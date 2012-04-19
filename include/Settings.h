@@ -113,11 +113,6 @@ extern NSString* kActivitySettingPrivacyPublic;
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value;
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent;
 
-
-//used to get groups of properties
-//@property (retain, readonly) NSMutableDictionary* general;
-//@property (retain, readonly) NSMutableDictionary* location;
-
 //used to set individual settings, returns whether the setting was accepted
 - (BOOL) setLogin:(NSString*)user withPassword:(NSString*) password;
 @end
