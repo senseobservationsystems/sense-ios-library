@@ -1,6 +1,7 @@
 #import "SensePlatform.h"
 #import "SensorStore.h"
 #import "Settings.h"
+#import "DynamicSensor.h"
 
 static SensorStore* sensorStore; 
 
@@ -49,5 +50,14 @@ static SensorStore* sensorStore;
     [settings setSensor:[RotationSensor class] enabled:YES];
     
     [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingSenseEnabled value:kSettingYES];
+}
+
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp {
+    //create sensor
+    DynamicSensor* sensor = [[DynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:deviceType dataType:dataType];
+    //add sensor to the sensor store
+    [sensorStore addSensor:sensor];
+    //commit value
+    [sensor commitValue:value withTimestamp:[NSString stringWithFormat:@"%.3f",timestamp]];
 }
 @end

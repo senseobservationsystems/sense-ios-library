@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DataStore.h"
 #import "Sender.h"
+#import "Sensor.h"
 
 extern NSString* const kMotionData;
 
@@ -28,6 +29,7 @@ extern NSString* const kMotionData;
 - (void) setEnabled:(BOOL) enable;
 - (void) enabledChanged:(id) notification;
 - (void) setSyncRate: (int) newRate;
+- (void) addSensor:(Sensor*) sensor;
 
 /* Ensure all sensor data is flushed, used to reduce memory usage.
  * Flushing in this order, on failure continue with the next:

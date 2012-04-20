@@ -85,6 +85,8 @@
 		3EF8C57E154188BA00777C34 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56C1541881A00777C34 /* SBJsonBase.m */; };
 		3EF8C57F154188BA00777C34 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56E1541881A00777C34 /* SBJsonParser.m */; };
 		3EF8C580154188BA00777C34 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5701541881A00777C34 /* SBJsonWriter.m */; };
+		3EF8C5821541912E00777C34 /* DynamicSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5811541912E00777C34 /* DynamicSensor.h */; };
+		3EF8C5841541917500777C34 /* DynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5831541917500777C34 /* DynamicSensor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +183,8 @@
 		3EF8C56E1541881A00777C34 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		3EF8C56F1541881A00777C34 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		3EF8C5701541881A00777C34 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		3EF8C5811541912E00777C34 /* DynamicSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicSensor.h; path = sensors/DynamicSensor.h; sourceTree = "<group>"; };
+		3EF8C5831541917500777C34 /* DynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +316,7 @@
 		3E5D0C3F153DC14E00198A55 /* sensors */ = {
 			isa = PBXGroup;
 			children = (
+				3EF8C5831541917500777C34 /* DynamicSensor.m */,
 				3E5D0C41153DC14E00198A55 /* Acceleration.m */,
 				3E5D0C43153DC14E00198A55 /* AccelerationSensor.m */,
 				3E5D0C45153DC14E00198A55 /* AccelerometerSensor.m */,
@@ -337,6 +342,7 @@
 		3EF8C3B3153EB23900777C34 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				3EF8C5811541912E00777C34 /* DynamicSensor.h */,
 				3EF8C48F15402E7D00777C34 /* ApplicationStateChange.h */,
 				3EF8C3B4153EB23900777C34 /* SensePlatform.h */,
 				3EF8C3C8153EB23900777C34 /* Settings.h */,
@@ -446,6 +452,7 @@
 				3EF8C5761541881A00777C34 /* SBJsonBase.h in Headers */,
 				3EF8C5781541881A00777C34 /* SBJsonParser.h in Headers */,
 				3EF8C57A1541881A00777C34 /* SBJsonWriter.h in Headers */,
+				3EF8C5821541912E00777C34 /* DynamicSensor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +552,7 @@
 				3EF8C4301540032100777C34 /* Settings.m in Sources */,
 				3E5D0CDE153DC3EF00198A55 /* ApplicationStateChange.m in Sources */,
 				3EF8C527154167E500777C34 /* SensePlatform.m in Sources */,
+				3EF8C5841541917500777C34 /* DynamicSensor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
