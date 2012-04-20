@@ -48,7 +48,7 @@ extern NSString* kLocationSettingMinimumDistance;
 //spatial settings
 extern NSString* kSpatialSettingInterval;
 extern NSString* kSpatialSettingFrequency;
-extern NSString* kSpatialSettingSampleTime;
+extern NSString* kSpatialSettingNrSamples;
 
 
 //Most settings are numbers (with SI units, i.e. seconds, meters, kg, percent etc.). Categorical values should be one of the following strings

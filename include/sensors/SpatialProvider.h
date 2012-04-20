@@ -17,31 +17,7 @@
 #import <pthread.h>
 
 @interface SpatialProvider : NSObject <CLLocationManagerDelegate>{
-	CLLocationManager* locationManager;
-	CMMotionManager* motionManager;
-	
-	CompassSensor* compassSensor;
-	AccelerometerSensor* accelerometerSensor;
-	OrientationSensor* orientationSensor;
-	AccelerationSensor* accelerationSensor;
-	RotationSensor* rotationSensor;
-	
-	NSOperationQueue* operations;
-  	NSOperationQueue* pollQueue;
-    NSCondition* headingAvailable;
-    BOOL updatingHeading;
-    
-    BOOL continuously;
-    NSTimeInterval interval;
-    double frequency, sampleTime;
-    NSTimer* pollTimer;
 }
 
 - (id) initWithCompass:(CompassSensor*)compass orientation:(OrientationSensor*)orientation accelerometer:(AccelerometerSensor*)accelerometer acceleration:(AccelerationSensor*)acceleration rotation:(RotationSensor*)rotation;
-- (void) accelerometerEnabledChanged: (id) notification;
-- (void) rotationEnabledChanged: (id) notification;
-- (void) orientationEnabledChanged: (id) notification;
-- (void) settingChanged: (NSNotification*) notification;
-- (void) schedulePoll;
-- (void) poll;
 @end

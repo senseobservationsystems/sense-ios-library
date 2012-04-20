@@ -29,4 +29,5 @@
 + (void) willTerminate;
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
 + (BOOL) registerhUser:(NSString*) user withPassword:(NSString*) password;
++ (void) applyIVitalitySettings;
 @end
