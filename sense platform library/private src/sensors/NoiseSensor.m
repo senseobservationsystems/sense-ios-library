@@ -87,8 +87,8 @@
         //register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(settingChanged:)
-													 name:[Settings settingChangedNotificationNameForType:@"noise"] object:nil];
-        sampleInterval = [[[Settings sharedSettings] getSettingType:@"noise" setting:@"interval"] doubleValue];
+													 name:[Settings settingChangedNotificationNameForType:kSettingTypeAmbience] object:nil];
+        sampleInterval = [[[Settings sharedSettings] getSettingType:kSettingTypeAmbience setting:kAmbienceSettingInterval] doubleValue];
         sampleDuration = 2;
 		volumeSampleInterval = 0.2;
 	}
@@ -193,7 +193,7 @@
 	@try {
 		Setting* setting = notification.object;
 		NSLog(@"noise: setting %@ changed to %@.", setting.name, setting.value);
-		if ([setting.name isEqualToString:@"interval"]) {
+		if ([setting.name isEqualToString:kAmbienceSettingInterval]) {
 			sampleInterval = [setting.value doubleValue];
 		}
 	}

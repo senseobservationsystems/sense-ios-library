@@ -18,6 +18,7 @@ NSString* kSettingTypeBiometric = @"biometric";
 NSString* kSettingTypeActivity = @"activity";
 NSString* kSettingTypeLocation = @"position";
 NSString* kSettingTypeSpatial = @"spatial";
+NSString* kSettingTypeAmbience = @"ambience";
 
 //general settings keys
 NSString* kGeneralSettingSenseEnabled = @"senseEnabled";
@@ -47,6 +48,9 @@ NSString* kLocationSettingMinimumDistance = @"minimumDistance";
 NSString* kSpatialSettingInterval = @"pollInterval";
 NSString* kSpatialSettingFrequency = @"frequency";
 NSString* kSpatialSettingNrSamples = @"number of samples";
+
+//ambiance settings
+NSString* kAmbienceSettingInterval = @"pollInterval";
 
 
 //categorical values

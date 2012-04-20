@@ -39,12 +39,6 @@
 		3E5D0CAD153DC14E00198A55 /* UserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C67153DC14E00198A55 /* UserProximity.m */; };
 		3E5D0CAE153DC14E00198A55 /* SensorStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C68153DC14E00198A55 /* SensorStore.h */; };
 		3E5D0CAF153DC14E00198A55 /* SensorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C69153DC14E00198A55 /* SensorStore.m */; };
-		3E5D0CC3153DC26D00198A55 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C2D153DC14E00198A55 /* NSObject+SBJSON.m */; };
-		3E5D0CC5153DC26D00198A55 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C2F153DC14E00198A55 /* NSString+SBJSON.m */; };
-		3E5D0CC7153DC26D00198A55 /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C31153DC14E00198A55 /* SBJSON.m */; };
-		3E5D0CC9153DC26D00198A55 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C33153DC14E00198A55 /* SBJsonBase.m */; };
-		3E5D0CCB153DC26D00198A55 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C35153DC14E00198A55 /* SBJsonParser.m */; };
-		3E5D0CCD153DC26D00198A55 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C37153DC14E00198A55 /* SBJsonWriter.m */; };
 		3E5D0CCE153DC28E00198A55 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2B153DC14E00198A55 /* JSON.h */; };
 		3E5D0CCF153DC28E00198A55 /* NSObject+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2C153DC14E00198A55 /* NSObject+SBJSON.h */; };
 		3E5D0CD1153DC28F00198A55 /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2E153DC14E00198A55 /* NSString+SBJSON.h */; };
@@ -75,10 +69,22 @@
 		3EF8C3DA153EB23900777C34 /* SpatialProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C3C6153EB23900777C34 /* SpatialProvider.h */; };
 		3EF8C3DB153EB23900777C34 /* UserProximity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C3C7153EB23900777C34 /* UserProximity.h */; };
 		3EF8C3DC153EB23900777C34 /* Settings.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C3C8153EB23900777C34 /* Settings.h */; };
-		3EF8C42F154002FF00777C34 /* SensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C1A153DBC7400198A55 /* SensePlatform.m */; };
 		3EF8C4301540032100777C34 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C6B153DC14E00198A55 /* Settings.m */; };
 		3EF8C46915401AF600777C34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E5D0C14153DBC7400198A55 /* Foundation.framework */; };
 		3EF8C49015402E7D00777C34 /* ApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C48F15402E7D00777C34 /* ApplicationStateChange.h */; };
+		3EF8C527154167E500777C34 /* SensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C526154167E500777C34 /* SensePlatform.m */; };
+		3EF8C55A1541723500777C34 /* sense platform library-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5591541723500777C34 /* sense platform library-Prefix.pch */; };
+		3EF8C5711541881A00777C34 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5661541881A00777C34 /* JSON.h */; };
+		3EF8C5721541881A00777C34 /* NSObject+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5671541881A00777C34 /* NSObject+SBJSON.h */; };
+		3EF8C5741541881A00777C34 /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5691541881A00777C34 /* NSString+SBJSON.h */; };
+		3EF8C5761541881A00777C34 /* SBJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56B1541881A00777C34 /* SBJsonBase.h */; };
+		3EF8C5781541881A00777C34 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56D1541881A00777C34 /* SBJsonParser.h */; };
+		3EF8C57A1541881A00777C34 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56F1541881A00777C34 /* SBJsonWriter.h */; };
+		3EF8C57C154188BA00777C34 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */; };
+		3EF8C57D154188BA00777C34 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56A1541881A00777C34 /* NSString+SBJSON.m */; };
+		3EF8C57E154188BA00777C34 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56C1541881A00777C34 /* SBJsonBase.m */; };
+		3EF8C57F154188BA00777C34 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56E1541881A00777C34 /* SBJsonParser.m */; };
+		3EF8C580154188BA00777C34 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5701541881A00777C34 /* SBJsonWriter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,8 +100,6 @@
 /* Begin PBXFileReference section */
 		3E5D0C11153DBC7400198A55 /* libsense platform library.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libsense platform library.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E5D0C14153DBC7400198A55 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		3E5D0C18153DBC7400198A55 /* sense platform library-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "sense platform library-Prefix.pch"; sourceTree = "<group>"; };
-		3E5D0C1A153DBC7400198A55 /* SensePlatform.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SensePlatform.m; sourceTree = "<group>"; };
 		3E5D0C23153DC14E00198A55 /* ActivitySender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivitySender.h; sourceTree = "<group>"; };
 		3E5D0C24153DC14E00198A55 /* ActivitySender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivitySender.m; sourceTree = "<group>"; };
 		3E5D0C25153DC14E00198A55 /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Hash.h"; sourceTree = "<group>"; };
@@ -142,7 +146,6 @@
 		3E5D0C69153DC14E00198A55 /* SensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorStore.m; sourceTree = "<group>"; };
 		3E5D0C6B153DC14E00198A55 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		3E5D0CB6153DC1EE00198A55 /* libSBJson.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSBJson.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3E5D0CBA153DC1EE00198A55 /* SBJson-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SBJson-Prefix.pch"; sourceTree = "<group>"; };
 		3E5D0CDC153DC3EF00198A55 /* ApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApplicationStateChange.m; path = "private src/ApplicationStateChange.m"; sourceTree = "<group>"; };
 		3EF8C3B4153EB23900777C34 /* SensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensePlatform.h; sourceTree = "<group>"; };
 		3EF8C3B6153EB23900777C34 /* Acceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Acceleration.h; sourceTree = "<group>"; };
@@ -165,6 +168,19 @@
 		3EF8C3C7153EB23900777C34 /* UserProximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProximity.h; sourceTree = "<group>"; };
 		3EF8C3C8153EB23900777C34 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		3EF8C48F15402E7D00777C34 /* ApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationStateChange.h; sourceTree = "<group>"; };
+		3EF8C526154167E500777C34 /* SensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensePlatform.m; sourceTree = "<group>"; };
+		3EF8C5591541723500777C34 /* sense platform library-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sense platform library-Prefix.pch"; sourceTree = "<group>"; };
+		3EF8C5661541881A00777C34 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		3EF8C5671541881A00777C34 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		3EF8C5691541881A00777C34 /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		3EF8C56A1541881A00777C34 /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		3EF8C56B1541881A00777C34 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		3EF8C56C1541881A00777C34 /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		3EF8C56D1541881A00777C34 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		3EF8C56E1541881A00777C34 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		3EF8C56F1541881A00777C34 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		3EF8C5701541881A00777C34 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,9 +206,9 @@
 		3E5D0C06153DBC7400198A55 = {
 			isa = PBXGroup;
 			children = (
+				3EF8C5651541881A00777C34 /* json */,
 				3EF8C3B3153EB23900777C34 /* include */,
 				3E5D0C16153DBC7400198A55 /* sense platform library */,
-				3E5D0CB8153DC1EE00198A55 /* SBJson */,
 				3E5D0C13153DBC7400198A55 /* Frameworks */,
 				3E5D0C12153DBC7400198A55 /* Products */,
 			);
@@ -218,9 +234,9 @@
 		3E5D0C16153DBC7400198A55 /* sense platform library */ = {
 			isa = PBXGroup;
 			children = (
+				3EF8C526154167E500777C34 /* SensePlatform.m */,
 				3E5D0CDC153DC3EF00198A55 /* ApplicationStateChange.m */,
 				3E5D0C21153DC14E00198A55 /* private src */,
-				3E5D0C1A153DBC7400198A55 /* SensePlatform.m */,
 				3E5D0C17153DBC7400198A55 /* Supporting Files */,
 			);
 			path = "sense platform library";
@@ -229,7 +245,7 @@
 		3E5D0C17153DBC7400198A55 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3E5D0C18153DBC7400198A55 /* sense platform library-Prefix.pch */,
+				3EF8C5591541723500777C34 /* sense platform library-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -318,22 +334,6 @@
 			path = sensors;
 			sourceTree = "<group>";
 		};
-		3E5D0CB8153DC1EE00198A55 /* SBJson */ = {
-			isa = PBXGroup;
-			children = (
-				3E5D0CB9153DC1EE00198A55 /* Supporting Files */,
-			);
-			path = SBJson;
-			sourceTree = "<group>";
-		};
-		3E5D0CB9153DC1EE00198A55 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3E5D0CBA153DC1EE00198A55 /* SBJson-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		3EF8C3B3153EB23900777C34 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -368,6 +368,24 @@
 				3EF8C3C7153EB23900777C34 /* UserProximity.h */,
 			);
 			path = sensors;
+			sourceTree = "<group>";
+		};
+		3EF8C5651541881A00777C34 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				3EF8C5661541881A00777C34 /* JSON.h */,
+				3EF8C5671541881A00777C34 /* NSObject+SBJSON.h */,
+				3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */,
+				3EF8C5691541881A00777C34 /* NSString+SBJSON.h */,
+				3EF8C56A1541881A00777C34 /* NSString+SBJSON.m */,
+				3EF8C56B1541881A00777C34 /* SBJsonBase.h */,
+				3EF8C56C1541881A00777C34 /* SBJsonBase.m */,
+				3EF8C56D1541881A00777C34 /* SBJsonParser.h */,
+				3EF8C56E1541881A00777C34 /* SBJsonParser.m */,
+				3EF8C56F1541881A00777C34 /* SBJsonWriter.h */,
+				3EF8C5701541881A00777C34 /* SBJsonWriter.m */,
+			);
+			path = json;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -406,6 +424,7 @@
 				3EF8C3DB153EB23900777C34 /* UserProximity.h in Headers */,
 				3EF8C3DC153EB23900777C34 /* Settings.h in Headers */,
 				3EF8C49015402E7D00777C34 /* ApplicationStateChange.h in Headers */,
+				3EF8C55A1541723500777C34 /* sense platform library-Prefix.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +440,12 @@
 				3E5D0CD5153DC28F00198A55 /* SBJsonBase.h in Headers */,
 				3E5D0CD7153DC28F00198A55 /* SBJsonParser.h in Headers */,
 				3E5D0CD9153DC28F00198A55 /* SBJsonWriter.h in Headers */,
+				3EF8C5711541881A00777C34 /* JSON.h in Headers */,
+				3EF8C5721541881A00777C34 /* NSObject+SBJSON.h in Headers */,
+				3EF8C5741541881A00777C34 /* NSString+SBJSON.h in Headers */,
+				3EF8C5761541881A00777C34 /* SBJsonBase.h in Headers */,
+				3EF8C5781541881A00777C34 /* SBJsonParser.h in Headers */,
+				3EF8C57A1541881A00777C34 /* SBJsonWriter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +518,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EF8C42F154002FF00777C34 /* SensePlatform.m in Sources */,
 				3E5D0C6D153DC14E00198A55 /* ActivitySender.m in Sources */,
 				3E5D0C6F153DC14E00198A55 /* NSString+MD5Hash.m in Sources */,
 				3E5D0C71153DC14E00198A55 /* Sender.m in Sources */,
@@ -520,6 +544,7 @@
 				3E5D0CAF153DC14E00198A55 /* SensorStore.m in Sources */,
 				3EF8C4301540032100777C34 /* Settings.m in Sources */,
 				3E5D0CDE153DC3EF00198A55 /* ApplicationStateChange.m in Sources */,
+				3EF8C527154167E500777C34 /* SensePlatform.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,12 +552,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E5D0CC3153DC26D00198A55 /* NSObject+SBJSON.m in Sources */,
-				3E5D0CC5153DC26D00198A55 /* NSString+SBJSON.m in Sources */,
-				3E5D0CC7153DC26D00198A55 /* SBJSON.m in Sources */,
-				3E5D0CC9153DC26D00198A55 /* SBJsonBase.m in Sources */,
-				3E5D0CCB153DC26D00198A55 /* SBJsonParser.m in Sources */,
-				3E5D0CCD153DC26D00198A55 /* SBJsonWriter.m in Sources */,
+				3EF8C57C154188BA00777C34 /* NSObject+SBJSON.m in Sources */,
+				3EF8C57D154188BA00777C34 /* NSString+SBJSON.m in Sources */,
+				3EF8C57E154188BA00777C34 /* SBJsonBase.m in Sources */,
+				3EF8C57F154188BA00777C34 /* SBJsonParser.m in Sources */,
+				3EF8C580154188BA00777C34 /* SBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,8 +656,8 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				DSTROOT = /tmp/SBJson.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SBJson/SBJson-Prefix.pch";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -645,8 +669,8 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = NO;
 				DSTROOT = /tmp/SBJson.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SBJson/SBJson-Prefix.pch";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

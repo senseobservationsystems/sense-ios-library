@@ -18,6 +18,7 @@ extern NSString* kSettingTypeGeneral;
 extern NSString* kSettingTypeBiometric;
 extern NSString* kSettingTypeLocation;
 extern NSString* kSettingTypeSpatial;
+extern NSString* kSettingTypeAmbience;
 
 
 //general settings
@@ -49,6 +50,9 @@ extern NSString* kLocationSettingMinimumDistance;
 extern NSString* kSpatialSettingInterval;
 extern NSString* kSpatialSettingFrequency;
 extern NSString* kSpatialSettingNrSamples;
+
+//ambience settings
+extern NSString* kAmbienceSettingInterval;
 
 
 //Most settings are numbers (with SI units, i.e. seconds, meters, kg, percent etc.). Categorical values should be one of the following strings
