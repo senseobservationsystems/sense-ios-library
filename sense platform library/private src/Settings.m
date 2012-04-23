@@ -52,7 +52,6 @@ NSString* kSpatialSettingNrSamples = @"number of samples";
 //ambiance settings
 NSString* kAmbienceSettingInterval = @"pollInterval";
 
-
 //categorical values
 NSString* kSettingYES = @"1";
 NSString* kSettingNO = @"0";
@@ -158,11 +157,11 @@ static Settings* sharedSettingsInstance = nil;
 #pragma mark - 
 #pragma mark Settings
 
-+ (NSString*) enabledChangedNotificationNameForSensor:(Class) sensor {
++ (NSString*) enabledChangedNotificationNameForSensor:(NSString*) sensor {
 	return [NSString stringWithFormat:@"%@EnabledChangedNotification", sensor];
 }
 
-+ (NSString*) settingChangedNotificationNameForSensor:(Class) sensor {
++ (NSString*) settingChangedNotificationNameForSensor:(NSString*) sensor {
 	return [NSString stringWithFormat:@"%@SettingChangedNotification", sensor];
 }
 
@@ -170,14 +169,14 @@ static Settings* sharedSettingsInstance = nil;
 	return [NSString stringWithFormat:@"%@SettingChangedNotificationType", type];
 }
 
-- (BOOL) isSensorEnabled:(Class) sensor {
+- (BOOL) isSensorEnabled:(NSString*) sensor {
 	NSString* key = [NSString stringWithFormat:@"%@", sensor];
 	id object = [sensorEnables objectForKey:key];
 	BOOL enabled = object == nil? NO : [object boolValue];
 	return enabled;
 }
 
-- (void) sendNotificationForSensor:(Class) sensor {
+- (void) sendNotificationForSensor:(NSString*) sensor {
 	NSString* key = [NSString stringWithFormat:@"%@", sensor];
 	id object = [sensorEnables objectForKey:key];
 	BOOL enabled = object == nil? NO : [object boolValue];
@@ -186,11 +185,11 @@ static Settings* sharedSettingsInstance = nil;
 	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:[[self class] enabledChangedNotificationNameForSensor:sensor] object:enableObject]];
 }
 
-- (BOOL) setSensor:(Class) sensor enabled:(BOOL) enable {
+- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable {
     return [self setSensor:sensor enabled:enable permanent:YES];
 }
 
-- (BOOL) setSensor:(Class) sensor enabled:(BOOL) enable permanent:(BOOL) permanent {
+- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable permanent:(BOOL) permanent {
 	NSNumber* enableObject = [NSNumber numberWithBool:enable];
     NSString* key = [NSString stringWithFormat:@"%@", sensor];
     if (permanent) {
@@ -206,10 +205,9 @@ static Settings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setLogin:(NSString*)user withPassword:(NSString*) password {
-	[general setObject:user forKey:kGeneralSettingUsername];
-	[general setObject:password forKey:kGeneralSettingPassword];
-	//write back to file
-	[self storeSettings];
+    NSLog(@"Settings setLogin:%@", user);
+    [self setSettingType:kSettingTypeGeneral setting:kGeneralSettingUsername value:user];
+    [self setSettingType:kSettingTypeGeneral setting:kGeneralSettingPassword value:password];
 	//notify registered subscribers
 	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:settingLoginChangedNotification object:nil]];
 	return YES;
@@ -273,7 +271,6 @@ static Settings* sharedSettingsInstance = nil;
 	//send notification
 	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:anySettingChangedNotification object:notificationObject]];
 	
-	//free
 }
 
 - (void) loadSettingsFromPath:(NSString*)path {

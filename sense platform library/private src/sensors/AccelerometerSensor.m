@@ -18,7 +18,7 @@ NSString* accelerationZKey = @"z-axis";
 @implementation AccelerometerSensor
 
 
-- (NSString*) name {return @"accelerometer";}
+- (NSString*) name {return kSENSOR_ACCELEROMETER;}
 - (NSString*) deviceType {return [self name];}
 //TODO: check for availability
 + (BOOL) isAvailable {return YES;}

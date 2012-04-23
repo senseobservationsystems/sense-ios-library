@@ -21,7 +21,7 @@ NSString* attitudeYawKey = @"azimuth";
 static const double G = 9.81;
 
 
-- (NSString*) name {return @"orientation";}
+- (NSString*) name {return kSENSOR_ORIENTATION;}
 - (NSString*) deviceType {return [self name];}
 //TODO: check for availability
 + (BOOL) isAvailable {

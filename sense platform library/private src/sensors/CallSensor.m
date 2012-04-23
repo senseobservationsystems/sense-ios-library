@@ -25,7 +25,7 @@ static NSString* connected = @"calling";
 static NSString* disconnected = @"idle";
 
 
-- (NSString*) name {return @"call state";}
+- (NSString*) name {return kSENSOR_CALL;}
 - (NSString*) deviceType {return [self name];}
 - (BOOL) isAvailable {return YES;}
 

@@ -17,7 +17,7 @@
 static NSString* stateKey = @"status";
 static NSString* levelKey = @"level";
 
-- (NSString*) name {return @"battery";}
+- (NSString*) name {return kSENSOR_BATTERY;}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return YES;}
 

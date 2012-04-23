@@ -7,6 +7,7 @@
 //
 
 #import "DynamicSensor.h"
+#import "DataStore.h"
 
 @implementation DynamicSensor
 - (NSString*) name {return sensorName;}

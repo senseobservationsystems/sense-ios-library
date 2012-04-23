@@ -19,7 +19,7 @@ NSString* devYKey = @"y";
 NSString* devZKey = @"z";
 NSString* accuracyKey = @"accuracy";
 
-- (NSString*) name {return @"compass";}
+- (NSString*) name {return kSENSOR_COMPASS;}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return [CLLocationManager headingAvailable];}
 

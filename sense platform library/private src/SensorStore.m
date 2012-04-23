@@ -138,7 +138,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
         
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginChanged) name:settingLoginChangedNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(generalSettingChanged:) name:[Settings settingChangedNotificationNameForType:@"general"] object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(generalSettingChanged:) name:[Settings settingChangedNotificationNameForType:kSettingTypeGeneral] object:nil];
 	}
 	return self;
 } 
@@ -171,11 +171,6 @@ static SensorStore* sharedSensorStoreInstance = nil;
 			if ([remoteSensor isKindOfClass:[NSDictionary class]] && [sensor matchesDescription:remoteSensor]) {
 				NSLog(@"Matched sensor of type %@", [sensor class]);
 				id sensorId = [remoteSensor valueForKey:@"id"];
-                
-                //by default share this sensor with the data collection user. We do this everytime a sensor is matched, to be very sure it is shared.
-                //2107 is the group unanonymous
-                [sender shareSensor:sensorId WithUser:@"2107"];
-                
                 //update sensor id map
 				[sensorIdMap setValue:sensorId forKey:sensor.sensorId];
 				break;
@@ -279,7 +274,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
          */
         //disable sensors
 		for (Sensor* sensor in sensors) {
-			[[Settings sharedSettings] setSensor:[sensor class] enabled:NO permanent:NO];
+			[[Settings sharedSettings] setSensor:[sensor sensorId] enabled:NO permanent:NO];
 		}
         
 		//flush data
@@ -306,7 +301,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 	//get new settings
     NSString* username = [[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingUsername];
   	NSString* password = [[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingPassword];
-    
+    NSLog(@"Sensorstore loginChang:%@", username);
 	//change login
     [sender setUser:username andPassword:password];
     
@@ -476,11 +471,9 @@ static SensorStore* sharedSensorStoreInstance = nil;
                 [self setSyncRate:3600];
             else if ([setting.value isEqualToString:kGeneralSettingUploadIntervalWifi])
                 [self setSyncRate:3600];
-            else {
-                if ([setting.value doubleValue]) {
-                    
+            else if ([setting.value doubleValue]) {   
                     [self setSyncRate:MAX(1,[setting.value doubleValue])];
-                } else
+            } else {
                     [self setSyncRate:1800]; //Hmm, unknown, let's choose some value
             }
 		} else if ([setting.name isEqualToString:kGeneralSettingSenseEnabled]) {

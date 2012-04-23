@@ -65,7 +65,6 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 }
 
 - (void) setUser:(NSString*)user andPassword:(NSString*) password {
-    NSLog(@"Sender set user %@ and password %@", user, password);
 	if (sessionCookie != nil)
 		[self logout];
 	username = user;

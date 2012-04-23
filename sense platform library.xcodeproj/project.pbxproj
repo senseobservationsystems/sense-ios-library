@@ -14,12 +14,10 @@
 		3E5D0C70153DC14E00198A55 /* Sender.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C27153DC14E00198A55 /* Sender.h */; };
 		3E5D0C71153DC14E00198A55 /* Sender.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C28153DC14E00198A55 /* Sender.m */; };
 		3E5D0C72153DC14E00198A55 /* DataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C29153DC14E00198A55 /* DataStore.h */; };
-		3E5D0C73153DC14E00198A55 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2B153DC14E00198A55 /* JSON.h */; };
 		3E5D0C80153DC14E00198A55 /* NSNotificationCenter+MainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C39153DC14E00198A55 /* NSNotificationCenter+MainThread.h */; };
 		3E5D0C81153DC14E00198A55 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C3A153DC14E00198A55 /* NSNotificationCenter+MainThread.m */; };
 		3E5D0C82153DC14E00198A55 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C3B153DC14E00198A55 /* Reachability.h */; };
 		3E5D0C83153DC14E00198A55 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C3C153DC14E00198A55 /* Reachability.m */; };
-		3E5D0C87153DC14E00198A55 /* Acceleration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C41153DC14E00198A55 /* Acceleration.m */; };
 		3E5D0C89153DC14E00198A55 /* AccelerationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C43153DC14E00198A55 /* AccelerationSensor.m */; };
 		3E5D0C8B153DC14E00198A55 /* AccelerometerSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C45153DC14E00198A55 /* AccelerometerSensor.m */; };
 		3E5D0C8F153DC14E00198A55 /* BatterySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C49153DC14E00198A55 /* BatterySensor.m */; };
@@ -39,14 +37,6 @@
 		3E5D0CAD153DC14E00198A55 /* UserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C67153DC14E00198A55 /* UserProximity.m */; };
 		3E5D0CAE153DC14E00198A55 /* SensorStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C68153DC14E00198A55 /* SensorStore.h */; };
 		3E5D0CAF153DC14E00198A55 /* SensorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0C69153DC14E00198A55 /* SensorStore.m */; };
-		3E5D0CCE153DC28E00198A55 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2B153DC14E00198A55 /* JSON.h */; };
-		3E5D0CCF153DC28E00198A55 /* NSObject+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2C153DC14E00198A55 /* NSObject+SBJSON.h */; };
-		3E5D0CD1153DC28F00198A55 /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C2E153DC14E00198A55 /* NSString+SBJSON.h */; };
-		3E5D0CD3153DC28F00198A55 /* SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C30153DC14E00198A55 /* SBJSON.h */; };
-		3E5D0CD4153DC28F00198A55 /* SBJSON.m in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C31153DC14E00198A55 /* SBJSON.m */; };
-		3E5D0CD5153DC28F00198A55 /* SBJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C32153DC14E00198A55 /* SBJsonBase.h */; };
-		3E5D0CD7153DC28F00198A55 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C34153DC14E00198A55 /* SBJsonParser.h */; };
-		3E5D0CD9153DC28F00198A55 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E5D0C36153DC14E00198A55 /* SBJsonWriter.h */; };
 		3E5D0CDE153DC3EF00198A55 /* ApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D0CDC153DC3EF00198A55 /* ApplicationStateChange.m */; };
 		3E5D0CE8153DC5DB00198A55 /* libSBJson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E5D0CB6153DC1EE00198A55 /* libSBJson.a */; };
 		3EF8C3C9153EB23900777C34 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C3B4153EB23900777C34 /* SensePlatform.h */; };
@@ -74,19 +64,24 @@
 		3EF8C49015402E7D00777C34 /* ApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C48F15402E7D00777C34 /* ApplicationStateChange.h */; };
 		3EF8C527154167E500777C34 /* SensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C526154167E500777C34 /* SensePlatform.m */; };
 		3EF8C55A1541723500777C34 /* sense platform library-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5591541723500777C34 /* sense platform library-Prefix.pch */; };
-		3EF8C5711541881A00777C34 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5661541881A00777C34 /* JSON.h */; };
-		3EF8C5721541881A00777C34 /* NSObject+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5671541881A00777C34 /* NSObject+SBJSON.h */; };
-		3EF8C5741541881A00777C34 /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5691541881A00777C34 /* NSString+SBJSON.h */; };
-		3EF8C5761541881A00777C34 /* SBJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56B1541881A00777C34 /* SBJsonBase.h */; };
-		3EF8C5781541881A00777C34 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56D1541881A00777C34 /* SBJsonParser.h */; };
-		3EF8C57A1541881A00777C34 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56F1541881A00777C34 /* SBJsonWriter.h */; };
-		3EF8C57C154188BA00777C34 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */; };
-		3EF8C57D154188BA00777C34 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56A1541881A00777C34 /* NSString+SBJSON.m */; };
-		3EF8C57E154188BA00777C34 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56C1541881A00777C34 /* SBJsonBase.m */; };
-		3EF8C57F154188BA00777C34 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56E1541881A00777C34 /* SBJsonParser.m */; };
-		3EF8C580154188BA00777C34 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5701541881A00777C34 /* SBJsonWriter.m */; };
-		3EF8C5821541912E00777C34 /* DynamicSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5811541912E00777C34 /* DynamicSensor.h */; };
 		3EF8C5841541917500777C34 /* DynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5831541917500777C34 /* DynamicSensor.m */; };
+		3EFE4D201545459C00CC67DD /* SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EFE4D1E1545459C00CC67DD /* SBJSON.h */; };
+		3EFE4D231545461000CC67DD /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFE4D1F1545459C00CC67DD /* SBJSON.m */; };
+		3EFE4D261545461000CC67DD /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */; };
+		3EFE4D281545461000CC67DD /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56A1541881A00777C34 /* NSString+SBJSON.m */; };
+		3EFE4D2A1545461000CC67DD /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56C1541881A00777C34 /* SBJsonBase.m */; };
+		3EFE4D2C1545461000CC67DD /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56E1541881A00777C34 /* SBJsonParser.m */; };
+		3EFE4D2E1545461000CC67DD /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5701541881A00777C34 /* SBJsonWriter.m */; };
+		3EFE4D2F1545462F00CC67DD /* SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EFE4D1E1545459C00CC67DD /* SBJSON.h */; };
+		3EFE4D311545462F00CC67DD /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5661541881A00777C34 /* JSON.h */; };
+		3EFE4D321545462F00CC67DD /* NSObject+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5671541881A00777C34 /* NSObject+SBJSON.h */; };
+		3EFE4D341545462F00CC67DD /* NSString+SBJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5691541881A00777C34 /* NSString+SBJSON.h */; };
+		3EFE4D361545462F00CC67DD /* SBJsonBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56B1541881A00777C34 /* SBJsonBase.h */; };
+		3EFE4D381545462F00CC67DD /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56D1541881A00777C34 /* SBJsonParser.h */; };
+		3EFE4D3A1545462F00CC67DD /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C56F1541881A00777C34 /* SBJsonWriter.h */; };
+		3EFE4D411545504100CC67DD /* DynamicSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5811541912E00777C34 /* DynamicSensor.h */; };
+		3EFE4D43154568C500CC67DD /* SensorIds.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EFE4D42154566D700CC67DD /* SensorIds.h */; };
+		3EFE4D7915457EFB00CC67DD /* SensorIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFE4D7815457EFB00CC67DD /* SensorIds.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,24 +104,10 @@
 		3E5D0C27153DC14E00198A55 /* Sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sender.h; sourceTree = "<group>"; };
 		3E5D0C28153DC14E00198A55 /* Sender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sender.m; sourceTree = "<group>"; };
 		3E5D0C29153DC14E00198A55 /* DataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataStore.h; sourceTree = "<group>"; };
-		3E5D0C2B153DC14E00198A55 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
-		3E5D0C2C153DC14E00198A55 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
-		3E5D0C2D153DC14E00198A55 /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
-		3E5D0C2E153DC14E00198A55 /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
-		3E5D0C2F153DC14E00198A55 /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
-		3E5D0C30153DC14E00198A55 /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
-		3E5D0C31153DC14E00198A55 /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
-		3E5D0C32153DC14E00198A55 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
-		3E5D0C33153DC14E00198A55 /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
-		3E5D0C34153DC14E00198A55 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
-		3E5D0C35153DC14E00198A55 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
-		3E5D0C36153DC14E00198A55 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
-		3E5D0C37153DC14E00198A55 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		3E5D0C39153DC14E00198A55 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
 		3E5D0C3A153DC14E00198A55 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
 		3E5D0C3B153DC14E00198A55 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		3E5D0C3C153DC14E00198A55 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		3E5D0C41153DC14E00198A55 /* Acceleration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Acceleration.m; sourceTree = "<group>"; };
 		3E5D0C43153DC14E00198A55 /* AccelerationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerationSensor.m; sourceTree = "<group>"; };
 		3E5D0C45153DC14E00198A55 /* AccelerometerSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerSensor.m; sourceTree = "<group>"; };
 		3E5D0C49153DC14E00198A55 /* BatterySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatterySensor.m; sourceTree = "<group>"; };
@@ -185,6 +166,10 @@
 		3EF8C5701541881A00777C34 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		3EF8C5811541912E00777C34 /* DynamicSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DynamicSensor.h; path = sensors/DynamicSensor.h; sourceTree = "<group>"; };
 		3EF8C5831541917500777C34 /* DynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicSensor.m; sourceTree = "<group>"; };
+		3EFE4D1E1545459C00CC67DD /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		3EFE4D1F1545459C00CC67DD /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
+		3EFE4D42154566D700CC67DD /* SensorIds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensorIds.h; sourceTree = "<group>"; };
+		3EFE4D7815457EFB00CC67DD /* SensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorIds.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,12 +244,12 @@
 			children = (
 				3E5D0C22153DC14E00198A55 /* communication */,
 				3E5D0C29153DC14E00198A55 /* DataStore.h */,
-				3E5D0C2A153DC14E00198A55 /* JSON */,
 				3E5D0C38153DC14E00198A55 /* misc */,
 				3E5D0C3F153DC14E00198A55 /* sensors */,
 				3E5D0C68153DC14E00198A55 /* SensorStore.h */,
 				3E5D0C69153DC14E00198A55 /* SensorStore.m */,
 				3E5D0C6B153DC14E00198A55 /* Settings.m */,
+				3EFE4D7815457EFB00CC67DD /* SensorIds.m */,
 			);
 			path = "private src";
 			sourceTree = "<group>";
@@ -282,26 +267,6 @@
 			path = communication;
 			sourceTree = "<group>";
 		};
-		3E5D0C2A153DC14E00198A55 /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				3E5D0C2B153DC14E00198A55 /* JSON.h */,
-				3E5D0C2C153DC14E00198A55 /* NSObject+SBJSON.h */,
-				3E5D0C2D153DC14E00198A55 /* NSObject+SBJSON.m */,
-				3E5D0C2E153DC14E00198A55 /* NSString+SBJSON.h */,
-				3E5D0C2F153DC14E00198A55 /* NSString+SBJSON.m */,
-				3E5D0C30153DC14E00198A55 /* SBJSON.h */,
-				3E5D0C31153DC14E00198A55 /* SBJSON.m */,
-				3E5D0C32153DC14E00198A55 /* SBJsonBase.h */,
-				3E5D0C33153DC14E00198A55 /* SBJsonBase.m */,
-				3E5D0C34153DC14E00198A55 /* SBJsonParser.h */,
-				3E5D0C35153DC14E00198A55 /* SBJsonParser.m */,
-				3E5D0C36153DC14E00198A55 /* SBJsonWriter.h */,
-				3E5D0C37153DC14E00198A55 /* SBJsonWriter.m */,
-			);
-			path = JSON;
-			sourceTree = "<group>";
-		};
 		3E5D0C38153DC14E00198A55 /* misc */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,7 +282,6 @@
 			isa = PBXGroup;
 			children = (
 				3EF8C5831541917500777C34 /* DynamicSensor.m */,
-				3E5D0C41153DC14E00198A55 /* Acceleration.m */,
 				3E5D0C43153DC14E00198A55 /* AccelerationSensor.m */,
 				3E5D0C45153DC14E00198A55 /* AccelerometerSensor.m */,
 				3E5D0C49153DC14E00198A55 /* BatterySensor.m */,
@@ -347,6 +311,7 @@
 				3EF8C3B4153EB23900777C34 /* SensePlatform.h */,
 				3EF8C3C8153EB23900777C34 /* Settings.h */,
 				3EF8C3B5153EB23900777C34 /* sensors */,
+				3EFE4D42154566D700CC67DD /* SensorIds.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -379,6 +344,8 @@
 		3EF8C5651541881A00777C34 /* json */ = {
 			isa = PBXGroup;
 			children = (
+				3EFE4D1E1545459C00CC67DD /* SBJSON.h */,
+				3EFE4D1F1545459C00CC67DD /* SBJSON.m */,
 				3EF8C5661541881A00777C34 /* JSON.h */,
 				3EF8C5671541881A00777C34 /* NSObject+SBJSON.h */,
 				3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */,
@@ -401,11 +368,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EFE4D43154568C500CC67DD /* SensorIds.h in Headers */,
+				3EFE4D411545504100CC67DD /* DynamicSensor.h in Headers */,
 				3E5D0C6C153DC14E00198A55 /* ActivitySender.h in Headers */,
 				3E5D0C6E153DC14E00198A55 /* NSString+MD5Hash.h in Headers */,
 				3E5D0C70153DC14E00198A55 /* Sender.h in Headers */,
 				3E5D0C72153DC14E00198A55 /* DataStore.h in Headers */,
-				3E5D0C73153DC14E00198A55 /* JSON.h in Headers */,
 				3E5D0C80153DC14E00198A55 /* NSNotificationCenter+MainThread.h in Headers */,
 				3E5D0C82153DC14E00198A55 /* Reachability.h in Headers */,
 				3E5D0CAE153DC14E00198A55 /* SensorStore.h in Headers */,
@@ -431,6 +399,7 @@
 				3EF8C3DC153EB23900777C34 /* Settings.h in Headers */,
 				3EF8C49015402E7D00777C34 /* ApplicationStateChange.h in Headers */,
 				3EF8C55A1541723500777C34 /* sense platform library-Prefix.pch in Headers */,
+				3EFE4D201545459C00CC67DD /* SBJSON.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,21 +407,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E5D0CCE153DC28E00198A55 /* JSON.h in Headers */,
-				3E5D0CCF153DC28E00198A55 /* NSObject+SBJSON.h in Headers */,
-				3E5D0CD1153DC28F00198A55 /* NSString+SBJSON.h in Headers */,
-				3E5D0CD3153DC28F00198A55 /* SBJSON.h in Headers */,
-				3E5D0CD4153DC28F00198A55 /* SBJSON.m in Headers */,
-				3E5D0CD5153DC28F00198A55 /* SBJsonBase.h in Headers */,
-				3E5D0CD7153DC28F00198A55 /* SBJsonParser.h in Headers */,
-				3E5D0CD9153DC28F00198A55 /* SBJsonWriter.h in Headers */,
-				3EF8C5711541881A00777C34 /* JSON.h in Headers */,
-				3EF8C5721541881A00777C34 /* NSObject+SBJSON.h in Headers */,
-				3EF8C5741541881A00777C34 /* NSString+SBJSON.h in Headers */,
-				3EF8C5761541881A00777C34 /* SBJsonBase.h in Headers */,
-				3EF8C5781541881A00777C34 /* SBJsonParser.h in Headers */,
-				3EF8C57A1541881A00777C34 /* SBJsonWriter.h in Headers */,
-				3EF8C5821541912E00777C34 /* DynamicSensor.h in Headers */,
+				3EFE4D2F1545462F00CC67DD /* SBJSON.h in Headers */,
+				3EFE4D311545462F00CC67DD /* JSON.h in Headers */,
+				3EFE4D321545462F00CC67DD /* NSObject+SBJSON.h in Headers */,
+				3EFE4D341545462F00CC67DD /* NSString+SBJSON.h in Headers */,
+				3EFE4D361545462F00CC67DD /* SBJsonBase.h in Headers */,
+				3EFE4D381545462F00CC67DD /* SBJsonParser.h in Headers */,
+				3EFE4D3A1545462F00CC67DD /* SBJsonWriter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,7 +491,6 @@
 				3E5D0C71153DC14E00198A55 /* Sender.m in Sources */,
 				3E5D0C81153DC14E00198A55 /* NSNotificationCenter+MainThread.m in Sources */,
 				3E5D0C83153DC14E00198A55 /* Reachability.m in Sources */,
-				3E5D0C87153DC14E00198A55 /* Acceleration.m in Sources */,
 				3E5D0C89153DC14E00198A55 /* AccelerationSensor.m in Sources */,
 				3E5D0C8B153DC14E00198A55 /* AccelerometerSensor.m in Sources */,
 				3E5D0C8F153DC14E00198A55 /* BatterySensor.m in Sources */,
@@ -553,6 +513,7 @@
 				3E5D0CDE153DC3EF00198A55 /* ApplicationStateChange.m in Sources */,
 				3EF8C527154167E500777C34 /* SensePlatform.m in Sources */,
 				3EF8C5841541917500777C34 /* DynamicSensor.m in Sources */,
+				3EFE4D7915457EFB00CC67DD /* SensorIds.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,11 +521,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EF8C57C154188BA00777C34 /* NSObject+SBJSON.m in Sources */,
-				3EF8C57D154188BA00777C34 /* NSString+SBJSON.m in Sources */,
-				3EF8C57E154188BA00777C34 /* SBJsonBase.m in Sources */,
-				3EF8C57F154188BA00777C34 /* SBJsonParser.m in Sources */,
-				3EF8C580154188BA00777C34 /* SBJsonWriter.m in Sources */,
+				3EFE4D231545461000CC67DD /* SBJSON.m in Sources */,
+				3EFE4D261545461000CC67DD /* NSObject+SBJSON.m in Sources */,
+				3EFE4D281545461000CC67DD /* NSString+SBJSON.m in Sources */,
+				3EFE4D2A1545461000CC67DD /* SBJsonBase.m in Sources */,
+				3EFE4D2C1545461000CC67DD /* SBJsonParser.m in Sources */,
+				3EFE4D2E1545461000CC67DD /* SBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

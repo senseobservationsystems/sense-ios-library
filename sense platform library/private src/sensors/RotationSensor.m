@@ -14,7 +14,7 @@
 
 @implementation RotationSensor
 
-- (NSString*) name {return @"gyroscope";}
+- (NSString*) name {return kSENSOR_ROTATION;}
 - (NSString*) deviceType {return [self name];}
 //TODO: check for availability
 + (BOOL) isAvailable {

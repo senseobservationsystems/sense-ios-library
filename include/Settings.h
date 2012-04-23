@@ -100,14 +100,14 @@ extern NSString* kActivitySettingPrivacyPublic;
 + (Settings*) sharedSettings;
 
 //notification names
-+ (NSString*) enabledChangedNotificationNameForSensor:(Class) sensor;
-+ (NSString*) settingChangedNotificationNameForSensor:(Class) sensor;
++ (NSString*) enabledChangedNotificationNameForSensor:(NSString*) sensor;
++ (NSString*) settingChangedNotificationNameForSensor:(NSString*) sensor;
 + (NSString*) settingChangedNotificationNameForType:(NSString*) type;
 
 //sensor enables
-- (BOOL) setSensor:(Class) sensor enabled:(BOOL) enable;
-- (BOOL) setSensor:(Class) sensor enabled:(BOOL) enable permanent:(BOOL) permanent;
-- (BOOL) isSensorEnabled:(Class) sensor;
+- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable;
+- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable permanent:(BOOL) permanent;
+- (BOOL) isSensorEnabled:(NSString*) sensor;
 
 //send notification to a specific sensor
 - (void) sendNotificationForSensor:(Class) sensor;

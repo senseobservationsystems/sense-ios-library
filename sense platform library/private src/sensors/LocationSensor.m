@@ -26,7 +26,7 @@ static const int minInterval = 30; //seconds
 
 static CLLocation* lastAcceptedPoint;
 
-- (NSString*) name {return @"position";}
+- (NSString*) name {return kSENSOR_LOCATION;}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return [CLLocationManager locationServicesEnabled];}
 
@@ -57,8 +57,8 @@ static CLLocation* lastAcceptedPoint;
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
 		//register for change in settings
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[Settings settingChangedNotificationNameForSensor:[self class]] object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[Settings settingChangedNotificationNameForType:@"position"] object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[Settings settingChangedNotificationNameForSensor:[self sensorId]] object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[Settings settingChangedNotificationNameForType:kSettingTypeLocation] object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[Settings settingChangedNotificationNameForType:@"adaptive"] object:nil];
 		
 		samples = [[NSMutableArray alloc] initWithCapacity:maxSamples];
@@ -159,7 +159,7 @@ static CLLocation* lastAcceptedPoint;
 	NSLog(@"Enabling location sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
 	if (enable) {
 		@try {
-			locationManager.desiredAccuracy = [[[Settings sharedSettings] getSettingType:@"position" setting:@"accuracy"] intValue];
+			locationManager.desiredAccuracy = [[[Settings sharedSettings] getSettingType:kSettingTypeLocation setting:kLocationSettingAccuracy] intValue];
 		} @catch (NSException* e) {
 			NSLog(@"Exception setting position accuracy: %@", e);
 		}
@@ -182,7 +182,7 @@ static CLLocation* lastAcceptedPoint;
 		Setting* setting = notification.object;
 		NSLog(@"Location setting %@ changed to %@.", setting.name, setting.value);
 
-		if ([setting.name isEqualToString:@"accuracy"]) {
+		if ([setting.name isEqualToString:kLocationSettingAccuracy]) {
 			locationManager.desiredAccuracy = [setting.value integerValue];
 		} else if ([setting.name isEqualToString:@"interval"]) {
         } else if ([setting.name isEqualToString:@"locationAdaptive"]) {

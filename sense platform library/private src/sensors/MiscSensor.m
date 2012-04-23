@@ -15,7 +15,7 @@ static NSString* variableKey = @"variable";
 static NSString* valueKey = @"value";
 
 @implementation MiscSensor
-- (NSString*) name {return @"miscellaneous";}
+- (NSString*) name {return kSENSOR_MISC;}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return YES;}
 

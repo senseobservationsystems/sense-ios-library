@@ -17,7 +17,7 @@
 static NSString* variableKey = @"variable";
 static NSString* valueKey = @"value";
 
-- (NSString*) name {return @"preferences";}
+- (NSString*) name {return kSENSOR_PREFERENCES;}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return YES;}
 
@@ -85,7 +85,6 @@ static NSString* valueKey = @"value";
 - (void) dealloc {
 	self.isEnabled = NO;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
 }
 
 @end

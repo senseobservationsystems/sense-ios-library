@@ -28,7 +28,7 @@
 @synthesize sampleTimer;
 @synthesize volumeTimer;
 
-- (NSString*) name {return @"noise_sensor";}
+- (NSString*) name {return kSENSOR_NOISE;}
 - (NSString*) displayName {return @"noise";}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return YES;}

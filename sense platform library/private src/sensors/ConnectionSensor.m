@@ -12,7 +12,7 @@
 
 @implementation ConnectionSensor
 
-- (NSString*) name {return @"connection type";}
+- (NSString*) name {return kSENSOR_CONNECTION_TYPE;}
 - (NSString*) deviceType {return [self name];}
 + (BOOL) isAvailable {return YES;}
 

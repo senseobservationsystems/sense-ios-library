@@ -41,13 +41,15 @@ static SensorStore* sensorStore;
     [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingPollInterval value:@"60"];
     [settings setSettingType:kSettingTypeLocation setting:kLocationSettingAccuracy  value:@"10000"];
     [settings setSettingType:kSettingTypeAmbience setting:kAmbienceSettingInterval  value:@"60"];
-    
-    [settings setSensor:[LocationSensor class] enabled:YES];
+   
+    /*
+    [settings setSensor:[LocationSensor sensorId] enabled:YES];
     [settings setSensor:[NoiseSensor class] enabled:YES];
     [settings setSensor:[AccelerationSensor class] enabled:YES];
     [settings setSensor:[AccelerometerSensor class] enabled:YES];
     [settings setSensor:[OrientationSensor class] enabled:YES];
     [settings setSensor:[RotationSensor class] enabled:YES];
+     */
     
     [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingSenseEnabled value:kSettingYES];
 }

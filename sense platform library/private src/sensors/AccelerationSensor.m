@@ -15,7 +15,7 @@
 @implementation AccelerationSensor
 
 
-- (NSString*) name {return @"acceleration";}
+- (NSString*) name {return kSENSOR_ACCELERATION;}
 - (NSString*) deviceType {return [self name];}
 //TODO: check for availability
 + (BOOL) isAvailable {
