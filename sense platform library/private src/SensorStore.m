@@ -436,8 +436,18 @@ static SensorStore* sharedSensorStoreInstance = nil;
 		//apply properties one by one
 		[sender setUser:username andPassword:password];
         //TODO:FIX
-		syncRate = [[[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingUploadInterval] doubleValue];
-        [self setSyncRate:3600];
+		NSString* setting = [[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingUploadInterval];
+        if ([setting isEqualToString:kGeneralSettingUploadIntervalAdaptive])
+            [self setSyncRate:10];
+        else if ([setting isEqualToString:kGeneralSettingUploadIntervalNightly])
+            [self setSyncRate:3600];
+        else if ([setting isEqualToString:kGeneralSettingUploadIntervalWifi])
+            [self setSyncRate:3600];
+        else if ([setting doubleValue]) {   
+            [self setSyncRate:MAX(1,[setting doubleValue])];
+        } else {
+            [self setSyncRate:1800]; //Hmm, unknown, let's choose some value
+        }
         
 		[self setEnabled:[[[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingSenseEnabled] boolValue]];
 	}
