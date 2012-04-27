@@ -11,14 +11,10 @@
 #import <CoreMotion/CoreMotion.h>
 
 @interface LocationSensor : Sensor <CLLocationManagerDelegate>{
-	CLLocationManager* locationManager;
-	int accuracyPreference;
-	NSMutableArray* samples;
-    
-    NSTimer* newSampleTimer;
-    CLLocation* previousLocation;
+
 }
 
 @property BOOL isEnabled;
-- (void) settingChanged: (NSNotification*) notification;
+
+- (void) setBackgroundRunningEnable:(BOOL) enable;
 @end

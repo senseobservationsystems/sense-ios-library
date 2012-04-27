@@ -8,24 +8,42 @@
 
 #import "DynamicSensor.h"
 #import "DataStore.h"
+#import "SensePlatform.h"
+#import "JSON.h"
 
-@implementation DynamicSensor
+@implementation DynamicSensor {
+    NSDictionary* fields;
+}
 - (NSString*) name {return sensorName;}
 - (NSString*) deviceType {return deviceType;}
 + (BOOL) isAvailable {return YES;}
 
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data
+    NSString* dataStructure = @"";
+    if ([dataType isEqualToString: kSENSEPLATFORM_DATA_TYPE_JSON]) {
+        if (fields != nil)
+            dataStructure = [fields JSONRepresentation];
+        return [NSDictionary dictionaryWithObjectsAndKeys:
+                [self name], @"name",
+       			[self displayName], @"display_name",
+                [self deviceType], @"device_type",
+                @"", @"pager_type",
+                dataType, @"data_type",
+                @"", @"data_structure",
+                nil];
+    }
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
+   			[self displayName], @"display_name",
 			[self deviceType], @"device_type",
 			@"", @"pager_type",
 			dataType, @"data_type",
-			@"", @"data_structure",
 			nil];
 }
 
-- (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType {
+- (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields {
 	self = [super init];
 	if (self) {
         sensorName = name;
@@ -49,10 +67,6 @@
 - (void) setIsEnabled:(BOOL) enable {
 	NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
 	isEnabled = enable;
-}
-
-- (NSString*) sensorId {
-    return [NSString stringWithFormat:@"%@", sensorName];
 }
 
 - (void) dealloc {

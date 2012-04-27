@@ -12,7 +12,14 @@
 #import "math.h"
 #import "DataStore.h"
 
-@implementation LocationSensor
+@implementation LocationSensor {
+    CLLocationManager* locationManager;
+	int accuracyPreference;
+	NSMutableArray* samples;
+    
+    NSTimer* newSampleTimer;
+    CLLocation* previousLocation;
+}
 //constants
 static NSString* longitudeKey = @"longitude";
 static NSString* latitudeKey = @"latitude";
@@ -74,6 +81,9 @@ static CLLocation* lastAcceptedPoint;
     didUpdateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation
 {
+    if (isEnabled == NO) {
+        return;
+    }
 	double longitude = newLocation.coordinate.longitude;
 	double latitude = newLocation.coordinate.latitude;
 	double altitude = newLocation.altitude;
@@ -166,15 +176,24 @@ static CLLocation* lastAcceptedPoint;
 		[samples removeAllObjects];
         //NOTE: using significant location updates doesn't allow the phone to sense while running in the background
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
-        
 	}
 	else {
         [newSampleTimer invalidate];
-        [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+        //[locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
 		//[locationManager stopUpdatingLocation];
+        //as this needs to be enabled to run in the background, rather switch to the lowest accuracy
+        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
 		[samples removeAllObjects];
 	}
 	isEnabled = enable;
+}
+
+- (void) setBackgroundRunningEnable:(BOOL) enable {
+    if (enable)
+        [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
+    else {
+        [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+    }
 }
 
 - (void) settingChanged: (NSNotification*) notification  {

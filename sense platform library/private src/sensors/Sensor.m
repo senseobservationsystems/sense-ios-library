@@ -25,11 +25,11 @@
 		return NO;
 	//check name
 	NSString* dName = [description valueForKey:@"name"];
-	 if (dName == nil || ([dName caseInsensitiveCompare:[self name]] != 0))
+	 if (dName == nil || ([dName caseInsensitiveCompare:[self name]] != NSOrderedSame))
 		 return NO;
 	//check device_type
 	NSString* dType = [description valueForKey:@"device_type"];
-	if (dType == nil || ([dType caseInsensitiveCompare:[self deviceType]] != 0))
+	if (dType == nil || ([dType caseInsensitiveCompare:[self deviceType]] != NSOrderedSame))
 		return NO;
 	
 	//passed all checks, hence the description matches
@@ -42,10 +42,11 @@
 - (id) init {
 	self = [super init];
 	 if (self) {
+         //TODO:, actually [self sensorId] should be used, but that means the settings shoudl also somehow use that, not used the name portion, have to decide how to fix that
 		 //register for enable changed notification
 		 [[NSNotificationCenter defaultCenter] addObserver:self
 												  selector:@selector(enabledChanged:)
-													  name:[Settings enabledChangedNotificationNameForSensor:[self sensorId]] object:nil];
+													  name:[Settings enabledChangedNotificationNameForSensor:[self name]] object:nil];
 	 }
 	 return self;
 }
@@ -59,7 +60,11 @@
 }
 
 - (NSString*) sensorId {
-    return [NSString stringWithFormat:@"%@", [self name]];
+    NSString* separator = @"/";
+    NSString* escapedSeparator = @"//";
+    NSString* escapedName = [[self name] stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    NSString* escapedDeviceType = [[self deviceType] stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    return [NSString stringWithFormat:@"%@%@%@", escapedName, separator, escapedDeviceType];
 }
 
 @end

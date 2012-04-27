@@ -169,7 +169,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 		for (id remoteSensor in remoteSensors) {
 			//determine whether the sensor matches
 			if ([remoteSensor isKindOfClass:[NSDictionary class]] && [sensor matchesDescription:remoteSensor]) {
-				NSLog(@"Matched sensor of type %@", [sensor class]);
+				NSLog(@"Matched sensor of type %@ and description %@", [sensor sensorId], [sensor sensorDescription]);
 				id sensorId = [remoteSensor valueForKey:@"id"];
                 //update sensor id map
 				[sensorIdMap setValue:sensorId forKey:sensor.sensorId];
@@ -235,10 +235,13 @@ static SensorStore* sharedSensorStoreInstance = nil;
     sensor.dataStore = self;
     for(Sensor* s in sensors) {
         if ([s matchesDescription:[sensor sensorDescription]]) {
+            NSLog(@"Adding a sensor we already have...");
+            NSLog(@"Sensor %@ same as already contained %@", [sensor sensorDescription], [s sensorDescription]);
             //list already contains sensor, don't add
             return;
         }
     }
+
     [sensors addObject:sensor];
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
@@ -266,6 +269,13 @@ static SensorStore* sharedSensorStoreInstance = nil;
 
 -(void) setEnabled:(BOOL) enable {
 	serviceEnabled = enable;
+    LocationSensor* locationSensor;
+    for (Sensor* s in sensors) {
+        if ([s.name isEqualToString:kSENSOR_LOCATION]) {
+            locationSensor = (LocationSensor*)s;
+            break;
+        }
+    }
     
 	if (NO == enable) { 
 		/* Previously sensors were deallocated (by removing their references), however that has some problems
@@ -277,6 +287,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 			[[Settings sharedSettings] setSensor:[sensor sensorId] enabled:NO permanent:NO];
 		}
         
+        [locationSensor setBackgroundRunningEnable:NO];
 		//flush data
 		[self forceDataFlush];
         
@@ -284,6 +295,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
         if (uploadTimer.isValid )
             [uploadTimer invalidate];
 	} else {
+        [locationSensor setBackgroundRunningEnable:YES];
         //send notifications to notify sensors whether they should activate themselves
         for (Sensor* sensor in sensors) {
 			[[Settings sharedSettings] sendNotificationForSensor:sensor.sensorId];

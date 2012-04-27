@@ -23,6 +23,11 @@
 #import "PreferencesSensor.h"
 #import "RotationSensor.h"
 
+extern NSString * const kSENSEPLATFORM_DATA_TYPE_JSON;
+extern NSString * const kSENSEPLATFORM_DATA_TYPE_INTEGER;
+extern NSString * const kSENSEPLATFORM_DATA_TYPE_FLOAT;
+extern NSString * const kSENSEPLATFORM_DATA_TYPE_STRING;
+
 @interface SensePlatform : NSObject
 + (void) initialize;
 + (NSArray*) availableSensors;
