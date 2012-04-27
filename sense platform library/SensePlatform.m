@@ -29,7 +29,7 @@ static SensorStore* sensorStore;
 + (BOOL) registerhUser:(NSString*) user withPassword:(NSString*) password {
 
     NSString* error;
-    BOOL succes =  [sensorStore.sender registerUser:user withPassword:password error:&error];
+    BOOL succes = [sensorStore.sender registerUser:user withPassword:password error:&error];
     if (succes)
             [[Settings sharedSettings] setLogin:user withPassword:password];
     return succes;
@@ -38,18 +38,17 @@ static SensorStore* sensorStore;
 
 + (void) applyIVitalitySettings {
     Settings* settings = [Settings sharedSettings];
-    [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingPollInterval value:@"60"];
-    [settings setSettingType:kSettingTypeLocation setting:kLocationSettingAccuracy  value:@"10000"];
-    [settings setSettingType:kSettingTypeAmbience setting:kAmbienceSettingInterval  value:@"60"];
+    [settings setSettingType:kSettingTypeSpatial setting:kSpatialSettingInterval value:@"60"];
+    [settings setSettingType:kSettingTypeLocation setting:kLocationSettingAccuracy value:@"100"];
+    [settings setSettingType:kSettingTypeAmbience setting:kAmbienceSettingInterval value:@"60"];
+    [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingUploadInterval value:@"1800"];
    
-    /*
-    [settings setSensor:[LocationSensor sensorId] enabled:YES];
-    [settings setSensor:[NoiseSensor class] enabled:YES];
-    [settings setSensor:[AccelerationSensor class] enabled:YES];
-    [settings setSensor:[AccelerometerSensor class] enabled:YES];
-    [settings setSensor:[OrientationSensor class] enabled:YES];
-    [settings setSensor:[RotationSensor class] enabled:YES];
-     */
+    [settings setSensor:kSENSOR_LOCATION enabled:YES];
+    [settings setSensor:kSENSOR_NOISE enabled:YES];
+    [settings setSensor:kSENSOR_ACCELERATION enabled:YES];
+    [settings setSensor:kSENSOR_ACCELEROMETER enabled:YES];
+    [settings setSensor:kSENSOR_ORIENTATION enabled:YES];
+    [settings setSensor:kSENSOR_ROTATION enabled:YES];
     
     [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingSenseEnabled value:kSettingYES];
 }

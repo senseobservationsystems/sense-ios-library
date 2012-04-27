@@ -30,4 +30,5 @@
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
 + (BOOL) registerhUser:(NSString*) user withPassword:(NSString*) password;
 + (void) applyIVitalitySettings;
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;
 @end

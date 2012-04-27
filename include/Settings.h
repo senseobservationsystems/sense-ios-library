@@ -110,7 +110,7 @@ extern NSString* kActivitySettingPrivacyPublic;
 - (BOOL) isSensorEnabled:(NSString*) sensor;
 
 //send notification to a specific sensor
-- (void) sendNotificationForSensor:(Class) sensor;
+- (void) sendNotificationForSensor:(NSString*) sensor;
 
 //getter and setters for settings
 - (NSString*) getSettingType: (NSString*) type setting:(NSString*) setting;

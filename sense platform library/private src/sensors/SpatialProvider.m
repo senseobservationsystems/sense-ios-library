@@ -11,8 +11,11 @@
 #import "SensorStore.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "Settings.h"
+#import "MotionEnergySensor.h"
+#import "MotionFeaturesSensor.h"
 
 static const double G = 9.81;
+static const double radianInDegrees = 180 / M_PI;
 
 static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this is a tradeoff between delay and cpu overhead
 @implementation SpatialProvider {
@@ -24,6 +27,8 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
 	OrientationSensor* orientationSensor;
 	AccelerationSensor* accelerationSensor;
 	RotationSensor* rotationSensor;
+    MotionEnergySensor* motionEnergySensor;
+    MotionFeaturesSensor* motionFeaturesSensor;
 	
 	NSOperationQueue* operations;
   	NSOperationQueue* pollQueue;
@@ -41,7 +46,9 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
 	self = [super init];
 	if (self) {
 		NSLog(@"spatial provider init");
-		compassSensor = compass; orientationSensor = orientation; accelerometerSensor = accelerometer; accelerationSensor = acceleration; rotationSensor = rotation;		
+		compassSensor = compass; orientationSensor = orientation; accelerometerSensor = accelerometer; accelerationSensor = acceleration; rotationSensor = rotation;
+        motionEnergySensor = [[MotionEnergySensor alloc] init];
+        motionFeaturesSensor = [[MotionFeaturesSensor alloc] init];
 		motionManager = [[CMMotionManager alloc] init];
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
@@ -70,15 +77,15 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
 		//enable
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(accelerometerEnabledChanged:)
-													 name:[Settings enabledChangedNotificationNameForSensor:[accelerometerSensor class]] object:nil];
+													 name:[Settings enabledChangedNotificationNameForSensor:kSENSOR_ACCELEROMETER] object:nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(rotationEnabledChanged:)
-													 name:[Settings enabledChangedNotificationNameForSensor:[rotationSensor class]] object:nil];
+													 name:[Settings enabledChangedNotificationNameForSensor:kSENSOR_ROTATION] object:nil];
         
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(orientationEnabledChanged:)
-													 name:[Settings enabledChangedNotificationNameForSensor:[orientationSensor class]] object:nil];
+													 name:[Settings enabledChangedNotificationNameForSensor:kSENSOR_ORIENTATION] object:nil];
 		
 		//register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -217,10 +224,86 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
     NSDictionary* data = [NSDictionary dictionaryWithObject:deviceMotionArray forKey:@"data"];
     NSNotification* notification = [NSNotification notificationWithName:kMotionData object:self userInfo:data];
     [[NSNotificationCenter defaultCenter] postNotification:notification];
+
     
+    //either send all samples, or just the first
+    BOOL rawSamples = NO, stats = YES;
     
-    const double radianInDegrees = 180 / M_PI;
+    if (rawSamples)
+        [self commitRawSamples:deviceMotionArray withTimestamps:timestampArray];
+    else {
+        NSRange range = NSMakeRange(0, 1);
+        [self commitRawSamples:[deviceMotionArray subarrayWithRange:range] withTimestamps:[timestampArray subarrayWithRange:range]];
+    }
     
+    if (stats) {
+        [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:[timestampArray objectAtIndex:0]];
+    }
+}
+
+- (void) commitMotionFeaturesForSamples:(NSArray*)deviceMotionArray withTimestamp:(NSDate*) timestampDate {
+    //commit average, stddev and kurtosis
+    double magnitudeSum=0, magnitudeSqSum=0;
+    double totalRotSum=0, totalRotSqSum=0;
+    for (CMDeviceMotion* deviceMotion in deviceMotionArray) {
+        CMAcceleration a = deviceMotion.userAcceleration;
+        double magnitude = sqrt(a.x * G * a.x * G + a.y * G *a.y * G + a.z * G *a.z * G);
+        
+        magnitudeSum += magnitude;
+        magnitudeSqSum += magnitude * magnitude;
+        
+        CMRotationRate r = deviceMotion.rotationRate;
+        double totalRot = sqrt(r.x * r.x + r.y * r.y + r.z * r.z);
+        
+        totalRotSum += totalRot;
+        totalRotSqSum += totalRot * totalRot;
+    }
+    //set magnitude related features
+    double magnitudeAvg = magnitudeSum / [deviceMotionArray count];
+    double meanSquares = magnitudeSqSum / [deviceMotionArray count];
+    double magnitudeStddev = meanSquares - magnitudeAvg*magnitudeAvg;
+    
+    //rotation related features
+    double totalRotAvg = totalRotSum / [deviceMotionArray count];
+    double totalRotMeanSquares = totalRotSqSum / [deviceMotionArray count];
+    double totalRotStddev = totalRotMeanSquares - totalRotAvg*totalRotAvg;
+
+    //commit values
+    NSTimeInterval timestamp = [timestampDate timeIntervalSince1970];
+    
+    [[SensorStore sharedSensorStore] addSensor:motionEnergySensor];
+    [[SensorStore sharedSensorStore] addSensor:motionFeaturesSensor];
+    
+    //commit motion energy
+    NSString* value = [NSString stringWithFormat:@"%.3f", magnitudeStddev];
+    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        value, @"value",
+                                        [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                        nil];
+    [motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
+    
+    value = [[NSDictionary dictionaryWithObjectsAndKeys:
+							[NSString stringWithFormat:@"%.3f", magnitudeAvg], accelerationAvg,
+							[NSString stringWithFormat:@"%.3f", magnitudeStddev], accelerationStddev,
+							@"", accelerationKurtosis,
+							[NSString stringWithFormat:@"%.3f", totalRotAvg], rotationAvg,
+							[NSString stringWithFormat:@"%.3f", totalRotStddev], rotationStddev,
+							@"", rotationKurtosis,
+							nil] JSONRepresentation];
+    
+    valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        value, @"value",
+                                        [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                        nil];
+    [motionFeaturesSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionFeaturesSensor.sensorId];
+}
+
+- (void) commitRawSamples:(NSArray*) deviceMotionArray withTimestamps: (NSArray*) timestampArray {
+    BOOL hasOrientation = orientationSensor != nil && orientationSensor.isEnabled;
+    BOOL hasAccelerometer = accelerometerSensor != nil && accelerometerSensor.isEnabled;
+    BOOL hasAcceleration = accelerationSensor != nil && accelerationSensor.isEnabled;
+    BOOL hasRotation = rotationSensor != nil && rotationSensor.isEnabled;
+    float heading = -1;
     
     for (size_t i = 0; i < [deviceMotionArray count]; i++) {
         NSTimeInterval timestamp = [[timestampArray objectAtIndex:i] timeIntervalSince1970];
@@ -229,7 +312,6 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
         //Commit samples for the sensors
         if (hasOrientation) {
             CMAttitude* attitude = motion.attitude;
-            //TODO: convert to android format. i.e. pitch <-180, 180] and roll <-90,90], now the default iOS format has pitch <-90,90] and roll <-180,180]
             NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                             [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
                                             [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,

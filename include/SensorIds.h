@@ -17,6 +17,8 @@ extern NSString* const kSENSOR_COMPASS;
 extern NSString* const kSENSOR_CONNECTION_TYPE;
 extern NSString* const kSENSOR_LOCATION;
 extern NSString* const kSENSOR_MISC;
+extern NSString* const kSENSOR_MOTION_ENERGY;
+extern NSString* const kSENSOR_MOTION_FEATURES;
 extern NSString* const kSENSOR_NOISE;
 extern NSString* const kSENSOR_ORIENTATION;
 extern NSString* const kSENSOR_PREFERENCES;

@@ -286,7 +286,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 	} else {
         //send notifications to notify sensors whether they should activate themselves
         for (Sensor* sensor in sensors) {
-			[[Settings sharedSettings] sendNotificationForSensor:[sensor class]];
+			[[Settings sharedSettings] sendNotificationForSensor:sensor.sensorId];
         }
         //enable uploading
         [self setSyncRate:syncRate];
