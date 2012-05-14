@@ -21,6 +21,7 @@
 #import "CallSensor.h"
 #import "ConnectionSensor.h"
 #import "PreferencesSensor.h"
+#import "BloodPressureSensor.h"
 #import "MiscSensor.h"
 #import <sqlite3.h>
 #import <UIKit/UIKit.h>
@@ -119,6 +120,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 							[AccelerationSensor class],
 							[RotationSensor class],
 							[PreferencesSensor class],
+							[BloodPressureSensor class],
 							//[MiscSensor class],
 							nil];
 		
@@ -168,6 +170,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 		//match against all remote sensors
 		for (id remoteSensor in remoteSensors) {
 			//determine whether the sensor matches
+            NSLog(@"Found sensor: %@", remoteSensor);
 			if ([remoteSensor isKindOfClass:[NSDictionary class]] && [sensor matchesDescription:remoteSensor]) {
 				NSLog(@"Matched sensor of type %@ and description %@", [sensor sensorId], [sensor sensorDescription]);
 				id sensorId = [remoteSensor valueForKey:@"id"];

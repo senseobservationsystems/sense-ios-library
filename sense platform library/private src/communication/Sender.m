@@ -373,12 +373,13 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 }
 
 - (NSURL*) makeSensorsUrlForDeviceId:(NSInteger)deviceId {
-	NSString* url = [NSString stringWithFormat: @"%@/%@/%d/%@%@",
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%d/%@%@%@",
 					 [urls valueForKey:@"baseUrl"],
 					 [urls valueForKey:@"devices"],
 					 deviceId,
  					 [urls valueForKey:@"sensors"],
-					 [urls valueForKey:@"jsonSuffix"]];
+					 [urls valueForKey:@"jsonSuffix"],
+                     @"?per_page=1000"];
 	
 	return [NSURL URLWithString:url];
 }

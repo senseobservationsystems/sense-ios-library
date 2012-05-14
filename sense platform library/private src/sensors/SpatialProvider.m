@@ -158,15 +158,11 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
 
 - (void) poll {
     NSLog(@"^^^ Spatial provider poll invoked. ^^^");
-    BOOL hasOrientation = orientationSensor != nil && orientationSensor.isEnabled;
-    BOOL hasAccelerometer = accelerometerSensor != nil && accelerometerSensor.isEnabled;
-    BOOL hasAcceleration = accelerationSensor != nil && accelerationSensor.isEnabled;
-    BOOL hasRotation = rotationSensor != nil && rotationSensor.isEnabled;
     
     
     //prepare arrays for data
     __block NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
-    __block CMAttitude* attitude;
+    //__block CMAttitude* attitude;
     __block NSMutableArray* timestampArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
     
@@ -202,7 +198,7 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
     [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
     // Aquire heading, this may take some time ( 1 second)
-    float heading = -1;
+    //float heading = -1;
     /*
      if (hasOrientation) {
      if (!updatingHeading) {

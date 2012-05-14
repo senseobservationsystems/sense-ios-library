@@ -2,6 +2,7 @@
 #import "SensorStore.h"
 #import "Settings.h"
 #import "DynamicSensor.h"
+#import "BloodPressureSensor.h"
 
 NSString * const kSENSEPLATFORM_DATA_TYPE_JSON = @"json";
 NSString * const kSENSEPLATFORM_DATA_TYPE_INTEGER = @"integer";
@@ -91,6 +92,23 @@ static SensorStore* sensorStore;
     //commit value
     [sensor commitValue:value withTimestamp:[NSString stringWithFormat:@"%.3f",[timestamp timeIntervalSince1970]]];
 }
+
++ (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback {
+    BloodPressureSensor* bpm;
+    for (Sensor* sensor in sensorStore.sensors) {
+        if ([sensor isKindOfClass:BloodPressureSensor.class]) {
+            bpm = (BloodPressureSensor*)sensor;
+            break;
+        }
+            
+    }
+    if (bpm != nil)
+        [bpm syncMeasurements:callback];
+    else {
+        callback(BPM_OTHER_ERROR, 0, 0, nil);
+    }
+}
+
 
 + (NSString*) dataTypeOf:(NSString*) value {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];

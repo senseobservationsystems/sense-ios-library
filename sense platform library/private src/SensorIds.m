@@ -10,6 +10,7 @@
 NSString* const kSENSOR_ACCELERATION = @"linear acceleration";
 NSString* const kSENSOR_ACCELEROMETER = @"accelerometer";
 NSString* const kSENSOR_BATTERY = @"battery";
+NSString* const kSENSOR_BLOOD_PRESSURE = @"blood pressure";
 NSString* const kSENSOR_CALL = @"call state";
 NSString* const kSENSOR_COMPASS = @"compass";
 NSString* const kSENSOR_CONNECTION_TYPE = @"connection type";

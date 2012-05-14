@@ -12,6 +12,7 @@
 extern NSString* const kSENSOR_ACCELERATION;
 extern NSString* const kSENSOR_ACCELEROMETER;
 extern NSString* const kSENSOR_BATTERY;
+extern NSString* const kSENSOR_BLOOD_PRESSURE;
 extern NSString* const kSENSOR_CALL;
 extern NSString* const kSENSOR_COMPASS;
 extern NSString* const kSENSOR_CONNECTION_TYPE;

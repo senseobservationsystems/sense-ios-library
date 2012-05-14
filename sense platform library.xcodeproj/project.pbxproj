@@ -74,6 +74,15 @@
 		3EF8C49015402E7D00777C34 /* ApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C48F15402E7D00777C34 /* ApplicationStateChange.h */; };
 		3EF8C55A1541723500777C34 /* sense platform library-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 3EF8C5591541723500777C34 /* sense platform library-Prefix.pch */; };
 		3EF8C5841541917500777C34 /* DynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5831541917500777C34 /* DynamicSensor.m */; };
+		3EFB7BB3155A73AF00ACBA6F /* AntPlusController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EFB7BAD155A73AF00ACBA6F /* AntPlusController.h */; };
+		3EFB7BB4155A73AF00ACBA6F /* AntPlusController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFB7BAE155A73AF00ACBA6F /* AntPlusController.m */; };
+		3EFB7BB5155A73AF00ACBA6F /* BloodPressureSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EFB7BAF155A73AF00ACBA6F /* BloodPressureSensor.h */; };
+		3EFB7BB6155A73AF00ACBA6F /* BloodPressureSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFB7BB0155A73AF00ACBA6F /* BloodPressureSensor.m */; };
+		3EFB7BB7155A73AF00ACBA6F /* FootpodSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EFB7BB1155A73AF00ACBA6F /* FootpodSensor.h */; };
+		3EFB7BB8155A73AF00ACBA6F /* FootpodSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFB7BB2155A73AF00ACBA6F /* FootpodSensor.m */; };
+		3EFB7BC0155A754A00ACBA6F /* WFConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFB7BBF155A754A00ACBA6F /* WFConnector.framework */; };
+		3EFB7BC2155A761B00ACBA6F /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFB7BC1155A761B00ACBA6F /* ExternalAccessory.framework */; };
+		3EFB7BC4155A763A00ACBA6F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFB7BC3155A763A00ACBA6F /* CoreBluetooth.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3EFE4D231545461000CC67DD /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EFE4D1F1545459C00CC67DD /* SBJSON.m */; };
 		3EFE4D261545461000CC67DD /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C5681541881A00777C34 /* NSObject+SBJSON.m */; };
 		3EFE4D281545461000CC67DD /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF8C56A1541881A00777C34 /* NSString+SBJSON.m */; };
@@ -184,6 +193,15 @@
 		3EF8C56E1541881A00777C34 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		3EF8C5701541881A00777C34 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		3EF8C5831541917500777C34 /* DynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicSensor.m; sourceTree = "<group>"; };
+		3EFB7BAD155A73AF00ACBA6F /* AntPlusController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AntPlusController.h; sourceTree = "<group>"; };
+		3EFB7BAE155A73AF00ACBA6F /* AntPlusController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AntPlusController.m; sourceTree = "<group>"; };
+		3EFB7BAF155A73AF00ACBA6F /* BloodPressureSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloodPressureSensor.h; sourceTree = "<group>"; };
+		3EFB7BB0155A73AF00ACBA6F /* BloodPressureSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloodPressureSensor.m; sourceTree = "<group>"; };
+		3EFB7BB1155A73AF00ACBA6F /* FootpodSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FootpodSensor.h; sourceTree = "<group>"; };
+		3EFB7BB2155A73AF00ACBA6F /* FootpodSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FootpodSensor.m; sourceTree = "<group>"; };
+		3EFB7BBF155A754A00ACBA6F /* WFConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WFConnector.framework; path = ../../../libs/wf_api_2.1.5.b1/dependencies/WFConnector.framework; sourceTree = "<group>"; };
+		3EFB7BC1155A761B00ACBA6F /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		3EFB7BC3155A763A00ACBA6F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		3EFE4D1F1545459C00CC67DD /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
 		3EFE4D42154566D700CC67DD /* SensorIds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensorIds.h; sourceTree = "<group>"; };
 		3EFE4D7815457EFB00CC67DD /* SensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorIds.m; sourceTree = "<group>"; };
@@ -198,6 +216,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EFB7BC4155A763A00ACBA6F /* CoreBluetooth.framework in Frameworks */,
+				3EFB7BC2155A761B00ACBA6F /* ExternalAccessory.framework in Frameworks */,
+				3EFB7BC0155A754A00ACBA6F /* WFConnector.framework in Frameworks */,
 				3EF8C46915401AF600777C34 /* Foundation.framework in Frameworks */,
 				3E5D0CE8153DC5DB00198A55 /* libSBJson.a in Frameworks */,
 			);
@@ -216,7 +237,6 @@
 		3E18BB2A154AC8CD005EED30 /* json */ = {
 			isa = PBXGroup;
 			children = (
-				3E1C7D65154AE6A50048CFF6 /* Sensor.h */,
 				3E18BB2B154AC8CD005EED30 /* JSON.h */,
 				3E18BB2C154AC8CD005EED30 /* NSObject+SBJSON.h */,
 				3E18BB2D154AC8CD005EED30 /* NSString+SBJSON.h */,
@@ -231,6 +251,9 @@
 		3E5D0C06153DBC7400198A55 = {
 			isa = PBXGroup;
 			children = (
+				3EFB7BC3155A763A00ACBA6F /* CoreBluetooth.framework */,
+				3EFB7BC1155A761B00ACBA6F /* ExternalAccessory.framework */,
+				3EFB7BBF155A754A00ACBA6F /* WFConnector.framework */,
 				3EF8C5651541881A00777C34 /* json */,
 				3EF8C3B3153EB23900777C34 /* include */,
 				3E5D0C16153DBC7400198A55 /* sense platform library */,
@@ -317,6 +340,7 @@
 		3E5D0C3F153DC14E00198A55 /* sensors */ = {
 			isa = PBXGroup;
 			children = (
+				3EFB7BAC155A73AF00ACBA6F /* ant+ */,
 				3E1C7D67154AE6C90048CFF6 /* Acceleration.h */,
 				3E1C7D68154AE6C90048CFF6 /* Acceleration.m */,
 				3E1C7D69154AE6C90048CFF6 /* AccelerationSensor.h */,
@@ -365,6 +389,7 @@
 		3EF8C3B3153EB23900777C34 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				3E1C7D65154AE6A50048CFF6 /* Sensor.h */,
 				3E18BB2A154AC8CD005EED30 /* json */,
 				3EF8C48F15402E7D00777C34 /* ApplicationStateChange.h */,
 				3EF8C3B4153EB23900777C34 /* SensePlatform.h */,
@@ -385,6 +410,19 @@
 				3EF8C5701541881A00777C34 /* SBJsonWriter.m */,
 			);
 			path = json;
+			sourceTree = "<group>";
+		};
+		3EFB7BAC155A73AF00ACBA6F /* ant+ */ = {
+			isa = PBXGroup;
+			children = (
+				3EFB7BAD155A73AF00ACBA6F /* AntPlusController.h */,
+				3EFB7BAE155A73AF00ACBA6F /* AntPlusController.m */,
+				3EFB7BAF155A73AF00ACBA6F /* BloodPressureSensor.h */,
+				3EFB7BB0155A73AF00ACBA6F /* BloodPressureSensor.m */,
+				3EFB7BB1155A73AF00ACBA6F /* FootpodSensor.h */,
+				3EFB7BB2155A73AF00ACBA6F /* FootpodSensor.m */,
+			);
+			path = "ant+";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -434,6 +472,9 @@
 				3E1C7D8A154AE6C90048CFF6 /* RotationSensor.h in Headers */,
 				3E1C7D8B154AE6C90048CFF6 /* SpatialProvider.h in Headers */,
 				3E1C7D8C154AE6C90048CFF6 /* UserProximity.h in Headers */,
+				3EFB7BB3155A73AF00ACBA6F /* AntPlusController.h in Headers */,
+				3EFB7BB5155A73AF00ACBA6F /* BloodPressureSensor.h in Headers */,
+				3EFB7BB7155A73AF00ACBA6F /* FootpodSensor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +586,9 @@
 				3EFE4DA41545A06000CC67DD /* MotionEnergySensor.m in Sources */,
 				3EFE4DA91545A14500CC67DD /* MotionFeaturesSensor.m in Sources */,
 				3E1C7D7B154AE6C90048CFF6 /* Acceleration.m in Sources */,
+				3EFB7BB4155A73AF00ACBA6F /* AntPlusController.m in Sources */,
+				3EFB7BB6155A73AF00ACBA6F /* BloodPressureSensor.m in Sources */,
+				3EFB7BB8155A73AF00ACBA6F /* FootpodSensor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,7 +635,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -608,7 +652,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -623,6 +667,10 @@
 				);
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/sense_platform_library.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../libs/wf_api_2.1.5.b1/dependencies\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "sense platform library/sense platform library-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
@@ -648,6 +696,10 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DSTROOT = /tmp/sense_platform_library.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../libs/wf_api_2.1.5.b1/dependencies\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "sense platform library/sense platform library-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
