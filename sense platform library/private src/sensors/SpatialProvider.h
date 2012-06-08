@@ -14,10 +14,11 @@
 #import "AccelerometerSensor.h"
 #import "AccelerationSensor.h"
 #import "RotationSensor.h"
+#import "JumpSensor.h"
 #import <pthread.h>
 
 @interface SpatialProvider : NSObject <CLLocationManagerDelegate>{
 }
 
-- (id) initWithCompass:(CompassSensor*)compass orientation:(OrientationSensor*)orientation accelerometer:(AccelerometerSensor*)accelerometer acceleration:(AccelerationSensor*)acceleration rotation:(RotationSensor*)rotation;
+- (id) initWithCompass:(CompassSensor*)compass orientation:(OrientationSensor*)orientation accelerometer:(AccelerometerSensor*)accelerometer acceleration:(AccelerationSensor*)acceleration rotation:(RotationSensor*)rotation jumpSensor:(JumpSensor*) jumpSensor;
 @end

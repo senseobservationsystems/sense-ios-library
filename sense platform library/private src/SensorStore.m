@@ -15,6 +15,7 @@
 #import "CompassSensor.h"
 #import "AccelerometerSensor.h"
 #import "OrientationSensor.h"
+#import "JumpSensor.h"
 #import "UserProximity.h"
 #import "OrientationStateSensor.h"
 #import "NoiseSensor.h"
@@ -29,7 +30,7 @@
 
 #import "SpatialProvider.h"
 
-#define IGNORE_DATA 0
+#define IGNORE_DATA 1
 #if IGNORE_DATA != 0
 #warning Compiling with IGNORE_DATA, so no data will be uploaded to commonSense
 #endif
@@ -119,6 +120,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
  							[AccelerometerSensor class],
 							[AccelerationSensor class],
 							[RotationSensor class],
+                            [JumpSensor class],
 							[PreferencesSensor class],
 							[BloodPressureSensor class],
 							//[MiscSensor class],
@@ -130,9 +132,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
         
         //instantiate sample strategy
         //sampleStrategy = [[SampleStrategy alloc] init];
-        
 
-        
         
 		//set settings and initialise sensors
         [self instantiateSensors];
@@ -217,7 +217,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 	}
 	
 	//initialise spatial provider
-	CompassSensor* compass=nil; OrientationSensor* orientation=nil; AccelerometerSensor* accelerometer=nil; AccelerationSensor* acceleration = nil; RotationSensor* rotation = nil;
+	CompassSensor* compass=nil; OrientationSensor* orientation=nil; AccelerometerSensor* accelerometer=nil; AccelerationSensor* acceleration = nil; RotationSensor* rotation = nil; JumpSensor* jumpSensor = nil;
 	for (Sensor* sensor in sensors) {
 		if ([sensor isKindOfClass:[CompassSensor class]])
 			compass = (CompassSensor*)sensor;
@@ -229,9 +229,11 @@ static SensorStore* sharedSensorStoreInstance = nil;
 			acceleration = (AccelerationSensor*)sensor;
 		else if ([sensor isKindOfClass:[RotationSensor class]])
 			rotation = (RotationSensor*)sensor;
+        else if ([sensor isKindOfClass:[JumpSensor class]])
+			jumpSensor = (JumpSensor*)sensor;
 	}
 	
-	spatialProvider = [[SpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation];
+	spatialProvider = [[SpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
 }
 
 - (void) addSensor:(Sensor*) sensor {

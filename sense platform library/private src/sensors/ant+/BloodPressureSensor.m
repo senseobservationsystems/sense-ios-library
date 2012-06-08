@@ -19,8 +19,8 @@
 
 
 static NSString* const heartRateKey = @"heart rate";
-static NSString* const diastollicPressureKey = @"diastollic pressure";
-static NSString* const systollicPressureKey = @"systollic pressure";
+static NSString* const diastollicPressureKey = @"diastollic";
+static NSString* const systollicPressureKey = @"systollic";
 static NSString* const passKey = @"sense.ant.bpm.pass";
 static NSString* const lastBloodPressureRecordKey = @"sense.ant.bpm.lastBloodPressureRecord";
 static const NSTimeInterval SCAN_INTERVAL = 60;

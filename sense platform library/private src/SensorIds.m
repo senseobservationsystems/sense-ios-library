@@ -22,3 +22,4 @@ NSString* const kSENSOR_PREFERENCES = @"preferences";
 NSString* const kSENSOR_ROTATION = @"gyroscope";
 NSString* const kSENSOR_MOTION_ENERGY = @"motion energy";
 NSString* const kSENSOR_MOTION_FEATURES = @"motion features";
+NSString* const kSENSOR_JUMP = @"jump";

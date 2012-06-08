@@ -6,7 +6,7 @@
 //  Copyright 2011 Almende. All rights reserved.
 //
 
-static NSString* kNewSensorDataNotification = @"NewSensorDataNotification";
+static NSString* const kNewSensorDataNotification = @"NewSensorDataNotification";
 @protocol DataStore
 - (void) commitFormattedData:(NSDictionary*)data forSensorId:(NSString*)sensorClass;
 @end

@@ -13,11 +13,11 @@
 #import "Settings.h"
 #import "MotionEnergySensor.h"
 #import "MotionFeaturesSensor.h"
+#import "JumpSensor.h"
 
 static const double G = 9.81;
 static const double radianInDegrees = 180 / M_PI;
 
-static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this is a tradeoff between delay and cpu overhead
 @implementation SpatialProvider {
     CLLocationManager* locationManager;
 	CMMotionManager* motionManager;
@@ -40,12 +40,16 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
     double frequency;
     NSTimer* pollTimer;
     
+    BOOL jumpDetection;
+    JumpSensor* jumpDetector;
 }
 
-- (id) initWithCompass:(CompassSensor*)compass orientation:(OrientationSensor*)orientation accelerometer:(AccelerometerSensor*)accelerometer acceleration:(AccelerationSensor*)acceleration rotation:(RotationSensor*)rotation{
+- (id) initWithCompass:(CompassSensor*)compass orientation:(OrientationSensor*)orientation accelerometer:(AccelerometerSensor*)accelerometer acceleration:(AccelerationSensor*)acceleration rotation:(RotationSensor*)rotation jumpSensor:(JumpSensor*) jumpSensor{
 	self = [super init];
 	if (self) {
 		NSLog(@"spatial provider init");
+        jumpDetection = YES;
+        jumpDetector = jumpSensor;
 		compassSensor = compass; orientationSensor = orientation; accelerometerSensor = accelerometer; accelerationSensor = acceleration; rotationSensor = rotation;
         motionEnergySensor = [[MotionEnergySensor alloc] init];
         motionFeaturesSensor = [[MotionFeaturesSensor alloc] init];
@@ -55,7 +59,6 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
         
 		//Set settings
 		@try {
-            
             interval = [[[Settings sharedSettings] getSettingType:kSettingTypeSpatial setting:kSpatialSettingInterval] doubleValue];
    			frequency = [[[Settings sharedSettings] getSettingType:kSettingTypeSpatial setting:kSpatialSettingFrequency] doubleValue];
   			nrSamples = [[[Settings sharedSettings] getSettingType:kSettingTypeSpatial setting:kSpatialSettingNrSamples] intValue];
@@ -86,6 +89,10 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(orientationEnabledChanged:)
 													 name:[Settings enabledChangedNotificationNameForSensor:kSENSOR_ORIENTATION] object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(jumpEnabledChanged:)
+													 name:[Settings enabledChangedNotificationNameForSensor:kSENSOR_JUMP] object:nil];
 		
 		//register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -94,6 +101,15 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
 	}
     
 	return self;
+}
+
+- (void) jumpEnabledChanged: (id) notification {
+    //UGLY hack to use jump detection
+	bool enable = [[notification object] boolValue];
+    jumpDetection = enable;
+    
+    [motionManager stopDeviceMotionUpdates];
+    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(schedulePoll) userInfo:nil repeats:NO];
 }
 
 - (void) accelerometerEnabledChanged: (id) notification {
@@ -173,10 +189,15 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
     
     
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
+        if (jumpDetection) {
+            [jumpDetector pushDeviceMotion:deviceMotion];
+            return;
+        }
+            
         if (counter > 0) {
             //Oh no, we're not processing fast enough. This means problems...
             discarded++;
-            NSLog(@"Processing too slow, skipping point, this corupts sensor input temporarily!");
+            NSLog(@"Processing too slow, skipping point, this corrupts sensor input temporarily!");
             return;
         }
         counter++;
@@ -196,6 +217,7 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
+    NSLog(@"Start sampling motion with %.0f Hz", frequency);
     [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
     // Aquire heading, this may take some time ( 1 second)
     //float heading = -1;
@@ -382,47 +404,46 @@ static const NSTimeInterval CONTINUOULY_UPDATE_INTERVAL = 1; //send block, this 
     
     
 - (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager {
-        return NO;
+    return NO;
+}
+
+
+//implement delegate
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+    //wake up threads waiting for a heading
+    [headingAvailable broadcast];
+    //if compass isn't enabled, it was just a one time need for a heading, so stop updating
+    if (compassSensor.isEnabled == NO && interval > 1) {
+        [locationManager stopUpdatingHeading];
+        updatingHeading = false;
+        return;
     }
-    
-    
-    //implement delegate
-    - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-        //wake up threads waiting for a heading
-        [headingAvailable broadcast];
-        //if compass isn't enabled, it was just a one time need for a heading, so stop updating
-        if (compassSensor.isEnabled == NO && interval > 1) {
-            [locationManager stopUpdatingHeading];
-            updatingHeading = false;
-            return;
+}
+
+- (void) settingChanged: (NSNotification*) notification {
+    @try {
+        Setting* setting = notification.object;
+        NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
+        if ([setting.name isEqualToString:kSpatialSettingInterval]) {
+            interval = [setting.value doubleValue];
+            [pollTimer invalidate];;
+            pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:!jumpDetection];
+        } else if ([setting.name isEqualToString:kSpatialSettingFrequency]) {
+            frequency = [setting.value doubleValue];
+        } else if ([setting.name isEqualToString:kSpatialSettingNrSamples]) {
+            nrSamples = [setting.value intValue];
         }
     }
-    
-    - (void) settingChanged: (NSNotification*) notification {
-        @try {
-            Setting* setting = notification.object;
-            NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
-            if ([setting.name isEqualToString:kSpatialSettingInterval]) {
-                interval = [setting.value doubleValue];
-                [pollTimer invalidate];;
-                pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
-            } else if ([setting.name isEqualToString:kSpatialSettingFrequency]) {
-                frequency = [setting.value doubleValue];
-            } else if ([setting.name isEqualToString:kSpatialSettingNrSamples]) {
-                nrSamples = [setting.value intValue];
-            }
-        }
-        @catch (NSException * e) {
-            NSLog(@"spatial provider: Exception thrown while changing setting: %@", e);
-        }
-        
+    @catch (NSException * e) {
+        NSLog(@"spatial provider: Exception thrown while changing setting: %@", e);
     }
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [pollTimer invalidate];
     
-    - (void) dealloc {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        [pollTimer invalidate];
-        
-        [operations cancelAllOperations];
-    }
-    
-    @end
+    [operations cancelAllOperations];
+}
+
+@end

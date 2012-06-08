@@ -24,5 +24,6 @@ extern NSString* const kSENSOR_NOISE;
 extern NSString* const kSENSOR_ORIENTATION;
 extern NSString* const kSENSOR_PREFERENCES;
 extern NSString* const kSENSOR_ROTATION;
+extern NSString* const kSENSOR_JUMP;
 
 #endif
