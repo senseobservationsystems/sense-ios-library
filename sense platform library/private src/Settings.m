@@ -27,6 +27,7 @@ NSString* kGeneralSettingPassword = @"password";
 NSString* kGeneralSettingUploadInterval = @"synchronisationRate";
 NSString* kGeneralSettingPollInterval = @"pollRate";
 NSString* kGeneralSettingAutodetect = @"auto detect";
+NSString* kGeneralSettingUploadToCommonSense = @"upload to common sense";
 
 //biometric settings
 NSString* kBiometricSettingGender = @"gender";
@@ -149,7 +150,9 @@ static Settings* sharedSettingsInstance = nil;
 				NSLog(@"Settings: exception thrown while loading default settings. THIS IS VERY SERIOUS: %@", e);
 				settings = nil;
 			}
-		}
+		} else {
+            [self ensureLatestVersion];
+        }
 	}
 	return self;
 }
@@ -297,6 +300,33 @@ static Settings* sharedSettingsInstance = nil;
 		sensorEnables = [NSMutableDictionary new];
 		[settings setObject:sensorEnables forKey:@"sensorEnables"];
 	}
+}
+
+- (void) ensureLatestVersion {
+    //open default settings
+    NSString* errorDesc = nil;
+	NSPropertyListFormat format;
+    NSString* defaultPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
+    NSData* plistXML = [[NSFileManager defaultManager] contentsAtPath:defaultPath];
+	NSDictionary* defaultSettings = (NSDictionary *)[NSPropertyListSerialization
+									   propertyListFromData:plistXML
+									   mutabilityOption:NSPropertyListMutableContainersAndLeaves
+									   format:&format
+									   errorDescription:&errorDesc];
+	if (!defaultSettings)
+	{
+		NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+		return;
+	}
+    
+    //copy settings that aren't in the local settings with the default settings
+    
+    for (NSString* key in defaultSettings) {
+        if ([settings valueForKey:key] == nil) {
+            [settings setValue:[defaultSettings objectForKey:key] forKey:key];
+        }
+    }
+    
 }
 
 - (void) storeSettings {

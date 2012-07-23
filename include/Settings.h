@@ -28,6 +28,7 @@ extern NSString* kGeneralSettingSenseEnabled;
 extern NSString* kGeneralSettingUploadInterval;
 extern NSString* kGeneralSettingPollInterval;
 extern NSString* kGeneralSettingAutodetect;
+extern NSString* kGeneralSettingUploadToCommonSense;
 
 //biometric settings
 extern NSString* kBiometricSettingGender;

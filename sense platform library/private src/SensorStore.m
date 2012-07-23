@@ -30,11 +30,6 @@
 
 #import "SpatialProvider.h"
 
-#define IGNORE_DATA 1
-#if IGNORE_DATA != 0
-#warning Compiling with IGNORE_DATA, so no data will be uploaded to commonSense
-#endif
-
 NSString* const kMotionData = @"motionData";
 
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
@@ -252,7 +247,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kNewSensorDataNotification object:sensorId userInfo:data];
-    if (IGNORE_DATA) return;
+    if ([[[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingUploadToCommonSense] isEqualToString:kSettingNO]) return;
 
 	//retrieve/create entry for this sensor
 	@synchronized(self) {
