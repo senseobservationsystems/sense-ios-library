@@ -76,6 +76,9 @@ NSString* const jumpLandingHeadingKey = @"landing heading";
     const double ay =motion.userAcceleration.y + motion.gravity.y;
     const double az =motion.userAcceleration.z + motion.gravity.z;
     
+    //get time
+    const NSTimeInterval now = motion.timestamp;
+    
     //project onto gravity
     const Vec3d motionVector = {ax, ay, az};
     const Vec3d gravityVector = {motion.gravity.x, motion.gravity.y, motion.gravity.z};
@@ -92,14 +95,19 @@ NSString* const jumpLandingHeadingKey = @"landing heading";
     const double thRest = 1.2;
     const NSTimeInterval thJumpContinuation = 0.7;
     const NSTimeInterval thJumpContinuationMin = 0.05;
+    const NSTimeInterval jumpTimeout = 1;
     
     //use filter value as input
     const double gg = filteredG;
     
+    //simple reset rule
+    double timeSinceTakeOff = now - takeOffStart;
+    if (jumpState != REST && timeSinceTakeOff > jumpTimeout) {
+        jumpState = REST;
+    }
     
     
     //state machine for jump detection
-    const NSTimeInterval now = motion.timestamp;
     switch (jumpState) {
         case REST: {
             NSTimeInterval dt = now - landingStart;

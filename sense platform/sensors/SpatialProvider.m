@@ -14,12 +14,12 @@
 #import "MotionEnergySensor.h"
 #import "MotionFeaturesSensor.h"
 #import "JumpSensor.h"
+#import <pthread.h>
 
 static const double G = 9.81;
 static const double radianInDegrees = 180 / M_PI;
 
 @implementation SpatialProvider {
-    CLLocationManager* locationManager;
 	CMMotionManager* motionManager;
 	
 	CompassSensor* compassSensor;
@@ -40,22 +40,26 @@ static const double radianInDegrees = 180 / M_PI;
     double frequency;
     NSTimer* pollTimer;
     
-    BOOL jumpDetection;
     JumpSensor* jumpDetector;
+    
+    int enableCounter;
+    bool orientationSensorEnabled;
+    bool jumpSensorEnabled;
+    bool accelerationSensorEnabled;
+    bool accelerometerSensorEnabled;
+    bool gyroSensorEnabled;
+    bool compassSensorEnabled;
 }
 
 - (id) initWithCompass:(CompassSensor*)compass orientation:(OrientationSensor*)orientation accelerometer:(AccelerometerSensor*)accelerometer acceleration:(AccelerationSensor*)acceleration rotation:(RotationSensor*)rotation jumpSensor:(JumpSensor*) jumpSensor{
 	self = [super init];
 	if (self) {
 		NSLog(@"spatial provider init");
-        jumpDetection = YES;
         jumpDetector = jumpSensor;
 		compassSensor = compass; orientationSensor = orientation; accelerometerSensor = accelerometer; accelerationSensor = acceleration; rotationSensor = rotation;
         motionEnergySensor = [[MotionEnergySensor alloc] init];
         motionFeaturesSensor = [[MotionFeaturesSensor alloc] init];
 		motionManager = [[CMMotionManager alloc] init];
-		locationManager = [[CLLocationManager alloc] init];
-		locationManager.delegate = self;
         
 		//Set settings
 		@try {
@@ -67,8 +71,6 @@ static const double radianInDegrees = 180 / M_PI;
 		@catch (NSException * e) {
 			NSLog(@"spatial provider: Exception thrown while setting: %@", e);
 		}
-		//TODO: properly manage this setting
-		locationManager.headingFilter = 10;
 		
 		//operations queue
 		operations = [[NSOperationQueue alloc] init];
@@ -104,61 +106,49 @@ static const double radianInDegrees = 180 / M_PI;
 }
 
 - (void) jumpEnabledChanged: (id) notification {
-    //UGLY hack to use jump detection
 	bool enable = [[notification object] boolValue];
-    jumpDetection = enable;
-    
-    [motionManager stopDeviceMotionUpdates];
-    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(schedulePoll) userInfo:nil repeats:NO];
+    if (enable != jumpSensorEnabled) {
+        if (enable)
+            [self incEnable];
+        else
+            [self decEnable];
+    }
+    jumpSensorEnabled = enable;
 }
 
 - (void) accelerometerEnabledChanged: (id) notification {
 	bool enable = [[notification object] boolValue];
-    //check to see wether the timer needs to be enabled/disabled
-    bool otherIsEnabled = (accelerationSensor != nil && accelerationSensor.isEnabled) || (rotationSensor != nil && rotationSensor.isEnabled) || (orientationSensor != nil && orientationSensor.isEnabled);
-    if (enable || otherIsEnabled) {
-        //make sure timer is scheduled
-        if (NO == [pollTimer isValid]) {
-            pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
-        }
+    if (enable != accelerometerSensorEnabled) {
+        if (enable)
+            [self incEnable];
+        else
+            [self decEnable];
     }
-	if (enable == NO && otherIsEnabled == NO) {
-        //stop the timer
-        [pollTimer invalidate];
-	}
+    accelerometerSensorEnabled = enable;
 }
 
 - (void) rotationEnabledChanged: (id) notification {
 	bool enable = [[notification object] boolValue] && (rotationSensor != nil);
-    //check to see wether the timer needs to be enabled/disabled
-    bool otherIsEnabled = (accelerometerSensor != nil && accelerometerSensor.isEnabled) || (orientationSensor != nil && orientationSensor.isEnabled);
-    if (enable || otherIsEnabled) {
-        //make sure timer is scheduled
-        if (NO == [pollTimer isValid]) {
-            pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
-        }
+    if (enable != gyroSensorEnabled) {
+        if (enable)
+            [self incEnable];
+        else
+            [self decEnable];
     }
-	if (enable == NO && otherIsEnabled == NO) {
-        //stop the timer
-        [pollTimer invalidate];
-	}
+    gyroSensorEnabled = enable;
 }
 
 - (void) orientationEnabledChanged:(id)notification {
 	bool enable = [[notification object] boolValue] && (orientationSensor != nil);
-    //check to see wether the timer needs to be enabled/disabled
-    bool otherIsEnabled = (accelerationSensor != nil && accelerationSensor.isEnabled) || (rotationSensor != nil && rotationSensor.isEnabled) || (accelerometerSensor != nil && accelerometerSensor.isEnabled);
-    if (enable || otherIsEnabled) {
-        //make sure timer is scheduled
-        if (NO == [pollTimer isValid]) {
-            pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
-        }
+    if (enable != orientationSensorEnabled) {
+        if (enable)
+            [self incEnable];
+        else
+            [self decEnable];
     }
-	if (enable == NO && otherIsEnabled == NO) {
-        //stop the timer
-        [pollTimer invalidate];
-	}
+    orientationSensorEnabled = enable;
 }
+
 
 - (void) schedulePoll {
     @try {
@@ -174,26 +164,24 @@ static const double radianInDegrees = 180 / M_PI;
 
 - (void) poll {
     NSLog(@"^^^ Spatial provider poll invoked. ^^^");
-    
-    
+
     //prepare arrays for data
     __block NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     //__block CMAttitude* attitude;
     __block NSMutableArray* timestampArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
-    
+
     NSCondition* dataCollectedCondition = [NSCondition new];
-    
+
     __block NSInteger counter = 0;
     __block NSInteger discarded = 0;
-    
-    
+
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
-        if (jumpDetection) {
+        if (jumpSensorEnabled) {
             [jumpDetector pushDeviceMotion:deviceMotion andManager:motionManager];
             return;
         }
-            
+
         if (counter > 0) {
             //Oh no, we're not processing fast enough. This means problems...
             discarded++;
@@ -204,7 +192,7 @@ static const double radianInDegrees = 180 / M_PI;
         //Note: deviceMotion.timestamp is relative to some reference, not unix time
         [timestampArray addObject:[NSDate date]]; //ai ai, object creation can slow down stuff..
         [deviceMotionArray addObject:deviceMotion];
-        
+
         //if we've sampled enough
         if (++sample >= nrSamples) {
             [motionManager stopDeviceMotionUpdates];
@@ -212,28 +200,13 @@ static const double radianInDegrees = 180 / M_PI;
             [dataCollectedCondition broadcast];
         }
         counter--;
-        
     };
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
     NSLog(@"Start sampling motion with %.0f Hz", frequency);
     [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
-    // Aquire heading, this may take some time ( 1 second)
-    //float heading = -1;
-    /*
-     if (hasOrientation) {
-     if (!updatingHeading) {
-     //wait for heading to be available 
-     [headingAvailable lock];
-     [locationManager startUpdatingHeading];
-     updatingHeading = YES;
-     [headingAvailable wait];
-     [headingAvailable unlock];
-     }
-     heading = locationManager.heading.magneticHeading;
-     }
-     */
+
     //wait until all data collected
     [dataCollectedCondition wait];
     [dataCollectedCondition unlock];
@@ -293,7 +266,7 @@ static const double radianInDegrees = 180 / M_PI;
     [[SensorStore sharedSensorStore] addSensor:motionFeaturesSensor];
     
     //commit motion energy
-    NSString* value = [NSString stringWithFormat:@"%.3f", magnitudeStddev];
+    NSString* value = [NSString stringWithFormat:@"%.3f", magnitudeAvg];
     NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
                                         value, @"value",
                                         [NSString stringWithFormat:@"%.3f", timestamp],@"date",
@@ -303,10 +276,10 @@ static const double radianInDegrees = 180 / M_PI;
     value = [[NSDictionary dictionaryWithObjectsAndKeys:
 							[NSString stringWithFormat:@"%.3f", magnitudeAvg], accelerationAvg,
 							[NSString stringWithFormat:@"%.3f", magnitudeStddev], accelerationStddev,
-							@"", accelerationKurtosis,
+							//@"", accelerationKurtosis,
 							[NSString stringWithFormat:@"%.3f", totalRotAvg], rotationAvg,
 							[NSString stringWithFormat:@"%.3f", totalRotStddev], rotationStddev,
-							@"", rotationKurtosis,
+							//@"", rotationKurtosis,
 							nil] JSONRepresentation];
     
     valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -400,25 +373,6 @@ static const double radianInDegrees = 180 / M_PI;
         }
     }
 }
-    
-    
-    
-- (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager {
-    return NO;
-}
-
-
-//implement delegate
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    //wake up threads waiting for a heading
-    [headingAvailable broadcast];
-    //if compass isn't enabled, it was just a one time need for a heading, so stop updating
-    if (compassSensor.isEnabled == NO && interval > 1) {
-        [locationManager stopUpdatingHeading];
-        updatingHeading = false;
-        return;
-    }
-}
 
 - (void) settingChanged: (NSNotification*) notification {
     @try {
@@ -426,8 +380,13 @@ static const double radianInDegrees = 180 / M_PI;
         NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
         if ([setting.name isEqualToString:kSpatialSettingInterval]) {
             interval = [setting.value doubleValue];
-            [pollTimer invalidate];;
-            pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:!jumpDetection];
+            
+            //restart
+            if (enableCounter > 0) {
+                [pollTimer invalidate];
+                [motionManager stopDeviceMotionUpdates];
+                pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+            }
         } else if ([setting.name isEqualToString:kSpatialSettingFrequency]) {
             frequency = [setting.value doubleValue];
         } else if ([setting.name isEqualToString:kSpatialSettingNrSamples]) {
@@ -436,6 +395,24 @@ static const double radianInDegrees = 180 / M_PI;
     }
     @catch (NSException * e) {
         NSLog(@"spatial provider: Exception thrown while changing setting: %@", e);
+    }
+}
+
+- (void) incEnable {
+    enableCounter += 1;
+    if (enableCounter == 1) {
+        [motionManager stopDeviceMotionUpdates];
+        [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+    }
+}
+
+- (void) decEnable {
+    if (enableCounter > 0) {
+        enableCounter -= 1;
+        if (enableCounter == 0) {
+            [pollTimer invalidate];
+            [motionManager stopDeviceMotionUpdates];
+        }
     }
 }
 

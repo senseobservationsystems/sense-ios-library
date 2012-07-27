@@ -29,13 +29,15 @@ static NSString* verticalAccuracyKey = @"vertical accuracy";
 static NSString* speedKey = @"speed";
 static const int maxSamples = 7;
 static const int minDistance = 10; //meters
-static const int minInterval = 30; //seconds
+static const int minInterval = 60; //seconds
 
 static CLLocation* lastAcceptedPoint;
 
 - (NSString*) name {return kSENSOR_LOCATION;}
 - (NSString*) deviceType {return [self name];}
-+ (BOOL) isAvailable {return [CLLocationManager locationServicesEnabled];}
+//+ (BOOL) isAvailable {return [CLLocationManager locationServicesEnabled];}
+//some users might be surprised that the position sensor isn't available. So let's say it's always available, and let ios/user handle turning services on/off.
++ (BOOL) isAvailable {return YES;}
 
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data

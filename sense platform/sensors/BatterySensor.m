@@ -97,7 +97,7 @@ static NSString* levelKey = @"level";
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
-	NSLog(@"Enabling battery sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
+	NSLog(@"%@ battery sensor (id=%@):", self.sensorId, enable ? @"Enabling":@"Disabling");
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	isEnabled = enable;
 }
@@ -105,7 +105,6 @@ static NSString* levelKey = @"level";
 - (void) dealloc {
 	self.isEnabled = NO;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
 }
 
 @end

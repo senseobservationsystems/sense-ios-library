@@ -46,7 +46,7 @@
 		 //register for enable changed notification
 		 [[NSNotificationCenter defaultCenter] addObserver:self
 												  selector:@selector(enabledChanged:)
-													  name:[Settings enabledChangedNotificationNameForSensor:[self sensorId]] object:nil];
+													  name:[Settings enabledChangedNotificationNameForSensor:[self name]] object:nil];
 	 }
 	 return self;
 }

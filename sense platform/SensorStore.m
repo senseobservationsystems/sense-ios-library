@@ -117,7 +117,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 							[AccelerationSensor class],
 							[RotationSensor class],
                             [JumpSensor class],
-							[PreferencesSensor class],
+							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
 							//[MiscSensor class],
 							nil];
@@ -236,8 +236,6 @@ static SensorStore* sharedSensorStoreInstance = nil;
     sensor.dataStore = self;
     for(Sensor* s in sensors) {
         if ([s matchesDescription:[sensor sensorDescription]]) {
-            NSLog(@"Adding a sensor we already have...");
-            NSLog(@"Sensor %@ same as already contained %@", [sensor sensorDescription], [s sensorDescription]);
             //list already contains sensor, don't add
             return;
         }
@@ -438,6 +436,38 @@ static SensorStore* sharedSensorStoreInstance = nil;
         
         [runLoop run];
     }
+}
+
+- (NSDictionary*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
+    //try to resolve the id from the local mapping
+    NSString* sensorId;
+    for (NSString* extendedID in sensorIdMap) {
+        //extract sensor name
+        NSMutableString* name = [[NSMutableString alloc] init];
+        for (size_t i = 0; i < extendedID.length; i++) {
+            char ch = [extendedID characterAtIndex:i];
+            if (ch != '/'){
+                [name appendFormat:@"%c", ch];
+            } else {
+                if (i+1 < extendedID.length && [extendedID characterAtIndex:i+1] == '/') {
+                    //skip, as this is an escaped slash
+                    i++;
+                    continue;
+                }
+                break;
+            }
+        }
+        if ([name isEqualToString:name]) {
+            //found sensor name
+            sensorId = [sensorIdMap valueForKey:extendedID];
+            break;
+        }
+    }
+
+    if (sensorId) {
+        return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
+    } else
+        return nil;
 }
 
 - (void) applyGeneralSettings {

@@ -155,12 +155,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 }
 
 - (NSDictionary*) listSensors {
-	return [self doJsonRequestTo:[self makeUrlFor:@"sensors"] withMethod:@"GET" withInput:nil];
+	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000"] withMethod:@"GET" withInput:nil];
 }
 
 - (NSDictionary*) listSensorsForDevice:(NSDictionary*)device {
 	//get device
-	NSArray* devices = [[self doJsonRequestTo:[self makeUrlFor:@"devices"] withMethod:@"GET" withInput:nil] valueForKey:@"devices"];
+	NSArray* devices = [[self doJsonRequestTo:[self makeUrlFor:@"devices" append:@"?per_page=1000"] withMethod:@"GET" withInput:nil] valueForKey:@"devices"];
 	NSInteger deviceId = -1;
 	NSLog(@"This device: type: \"%@': uuid: \"%@\"", [device valueForKey:@"type"], [device valueForKey:@"uuid"]);
 	for (NSDictionary* remoteDevice in devices) {
@@ -243,6 +243,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 		NSLog(@"Responded: %@", responded);
 		return NO;
     }
+}
+
+- (NSDictionary*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints {
+	return [[self doJsonRequestTo:[self makeUrlForGettingSensorData:sensorId nrPoints:nrPoints order:@"DESC"] withMethod:@"GET" withInput:nil] valueForKey:@"data"];
 }
 
 #pragma mark -
@@ -353,10 +357,16 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 ///Creates the url using CommonSense.plist
 - (NSURL*) makeUrlFor:(NSString*) action
 {
-	NSString* url = [NSString stringWithFormat: @"%@/%@%@",
+	return [self makeUrlFor:action append:@""];
+}
+
+- (NSURL*) makeUrlFor:(NSString*) action append:(NSString*) appendix
+{
+	NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
 					 [urls valueForKey:@"baseUrl"],
 					 [urls valueForKey:action],
-					 [urls valueForKey:@"jsonSuffix"]];
+					 [urls valueForKey:@"jsonSuffix"],
+                     appendix];
 	
 	return [NSURL URLWithString:url];
 }
@@ -402,6 +412,19 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 					 sensorId,
  					 [urls valueForKey:@"users"],
 					 [urls valueForKey:@"jsonSuffix"]];
+	
+	return [NSURL URLWithString:url];
+}
+
+- (NSURL*) makeUrlForGettingSensorData:(NSString*) sensorId nrPoints:(NSInteger) nrPoints order:(NSString*) order {
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%@&sort=%@",
+					 [urls valueForKey:@"baseUrl"],
+					 [urls valueForKey:@"sensors"],
+					 sensorId,
+ 					 [urls valueForKey:@"data"],
+					 [urls valueForKey:@"jsonSuffix"],
+                     nrPoints,
+                     order];
 	
 	return [NSURL URLWithString:url];
 }

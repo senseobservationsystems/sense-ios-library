@@ -1,6 +1,5 @@
-//
 //  sense_platform_library.h
-//  sense platform library
+//  sense platform libraryb
 //
 //  Created by Pim Nijdam on 4/17/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
@@ -26,9 +25,11 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 + (void) initialize;
 + (NSArray*) availableSensors;
 + (void) willTerminate;
++ (void) flushData;
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
-+ (BOOL) registerhUser:(NSString*) user withPassword:(NSString*) password;
++ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password;
 + (void) applyIVitalitySettings;
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;
++ (NSDictionary*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
 @end

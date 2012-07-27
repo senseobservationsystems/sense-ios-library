@@ -32,4 +32,5 @@
 - (BOOL) connectSensor:(NSString*)sensorId ToDevice:(NSDictionary*) device;
 - (BOOL) uploadData:(NSArray*) data forSensorId:(NSString*)sensorId;
 - (BOOL) shareSensor: (NSString*)sensorId WithUser:(NSString*)user;
+- (NSDictionary*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints;
 @end
