@@ -106,7 +106,6 @@ NSString* const jumpLandingHeadingKey = @"landing heading";
         jumpState = REST;
     }
     
-    
     //state machine for jump detection
     switch (jumpState) {
         case REST: {
@@ -122,8 +121,7 @@ NSString* const jumpLandingHeadingKey = @"landing heading";
                 takeOffHeading = motionManager.deviceMotion.attitude.yaw;
                 jumpState = TAKE_OFF;
             }
-        }
-            
+        }    
             break;
         case TAKE_OFF:
             if (gg < thFlight) {
@@ -160,7 +158,7 @@ NSString* const jumpLandingHeadingKey = @"landing heading";
     const double height = .5 *  9.81 * (flightTime/2) * (flightTime/2);
     
     //discard really low jumps
-    if (height < 0.03) return;
+    if (height < 0.01) return;
     
     const double landingDegrees = [self normDegrees:(-landingHeading * DEGREES_PER_RADIAN + 180) toRange:360];
     const double takeOffDegrees = [self normDegrees:(-takeOffHeading * DEGREES_PER_RADIAN + 180) toRange:360];

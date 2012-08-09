@@ -463,6 +463,8 @@ static SensorStore* sharedSensorStoreInstance = nil;
             break;
         }
     }
+    
+    //TODO: in case it isn't in the local mapping, resolve the sensor id remotely
 
     if (sensorId) {
         return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];

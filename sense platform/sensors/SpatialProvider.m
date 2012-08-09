@@ -39,6 +39,7 @@ static const double radianInDegrees = 180 / M_PI;
     NSInteger nrSamples;
     double frequency;
     NSTimer* pollTimer;
+    NSTimeInterval secondsSinceReferenceDate;
     
     JumpSensor* jumpDetector;
     
@@ -59,6 +60,8 @@ static const double radianInDegrees = 180 / M_PI;
 		compassSensor = compass; orientationSensor = orientation; accelerometerSensor = accelerometer; accelerationSensor = acceleration; rotationSensor = rotation;
         motionEnergySensor = [[MotionEnergySensor alloc] init];
         motionFeaturesSensor = [[MotionFeaturesSensor alloc] init];
+        secondsSinceReferenceDate = [[NSDate dateWithTimeIntervalSinceReferenceDate:0] timeIntervalSince1970];
+        
 		motionManager = [[CMMotionManager alloc] init];
         
 		//Set settings
@@ -165,10 +168,8 @@ static const double radianInDegrees = 180 / M_PI;
 - (void) poll {
     NSLog(@"^^^ Spatial provider poll invoked. ^^^");
 
-    //prepare arrays for data
+    //prepare array for data
     __block NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
-    //__block CMAttitude* attitude;
-    __block NSMutableArray* timestampArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
 
     NSCondition* dataCollectedCondition = [NSCondition new];
@@ -189,8 +190,6 @@ static const double radianInDegrees = 180 / M_PI;
             return;
         }
         counter++;
-        //Note: deviceMotion.timestamp is relative to some reference, not unix time
-        [timestampArray addObject:[NSDate date]]; //ai ai, object creation can slow down stuff..
         [deviceMotionArray addObject:deviceMotion];
 
         //if we've sampled enough
@@ -221,18 +220,19 @@ static const double radianInDegrees = 180 / M_PI;
     BOOL rawSamples = NO, stats = YES;
     
     if (rawSamples)
-        [self commitRawSamples:deviceMotionArray withTimestamps:timestampArray];
+        [self commitRawSamples:deviceMotionArray];
     else {
         NSRange range = NSMakeRange(0, 1);
-        [self commitRawSamples:[deviceMotionArray subarrayWithRange:range] withTimestamps:[timestampArray subarrayWithRange:range]];
+        [self commitRawSamples:[deviceMotionArray subarrayWithRange:range]];
     }
     
     if (stats) {
-        [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:[timestampArray objectAtIndex:0]];
+        NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + secondsSinceReferenceDate;
+        [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
     }
 }
 
-- (void) commitMotionFeaturesForSamples:(NSArray*)deviceMotionArray withTimestamp:(NSDate*) timestampDate {
+- (void) commitMotionFeaturesForSamples:(NSArray*)deviceMotionArray withTimestamp:(NSTimeInterval) timestamp {
     //commit average, stddev and kurtosis
     double magnitudeSum=0, magnitudeSqSum=0;
     double totalRotSum=0, totalRotSqSum=0;
@@ -260,8 +260,6 @@ static const double radianInDegrees = 180 / M_PI;
     double totalRotStddev = totalRotMeanSquares - totalRotAvg*totalRotAvg;
 
     //commit values
-    NSTimeInterval timestamp = [timestampDate timeIntervalSince1970];
-    
     [[SensorStore sharedSensorStore] addSensor:motionEnergySensor];
     [[SensorStore sharedSensorStore] addSensor:motionFeaturesSensor];
     
@@ -289,91 +287,96 @@ static const double radianInDegrees = 180 / M_PI;
     [motionFeaturesSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionFeaturesSensor.sensorId];
 }
 
-- (void) commitRawSamples:(NSArray*) deviceMotionArray withTimestamps: (NSArray*) timestampArray {
+- (void) commitRawSamples:(NSArray*) deviceMotionArray {
+    for (size_t i = 0; i < [deviceMotionArray count]; i++) {
+        CMDeviceMotion* motion = [deviceMotionArray objectAtIndex:i];
+        [self commitRawSample:motion];
+        
+    }
+}
+
+- (void) commitRawSample:(CMDeviceMotion*) motion {
     BOOL hasOrientation = orientationSensor != nil && orientationSensor.isEnabled;
     BOOL hasAccelerometer = accelerometerSensor != nil && accelerometerSensor.isEnabled;
     BOOL hasAcceleration = accelerationSensor != nil && accelerationSensor.isEnabled;
     BOOL hasRotation = rotationSensor != nil && rotationSensor.isEnabled;
     float heading = -1;
     
-    for (size_t i = 0; i < [deviceMotionArray count]; i++) {
-        NSTimeInterval timestamp = [[timestampArray objectAtIndex:i] timeIntervalSince1970];
-        CMDeviceMotion* motion = [deviceMotionArray objectAtIndex:i];
+    NSTimeInterval timestamp = motion.timestamp + secondsSinceReferenceDate;
+    
+    
+    //Commit samples for the sensors
+    if (hasOrientation) {
+        CMAttitude* attitude = motion.attitude;
+        NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
+                                        [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,
+                                        [NSString stringWithFormat:@"%.0f", heading], attitudeYawKey,
+                                        nil];
         
-        //Commit samples for the sensors
-        if (hasOrientation) {
-            CMAttitude* attitude = motion.attitude;
-            NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                            [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
-                                            [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,
-                                            [NSString stringWithFormat:@"%.0f", heading], attitudeYawKey,
+        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            [newItem JSONRepresentation], @"value",
+                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
                                             nil];
-            
-            NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                [newItem JSONRepresentation], @"value",
-                                                [NSString stringWithFormat:@"%.3f", timestamp],@"date",
-                                                nil];
-            [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
-            
-        }
+        [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
         
+    }
+    
+    
+    if (hasAccelerometer) {
+        double x = motion.gravity.x + motion.userAcceleration.x;
+        double y = motion.gravity.y + motion.userAcceleration.y;
+        double z = motion.gravity.z + motion.userAcceleration.z;
+        NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        [NSString stringWithFormat:@"%.3f", x * G], accelerationXKey,
+                                        [NSString stringWithFormat:@"%.3f", y * G], accelerationYKey,
+                                        [NSString stringWithFormat:@"%.3f", z * G], accelerationZKey,
+                                        nil];
         
-        if (hasAccelerometer) {
-            double x = motion.gravity.x + motion.userAcceleration.x;
-            double y = motion.gravity.y + motion.userAcceleration.y;
-            double z = motion.gravity.z + motion.userAcceleration.z;
-            NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                            [NSString stringWithFormat:@"%.3f", x * G], accelerationXKey,
-                                            [NSString stringWithFormat:@"%.3f", y * G], accelerationYKey,
-                                            [NSString stringWithFormat:@"%.3f", z * G], accelerationZKey,
+        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            [newItem JSONRepresentation], @"value",
+                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
                                             nil];
-            
-            NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                [newItem JSONRepresentation], @"value",
-                                                [NSString stringWithFormat:@"%.3f", timestamp],@"date",
-                                                nil];
-            
-            [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
-            
-            
-        }
         
-        if (hasAcceleration) {
-            double x = motion.userAcceleration.x * G;
-            double y = motion.userAcceleration.y * G;
-            double z = motion.userAcceleration.z * G;
-            NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                            [NSString stringWithFormat:@"%.3f", x], accelerationXKey,
-                                            [NSString stringWithFormat:@"%.3f", y], accelerationYKey,
-                                            [NSString stringWithFormat:@"%.3f", z], accelerationZKey,
-                                            nil];
-            
-            NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                [newItem JSONRepresentation], @"value",
-                                                [NSString stringWithFormat:@"%.3f", timestamp],@"date",
-                                                nil];
-            [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
-        }
+        [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
         
-        if (hasRotation) {
-            double pitch = motion.rotationRate.x * radianInDegrees;
-            double roll = motion.rotationRate.y * radianInDegrees;
-            double yaw = motion.rotationRate.z * radianInDegrees;
-            NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                            [NSString stringWithFormat:@"%.3f", pitch], attitudePitchKey,
-                                            [NSString stringWithFormat:@"%.3f", roll], attitudeRollKey,
-                                            [NSString stringWithFormat:@"%.3f", yaw], attitudeYawKey,
+        
+    }
+    
+    if (hasAcceleration) {
+        double x = motion.userAcceleration.x * G;
+        double y = motion.userAcceleration.y * G;
+        double z = motion.userAcceleration.z * G;
+        NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        [NSString stringWithFormat:@"%.3f", x], accelerationXKey,
+                                        [NSString stringWithFormat:@"%.3f", y], accelerationYKey,
+                                        [NSString stringWithFormat:@"%.3f", z], accelerationZKey,
+                                        nil];
+        
+        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            [newItem JSONRepresentation], @"value",
+                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
                                             nil];
-            
-            NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                [newItem JSONRepresentation], @"value",
-                                                [NSString stringWithFormat:@"%.3f", timestamp],@"date",
-                                                nil];
-            [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];
-        }
+        [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
+    }
+    
+    if (hasRotation) {
+        double pitch = motion.rotationRate.x * radianInDegrees;
+        double roll = motion.rotationRate.y * radianInDegrees;
+        double yaw = motion.rotationRate.z * radianInDegrees;
+        NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        [NSString stringWithFormat:@"%.3f", pitch], attitudePitchKey,
+                                        [NSString stringWithFormat:@"%.3f", roll], attitudeRollKey,
+                                        [NSString stringWithFormat:@"%.3f", yaw], attitudeYawKey,
+                                        nil];
+        
+        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            [newItem JSONRepresentation], @"value",
+                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                            nil];
+        [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];
     }
 }
-
 - (void) settingChanged: (NSNotification*) notification {
     @try {
         Setting* setting = notification.object;
