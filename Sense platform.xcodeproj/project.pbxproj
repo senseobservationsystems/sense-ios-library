@@ -106,6 +106,14 @@
 		3E9C156A15D564E100F520D0 /* Sensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C155715D564E100F520D0 /* Sensor.h */; };
 		3E9C156B15D564E100F520D0 /* SensorIds.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* SensorIds.h */; };
 		3E9C156C15D564E100F520D0 /* Settings.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* Settings.h */; };
+		3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
+		3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
+		3E9C157C15D574C300F520D0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
+		3E9C157E15D574D300F520D0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
+		3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
+		3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
+		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
+		3E9C158615D574EC00F520D0 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158515D574EC00F520D0 /* CoreBluetooth.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -212,6 +220,14 @@
 		3E9C155715D564E100F520D0 /* Sensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sensor.h; sourceTree = "<group>"; };
 		3E9C155815D564E100F520D0 /* SensorIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorIds.h; sourceTree = "<group>"; };
 		3E9C155915D564E100F520D0 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		3E9C157615D574B500F520D0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3E9C157915D574BB00F520D0 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		3E9C157B15D574C300F520D0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		3E9C157D15D574D300F520D0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		3E9C157F15D574DB00F520D0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3E9C158515D574EC00F520D0 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +235,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E9C158615D574EC00F520D0 /* CoreBluetooth.framework in Frameworks */,
+				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
+				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
+				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
+				3E9C157E15D574D300F520D0 /* CoreAudio.framework in Frameworks */,
+				3E9C157C15D574C300F520D0 /* AudioToolbox.framework in Frameworks */,
+				3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */,
+				3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */,
 				3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,6 +253,14 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
+				3E9C158515D574EC00F520D0 /* CoreBluetooth.framework */,
+				3E9C158315D574E700F520D0 /* CoreLocation.framework */,
+				3E9C158115D574E100F520D0 /* CoreMotion.framework */,
+				3E9C157F15D574DB00F520D0 /* AVFoundation.framework */,
+				3E9C157D15D574D300F520D0 /* CoreAudio.framework */,
+				3E9C157B15D574C300F520D0 /* AudioToolbox.framework */,
+				3E9C157915D574BB00F520D0 /* CoreTelephony.framework */,
+				3E9C157615D574B500F520D0 /* SystemConfiguration.framework */,
 				3E9C154315D564E100F520D0 /* include */,
 				3E820F9015D41D6D0001A3EC /* json */,
 				3E820F8215D41C970001A3EC /* Sense platform-Prefix.pch */,

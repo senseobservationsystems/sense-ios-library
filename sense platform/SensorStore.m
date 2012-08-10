@@ -161,20 +161,19 @@ static SensorStore* sharedSensorStoreInstance = nil;
     }
 	NSArray* remoteSensors = [response valueForKey:@"sensors"];
 	
-	//forall local sensors
-	for (Sensor* sensor in sensors) {
-		//match against all remote sensors
-		for (id remoteSensor in remoteSensors) {
-			//determine whether the sensor matches
-			if ([remoteSensor isKindOfClass:[NSDictionary class]] && [sensor matchesDescription:remoteSensor]) {
-				id sensorId = [remoteSensor valueForKey:@"id"];
-                //update sensor id map
-				[sensorIdMap setValue:sensorId forKey:sensor.sensorId];
-				break;
-			}
-		}
-	}
-	
+    //push all ids in the sensorId map
+    for (id remoteSensor in remoteSensors) {
+        //determine whether the sensor matches
+        if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
+            NSString* remoteId = [remoteSensor valueForKey:@"id"];
+            NSString* name = [remoteSensor valueForKey:@"name"];
+            NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
+            NSString* sensorId = [Sensor sensorIdFromName:name andDeviceType:deviceType];
+            //update sensor id map
+            [sensorIdMap setValue:remoteId forKey:sensorId];
+        }
+    }
+
 	//create sensors that aren't assigned an id yet
 	for (Sensor* sensor in sensors) {
 		if ([sensorIdMap objectForKey:sensor.sensorId] == NULL) {
@@ -489,7 +488,6 @@ static SensorStore* sharedSensorStoreInstance = nil;
 
 - (void) forceDataFlushAndBlock {
     [self forceDataFlush];
-    [operationQueue waitUntilAllOperationsAreFinished];
 }
 
 - (void) forceDataFlush {
