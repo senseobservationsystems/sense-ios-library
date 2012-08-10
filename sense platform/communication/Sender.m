@@ -417,7 +417,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 }
 
 - (NSURL*) makeUrlForGettingSensorData:(NSString*) sensorId nrPoints:(NSInteger) nrPoints order:(NSString*) order {
-	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%@&sort=%@",
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%i&sort=%@",
 					 [urls valueForKey:@"baseUrl"],
 					 [urls valueForKey:@"sensors"],
 					 sensorId,

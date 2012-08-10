@@ -100,6 +100,11 @@ static NSString* levelKey = @"level";
 	NSLog(@"%@ battery sensor (id=%@):", self.sensorId, enable ? @"Enabling":@"Disabling");
 	[UIDevice currentDevice].batteryMonitoringEnabled = YES;
 	isEnabled = enable;
+    
+    if (enable) {
+        //as this one is only committed when it changes, commit current value
+        [self commitBatteryState:nil];
+    }
 }
 
 - (void) dealloc {

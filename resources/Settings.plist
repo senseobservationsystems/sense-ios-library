@@ -24,7 +24,7 @@
 	</dict>
 	<key>SettingsTypenoise</key>
 	<dict>
-		<key>interval</key>
+		<key>pollInterval</key>
 		<string>60</string>
 	</dict>
 	<key>SettingsTypeposition</key>

@@ -17,7 +17,7 @@
 #import <pthread.h>
 
 static const double G = 9.81;
-static const double radianInDegrees = 180 / M_PI;
+static const double radianInDegrees = 180.0 / M_PI;
 
 @implementation SpatialProvider {
 	CMMotionManager* motionManager;
@@ -39,7 +39,7 @@ static const double radianInDegrees = 180 / M_PI;
     NSInteger nrSamples;
     double frequency;
     NSTimer* pollTimer;
-    NSTimeInterval secondsSinceReferenceDate;
+    NSTimeInterval timestampOffset;
     
     JumpSensor* jumpDetector;
     
@@ -60,7 +60,11 @@ static const double radianInDegrees = 180 / M_PI;
 		compassSensor = compass; orientationSensor = orientation; accelerometerSensor = accelerometer; accelerationSensor = acceleration; rotationSensor = rotation;
         motionEnergySensor = [[MotionEnergySensor alloc] init];
         motionFeaturesSensor = [[MotionFeaturesSensor alloc] init];
-        secondsSinceReferenceDate = [[NSDate dateWithTimeIntervalSinceReferenceDate:0] timeIntervalSince1970];
+        
+        // motion manager used time since boot, calculate offset
+        NSTimeInterval uptime = [NSProcessInfo processInfo].systemUptime;
+        NSTimeInterval nowTimeIntervalSince1970 = [[NSDate date] timeIntervalSince1970];
+        timestampOffset = nowTimeIntervalSince1970 - uptime;
         
 		motionManager = [[CMMotionManager alloc] init];
         
@@ -178,6 +182,8 @@ static const double radianInDegrees = 180 / M_PI;
     __block NSInteger discarded = 0;
 
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
+        if (deviceMotion == nil)
+            return;
         if (jumpSensorEnabled) {
             [jumpDetector pushDeviceMotion:deviceMotion andManager:motionManager];
             return;
@@ -203,8 +209,8 @@ static const double radianInDegrees = 180 / M_PI;
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
-    NSLog(@"Start sampling motion with %.0f Hz", frequency);
-    [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
+    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
+    //[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
     //wait until all data collected
     [dataCollectedCondition wait];
@@ -227,7 +233,7 @@ static const double radianInDegrees = 180 / M_PI;
     }
     
     if (stats) {
-        NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + secondsSinceReferenceDate;
+        NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
         [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
     }
 }
@@ -300,18 +306,23 @@ static const double radianInDegrees = 180 / M_PI;
     BOOL hasAccelerometer = accelerometerSensor != nil && accelerometerSensor.isEnabled;
     BOOL hasAcceleration = accelerationSensor != nil && accelerationSensor.isEnabled;
     BOOL hasRotation = rotationSensor != nil && rotationSensor.isEnabled;
-    float heading = -1;
     
-    NSTimeInterval timestamp = motion.timestamp + secondsSinceReferenceDate;
+    NSTimeInterval timestamp = motion.timestamp + timestampOffset;
     
     
     //Commit samples for the sensors
     if (hasOrientation) {
         CMAttitude* attitude = motion.attitude;
+        //make compass value
+        double yaw = attitude.yaw * radianInDegrees;
+        if (yaw < 0) yaw += 360;
+        
+        NSLog(@"yaw: %.3f, compass: %.3f, radianInDegrees: %.3f", attitude.yaw, yaw, radianInDegrees);
+        
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
                                         [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,
-                                        [NSString stringWithFormat:@"%.0f", heading], attitudeYawKey,
+                                        [NSString stringWithFormat:@"%.0f", yaw], attitudeYawKey,
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:

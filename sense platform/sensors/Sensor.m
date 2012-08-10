@@ -60,11 +60,34 @@
 }
 
 - (NSString*) sensorId {
+    return [Sensor sensorIdFromName:self.name andDeviceType:self.deviceType];
+}
+
++ (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType {
     NSString* separator = @"/";
     NSString* escapedSeparator = @"//";
-    NSString* escapedName = [[self name] stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
-    NSString* escapedDeviceType = [[self deviceType] stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    NSString* escapedName = [name stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    NSString* escapedDeviceType = [deviceType stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
     return [NSString stringWithFormat:@"%@%@%@", escapedName, separator, escapedDeviceType];
+}
+
++ (NSString*) sensorNameFromSensorId:(NSString*) sensorId {
+    //extract sensor name
+    NSMutableString* name = [[NSMutableString alloc] init];
+    for (size_t i = 0; i < sensorId.length; i++) {
+        char ch = [sensorId characterAtIndex:i];
+        if (ch != '/'){
+            [name appendFormat:@"%c", ch];
+        } else {
+            if (i+1 < sensorId.length && [sensorId characterAtIndex:i+1] == '/') {
+                //skip, as this is an escaped slash
+                i++;
+                continue;
+            }
+            break;
+        }
+    }
+    return name;
 }
 
 @end

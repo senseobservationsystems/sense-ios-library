@@ -166,9 +166,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 		//match against all remote sensors
 		for (id remoteSensor in remoteSensors) {
 			//determine whether the sensor matches
-            NSLog(@"Found sensor: %@", remoteSensor);
 			if ([remoteSensor isKindOfClass:[NSDictionary class]] && [sensor matchesDescription:remoteSensor]) {
-				NSLog(@"Matched sensor of type %@ and description %@", [sensor sensorId], [sensor sensorDescription]);
 				id sensorId = [remoteSensor valueForKey:@"id"];
                 //update sensor id map
 				[sensorIdMap setValue:sensorId forKey:sensor.sensorId];
@@ -276,7 +274,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
             break;
         }
     }
-    
+
 	if (NO == enable) { 
 		/* Previously sensors were deallocated (by removing their references), however that has some problems
          * - the noise sensor uses a callback that cannot be unregistered, so deallocating the object while the callback may still use it is unwise
@@ -291,14 +289,14 @@ static SensorStore* sharedSensorStoreInstance = nil;
 		//flush data
 		[self forceDataFlush];
         
-        //delete upload time
+        //delete upload timer
         if (uploadTimer.isValid )
             [uploadTimer invalidate];
 	} else {
         [locationSensor setBackgroundRunningEnable:YES];
         //send notifications to notify sensors whether they should activate themselves
         for (Sensor* sensor in sensors) {
-			[[Settings sharedSettings] sendNotificationForSensor:sensor.sensorId];
+			[[Settings sharedSettings] sendNotificationForSensor:sensor.name];
         }
         //enable uploading
         [self setSyncRate:syncRate];
@@ -313,7 +311,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 	//get new settings
     NSString* username = [[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingUsername];
   	NSString* password = [[Settings sharedSettings] getSettingType:kSettingTypeGeneral setting:kGeneralSettingPassword];
-    NSLog(@"Sensorstore loginChang:%@", username);
+    NSLog(@"Sensorstore loginChanged:%@", username);
 	//change login
     [sender setUser:username andPassword:password];
     
@@ -443,20 +441,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
     NSString* sensorId;
     for (NSString* extendedID in sensorIdMap) {
         //extract sensor name
-        NSMutableString* name = [[NSMutableString alloc] init];
-        for (size_t i = 0; i < extendedID.length; i++) {
-            char ch = [extendedID characterAtIndex:i];
-            if (ch != '/'){
-                [name appendFormat:@"%c", ch];
-            } else {
-                if (i+1 < extendedID.length && [extendedID characterAtIndex:i+1] == '/') {
-                    //skip, as this is an escaped slash
-                    i++;
-                    continue;
-                }
-                break;
-            }
-        }
+        NSString* name = [Sensor sensorNameFromSensorId:extendedID];
         if ([name isEqualToString:name]) {
             //found sensor name
             sensorId = [sensorIdMap valueForKey:extendedID];
@@ -465,6 +450,39 @@ static SensorStore* sharedSensorStoreInstance = nil;
     }
     
     //TODO: in case it isn't in the local mapping, resolve the sensor id remotely
+    if (sensorId == nil) {
+    //get list of sensors from the server
+    NSDictionary* response;
+    @try {
+        if (onlyFromDevice)
+            response = [sender listSensorsForDevice:[SensorStore device]];
+        else 
+            response = [sender listSensors];
+    } @catch (NSException* e) {
+        //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
+        NSLog(@"Couldn't get a list of sensors for the device: %@ ", e.description);
+        return nil;
+    }
+        NSArray* remoteSensors = [response valueForKey:@"sensors"];
+        
+		//match against all remote sensors
+		for (id remoteSensor in remoteSensors) {
+			//determine whether the sensor matches
+            
+			if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
+                NSString* dName = [remoteSensor valueForKey:@"name"];
+                NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
+                if (dName == nil || ([dName caseInsensitiveCompare:name] != NSOrderedSame))
+                    continue;
+                
+				sensorId = [remoteSensor valueForKey:@"id"];
+                //update sensor id map
+				[sensorIdMap setValue:sensorId forKey:[Sensor sensorIdFromName:name andDeviceType:deviceType]];
+				break;
+			}
+        }
+    }
+    
 
     if (sensorId) {
         return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
