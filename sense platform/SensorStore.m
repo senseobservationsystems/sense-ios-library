@@ -437,58 +437,24 @@ static SensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (NSDictionary*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
-    //try to resolve the id from the local mapping
-    NSString* sensorId;
-    for (NSString* extendedID in sensorIdMap) {
-        //extract sensor name
-        NSString* name = [Sensor sensorNameFromSensorId:extendedID];
-        if ([name isEqualToString:name]) {
-            //found sensor name
-            sensorId = [sensorIdMap valueForKey:extendedID];
-            break;
-        }
-    }
-    
-    //TODO: in case it isn't in the local mapping, resolve the sensor id remotely
-    if (sensorId == nil) {
-    //get list of sensors from the server
-    NSDictionary* response;
-    @try {
-        if (onlyFromDevice)
-            response = [sender listSensorsForDevice:[SensorStore device]];
-        else 
-            response = [sender listSensors];
-    } @catch (NSException* e) {
-        //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
-        NSLog(@"Couldn't get a list of sensors for the device: %@ ", e.description);
-        return nil;
-    }
-        NSArray* remoteSensors = [response valueForKey:@"sensors"];
-        
-		//match against all remote sensors
-		for (id remoteSensor in remoteSensors) {
-			//determine whether the sensor matches
-            
-			if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
-                NSString* dName = [remoteSensor valueForKey:@"name"];
-                NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
-                if (dName == nil || ([dName caseInsensitiveCompare:name] != NSOrderedSame))
-                    continue;
-                
-				sensorId = [remoteSensor valueForKey:@"id"];
-                //update sensor id map
-				[sensorIdMap setValue:sensorId forKey:[Sensor sensorIdFromName:name andDeviceType:deviceType]];
-				break;
-			}
-        }
-    }
-    
+    NSString* sensorId = [self resolveSensorIdForSensorName:name onlyThisDevice:onlyFromDevice];    
 
     if (sensorId) {
         return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
     } else
         return nil;
 }
+
+- (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
+    NSString* sensorId = [self resolveSensorIdForSensorName:state onlyThisDevice:NO];
+
+    if (sensorId) {
+        //make sure data is flushed
+        [self forceDataFlushAndBlock];
+        [sender giveFeedbackToStateSensor:sensorId from:from to:to label:label];
+    }
+}
+
 
 - (void) applyGeneralSettings {
 	@try {
@@ -518,6 +484,12 @@ static SensorStore* sharedSensorStoreInstance = nil;
 	@catch (NSException * e) {
 		NSLog(@"SenseStore: Exception thrown while updating general settings: %@", e);
 	}	
+}
+
+
+- (void) forceDataFlushAndBlock {
+    [self forceDataFlush];
+    [operationQueue waitUntilAllOperationsAreFinished];
 }
 
 - (void) forceDataFlush {
@@ -582,6 +554,56 @@ static SensorStore* sharedSensorStoreInstance = nil;
     } while (size + sizeOfNextPoint < MAX_BYTES_TO_UPLOAD_AT_ONCE);
     return points;
 }
+
+- (NSString*) resolveSensorIdForSensorName:(NSString*) sensorName onlyThisDevice:(BOOL)onlyThisDevice {
+    //try to resolve the id from the local mapping
+    NSString* sensorId;
+    for (NSString* extendedID in sensorIdMap) {
+        //extract sensor name
+        NSString* name = [Sensor sensorNameFromSensorId:extendedID];
+        if ([name isEqualToString:sensorName]) {
+            //found sensor name
+            sensorId = [sensorIdMap valueForKey:extendedID];
+            break;
+        }
+    }
+    
+    //TODO: in case it isn't in the local mapping, resolve the sensor id remotely
+    if (sensorId == nil) {
+        //get list of sensors from the server
+        NSDictionary* response;
+        @try {
+            if (onlyThisDevice)
+                response = [sender listSensorsForDevice:[SensorStore device]];
+            else 
+                response = [sender listSensors];
+        } @catch (NSException* e) {
+            //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
+            NSLog(@"Couldn't get a list of sensors for the device: %@ ", e.description);
+            return nil;
+        }
+        NSArray* remoteSensors = [response valueForKey:@"sensors"];
+        
+        //match against all remote sensors
+        for (id remoteSensor in remoteSensors) {
+            //determine whether the sensor matches
+            if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
+                NSString* dName = [remoteSensor valueForKey:@"name"];
+                NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
+                if (dName == nil || ([sensorName caseInsensitiveCompare:dName] != NSOrderedSame))
+                    continue;
+                
+                sensorId = [remoteSensor valueForKey:@"id"];
+                //update sensor id map
+                [sensorIdMap setValue:sensorId forKey:[Sensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                break;
+            }
+        }
+    }
+    
+    return sensorId;
+}
+
 
 
 + (NSDictionary*) device {

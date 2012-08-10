@@ -26,10 +26,12 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 + (NSArray*) availableSensors;
 + (void) willTerminate;
 + (void) flushData;
++ (void) flushDataAndBlock;
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password;
 + (void) applyIVitalitySettings;
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;
 + (NSDictionary*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
++ (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
 @end

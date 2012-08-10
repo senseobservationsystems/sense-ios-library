@@ -33,4 +33,5 @@
 - (BOOL) uploadData:(NSArray*) data forSensorId:(NSString*)sensorId;
 - (BOOL) shareSensor: (NSString*)sensorId WithUser:(NSString*)user;
 - (NSDictionary*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints;
+- (BOOL) giveFeedbackToStateSensor:(NSString*)sensorId from:(NSDate*) from to:(NSDate*)to label:(NSString*) label;
 @end

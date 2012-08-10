@@ -34,4 +34,7 @@
 - (NSDictionary*) sensorDescription;
 + (BOOL) isAvailable;
 - (NSString*) sensorId;
+
++ (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType;
++ (NSString*) sensorNameFromSensorId:(NSString*) sensorId;
 @end

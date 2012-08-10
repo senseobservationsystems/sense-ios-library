@@ -183,6 +183,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 	return [self doJsonRequestTo:[self makeSensorsUrlForDeviceId:deviceId] withMethod:@"GET" withInput:nil];
 }
 
+- (NSDictionary*) listConnectedSensorsFor:(NSString*)sensorId {
+	return [self doJsonRequestTo:[self makeUrlForConnectedSensors:sensorId] withMethod:@"GET" withInput:nil];
+}
+
 - (NSDictionary*) createSensorWithDescription:(NSDictionary*) description {	
 	NSDictionary* request = [NSDictionary dictionaryWithObject:description forKey:@"sensor"];
 	NSDictionary* response = [self doJsonRequestTo:[self makeUrlFor:@"sensors"] withMethod:@"POST" withInput:request];
@@ -248,6 +252,34 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 - (NSDictionary*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints {
 	return [[self doJsonRequestTo:[self makeUrlForGettingSensorData:sensorId nrPoints:nrPoints order:@"DESC"] withMethod:@"GET" withInput:nil] valueForKey:@"data"];
 }
+            
+- (BOOL) giveFeedbackToStateSensor:(NSString*)sensorId from:(NSDate*) from to:(NSDate*)to label:(NSString*) label {
+    @try {
+        //weird clutch, need the sensor id of a connected sensor to obtain the service
+        //get a connected sensor
+        NSDictionary* connectedSensors = [self listConnectedSensorsFor:sensorId];
+        
+        NSString* connectedSensorId = [[[connectedSensors valueForKey:@"sensors"] objectAtIndex:0] valueForKey:@"id"];
+        
+        if (connectedSensorId == nil)
+            return NO;
+        
+        //prepare request
+        NSDictionary* request = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 [NSString stringWithFormat:@"%.3f", [from timeIntervalSince1970]], @"start_date",
+                                 [NSString stringWithFormat:@"%.3f", [to timeIntervalSince1970]], @"end_date",
+                                 label, @"class_label",
+                                 nil];
+        NSURL* url = [self makeUrlForServiceMethod:@"manualLearn" sensorId:connectedSensorId stateSensorId:sensorId];
+        [self doJsonRequestTo:url withMethod:@"POST" withInput:request];
+        return YES;
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Error while giving feedback: %@", exception.description);
+    }
+
+    return NO;
+}
 
 #pragma mark -
 #pragma mark Private methods
@@ -282,7 +314,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 		@throw [NSException exceptionWithName:@"Request failed" reason:nil userInfo:nil];
 	}
 
-    if (contents) {
+    if (contents && contents.length > 0) {
         //interpret JSON
         NSString* jsonString = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
         NSDictionary* jsonResponse = nil;
@@ -428,4 +460,28 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 	
 	return [NSURL URLWithString:url];
 }
+
+- (NSURL*) makeUrlForServiceMethod:(NSString*) method sensorId:(NSString*) sensorId stateSensorId:(NSString*) stateSensorId {
+    //example: http://api.sense-os.nl/sensors/1/services/1/method_name.json
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@/%@/%@%@",
+					 [urls valueForKey:@"baseUrl"],
+					 [urls valueForKey:@"sensors"],
+					 sensorId,
+ 					 @"services",
+                     stateSensorId,
+					 method,
+                     [urls valueForKey:@"jsonSuffix"]];
+	
+	return [NSURL URLWithString:url];
+}
+- (NSURL*) makeUrlForConnectedSensors:(NSString*) sensorId {
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=1000",
+					 [urls valueForKey:@"baseUrl"],
+					 [urls valueForKey:@"sensors"],
+					 sensorId,
+ 					 @"sensors",
+					 [urls valueForKey:@"jsonSuffix"]];
+	
+	return [NSURL URLWithString:url];
+}                     
 @end

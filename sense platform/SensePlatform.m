@@ -36,6 +36,10 @@ static SensorStore* sensorStore;
     [sensorStore forceDataFlush];
 }
 
++ (void) flushDataAndBlock {
+    [sensorStore forceDataFlush];
+}
+
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
     [[Settings sharedSettings] setLogin:user withPassword:password];
     return [sensorStore.sender login];
@@ -53,6 +57,10 @@ static SensorStore* sensorStore;
 
 + (NSDictionary*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
     return [[SensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
+}
+
++(void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
+    [sensorStore giveFeedbackOnState:state from:from to:to label:label];
 }
 
 + (void) applyIVitalitySettings {
