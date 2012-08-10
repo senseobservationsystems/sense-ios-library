@@ -1,0 +1,689 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
+		3E820E0615D40B190001A3EC /* ApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* ApplicationStateChange.m */; };
+		3E820E0715D40B190001A3EC /* ActivitySender.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DC215D40B180001A3EC /* ActivitySender.h */; };
+		3E820E0815D40B190001A3EC /* ActivitySender.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC315D40B180001A3EC /* ActivitySender.m */; };
+		3E820E0915D40B190001A3EC /* NSString+MD5Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DC415D40B180001A3EC /* NSString+MD5Hash.h */; };
+		3E820E0A15D40B190001A3EC /* NSString+MD5Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC515D40B180001A3EC /* NSString+MD5Hash.m */; };
+		3E820E0B15D40B190001A3EC /* Sender.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DC615D40B180001A3EC /* Sender.h */; };
+		3E820E0C15D40B190001A3EC /* Sender.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC715D40B180001A3EC /* Sender.m */; };
+		3E820E0D15D40B190001A3EC /* DataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DC815D40B180001A3EC /* DataStore.h */; };
+		3E820E0E15D40B190001A3EC /* NSNotificationCenter+MainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */; };
+		3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */; };
+		3E820E1015D40B190001A3EC /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DCC15D40B180001A3EC /* Reachability.h */; };
+		3E820E1115D40B190001A3EC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCD15D40B180001A3EC /* Reachability.m */; };
+		3E820E1215D40B190001A3EC /* SensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCE15D40B180001A3EC /* SensePlatform.m */; };
+		3E820E1315D40B190001A3EC /* SensorIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCF15D40B180001A3EC /* SensorIds.m */; };
+		3E820E1415D40B190001A3EC /* Acceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DD115D40B180001A3EC /* Acceleration.h */; };
+		3E820E1515D40B190001A3EC /* Acceleration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD215D40B180001A3EC /* Acceleration.m */; };
+		3E820E1615D40B190001A3EC /* AccelerationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DD315D40B180001A3EC /* AccelerationSensor.h */; };
+		3E820E1715D40B190001A3EC /* AccelerationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD415D40B180001A3EC /* AccelerationSensor.m */; };
+		3E820E1815D40B190001A3EC /* AccelerometerSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DD515D40B180001A3EC /* AccelerometerSensor.h */; };
+		3E820E1915D40B190001A3EC /* AccelerometerSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD615D40B180001A3EC /* AccelerometerSensor.m */; };
+		3E820E1A15D40B190001A3EC /* AntPlusController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DD815D40B180001A3EC /* AntPlusController.h */; };
+		3E820E1B15D40B190001A3EC /* AntPlusController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD915D40B180001A3EC /* AntPlusController.m */; };
+		3E820E1C15D40B190001A3EC /* BloodPressureSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DDA15D40B180001A3EC /* BloodPressureSensor.h */; };
+		3E820E1D15D40B190001A3EC /* BloodPressureSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DDB15D40B180001A3EC /* BloodPressureSensor.m */; };
+		3E820E1E15D40B190001A3EC /* FootpodSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DDC15D40B180001A3EC /* FootpodSensor.h */; };
+		3E820E1F15D40B190001A3EC /* FootpodSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DDD15D40B180001A3EC /* FootpodSensor.m */; };
+		3E820E2015D40B190001A3EC /* BatterySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DDE15D40B180001A3EC /* BatterySensor.h */; };
+		3E820E2115D40B190001A3EC /* BatterySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DDF15D40B180001A3EC /* BatterySensor.m */; };
+		3E820E2215D40B190001A3EC /* CallSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DE015D40B180001A3EC /* CallSensor.h */; };
+		3E820E2315D40B190001A3EC /* CallSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE115D40B180001A3EC /* CallSensor.m */; };
+		3E820E2415D40B190001A3EC /* CompassSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DE215D40B180001A3EC /* CompassSensor.h */; };
+		3E820E2515D40B190001A3EC /* CompassSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE315D40B180001A3EC /* CompassSensor.m */; };
+		3E820E2615D40B190001A3EC /* ConnectionSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DE415D40B180001A3EC /* ConnectionSensor.h */; };
+		3E820E2715D40B190001A3EC /* ConnectionSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE515D40B180001A3EC /* ConnectionSensor.m */; };
+		3E820E2815D40B190001A3EC /* DynamicSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* DynamicSensor.h */; };
+		3E820E2915D40B190001A3EC /* DynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE715D40B180001A3EC /* DynamicSensor.m */; };
+		3E820E2A15D40B190001A3EC /* JumpSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DE815D40B180001A3EC /* JumpSensor.h */; };
+		3E820E2B15D40B190001A3EC /* JumpSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE915D40B180001A3EC /* JumpSensor.m */; };
+		3E820E2C15D40B190001A3EC /* LocationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DEA15D40B180001A3EC /* LocationSensor.h */; };
+		3E820E2D15D40B190001A3EC /* LocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEB15D40B180001A3EC /* LocationSensor.m */; };
+		3E820E2E15D40B190001A3EC /* MiscSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DEC15D40B180001A3EC /* MiscSensor.h */; };
+		3E820E2F15D40B190001A3EC /* MiscSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DED15D40B180001A3EC /* MiscSensor.m */; };
+		3E820E3015D40B190001A3EC /* MotionEnergySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DEE15D40B180001A3EC /* MotionEnergySensor.h */; };
+		3E820E3115D40B190001A3EC /* MotionEnergySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEF15D40B180001A3EC /* MotionEnergySensor.m */; };
+		3E820E3215D40B190001A3EC /* MotionFeaturesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DF015D40B180001A3EC /* MotionFeaturesSensor.h */; };
+		3E820E3315D40B190001A3EC /* MotionFeaturesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF115D40B180001A3EC /* MotionFeaturesSensor.m */; };
+		3E820E3415D40B190001A3EC /* MovingSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DF215D40B180001A3EC /* MovingSensor.h */; };
+		3E820E3515D40B190001A3EC /* MovingSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF315D40B180001A3EC /* MovingSensor.m */; };
+		3E820E3615D40B190001A3EC /* NoiseSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DF415D40B180001A3EC /* NoiseSensor.h */; };
+		3E820E3715D40B190001A3EC /* NoiseSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF515D40B180001A3EC /* NoiseSensor.m */; };
+		3E820E3815D40B190001A3EC /* OrientationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DF615D40B180001A3EC /* OrientationSensor.h */; };
+		3E820E3915D40B190001A3EC /* OrientationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF715D40B180001A3EC /* OrientationSensor.m */; };
+		3E820E3A15D40B190001A3EC /* OrientationStateSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DF815D40B180001A3EC /* OrientationStateSensor.h */; };
+		3E820E3B15D40B190001A3EC /* OrientationStateSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF915D40B180001A3EC /* OrientationStateSensor.m */; };
+		3E820E3C15D40B190001A3EC /* PreferencesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DFA15D40B180001A3EC /* PreferencesSensor.h */; };
+		3E820E3D15D40B190001A3EC /* PreferencesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DFB15D40B180001A3EC /* PreferencesSensor.m */; };
+		3E820E3E15D40B190001A3EC /* RotationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DFC15D40B180001A3EC /* RotationSensor.h */; };
+		3E820E3F15D40B190001A3EC /* RotationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DFD15D40B180001A3EC /* RotationSensor.m */; };
+		3E820E4015D40B190001A3EC /* Sensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DFE15D40B180001A3EC /* Sensor.m */; };
+		3E820E4115D40B190001A3EC /* SpatialProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DFF15D40B180001A3EC /* SpatialProvider.h */; };
+		3E820E4215D40B190001A3EC /* SpatialProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0015D40B180001A3EC /* SpatialProvider.m */; };
+		3E820E4315D40B190001A3EC /* UserProximity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820E0115D40B180001A3EC /* UserProximity.h */; };
+		3E820E4415D40B190001A3EC /* UserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0215D40B180001A3EC /* UserProximity.m */; };
+		3E820E4515D40B190001A3EC /* SensorStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820E0315D40B180001A3EC /* SensorStore.h */; };
+		3E820E4615D40B190001A3EC /* SensorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0415D40B180001A3EC /* SensorStore.m */; };
+		3E820E4715D40B190001A3EC /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0515D40B180001A3EC /* Settings.m */; };
+		3E820F8315D41C970001A3EC /* Sense platform-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 3E820F8215D41C970001A3EC /* Sense platform-Prefix.pch */; };
+		3E820F9D15D41D6D0001A3EC /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9115D41D6D0001A3EC /* NSObject+SBJson.m */; };
+		3E820F9E15D41D6D0001A3EC /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9215D41D6D0001A3EC /* SBJsonParser.m */; };
+		3E820F9F15D41D6D0001A3EC /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9315D41D6D0001A3EC /* SBJsonStreamParser.m */; };
+		3E820FA015D41D6D0001A3EC /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9415D41D6D0001A3EC /* SBJsonStreamParserAccumulator.m */; };
+		3E820FA115D41D6D0001A3EC /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9515D41D6D0001A3EC /* SBJsonStreamParserAdapter.m */; };
+		3E820FA215D41D6D0001A3EC /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9615D41D6D0001A3EC /* SBJsonStreamParserState.m */; };
+		3E820FA315D41D6D0001A3EC /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9715D41D6D0001A3EC /* SBJsonStreamWriter.m */; };
+		3E820FA415D41D6D0001A3EC /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9815D41D6D0001A3EC /* SBJsonStreamWriterAccumulator.m */; };
+		3E820FA515D41D6D0001A3EC /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9915D41D6D0001A3EC /* SBJsonStreamWriterState.m */; };
+		3E820FA615D41D6D0001A3EC /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9A15D41D6D0001A3EC /* SBJsonTokeniser.m */; };
+		3E820FA715D41D6D0001A3EC /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9B15D41D6D0001A3EC /* SBJsonUTF8Stream.m */; };
+		3E820FA815D41D6D0001A3EC /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820F9C15D41D6D0001A3EC /* SBJsonWriter.m */; };
+		3E9C14C615D5044100F520D0 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B215D5044100F520D0 /* JSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14C715D5044100F520D0 /* NSObject+SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B315D5044100F520D0 /* NSObject+SBJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14C815D5044100F520D0 /* SBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B415D5044100F520D0 /* SBJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14C915D5044100F520D0 /* SBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B515D5044100F520D0 /* SBJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14CA15D5044100F520D0 /* SBJsonStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B615D5044100F520D0 /* SBJsonStreamParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14CB15D5044100F520D0 /* SBJsonStreamParserAccumulator.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B715D5044100F520D0 /* SBJsonStreamParserAccumulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14CC15D5044100F520D0 /* SBJsonStreamParserAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B815D5044100F520D0 /* SBJsonStreamParserAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14CD15D5044100F520D0 /* SBJsonStreamParserState.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14B915D5044100F520D0 /* SBJsonStreamParserState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14CE15D5044100F520D0 /* SBJsonStreamWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14BA15D5044100F520D0 /* SBJsonStreamWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14CF15D5044100F520D0 /* SBJsonStreamWriterAccumulator.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14BB15D5044100F520D0 /* SBJsonStreamWriterAccumulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D015D5044100F520D0 /* SBJsonStreamWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14BC15D5044100F520D0 /* SBJsonStreamWriterState.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D115D5044100F520D0 /* SBJsonTokeniser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14BD15D5044100F520D0 /* SBJsonTokeniser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D215D5044100F520D0 /* SBJsonUTF8Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14BE15D5044100F520D0 /* SBJsonUTF8Stream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D315D5044100F520D0 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14BF15D5044100F520D0 /* SBJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D415D5044100F520D0 /* ApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14C115D5044100F520D0 /* ApplicationStateChange.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D515D5044100F520D0 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14C215D5044100F520D0 /* SensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D615D5044100F520D0 /* Sensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14C315D5044100F520D0 /* Sensor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D715D5044100F520D0 /* SensorIds.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14C415D5044100F520D0 /* SensorIds.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3E9C14D815D5044100F520D0 /* Settings.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E9C14C515D5044100F520D0 /* Settings.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3E820D6A15D40AB50001A3EC /* libSense platform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSense platform.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E820D6D15D40AB50001A3EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3E820DBC15D40B100001A3EC /* CommonSense.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CommonSense.plist; sourceTree = "<group>"; };
+		3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SensePlatform-Info.plist"; sourceTree = "<group>"; };
+		3E820DBE15D40B100001A3EC /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
+		3E820DC015D40B180001A3EC /* ApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationStateChange.m; sourceTree = "<group>"; };
+		3E820DC215D40B180001A3EC /* ActivitySender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivitySender.h; sourceTree = "<group>"; };
+		3E820DC315D40B180001A3EC /* ActivitySender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivitySender.m; sourceTree = "<group>"; };
+		3E820DC415D40B180001A3EC /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Hash.h"; sourceTree = "<group>"; };
+		3E820DC515D40B180001A3EC /* NSString+MD5Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5Hash.m"; sourceTree = "<group>"; };
+		3E820DC615D40B180001A3EC /* Sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sender.h; sourceTree = "<group>"; };
+		3E820DC715D40B180001A3EC /* Sender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sender.m; sourceTree = "<group>"; };
+		3E820DC815D40B180001A3EC /* DataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataStore.h; sourceTree = "<group>"; };
+		3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
+		3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
+		3E820DCC15D40B180001A3EC /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		3E820DCD15D40B180001A3EC /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		3E820DCE15D40B180001A3EC /* SensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensePlatform.m; sourceTree = "<group>"; };
+		3E820DCF15D40B180001A3EC /* SensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorIds.m; sourceTree = "<group>"; };
+		3E820DD115D40B180001A3EC /* Acceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Acceleration.h; sourceTree = "<group>"; };
+		3E820DD215D40B180001A3EC /* Acceleration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Acceleration.m; sourceTree = "<group>"; };
+		3E820DD315D40B180001A3EC /* AccelerationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationSensor.h; sourceTree = "<group>"; };
+		3E820DD415D40B180001A3EC /* AccelerationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerationSensor.m; sourceTree = "<group>"; };
+		3E820DD515D40B180001A3EC /* AccelerometerSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerSensor.h; sourceTree = "<group>"; };
+		3E820DD615D40B180001A3EC /* AccelerometerSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerSensor.m; sourceTree = "<group>"; };
+		3E820DD815D40B180001A3EC /* AntPlusController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AntPlusController.h; sourceTree = "<group>"; };
+		3E820DD915D40B180001A3EC /* AntPlusController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AntPlusController.m; sourceTree = "<group>"; };
+		3E820DDA15D40B180001A3EC /* BloodPressureSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloodPressureSensor.h; sourceTree = "<group>"; };
+		3E820DDB15D40B180001A3EC /* BloodPressureSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloodPressureSensor.m; sourceTree = "<group>"; };
+		3E820DDC15D40B180001A3EC /* FootpodSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FootpodSensor.h; sourceTree = "<group>"; };
+		3E820DDD15D40B180001A3EC /* FootpodSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FootpodSensor.m; sourceTree = "<group>"; };
+		3E820DDE15D40B180001A3EC /* BatterySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatterySensor.h; sourceTree = "<group>"; };
+		3E820DDF15D40B180001A3EC /* BatterySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatterySensor.m; sourceTree = "<group>"; };
+		3E820DE015D40B180001A3EC /* CallSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallSensor.h; sourceTree = "<group>"; };
+		3E820DE115D40B180001A3EC /* CallSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallSensor.m; sourceTree = "<group>"; };
+		3E820DE215D40B180001A3EC /* CompassSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompassSensor.h; sourceTree = "<group>"; };
+		3E820DE315D40B180001A3EC /* CompassSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompassSensor.m; sourceTree = "<group>"; };
+		3E820DE415D40B180001A3EC /* ConnectionSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionSensor.h; sourceTree = "<group>"; };
+		3E820DE515D40B180001A3EC /* ConnectionSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectionSensor.m; sourceTree = "<group>"; };
+		3E820DE615D40B180001A3EC /* DynamicSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicSensor.h; sourceTree = "<group>"; };
+		3E820DE715D40B180001A3EC /* DynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicSensor.m; sourceTree = "<group>"; };
+		3E820DE815D40B180001A3EC /* JumpSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JumpSensor.h; sourceTree = "<group>"; };
+		3E820DE915D40B180001A3EC /* JumpSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JumpSensor.m; sourceTree = "<group>"; };
+		3E820DEA15D40B180001A3EC /* LocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSensor.h; sourceTree = "<group>"; };
+		3E820DEB15D40B180001A3EC /* LocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSensor.m; sourceTree = "<group>"; };
+		3E820DEC15D40B180001A3EC /* MiscSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiscSensor.h; sourceTree = "<group>"; };
+		3E820DED15D40B180001A3EC /* MiscSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MiscSensor.m; sourceTree = "<group>"; };
+		3E820DEE15D40B180001A3EC /* MotionEnergySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MotionEnergySensor.h; sourceTree = "<group>"; };
+		3E820DEF15D40B180001A3EC /* MotionEnergySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MotionEnergySensor.m; sourceTree = "<group>"; };
+		3E820DF015D40B180001A3EC /* MotionFeaturesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MotionFeaturesSensor.h; sourceTree = "<group>"; };
+		3E820DF115D40B180001A3EC /* MotionFeaturesSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MotionFeaturesSensor.m; sourceTree = "<group>"; };
+		3E820DF215D40B180001A3EC /* MovingSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovingSensor.h; sourceTree = "<group>"; };
+		3E820DF315D40B180001A3EC /* MovingSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovingSensor.m; sourceTree = "<group>"; };
+		3E820DF415D40B180001A3EC /* NoiseSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoiseSensor.h; sourceTree = "<group>"; };
+		3E820DF515D40B180001A3EC /* NoiseSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoiseSensor.m; sourceTree = "<group>"; };
+		3E820DF615D40B180001A3EC /* OrientationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrientationSensor.h; sourceTree = "<group>"; };
+		3E820DF715D40B180001A3EC /* OrientationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrientationSensor.m; sourceTree = "<group>"; };
+		3E820DF815D40B180001A3EC /* OrientationStateSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrientationStateSensor.h; sourceTree = "<group>"; };
+		3E820DF915D40B180001A3EC /* OrientationStateSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrientationStateSensor.m; sourceTree = "<group>"; };
+		3E820DFA15D40B180001A3EC /* PreferencesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesSensor.h; sourceTree = "<group>"; };
+		3E820DFB15D40B180001A3EC /* PreferencesSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesSensor.m; sourceTree = "<group>"; };
+		3E820DFC15D40B180001A3EC /* RotationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationSensor.h; sourceTree = "<group>"; };
+		3E820DFD15D40B180001A3EC /* RotationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotationSensor.m; sourceTree = "<group>"; };
+		3E820DFE15D40B180001A3EC /* Sensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sensor.m; sourceTree = "<group>"; };
+		3E820DFF15D40B180001A3EC /* SpatialProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialProvider.h; sourceTree = "<group>"; };
+		3E820E0015D40B180001A3EC /* SpatialProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialProvider.m; sourceTree = "<group>"; };
+		3E820E0115D40B180001A3EC /* UserProximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProximity.h; sourceTree = "<group>"; };
+		3E820E0215D40B180001A3EC /* UserProximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProximity.m; sourceTree = "<group>"; };
+		3E820E0315D40B180001A3EC /* SensorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorStore.h; sourceTree = "<group>"; };
+		3E820E0415D40B180001A3EC /* SensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorStore.m; sourceTree = "<group>"; };
+		3E820E0515D40B180001A3EC /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		3E820F8215D41C970001A3EC /* Sense platform-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Sense platform-Prefix.pch"; sourceTree = "<group>"; };
+		3E820F9115D41D6D0001A3EC /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
+		3E820F9215D41D6D0001A3EC /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		3E820F9315D41D6D0001A3EC /* SBJsonStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParser.m; sourceTree = "<group>"; };
+		3E820F9415D41D6D0001A3EC /* SBJsonStreamParserAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAccumulator.m; sourceTree = "<group>"; };
+		3E820F9515D41D6D0001A3EC /* SBJsonStreamParserAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserAdapter.m; sourceTree = "<group>"; };
+		3E820F9615D41D6D0001A3EC /* SBJsonStreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamParserState.m; sourceTree = "<group>"; };
+		3E820F9715D41D6D0001A3EC /* SBJsonStreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriter.m; sourceTree = "<group>"; };
+		3E820F9815D41D6D0001A3EC /* SBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
+		3E820F9915D41D6D0001A3EC /* SBJsonStreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonStreamWriterState.m; sourceTree = "<group>"; };
+		3E820F9A15D41D6D0001A3EC /* SBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonTokeniser.m; sourceTree = "<group>"; };
+		3E820F9B15D41D6D0001A3EC /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
+		3E820F9C15D41D6D0001A3EC /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		3E9C14B215D5044100F520D0 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		3E9C14B315D5044100F520D0 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
+		3E9C14B415D5044100F520D0 /* SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJson.h; sourceTree = "<group>"; };
+		3E9C14B515D5044100F520D0 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		3E9C14B615D5044100F520D0 /* SBJsonStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParser.h; sourceTree = "<group>"; };
+		3E9C14B715D5044100F520D0 /* SBJsonStreamParserAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAccumulator.h; sourceTree = "<group>"; };
+		3E9C14B815D5044100F520D0 /* SBJsonStreamParserAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserAdapter.h; sourceTree = "<group>"; };
+		3E9C14B915D5044100F520D0 /* SBJsonStreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamParserState.h; sourceTree = "<group>"; };
+		3E9C14BA15D5044100F520D0 /* SBJsonStreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriter.h; sourceTree = "<group>"; };
+		3E9C14BB15D5044100F520D0 /* SBJsonStreamWriterAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterAccumulator.h; sourceTree = "<group>"; };
+		3E9C14BC15D5044100F520D0 /* SBJsonStreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonStreamWriterState.h; sourceTree = "<group>"; };
+		3E9C14BD15D5044100F520D0 /* SBJsonTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonTokeniser.h; sourceTree = "<group>"; };
+		3E9C14BE15D5044100F520D0 /* SBJsonUTF8Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonUTF8Stream.h; sourceTree = "<group>"; };
+		3E9C14BF15D5044100F520D0 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		3E9C14C115D5044100F520D0 /* ApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationStateChange.h; sourceTree = "<group>"; };
+		3E9C14C215D5044100F520D0 /* SensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensePlatform.h; sourceTree = "<group>"; };
+		3E9C14C315D5044100F520D0 /* Sensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sensor.h; sourceTree = "<group>"; };
+		3E9C14C415D5044100F520D0 /* SensorIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorIds.h; sourceTree = "<group>"; };
+		3E9C14C515D5044100F520D0 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3E820D6715D40AB50001A3EC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3E820D5F15D40AB50001A3EC = {
+			isa = PBXGroup;
+			children = (
+				3E9C14B015D5044100F520D0 /* include */,
+				3E820F9015D41D6D0001A3EC /* json */,
+				3E820F8215D41C970001A3EC /* Sense platform-Prefix.pch */,
+				3E820DBF15D40B180001A3EC /* sense platform */,
+				3E820DBB15D40B100001A3EC /* resources */,
+				3E820D6C15D40AB50001A3EC /* Frameworks */,
+				3E820D6B15D40AB50001A3EC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3E820D6B15D40AB50001A3EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E820D6A15D40AB50001A3EC /* libSense platform.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3E820DBB15D40B100001A3EC /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				3E820DBC15D40B100001A3EC /* CommonSense.plist */,
+				3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */,
+				3E820DBE15D40B100001A3EC /* Settings.plist */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		3E820DBF15D40B180001A3EC /* sense platform */ = {
+			isa = PBXGroup;
+			children = (
+				3E820DC015D40B180001A3EC /* ApplicationStateChange.m */,
+				3E820DC115D40B180001A3EC /* communication */,
+				3E820DC815D40B180001A3EC /* DataStore.h */,
+				3E820DC915D40B180001A3EC /* misc */,
+				3E820DCE15D40B180001A3EC /* SensePlatform.m */,
+				3E820DCF15D40B180001A3EC /* SensorIds.m */,
+				3E820DD015D40B180001A3EC /* sensors */,
+				3E820E0315D40B180001A3EC /* SensorStore.h */,
+				3E820E0415D40B180001A3EC /* SensorStore.m */,
+				3E820E0515D40B180001A3EC /* Settings.m */,
+			);
+			path = "sense platform";
+			sourceTree = "<group>";
+		};
+		3E820DC115D40B180001A3EC /* communication */ = {
+			isa = PBXGroup;
+			children = (
+				3E820DC215D40B180001A3EC /* ActivitySender.h */,
+				3E820DC315D40B180001A3EC /* ActivitySender.m */,
+				3E820DC415D40B180001A3EC /* NSString+MD5Hash.h */,
+				3E820DC515D40B180001A3EC /* NSString+MD5Hash.m */,
+				3E820DC615D40B180001A3EC /* Sender.h */,
+				3E820DC715D40B180001A3EC /* Sender.m */,
+			);
+			path = communication;
+			sourceTree = "<group>";
+		};
+		3E820DC915D40B180001A3EC /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */,
+				3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */,
+				3E820DCC15D40B180001A3EC /* Reachability.h */,
+				3E820DCD15D40B180001A3EC /* Reachability.m */,
+			);
+			path = misc;
+			sourceTree = "<group>";
+		};
+		3E820DD015D40B180001A3EC /* sensors */ = {
+			isa = PBXGroup;
+			children = (
+				3E820DD115D40B180001A3EC /* Acceleration.h */,
+				3E820DD215D40B180001A3EC /* Acceleration.m */,
+				3E820DD315D40B180001A3EC /* AccelerationSensor.h */,
+				3E820DD415D40B180001A3EC /* AccelerationSensor.m */,
+				3E820DD515D40B180001A3EC /* AccelerometerSensor.h */,
+				3E820DD615D40B180001A3EC /* AccelerometerSensor.m */,
+				3E820DD715D40B180001A3EC /* ant+ */,
+				3E820DDE15D40B180001A3EC /* BatterySensor.h */,
+				3E820DDF15D40B180001A3EC /* BatterySensor.m */,
+				3E820DE015D40B180001A3EC /* CallSensor.h */,
+				3E820DE115D40B180001A3EC /* CallSensor.m */,
+				3E820DE215D40B180001A3EC /* CompassSensor.h */,
+				3E820DE315D40B180001A3EC /* CompassSensor.m */,
+				3E820DE415D40B180001A3EC /* ConnectionSensor.h */,
+				3E820DE515D40B180001A3EC /* ConnectionSensor.m */,
+				3E820DE615D40B180001A3EC /* DynamicSensor.h */,
+				3E820DE715D40B180001A3EC /* DynamicSensor.m */,
+				3E820DE815D40B180001A3EC /* JumpSensor.h */,
+				3E820DE915D40B180001A3EC /* JumpSensor.m */,
+				3E820DEA15D40B180001A3EC /* LocationSensor.h */,
+				3E820DEB15D40B180001A3EC /* LocationSensor.m */,
+				3E820DEC15D40B180001A3EC /* MiscSensor.h */,
+				3E820DED15D40B180001A3EC /* MiscSensor.m */,
+				3E820DEE15D40B180001A3EC /* MotionEnergySensor.h */,
+				3E820DEF15D40B180001A3EC /* MotionEnergySensor.m */,
+				3E820DF015D40B180001A3EC /* MotionFeaturesSensor.h */,
+				3E820DF115D40B180001A3EC /* MotionFeaturesSensor.m */,
+				3E820DF215D40B180001A3EC /* MovingSensor.h */,
+				3E820DF315D40B180001A3EC /* MovingSensor.m */,
+				3E820DF415D40B180001A3EC /* NoiseSensor.h */,
+				3E820DF515D40B180001A3EC /* NoiseSensor.m */,
+				3E820DF615D40B180001A3EC /* OrientationSensor.h */,
+				3E820DF715D40B180001A3EC /* OrientationSensor.m */,
+				3E820DF815D40B180001A3EC /* OrientationStateSensor.h */,
+				3E820DF915D40B180001A3EC /* OrientationStateSensor.m */,
+				3E820DFA15D40B180001A3EC /* PreferencesSensor.h */,
+				3E820DFB15D40B180001A3EC /* PreferencesSensor.m */,
+				3E820DFC15D40B180001A3EC /* RotationSensor.h */,
+				3E820DFD15D40B180001A3EC /* RotationSensor.m */,
+				3E820DFE15D40B180001A3EC /* Sensor.m */,
+				3E820DFF15D40B180001A3EC /* SpatialProvider.h */,
+				3E820E0015D40B180001A3EC /* SpatialProvider.m */,
+				3E820E0115D40B180001A3EC /* UserProximity.h */,
+				3E820E0215D40B180001A3EC /* UserProximity.m */,
+			);
+			path = sensors;
+			sourceTree = "<group>";
+		};
+		3E820DD715D40B180001A3EC /* ant+ */ = {
+			isa = PBXGroup;
+			children = (
+				3E820DD815D40B180001A3EC /* AntPlusController.h */,
+				3E820DD915D40B180001A3EC /* AntPlusController.m */,
+				3E820DDA15D40B180001A3EC /* BloodPressureSensor.h */,
+				3E820DDB15D40B180001A3EC /* BloodPressureSensor.m */,
+				3E820DDC15D40B180001A3EC /* FootpodSensor.h */,
+				3E820DDD15D40B180001A3EC /* FootpodSensor.m */,
+			);
+			path = "ant+";
+			sourceTree = "<group>";
+		};
+		3E820F9015D41D6D0001A3EC /* json */ = {
+			isa = PBXGroup;
+			children = (
+				3E820F9115D41D6D0001A3EC /* NSObject+SBJson.m */,
+				3E820F9215D41D6D0001A3EC /* SBJsonParser.m */,
+				3E820F9315D41D6D0001A3EC /* SBJsonStreamParser.m */,
+				3E820F9415D41D6D0001A3EC /* SBJsonStreamParserAccumulator.m */,
+				3E820F9515D41D6D0001A3EC /* SBJsonStreamParserAdapter.m */,
+				3E820F9615D41D6D0001A3EC /* SBJsonStreamParserState.m */,
+				3E820F9715D41D6D0001A3EC /* SBJsonStreamWriter.m */,
+				3E820F9815D41D6D0001A3EC /* SBJsonStreamWriterAccumulator.m */,
+				3E820F9915D41D6D0001A3EC /* SBJsonStreamWriterState.m */,
+				3E820F9A15D41D6D0001A3EC /* SBJsonTokeniser.m */,
+				3E820F9B15D41D6D0001A3EC /* SBJsonUTF8Stream.m */,
+				3E820F9C15D41D6D0001A3EC /* SBJsonWriter.m */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		3E9C14B015D5044100F520D0 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				3E9C14B115D5044100F520D0 /* json */,
+				3E9C14C015D5044100F520D0 /* SensePlatform */,
+			);
+			name = include;
+			path = "../../../Sense platform iOS/include";
+			sourceTree = "<group>";
+		};
+		3E9C14B115D5044100F520D0 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				3E9C14B215D5044100F520D0 /* JSON.h */,
+				3E9C14B315D5044100F520D0 /* NSObject+SBJson.h */,
+				3E9C14B415D5044100F520D0 /* SBJson.h */,
+				3E9C14B515D5044100F520D0 /* SBJsonParser.h */,
+				3E9C14B615D5044100F520D0 /* SBJsonStreamParser.h */,
+				3E9C14B715D5044100F520D0 /* SBJsonStreamParserAccumulator.h */,
+				3E9C14B815D5044100F520D0 /* SBJsonStreamParserAdapter.h */,
+				3E9C14B915D5044100F520D0 /* SBJsonStreamParserState.h */,
+				3E9C14BA15D5044100F520D0 /* SBJsonStreamWriter.h */,
+				3E9C14BB15D5044100F520D0 /* SBJsonStreamWriterAccumulator.h */,
+				3E9C14BC15D5044100F520D0 /* SBJsonStreamWriterState.h */,
+				3E9C14BD15D5044100F520D0 /* SBJsonTokeniser.h */,
+				3E9C14BE15D5044100F520D0 /* SBJsonUTF8Stream.h */,
+				3E9C14BF15D5044100F520D0 /* SBJsonWriter.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		3E9C14C015D5044100F520D0 /* SensePlatform */ = {
+			isa = PBXGroup;
+			children = (
+				3E9C14C115D5044100F520D0 /* ApplicationStateChange.h */,
+				3E9C14C215D5044100F520D0 /* SensePlatform.h */,
+				3E9C14C315D5044100F520D0 /* Sensor.h */,
+				3E9C14C415D5044100F520D0 /* SensorIds.h */,
+				3E9C14C515D5044100F520D0 /* Settings.h */,
+			);
+			path = SensePlatform;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3E820D6815D40AB50001A3EC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E9C14C615D5044100F520D0 /* JSON.h in Headers */,
+				3E9C14C715D5044100F520D0 /* NSObject+SBJson.h in Headers */,
+				3E9C14C815D5044100F520D0 /* SBJson.h in Headers */,
+				3E9C14C915D5044100F520D0 /* SBJsonParser.h in Headers */,
+				3E9C14CA15D5044100F520D0 /* SBJsonStreamParser.h in Headers */,
+				3E9C14CF15D5044100F520D0 /* SBJsonStreamWriterAccumulator.h in Headers */,
+				3E9C14D015D5044100F520D0 /* SBJsonStreamWriterState.h in Headers */,
+				3E9C14D215D5044100F520D0 /* SBJsonUTF8Stream.h in Headers */,
+				3E9C14D115D5044100F520D0 /* SBJsonTokeniser.h in Headers */,
+				3E9C14D315D5044100F520D0 /* SBJsonWriter.h in Headers */,
+				3E9C14D415D5044100F520D0 /* ApplicationStateChange.h in Headers */,
+				3E9C14D515D5044100F520D0 /* SensePlatform.h in Headers */,
+				3E9C14D615D5044100F520D0 /* Sensor.h in Headers */,
+				3E9C14D815D5044100F520D0 /* Settings.h in Headers */,
+				3E9C14D715D5044100F520D0 /* SensorIds.h in Headers */,
+				3E9C14CE15D5044100F520D0 /* SBJsonStreamWriter.h in Headers */,
+				3E9C14CB15D5044100F520D0 /* SBJsonStreamParserAccumulator.h in Headers */,
+				3E9C14CC15D5044100F520D0 /* SBJsonStreamParserAdapter.h in Headers */,
+				3E9C14CD15D5044100F520D0 /* SBJsonStreamParserState.h in Headers */,
+				3E820E0715D40B190001A3EC /* ActivitySender.h in Headers */,
+				3E820E0915D40B190001A3EC /* NSString+MD5Hash.h in Headers */,
+				3E820E0B15D40B190001A3EC /* Sender.h in Headers */,
+				3E820E0D15D40B190001A3EC /* DataStore.h in Headers */,
+				3E820E0E15D40B190001A3EC /* NSNotificationCenter+MainThread.h in Headers */,
+				3E820E1015D40B190001A3EC /* Reachability.h in Headers */,
+				3E820E1415D40B190001A3EC /* Acceleration.h in Headers */,
+				3E820E1615D40B190001A3EC /* AccelerationSensor.h in Headers */,
+				3E820E1815D40B190001A3EC /* AccelerometerSensor.h in Headers */,
+				3E820E1A15D40B190001A3EC /* AntPlusController.h in Headers */,
+				3E820E1C15D40B190001A3EC /* BloodPressureSensor.h in Headers */,
+				3E820E1E15D40B190001A3EC /* FootpodSensor.h in Headers */,
+				3E820E2015D40B190001A3EC /* BatterySensor.h in Headers */,
+				3E820E2215D40B190001A3EC /* CallSensor.h in Headers */,
+				3E820E2415D40B190001A3EC /* CompassSensor.h in Headers */,
+				3E820E2615D40B190001A3EC /* ConnectionSensor.h in Headers */,
+				3E820E2815D40B190001A3EC /* DynamicSensor.h in Headers */,
+				3E820E2A15D40B190001A3EC /* JumpSensor.h in Headers */,
+				3E820E2C15D40B190001A3EC /* LocationSensor.h in Headers */,
+				3E820E2E15D40B190001A3EC /* MiscSensor.h in Headers */,
+				3E820E3015D40B190001A3EC /* MotionEnergySensor.h in Headers */,
+				3E820E3215D40B190001A3EC /* MotionFeaturesSensor.h in Headers */,
+				3E820E3415D40B190001A3EC /* MovingSensor.h in Headers */,
+				3E820E3615D40B190001A3EC /* NoiseSensor.h in Headers */,
+				3E820E3815D40B190001A3EC /* OrientationSensor.h in Headers */,
+				3E820E3A15D40B190001A3EC /* OrientationStateSensor.h in Headers */,
+				3E820E3C15D40B190001A3EC /* PreferencesSensor.h in Headers */,
+				3E820E3E15D40B190001A3EC /* RotationSensor.h in Headers */,
+				3E820E4115D40B190001A3EC /* SpatialProvider.h in Headers */,
+				3E820E4315D40B190001A3EC /* UserProximity.h in Headers */,
+				3E820E4515D40B190001A3EC /* SensorStore.h in Headers */,
+				3E820F8315D41C970001A3EC /* Sense platform-Prefix.pch in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3E820D6915D40AB50001A3EC /* Sense platform */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E820D7715D40AB50001A3EC /* Build configuration list for PBXNativeTarget "Sense platform" */;
+			buildPhases = (
+				3E820D6615D40AB50001A3EC /* Sources */,
+				3E820D6715D40AB50001A3EC /* Frameworks */,
+				3E820D6815D40AB50001A3EC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Sense platform";
+			productName = "Sense platform iOS";
+			productReference = 3E820D6A15D40AB50001A3EC /* libSense platform.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3E820D6115D40AB50001A3EC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "Sense platform" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3E820D5F15D40AB50001A3EC;
+			productRefGroup = 3E820D6B15D40AB50001A3EC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3E820D6915D40AB50001A3EC /* Sense platform */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3E820D6615D40AB50001A3EC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E820E0615D40B190001A3EC /* ApplicationStateChange.m in Sources */,
+				3E820E0815D40B190001A3EC /* ActivitySender.m in Sources */,
+				3E820E0A15D40B190001A3EC /* NSString+MD5Hash.m in Sources */,
+				3E820E0C15D40B190001A3EC /* Sender.m in Sources */,
+				3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */,
+				3E820E1115D40B190001A3EC /* Reachability.m in Sources */,
+				3E820E1215D40B190001A3EC /* SensePlatform.m in Sources */,
+				3E820E1315D40B190001A3EC /* SensorIds.m in Sources */,
+				3E820E1515D40B190001A3EC /* Acceleration.m in Sources */,
+				3E820E1715D40B190001A3EC /* AccelerationSensor.m in Sources */,
+				3E820E1915D40B190001A3EC /* AccelerometerSensor.m in Sources */,
+				3E820E1B15D40B190001A3EC /* AntPlusController.m in Sources */,
+				3E820E1D15D40B190001A3EC /* BloodPressureSensor.m in Sources */,
+				3E820E1F15D40B190001A3EC /* FootpodSensor.m in Sources */,
+				3E820E2115D40B190001A3EC /* BatterySensor.m in Sources */,
+				3E820E2315D40B190001A3EC /* CallSensor.m in Sources */,
+				3E820E2515D40B190001A3EC /* CompassSensor.m in Sources */,
+				3E820E2715D40B190001A3EC /* ConnectionSensor.m in Sources */,
+				3E820E2915D40B190001A3EC /* DynamicSensor.m in Sources */,
+				3E820E2B15D40B190001A3EC /* JumpSensor.m in Sources */,
+				3E820E2D15D40B190001A3EC /* LocationSensor.m in Sources */,
+				3E820E2F15D40B190001A3EC /* MiscSensor.m in Sources */,
+				3E820E3115D40B190001A3EC /* MotionEnergySensor.m in Sources */,
+				3E820E3315D40B190001A3EC /* MotionFeaturesSensor.m in Sources */,
+				3E820E3515D40B190001A3EC /* MovingSensor.m in Sources */,
+				3E820E3715D40B190001A3EC /* NoiseSensor.m in Sources */,
+				3E820E3915D40B190001A3EC /* OrientationSensor.m in Sources */,
+				3E820E3B15D40B190001A3EC /* OrientationStateSensor.m in Sources */,
+				3E820E3D15D40B190001A3EC /* PreferencesSensor.m in Sources */,
+				3E820E3F15D40B190001A3EC /* RotationSensor.m in Sources */,
+				3E820E4015D40B190001A3EC /* Sensor.m in Sources */,
+				3E820E4215D40B190001A3EC /* SpatialProvider.m in Sources */,
+				3E820E4415D40B190001A3EC /* UserProximity.m in Sources */,
+				3E820E4615D40B190001A3EC /* SensorStore.m in Sources */,
+				3E820E4715D40B190001A3EC /* Settings.m in Sources */,
+				3E820F9D15D41D6D0001A3EC /* NSObject+SBJson.m in Sources */,
+				3E820F9E15D41D6D0001A3EC /* SBJsonParser.m in Sources */,
+				3E820F9F15D41D6D0001A3EC /* SBJsonStreamParser.m in Sources */,
+				3E820FA015D41D6D0001A3EC /* SBJsonStreamParserAccumulator.m in Sources */,
+				3E820FA115D41D6D0001A3EC /* SBJsonStreamParserAdapter.m in Sources */,
+				3E820FA215D41D6D0001A3EC /* SBJsonStreamParserState.m in Sources */,
+				3E820FA315D41D6D0001A3EC /* SBJsonStreamWriter.m in Sources */,
+				3E820FA415D41D6D0001A3EC /* SBJsonStreamWriterAccumulator.m in Sources */,
+				3E820FA515D41D6D0001A3EC /* SBJsonStreamWriterState.m in Sources */,
+				3E820FA615D41D6D0001A3EC /* SBJsonTokeniser.m in Sources */,
+				3E820FA715D41D6D0001A3EC /* SBJsonUTF8Stream.m in Sources */,
+				3E820FA815D41D6D0001A3EC /* SBJsonWriter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3E820D7515D40AB50001A3EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3E820D7615D40AB50001A3EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3E820D7815D40AB50001A3EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Sense_platform_iOS.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sense platform-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "Sense platform";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		3E820D7915D40AB50001A3EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Sense_platform_iOS.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sense platform-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "Sense platform";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "Sense platform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E820D7515D40AB50001A3EC /* Debug */,
+				3E820D7615D40AB50001A3EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3E820D7715D40AB50001A3EC /* Build configuration list for PBXNativeTarget "Sense platform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E820D7815D40AB50001A3EC /* Debug */,
+				3E820D7915D40AB50001A3EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3E820D6115D40AB50001A3EC /* Project object */;
+}

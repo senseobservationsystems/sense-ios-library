@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SettingsTypeadaptive</key>
+	<dict>
+		<key>recordedTime</key>
+		<string>0</string>
+		<key>consumptionFactor</key>
+		<string>1</string>
+		<key>energyAdaptive</key>
+		<string>0</string>
+		<key>locationAdaptive</key>
+		<string>0</string>
+	</dict>
+	<key>SettingsTypegeneral</key>
+	<dict>
+		<key>synchronisationRate</key>
+		<string>300</string>
+		<key>upload to CommonSense</key>
+		<string>YES</string>
+		<key>senseEnabled</key>
+		<string>YES</string>
+	</dict>
+	<key>SettingsTypenoise</key>
+	<dict>
+		<key>pollInterval</key>
+		<string>60</string>
+	</dict>
+	<key>SettingsTypeposition</key>
+	<dict>
+		<key>accuracy</key>
+		<string>100</string>
+	</dict>
+	<key>SettingsTypespatial</key>
+	<dict>
+		<key>pollInterval</key>
+		<string>60</string>
+		<key>frequency</key>
+		<string>50</string>
+		<key>number of samples</key>
+		<string>150</string>
+	</dict>
+</dict>
+</plist>

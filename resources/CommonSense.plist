@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseUrl</key>
+	<string>https://api.sense-os.nl</string>
+	<key>data</key>
+	<string>data</string>
+	<key>devices</key>
+	<string>devices</string>
+	<key>jsonSuffix</key>
+	<string>.json</string>
+	<key>login</key>
+	<string>login</string>
+	<key>logout</key>
+	<string>logout</string>
+	<key>sensorDevice</key>
+	<string>device</string>
+	<key>sensors</key>
+	<string>sensors</string>
+	<key>users</key>
+	<string>users</string>
+</dict>
+</plist>
