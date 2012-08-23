@@ -30,7 +30,7 @@ extern NSString* const kMotionData;
 - (void) enabledChanged:(id) notification;
 - (void) setSyncRate: (int) newRate;
 - (void) addSensor:(Sensor*) sensor;
-- (NSDictionary*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
+- (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
 
 /* Ensure all sensor data is flushed, used to reduce memory usage.
