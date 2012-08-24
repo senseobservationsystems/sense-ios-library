@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Sensor.h"
-@class Reachability;
+@class SEReachability;
 
 
 @interface ConnectionSensor : Sensor {
-	Reachability* internetReach;
+	SEReachability* internetReach;
 }
 
 - (void) reachabilityChanged: (NSNotification* )note;

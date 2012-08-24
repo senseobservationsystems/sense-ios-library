@@ -18,8 +18,8 @@
 		3E820E0D15D40B190001A3EC /* DataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DC815D40B180001A3EC /* DataStore.h */; };
 		3E820E0E15D40B190001A3EC /* NSNotificationCenter+MainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */; };
 		3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */; };
-		3E820E1015D40B190001A3EC /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DCC15D40B180001A3EC /* Reachability.h */; };
-		3E820E1115D40B190001A3EC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCD15D40B180001A3EC /* Reachability.m */; };
+		3E820E1015D40B190001A3EC /* SEReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DCC15D40B180001A3EC /* SEReachability.h */; };
+		3E820E1115D40B190001A3EC /* SEReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCD15D40B180001A3EC /* SEReachability.m */; };
 		3E820E1215D40B190001A3EC /* SensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCE15D40B180001A3EC /* SensePlatform.m */; };
 		3E820E1315D40B190001A3EC /* SensorIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCF15D40B180001A3EC /* SensorIds.m */; };
 		3E820E1415D40B190001A3EC /* Acceleration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DD115D40B180001A3EC /* Acceleration.h */; };
@@ -132,8 +132,8 @@
 		3E820DC815D40B180001A3EC /* DataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataStore.h; sourceTree = "<group>"; };
 		3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
 		3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
-		3E820DCC15D40B180001A3EC /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		3E820DCD15D40B180001A3EC /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		3E820DCC15D40B180001A3EC /* SEReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEReachability.h; sourceTree = "<group>"; };
+		3E820DCD15D40B180001A3EC /* SEReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEReachability.m; sourceTree = "<group>"; };
 		3E820DCE15D40B180001A3EC /* SensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensePlatform.m; sourceTree = "<group>"; };
 		3E820DCF15D40B180001A3EC /* SensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorIds.m; sourceTree = "<group>"; };
 		3E820DD115D40B180001A3EC /* Acceleration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Acceleration.h; sourceTree = "<group>"; };
@@ -332,8 +332,8 @@
 			children = (
 				3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */,
 				3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */,
-				3E820DCC15D40B180001A3EC /* Reachability.h */,
-				3E820DCD15D40B180001A3EC /* Reachability.m */,
+				3E820DCC15D40B180001A3EC /* SEReachability.h */,
+				3E820DCD15D40B180001A3EC /* SEReachability.m */,
 			);
 			path = misc;
 			sourceTree = "<group>";
@@ -483,7 +483,7 @@
 				3E820E0B15D40B190001A3EC /* Sender.h in Headers */,
 				3E820E0D15D40B190001A3EC /* DataStore.h in Headers */,
 				3E820E0E15D40B190001A3EC /* NSNotificationCenter+MainThread.h in Headers */,
-				3E820E1015D40B190001A3EC /* Reachability.h in Headers */,
+				3E820E1015D40B190001A3EC /* SEReachability.h in Headers */,
 				3E820E1415D40B190001A3EC /* Acceleration.h in Headers */,
 				3E820E1615D40B190001A3EC /* AccelerationSensor.h in Headers */,
 				3E820E1815D40B190001A3EC /* AccelerometerSensor.h in Headers */,
@@ -587,7 +587,7 @@
 				3E820E0A15D40B190001A3EC /* NSString+MD5Hash.m in Sources */,
 				3E820E0C15D40B190001A3EC /* Sender.m in Sources */,
 				3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */,
-				3E820E1115D40B190001A3EC /* Reachability.m in Sources */,
+				3E820E1115D40B190001A3EC /* SEReachability.m in Sources */,
 				3E820E1215D40B190001A3EC /* SensePlatform.m in Sources */,
 				3E820E1315D40B190001A3EC /* SensorIds.m in Sources */,
 				3E820E1515D40B190001A3EC /* Acceleration.m in Sources */,

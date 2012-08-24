@@ -7,7 +7,7 @@
 //
 
 #import "ConnectionSensor.h"
-#import "Reachability.h"
+#import "SEReachability.h"
 #import "DataStore.h"
 
 @implementation ConnectionSensor
@@ -29,7 +29,7 @@
 - (id) init {
 	self = [super init];
 	if (self) {
-		    internetReach = [Reachability reachabilityForInternetConnection];
+		    internetReach = [SEReachability reachabilityForInternetConnection];
 		    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reachabilityChanged:) name: kReachabilityChangedNotification object: nil];
 	}
 	return self;
