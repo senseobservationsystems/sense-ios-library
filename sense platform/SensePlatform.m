@@ -133,9 +133,12 @@ static SensorStore* sensorStore;
 + (NSString*) dataTypeOf:(NSString*) value {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
-    NSNumber* number = [f numberFromString:value];
+    
+    //hmm, value might be anything, let's write it to a string
+    NSString* stringValue = [NSString stringWithFormat:@"%@", value];
+    NSNumber* number = [f numberFromString:stringValue];
     if (number) {
-        if ([value rangeOfString:@"."].location == NSNotFound)
+        if ([stringValue rangeOfString:@"."].location == NSNotFound)
             return kSENSEPLATFORM_DATA_TYPE_INTEGER;
         else {
             return kSENSEPLATFORM_DATA_TYPE_FLOAT;
