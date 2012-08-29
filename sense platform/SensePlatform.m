@@ -68,8 +68,9 @@ static SensorStore* sensorStore;
     [settings setSettingType:kSettingTypeSpatial setting:kSpatialSettingInterval value:@"60"];
     [settings setSettingType:kSettingTypeAmbience setting:kAmbienceSettingInterval value:@"60"];
     [settings setSettingType:kSettingTypeGeneral setting:kGeneralSettingUploadInterval value:@"900"];
+    [settings setSettingType:kSettingTypeLocation setting:kLocationSettingAccuracy value:@"10000"];
 
-    [settings setSensor:kSENSOR_LOCATION enabled:NO];
+    [settings setSensor:kSENSOR_LOCATION enabled:YES];
     [settings setSensor:kSENSOR_BATTERY enabled:YES];
     [settings setSensor:kSENSOR_NOISE enabled:YES];
     [settings setSensor:kSENSOR_ACCELEROMETER enabled:YES];

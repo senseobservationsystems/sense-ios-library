@@ -127,7 +127,7 @@
 
 - (void) setIsEnabled:(BOOL) enable {
 	//only react to changes
-	//if (enable == isEnabled) return;
+	if (enable == isEnabled) return;
 	
 	NSLog(@"Enabling noise sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
 	isEnabled = enable;
@@ -144,6 +144,7 @@
 		[sampleTimer invalidate];
 		self.sampleTimer = nil;
 	}
+    isEnabled = enable;
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {

@@ -416,7 +416,9 @@ static const double radianInDegrees = 180.0 / M_PI;
     enableCounter += 1;
     if (enableCounter == 1) {
         [motionManager stopDeviceMotionUpdates];
-        [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+        [pollTimer invalidate];
+        pollTimer = nil;
+        pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
     }
 }
 
