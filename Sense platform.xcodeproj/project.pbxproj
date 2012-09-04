@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E59ACBD15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */; };
+		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
 		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E820E0615D40B190001A3EC /* ApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* ApplicationStateChange.m */; };
 		3E820E0715D40B190001A3EC /* ActivitySender.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E820DC215D40B180001A3EC /* ActivitySender.h */; };
@@ -117,6 +119,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
+		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		3E820D6A15D40AB50001A3EC /* libSense platform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSense platform.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E820D6D15D40AB50001A3EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3E820DBC15D40B100001A3EC /* CommonSense.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CommonSense.plist; sourceTree = "<group>"; };
@@ -250,6 +254,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E59ACB915F4DB1B00C07D59 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */,
+				3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
@@ -264,6 +277,7 @@
 				3E9C154315D564E100F520D0 /* include */,
 				3E820F9015D41D6D0001A3EC /* json */,
 				3E820F8215D41C970001A3EC /* Sense platform-Prefix.pch */,
+				3E59ACB915F4DB1B00C07D59 /* Utils */,
 				3E820DBF15D40B180001A3EC /* sense platform */,
 				3E820DBB15D40B100001A3EC /* resources */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
@@ -529,6 +543,7 @@
 				3E9C156A15D564E100F520D0 /* Sensor.h in Headers */,
 				3E9C156B15D564E100F520D0 /* SensorIds.h in Headers */,
 				3E9C156C15D564E100F520D0 /* Settings.h in Headers */,
+				3E59ACBD15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,6 +644,7 @@
 				3E820FA615D41D6D0001A3EC /* SBJsonTokeniser.m in Sources */,
 				3E820FA715D41D6D0001A3EC /* SBJsonUTF8Stream.m in Sources */,
 				3E820FA815D41D6D0001A3EC /* SBJsonWriter.m in Sources */,
+				3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

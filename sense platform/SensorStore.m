@@ -11,6 +11,9 @@
 #import "Settings.h"
 #import "ApplicationStateChange.h"
 
+#import <UIKit/UIKit.h>
+#import "UIDevice+IdentifierAddition.h"
+
 #import "LocationSensor.h"
 #import "BatterySensor.h"
 #import "CompassSensor.h"
@@ -26,7 +29,6 @@
 #import "BloodPressureSensor.h"
 #import "MiscSensor.h"
 #import <sqlite3.h>
-#import <UIKit/UIKit.h>
 #import "Sender.h"
 
 #import "SpatialProvider.h"
@@ -606,7 +608,7 @@ static SensorStore* sharedSensorStoreInstance = nil;
 
 + (NSDictionary*) device {
 	NSString* type = [[UIDevice currentDevice] model];
-	NSString* uuid = [[UIDevice currentDevice] uniqueIdentifier];
+	NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
 	NSDictionary* device = [NSDictionary dictionaryWithObjectsAndKeys:
 							uuid, @"uuid",
 							type, @"type",
