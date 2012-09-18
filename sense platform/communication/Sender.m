@@ -249,7 +249,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
     }
 }
 
-- (NSDictionary*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints {
+- (NSArray*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints {
 	return [[self doJsonRequestTo:[self makeUrlForGettingSensorData:sensorId nrPoints:nrPoints order:@"DESC"] withMethod:@"GET" withInput:nil] valueForKey:@"data"];
 }
             

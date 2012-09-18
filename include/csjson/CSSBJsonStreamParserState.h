@@ -32,15 +32,15 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SBJsonTokeniser.h"
-#import "SBJsonStreamParser.h"
+#import "CSSBJsonTokeniser.h"
+#import "CSSBJsonStreamParser.h"
 
-@interface SBJsonStreamParserState : NSObject
+@interface CSSBJsonStreamParserState : NSObject
 + (id)sharedInstance;
 
-- (BOOL)parser:(SBJsonStreamParser*)parser shouldAcceptToken:(sbjson_token_t)token;
-- (SBJsonStreamParserStatus)parserShouldReturn:(SBJsonStreamParser*)parser;
-- (void)parser:(SBJsonStreamParser*)parser shouldTransitionTo:(sbjson_token_t)tok;
+- (BOOL)parser:(CSSBJsonStreamParser*)parser shouldAcceptToken:(sbjson_token_t)token;
+- (CSSBJsonStreamParserStatus)parserShouldReturn:(CSSBJsonStreamParser*)parser;
+- (void)parser:(CSSBJsonStreamParser*)parser shouldTransitionTo:(sbjson_token_t)tok;
 - (BOOL)needKey;
 - (BOOL)isError;
 
@@ -48,36 +48,36 @@
 
 @end
 
-@interface SBJsonStreamParserStateStart : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateStart : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateComplete : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateComplete : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateError : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateError : CSSBJsonStreamParserState
 @end
 
 
-@interface SBJsonStreamParserStateObjectStart : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateObjectStart : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateObjectGotKey : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateObjectGotKey : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateObjectSeparator : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateObjectSeparator : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateObjectGotValue : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateObjectGotValue : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateObjectNeedKey : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateObjectNeedKey : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateArrayStart : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateArrayStart : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateArrayGotValue : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateArrayGotValue : CSSBJsonStreamParserState
 @end
 
-@interface SBJsonStreamParserStateArrayNeedValue : SBJsonStreamParserState
+@interface CSSBJsonStreamParserStateArrayNeedValue : CSSBJsonStreamParserState
 @end

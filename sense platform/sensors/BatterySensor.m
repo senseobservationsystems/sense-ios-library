@@ -7,7 +7,7 @@
 //
 
 #import "BatterySensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 #import <UIKit/UIKit.h>
 #import "DataStore.h"
 

@@ -30,8 +30,8 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonStreamWriter.h"
-#import "SBJsonStreamWriterState.h"
+#import "CSSBJsonStreamWriter.h"
+#import "CSSBJsonStreamWriterState.h"
 
 static NSNumber *kNotANumber;
 static NSNumber *kTrue;
@@ -40,7 +40,7 @@ static NSNumber *kPositiveInfinity;
 static NSNumber *kNegativeInfinity;
 
 
-@implementation SBJsonStreamWriter
+@implementation CSSBJsonStreamWriter
 
 @synthesize error;
 @synthesize maxDepth;
@@ -67,7 +67,7 @@ static NSNumber *kNegativeInfinity;
 	if (self) {
 		maxDepth = 32u;
         stateStack = [[NSMutableArray alloc] initWithCapacity:maxDepth];
-        state = [SBJsonStreamWriterStateStart sharedInstance];
+        state = [CSSBJsonStreamWriterStateStart sharedInstance];
         cache = [[NSMutableDictionary alloc] initWithCapacity:32];
     }
 	return self;
@@ -126,7 +126,7 @@ static NSNumber *kNegativeInfinity;
 	if (humanReadable && stateStack.count) [state appendWhitespace:self];
 
     [stateStack addObject:state];
-    self.state = [SBJsonStreamWriterStateObjectStart sharedInstance];
+    self.state = [CSSBJsonStreamWriterStateObjectStart sharedInstance];
 
 	if (maxDepth && stateStack.count > maxDepth) {
 		self.error = @"Nested too deep";
@@ -140,7 +140,7 @@ static NSNumber *kNegativeInfinity;
 - (BOOL)writeObjectClose {
 	if ([state isInvalidState:self]) return NO;
 
-    SBJsonStreamWriterState *prev = state;
+    CSSBJsonStreamWriterState *prev = state;
 
     self.state = [stateStack lastObject];
     [stateStack removeLastObject];
@@ -159,7 +159,7 @@ static NSNumber *kNegativeInfinity;
 	if (humanReadable && stateStack.count) [state appendWhitespace:self];
 
     [stateStack addObject:state];
-	self.state = [SBJsonStreamWriterStateArrayStart sharedInstance];
+	self.state = [CSSBJsonStreamWriterStateArrayStart sharedInstance];
 
 	if (maxDepth && stateStack.count > maxDepth) {
 		self.error = @"Nested too deep";
@@ -174,7 +174,7 @@ static NSNumber *kNegativeInfinity;
 	if ([state isInvalidState:self]) return NO;
 	if ([state expectingKey:self]) return NO;
 
-    SBJsonStreamWriterState *prev = state;
+    CSSBJsonStreamWriterState *prev = state;
 
     self.state = [stateStack lastObject];
     [stateStack removeLastObject];

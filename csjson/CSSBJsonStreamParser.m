@@ -30,12 +30,12 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonStreamParser.h"
-#import "SBJsonTokeniser.h"
-#import "SBJsonStreamParserState.h"
+#import "CSSBJsonStreamParser.h"
+#import "CSSBJsonTokeniser.h"
+#import "CSSBJsonStreamParserState.h"
 #import <limits.h>
 
-@implementation SBJsonStreamParser
+@implementation CSSBJsonStreamParser
 
 @synthesize supportMultipleDocuments;
 @synthesize error;
@@ -51,8 +51,8 @@
 	if (self) {
 		maxDepth = 32u;
         stateStack = [[NSMutableArray alloc] initWithCapacity:maxDepth];
-        state = [SBJsonStreamParserStateStart sharedInstance];
-		tokeniser = [[SBJsonTokeniser alloc] init];
+        state = [CSSBJsonStreamParserStateStart sharedInstance];
+		tokeniser = [[CSSBJsonTokeniser alloc] init];
 	}
 	return self;
 }
@@ -112,8 +112,8 @@
 }
 
 - (void)maxDepthError {
-    self.error = [NSString stringWithFormat:@"Input depth exceeds max depth of %lu", maxDepth];
-    self.state = [SBJsonStreamParserStateError sharedInstance];
+    self.error = [NSString stringWithFormat:@"Input depth exceeds max depth of %u", maxDepth];
+    self.state = [CSSBJsonStreamParserStateError sharedInstance];
 }
 
 - (void)handleObjectStart {
@@ -124,7 +124,7 @@
 
     [delegate parserFoundObjectStart:self];
     [stateStack addObject:state];
-    self.state = [SBJsonStreamParserStateObjectStart sharedInstance];
+    self.state = [CSSBJsonStreamParserStateObjectStart sharedInstance];
 }
 
 - (void)handleObjectEnd: (sbjson_token_t) tok  {
@@ -142,7 +142,7 @@
 	
 	[delegate parserFoundArrayStart:self];
     [stateStack addObject:state];
-    self.state = [SBJsonStreamParserStateArrayStart sharedInstance];
+    self.state = [CSSBJsonStreamParserStateArrayStart sharedInstance];
 }
 
 - (void)handleArrayEnd: (sbjson_token_t) tok  {
@@ -157,17 +157,17 @@
     NSString *stateName = [state name];
 
     self.error = [NSString stringWithFormat:@"Token '%@' not expected %@", tokenName, stateName];
-    self.state = [SBJsonStreamParserStateError sharedInstance];
+    self.state = [CSSBJsonStreamParserStateError sharedInstance];
 }
 
-- (SBJsonStreamParserStatus)parse:(NSData *)data_ {
+- (CSSBJsonStreamParserStatus)parse:(NSData *)data_ {
     @autoreleasepool {
         [tokeniser appendData:data_];
         
         for (;;) {
             
             if ([state isError])
-                return SBJsonStreamParserError;
+                return CSSBJsonStreamParserError;
             
             NSObject *token;
             sbjson_token_t tok = [tokeniser getToken:&token];
@@ -177,16 +177,16 @@
                     break;
                     
                 case sbjson_token_error:
-                    self.state = [SBJsonStreamParserStateError sharedInstance];
+                    self.state = [CSSBJsonStreamParserStateError sharedInstance];
                     self.error = tokeniser.error;
-                    return SBJsonStreamParserError;
+                    return CSSBJsonStreamParserError;
                     break;
                     
                 default:
                     
                     if (![state parser:self shouldAcceptToken:tok]) {
                         [self handleTokenNotExpectedHere: tok];
-                        return SBJsonStreamParserError;
+                        return CSSBJsonStreamParserError;
                     }
                     
                     switch (tok) {
@@ -245,7 +245,7 @@
                     break;
             }
         }
-        return SBJsonStreamParserComplete;
+        return CSSBJsonStreamParserComplete;
     }
 }
 

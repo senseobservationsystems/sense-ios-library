@@ -7,7 +7,7 @@
 //
 
 #import "AccelerometerSensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 
 //constants

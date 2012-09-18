@@ -8,7 +8,7 @@
 #import <CoreMotion/CMAccelerometer.h>
 #import <CoreMotion/CMMotionManager.h>
 #import "OrientationSensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 
 @implementation OrientationSensor

@@ -27,12 +27,12 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonParser.h"
-#import "SBJsonStreamParser.h"
-#import "SBJsonStreamParserAdapter.h"
-#import "SBJsonStreamParserAccumulator.h"
+#import "CSSBJsonParser.h"
+#import "CSSBJsonStreamParser.h"
+#import "CSSBJsonStreamParserAdapter.h"
+#import "CSSBJsonStreamParserAccumulator.h"
 
-@implementation SBJsonParser
+@implementation CSSBJsonParser
 
 @synthesize maxDepth;
 @synthesize error;
@@ -54,25 +54,25 @@
         return nil;
     }
 
-	SBJsonStreamParserAccumulator *accumulator = [[SBJsonStreamParserAccumulator alloc] init];
+	CSSBJsonStreamParserAccumulator *accumulator = [[CSSBJsonStreamParserAccumulator alloc] init];
     
-    SBJsonStreamParserAdapter *adapter = [[SBJsonStreamParserAdapter alloc] init];
+    CSSBJsonStreamParserAdapter *adapter = [[CSSBJsonStreamParserAdapter alloc] init];
     adapter.delegate = accumulator;
 	
-	SBJsonStreamParser *parser = [[SBJsonStreamParser alloc] init];
+	CSSBJsonStreamParser *parser = [[CSSBJsonStreamParser alloc] init];
 	parser.maxDepth = self.maxDepth;
 	parser.delegate = adapter;
 	
 	switch ([parser parse:data]) {
-		case SBJsonStreamParserComplete:
+		case CSSBJsonStreamParserComplete:
             return accumulator.value;
 			break;
 			
-		case SBJsonStreamParserWaitingForData:
+		case CSSBJsonStreamParserWaitingForData:
 		    self.error = @"Unexpected end of input";
 			break;
 
-		case SBJsonStreamParserError:
+		case CSSBJsonStreamParserError:
 		    self.error = parser.error;
 			break;
 	}
@@ -91,7 +91,7 @@
     
     if (error_) {
 		NSDictionary *ui = [NSDictionary dictionaryWithObjectsAndKeys:error, NSLocalizedDescriptionKey, nil];
-        *error_ = [NSError errorWithDomain:@"org.brautaset.SBJsonParser.ErrorDomain" code:0 userInfo:ui];
+        *error_ = [NSError errorWithDomain:@"org.brautaset.CSSBJsonParser.ErrorDomain" code:0 userInfo:ui];
 	}
 	
     return nil;

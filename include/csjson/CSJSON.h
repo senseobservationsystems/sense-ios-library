@@ -9,6 +9,6 @@
 #ifndef sense_platform_JSON_h
 #define sense_platform_JSON_h
 
-#import "SBJson.h"
+#import "CSSBJson.h"
 
 #endif

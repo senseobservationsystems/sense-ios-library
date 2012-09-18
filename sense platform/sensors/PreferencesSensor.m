@@ -7,7 +7,7 @@
 //
 
 #import "PreferencesSensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 #import "Settings.h"
 #import <UIKit/UIKit.h>
 #import "DataStore.h"

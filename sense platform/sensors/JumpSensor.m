@@ -9,7 +9,7 @@
 #import "JumpSensor.h"
 #import <CoreMotion/CoreMotion.h>
 #import "DataStore.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 #define DEGREES_PER_RADIAN (180.0 / M_PI)
 

@@ -7,7 +7,7 @@
 //
 
 #import "SpatialProvider.h"
-#import "JSON.h"
+#import "CSJSON.h"
 #import "SensorStore.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "Settings.h"

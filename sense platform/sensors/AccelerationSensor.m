@@ -9,7 +9,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "AccelerometerSensor.h"
 #import "AccelerationSensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 
 @implementation AccelerationSensor

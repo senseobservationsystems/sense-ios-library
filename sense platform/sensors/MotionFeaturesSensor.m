@@ -7,7 +7,7 @@
 //
 
 #import "MotionFeaturesSensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 NSString* accelerationAvg = @"acceleration average";
 NSString* accelerationStddev = @"acceleration stddev";

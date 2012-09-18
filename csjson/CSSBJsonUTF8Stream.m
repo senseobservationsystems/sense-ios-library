@@ -29,10 +29,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonUTF8Stream.h"
+#import "CSSBJsonUTF8Stream.h"
 
 
-@implementation SBJsonUTF8Stream
+@implementation CSSBJsonUTF8Stream
 
 @synthesize index = _index;
 

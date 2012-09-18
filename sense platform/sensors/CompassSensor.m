@@ -8,7 +8,7 @@
 
 #import "CompassSensor.h"
 #import <CoreLocation/CoreLocation.h>
-#import "JSON.h"
+#import "CSJSON.h"
 
 
 @implementation CompassSensor

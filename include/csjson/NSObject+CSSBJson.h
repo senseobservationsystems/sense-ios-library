@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2011 Stig Brautaset. All rights reserved.
+ Copyright (C) 2009 Stig Brautaset. All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -27,21 +27,53 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "SBJsonStreamParserAccumulator.h"
+#import <Foundation/Foundation.h>
 
-@implementation SBJsonStreamParserAccumulator
+#pragma mark JSON Writing
 
-@synthesize value;
+/// Adds JSON generation to NSObject
+@interface NSObject (NSObject_CSSBJsonWriting)
+
+/**
+ @brief Encodes the receiver into a JSON string
+ 
+ Although defined as a category on NSObject it is only defined for NSArray and NSDictionary.
+ 
+ @return the receiver encoded in JSON, or nil on error.
+ 
+ @see @ref objc2json
+ */
+- (NSString *)JSONRepresentation;
+
+@end
 
 
-#pragma mark SBJsonStreamParserAdapterDelegate
+#pragma mark JSON Parsing
 
-- (void)parser:(SBJsonStreamParser*)parser foundArray:(NSArray *)array {
-	value = array;
-}
+/// Adds JSON parsing methods to NSString
+@interface NSString (NSString_CSSBJsonParsing)
 
-- (void)parser:(SBJsonStreamParser*)parser foundObject:(NSDictionary *)dict {
-	value = dict;
-}
+/**
+ @brief Decodes the receiver's JSON text
+ 
+ @return the NSDictionary or NSArray represented by the receiver, or nil on error.
+ 
+ @see @ref json2objc
+ */
+- (id)JSONValue;
+
+@end
+
+/// Adds JSON parsing methods to NSData
+@interface NSData (NSData_CSSBJsonParsing)
+
+/**
+ @brief Decodes the receiver's JSON data
+ 
+ @return the NSDictionary or NSArray represented by the receiver, or nil on error.
+ 
+ @see @ref json2objc
+ */
+- (id)JSONValue;
 
 @end

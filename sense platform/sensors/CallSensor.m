@@ -10,7 +10,7 @@
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import "JSON.h"
+#import "CSJSON.h"
 #import "DataStore.h"
 
 
@@ -84,7 +84,7 @@ static NSString* disconnected = @"idle";
 												[newItem JSONRepresentation], @"value",
 												timestamp,@"date",
 												nil];
-			[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+			[self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
 			
 		};
 	} else {

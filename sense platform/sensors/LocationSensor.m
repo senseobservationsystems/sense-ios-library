@@ -7,7 +7,7 @@
 //
 
 #import "LocationSensor.h"
-#import "JSON.h"
+#import "CSJSON.h"
 #import "Settings.h"
 #import "math.h"
 #import "DataStore.h"

@@ -32,12 +32,12 @@
 /**
  @brief The JSON writer class.
  
- This uses SBJsonStreamWriter internally.
+ This uses CSSBJsonStreamWriter internally.
  
  @see @ref json2objc
  */
 
-@interface SBJsonWriter : NSObject
+@interface CSSBJsonWriter : NSObject
 
 /**
  @brief The maximum recursing depth.

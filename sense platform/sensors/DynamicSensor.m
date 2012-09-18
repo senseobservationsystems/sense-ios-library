@@ -9,7 +9,7 @@
 #import "DynamicSensor.h"
 #import "DataStore.h"
 #import "SensePlatform.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 @implementation DynamicSensor {
     NSDictionary* fields;

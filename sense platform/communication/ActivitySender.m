@@ -7,7 +7,7 @@
 //
 
 #import "ActivitySender.h"
-#import "JSON.h"
+#import "CSJSON.h"
 
 //Declare private methods
 @interface ActivitySender(private)
