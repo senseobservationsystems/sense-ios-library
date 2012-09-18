@@ -10,7 +10,7 @@
 #import <CommonCrypto/CommonDigest.h>
 
 
-@implementation NSString (MD5Hash)
+@implementation NSString (CSMD5Hash)
 
 + (NSString *) MD5HashOf:(NSString*)string {	
     const char* bytes = [string UTF8String];

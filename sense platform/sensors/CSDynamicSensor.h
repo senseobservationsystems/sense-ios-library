@@ -1,0 +1,20 @@
+//
+//  DynamicSensor.h
+//  fiqs
+//
+//  Created by Pim Nijdam on 2/8/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "CSSensor.h"
+
+@interface CSDynamicSensor : CSSensor {
+    NSString* sensorName;
+    NSString* displayName;
+    NSString* deviceType;
+    NSString* dataType;
+}
+- (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields;
+- (void) commitValue:(NSString*)value withTimestamp:(NSString*)timestamp;
+@end
+

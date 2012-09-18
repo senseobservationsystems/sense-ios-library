@@ -7,7 +7,7 @@
 //
 
 #import "NSNotificationCenter+MainThread.h"
-@implementation NSNotificationCenter (MainThread)
+@implementation NSNotificationCenter (CSMainThread)
 
 static dispatch_queue_t backgroundQueue = nil;
 

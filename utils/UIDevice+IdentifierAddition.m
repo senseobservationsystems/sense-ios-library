@@ -33,7 +33,7 @@ SOFTWARE.
 
 @end
 
-@implementation UIDevice (IdentifierAddition)
+@implementation UIDevice (CSIdentifierAddition)
 
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -

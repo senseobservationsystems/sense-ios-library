@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIDevice (IdentifierAddition)
+@interface UIDevice (CSIdentifierAddition)
 - (NSString *) uniqueDeviceIdentifier;
 
 - (NSString *) uniqueGlobalDeviceIdentifier;

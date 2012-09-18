@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSNotificationCenter (MainThread)
+@interface NSNotificationCenter (CSMainThread)
 
 - (void)postNotificationOnMainThread:(NSNotification *)notification;
 - (void)postNotificationOnMainThreadName:(NSString *)aName object:(id)anObject;

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSString (MD5Hash)
+@interface NSString (CSMD5Hash)
 
 -(NSString*) MD5Hash;
 +(NSString*) MD5HashOf:(NSString*) string;
