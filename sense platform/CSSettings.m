@@ -140,7 +140,7 @@ static CSSettings* sharedSettingsInstance = nil;
         plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
         if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
 			//fallback to default settings
-			plistPath = [[NSBundle mainBundle] pathForResource:@"CSSettings" ofType:@"plist"];
+			plistPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
         }
 		@try {
 			[self loadSettingsFromPath:plistPath];
