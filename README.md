@@ -22,7 +22,7 @@ The project is setup as a static library. That means you can either compile the 
 7. Add the following two resources from the resources directory in the library project to your project
  - CommonSense.plist
  - Settings.plist
-8. Add the '-ObjC' and '-load_all' flag to your linker flags (see https://developer.apple.com/library/mac/#qa/qa2006/qa1490.html)
+8. Add the '-ObjC' and '-all_load' flag to your linker flags (see https://developer.apple.com/library/mac/#qa/qa2006/qa1490.html)
 9. in your delegate at startup put [SensePlatform initialize];
 10. in your delegate's willTeminate add [SensePlatform willTerminate];
 
