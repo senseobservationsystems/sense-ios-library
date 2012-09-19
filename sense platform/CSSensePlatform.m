@@ -22,30 +22,30 @@ static CSSensorStore* sensorStore;
 }
 
 + (NSArray*) availableSensors {
-    return sensorStore.sensors;
+    return [CSSensorStore sharedSensorStore].sensors;
 }
 
 + (void) willTerminate {
-    [sensorStore forceDataFlush];
+    [[CSSensorStore sharedSensorStore] forceDataFlush];
 }
 
 + (void) flushData {
-    [sensorStore forceDataFlush];
+    [[CSSensorStore sharedSensorStore] forceDataFlush];
 }
 
 + (void) flushDataAndBlock {
-    [sensorStore forceDataFlush];
+    [[CSSensorStore sharedSensorStore] forceDataFlush];
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
     [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    return [sensorStore.sender login];
+    return [[CSSensorStore sharedSensorStore].sender login];
 }
 
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password {
 
     NSString* error;
-    BOOL succes = [sensorStore.sender registerUser:user withPassword:password error:&error];
+    BOOL succes = [[CSSensorStore sharedSensorStore].sender registerUser:user withPassword:password error:&error];
     if (succes)
             [[CSSettings sharedSettings] setLogin:user withPassword:password];
     return succes;
@@ -54,10 +54,11 @@ static CSSensorStore* sensorStore;
 
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
     return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
+    [CSSensePlatform applyIVitalitySettings];
 }
 
 +(void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
-    [sensorStore giveFeedbackOnState:state from:from to:to label:label];
+    [[CSSensorStore sharedSensorStore] giveFeedbackOnState:state from:from to:to label:label];
 }
 
 + (void) applyIVitalitySettings {
@@ -104,7 +105,7 @@ static CSSensorStore* sensorStore;
     //create sensor
     CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:deviceType dataType:dataType fields:fields];
     //add sensor to the sensor store
-    [sensorStore addSensor:sensor];
+    [[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
     [sensor commitValue:value withTimestamp:[NSString stringWithFormat:@"%.3f",[timestamp timeIntervalSince1970]]];
 }
