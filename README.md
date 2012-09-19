@@ -62,4 +62,4 @@ Have a look at the [documentation](http://senseobservationsystems.github.com/sen
 Licensed under the Apache License, Version 2.0.
 
 ##Credit
-For handling JSON the excelent [SBJson](https://github.com/stig/json-framework) library was used.
+For handling JSON the excellent [SBJson](https://github.com/stig/json-framework) library was used.
