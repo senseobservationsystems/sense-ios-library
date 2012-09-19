@@ -10,7 +10,8 @@ fi
 
 $DOXYGEN doxygen.config
 #  make will invoke docsetutil. Take a look at the Makefile to see how this is done.
-make -C doc/html install
+make -C doc/html/ uninstall
+make -C doc/html/ install
 
 #tell xcode to load the new documentation
 osascript -e 'tell application "Xcode"' -e 'load documentation set with path "/Users/pim/Library/Developer/Shared/Documentation/DocSets/"' -e 'end tell'

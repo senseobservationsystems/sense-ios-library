@@ -3,7 +3,7 @@
 //  sense platform
 //
 //  Created by Pim Nijdam on 6/12/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Sense Observation Systems B.V.. All rights reserved.
 //
 
 #ifndef sense_platform_JSON_h

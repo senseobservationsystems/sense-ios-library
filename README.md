@@ -57,3 +57,9 @@ To do that enable the sensor, but also make sure that you add to your -info.plis
 
 ##Documentation
 Have a look at the [documentation](http://senseobservationsystems.github.com/sense-ios-library/) for more information.
+
+##License
+Licensed under the Apache License, Version 2.0.
+
+##Credit
+For handling JSON the excelent [SBJson](https://github.com/stig/json-framework) library was used.

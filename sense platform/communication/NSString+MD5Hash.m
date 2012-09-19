@@ -1,11 +1,3 @@
-//
-//  NSString+MD5Hash.m
-//  senseLocationApp
-//
-//  Created by Pim Nijdam on 2/14/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import "NSString+MD5Hash.h"
 #import <CommonCrypto/CommonDigest.h>
 
