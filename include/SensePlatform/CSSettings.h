@@ -94,30 +94,51 @@ NSString* const kCSActivitySettingPrivacyPublic;
 
 @end
 
-
+/** This singleton is used to control the settings of the sense platform. Using this class sensors can be enabled/disabled and specific settings be set.
+ */
 @interface CSSettings : NSObject {
 
 }
 + (CSSettings*) sharedSettings;
 
-//notification names
+///Returns the name of enable notifications for the specified sensor
 + (NSString*) enabledChangedNotificationNameForSensor:(NSString*) sensor;
-+ (NSString*) settingChangedNotificationNameForSensor:(NSString*) sensor;
+//////Returns the name of the notification send when a setting of the specified type changes
 + (NSString*) settingChangedNotificationNameForType:(NSString*) type;
 
-//sensor enables
+///Enable/disable the specified sensor, setting is persistent
 - (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable;
-- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable permanent:(BOOL) permanent;
+/** Enable/disable the specified sensor
+ * @param enable wether to enable or disable the sensor
+ * @param persistent whether this setting is persistent
+ */
+- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable persistent:(BOOL) persistent;
+///Returns wether the specified sensor is enabled
 - (BOOL) isSensorEnabled:(NSString*) sensor;
 
-//send notification to a specific sensor
+//send notifications to a specific sensor 
 - (void) sendNotificationForSensor:(NSString*) sensor;
 
-//getter and setters for settings
+/** Get the value of the specified setting
+ * @param type the setting type
+ * @param setting the specific setting for the type
+ * @returns the value of the setting
+ */
 - (NSString*) getSettingType: (NSString*) type setting:(NSString*) setting;
+/** Set the value of the specified setting, the setting is persistent
+ * @param type the setting type
+ * @param setting the specific setting for the type
+ * @param value the value of to set the setting to
+ */
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value;
+/** Set the value of the specified setting
+ * @param type the setting type
+ * @param setting the specific setting for the type
+ * @param value the value of to set the setting to
+ * @param persistent whether the setting should be persistent
+ */
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent;
 
-//used to set individual settings, returns whether the setting was accepted
+///used to set individual settings, returns whether the setting was accepted
 - (BOOL) setLogin:(NSString*)user withPassword:(NSString*) password;
 @end

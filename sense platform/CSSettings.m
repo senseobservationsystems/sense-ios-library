@@ -188,13 +188,13 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable {
-    return [self setSensor:sensor enabled:enable permanent:YES];
+    return [self setSensor:sensor enabled:enable persistent:YES];
 }
 
-- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable permanent:(BOOL) permanent {
+- (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable persistent:(BOOL) persistent {
 	NSNumber* enableObject = [NSNumber numberWithBool:enable];
     NSString* key = [NSString stringWithFormat:@"%@", sensor];
-    if (permanent) {
+    if (persistent) {
         //store enable settings
         [sensorEnables setObject:enableObject forKey:key];
         //write back to file

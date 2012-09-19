@@ -283,7 +283,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
          */
         //disable sensors
 		for (CSSensor* sensor in sensors) {
-			[[CSSettings sharedSettings] setSensor:[sensor sensorId] enabled:NO permanent:NO];
+			[[CSSettings sharedSettings] setSensor:[sensor sensorId] enabled:NO persistent:NO];
 		}
         
         [locationSensor setBackgroundRunningEnable:NO];

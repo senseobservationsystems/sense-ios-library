@@ -66,7 +66,6 @@ static CLLocation* lastAcceptedPoint;
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
 		//register for change in settings
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForSensor:[self sensorId]] object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
 		
