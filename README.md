@@ -1,5 +1,5 @@
 \mainpage
-Sense iOS platform library
+Sense iOS Platform Library
 =================
 Sense library for sensing and using Common Sense.
 
