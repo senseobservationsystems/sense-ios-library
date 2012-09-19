@@ -54,3 +54,6 @@ To do that enable the sensor, but also make sure that you add to your -info.plis
     NSDate* from = [to dateByAddingTimeInterval:-3600];
     
     [SensePlatform giveFeedbackOnState:@"Location" from:from to:to label:@"Work"];
+
+##Documentation
+Have a look at the [documentation](http://senseobservationsystems.github.com/sense-ios-library/) for more information.
