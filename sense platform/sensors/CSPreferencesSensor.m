@@ -85,7 +85,7 @@ static NSString* valueKey = @"value";
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
-	NSLog(@"Enabling battery sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
+	NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", self.name, self.sensorId);
 	[UIDevice currentDevice].batteryMonitoringEnabled = enable;
 	isEnabled = enable;
 }

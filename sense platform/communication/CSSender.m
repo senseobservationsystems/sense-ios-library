@@ -176,7 +176,6 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 			NSString* uuid = [remoteDevice valueForKey:@"uuid"];
 			NSString* type = [remoteDevice valueForKey:@"type"];
 			
-			NSLog(@"found type: \"%@\" uuid: \"%@\"", type, uuid);
 			if (([type caseInsensitiveCompare:[device valueForKey:@"type"]] == 0) && ([uuid caseInsensitiveCompare:[device valueForKey:@"uuid"]] == 0)) {
 				deviceId = [[remoteDevice valueForKey:@"id"] integerValue];
 				NSLog(@"Mathed device with id %d", deviceId);
@@ -195,11 +194,30 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 	return [self doJsonRequestTo:[self makeUrlForConnectedSensors:sensorId] withMethod:@"GET" withInput:nil];
 }
 
-- (NSDictionary*) createSensorWithDescription:(NSDictionary*) description {	
+- (NSDictionary*) createSensorWithDescription:(NSDictionary*) description {
 	NSDictionary* request = [NSDictionary dictionaryWithObject:description forKey:@"sensor"];
-	NSDictionary* response = [self doJsonRequestTo:[self makeUrlFor:@"sensors"] withMethod:@"POST" withInput:request];
+    NSData* contents = nil;
+	NSHTTPURLResponse* response = [self doJsonRequestTo:[self makeUrlFor:@"sensors"] withMethod:@"POST" withInput:request output:contents];
+    NSMutableDictionary* sensorDescription = [description mutableCopy];
+    //check response code
+	if ([response statusCode] > 200 && [response statusCode] < 300)
+	{
+        @try {
+            NSDictionary* header = response.allHeaderFields;
+            NSString* location = [header valueForKey:@"location"];
+            NSArray* locationComponents = [location componentsSeparatedByString:@"/"];
+            NSString* sensorId = [locationComponents objectAtIndex:[locationComponents count] -1];
+            
+            [sensorDescription setValue:sensorId forKey:@"id"];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception while creating sensor %@: %@", description, exception);
+        }
+
+        return sensorDescription;
+	}
 	
-	return [response valueForKey:@"sensor"];
+	return nil;
 }
 
 - (BOOL) connectSensor:(NSString*)sensorId ToDevice:(NSDictionary*) device {
@@ -213,7 +231,6 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
     //share sensor with username
     NSDictionary* userEntry = [NSDictionary dictionaryWithObject:user forKey:@"id"];
     NSDictionary* request = [NSDictionary dictionaryWithObject:userEntry forKey:@"user"];
-    NSLog(@"%@", [request JSONRepresentation]);
 	
 	[self doJsonRequestTo:[self makeUrlForSharingSensor:sensorId] withMethod:@"POST" withInput:request];
     //TODO: this method should check wether the sharing succeeded
@@ -340,6 +357,40 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
         return nil;
     }
 }
+
+
+- (NSHTTPURLResponse*) doJsonRequestTo:(NSURL*) url withMethod:(NSString*)method withInput:(NSDictionary*) input output:(NSData*)contents
+{
+	//make session
+	if (sessionCookie == nil) {
+		if (![self login])
+			return nil;
+	}
+	
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:[input JSONRepresentation] output:&contents cookie:sessionCookie];
+	
+	//handle unauthorized error
+	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
+		//relogin (session might've expired)
+		[self login];
+		//redo request
+		response = [self doRequestTo:url method:method input:[input JSONRepresentation] output:&contents cookie:sessionCookie];
+	}
+    
+	//check response code
+	if ([response statusCode] < 200 || [response statusCode] > 300)
+	{
+		//Ai, some error that couldn't be resolved. Log and throw exception
+		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+		NSLog(@"Responded: %@", responded);
+        //TODO: throw clean exception that details the exception
+		@throw [NSException exceptionWithName:@"Request failed" reason:nil userInfo:nil];
+	}
+    
+    return response;
+}
+
 
 - (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie
 {

@@ -40,16 +40,15 @@ static NSString* const password = @";jadsf8wurljksdfw3rw";
 - (void)testPostAndRetrieveUseCase
 {
     [CSSensePlatform initialize];
-    //[CSSensePlatform registerUser:user withPassword:password];
-    [CSSensePlatform loginWithUser:@"pim" andPassword:@"sensedroid"];
+    [CSSensePlatform loginWithUser:user andPassword:password];
     NSString* name = @"TestSensor";
     NSString* value = @"Some value";
     NSDate* timestamp = [NSDate date];
     [CSSensePlatform addDataPointForSensor:name displayName:name deviceType:name dataType:kCSDATA_TYPE_STRING value:value timestamp:timestamp];
-    //[CSSensePlatform flushData];
+    [CSSensePlatform flushData];
 
     //let's be nice and give it some time
-    //[NSThread sleepForTimeInterval:15];
+    [NSThread sleepForTimeInterval:15];
     
     //get data from CommonSense
     NSArray* data = [CSSensePlatform getDataForSensor:name onlyFromDevice:NO nrLastPoints:1];

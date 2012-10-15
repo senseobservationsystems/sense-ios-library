@@ -151,7 +151,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 } 
 
-- (void) makeRemoteDeviceSensors {
+- (bool) makeRemoteDeviceSensors {
     if (sensorIdMap == nil)
         sensorIdMap = [NSMutableDictionary new];
     else {
@@ -167,7 +167,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     } @catch (NSException* e) {
         //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
         NSLog(@"Couldn't get a list of sensors for the device. Don't make ");
-        return;
+        return false;
     }
 	NSArray* remoteSensors = [response valueForKey:@"sensors"];
 	
@@ -184,6 +184,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
     }
 
+    bool allSucces = YES;
 	//create sensors that aren't assigned an id yet
 	for (CSSensor* sensor in sensors) {
 		if ([sensorIdMap objectForKey:sensor.sensorId] == NULL) {
@@ -196,9 +197,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                 //store sensor id in the map
   				[sensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
 				NSLog(@"Created %@ sensor with id %@", sensor.sensorId, sensorIdString);
-			}
+			} else {
+                allSucces = NO;
+            }
 		}
 	}
+    return allSucces;
 }
 
 - (void) instantiateSensors {
@@ -370,10 +374,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	for (NSString* sensorId in myData) {
         NSMutableArray* data= [myData valueForKey:sensorId];
         if ([sensorIdMap valueForKey:sensorId] == NULL) {
+            //skip this sensor if we don't have a remote id for this sensor.
             allSucceed = NO;
             continue;
         }
-        NSLog(@"Uploading data for sensor %@. %u point(s).", sensorId, data.count);
         //split the data, as the server limits the size per request
         //TODO: refactor this ugly but critical code, a proper transparent implementation should be done with respect to error handling
         while (data.count > 0) {
@@ -384,7 +388,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             NSArray* dataPart = [data subarrayWithRange:range];
             BOOL succeed = NO;
             @try {
-                NSLog(@"Uploading batch of %d points.",points);
                 succeed = [sender uploadData:dataPart forSensorId: [sensorIdMap valueForKey:sensorId]];
             } @catch (NSException* e) {
                 NSLog(@"SenseStore: Exception while uploading data: %@", e);
@@ -403,7 +406,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
 	}
     
-    //re submit unsent data (if any)  into sensorData
+    //resubmit unsent data (if any)  into sensorData
     @synchronized(self) {
         for (NSString* sensorId in myData) {
             NSMutableArray* unsent = [myData valueForKey:sensorId];
@@ -467,7 +470,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) applyGeneralSettings {
 	@try {
-		NSLog(@"applying general settings");
 		//get new settings
         NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
         NSString* password = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
@@ -516,7 +518,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) generalSettingChanged: (NSNotification*) notification {
 	if ([notification.object isKindOfClass:[CSSetting class]]) {
 		CSSetting* setting = notification.object;
-		NSLog(@"general setting changed: %@,%@", setting.name, setting.value);
 		if ([setting.name isEqualToString:kCSGeneralSettingUploadInterval]) {
             
             if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalAdaptive])
