@@ -76,6 +76,7 @@ NSString* const kMotionData = @"motionData";
 	NSArray* allAvailableSensorClasses;
 	NSMutableArray* sensors;
     NSMutableDictionary* sensorIdMap;
+    NSObject* sensorIdMapLock;
 	
 	CSSpatialProvider* spatialProvider;
 }
@@ -111,6 +112,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		operationQueue = [[NSOperationQueue alloc] init];
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
+        sensorIdMapLock = [[NSObject alloc] init];
 		
 		//all sensor classes
 		allSensorClasses = [NSArray arrayWithObjects:
@@ -151,26 +153,26 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 } 
 
-- (bool) makeRemoteDeviceSensors {
-    if (sensorIdMap == nil)
-        sensorIdMap = [NSMutableDictionary new];
-    else {
-        //refreshing the mapping, remove 'old' mapping so we can recreate sensor that have been removed at the server.
-        [sensorIdMap removeAllObjects];
-    }
+- (void) makeRemoteDeviceSensors {
+    NSMutableDictionary* mySensorIdMap = [NSMutableDictionary new];
     
-    
+    BOOL stop = NO;
 	//get list of sensors from the server
     NSDictionary* response;
     @try {
         response = [sender listSensorsForDevice:[CSSensorStore device]];
     } @catch (NSException* e) {
+        stop = YES;
+    }
+    
+  	NSArray* remoteSensors = [response valueForKey:@"sensors"];
+    //NSLog(@"Response: '%@', sensor list: '%@'", response, remoteSensors);
+    if (stop || remoteSensors == nil) {
         //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
         NSLog(@"Couldn't get a list of sensors for the device. Don't make ");
-        return false;
+        return;
     }
-	NSArray* remoteSensors = [response valueForKey:@"sensors"];
-	
+
     //push all ids in the sensorId map
     for (id remoteSensor in remoteSensors) {
         //determine whether the sensor matches
@@ -180,14 +182,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
             NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType];
             //update sensor id map
-            [sensorIdMap setValue:remoteId forKey:sensorId];
+            [mySensorIdMap setValue:remoteId forKey:sensorId];
         }
     }
 
     bool allSucces = YES;
 	//create sensors that aren't assigned an id yet
 	for (CSSensor* sensor in sensors) {
-		if ([sensorIdMap objectForKey:sensor.sensorId] == NULL) {
+		if ([mySensorIdMap objectForKey:sensor.sensorId] == NULL) {
 			NSDictionary* description = [sender createSensorWithDescription:[sensor sensorDescription]];
             id sensorIdString = [description valueForKey:@"id"];
    			if (description != nil && sensorIdString != nil) {
@@ -195,14 +197,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 				[sender connectSensor:sensorIdString ToDevice:[CSSensorStore device]];
 
                 //store sensor id in the map
-  				[sensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
+  				[mySensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
 				NSLog(@"Created %@ sensor with id %@", sensor.sensorId, sensorIdString);
 			} else {
                 allSucces = NO;
             }
 		}
 	}
-    return allSucces;
+    @synchronized(sensorIdMapLock) {
+        sensorIdMap = mySensorIdMap;
+    }
 }
 
 - (void) instantiateSensors {
@@ -295,7 +299,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
          */
         //disable sensors
 		for (CSSensor* sensor in sensors) {
-			[[CSSettings sharedSettings] setSensor:[sensor sensorId] enabled:NO persistent:NO];
+			[[CSSettings sharedSettings] setSensor:sensor.name enabled:NO persistent:NO];
 		}
         
         [locationSensor setBackgroundRunningEnable:NO];
@@ -323,12 +327,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	
 	//get new settings
     NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
-  	NSString* password = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+  	NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
     NSLog(@"Sensorstore loginChanged:%@", username);
 	//change login
-    [sender setUser:username andPassword:password];
+    [sender setUser:username andPasswordHash:passwordHash];
     
-    sensorIdMap = nil;
+    @synchronized(sensorIdMapLock) {
+        sensorIdMap = nil;
+    }
     waitTime = 0;
 }
 
@@ -399,7 +405,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             } else {
                 NSLog(@"Upload failed");
                 //don't check the reason for failure, just erase this sensor id
-                [sensorIdMap removeObjectForKey:sensorId];
+                @synchronized(sensorIdMapLock) {
+                    [sensorIdMap removeObjectForKey:sensorId];
+                }
                 //get out of this loop and continue with the next sensor.
                 break;
             }
@@ -472,10 +480,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	@try {
 		//get new settings
         NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
-        NSString* password = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+        NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
         
 		//apply properties one by one
-		[sender setUser:username andPassword:password];
+		[sender setUser:username andPasswordHash:passwordHash];
         //TODO:FIX
 		NSString* setting = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval];
         if ([setting isEqualToString:kCSGeneralSettingUploadIntervalAdaptive])
@@ -577,7 +585,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
     }
     
-    //TODO: in case it isn't in the local mapping, resolve the sensor id remotely
+    //in case it isn't in the local mapping, resolve the sensor id remotely
     if (sensorId == nil) {
         //get list of sensors from the server
         NSDictionary* response;
@@ -593,6 +601,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
         NSArray* remoteSensors = [response valueForKey:@"sensors"];
         
+        if (remoteSensors == nil)
+            return nil;
+        
         //match against all remote sensors
         for (id remoteSensor in remoteSensors) {
             //determine whether the sensor matches
@@ -604,12 +615,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                 
                 sensorId = [remoteSensor valueForKey:@"id"];
                 //update sensor id map
-                [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                @synchronized(sensorIdMapLock) {
+                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                }
                 break;
             }
         }
     }
-    
+
     return sensorId;
 }
 

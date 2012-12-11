@@ -58,6 +58,11 @@ static CSSensorStore* sensorStore;
     return [[CSSensorStore sharedSensorStore].sender login];
 }
 
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
+    [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
+    return [sensorStore.sender login];
+}
+
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password {
 
     NSString* error;
@@ -79,7 +84,7 @@ static CSSensorStore* sensorStore;
 + (void) applyIVitalitySettings {
     CSSettings* settings = [CSSettings sharedSettings];
     [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval value:@"60"];
-    [settings setSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval value:@"60"];
+    [settings setSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval value:@"240"];
     [settings setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval value:@"900"];
     [settings setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy value:@"10000"];
 

@@ -32,7 +32,7 @@
 @synthesize urls;
 @synthesize sessionCookie;
 
-static const NSInteger STATUSCODE_UNAUTHORIZED;
+static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
 
 - (id) init
@@ -72,11 +72,11 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 	return sessionCookie != nil;
 }
 
-- (void) setUser:(NSString*)user andPassword:(NSString*) password {
+- (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash {
 	if (sessionCookie != nil)
 		[self logout];
 	username = user;
-	passwordHash = [password MD5Hash];
+	passwordHash = hash;
 }
 
 - (BOOL) registerUser:(NSString*) user withPassword:(NSString*) pass error:(NSString**) error
@@ -185,7 +185,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 	}
 	
 	//if device unknown, then it follows it has no sensors
-	if (deviceId == -1) return nil;
+	if (deviceId == -1) return [NSDictionary dictionaryWithObjectsAndKeys:[NSArray array], @"sensors", nil];
 
 	return [self doJsonRequestTo:[self makeSensorsUrlForDeviceId:deviceId] withMethod:@"GET" withInput:nil];
 }
@@ -216,7 +216,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED;
 
         return sensorDescription;
 	}
-	
+
 	return nil;
 }
 

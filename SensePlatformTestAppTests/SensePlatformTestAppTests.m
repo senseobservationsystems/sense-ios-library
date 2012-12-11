@@ -52,9 +52,10 @@ static NSString* const password = @";jadsf8wurljksdfw3rw";
     
     //get data from CommonSense
     NSArray* data = [CSSensePlatform getDataForSensor:name onlyFromDevice:NO nrLastPoints:1];
+    id item = [data objectAtIndex:0];
     
-    NSString* rVAlue = [data[0] valueForKey:@"value"];
-    NSDate* rTimestamp = [NSDate dateWithTimeIntervalSince1970:[[data[0] valueForKey:@"date"] doubleValue]];
+    NSString* rVAlue = [item valueForKey:@"value"];
+    NSDate* rTimestamp = [NSDate dateWithTimeIntervalSince1970:[[item valueForKey:@"date"] doubleValue]];
     NSTimeInterval dt = [timestamp timeIntervalSinceDate:rTimestamp];
                         
     if (data && [data count] == 1 && [value isEqualToString:rVAlue] && dt < 0.01) {
