@@ -39,7 +39,7 @@ static const double radianInDegrees = 180.0 / M_PI;
     CSMotionFeaturesSensor* motionFeaturesSensor;
 	
 	NSOperationQueue* operations;
-  	NSOperationQueue* pollQueue;
+    dispatch_queue_t pollQueueGCD;
     NSCondition* headingAvailable;
     BOOL updatingHeading;
     
@@ -89,7 +89,8 @@ static const double radianInDegrees = 180.0 / M_PI;
 		
 		//operations queue
 		operations = [[NSOperationQueue alloc] init];
-   		pollQueue = [[NSOperationQueue alloc] init];
+        
+        pollQueueGCD = dispatch_queue_create("com.sense.sense_platform.pollQueue", NULL);
         
         headingAvailable = [[NSCondition alloc] init];
         updatingHeading = NO;
@@ -166,15 +167,9 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 
 - (void) schedulePoll {
-    @try {
-        //make a poll operation
-        NSInvocationOperation* pollOp = [[NSInvocationOperation alloc]
-                                         initWithTarget:self selector:@selector(poll) object:nil];
-        [pollQueue addOperation:pollOp];
-    }
-    @catch (NSException * e) {
-        NSLog(@"Catched exception while scheduling poll. Exception: %@", e);
-    }
+        dispatch_async(pollQueueGCD, ^{
+            [self poll];
+        });
 }
 
 - (void) poll {
@@ -197,12 +192,14 @@ static const double radianInDegrees = 180.0 / M_PI;
             return;
         }
 
+        /*
         if (counter > 0) {
             //Oh no, we're not processing fast enough. This means problems...
             discarded++;
             NSLog(@"Processing too slow, skipping point, this corrupts sensor input temporarily!");
             return;
         }
+         */
         counter++;
         [deviceMotionArray addObject:deviceMotion];
 
@@ -217,12 +214,21 @@ static const double radianInDegrees = 180.0 / M_PI;
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
-    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
-    //[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
+    //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
+    [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
-    //wait until all data collected
-    [dataCollectedCondition wait];
+    NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
+    while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
+        //wait until all data collected, or a timeout
+        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1]];
+    }
     [dataCollectedCondition unlock];
+    
+    if (sample < nrSamples) {
+        NSLog(@"Error while polling the motion sensors.");
+        [motionManager stopDeviceMotionUpdates];
+        return;
+    }
     
     //post device motion //TODO: is there a better way to efficiently share data?
     NSDictionary* data = [NSDictionary dictionaryWithObject:deviceMotionArray forKey:@"data"];
@@ -325,8 +331,6 @@ static const double radianInDegrees = 180.0 / M_PI;
         double yaw = attitude.yaw * radianInDegrees;
         if (yaw < 0) yaw += 360;
         
-        NSLog(@"yaw: %.3f, compass: %.3f, radianInDegrees: %.3f", attitude.yaw, yaw, radianInDegrees);
-        
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
                                         [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,
@@ -406,7 +410,6 @@ static const double radianInDegrees = 180.0 / M_PI;
             //restart
             if (enableCounter > 0) {
                 [pollTimer invalidate];
-                [motionManager stopDeviceMotionUpdates];
                 pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
             }
         } else if ([setting.name isEqualToString:kCSSpatialSettingFrequency]) {

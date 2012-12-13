@@ -84,9 +84,14 @@ static CSSensorStore* sensorStore;
 + (void) applyIVitalitySettings {
     CSSettings* settings = [CSSettings sharedSettings];
     [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval value:@"60"];
+    [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingFrequency value:@"20"];
+    [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingNrSamples value:@"20"];
+    
     [settings setSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval value:@"240"];
-    [settings setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval value:@"900"];
     [settings setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy value:@"10000"];
+    [settings setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingMinimumDistance value:@"10000"];
+    
+    [settings setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval value:@"900"];
 
     [settings setSensor:kCSSENSOR_LOCATION enabled:YES];
     [settings setSensor:kCSSENSOR_BATTERY enabled:YES];
