@@ -40,13 +40,17 @@ static const double radianInDegrees = 180.0 / M_PI;
 	
 	NSOperationQueue* operations;
     dispatch_queue_t pollQueueGCD;
+    dispatch_queue_t pollTimerQueueGCD;
+    dispatch_source_t pollTimerGCD;
+    NSObject* pollTimerLock;
+    
+    
     NSCondition* headingAvailable;
     BOOL updatingHeading;
     
     NSTimeInterval interval;
     NSInteger nrSamples;
     double frequency;
-    NSTimer* pollTimer;
     NSTimeInterval timestampOffset;
     
     CSJumpSensor* jumpDetector;
@@ -91,6 +95,8 @@ static const double radianInDegrees = 180.0 / M_PI;
 		operations = [[NSOperationQueue alloc] init];
         
         pollQueueGCD = dispatch_queue_create("com.sense.sense_platform.pollQueue", NULL);
+        pollTimerQueueGCD = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        pollTimerLock = [[NSObject alloc] init];
         
         headingAvailable = [[NSCondition alloc] init];
         updatingHeading = NO;
@@ -406,11 +412,10 @@ static const double radianInDegrees = 180.0 / M_PI;
         NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
         if ([setting.name isEqualToString:kCSSpatialSettingInterval]) {
             interval = [setting.value doubleValue];
-            
+
             //restart
             if (enableCounter > 0) {
-                [pollTimer invalidate];
-                pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+                [self schedulePollWithInterval:interval];
             }
         } else if ([setting.name isEqualToString:kCSSpatialSettingFrequency]) {
             frequency = [setting.value doubleValue];
@@ -423,13 +428,36 @@ static const double radianInDegrees = 180.0 / M_PI;
     }
 }
 
+- (void) schedulePollWithInterval:(NSTimeInterval) interval {
+    [motionManager stopDeviceMotionUpdates];
+    @synchronized(pollTimerLock) {
+        if (pollTimerGCD) {
+            dispatch_source_cancel(pollTimerGCD);
+        }
+        uint64_t leeway = interval * 0.05 * NSEC_PER_SEC; //5% leeway
+        pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
+        dispatch_source_set_event_handler(pollTimerGCD, ^{
+            [self schedulePoll];
+        });
+        dispatch_source_set_timer(pollTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, leeway);
+        dispatch_resume(pollTimerGCD);
+    }
+}
+
+- (void) stopPolling {
+    [motionManager stopDeviceMotionUpdates];
+    @synchronized(pollTimerLock) {
+        if (pollTimerGCD) {
+            dispatch_source_cancel(pollTimerGCD);
+        }
+    }
+}
+
 - (void) incEnable {
     enableCounter += 1;
     if (enableCounter == 1) {
         [motionManager stopDeviceMotionUpdates];
-        [pollTimer invalidate];
-        pollTimer = nil;
-        pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+        [self schedulePollWithInterval:interval];
     }
 }
 
@@ -437,15 +465,13 @@ static const double radianInDegrees = 180.0 / M_PI;
     if (enableCounter > 0) {
         enableCounter -= 1;
         if (enableCounter == 0) {
-            [pollTimer invalidate];
-            [motionManager stopDeviceMotionUpdates];
+            [self stopPolling];
         }
     }
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [pollTimer invalidate];
     
     [operations cancelAllOperations];
 }

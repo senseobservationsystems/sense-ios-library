@@ -51,7 +51,6 @@ NSString* const kMotionData = @"motionData";
 - (void) applyGeneralSettings;
 - (BOOL) uploadData;
 - (void) instantiateSensors;
-- (void) scheduleUpload;
 - (NSUInteger) nrPointsToSend:(NSArray*) data;
 @end
 
@@ -67,9 +66,10 @@ NSString* const kMotionData = @"motionData";
 	NSDate* lastUpload;
 	NSTimeInterval pollRate;
 	NSDate* lastPoll;
-	NSOperationQueue* operationQueue;
-	
-	NSTimer* uploadTimer;
+    dispatch_queue_t uploadQueueGCD;
+    dispatch_queue_t uploadTimerQueueGCD;
+    dispatch_source_t uploadTimerGCD;
+    NSObject* uploadTimerLock;
 	
 	//Sensor classes, this variable is used to instantiate sensors
 	NSArray* allSensorClasses;
@@ -109,8 +109,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		sender = [[CSSender alloc] init];
 		//setup attributes
 		sensorData = [[NSMutableDictionary alloc] init];
-		operationQueue = [[NSOperationQueue alloc] init];
-        [operationQueue setMaxConcurrentOperationCount:1];
+        uploadQueueGCD = dispatch_queue_create("com.sense.sense_platform.uploadQueue", NULL);
+        uploadTimerQueueGCD = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        uploadTimerLock = [[NSObject alloc] init];
+
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
@@ -308,9 +310,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		//flush data
 		[self forceDataFlush];
         
-        //delete upload timer
-        if (uploadTimer.isValid )
-            [uploadTimer invalidate];
+        //set timer
+        [self stopUploading];
 	} else {
         [locationSensor setBackgroundRunningEnable:YES];
         //send notifications to notify sensors whether they should activate themselves
@@ -340,25 +341,37 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     waitTime = 0;
 }
 
-- (void) scheduleUpload {
-	@try {
-		//make an upload operation
-		NSInvocationOperation* uploadOp = [[NSInvocationOperation alloc]
-                                           initWithTarget:self selector:@selector(uploadOperation) object:nil];
-        
-		[operationQueue addOperation:uploadOp];
-	}
-	@catch (NSException * e) {
-		NSLog(@"Catched exception while scheduling upload. Exception: %@", e);
-	}
-}
-
 - (void) uploadAndClearData {
-	[self uploadData];
+    dispatch_sync(uploadQueueGCD, ^{
+        	[self uploadData];
+    });
+
 	@synchronized(self){
 		[sensorData removeAllObjects];
 	}
-    
+}
+
+- (void) scheduleUploadIn:(NSTimeInterval) interval {
+    @synchronized(uploadTimerLock) {
+        if (uploadTimerGCD) {
+            dispatch_source_cancel(uploadTimerGCD);
+        }
+        uint64_t leeway = MAX(interval * 0.1, 1ull) * NSEC_PER_SEC;
+        uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
+        dispatch_source_set_event_handler(uploadTimerGCD, ^{
+            [self uploadOperation];
+        });
+        dispatch_source_set_timer(uploadTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, leeway);
+        dispatch_resume(uploadTimerGCD);
+    }
+}
+
+- (void) stopUploading {
+    @synchronized(uploadTimerLock) {
+        if (uploadTimerGCD) {
+            dispatch_source_cancel(uploadTimerGCD);
+        }
+    }
 }
 
 - (void) uploadOperation {
@@ -379,19 +392,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     
     if (serviceEnabled == YES) {
         NSTimeInterval interval = MAX(waitTime, syncRate);
-        if (uploadTimer.isValid)
-            [uploadTimer invalidate];
-        uploadTimer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(scheduleUpload)    userInfo:nil repeats:NO];
-        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
-        [runLoop addTimer:uploadTimer forMode:NSRunLoopCommonModes];
+        [self scheduleUploadIn:interval];
         NSLog(@"Uploading again in %f seconds.", interval);
         
         //send notification about upload
         CSApplicationStateChangeMsg* msg = [[CSApplicationStateChangeMsg alloc] init];
         msg.applicationStateChange = allSucceed ? kCSUPLOAD_OK :kCSUPLOAD_FAILED;
         [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSapplicationStateChangeNotification object:msg]];
-        
-        [runLoop run];
     }
 }
 
@@ -522,20 +529,15 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 
 - (void) forceDataFlushAndBlock {
-    [self forceDataFlush];
+    dispatch_sync(uploadQueueGCD, ^{
+        [self uploadData];
+    });
 }
 
 - (void) forceDataFlush {
-	@try {
-		//make an upload operation
-		NSInvocationOperation* uploadOp = [[NSInvocationOperation alloc]
-										   initWithTarget:self selector:@selector(uploadAndClearData) object:nil];
-		
-		[operationQueue addOperation:uploadOp];
-	}
-	@catch (NSException * e) {
-		NSLog(@"Catched exception while scheduling upload. Exception: %@", e);
-	}
+    dispatch_async(uploadQueueGCD, ^{
+        [self uploadData];
+    });
 }
 
 - (void) generalSettingChanged: (NSNotification*) notification {
@@ -563,9 +565,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) setSyncRate: (int) newRate {
 	syncRate = newRate;
     if (serviceEnabled) {
-        if (uploadTimer.isValid )
-            [uploadTimer invalidate];
-        uploadTimer = [NSTimer scheduledTimerWithTimeInterval:syncRate target:self selector:@selector(scheduleUpload) userInfo:nil repeats:NO];
+        [self scheduleUploadIn:syncRate];
     }
     NSLog(@"set upload interval: %d", newRate);
 }
