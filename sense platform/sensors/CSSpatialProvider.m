@@ -433,6 +433,7 @@ static const double radianInDegrees = 180.0 / M_PI;
     @synchronized(pollTimerLock) {
         if (pollTimerGCD) {
             dispatch_source_cancel(pollTimerGCD);
+            dispatch_release(pollTimerGCD);
         }
         uint64_t leeway = interval * 0.05 * NSEC_PER_SEC; //5% leeway
         pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
@@ -449,6 +450,8 @@ static const double radianInDegrees = 180.0 / M_PI;
     @synchronized(pollTimerLock) {
         if (pollTimerGCD) {
             dispatch_source_cancel(pollTimerGCD);
+            dispatch_release(pollTimerGCD);
+            pollTimerGCD = NULL;
         }
     }
 }

@@ -20,19 +20,7 @@
 
 
 @interface CSNoiseSensor : CSSensor <AVAudioRecorderDelegate> {
-	@private AVAudioRecorder* audioRecorder;
-	@private NSTimeInterval sampleInterval;
-	@private NSTimeInterval sampleDuration;
-	@private NSTimeInterval volumeSampleInterval;
-	@private NSTimer* sampleTimer;
-	@private NSTimer* volumeTimer;
-	
-	@private double volumeSum;
-	@private NSInteger nrVolumeSamples;
 }
 
 - (void) settingChanged: (NSNotification*) notification;
-
-@property (retain) NSTimer* sampleTimer;
-@property (retain) NSTimer* volumeTimer;
 @end
