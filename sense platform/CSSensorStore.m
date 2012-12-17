@@ -352,6 +352,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) scheduleUploadIn:(NSTimeInterval) interval {
+    /* Use a timer instead of dispatch_after so we can add some leeway and allow the scheduler to optimise. */
     @synchronized(uploadTimerLock) {
         if (uploadTimerGCD) {
             dispatch_source_cancel(uploadTimerGCD);
@@ -360,7 +361,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         uint64_t leeway = MAX(interval * 0.1, 1ull) * NSEC_PER_SEC;
         uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
         dispatch_source_set_event_handler(uploadTimerGCD, ^{
-            [self uploadOperation];
+            dispatch_async(uploadQueueGCD, ^{
+                [self uploadOperation];
+            });
         });
         dispatch_source_set_timer(uploadTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, leeway);
         dispatch_resume(uploadTimerGCD);

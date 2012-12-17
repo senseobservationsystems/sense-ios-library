@@ -188,7 +188,6 @@ static const double radianInDegrees = 180.0 / M_PI;
     NSCondition* dataCollectedCondition = [NSCondition new];
 
     __block NSInteger counter = 0;
-    __block NSInteger discarded = 0;
 
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
         if (deviceMotion == nil)
@@ -428,19 +427,19 @@ static const double radianInDegrees = 180.0 / M_PI;
     }
 }
 
-- (void) schedulePollWithInterval:(NSTimeInterval) interval {
+- (void) schedulePollWithInterval:(NSTimeInterval) newInterval {
     [motionManager stopDeviceMotionUpdates];
     @synchronized(pollTimerLock) {
         if (pollTimerGCD) {
             dispatch_source_cancel(pollTimerGCD);
             dispatch_release(pollTimerGCD);
         }
-        uint64_t leeway = interval * 0.05 * NSEC_PER_SEC; //5% leeway
+        uint64_t leeway = newInterval * 0.05 * NSEC_PER_SEC; //5% leeway
         pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
         dispatch_source_set_event_handler(pollTimerGCD, ^{
             [self schedulePoll];
         });
-        dispatch_source_set_timer(pollTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, leeway);
+        dispatch_source_set_timer(pollTimerGCD, dispatch_walltime(NULL, newInterval * NSEC_PER_SEC), newInterval * NSEC_PER_SEC, leeway);
         dispatch_resume(pollTimerGCD);
     }
 }
