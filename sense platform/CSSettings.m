@@ -15,6 +15,7 @@
  */
 
 #import "CSSettings.h"
+#import "NSString+MD5Hash.h"
 
 //notifications
 NSString* const CSsettingLoginChangedNotification = @"CSsettingLoginChangedNotification";
@@ -140,7 +141,7 @@ static CSSettings* sharedSettingsInstance = nil;
         plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
         if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
 			//fallback to default settings
-			plistPath = [[NSBundle mainBundle] pathForResource:@"CSSettings" ofType:@"plist"];
+			plistPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
         }
 		@try {
 			[self loadSettingsFromPath:plistPath];
@@ -215,12 +216,16 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setLogin:(NSString*)user withPassword:(NSString*) password {
+        return [self setLogin:user withPasswordHash:[password MD5Hash]];
+}
+
+- (BOOL) setLogin:(NSString*)user withPasswordHash:(NSString*) passwordHash {
     NSLog(@"Settings setLogin:%@", user);
     [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername value:user];
-    [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword value:password];
-	//notify registered subscribers
-	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSsettingLoginChangedNotification object:nil]];
-	return YES;
+    [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword value:passwordHash ];
+    //notify registered subscribers
+    [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSsettingLoginChangedNotification object:nil]];
+    return YES;
 }
 
 

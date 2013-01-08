@@ -29,7 +29,7 @@
 @property (strong) NSString* sessionCookie;
 
 - (id) init;
-- (void) setUser:(NSString*)user andPassword:(NSString*) password;
+- (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash;
 - (BOOL) isLoggedIn;
 - (BOOL) registerUser:(NSString*) username withPassword:(NSString*) password error:(NSString**)error;
 - (BOOL) login;

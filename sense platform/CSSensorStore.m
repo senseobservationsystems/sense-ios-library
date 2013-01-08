@@ -49,9 +49,8 @@ NSString* const kMotionData = @"motionData";
 
 @interface CSSensorStore (private)
 - (void) applyGeneralSettings;
-- (void) uploadData;
+- (BOOL) uploadData;
 - (void) instantiateSensors;
-- (void) scheduleUpload;
 - (NSUInteger) nrPointsToSend:(NSArray*) data;
 @end
 
@@ -67,15 +66,17 @@ NSString* const kMotionData = @"motionData";
 	NSDate* lastUpload;
 	NSTimeInterval pollRate;
 	NSDate* lastPoll;
-	NSOperationQueue* operationQueue;
-	
-	NSTimer* uploadTimer;
+    dispatch_queue_t uploadQueueGCD;
+    dispatch_queue_t uploadTimerQueueGCD;
+    dispatch_source_t uploadTimerGCD;
+    NSObject* uploadTimerLock;
 	
 	//Sensor classes, this variable is used to instantiate sensors
 	NSArray* allSensorClasses;
 	NSArray* allAvailableSensorClasses;
 	NSMutableArray* sensors;
     NSMutableDictionary* sensorIdMap;
+    NSObject* sensorIdMapLock;
 	
 	CSSpatialProvider* spatialProvider;
 }
@@ -108,9 +109,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		sender = [[CSSender alloc] init];
 		//setup attributes
 		sensorData = [[NSMutableDictionary alloc] init];
-		operationQueue = [[NSOperationQueue alloc] init];
+        uploadQueueGCD = dispatch_queue_create("com.sense.sense_platform.uploadQueue", NULL);
+        uploadTimerQueueGCD = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        uploadTimerLock = [[NSObject alloc] init];
+
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
+        sensorIdMapLock = [[NSObject alloc] init];
 		
 		//all sensor classes
 		allSensorClasses = [NSArray arrayWithObjects:
@@ -152,25 +157,25 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 } 
 
 - (void) makeRemoteDeviceSensors {
-    if (sensorIdMap == nil)
-        sensorIdMap = [NSMutableDictionary new];
-    else {
-        //refreshing the mapping, remove 'old' mapping so we can recreate sensor that have been removed at the server.
-        [sensorIdMap removeAllObjects];
-    }
+    NSMutableDictionary* mySensorIdMap = [NSMutableDictionary new];
     
-    
+    BOOL stop = NO;
 	//get list of sensors from the server
     NSDictionary* response;
     @try {
         response = [sender listSensorsForDevice:[CSSensorStore device]];
     } @catch (NSException* e) {
+        stop = YES;
+    }
+    
+  	NSArray* remoteSensors = [response valueForKey:@"sensors"];
+    //NSLog(@"Response: '%@', sensor list: '%@'", response, remoteSensors);
+    if (stop || remoteSensors == nil) {
         //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
         NSLog(@"Couldn't get a list of sensors for the device. Don't make ");
         return;
     }
-	NSArray* remoteSensors = [response valueForKey:@"sensors"];
-	
+
     //push all ids in the sensorId map
     for (id remoteSensor in remoteSensors) {
         //determine whether the sensor matches
@@ -180,13 +185,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
             NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType];
             //update sensor id map
-            [sensorIdMap setValue:remoteId forKey:sensorId];
+            [mySensorIdMap setValue:remoteId forKey:sensorId];
         }
     }
 
+    bool allSucces = YES;
 	//create sensors that aren't assigned an id yet
 	for (CSSensor* sensor in sensors) {
-		if ([sensorIdMap objectForKey:sensor.sensorId] == NULL) {
+		if ([mySensorIdMap objectForKey:sensor.sensorId] == NULL) {
 			NSDictionary* description = [sender createSensorWithDescription:[sensor sensorDescription]];
             id sensorIdString = [description valueForKey:@"id"];
    			if (description != nil && sensorIdString != nil) {
@@ -194,11 +200,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 				[sender connectSensor:sensorIdString ToDevice:[CSSensorStore device]];
 
                 //store sensor id in the map
-  				[sensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
+  				[mySensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
 				NSLog(@"Created %@ sensor with id %@", sensor.sensorId, sensorIdString);
-			}
+			} else {
+                allSucces = NO;
+            }
 		}
 	}
+    @synchronized(sensorIdMapLock) {
+        sensorIdMap = mySensorIdMap;
+    }
 }
 
 - (void) instantiateSensors {
@@ -252,6 +263,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
+    //NSLog(@"Adding data for %@ (%@)", sensorName, sensorId);
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
@@ -291,16 +303,15 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
          */
         //disable sensors
 		for (CSSensor* sensor in sensors) {
-			[[CSSettings sharedSettings] setSensor:[sensor sensorId] enabled:NO persistent:NO];
+			[[CSSettings sharedSettings] setSensor:sensor.name enabled:NO persistent:NO];
 		}
         
         [locationSensor setBackgroundRunningEnable:NO];
 		//flush data
 		[self forceDataFlush];
         
-        //delete upload timer
-        if (uploadTimer.isValid )
-            [uploadTimer invalidate];
+        //set timer
+        [self stopUploading];
 	} else {
         [locationSensor setBackgroundRunningEnable:YES];
         //send notifications to notify sensors whether they should activate themselves
@@ -319,37 +330,87 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	
 	//get new settings
     NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
-  	NSString* password = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+  	NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
     NSLog(@"Sensorstore loginChanged:%@", username);
 	//change login
-    [sender setUser:username andPassword:password];
+    [sender setUser:username andPasswordHash:passwordHash];
     
-    sensorIdMap = nil;
+    @synchronized(sensorIdMapLock) {
+        sensorIdMap = nil;
+    }
     waitTime = 0;
 }
 
-- (void) scheduleUpload {
-	@try {
-		//make an upload operation
-		NSInvocationOperation* uploadOp = [[NSInvocationOperation alloc]
-                                           initWithTarget:self selector:@selector(uploadData) object:nil];
-        
-		[operationQueue addOperation:uploadOp];
-	}
-	@catch (NSException * e) {
-		NSLog(@"Catched exception while scheduling upload. Exception: %@", e);
-	}
-}
-
 - (void) uploadAndClearData {
-	[self uploadData];
+    dispatch_sync(uploadQueueGCD, ^{
+        	[self uploadData];
+    });
+
 	@synchronized(self){
 		[sensorData removeAllObjects];
 	}
-    
 }
 
-- (void) uploadData {
+- (void) scheduleUploadIn:(NSTimeInterval) interval {
+    /* Use a timer instead of dispatch_after so we can add some leeway and allow the scheduler to optimise. */
+    @synchronized(uploadTimerLock) {
+        if (uploadTimerGCD) {
+            dispatch_source_cancel(uploadTimerGCD);
+            dispatch_release(uploadTimerGCD);
+        }
+        uint64_t leeway = MAX(interval * 0.1, 1ull) * NSEC_PER_SEC;
+        uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
+        dispatch_source_set_event_handler(uploadTimerGCD, ^{
+            dispatch_async(uploadQueueGCD, ^{
+                [self uploadOperation];
+            });
+        });
+        dispatch_source_set_timer(uploadTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, leeway);
+        dispatch_resume(uploadTimerGCD);
+    }
+}
+
+- (void) stopUploading {
+    @synchronized(uploadTimerLock) {
+        if (uploadTimerGCD) {
+            dispatch_source_cancel(uploadTimerGCD);
+            dispatch_release(uploadTimerGCD);
+            uploadTimerGCD = NULL;
+        }
+    }
+}
+
+- (void) uploadOperation {
+    BOOL allSucceed = NO;
+    @try {
+        allSucceed = [self uploadData];
+    } @catch (NSException* exception) {
+        NSLog(@"Exception during upload: %@", exception);
+    }
+    
+    //exponentially back off at failures to avoid spamming the server
+    if (allSucceed)
+        waitTime = 0; //no need to back off
+    else {
+        //back off with a factor 2, max to one hour or upload interval
+        waitTime = MIN(MAX(MAX_UPLOAD_INTERVAL, syncRate), MAX(2 * syncRate, 2 * waitTime));
+    }
+    
+    if (serviceEnabled == YES) {
+        NSTimeInterval interval = MAX(waitTime, syncRate);
+        [self scheduleUploadIn:interval];
+        NSLog(@"Uploading again in %f seconds.", interval);
+        
+        //send notification about upload
+        CSApplicationStateChangeMsg* msg = [[CSApplicationStateChangeMsg alloc] init];
+        msg.applicationStateChange = allSucceed ? kCSUPLOAD_OK :kCSUPLOAD_FAILED;
+        [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSapplicationStateChangeNotification object:msg]];
+    }
+}
+
+
+
+- (BOOL) uploadData {
     BOOL allSucceed = YES;
 	NSMutableDictionary* myData;
 	//take over sensorData
@@ -357,7 +418,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		myData = sensorData;
 		sensorData = [NSMutableDictionary new];
 	}
-    
+
     //refresh sensors, if one of the id's isn't in the map
 	for (NSString* sensorId in myData) {    
         if (sensorIdMap == nil || [sensorIdMap objectForKey:sensorId] == NULL) {
@@ -370,10 +431,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	for (NSString* sensorId in myData) {
         NSMutableArray* data= [myData valueForKey:sensorId];
         if ([sensorIdMap valueForKey:sensorId] == NULL) {
+            //skip this sensor if we don't have a remote id for this sensor.
             allSucceed = NO;
             continue;
         }
-        NSLog(@"Uploading data for sensor %@. %u point(s).", sensorId, data.count);
         //split the data, as the server limits the size per request
         //TODO: refactor this ugly but critical code, a proper transparent implementation should be done with respect to error handling
         while (data.count > 0) {
@@ -384,7 +445,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             NSArray* dataPart = [data subarrayWithRange:range];
             BOOL succeed = NO;
             @try {
-                NSLog(@"Uploading batch of %d points.",points);
                 succeed = [sender uploadData:dataPart forSensorId: [sensorIdMap valueForKey:sensorId]];
             } @catch (NSException* e) {
                 NSLog(@"SenseStore: Exception while uploading data: %@", e);
@@ -394,16 +454,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                 //remove sent data
                 [data removeObjectsInRange:range];
             } else {
+                allSucceed = NO;
                 NSLog(@"Upload failed");
                 //don't check the reason for failure, just erase this sensor id
-                [sensorIdMap removeObjectForKey:sensorId];
+                @synchronized(sensorIdMapLock) {
+                    [sensorIdMap removeObjectForKey:sensorId];
+                }
                 //get out of this loop and continue with the next sensor.
                 break;
             }
         }
 	}
     
-    //re submit unsent data (if any)  into sensorData
+    //resubmit unsent data (if any)  into sensorData
     @synchronized(self) {
         for (NSString* sensorId in myData) {
             NSMutableArray* unsent = [myData valueForKey:sensorId];
@@ -418,31 +481,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             }
         }
     }
-    
-    //exponentially back off at failures to avoid spamming the server
-    if (allSucceed)
-        waitTime = 0; //no need to back off
-    else {
-        //back off with a factor 2, max to one hour or upload interval
-        waitTime = MIN(MAX(MAX_UPLOAD_INTERVAL, syncRate), MAX(2 * syncRate, 2 * waitTime));
-    }
-    
-    if (serviceEnabled == YES) {
-        NSTimeInterval interval = MAX(waitTime, syncRate);
-        if (uploadTimer.isValid)
-            [uploadTimer invalidate];
-        uploadTimer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(scheduleUpload)    userInfo:nil repeats:NO];
-        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
-        [runLoop addTimer:uploadTimer forMode:NSRunLoopCommonModes];
-        NSLog(@"Uploading again in %f seconds.", interval);
-        
-        //send notification about upload
-        CSApplicationStateChangeMsg* msg = [[CSApplicationStateChangeMsg alloc] init];
-        msg.applicationStateChange = allSucceed ? kCSUPLOAD_OK :kCSUPLOAD_FAILED;
-        [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSapplicationStateChangeNotification object:msg]];
-        
-        [runLoop run];
-    }
+    return allSucceed;
 }
 
 - (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
@@ -467,13 +506,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) applyGeneralSettings {
 	@try {
-		NSLog(@"applying general settings");
 		//get new settings
         NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
-        NSString* password = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+        NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
         
 		//apply properties one by one
-		[sender setUser:username andPassword:password];
+		[sender setUser:username andPasswordHash:passwordHash];
         //TODO:FIX
 		NSString* setting = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval];
         if ([setting isEqualToString:kCSGeneralSettingUploadIntervalAdaptive])
@@ -497,26 +535,20 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 
 - (void) forceDataFlushAndBlock {
-    [self forceDataFlush];
+    dispatch_sync(uploadQueueGCD, ^{
+        [self uploadData];
+    });
 }
 
 - (void) forceDataFlush {
-	@try {
-		//make an upload operation
-		NSInvocationOperation* uploadOp = [[NSInvocationOperation alloc]
-										   initWithTarget:self selector:@selector(uploadAndClearData) object:nil];
-		
-		[operationQueue addOperation:uploadOp];
-	}
-	@catch (NSException * e) {
-		NSLog(@"Catched exception while scheduling upload. Exception: %@", e);
-	}
+    dispatch_async(uploadQueueGCD, ^{
+        [self uploadData];
+    });
 }
 
 - (void) generalSettingChanged: (NSNotification*) notification {
 	if ([notification.object isKindOfClass:[CSSetting class]]) {
 		CSSetting* setting = notification.object;
-		NSLog(@"general setting changed: %@,%@", setting.name, setting.value);
 		if ([setting.name isEqualToString:kCSGeneralSettingUploadInterval]) {
             
             if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalAdaptive])
@@ -539,9 +571,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) setSyncRate: (int) newRate {
 	syncRate = newRate;
     if (serviceEnabled) {
-        if (uploadTimer.isValid )
-            [uploadTimer invalidate];
-        uploadTimer = [NSTimer scheduledTimerWithTimeInterval:syncRate target:self selector:@selector(scheduleUpload) userInfo:nil repeats:NO];
+        [self scheduleUploadIn:syncRate];
     }
     NSLog(@"set upload interval: %d", newRate);
 }
@@ -576,7 +606,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
     }
     
-    //TODO: in case it isn't in the local mapping, resolve the sensor id remotely
+    //in case it isn't in the local mapping, resolve the sensor id remotely
     if (sensorId == nil) {
         //get list of sensors from the server
         NSDictionary* response;
@@ -592,6 +622,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
         NSArray* remoteSensors = [response valueForKey:@"sensors"];
         
+        if (remoteSensors == nil)
+            return nil;
+        
         //match against all remote sensors
         for (id remoteSensor in remoteSensors) {
             //determine whether the sensor matches
@@ -603,12 +636,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                 
                 sensorId = [remoteSensor valueForKey:@"id"];
                 //update sensor id map
-                [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                @synchronized(sensorIdMapLock) {
+                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                }
                 break;
             }
         }
     }
-    
+
     return sensorId;
 }
 
