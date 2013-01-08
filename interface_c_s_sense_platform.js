@@ -9,6 +9,7 @@ var interface_c_s_sense_platform =
     [ "giveFeedbackOnState:from:to:label:", "interface_c_s_sense_platform.html#a2267cb6f9298e0117541b0dead38b93c", null ],
     [ "initialize", "interface_c_s_sense_platform.html#a52938007ff176ddf5ee64be85738874f", null ],
     [ "loginWithUser:andPassword:", "interface_c_s_sense_platform.html#a5592175fcff45f5373f0ce47f6a01e68", null ],
+    [ "loginWithUser:andPasswordHash:", "interface_c_s_sense_platform.html#afa485c8264126d78670e160219bbe242", null ],
     [ "registerUser:withPassword:", "interface_c_s_sense_platform.html#a94681a6b7ba573a58383072f1efd7831", null ],
     [ "synchronizeWithBloodPressureMonitor:", "interface_c_s_sense_platform.html#a558f64e898b5594d64a353a02461f96f", null ],
     [ "willTerminate", "interface_c_s_sense_platform.html#af8889234b782d34cef4bc3915316f416", null ]

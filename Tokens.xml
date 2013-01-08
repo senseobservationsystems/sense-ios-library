@@ -403,7 +403,17 @@
     </TokenIdentifier>
     <Path>interface_c_s_settings.html</Path>
     <Anchor>a7cd991b2e00b1dcb0b6126ede7c871c8</Anchor>
-    <Abstract>used to set individual settings, returns whether the setting was accepted</Abstract>
+    <DeclaredIn>CSSettings.h</DeclaredIn>
+  </Token>
+  <Token>
+    <TokenIdentifier>
+      <Name>setLogin:withPasswordHash:</Name>
+      <APILanguage>occ</APILanguage>
+      <Type>instm</Type>
+      <Scope>CSSettings</Scope>
+    </TokenIdentifier>
+    <Path>interface_c_s_settings.html</Path>
+    <Anchor>a2b72e02a28e280085d5e9fbcbb746745</Anchor>
     <DeclaredIn>CSSettings.h</DeclaredIn>
   </Token>
   <Token>

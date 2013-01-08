@@ -83,6 +83,11 @@
               <Anchor>a5592175fcff45f5373f0ce47f6a01e68</Anchor>
              </Node>
              <Node>
+              <Name>loginWithUser:andPasswordHash:</Name>
+              <Path>interface_c_s_sense_platform.html</Path>
+              <Anchor>afa485c8264126d78670e160219bbe242</Anchor>
+             </Node>
+             <Node>
               <Name>registerUser:withPassword:</Name>
               <Path>interface_c_s_sense_platform.html</Path>
               <Anchor>a94681a6b7ba573a58383072f1efd7831</Anchor>
@@ -214,6 +219,11 @@
               <Name>setLogin:withPassword:</Name>
               <Path>interface_c_s_settings.html</Path>
               <Anchor>a7cd991b2e00b1dcb0b6126ede7c871c8</Anchor>
+             </Node>
+             <Node>
+              <Name>setLogin:withPasswordHash:</Name>
+              <Path>interface_c_s_settings.html</Path>
+              <Anchor>a2b72e02a28e280085d5e9fbcbb746745</Anchor>
              </Node>
              <Node>
               <Name>setSensor:enabled:</Name>

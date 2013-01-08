@@ -127,20 +127,21 @@ $(document).ready(function(){initNavTree('_c_s_sense_platform_8h_source.html',''
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;+ (void) <a class="code" href="interface_c_s_sense_platform.html#ac3e66a61197ec7cdf3f904e5dcd222df" title="Flush data to Common Sense.">flushData</a>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;+ (void) <a class="code" href="interface_c_s_sense_platform.html#a8955920433d2327ae8091b07491f2525" title="Flush data to Common Sense, return after the flush is completed.">flushDataAndBlock</a>;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;+ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;+ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;+ (void) <a class="code" href="interface_c_s_sense_platform.html#a68665d097996459b6c0158625e48d23f" title="Setup the platform for use with iVitality.">applyIVitalitySettings</a>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;+ (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;+ (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(<span class="keywordtype">bool</span>) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;+ (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">@end</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;+ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;+ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;+ (void) <a class="code" href="interface_c_s_sense_platform.html#a68665d097996459b6c0158625e48d23f" title="Setup the platform for use with iVitality.">applyIVitalitySettings</a>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;+ (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;+ (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(<span class="keywordtype">bool</span>) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;+ (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">@end</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_0a5aaec45e0df9f5b4426563478aad52.html">SensePlatform</a></li><li class="navelem"><b>CSSensePlatform.h</b></li>
-    <li class="footer">Generated on Thu Sep 20 2012 12:20:53 for Sense iOS Platform Library by
+    <li class="footer">Generated on Tue Jan 8 2013 17:42:05 for Sense iOS Platform Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.2 </li>
   </ul>

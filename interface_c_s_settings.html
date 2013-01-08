@@ -126,10 +126,10 @@ Instance Methods</h2></td></tr>
 <tr class="separator:ab1cd2d7f2d840fb82ef2968876a8df0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af71716f8a10098d27fd0f3bd882a7629"><td class="memItemLeft" align="right" valign="top">(BOOL)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_c_s_settings.html#af71716f8a10098d27fd0f3bd882a7629">setSettingType:setting:value:persistent:</a></td></tr>
 <tr class="separator:af71716f8a10098d27fd0f3bd882a7629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cd991b2e00b1dcb0b6126ede7c871c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cd991b2e00b1dcb0b6126ede7c871c8"></a>
-(BOOL)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_c_s_settings.html#a7cd991b2e00b1dcb0b6126ede7c871c8">setLogin:withPassword:</a></td></tr>
-<tr class="memdesc:a7cd991b2e00b1dcb0b6126ede7c871c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">used to set individual settings, returns whether the setting was accepted <br/></td></tr>
+<tr class="memitem:a7cd991b2e00b1dcb0b6126ede7c871c8"><td class="memItemLeft" align="right" valign="top">(BOOL)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_c_s_settings.html#a7cd991b2e00b1dcb0b6126ede7c871c8">setLogin:withPassword:</a></td></tr>
 <tr class="separator:a7cd991b2e00b1dcb0b6126ede7c871c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b72e02a28e280085d5e9fbcbb746745"><td class="memItemLeft" align="right" valign="top">(BOOL)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_c_s_settings.html#a2b72e02a28e280085d5e9fbcbb746745">setLogin:withPasswordHash:</a></td></tr>
+<tr class="separator:a2b72e02a28e280085d5e9fbcbb746745"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Class Methods</h2></td></tr>
@@ -179,6 +179,74 @@ Class Methods</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the value of the setting </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7cd991b2e00b1dcb0b6126ede7c871c8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (BOOL) setLogin: </td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>user</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">withPassword:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>password</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Login with user and password </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">user</td><td>the username </td></tr>
+    <tr><td class="paramname">password</td><td>the plain password </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a2b72e02a28e280085d5e9fbcbb746745"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (BOOL) setLogin: </td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>user</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">withPasswordHash:</td>
+          <td></td>
+          <td class="paramtype">(NSString *)&#160;</td>
+          <td class="paramname"><em>passwordHash</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Login with user and a hash of the password </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">user</td><td>the username </td></tr>
+    <tr><td class="paramname">passwordHash</td><td>the hash of the password </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -320,7 +388,7 @@ Class Methods</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="interface_c_s_settings.html">CSSettings</a></li>
-    <li class="footer">Generated on Thu Sep 20 2012 12:20:53 for Sense iOS Platform Library by
+    <li class="footer">Generated on Tue Jan 8 2013 17:42:05 for Sense iOS Platform Library by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.2 </li>
   </ul>
