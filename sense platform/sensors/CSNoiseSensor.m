@@ -32,9 +32,20 @@
 - (void) incrementVolume;
 @end
 
-@implementation CSNoiseSensor
-@synthesize sampleTimer;
-@synthesize volumeTimer;
+@implementation CSNoiseSensor {
+    AVAudioRecorder* audioRecorder;
+    NSTimeInterval sampleInterval;
+    NSTimeInterval sampleDuration;
+    NSTimeInterval volumeSampleInterval;
+	
+    double volumeSum;
+    NSInteger nrVolumeSamples;
+    
+    dispatch_queue_t recordQueue;
+    dispatch_queue_t volumeTimerQueue;
+    dispatch_source_t volumeTimer;
+    NSObject* volumeTimerLock;
+}
 
 - (NSString*) name {return kCSSENSOR_NOISE;}
 - (NSString*) displayName {return @"noise";}
@@ -99,12 +110,19 @@
         sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
         sampleDuration = 2;
 		volumeSampleInterval = 0.2;
+        
+        recordQueue = dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
+        volumeTimerQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        volumeTimerLock = [[NSObject alloc] init];
 	}
 	return self;
 }
 
-- (void)  scheduleRecording {
-	self.sampleTimer = [NSTimer scheduledTimerWithTimeInterval:sampleInterval target:self selector:@selector(startRecording) userInfo:nil repeats:NO];
+- (void) scheduleRecording {
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
+    dispatch_after(popTime, recordQueue, ^(void){
+        [self startRecording];
+    });
 }
 
 - (void) startRecording {
@@ -121,15 +139,24 @@
 	}
 	volumeSum = 0;
 	nrVolumeSamples = 0;
-	self.volumeTimer = [NSTimer scheduledTimerWithTimeInterval:volumeSampleInterval target:self selector:@selector(incrementVolume) userInfo:nil repeats:YES];
+    
+    //start a timer to sample volume
+    @synchronized(volumeTimerLock) {
+        if (volumeTimer) {
+            dispatch_source_cancel(volumeTimer);
+            dispatch_release(volumeTimer);
+        }
+        uint64_t leeway = volumeSampleInterval * 0.05 * NSEC_PER_SEC; //5% leeway
+        volumeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, volumeTimerQueue);
+        dispatch_source_set_event_handler(volumeTimer, ^{
+            [audioRecorder updateMeters];
+            volumeSum +=  pow(10, [audioRecorder averagePowerForChannel:0] / 20);
+            ++nrVolumeSamples;
+        });
+        dispatch_source_set_timer(volumeTimer, dispatch_walltime(NULL, volumeSampleInterval * NSEC_PER_SEC), volumeSampleInterval * NSEC_PER_SEC, leeway);
+        dispatch_resume(volumeTimer);
+    }
 }
-
-- (void) incrementVolume {
-	[audioRecorder updateMeters];
-	volumeSum +=  pow(10, [audioRecorder averagePowerForChannel:0] / 20);
-	++nrVolumeSamples;
-}
-
 
 - (BOOL) isEnabled {return isEnabled;}
 
@@ -144,21 +171,30 @@
 			[self startRecording];
 		}
 	} else {
+        @synchronized(volumeTimerLock) {
+            if (volumeTimer) {
+                dispatch_source_cancel(volumeTimer);
+                dispatch_release(volumeTimer);
+                volumeTimer = NULL;
+            }
+        }
 		audioRecorder.delegate = nil;
 		[audioRecorder stop];
-		//cancel a scheduled recording
-		[volumeTimer invalidate];
-		self.volumeTimer = nil;
-		[sampleTimer invalidate];
-		self.sampleTimer = nil;
 	}
     isEnabled = enable;
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
 	NSLog(@"recorder stopped");
-	[volumeTimer invalidate];
-	self.volumeTimer = nil;
+
+    @synchronized(volumeTimerLock) {
+        if (volumeTimer) {
+            dispatch_source_cancel(volumeTimer);
+            dispatch_release(volumeTimer);
+            volumeTimer = NULL;
+        }
+    }
+
 	if (didSucceed && nrVolumeSamples > 0)	{
 		//take timestamp
 		double timestamp = [[NSDate date] timeIntervalSince1970];

@@ -39,14 +39,18 @@ static const double radianInDegrees = 180.0 / M_PI;
     CSMotionFeaturesSensor* motionFeaturesSensor;
 	
 	NSOperationQueue* operations;
-  	NSOperationQueue* pollQueue;
+    dispatch_queue_t pollQueueGCD;
+    dispatch_queue_t pollTimerQueueGCD;
+    dispatch_source_t pollTimerGCD;
+    NSObject* pollTimerLock;
+    
+    
     NSCondition* headingAvailable;
     BOOL updatingHeading;
     
     NSTimeInterval interval;
     NSInteger nrSamples;
     double frequency;
-    NSTimer* pollTimer;
     NSTimeInterval timestampOffset;
     
     CSJumpSensor* jumpDetector;
@@ -89,7 +93,10 @@ static const double radianInDegrees = 180.0 / M_PI;
 		
 		//operations queue
 		operations = [[NSOperationQueue alloc] init];
-   		pollQueue = [[NSOperationQueue alloc] init];
+        
+        pollQueueGCD = dispatch_queue_create("com.sense.sense_platform.pollQueue", NULL);
+        pollTimerQueueGCD = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        pollTimerLock = [[NSObject alloc] init];
         
         headingAvailable = [[NSCondition alloc] init];
         updatingHeading = NO;
@@ -166,15 +173,9 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 
 - (void) schedulePoll {
-    @try {
-        //make a poll operation
-        NSInvocationOperation* pollOp = [[NSInvocationOperation alloc]
-                                         initWithTarget:self selector:@selector(poll) object:nil];
-        [pollQueue addOperation:pollOp];
-    }
-    @catch (NSException * e) {
-        NSLog(@"Catched exception while scheduling poll. Exception: %@", e);
-    }
+        dispatch_async(pollQueueGCD, ^{
+            [self poll];
+        });
 }
 
 - (void) poll {
@@ -187,7 +188,6 @@ static const double radianInDegrees = 180.0 / M_PI;
     NSCondition* dataCollectedCondition = [NSCondition new];
 
     __block NSInteger counter = 0;
-    __block NSInteger discarded = 0;
 
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
         if (deviceMotion == nil)
@@ -197,12 +197,14 @@ static const double radianInDegrees = 180.0 / M_PI;
             return;
         }
 
+        /*
         if (counter > 0) {
             //Oh no, we're not processing fast enough. This means problems...
             discarded++;
             NSLog(@"Processing too slow, skipping point, this corrupts sensor input temporarily!");
             return;
         }
+         */
         counter++;
         [deviceMotionArray addObject:deviceMotion];
 
@@ -217,12 +219,21 @@ static const double radianInDegrees = 180.0 / M_PI;
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
-    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
-    //[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
+    //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
+    [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
-    //wait until all data collected
-    [dataCollectedCondition wait];
+    NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
+    while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
+        //wait until all data collected, or a timeout
+        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1]];
+    }
     [dataCollectedCondition unlock];
+    
+    if (sample < nrSamples) {
+        NSLog(@"Error while polling the motion sensors.");
+        [motionManager stopDeviceMotionUpdates];
+        return;
+    }
     
     //post device motion //TODO: is there a better way to efficiently share data?
     NSDictionary* data = [NSDictionary dictionaryWithObject:deviceMotionArray forKey:@"data"];
@@ -325,8 +336,6 @@ static const double radianInDegrees = 180.0 / M_PI;
         double yaw = attitude.yaw * radianInDegrees;
         if (yaw < 0) yaw += 360;
         
-        NSLog(@"yaw: %.3f, compass: %.3f, radianInDegrees: %.3f", attitude.yaw, yaw, radianInDegrees);
-        
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
                                         [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,
@@ -402,12 +411,10 @@ static const double radianInDegrees = 180.0 / M_PI;
         NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
         if ([setting.name isEqualToString:kCSSpatialSettingInterval]) {
             interval = [setting.value doubleValue];
-            
+
             //restart
             if (enableCounter > 0) {
-                [pollTimer invalidate];
-                [motionManager stopDeviceMotionUpdates];
-                pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+                [self schedulePollWithInterval:interval];
             }
         } else if ([setting.name isEqualToString:kCSSpatialSettingFrequency]) {
             frequency = [setting.value doubleValue];
@@ -420,13 +427,39 @@ static const double radianInDegrees = 180.0 / M_PI;
     }
 }
 
+- (void) schedulePollWithInterval:(NSTimeInterval) newInterval {
+    [motionManager stopDeviceMotionUpdates];
+    @synchronized(pollTimerLock) {
+        if (pollTimerGCD) {
+            dispatch_source_cancel(pollTimerGCD);
+            dispatch_release(pollTimerGCD);
+        }
+        uint64_t leeway = newInterval * 0.05 * NSEC_PER_SEC; //5% leeway
+        pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
+        dispatch_source_set_event_handler(pollTimerGCD, ^{
+            [self schedulePoll];
+        });
+        dispatch_source_set_timer(pollTimerGCD, dispatch_walltime(NULL, newInterval * NSEC_PER_SEC), newInterval * NSEC_PER_SEC, leeway);
+        dispatch_resume(pollTimerGCD);
+    }
+}
+
+- (void) stopPolling {
+    [motionManager stopDeviceMotionUpdates];
+    @synchronized(pollTimerLock) {
+        if (pollTimerGCD) {
+            dispatch_source_cancel(pollTimerGCD);
+            dispatch_release(pollTimerGCD);
+            pollTimerGCD = NULL;
+        }
+    }
+}
+
 - (void) incEnable {
     enableCounter += 1;
     if (enableCounter == 1) {
         [motionManager stopDeviceMotionUpdates];
-        [pollTimer invalidate];
-        pollTimer = nil;
-        pollTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(schedulePoll) userInfo:nil repeats:YES];
+        [self schedulePollWithInterval:interval];
     }
 }
 
@@ -434,15 +467,13 @@ static const double radianInDegrees = 180.0 / M_PI;
     if (enableCounter > 0) {
         enableCounter -= 1;
         if (enableCounter == 0) {
-            [pollTimer invalidate];
-            [motionManager stopDeviceMotionUpdates];
+            [self stopPolling];
         }
     }
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [pollTimer invalidate];
     
     [operations cancelAllOperations];
 }

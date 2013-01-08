@@ -58,6 +58,11 @@ static CSSensorStore* sensorStore;
     return [[CSSensorStore sharedSensorStore].sender login];
 }
 
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
+    [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
+    return [sensorStore.sender login];
+}
+
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password {
 
     NSString* error;
@@ -70,7 +75,6 @@ static CSSensorStore* sensorStore;
 
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
     return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
-    [CSSensePlatform applyIVitalitySettings];
 }
 
 +(void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
@@ -80,9 +84,14 @@ static CSSensorStore* sensorStore;
 + (void) applyIVitalitySettings {
     CSSettings* settings = [CSSettings sharedSettings];
     [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval value:@"60"];
-    [settings setSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval value:@"60"];
-    [settings setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval value:@"900"];
+    [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingFrequency value:@"20"];
+    [settings setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingNrSamples value:@"20"];
+    
+    [settings setSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval value:@"240"];
     [settings setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy value:@"10000"];
+    [settings setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingMinimumDistance value:@"10000"];
+    
+    [settings setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval value:@"900"];
 
     [settings setSensor:kCSSENSOR_LOCATION enabled:YES];
     [settings setSensor:kCSSENSOR_BATTERY enabled:YES];

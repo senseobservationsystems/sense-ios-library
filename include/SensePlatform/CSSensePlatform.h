@@ -46,6 +46,7 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 + (void) flushDataAndBlock;
 /// Set the credentials to log in on Common Sense
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash;
 /** Register a user in Common Sense
  * @returns Wether the registration succeeded
  */

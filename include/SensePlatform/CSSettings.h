@@ -147,6 +147,15 @@ NSString* const kCSActivitySettingPrivacyPublic;
  */
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent;
 
-///used to set individual settings, returns whether the setting was accepted
+/** Login with user and password
+ * @param user the username
+ * @param password the plain password
+ */
 - (BOOL) setLogin:(NSString*)user withPassword:(NSString*) password;
+
+/** Login with user and a hash of the password
+ * @param user the username
+ * @param passwordHash the hash of the password
+ */
+- (BOOL) setLogin:(NSString*)user withPasswordHash:(NSString*) passwordHash;
 @end

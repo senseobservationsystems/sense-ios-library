@@ -14,13 +14,8 @@
  * Author: Pim Nijdam (pim@sense-os.nl)
  */
 
-#import <Foundation/Foundation.h>
-#import <AVFoundation/AVAudioRecorder.h>
-#import "CSSensor.h"
+#import <SenTestingKit/SenTestingKit.h>
 
+@interface SensePlatformTestAppTests : SenTestCase
 
-@interface CSNoiseSensor : CSSensor <AVAudioRecorderDelegate> {
-}
-
-- (void) settingChanged: (NSNotification*) notification;
 @end
