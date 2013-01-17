@@ -31,7 +31,8 @@
 - (id) init;
 - (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash;
 - (BOOL) isLoggedIn;
-- (BOOL) registerUser:(NSString*) username withPassword:(NSString*) password error:(NSString**)error;
+
+- (BOOL) registerUser:(NSString*) user withPassword:(NSString*) pass withEmail:(NSString*) email error:(NSString**) error;
 - (BOOL) login;
 - (BOOL) logout;
 - (NSDictionary*) listSensors;

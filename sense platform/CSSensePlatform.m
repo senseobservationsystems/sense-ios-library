@@ -63,10 +63,10 @@ static CSSensorStore* sensorStore;
     return [sensorStore.sender login];
 }
 
-+ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password {
++ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password  withEmail:(NSString*) email {
 
     NSString* error;
-    BOOL succes = [[CSSensorStore sharedSensorStore].sender registerUser:user withPassword:password error:&error];
+    BOOL succes = [[CSSensorStore sharedSensorStore].sender registerUser:user withPassword:password withEmail:email error:&error];
     if (succes)
             [[CSSettings sharedSettings] setLogin:user withPassword:password];
     return succes;
