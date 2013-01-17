@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E11261A16A7086400805102 /* UIDevice+Hardware.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E11261816A7086400805102 /* UIDevice+Hardware.h */; };
+		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E148A841608C2570010A0D1 /* CSJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E148A761608C2570010A0D1 /* CSJSON.h */; };
 		3E148A851608C2570010A0D1 /* CSSBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E148A771608C2570010A0D1 /* CSSBJson.h */; };
 		3E148A861608C2570010A0D1 /* CSSBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E148A781608C2570010A0D1 /* CSSBJsonParser.h */; };
@@ -171,6 +173,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
+		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148A761608C2570010A0D1 /* CSJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSON.h; sourceTree = "<group>"; };
 		3E148A771608C2570010A0D1 /* CSSBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJson.h; sourceTree = "<group>"; };
 		3E148A781608C2570010A0D1 /* CSSBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonParser.h; sourceTree = "<group>"; };
@@ -417,6 +421,8 @@
 		3E59ACB915F4DB1B00C07D59 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3E11261816A7086400805102 /* UIDevice+Hardware.h */,
+				3E11261916A7086400805102 /* UIDevice+Hardware.m */,
 				3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */,
 				3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */,
 				3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */,
@@ -652,6 +658,7 @@
 				3E148A8F1608C2570010A0D1 /* CSSBJsonUTF8Stream.h in Headers */,
 				3E148A901608C2570010A0D1 /* CSSBJsonWriter.h in Headers */,
 				3E148A911608C2570010A0D1 /* NSObject+CSSBJson.h in Headers */,
+				3E11261A16A7086400805102 /* UIDevice+Hardware.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,6 +851,7 @@
 				3E148AA81608C2630010A0D1 /* CSSBJsonUTF8Stream.m in Sources */,
 				3E148AA91608C2630010A0D1 /* CSSBJsonWriter.m in Sources */,
 				3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */,
+				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

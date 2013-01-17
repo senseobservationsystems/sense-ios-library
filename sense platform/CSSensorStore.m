@@ -21,6 +21,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIDevice+IdentifierAddition.h"
+#import "UIDevice+Hardware.h"
 
 #import "CSLocationSensor.h"
 #import "CSBatterySensor.h"
@@ -125,13 +126,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
  							[CSConnectionSensor class],
    							[CSNoiseSensor class],
 							[CSOrientationSensor class],
-							//[CompassSensor class],
+							//[CSCompassSensor class],
 							//[UserProximity class],
 							//[OrientationStateSensor class],
  							[CSAccelerometerSensor class],
 							[CSAccelerationSensor class],
 							[CSRotationSensor class],
-                            [CSJumpSensor class],
+                            //[CSJumpSensor class],
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
 							//[MiscSensor class],
@@ -650,7 +651,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 
 + (NSDictionary*) device {
-	NSString* type = [[UIDevice currentDevice] model];
+    NSString* type = [[UIDevice currentDevice] platformString];
+    
 	NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
 	NSDictionary* device = [NSDictionary dictionaryWithObjectsAndKeys:
 							uuid, @"uuid",
