@@ -79,14 +79,17 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	passwordHash = hash;
 }
 
-- (BOOL) registerUser:(NSString*) user withPassword:(NSString*) pass error:(NSString**) error
+- (BOOL) registerUser:(NSString*) user withPassword:(NSString*) pass withEmail:(NSString*) email error:(NSString**) error
 {
 	//prepare post
-	NSDictionary* userPost = [NSDictionary dictionaryWithObjectsAndKeys:
+	NSMutableDictionary* userPost = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 						  user, @"username",
 						  [pass MD5Hash], @"password",
-						  user, @"email",
 						  nil];
+    if (email)
+        [userPost setValue:email forKey:@"email"];
+    else
+        [userPost setValue:user forKey:@"email"];
 	//encapsulate in "user"
 	NSDictionary* post = [NSDictionary dictionaryWithObjectsAndKeys:
 						  userPost, @"user",

@@ -47,10 +47,14 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 /// Set the credentials to log in on Common Sense
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash;
+
 /** Register a user in Common Sense
+ * @param user the username
+ * @param password the plain text password
+ * @param email the user's email address
  * @returns Wether the registration succeeded
  */
-+ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password;
++ (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password withEmail:(NSString*) email;
 /// Setup the platform for use with iVitality
 + (void) applyIVitalitySettings;
 /** Add a data point for a sensor, if the sensor doesn't exist it will be created
