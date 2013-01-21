@@ -153,7 +153,7 @@ static CSSettings* sharedSettingsInstance = nil;
 		if (settings == nil) {
 			//fall back to defaults
 			@try {
-				[self loadSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"CSSettings" ofType:@"plist"]];
+				[self loadSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"]];
 			}
 			@catch (NSException * e) {
 				NSLog(@"Settings: exception thrown while loading default settings. THIS IS VERY SERIOUS: %@", e);
@@ -338,7 +338,7 @@ static CSSettings* sharedSettingsInstance = nil;
     //open default settings
     NSString* errorDesc = nil;
 	NSPropertyListFormat format;
-    NSString* defaultPath = [[NSBundle mainBundle] pathForResource:@"CSSettings" ofType:@"plist"];
+    NSString* defaultPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
     NSData* plistXML = [[NSFileManager defaultManager] contentsAtPath:defaultPath];
 	NSDictionary* defaultSettings = (NSDictionary *)[NSPropertyListSerialization
                                                      propertyListFromData:plistXML
