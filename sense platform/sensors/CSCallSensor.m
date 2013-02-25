@@ -35,7 +35,7 @@ static NSString* disconnected = @"idle";
 
 - (NSString*) name {return kCSSENSOR_CALL;}
 - (NSString*) deviceType {return [self name];}
-- (BOOL) isAvailable {return YES;}
++ (BOOL) isAvailable {return YES;}
 
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data

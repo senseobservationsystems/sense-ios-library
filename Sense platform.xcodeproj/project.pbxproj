@@ -145,7 +145,6 @@
 		3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
 		3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
 		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
-		3E9C158615D574EC00F520D0 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158515D574EC00F520D0 /* CoreBluetooth.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,7 +295,6 @@
 		3E9C157F15D574DB00F520D0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		3E9C158515D574EC00F520D0 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,7 +342,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E9C158615D574EC00F520D0 /* CoreBluetooth.framework in Frameworks */,
 				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
 				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
 				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
@@ -440,7 +437,6 @@
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
 				3E148BCA160A180F0010A0D1 /* CoreMedia.framework */,
 				3E148BC7160A17F50010A0D1 /* AudioUnit.framework */,
-				3E9C158515D574EC00F520D0 /* CoreBluetooth.framework */,
 				3E9C158315D574E700F520D0 /* CoreLocation.framework */,
 				3E9C158115D574E100F520D0 /* CoreMotion.framework */,
 				3E9C157F15D574DB00F520D0 /* AVFoundation.framework */,
