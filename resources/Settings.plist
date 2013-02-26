@@ -22,7 +22,7 @@
 		<key>senseEnabled</key>
 		<string>YES</string>
 	</dict>
-	<key>SettingsTypenoise</key>
+	<key>SettingsTypeambience</key>
 	<dict>
 		<key>pollInterval</key>
 		<string>60</string>

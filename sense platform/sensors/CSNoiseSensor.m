@@ -29,7 +29,6 @@
 @interface CSNoiseSensor()
 - (void) startRecording;
 - (void) scheduleRecording;
-- (void) incrementVolume;
 @end
 
 @implementation CSNoiseSensor {
@@ -74,18 +73,28 @@
 		 setCategory: AVAudioSessionCategoryPlayAndRecord
 		 error: &setCategoryError];
 		OSStatus propertySetError = 0;
-		UInt32 allowMixing = true;
+		UInt32 value = true;
+		NSError* error;
+        [[AVAudioSession sharedInstance] setActive:NO error:&error];
+
 		propertySetError = AudioSessionSetProperty (
 													kAudioSessionProperty_OverrideCategoryMixWithOthers,
-													sizeof (allowMixing),
-													&allowMixing
+													sizeof (value),
+													&value
 													);
-		
+        value = kAudioSessionOverrideAudioRoute_Speaker;
+        propertySetError = AudioSessionSetProperty (
+                                                    kAudioSessionProperty_OverrideAudioRoute,
+													sizeof (value),
+													&value
+													);
+        [[AVAudioSession sharedInstance] setActive:YES error:&error];
 		//set recording file
 		NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
 		NSString* path = [rootPath stringByAppendingPathComponent:@"recording.wav"];
 		NSURL* recording = [NSURL fileURLWithPath: path];
+        
 		
 		/*
 		NSDictionary* recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -94,14 +103,13 @@
 										[NSNumber numberWithInt: 1], AVNumberOfChannelsKey,
 										nil];
 		 */
-		NSError* error;
+
 		audioRecorder = [[AVAudioRecorder alloc] initWithURL:recording settings:nil error:&error];
 		if (nil == audioRecorder) {
 			NSLog(@"Recorder could not be initialised. Error: %@", error);
 		}
 		audioRecorder.delegate = self;
 		audioRecorder.meteringEnabled = YES;
-		
         
         //register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -126,13 +134,21 @@
 }
 
 - (void) startRecording {
-	NSError* error = nil;
-	//try to activate the session
-	[[AVAudioSession sharedInstance] setActive:YES error:&error];
+    UInt32 audioIsPlaying = 0;
+    UInt32 size = sizeof(audioIsPlaying);
+    AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &size, &audioIsPlaying);
+    if (audioIsPlaying) {
+        // Recording can interfere with others apps playing/recording. Don't record when another app is playing should improve user experience,
+        // at the cost of some missing data.
+        [self scheduleRecording];
+        return;
+    }
+
+    
 	audioRecorder.delegate = self;
 	BOOL started = [audioRecorder recordForDuration:sampleDuration];
-	//NSLog(@"recorder %@", started? @"started":@"failed to start");
-	if (NO == started) {
+	NSLog(@"recorder %@", started? @"started":@"failed to start");
+	if (NO == started || audioRecorder.isRecording == NO) {
 		//try again later
 		[self scheduleRecording];
 		return;
@@ -221,16 +237,12 @@
 
 -(void)audioRecorderBeginInterruption:(AVAudioRecorder *)recorder {
 	NSLog(@"Noise sensor interrupted.");
+    [recorder stop];
+	[recorder deleteRecording];
+    [self scheduleRecording];
 }
 
 - (void)audioRecorderEndInterruption:(AVAudioRecorder *)recorder withFlags:(NSUInteger)flags {
-	NSLog(@"recorder interruption ended");
-	[recorder stop];
-	[recorder deleteRecording];
-	if (isEnabled) {
-		//start a new recording
-		[self startRecording];
-	}
 }
 
 
