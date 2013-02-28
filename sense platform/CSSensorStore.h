@@ -19,8 +19,6 @@
 #import "CSSender.h"
 #import "CSSensor.h"
 
-extern NSString* const kMotionData;
-
 @interface CSSensorStore : NSObject <CSDataStore> {
 }
 

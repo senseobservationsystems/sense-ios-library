@@ -42,8 +42,6 @@
 
 #import "CSSpatialProvider.h"
 
-NSString* const kMotionData = @"motionData";
-
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
 #define MAX_UPLOAD_INTERVAL 3600
@@ -194,6 +192,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	//create sensors that aren't assigned an id yet
 	for (CSSensor* sensor in sensors) {
 		if ([mySensorIdMap objectForKey:sensor.sensorId] == NULL) {
+			NSLog(@"Creating %@ sensor...", sensor.sensorId);
 			NSDictionary* description = [sender createSensorWithDescription:[sensor sensorDescription]];
             id sensorIdString = [description valueForKey:@"id"];
    			if (description != nil && sensorIdString != nil) {
@@ -214,6 +213,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) instantiateSensors {
+    @synchronized(sensors) {
 	//release current sensors
 	spatialProvider=nil;
 	[sensors removeAllObjects];
@@ -249,18 +249,22 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	}
 	
 	spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
+        
+    }
 }
 
 - (void) addSensor:(CSSensor*) sensor {
-    sensor.dataStore = self;
-    for(CSSensor* s in sensors) {
-        if ([s matchesDescription:[sensor sensorDescription]]) {
-            //list already contains sensor, don't add
-            return;
+    @synchronized(sensors) {
+        sensor.dataStore = self;
+        for(CSSensor* s in sensors) {
+            if ([s matchesDescription:[sensor sensorDescription]]) {
+                //list already contains sensor, don't add
+                return;
+            }
         }
+        
+        [sensors addObject:sensor];
     }
-
-    [sensors addObject:sensor];
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
@@ -290,6 +294,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 -(void) setEnabled:(BOOL) enable {
 	serviceEnabled = enable;
     CSLocationSensor* locationSensor;
+    @synchronized(sensors) {
     for (CSSensor* s in sensors) {
         if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
             locationSensor = (CSLocationSensor*)s;
@@ -297,7 +302,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
     }
 
-	if (NO == enable) { 
+	if (NO == enable) {
 		/* Previously sensors were deallocated (by removing their references), however that has some problems
          * - the noise sensor uses a callback that cannot be unregistered, so deallocating the object while the callback may still use it is unwise
          * - due to blocks being used as callbacks and other sources of references, it is actually quite hard to deallocate some objects. This might lead to multiple instances of the same sensor, which is not a good thing.
@@ -323,6 +328,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         [self setSyncRate:syncRate];
 	}
     waitTime = 0;
+    }
 }
 
 - (void) loginChanged {

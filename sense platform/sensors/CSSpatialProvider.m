@@ -234,10 +234,12 @@ static const double radianInDegrees = 180.0 / M_PI;
         [motionManager stopDeviceMotionUpdates];
         return;
     }
-    
+    NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
     //post device motion //TODO: is there a better way to efficiently share data?
-    NSDictionary* data = [NSDictionary dictionaryWithObject:deviceMotionArray forKey:@"data"];
-    NSNotification* notification = [NSNotification notificationWithName:kMotionData object:self userInfo:data];
+    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:deviceMotionArray, @"data",
+                          [NSNumber numberWithDouble:timestamp], @"timestamp",
+                          nil];
+    NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
     [[NSNotificationCenter defaultCenter] postNotification:notification];
 
     
@@ -252,7 +254,6 @@ static const double radianInDegrees = 180.0 / M_PI;
     }
     
     if (stats) {
-        NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
         [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
     }
 }

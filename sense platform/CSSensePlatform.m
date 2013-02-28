@@ -25,6 +25,7 @@ NSString * const kCSDATA_TYPE_INTEGER = @"integer";
 NSString * const kCSDATA_TYPE_FLOAT = @"float";
 NSString * const kCSDATA_TYPE_STRING = @"string";
 NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
+NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 
 static CSSensorStore* sensorStore;
 

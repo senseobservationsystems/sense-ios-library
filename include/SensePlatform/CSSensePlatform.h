@@ -26,6 +26,7 @@ extern NSString * const kCSDATA_TYPE_FLOAT;
 extern NSString * const kCSDATA_TYPE_STRING;
 
 extern NSString* const kCSNewSensorDataNotification;
+extern NSString* const kCSNewMotionDataNotification;
 
 typedef enum {BPM_SUCCES=0, BPM_CONNECTOR_NOT_PRESENT, BPM_NOT_FOUND, BPM_UNAUTHORIZED, BPM_OTHER_ERROR} BpmResult;
 typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInteger newFailedMeasurements, NSDate* latestMeasurement);
