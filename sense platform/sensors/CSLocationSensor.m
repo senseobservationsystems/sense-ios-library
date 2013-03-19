@@ -185,6 +185,7 @@ static CLLocation* lastAcceptedPoint;
 		[samples removeAllObjects];
         //NOTE: using significant location updates doesn't allow the phone to sense while running in the background
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
 	}
 	else {
         [newSampleTimer invalidate];
