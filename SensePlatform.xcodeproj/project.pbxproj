@@ -71,6 +71,7 @@
 		3E4F2751170346940045588C /* CSSBJsonUTF8Stream.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A811608C2570010A0D1 /* CSSBJsonUTF8Stream.h */; };
 		3E4F27521703469A0045588C /* CSSBJsonWriter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A821608C2570010A0D1 /* CSSBJsonWriter.h */; };
 		3E4F27531703469D0045588C /* NSObject+CSSBJson.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A831608C2570010A0D1 /* NSObject+CSSBJson.h */; };
+		3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* CSDynamicSensor.h */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
 		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */; };
@@ -146,6 +147,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */,
 				3E4F27521703469A0045588C /* CSSBJsonWriter.h in CopyFiles */,
 				3E4F2751170346940045588C /* CSSBJsonUTF8Stream.h in CopyFiles */,
 				3E4F27501703468F0045588C /* CSSBJsonTokeniser.h in CopyFiles */,

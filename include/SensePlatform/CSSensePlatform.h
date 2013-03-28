@@ -24,6 +24,7 @@ extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;
 extern NSString * const kCSDATA_TYPE_FLOAT;
 extern NSString * const kCSDATA_TYPE_STRING;
+extern NSString * const kCSDATA_TYPE_BOOL;
 
 extern NSString* const kCSNewSensorDataNotification;
 extern NSString* const kCSNewMotionDataNotification;
