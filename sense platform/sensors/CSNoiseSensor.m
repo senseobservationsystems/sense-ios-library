@@ -24,6 +24,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "CSSettings.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 //Declare private methods using empty category
 @interface CSNoiseSensor()
@@ -221,8 +222,8 @@
 		[recorder deleteRecording];
 	
 		NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-											[NSString stringWithFormat:@"%.1f", level], @"value",
-											[NSString stringWithFormat:@"%.0f",timestamp], @"date",
+											CSroundedNumber(level, 1), @"value",
+											CSroundedNumber(timestamp, 3), @"date",
 											nil];
 	
 		[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];

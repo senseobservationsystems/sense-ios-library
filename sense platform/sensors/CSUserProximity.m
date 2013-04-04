@@ -17,6 +17,7 @@
 #import "CSUserProximity.h"
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 
 @implementation CSUserProximity
@@ -50,7 +51,7 @@
 	//get proximity infomation
 	NSString* proximityState = [[UIDevice currentDevice] proximityState] ? @"true": @"false";
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										proximityState, @"value",

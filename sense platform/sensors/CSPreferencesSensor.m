@@ -19,6 +19,7 @@
 #import "CSSettings.h"
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 @implementation CSPreferencesSensor
 //constants
@@ -70,7 +71,7 @@ static NSString* valueKey = @"value";
 									setting.value, setting.name,
 									nil];
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										[newItem JSONRepresentation], @"value",
