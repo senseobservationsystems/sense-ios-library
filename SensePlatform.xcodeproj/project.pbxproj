@@ -72,6 +72,7 @@
 		3E4F27521703469A0045588C /* CSSBJsonWriter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A821608C2570010A0D1 /* CSSBJsonWriter.h */; };
 		3E4F27531703469D0045588C /* NSObject+CSSBJson.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A831608C2570010A0D1 /* NSObject+CSSBJson.h */; };
 		3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* CSDynamicSensor.h */; };
+		3E4F280A170B41040045588C /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4F2809170B41040045588C /* Formatting.m */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
 		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */; };
@@ -214,6 +215,8 @@
 		3E148BCA160A180F0010A0D1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3E148BCC160A18130010A0D1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3E148BD0160A18DC0010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		3E4F2809170B41040045588C /* Formatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Formatting.m; path = utils/Formatting.m; sourceTree = "<group>"; };
+		3E4F280B170B412F0045588C /* Formatting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Formatting.h; path = utils/Formatting.h; sourceTree = "<group>"; };
 		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		3E820D6A15D40AB50001A3EC /* libSensePlatform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSensePlatform.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -427,6 +430,8 @@
 				3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */,
 				3E820DCC15D40B180001A3EC /* CSReachability.h */,
 				3E820DCD15D40B180001A3EC /* CSReachability.m */,
+				3E4F2809170B41040045588C /* Formatting.m */,
+				3E4F280B170B412F0045588C /* Formatting.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -788,6 +793,7 @@
 				3E148AA91608C2630010A0D1 /* CSSBJsonWriter.m in Sources */,
 				3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
+				3E4F280A170B41040045588C /* Formatting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -980,6 +986,7 @@
 		3E820D7915D40AB50001A3EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";

@@ -19,6 +19,8 @@
 
 extern NSString* const kCSSENSOR_ACCELERATION;
 extern NSString* const kCSSENSOR_ACCELEROMETER;
+extern NSString* const kCSSENSOR_ACCELERATION_BURST;
+extern NSString* const kCSSENSOR_ACCELEROMETER_BURST;
 extern NSString* const kCSSENSOR_BATTERY;
 extern NSString* const kCSSENSOR_BLOOD_PRESSURE;
 extern NSString* const kCSSENSOR_CALL;
@@ -30,8 +32,10 @@ extern NSString* const kCSSENSOR_MOTION_ENERGY;
 extern NSString* const kCSSENSOR_MOTION_FEATURES;
 extern NSString* const kCSSENSOR_NOISE;
 extern NSString* const kCSSENSOR_ORIENTATION;
+extern NSString* const kCSSENSOR_ORIENTATION_BURST;
 extern NSString* const kCSSENSOR_PREFERENCES;
 extern NSString* const kCSSENSOR_ROTATION;
+extern NSString* const kCSSENSOR_ROTATION_BURST;
 extern NSString* const kCSSENSOR_JUMP;
 
 #endif
