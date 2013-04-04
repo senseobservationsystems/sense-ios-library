@@ -147,23 +147,23 @@ static CLLocation* lastAcceptedPoint;
 
 
 	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									[NSString stringWithFormat:@"%.8f", longitude], longitudeKey,
-									[NSString stringWithFormat:@"%.8f", latitude], latitudeKey,
-									[NSString stringWithFormat:@"%.0f", horizontalAccuracy], horizontalAccuracyKey,
+									roundedNumber(longitude, 8), longitudeKey,
+									roundedNumber(latitude, 8), latitudeKey,
+									roundedNumber(horizontalAccuracy, 8), horizontalAccuracyKey,
 									nil];
 	if (newLocation.speed >=0) {
-		[newItem setObject:[NSString stringWithFormat:@"%.1f",speed] forKey:speedKey];
+		[newItem setObject:roundedNumber(speed, 1) forKey:speedKey];
 	}
 	if (newLocation.verticalAccuracy >= 0) {
-		[newItem setObject:[NSString stringWithFormat:@"%.0f", altitude] forKey:altitudeKey];
-		[newItem setObject:[NSString stringWithFormat:@"%.0f", verticalAccuracy] forKey:verticalAccuracyKey];
+		[newItem setObject:roundedNumber(altitude, 0) forKey:altitudeKey];
+		[newItem setObject:roundedNumber(verticalAccuracy, 0) forKey:verticalAccuracyKey];
 	}
 	
 	double timestamp = [newLocation.timestamp timeIntervalSince1970];
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										[newItem JSONRepresentation], @"value",
-										[NSString stringWithFormat:@"%.3f",timestamp],@"date",
+										roundedNumber(timestamp, 3), @"date",
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
     
@@ -220,6 +220,10 @@ static CLLocation* lastAcceptedPoint;
 	@catch (NSException * e) {
 		NSLog(@"LocationSensor: Exception thrown while applying location settings: %@", e);
 	}
+}
+
+NSNumber* roundedNumber(double number, int decimals) {
+    return [NSNumber numberWithDouble:round(number * pow(10,decimals)) / pow(10,decimals)];
 }
 
 - (void) dealloc {
