@@ -18,6 +18,7 @@
 #import "CSJSON.h"
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 static NSString* variableKey = @"variable";
 static NSString* valueKey = @"value";
@@ -70,7 +71,7 @@ static NSString* valueKey = @"value";
 									proximityState, valueKey,
 									nil];
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										[newItem JSONRepresentation], @"value",
@@ -85,7 +86,7 @@ static NSString* valueKey = @"value";
 									@"active", valueKey,
 									nil];
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										[newItem JSONRepresentation], @"value",
@@ -100,7 +101,7 @@ static NSString* valueKey = @"value";
 									@"inactive", valueKey,
 									nil];
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										[newItem JSONRepresentation], @"value",

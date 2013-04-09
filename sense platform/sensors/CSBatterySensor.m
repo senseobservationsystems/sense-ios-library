@@ -18,6 +18,7 @@
 #import "CSJSON.h"
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 
 @implementation CSBatterySensor
@@ -89,7 +90,7 @@ static NSString* levelKey = @"level";
 									batteryState, stateKey,
 									nil];
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										[newItem JSONRepresentation], @"value",

@@ -128,13 +128,18 @@ static CSSensorStore* sensorStore;
             NSLog(@"SensePlatform addDataPointForSensor: error extracting datatype from sensor value");
         }
     }
+    if (displayName == nil)
+        displayName = sensorName;
+    if (deviceType == nil) {
+        deviceType = sensorName;
+    }
     
     //create sensor
     CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:deviceType dataType:dataType fields:fields];
     //add sensor to the sensor store
     [[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
-    [sensor commitValue:value withTimestamp:[NSString stringWithFormat:@"%.3f",[timestamp timeIntervalSince1970]]];
+    [sensor commitValue:value withTimestamp:[timestamp timeIntervalSince1970]];
 }
 
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback {

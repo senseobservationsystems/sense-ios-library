@@ -17,6 +17,7 @@
 #import "CSConnectionSensor.h"
 #import "CSReachability.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 @implementation CSConnectionSensor
 
@@ -69,7 +70,7 @@
     }
 	
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										statusString, @"value",

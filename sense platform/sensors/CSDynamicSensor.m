@@ -18,6 +18,7 @@
 #import "CSDataStore.h"
 #import "CSSensePlatform.h"
 #import "CSJSON.h"
+#import "Formatting.h"
 
 @implementation CSDynamicSensor {
     NSDictionary* fields;
@@ -62,10 +63,10 @@
 	return self;
 }
 
-- (void) commitValue:(NSString*)value withTimestamp:(NSString*)timestamp {
+- (void) commitValue:(NSString*)value withTimestamp:(NSTimeInterval)timestamp {
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										value, @"value",
-										timestamp,@"date",
+										CSroundedNumber(timestamp, 3),@"date",
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
 }
