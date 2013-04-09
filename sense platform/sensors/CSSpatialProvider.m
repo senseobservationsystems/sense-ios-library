@@ -344,8 +344,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                header, @"header",
                                sampleInterval, @"interval",
                                nil];
-        NSString* sensorName = [NSString stringWithFormat:@"%@ (burst-mode)", kCSSENSOR_ORIENTATION];
-        [CSSensePlatform addDataPointForSensor:sensorName displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
         
     }
 
@@ -366,9 +365,8 @@ static const double radianInDegrees = 180.0 / M_PI;
                                header, @"header",
                                sampleInterval, @"interval",
                                 nil];
-         NSString* sensorName = [NSString stringWithFormat:@"%@ (burst-mode)", kCSSENSOR_ACCELEROMETER];
 
-        [CSSensePlatform addDataPointForSensor:sensorName displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasAcceleration) {
@@ -388,8 +386,8 @@ static const double radianInDegrees = 180.0 / M_PI;
                                header, @"header",
                                sampleInterval, @"interval",
                                nil];
-        NSString* sensorName = [NSString stringWithFormat:@"%@ (burst-mode)", kCSSENSOR_ACCELERATION];
-        [CSSensePlatform addDataPointForSensor:sensorName displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasRotation) {
@@ -409,8 +407,8 @@ static const double radianInDegrees = 180.0 / M_PI;
                                header, @"header",
                                sampleInterval, @"interval",
                                nil];
-        NSString* sensorName = [NSString stringWithFormat:@"%@ (burst-mode)", kCSSENSOR_ROTATION];
-        [CSSensePlatform addDataPointForSensor:sensorName displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
 }
 
