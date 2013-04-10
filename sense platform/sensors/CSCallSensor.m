@@ -20,6 +20,7 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import "CSJSON.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 
 @implementation CSCallSensor
@@ -86,7 +87,7 @@ static NSString* disconnected = @"idle";
 											callState, stateKey,
 											nil];
 			
-			NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+			NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 			
 			NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 												[newItem JSONRepresentation], @"value",
