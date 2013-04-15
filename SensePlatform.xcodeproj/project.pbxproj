@@ -108,6 +108,7 @@
 		3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0215D40B180001A3EC /* CSUserProximity.m */; };
 		3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0415D40B180001A3EC /* CSSensorStore.m */; };
 		3E820E4715D40B190001A3EC /* CSSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0515D40B180001A3EC /* CSSettings.m */; };
+		3E836CD3171C4BB900D7494C /* CSSensorRequirements.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */; };
 		3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
 		3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
 		3E9C157C15D574C300F520D0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
@@ -287,6 +288,8 @@
 		3E820E0415D40B180001A3EC /* CSSensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorStore.m; sourceTree = "<group>"; };
 		3E820E0515D40B180001A3EC /* CSSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSettings.m; sourceTree = "<group>"; };
 		3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SensePlatform-Prefix.pch"; sourceTree = "<group>"; };
+		3E836CD1171C4BB800D7494C /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorRequirements.h; sourceTree = "<group>"; };
+		3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorRequirements.m; sourceTree = "<group>"; };
 		3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationStateChange.h; sourceTree = "<group>"; };
 		3E9C155615D564E100F520D0 /* CSSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensePlatform.h; sourceTree = "<group>"; };
 		3E9C155715D564E100F520D0 /* CSSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensor.h; sourceTree = "<group>"; };
@@ -505,6 +508,8 @@
 				3E820E0315D40B180001A3EC /* CSSensorStore.h */,
 				3E820E0415D40B180001A3EC /* CSSensorStore.m */,
 				3E820E0515D40B180001A3EC /* CSSettings.m */,
+				3E836CD1171C4BB800D7494C /* CSSensorRequirements.h */,
+				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
 			);
 			path = "sense platform";
 			sourceTree = "<group>";
@@ -794,6 +799,7 @@
 				3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
 				3E4F28BB170DB4750045588C /* Formatting.m in Sources */,
+				3E836CD3171C4BB900D7494C /* CSSensorRequirements.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
