@@ -14,7 +14,7 @@
  * Author: Pim Nijdam (pim@sense-os.nl)
  */
 #import <Foundation/Foundation.h>
-#include "CSSensorIds.h"
+#import "CSSensorIds.h"
 NSString* const kCSSENSOR_ACCELERATION = @"linear acceleration";
 NSString* const kCSSENSOR_ACCELERATION_BURST = @"linear acceleration (burst-mode)";
 NSString* const kCSSENSOR_ACCELEROMETER = @"accelerometer";
