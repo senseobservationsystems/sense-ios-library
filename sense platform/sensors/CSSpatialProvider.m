@@ -50,7 +50,9 @@ static const double radianInDegrees = 180.0 / M_PI;
     NSTimeInterval interval;
     NSInteger nrSamples;
     double frequency;
+    bool continuous;
     NSTimeInterval timestampOffset;
+    bool isSampling;
     
     CSJumpSensor* jumpDetector;
     
@@ -170,7 +172,15 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 - (void) schedulePoll {
         dispatch_async(pollQueueGCD, ^{
-            [self poll];
+            if (!isSampling) {
+                isSampling = YES;
+                [self poll];
+                isSampling = NO;
+
+                if (continuous) {
+                    [self schedulePoll];
+                }
+            }
         });
 }
 
@@ -200,9 +210,18 @@ static const double radianInDegrees = 180.0 / M_PI;
             NSLog(@"Processing too slow, skipping point, this corrupts sensor input temporarily!");
             return;
         }
-         */
+        */
         counter++;
         [deviceMotionArray addObject:deviceMotion];
+        
+        //send this sample so others can listen to the data
+        NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
+        NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                              deviceMotion, @"data",
+                              [NSNumber numberWithDouble:timestamp], @"timestamp",
+                              nil];
+        NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
+        [[NSNotificationCenter defaultCenter] postNotification:notification];
 
         //if we've sampled enough
         if (++sample >= nrSamples) {
@@ -231,13 +250,6 @@ static const double radianInDegrees = 180.0 / M_PI;
         return;
     }
     NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
-    //post device motion //TODO: is there a better way to efficiently share data?
-    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:deviceMotionArray, @"data",
-                          [NSNumber numberWithDouble:timestamp], @"timestamp",
-                          nil];
-    NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
-    [[NSNotificationCenter defaultCenter] postNotification:notification];
-
     
     //either send all samples, or just the first
     BOOL rawSamples = NO, stats = YES;
@@ -511,15 +523,15 @@ static const double radianInDegrees = 180.0 / M_PI;
         NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
         if ([setting.name isEqualToString:kCSSpatialSettingInterval]) {
             interval = [setting.value doubleValue];
-
-            //restart
-            if (enableCounter > 0) {
-                [self schedulePollWithInterval:interval];
-            }
         } else if ([setting.name isEqualToString:kCSSpatialSettingFrequency]) {
             frequency = [setting.value doubleValue];
         } else if ([setting.name isEqualToString:kCSSpatialSettingNrSamples]) {
             nrSamples = [setting.value intValue];
+        }
+        
+        //restart
+        if (enableCounter > 0) {
+            [self schedulePollWithInterval:interval];
         }
     }
     @catch (NSException * e) {
@@ -528,23 +540,41 @@ static const double radianInDegrees = 180.0 / M_PI;
 }
 
 - (void) schedulePollWithInterval:(NSTimeInterval) newInterval {
-    [motionManager stopDeviceMotionUpdates];
-    @synchronized(pollTimerLock) {
-        if (pollTimerGCD) {
-            dispatch_source_cancel(pollTimerGCD);
-            dispatch_release(pollTimerGCD);
+    void (^innerSchedule)() = ^() {
+        [motionManager stopDeviceMotionUpdates];
+        @synchronized(pollTimerLock) {
+            if (pollTimerGCD) {
+                dispatch_source_cancel(pollTimerGCD);
+                dispatch_release(pollTimerGCD);
+            }
+            uint64_t leeway = newInterval * 0.1 * NSEC_PER_SEC; //10% leeway
+            pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
+            dispatch_source_set_event_handler(pollTimerGCD, ^{
+                [self schedulePoll];
+            });
+            
+            dispatch_source_set_timer(pollTimerGCD, dispatch_time(DISPATCH_TIME_NOW, newInterval * NSEC_PER_SEC), newInterval * NSEC_PER_SEC, leeway);
+            dispatch_resume(pollTimerGCD);
         }
-        uint64_t leeway = newInterval * 0.05 * NSEC_PER_SEC; //5% leeway
-        pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
-        dispatch_source_set_event_handler(pollTimerGCD, ^{
-            [self schedulePoll];
-        });
-        dispatch_source_set_timer(pollTimerGCD, dispatch_walltime(NULL, newInterval * NSEC_PER_SEC), newInterval * NSEC_PER_SEC, leeway);
-        dispatch_resume(pollTimerGCD);
+    };
+
+    bool newContinuous = nrSamples / frequency >= newInterval - 1;
+    if (continuous && newContinuous) {
+        [self schedulePoll];
+    } else if (!continuous && newContinuous) {
+        [self stopPolling];
+        continuous = YES;
+        [self schedulePoll];
+    } else if (continuous && !newContinuous) {
+        continuous = NO;
+        innerSchedule();
+    } else { //!continuous && !newContinuous
+        innerSchedule();
     }
 }
 
 - (void) stopPolling {
+    continuous = NO;
     [motionManager stopDeviceMotionUpdates];
     @synchronized(pollTimerLock) {
         if (pollTimerGCD) {
