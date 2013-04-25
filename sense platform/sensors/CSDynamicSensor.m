@@ -74,12 +74,12 @@
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
-	NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
+	//NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
 	isEnabled = enable;
 }
 
 - (void) dealloc {
-    NSLog(@"Deallocating %@", sensorName);
+    //NSLog(@"Deallocating %@", sensorName);
 	self.isEnabled = NO;
 }
 

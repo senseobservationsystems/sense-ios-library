@@ -85,7 +85,7 @@
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
-	NSLog(@"Enabling connection type sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
+	//NSLog(@"Enabling connection type sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
 	if (enable) {
 		[internetReach startNotifier];
 		[self reachabilityChanged:nil];
@@ -99,7 +99,6 @@
 - (void) dealloc {
 	self.isEnabled = NO;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
 }
 
 @end

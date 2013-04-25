@@ -171,10 +171,16 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 
 - (void) schedulePoll {
+    /*
         dispatch_async(pollQueueGCD, ^{
             if (!isSampling) {
                 isSampling = YES;
-                [self poll];
+                @try {
+                    [self poll];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"Exception in polling motion sensors: %@\n%@", exception, [NSThread callStackSymbols]);
+                }
                 isSampling = NO;
 
                 if (continuous) {
@@ -182,13 +188,36 @@ static const double radianInDegrees = 180.0 / M_PI;
                 }
             }
         });
+     */
+    /* DEBUG*/
+    dispatch_async_f(pollQueueGCD, (__bridge void *)(self), someScheduleFunction);
 }
 
+void someScheduleFunction(void* context) {
+    CSSpatialProvider* self = (__bridge CSSpatialProvider*) context;
+    if (!self->isSampling) {
+        self->isSampling = YES;
+        @try {
+            [self poll];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception in polling motion sensors: %@\n%@", exception, [NSThread callStackSymbols]);
+        }
+        self->isSampling = NO;
+        
+        if (self->continuous) {
+            [self schedulePoll];
+        }
+    }
+}
+
+
 - (void) poll {
-    NSLog(@"^^^ Spatial provider poll invoked. ^^^");
+    //NSLog(@"^^^ Spatial provider poll invoked. ^^^");
 
     //prepare array for data
-    __block NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
+    NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
+    NSMutableArray* __unsafe_unretained weakDeviceMotionArray = deviceMotionArray;
     __block int sample = 0;
 
     NSCondition* dataCollectedCondition = [NSCondition new];
@@ -212,7 +241,7 @@ static const double radianInDegrees = 180.0 / M_PI;
         }
         */
         counter++;
-        [deviceMotionArray addObject:deviceMotion];
+        [weakDeviceMotionArray addObject:deviceMotion];
         
         //send this sample so others can listen to the data
         NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
@@ -243,17 +272,19 @@ static const double radianInDegrees = 180.0 / M_PI;
         [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1]];
     }
     [dataCollectedCondition unlock];
-    
+
+
     if (sample < nrSamples) {
         NSLog(@"Error while polling the motion sensors.");
         [motionManager stopDeviceMotionUpdates];
         return;
     }
+
     NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
     
     //either send all samples, or just the first
-    BOOL rawSamples = NO, stats = YES;
-    BOOL burst = nrSamples > 1;
+    BOOL rawSamples = NO, stats = NO;
+    BOOL burst = NO;//nrSamples > 1;
     
     if (rawSamples)
         [self commitRawSamples:deviceMotionArray];
@@ -261,11 +292,11 @@ static const double radianInDegrees = 180.0 / M_PI;
         NSRange range = NSMakeRange(0, 1);
         [self commitRawSamples:[deviceMotionArray subarrayWithRange:range]];
     }
-    
+
     if (stats) {
         [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
     }
-    
+
     if (burst) {
         [self commitBurst:deviceMotionArray];
     }

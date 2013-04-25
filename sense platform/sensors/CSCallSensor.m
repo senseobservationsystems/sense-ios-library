@@ -68,7 +68,7 @@ static NSString* disconnected = @"idle";
 	//only react to changes
 	//if (enable == isEnabled) return;
 	NSLog(@"%@ call sensor (id=%@)", enable ? @"Enabling":@"Disabling", self.sensorId);
-	
+	CSCallSensor* __block selfRef = self;
 	if (enable) {
 		callCenter.callEventHandler = ^(CTCall* inCTCall) {
 			NSLog(@"%@: %@",inCTCall.callID, inCTCall.callState);
@@ -93,7 +93,7 @@ static NSString* disconnected = @"idle";
 												[newItem JSONRepresentation], @"value",
 												timestamp,@"date",
 												nil];
-			[self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];
 			
 		};
 	} else {

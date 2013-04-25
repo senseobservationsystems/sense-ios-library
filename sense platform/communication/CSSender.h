@@ -25,8 +25,8 @@
 	NSString* passwordHash;
 }
 
-@property (strong) NSDictionary* urls;
-@property (strong) NSString* sessionCookie;
+@property NSDictionary* urls;
+@property NSString* sessionCookie;
 
 - (id) init;
 - (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash;
