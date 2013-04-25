@@ -56,12 +56,21 @@ static CSSensorStore* sensorStore;
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
     [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    return [[CSSensorStore sharedSensorStore].sender login];
+    BOOL succeed = [[CSSensorStore sharedSensorStore].sender login];
+    if (succeed) {
+        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
+    }
+    return succeed;
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
-    return [sensorStore.sender login];
+    BOOL succeed = [sensorStore.sender login];
+    if (succeed) {
+        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
+    }
+    
+    return succeed;
 }
 
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password  withEmail:(NSString*) email {
@@ -69,9 +78,13 @@ static CSSensorStore* sensorStore;
     NSString* error;
     BOOL succes = [[CSSensorStore sharedSensorStore].sender registerUser:user withPassword:password withEmail:email error:&error];
     if (succes)
-            [[CSSettings sharedSettings] setLogin:user withPassword:password];
+        [CSSensePlatform loginWithUser:user andPassword:password];
     return succes;
-        
+}
+
++ (void) logout {
+    [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
+    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
 }
 
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {

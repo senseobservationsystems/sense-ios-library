@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3E11261A16A7086400805102 /* UIDevice+Hardware.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E11261816A7086400805102 /* UIDevice+Hardware.h */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
+		3E1232091729323500314CF6 /* CSPGSensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E1232071729323500314CF6 /* CSPGSensePlatform.h */; };
+		3E12320A1729323500314CF6 /* CSPGSensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E1232081729323500314CF6 /* CSPGSensePlatform.m */; };
 		3E148A841608C2570010A0D1 /* CSJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E148A761608C2570010A0D1 /* CSJSON.h */; };
 		3E148A851608C2570010A0D1 /* CSSBJson.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E148A771608C2570010A0D1 /* CSSBJson.h */; };
 		3E148A861608C2570010A0D1 /* CSSBJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E148A781608C2570010A0D1 /* CSSBJsonParser.h */; };
@@ -174,6 +176,8 @@
 /* Begin PBXFileReference section */
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
+		3E1232071729323500314CF6 /* CSPGSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPGSensePlatform.h; sourceTree = "<group>"; };
+		3E1232081729323500314CF6 /* CSPGSensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPGSensePlatform.m; sourceTree = "<group>"; };
 		3E148A761608C2570010A0D1 /* CSJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSON.h; sourceTree = "<group>"; };
 		3E148A771608C2570010A0D1 /* CSSBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJson.h; sourceTree = "<group>"; };
 		3E148A781608C2570010A0D1 /* CSSBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonParser.h; sourceTree = "<group>"; };
@@ -356,6 +360,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E1232061729323500314CF6 /* plugins */ = {
+			isa = PBXGroup;
+			children = (
+				3E1232071729323500314CF6 /* CSPGSensePlatform.h */,
+				3E1232081729323500314CF6 /* CSPGSensePlatform.m */,
+			);
+			path = plugins;
+			sourceTree = "<group>";
+		};
 		3E148A751608C2570010A0D1 /* csjson */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +503,7 @@
 		3E820DBF15D40B180001A3EC /* sense platform */ = {
 			isa = PBXGroup;
 			children = (
+				3E1232061729323500314CF6 /* plugins */,
 				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
 				3E820DC115D40B180001A3EC /* communication */,
 				3E820DC815D40B180001A3EC /* CSDataStore.h */,
@@ -655,6 +669,7 @@
 				3E148A901608C2570010A0D1 /* CSSBJsonWriter.h in Headers */,
 				3E148A911608C2570010A0D1 /* NSObject+CSSBJson.h in Headers */,
 				3E11261A16A7086400805102 /* UIDevice+Hardware.h in Headers */,
+				3E1232091729323500314CF6 /* CSPGSensePlatform.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -848,6 +863,7 @@
 				3E148AA91608C2630010A0D1 /* CSSBJsonWriter.m in Sources */,
 				3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
+				3E12320A1729323500314CF6 /* CSPGSensePlatform.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
