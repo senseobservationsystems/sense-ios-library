@@ -39,13 +39,13 @@
 		30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E5649113A7FCAF007403D8 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3E12320C17293B9700314CF6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E12320B17293B9700314CF6 /* CoreMotion.framework */; };
 		3E12320E17293B9E00314CF6 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E12320D17293B9E00314CF6 /* CoreTelephony.framework */; };
-		3E12322D1729826300314CF6 /* libSense platform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1232261729824200314CF6 /* libSense platform.a */; };
 		3E12323A172986A500314CF6 /* icon-72.png.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123236172986A500314CF6 /* icon-72.png.png */; };
 		3E12323B172986A500314CF6 /* icon-72@2x.png.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123237172986A500314CF6 /* icon-72@2x.png.png */; };
 		3E12323C172986A500314CF6 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123238172986A500314CF6 /* icon.png */; };
 		3E12323D172986A500314CF6 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123239172986A500314CF6 /* icon@2x.png */; };
 		3EACDD09172E8F2B00975C8D /* CommonSense.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EACDD07172E8F2B00975C8D /* CommonSense.plist */; };
 		3EACDD0A172E8F2B00975C8D /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EACDD08172E8F2B00975C8D /* Settings.plist */; };
+		3EACDD1B172E922100975C8D /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EACDD14172E91EA00975C8D /* libSensePlatform.a */; };
 		5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
@@ -66,33 +66,33 @@
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = CordovaLib;
 		};
-		3E1232251729824200314CF6 /* PBXContainerItemProxy */ = {
+		3EACDD13172E91EA00975C8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3E12321F1729824200314CF6 /* Sense platform.xcodeproj */;
+			containerPortal = 3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3E820D6A15D40AB50001A3EC;
-			remoteInfo = "Sense platform";
+			remoteInfo = SensePlatform;
 		};
-		3E1232271729824200314CF6 /* PBXContainerItemProxy */ = {
+		3EACDD15172E91EA00975C8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3E12321F1729824200314CF6 /* Sense platform.xcodeproj */;
+			containerPortal = 3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3E148B91160A12000010A0D1;
 			remoteInfo = SensePlatformTestApp;
 		};
-		3E1232291729824200314CF6 /* PBXContainerItemProxy */ = {
+		3EACDD17172E91EA00975C8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3E12321F1729824200314CF6 /* Sense platform.xcodeproj */;
+			containerPortal = 3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3E148BA8160A12010010A0D1;
 			remoteInfo = SensePlatformTestAppTests;
 		};
-		3E12322B1729825A00314CF6 /* PBXContainerItemProxy */ = {
+		3EACDD19172E921B00975C8D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3E12321F1729824200314CF6 /* Sense platform.xcodeproj */;
+			containerPortal = 3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
-			remoteInfo = "Sense platform";
+			remoteInfo = SensePlatform;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -134,13 +134,13 @@
 		32CA4F630368D1EE00C91783 /* sense-ios-phonegap-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sense-ios-phonegap-Prefix.pch"; sourceTree = "<group>"; };
 		3E12320B17293B9700314CF6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E12320D17293B9E00314CF6 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		3E12321F1729824200314CF6 /* Sense platform.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Sense platform.xcodeproj"; path = "../../Sense platform.xcodeproj"; sourceTree = "<group>"; };
 		3E123236172986A500314CF6 /* icon-72.png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png.png"; sourceTree = "<group>"; };
 		3E123237172986A500314CF6 /* icon-72@2x.png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72@2x.png.png"; sourceTree = "<group>"; };
 		3E123238172986A500314CF6 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		3E123239172986A500314CF6 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		3EACDD07172E8F2B00975C8D /* CommonSense.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = CommonSense.plist; path = ../../../../resources/CommonSense.plist; sourceTree = "<group>"; };
 		3EACDD08172E8F2B00975C8D /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = Settings.plist; path = ../../../../resources/Settings.plist; sourceTree = "<group>"; };
+		3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SensePlatform.xcodeproj; path = ../../SensePlatform.xcodeproj; sourceTree = "<group>"; };
 		5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* sense-ios-phonegap-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "sense-ios-phonegap-Info.plist"; path = "../sense-ios-phonegap-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E12322D1729826300314CF6 /* libSense platform.a in Frameworks */,
+				3EACDD1B172E922100975C8D /* libSensePlatform.a in Frameworks */,
 				301BF5C5109A6A2B0062928A /* SystemConfiguration.framework in Frameworks */,
 				3E12320E17293B9E00314CF6 /* CoreTelephony.framework in Frameworks */,
 				3E12320C17293B9700314CF6 /* CoreMotion.framework in Frameworks */,
@@ -217,7 +217,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				3E12321F1729824200314CF6 /* Sense platform.xcodeproj */,
+				3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */,
 				3E12320D17293B9E00314CF6 /* CoreTelephony.framework */,
 				3E12320B17293B9700314CF6 /* CoreMotion.framework */,
 				F840E1F0165FE0F500CFE078 /* config.xml */,
@@ -340,12 +340,12 @@
 			path = se.lproj;
 			sourceTree = "<group>";
 		};
-		3E1232201729824200314CF6 /* Products */ = {
+		3EACDD0E172E91E900975C8D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3E1232261729824200314CF6 /* libSense platform.a */,
-				3E1232281729824200314CF6 /* SensePlatformTestApp.app */,
-				3E12322A1729824200314CF6 /* SensePlatformTestAppTests.octest */,
+				3EACDD14172E91EA00975C8D /* libSensePlatform.a */,
+				3EACDD16172E91EA00975C8D /* SensePlatformTestApp.app */,
+				3EACDD18172E91EA00975C8D /* SensePlatformTestAppTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -365,7 +365,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				3E12322C1729825A00314CF6 /* PBXTargetDependency */,
+				3EACDD1A172E921B00975C8D /* PBXTargetDependency */,
 				301BF551109A68C00062928A /* PBXTargetDependency */,
 			);
 			name = "sense-ios-phonegap";
@@ -403,8 +403,8 @@
 					ProjectRef = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
 				},
 				{
-					ProductGroup = 3E1232201729824200314CF6 /* Products */;
-					ProjectRef = 3E12321F1729824200314CF6 /* Sense platform.xcodeproj */;
+					ProductGroup = 3EACDD0E172E91E900975C8D /* Products */;
+					ProjectRef = 3EACDD0D172E91E900975C8D /* SensePlatform.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -422,25 +422,25 @@
 			remoteRef = 301BF534109A57CC0062928A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3E1232261729824200314CF6 /* libSense platform.a */ = {
+		3EACDD14172E91EA00975C8D /* libSensePlatform.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libSense platform.a";
-			remoteRef = 3E1232251729824200314CF6 /* PBXContainerItemProxy */;
+			path = libSensePlatform.a;
+			remoteRef = 3EACDD13172E91EA00975C8D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3E1232281729824200314CF6 /* SensePlatformTestApp.app */ = {
+		3EACDD16172E91EA00975C8D /* SensePlatformTestApp.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = SensePlatformTestApp.app;
-			remoteRef = 3E1232271729824200314CF6 /* PBXContainerItemProxy */;
+			remoteRef = 3EACDD15172E91EA00975C8D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3E12322A1729824200314CF6 /* SensePlatformTestAppTests.octest */ = {
+		3EACDD18172E91EA00975C8D /* SensePlatformTestAppTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = SensePlatformTestAppTests.octest;
-			remoteRef = 3E1232291729824200314CF6 /* PBXContainerItemProxy */;
+			remoteRef = 3EACDD17172E91EA00975C8D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -511,10 +511,10 @@
 			name = CordovaLib;
 			targetProxy = 301BF550109A68C00062928A /* PBXContainerItemProxy */;
 		};
-		3E12322C1729825A00314CF6 /* PBXTargetDependency */ = {
+		3EACDD1A172E921B00975C8D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "Sense platform";
-			targetProxy = 3E12322B1729825A00314CF6 /* PBXContainerItemProxy */;
+			name = SensePlatform;
+			targetProxy = 3EACDD19172E921B00975C8D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

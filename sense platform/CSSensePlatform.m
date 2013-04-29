@@ -24,6 +24,7 @@ NSString * const kCSDATA_TYPE_JSON = @"json";
 NSString * const kCSDATA_TYPE_INTEGER = @"integer";
 NSString * const kCSDATA_TYPE_FLOAT = @"float";
 NSString * const kCSDATA_TYPE_STRING = @"string";
+NSString * const kCSDATA_TYPE_BOOL = @"bool";
 NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
 NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 
