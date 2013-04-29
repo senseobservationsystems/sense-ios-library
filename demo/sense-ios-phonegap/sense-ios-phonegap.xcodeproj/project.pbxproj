@@ -44,6 +44,8 @@
 		3E12323B172986A500314CF6 /* icon-72@2x.png.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123237172986A500314CF6 /* icon-72@2x.png.png */; };
 		3E12323C172986A500314CF6 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123238172986A500314CF6 /* icon.png */; };
 		3E12323D172986A500314CF6 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E123239172986A500314CF6 /* icon@2x.png */; };
+		3EACDD09172E8F2B00975C8D /* CommonSense.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EACDD07172E8F2B00975C8D /* CommonSense.plist */; };
+		3EACDD0A172E8F2B00975C8D /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EACDD08172E8F2B00975C8D /* Settings.plist */; };
 		5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
@@ -137,6 +139,8 @@
 		3E123237172986A500314CF6 /* icon-72@2x.png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72@2x.png.png"; sourceTree = "<group>"; };
 		3E123238172986A500314CF6 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		3E123239172986A500314CF6 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		3EACDD07172E8F2B00975C8D /* CommonSense.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = CommonSense.plist; path = ../../../../resources/CommonSense.plist; sourceTree = "<group>"; };
+		3EACDD08172E8F2B00975C8D /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; name = Settings.plist; path = ../../../../resources/Settings.plist; sourceTree = "<group>"; };
 		5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* sense-ios-phonegap-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "sense-ios-phonegap-Info.plist"; path = "../sense-ios-phonegap-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
@@ -242,6 +246,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3EACDD07172E8F2B00975C8D /* CommonSense.plist */,
+				3EACDD08172E8F2B00975C8D /* Settings.plist */,
 				30A0434214DC770100060A13 /* de.lproj */,
 				30A0434514DC770100060A13 /* se.lproj */,
 				1F766FDB13BBADB100FB74C0 /* en.lproj */,
@@ -462,6 +468,8 @@
 				3E12323B172986A500314CF6 /* icon-72@2x.png.png in Resources */,
 				3E12323C172986A500314CF6 /* icon.png in Resources */,
 				3E12323D172986A500314CF6 /* icon@2x.png in Resources */,
+				3EACDD09172E8F2B00975C8D /* CommonSense.plist in Resources */,
+				3EACDD0A172E8F2B00975C8D /* Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
