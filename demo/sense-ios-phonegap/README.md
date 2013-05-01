@@ -17,7 +17,7 @@ In order to create your own PhoneGap Sense project you can clone this project
 and put your html/css/javascript files in the www directory.
 
  - Load the sense_platform.js file in your HTML. You can find in inside the
-   assets/www/ folder.
+   /www folder.
  - The Sense platform methods are now accessible in JavaScript through
    window.plugins.sense.*.
  - When starting you app, make sure that you call window.plugins.sense.init()
