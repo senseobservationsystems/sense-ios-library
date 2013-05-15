@@ -114,7 +114,6 @@
 		3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
 		3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
 		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
-		3EACDD87172E927900975C8D /* CSPGSensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EACDD86172E927900975C8D /* CSPGSensePlatform.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -297,8 +296,6 @@
 		3E9C157F15D574DB00F520D0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		3EACDD85172E927900975C8D /* CSPGSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPGSensePlatform.h; sourceTree = "<group>"; };
-		3EACDD86172E927900975C8D /* CSPGSensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPGSensePlatform.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -605,8 +602,6 @@
 		3EACDD84172E927900975C8D /* plugins */ = {
 			isa = PBXGroup;
 			children = (
-				3EACDD85172E927900975C8D /* CSPGSensePlatform.h */,
-				3EACDD86172E927900975C8D /* CSPGSensePlatform.m */,
 			);
 			name = plugins;
 			path = "sense platform/plugins";
@@ -676,7 +671,7 @@
 		3E820D6115D40AB50001A3EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -802,7 +797,6 @@
 				3E148AA91608C2630010A0D1 /* CSSBJsonWriter.m in Sources */,
 				3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
-				3EACDD87172E927900975C8D /* CSPGSensePlatform.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -945,6 +939,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -969,6 +967,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

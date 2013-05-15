@@ -7,15 +7,8 @@
 //
 
 #import "CSPGSensePlatform.h"
-#import "CSSensePlatform.h"
-#import "CSSensorStore.h"
-#import "CSSettings.h"
-#import "CSNoiseSensor.h"
-#import "CSBatterySensor.h"
-#import "CSCallSensor.h"
-#import "CSConnectionSensor.h"
-#import "CSLocationSensor.h"
-#import "CSDynamicSensor.h"
+#import <SensePlatform/CSSensePlatform.h>
+#import <SensePlatform/CSSettings.h>
 
 @implementation CSPGSensePlatform {
     BOOL locationGps;
@@ -254,16 +247,16 @@
 
 - (void) updateLocationSetting {
     if (locationNetwork == NO && locationGps == NO) {
-        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:kCSSettingNO];
+        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:NO];
     } else if (locationNetwork == NO && locationGps == YES) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy value:@"0"];
-        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:kCSSettingYES];
+        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:YES];
     } else if (locationNetwork == YES && locationGps == NO) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy value:@"100"];
-        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:kCSSettingYES];
+        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:YES];
     } else if (locationNetwork == YES && locationGps == YES) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy value:@"0"];
-        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:kCSSettingYES];
+        [[CSSettings sharedSettings] setSensor:kCSSENSOR_LOCATION enabled:YES];
     }
 }
 

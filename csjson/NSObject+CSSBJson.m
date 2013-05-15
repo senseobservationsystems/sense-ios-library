@@ -31,7 +31,7 @@
 #import "CSSBJsonWriter.h"
 #import "CSSBJsonParser.h"
 
-@interface FORCELOAD_NSObject_CSSBJson @end @implementation FORCELOAD_NSObject_CSSBJson @end
+@interface FORCELOAD_NSObject_CSSBJson : NSObject  @end @implementation FORCELOAD_NSObject_CSSBJson @end
 
 @implementation NSObject (NSObject_CSSBJsonWriting)
 
