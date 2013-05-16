@@ -18,7 +18,6 @@
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import "CSJSON.h"
 #import "CSDataStore.h"
 #import "Formatting.h"
 
@@ -44,7 +43,10 @@ static NSString* disconnected = @"idle";
 							@"string", stateKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",
@@ -90,7 +92,7 @@ static NSString* disconnected = @"idle";
 			NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 			
 			NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-												[newItem JSONRepresentation], @"value",
+												newItem, @"value",
 												timestamp,@"date",
 												nil];
 			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];

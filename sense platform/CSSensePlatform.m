@@ -107,7 +107,16 @@ static CSSensorStore* sensorStore;
     [settings setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingSenseEnabled value:kCSSettingYES];
 }
 
-+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp {
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp {
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value options:0 error:&error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    [CSSensePlatform addDataPointForSensor:sensorName displayName:displayName deviceType:deviceType dataType:dataType stringValue:jsonString timestamp:timestamp];
+}
+
+
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp {
     
     NSMutableDictionary* fields;
 
@@ -115,7 +124,12 @@ static CSSensorStore* sensorStore;
         fields = [[NSMutableDictionary alloc] init];
         //extract data structure from value
         @try {
-            NSDictionary* values = [value JSONValue];
+            NSError* error = nil;
+            NSData* jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary* values = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+            if (error)
+                @throw [NSException exceptionWithName:@"Invalid JSON" reason:@"Value is not JSON" userInfo:nil];
+            
             for (NSString* key in values) {
                 NSString* type = [CSSensePlatform dataTypeOf:[values objectForKey:key]];
                 if (type == nil)
@@ -139,7 +153,9 @@ static CSSensorStore* sensorStore;
     //add sensor to the sensor store
     [[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
-    [sensor commitValue:value withTimestamp:[timestamp timeIntervalSince1970]];
+    NSError* error;
+    id jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    [sensor commitValue:jsonValue withTimestamp:[timestamp timeIntervalSince1970]];
 }
 
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback {

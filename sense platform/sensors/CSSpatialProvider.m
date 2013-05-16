@@ -15,7 +15,6 @@
  */
 
 #import "CSSpatialProvider.h"
-#import "CSJSON.h"
 #import "CSSensorStore.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "CSSettings.h"
@@ -171,8 +170,9 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 
 - (void) schedulePoll {
-    /*
         dispatch_async(pollQueueGCD, ^{
+            @autoreleasepool {
+
             if (!isSampling) {
                 isSampling = YES;
                 @try {
@@ -187,13 +187,16 @@ static const double radianInDegrees = 180.0 / M_PI;
                     [self schedulePoll];
                 }
             }
+            }
         });
-     */
+
     /* DEBUG*/
-    dispatch_async_f(pollQueueGCD, (__bridge void *)(self), someScheduleFunction);
+    //dispatch_async_f(pollQueueGCD, (__bridge void *)(self), someScheduleFunction);
 }
 
 void someScheduleFunction(void* context) {
+    @autoreleasepool {
+
     CSSpatialProvider* self = (__bridge CSSpatialProvider*) context;
     if (!self->isSampling) {
         self->isSampling = YES;
@@ -209,6 +212,7 @@ void someScheduleFunction(void* context) {
             [self schedulePoll];
         }
     }
+    }
 }
 
 
@@ -217,7 +221,6 @@ void someScheduleFunction(void* context) {
 
     //prepare array for data
     NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
-    NSMutableArray* __unsafe_unretained weakDeviceMotionArray = deviceMotionArray;
     __block int sample = 0;
 
     NSCondition* dataCollectedCondition = [NSCondition new];
@@ -241,7 +244,7 @@ void someScheduleFunction(void* context) {
         }
         */
         counter++;
-        [weakDeviceMotionArray addObject:deviceMotion];
+        [deviceMotionArray addObject:deviceMotion];
         
         //send this sample so others can listen to the data
         NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
@@ -284,7 +287,7 @@ void someScheduleFunction(void* context) {
     
     //either send all samples, or just the first
     BOOL rawSamples = NO, stats = NO;
-    BOOL burst = NO;//nrSamples > 1;
+    BOOL burst = nrSamples > 1;
     
     if (rawSamples)
         [self commitRawSamples:deviceMotionArray];
@@ -340,14 +343,14 @@ void someScheduleFunction(void* context) {
                                         nil];
     [motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
     
-    NSString* value = [[NSDictionary dictionaryWithObjectsAndKeys:
+    NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
 							CSroundedNumber(magnitudeAvg, 3), accelerationAvg,
 							CSroundedNumber(magnitudeStddev, 3), accelerationStddev,
 							//@"", accelerationKurtosis,
 							CSroundedNumber(totalRotAvg, 3), rotationAvg,
 							CSroundedNumber(totalRotStddev, 3), rotationStddev,
 							//@"", rotationKurtosis,
-							nil] JSONRepresentation];
+							nil];
     
     valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
                                         value, @"value",
@@ -387,7 +390,7 @@ void someScheduleFunction(void* context) {
                                header, @"header",
                                sampleInterval, @"interval",
                                nil];
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
         
     }
 
@@ -409,7 +412,7 @@ void someScheduleFunction(void* context) {
                                sampleInterval, @"interval",
                                 nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasAcceleration) {
@@ -430,7 +433,7 @@ void someScheduleFunction(void* context) {
                                sampleInterval, @"interval",
                                nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasRotation) {
@@ -451,7 +454,7 @@ void someScheduleFunction(void* context) {
                                sampleInterval, @"interval",
                                nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
 }
 
@@ -485,7 +488,7 @@ void someScheduleFunction(void* context) {
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3), @"date",
                                             nil];
         [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
@@ -504,7 +507,7 @@ void someScheduleFunction(void* context) {
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         
@@ -524,7 +527,7 @@ void someScheduleFunction(void* context) {
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
@@ -541,7 +544,7 @@ void someScheduleFunction(void* context) {
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];

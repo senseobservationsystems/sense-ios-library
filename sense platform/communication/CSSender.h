@@ -15,7 +15,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "CSJSON.h"
 
 @interface CSSender : NSObject {
 	@private

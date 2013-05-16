@@ -60,8 +60,23 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 /// Setup the platform for use with iVitality
 + (void) applyIVitalitySettings;
 /** Add a data point for a sensor, if the sensor doesn't exist it will be created
+ * @param sensorName the sensor name
+ * @param displayName the display name of the sensor
+ * @param deviceType the deviceType/description of the sensor
+ * @param dataType the data type for the data of the sensor.
+ * @param stringValue A JSON encoded data point
  */
-+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp;
+
+/** Add a data point for a sensor, if the sensor doesn't exist it will be created
+ * @param sensorName the sensor name
+ * @param displayName the display name of the sensor
+ * @param deviceType the deviceType/description of the sensor
+ * @param dataType the data type for the data of the sensor.
+ * @param jsonValue The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).
+ */
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp;
+
 /// This function isn't operational.
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;
 /** Retrieve a number of values of a sensor from Common Sense. returns nrLastPoints of the latest values.

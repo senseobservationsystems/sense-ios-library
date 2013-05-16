@@ -44,7 +44,10 @@ static dispatch_queue_t backgroundQueue = nil;
         backgroundQueue = dispatch_queue_create("com.sense.backgroundNotification", NULL);
     
     dispatch_async(backgroundQueue, ^{
+        @autoreleasepool {
+
         [self performSelectorOnMainThread:@selector(postNotification:) withObject:notification waitUntilDone:YES];
+        }
     });
 }
 

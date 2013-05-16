@@ -15,7 +15,6 @@
  */
 
 #import "CSPreferencesSensor.h"
-#import "CSJSON.h"
 #import "CSSettings.h"
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
@@ -37,13 +36,15 @@ static NSString* valueKey = @"value";
 							@"string", valueKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",
 			@"", @"pager_type",
 			@"json", @"data_type",
-			json, @"data_structure",
+			jsonString, @"data_structure",
 			nil];
 }
 
@@ -74,7 +75,7 @@ static NSString* valueKey = @"value";
 	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										[newItem JSONRepresentation], @"value",
+										newItem, @"value",
 										timestamp,@"date",
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
