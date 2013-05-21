@@ -442,6 +442,7 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
+				3EACDD84172E927900975C8D /* plugins */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
 				3E148BCA160A180F0010A0D1 /* CoreMedia.framework */,
@@ -608,6 +609,14 @@
 			path = SensePlatform;
 			sourceTree = "<group>";
 		};
+		3EACDD84172E927900975C8D /* plugins */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = plugins;
+			path = "sense platform/plugins";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -672,7 +681,7 @@
 		3E820D6115D40AB50001A3EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -942,6 +951,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -966,6 +979,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
