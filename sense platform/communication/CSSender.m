@@ -287,6 +287,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
         //get a connected sensor
         NSDictionary* connectedSensors = [self listConnectedSensorsFor:sensorId];
         
+        if ([connectedSensors count] == 0)
+            return NO;
+
         NSString* connectedSensorId = [[[connectedSensors valueForKey:@"sensors"] objectAtIndex:0] valueForKey:@"id"];
         
         if (connectedSensorId == nil)
