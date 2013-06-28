@@ -16,7 +16,6 @@
 
 #import "CSCompassSensor.h"
 #import <CoreLocation/CoreLocation.h>
-#import "CSJSON.h"
 
 
 @implementation CSCompassSensor
@@ -41,7 +40,10 @@ NSString* accuracyKey = @"accuracy";
 							@"float", accuracyKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",

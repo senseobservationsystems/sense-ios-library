@@ -15,7 +15,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "CSJSON.h"
 
 @interface CSSender : NSObject {
 	@private
@@ -25,8 +24,8 @@
 	NSString* passwordHash;
 }
 
-@property (strong) NSDictionary* urls;
-@property (strong) NSString* sessionCookie;
+@property NSDictionary* urls;
+@property NSString* sessionCookie;
 
 - (id) init;
 - (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash;

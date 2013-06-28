@@ -25,8 +25,8 @@
 }
 
 @property (assign) BOOL isEnabled;
-///The data store the sensor commits it's obtained values to
-@property (strong) id dataStore;
+///The data store the sensor commits its obtained values to
+@property id dataStore;
 @property (readonly) NSString* sensorId;
 
 ///Method to check wether the sensor matches the given description of the sensor

@@ -15,7 +15,6 @@
  */
 
 #import "CSMotionFeaturesSensor.h"
-#import "CSJSON.h"
 
 NSString* accelerationAvg = @"acceleration average";
 NSString* accelerationStddev = @"acceleration stddev";
@@ -40,7 +39,10 @@ NSString* rotationKurtosis = @"rotation kurtosis";
 							@"float", rotationKurtosis,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",

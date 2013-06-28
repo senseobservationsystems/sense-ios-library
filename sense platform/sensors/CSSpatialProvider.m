@@ -15,7 +15,6 @@
  */
 
 #import "CSSpatialProvider.h"
-#import "CSJSON.h"
 #import "CSSensorStore.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "CSSettings.h"
@@ -172,23 +171,56 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 - (void) schedulePoll {
         dispatch_async(pollQueueGCD, ^{
+            @autoreleasepool {
+
             if (!isSampling) {
                 isSampling = YES;
-                [self poll];
+                @try {
+                    [self poll];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"Exception in polling motion sensors: %@\n%@", exception, [NSThread callStackSymbols]);
+                }
                 isSampling = NO;
 
                 if (continuous) {
                     [self schedulePoll];
                 }
             }
+            }
         });
+
+    /* DEBUG*/
+    //dispatch_async_f(pollQueueGCD, (__bridge void *)(self), someScheduleFunction);
 }
 
+void someScheduleFunction(void* context) {
+    @autoreleasepool {
+
+    CSSpatialProvider* self = (__bridge CSSpatialProvider*) context;
+    if (!self->isSampling) {
+        self->isSampling = YES;
+        @try {
+            [self poll];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception in polling motion sensors: %@\n%@", exception, [NSThread callStackSymbols]);
+        }
+        self->isSampling = NO;
+        
+        if (self->continuous) {
+            [self schedulePoll];
+        }
+    }
+    }
+}
+
+
 - (void) poll {
-    NSLog(@"^^^ Spatial provider poll invoked. ^^^");
+    //NSLog(@"^^^ Spatial provider poll invoked. ^^^");
 
     //prepare array for data
-    __block NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
+    NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
 
     NSCondition* dataCollectedCondition = [NSCondition new];
@@ -243,16 +275,18 @@ static const double radianInDegrees = 180.0 / M_PI;
         [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1]];
     }
     [dataCollectedCondition unlock];
-    
+
+
     if (sample < nrSamples) {
         NSLog(@"Error while polling the motion sensors.");
         [motionManager stopDeviceMotionUpdates];
         return;
     }
+
     NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
     
     //either send all samples, or just the first
-    BOOL rawSamples = NO, stats = YES;
+    BOOL rawSamples = NO, stats = NO;
     BOOL burst = nrSamples > 1;
     
     if (rawSamples)
@@ -261,11 +295,11 @@ static const double radianInDegrees = 180.0 / M_PI;
         NSRange range = NSMakeRange(0, 1);
         [self commitRawSamples:[deviceMotionArray subarrayWithRange:range]];
     }
-    
+
     if (stats) {
         [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
     }
-    
+
     if (burst) {
         [self commitBurst:deviceMotionArray];
     }
@@ -309,14 +343,14 @@ static const double radianInDegrees = 180.0 / M_PI;
                                         nil];
     [motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
     
-    NSString* value = [[NSDictionary dictionaryWithObjectsAndKeys:
+    NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
 							CSroundedNumber(magnitudeAvg, 3), accelerationAvg,
 							CSroundedNumber(magnitudeStddev, 3), accelerationStddev,
 							//@"", accelerationKurtosis,
 							CSroundedNumber(totalRotAvg, 3), rotationAvg,
 							CSroundedNumber(totalRotStddev, 3), rotationStddev,
 							//@"", rotationKurtosis,
-							nil] JSONRepresentation];
+							nil];
     
     valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
                                         value, @"value",
@@ -356,7 +390,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                header, @"header",
                                sampleInterval, @"interval",
                                nil];
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
         
     }
 
@@ -378,7 +412,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                sampleInterval, @"interval",
                                 nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasAcceleration) {
@@ -399,7 +433,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                sampleInterval, @"interval",
                                nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasRotation) {
@@ -420,7 +454,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                sampleInterval, @"interval",
                                nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON value:[value JSONRepresentation] timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
 }
 
@@ -454,7 +488,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3), @"date",
                                             nil];
         [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
@@ -473,7 +507,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         
@@ -493,7 +527,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
@@ -510,7 +544,7 @@ static const double radianInDegrees = 180.0 / M_PI;
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
+                                            newItem, @"value",
                                             CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];

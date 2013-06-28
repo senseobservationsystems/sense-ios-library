@@ -130,7 +130,10 @@
 - (void) scheduleRecording {
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
+        @autoreleasepool {
+
         [self startRecording];
+        }
     });
 }
 

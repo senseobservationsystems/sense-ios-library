@@ -8,18 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
-		3E148A9F1608C2630010A0D1 /* CSSBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A931608C2630010A0D1 /* CSSBJsonParser.m */; };
-		3E148AA01608C2630010A0D1 /* CSSBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A941608C2630010A0D1 /* CSSBJsonStreamParser.m */; };
-		3E148AA11608C2630010A0D1 /* CSSBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A951608C2630010A0D1 /* CSSBJsonStreamParserAccumulator.m */; };
-		3E148AA21608C2630010A0D1 /* CSSBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A961608C2630010A0D1 /* CSSBJsonStreamParserAdapter.m */; };
-		3E148AA31608C2630010A0D1 /* CSSBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A971608C2630010A0D1 /* CSSBJsonStreamParserState.m */; };
-		3E148AA41608C2630010A0D1 /* CSSBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A981608C2630010A0D1 /* CSSBJsonStreamWriter.m */; };
-		3E148AA51608C2630010A0D1 /* CSSBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A991608C2630010A0D1 /* CSSBJsonStreamWriterAccumulator.m */; };
-		3E148AA61608C2630010A0D1 /* CSSBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A9A1608C2630010A0D1 /* CSSBJsonStreamWriterState.m */; };
-		3E148AA71608C2630010A0D1 /* CSSBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A9B1608C2630010A0D1 /* CSSBJsonTokeniser.m */; };
-		3E148AA81608C2630010A0D1 /* CSSBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A9C1608C2630010A0D1 /* CSSBJsonUTF8Stream.m */; };
-		3E148AA91608C2630010A0D1 /* CSSBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A9D1608C2630010A0D1 /* CSSBJsonWriter.m */; };
-		3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148A9E1608C2630010A0D1 /* NSObject+CSSBJson.m */; };
 		3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E148B96160A12010010A0D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B95160A12010010A0D1 /* CoreGraphics.framework */; };
 		3E148BA9160A12010010A0D1 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B7A160A11280010A0D1 /* SenTestingKit.framework */; };
@@ -57,20 +45,6 @@
 		3E4F273B17033CD60045588C /* CSSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155715D564E100F520D0 /* CSSensor.h */; };
 		3E4F273C17033CD90045588C /* CSSensePlatform.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155615D564E100F520D0 /* CSSensePlatform.h */; };
 		3E4F274517033D200045588C /* CSApplicationStateChange.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */; };
-		3E4F274617033D4B0045588C /* CSJSON.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A761608C2570010A0D1 /* CSJSON.h */; };
-		3E4F274717033D4D0045588C /* CSSBJson.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A771608C2570010A0D1 /* CSSBJson.h */; };
-		3E4F2748170346780045588C /* CSSBJsonParser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A781608C2570010A0D1 /* CSSBJsonParser.h */; };
-		3E4F27491703467A0045588C /* CSSBJsonStreamParser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A791608C2570010A0D1 /* CSSBJsonStreamParser.h */; };
-		3E4F274A1703467E0045588C /* CSSBJsonStreamParserAccumulator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A7A1608C2570010A0D1 /* CSSBJsonStreamParserAccumulator.h */; };
-		3E4F274B170346810045588C /* CSSBJsonStreamParserAdapter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A7B1608C2570010A0D1 /* CSSBJsonStreamParserAdapter.h */; };
-		3E4F274C170346840045588C /* CSSBJsonStreamParserState.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A7C1608C2570010A0D1 /* CSSBJsonStreamParserState.h */; };
-		3E4F274D170346870045588C /* CSSBJsonStreamWriter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A7D1608C2570010A0D1 /* CSSBJsonStreamWriter.h */; };
-		3E4F274E170346890045588C /* CSSBJsonStreamWriterAccumulator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A7E1608C2570010A0D1 /* CSSBJsonStreamWriterAccumulator.h */; };
-		3E4F274F1703468C0045588C /* CSSBJsonStreamWriterState.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A7F1608C2570010A0D1 /* CSSBJsonStreamWriterState.h */; };
-		3E4F27501703468F0045588C /* CSSBJsonTokeniser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A801608C2570010A0D1 /* CSSBJsonTokeniser.h */; };
-		3E4F2751170346940045588C /* CSSBJsonUTF8Stream.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A811608C2570010A0D1 /* CSSBJsonUTF8Stream.h */; };
-		3E4F27521703469A0045588C /* CSSBJsonWriter.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A821608C2570010A0D1 /* CSSBJsonWriter.h */; };
-		3E4F27531703469D0045588C /* NSObject+CSSBJson.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E148A831608C2570010A0D1 /* NSObject+CSSBJson.h */; };
 		3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* CSDynamicSensor.h */; };
 		3E4F28BB170DB4750045588C /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4F28BA170DB4750045588C /* Formatting.m */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
@@ -94,7 +68,6 @@
 		3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE715D40B180001A3EC /* CSDynamicSensor.m */; };
 		3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE915D40B180001A3EC /* CSJumpSensor.m */; };
 		3E820E2D15D40B190001A3EC /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEB15D40B180001A3EC /* CSLocationSensor.m */; };
-		3E820E2F15D40B190001A3EC /* CSMiscSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DED15D40B180001A3EC /* CSMiscSensor.m */; };
 		3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */; };
 		3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF115D40B180001A3EC /* CSMotionFeaturesSensor.m */; };
 		3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF315D40B180001A3EC /* CSMovingSensor.m */; };
@@ -150,20 +123,6 @@
 			dstSubfolderSpec = 16;
 			files = (
 				3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */,
-				3E4F27521703469A0045588C /* CSSBJsonWriter.h in CopyFiles */,
-				3E4F2751170346940045588C /* CSSBJsonUTF8Stream.h in CopyFiles */,
-				3E4F27501703468F0045588C /* CSSBJsonTokeniser.h in CopyFiles */,
-				3E4F274D170346870045588C /* CSSBJsonStreamWriter.h in CopyFiles */,
-				3E4F27531703469D0045588C /* NSObject+CSSBJson.h in CopyFiles */,
-				3E4F274F1703468C0045588C /* CSSBJsonStreamWriterState.h in CopyFiles */,
-				3E4F274C170346840045588C /* CSSBJsonStreamParserState.h in CopyFiles */,
-				3E4F274A1703467E0045588C /* CSSBJsonStreamParserAccumulator.h in CopyFiles */,
-				3E4F274E170346890045588C /* CSSBJsonStreamWriterAccumulator.h in CopyFiles */,
-				3E4F2748170346780045588C /* CSSBJsonParser.h in CopyFiles */,
-				3E4F27491703467A0045588C /* CSSBJsonStreamParser.h in CopyFiles */,
-				3E4F274B170346810045588C /* CSSBJsonStreamParserAdapter.h in CopyFiles */,
-				3E4F274617033D4B0045588C /* CSJSON.h in CopyFiles */,
-				3E4F274717033D4D0045588C /* CSSBJson.h in CopyFiles */,
 				3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */,
 				3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */,
 				3E4F273B17033CD60045588C /* CSSensor.h in CopyFiles */,
@@ -177,32 +136,6 @@
 /* Begin PBXFileReference section */
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
-		3E148A761608C2570010A0D1 /* CSJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSON.h; sourceTree = "<group>"; };
-		3E148A771608C2570010A0D1 /* CSSBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJson.h; sourceTree = "<group>"; };
-		3E148A781608C2570010A0D1 /* CSSBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonParser.h; sourceTree = "<group>"; };
-		3E148A791608C2570010A0D1 /* CSSBJsonStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamParser.h; sourceTree = "<group>"; };
-		3E148A7A1608C2570010A0D1 /* CSSBJsonStreamParserAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamParserAccumulator.h; sourceTree = "<group>"; };
-		3E148A7B1608C2570010A0D1 /* CSSBJsonStreamParserAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamParserAdapter.h; sourceTree = "<group>"; };
-		3E148A7C1608C2570010A0D1 /* CSSBJsonStreamParserState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamParserState.h; sourceTree = "<group>"; };
-		3E148A7D1608C2570010A0D1 /* CSSBJsonStreamWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamWriter.h; sourceTree = "<group>"; };
-		3E148A7E1608C2570010A0D1 /* CSSBJsonStreamWriterAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamWriterAccumulator.h; sourceTree = "<group>"; };
-		3E148A7F1608C2570010A0D1 /* CSSBJsonStreamWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonStreamWriterState.h; sourceTree = "<group>"; };
-		3E148A801608C2570010A0D1 /* CSSBJsonTokeniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonTokeniser.h; sourceTree = "<group>"; };
-		3E148A811608C2570010A0D1 /* CSSBJsonUTF8Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonUTF8Stream.h; sourceTree = "<group>"; };
-		3E148A821608C2570010A0D1 /* CSSBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBJsonWriter.h; sourceTree = "<group>"; };
-		3E148A831608C2570010A0D1 /* NSObject+CSSBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+CSSBJson.h"; sourceTree = "<group>"; };
-		3E148A931608C2630010A0D1 /* CSSBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonParser.m; sourceTree = "<group>"; };
-		3E148A941608C2630010A0D1 /* CSSBJsonStreamParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamParser.m; sourceTree = "<group>"; };
-		3E148A951608C2630010A0D1 /* CSSBJsonStreamParserAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamParserAccumulator.m; sourceTree = "<group>"; };
-		3E148A961608C2630010A0D1 /* CSSBJsonStreamParserAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamParserAdapter.m; sourceTree = "<group>"; };
-		3E148A971608C2630010A0D1 /* CSSBJsonStreamParserState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamParserState.m; sourceTree = "<group>"; };
-		3E148A981608C2630010A0D1 /* CSSBJsonStreamWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamWriter.m; sourceTree = "<group>"; };
-		3E148A991608C2630010A0D1 /* CSSBJsonStreamWriterAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamWriterAccumulator.m; sourceTree = "<group>"; };
-		3E148A9A1608C2630010A0D1 /* CSSBJsonStreamWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonStreamWriterState.m; sourceTree = "<group>"; };
-		3E148A9B1608C2630010A0D1 /* CSSBJsonTokeniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonTokeniser.m; sourceTree = "<group>"; };
-		3E148A9C1608C2630010A0D1 /* CSSBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonUTF8Stream.m; sourceTree = "<group>"; };
-		3E148A9D1608C2630010A0D1 /* CSSBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBJsonWriter.m; sourceTree = "<group>"; };
-		3E148A9E1608C2630010A0D1 /* NSObject+CSSBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+CSSBJson.m"; sourceTree = "<group>"; };
 		3E148B7A160A11280010A0D1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SensePlatformTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,8 +194,6 @@
 		3E820DE915D40B180001A3EC /* CSJumpSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSJumpSensor.m; sourceTree = "<group>"; };
 		3E820DEA15D40B180001A3EC /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
 		3E820DEB15D40B180001A3EC /* CSLocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationSensor.m; sourceTree = "<group>"; };
-		3E820DEC15D40B180001A3EC /* CSMiscSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMiscSensor.h; sourceTree = "<group>"; };
-		3E820DED15D40B180001A3EC /* CSMiscSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMiscSensor.m; sourceTree = "<group>"; };
 		3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionEnergySensor.h; sourceTree = "<group>"; };
 		3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMotionEnergySensor.m; sourceTree = "<group>"; };
 		3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionFeaturesSensor.h; sourceTree = "<group>"; };
@@ -363,46 +294,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3E148A751608C2570010A0D1 /* csjson */ = {
-			isa = PBXGroup;
-			children = (
-				3E148A761608C2570010A0D1 /* CSJSON.h */,
-				3E148A771608C2570010A0D1 /* CSSBJson.h */,
-				3E148A781608C2570010A0D1 /* CSSBJsonParser.h */,
-				3E148A791608C2570010A0D1 /* CSSBJsonStreamParser.h */,
-				3E148A7A1608C2570010A0D1 /* CSSBJsonStreamParserAccumulator.h */,
-				3E148A7B1608C2570010A0D1 /* CSSBJsonStreamParserAdapter.h */,
-				3E148A7C1608C2570010A0D1 /* CSSBJsonStreamParserState.h */,
-				3E148A7D1608C2570010A0D1 /* CSSBJsonStreamWriter.h */,
-				3E148A7E1608C2570010A0D1 /* CSSBJsonStreamWriterAccumulator.h */,
-				3E148A7F1608C2570010A0D1 /* CSSBJsonStreamWriterState.h */,
-				3E148A801608C2570010A0D1 /* CSSBJsonTokeniser.h */,
-				3E148A811608C2570010A0D1 /* CSSBJsonUTF8Stream.h */,
-				3E148A821608C2570010A0D1 /* CSSBJsonWriter.h */,
-				3E148A831608C2570010A0D1 /* NSObject+CSSBJson.h */,
-			);
-			path = csjson;
-			sourceTree = "<group>";
-		};
-		3E148A921608C2630010A0D1 /* csjson */ = {
-			isa = PBXGroup;
-			children = (
-				3E148A931608C2630010A0D1 /* CSSBJsonParser.m */,
-				3E148A941608C2630010A0D1 /* CSSBJsonStreamParser.m */,
-				3E148A951608C2630010A0D1 /* CSSBJsonStreamParserAccumulator.m */,
-				3E148A961608C2630010A0D1 /* CSSBJsonStreamParserAdapter.m */,
-				3E148A971608C2630010A0D1 /* CSSBJsonStreamParserState.m */,
-				3E148A981608C2630010A0D1 /* CSSBJsonStreamWriter.m */,
-				3E148A991608C2630010A0D1 /* CSSBJsonStreamWriterAccumulator.m */,
-				3E148A9A1608C2630010A0D1 /* CSSBJsonStreamWriterState.m */,
-				3E148A9B1608C2630010A0D1 /* CSSBJsonTokeniser.m */,
-				3E148A9C1608C2630010A0D1 /* CSSBJsonUTF8Stream.m */,
-				3E148A9D1608C2630010A0D1 /* CSSBJsonWriter.m */,
-				3E148A9E1608C2630010A0D1 /* NSObject+CSSBJson.m */,
-			);
-			path = csjson;
-			sourceTree = "<group>";
-		};
 		3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,7 +346,6 @@
 				3E9C157615D574B500F520D0 /* SystemConfiguration.framework */,
 				3E9C154315D564E100F520D0 /* include */,
 				3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */,
-				3E148A921608C2630010A0D1 /* csjson */,
 				3E59ACB915F4DB1B00C07D59 /* Utils */,
 				3E820DBF15D40B180001A3EC /* sense platform */,
 				3E820DBB15D40B100001A3EC /* resources */,
@@ -547,8 +437,6 @@
 				3E820DE915D40B180001A3EC /* CSJumpSensor.m */,
 				3E820DEA15D40B180001A3EC /* CSLocationSensor.h */,
 				3E820DEB15D40B180001A3EC /* CSLocationSensor.m */,
-				3E820DEC15D40B180001A3EC /* CSMiscSensor.h */,
-				3E820DED15D40B180001A3EC /* CSMiscSensor.m */,
 				3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */,
 				3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */,
 				3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */,
@@ -590,7 +478,6 @@
 		3E9C154315D564E100F520D0 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				3E148A751608C2570010A0D1 /* csjson */,
 				3E9C155415D564E100F520D0 /* SensePlatform */,
 			);
 			path = include;
@@ -672,7 +559,7 @@
 		3E820D6115D40AB50001A3EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -770,7 +657,6 @@
 				3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */,
 				3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */,
 				3E820E2D15D40B190001A3EC /* CSLocationSensor.m in Sources */,
-				3E820E2F15D40B190001A3EC /* CSMiscSensor.m in Sources */,
 				3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */,
 				3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */,
 				3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */,
@@ -785,18 +671,6 @@
 				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
 				3E820E4715D40B190001A3EC /* CSSettings.m in Sources */,
 				3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */,
-				3E148A9F1608C2630010A0D1 /* CSSBJsonParser.m in Sources */,
-				3E148AA01608C2630010A0D1 /* CSSBJsonStreamParser.m in Sources */,
-				3E148AA11608C2630010A0D1 /* CSSBJsonStreamParserAccumulator.m in Sources */,
-				3E148AA21608C2630010A0D1 /* CSSBJsonStreamParserAdapter.m in Sources */,
-				3E148AA31608C2630010A0D1 /* CSSBJsonStreamParserState.m in Sources */,
-				3E148AA41608C2630010A0D1 /* CSSBJsonStreamWriter.m in Sources */,
-				3E148AA51608C2630010A0D1 /* CSSBJsonStreamWriterAccumulator.m in Sources */,
-				3E148AA61608C2630010A0D1 /* CSSBJsonStreamWriterState.m in Sources */,
-				3E148AA71608C2630010A0D1 /* CSSBJsonTokeniser.m in Sources */,
-				3E148AA81608C2630010A0D1 /* CSSBJsonUTF8Stream.m in Sources */,
-				3E148AA91608C2630010A0D1 /* CSSBJsonWriter.m in Sources */,
-				3E148AAA1608C2630010A0D1 /* NSObject+CSSBJson.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
 				3E4F28BB170DB4750045588C /* Formatting.m in Sources */,
 				3E836CD3171C4BB900D7494C /* CSSensorRequirements.m in Sources */,
@@ -942,6 +816,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -966,6 +844,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -981,22 +863,28 @@
 		3E820D7815D40AB50001A3EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
 		3E820D7915D40AB50001A3EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Release;
 		};

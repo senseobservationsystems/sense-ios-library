@@ -17,7 +17,6 @@
 #import "CSDynamicSensor.h"
 #import "CSDataStore.h"
 #import "CSSensePlatform.h"
-#import "CSJSON.h"
 #import "Formatting.h"
 
 @implementation CSDynamicSensor {
@@ -31,8 +30,12 @@
 	//create description for data format. programmer: make SURE it matches the format used to send data
     NSString* dataStructure = @"";
     if ([dataType isEqualToString: kCSDATA_TYPE_JSON]) {
-        if (fields != nil)
-            dataStructure = [fields JSONRepresentation];
+        if (fields != nil) {
+            NSError* error = nil;
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:fields options:0 error:&error];
+            dataStructure = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+        }
         return [NSDictionary dictionaryWithObjectsAndKeys:
                 [self name], @"name",
        			[self displayName], @"display_name",
@@ -63,7 +66,7 @@
 	return self;
 }
 
-- (void) commitValue:(NSString*)value withTimestamp:(NSTimeInterval)timestamp {
+- (void) commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp {
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										value, @"value",
 										CSroundedNumber(timestamp, 3),@"date",
@@ -74,12 +77,12 @@
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
-	NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
+	//NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
 	isEnabled = enable;
 }
 
 - (void) dealloc {
-    NSLog(@"Deallocating %@", sensorName);
+    //NSLog(@"Deallocating %@", sensorName);
 	self.isEnabled = NO;
 }
 

@@ -36,7 +36,6 @@
 #import "CSConnectionSensor.h"
 #import "CSPreferencesSensor.h"
 #import "BloodPressureSensor.h"
-#import "CSMiscSensor.h"
 #import <sqlite3.h>
 #import "CSSender.h"
 
@@ -133,7 +132,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                             //[CSJumpSensor class],
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
-							//[MiscSensor class],
 							nil];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];
@@ -265,10 +263,11 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         
         [sensors addObject:sensor];
     }
+    NSLog(@"Nr sensors: %d", [sensors count]);
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
-    //NSLog(@"Adding data for %@ (%@)", sensorName, sensorId);
+    NSLog(@"Adding data for %@ (%@)", sensorName, sensorId);
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
@@ -350,7 +349,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) uploadAndClearData {
     dispatch_sync(uploadQueueGCD, ^{
+        @autoreleasepool {
         	[self uploadData];
+        }
     });
 
 	@synchronized(self){
@@ -369,7 +370,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
         dispatch_source_set_event_handler(uploadTimerGCD, ^{
             dispatch_async(uploadQueueGCD, ^{
+                @autoreleasepool {
                 [self uploadOperation];
+                }
             });
         });
         dispatch_source_set_timer(uploadTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, leeway);
@@ -543,13 +546,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) forceDataFlushAndBlock {
     dispatch_sync(uploadQueueGCD, ^{
+        @autoreleasepool {
+
         [self uploadData];
+        }
     });
 }
 
 - (void) forceDataFlush {
     dispatch_async(uploadQueueGCD, ^{
+        @autoreleasepool {
+
         [self uploadData];
+        }
     });
 }
 
@@ -587,13 +596,21 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     //Heuristic to estimate the nr of points to send.
     NSUInteger points=0;
     int size = 0;
-    int sizeOfNextPoint = [[[data objectAtIndex:points] JSONRepresentation] length];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    int sizeOfNextPoint = [json length];
     do {
         points++;
         size += sizeOfNextPoint;
         if (points >= data.count)
             break; //there is no next point...
-        sizeOfNextPoint = [[[data objectAtIndex:points] JSONRepresentation] length];
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
+        NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        sizeOfNextPoint = [json length];
+
         //add some bytes for overhead
         sizeOfNextPoint += 10;
     } while (size + sizeOfNextPoint < MAX_BYTES_TO_UPLOAD_AT_ONCE);
