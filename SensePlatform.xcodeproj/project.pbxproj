@@ -333,6 +333,7 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
+				3EACDD84172E927900975C8D /* plugins */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
 				3E148BCA160A180F0010A0D1 /* CoreMedia.framework */,
@@ -493,6 +494,14 @@
 				3E9C155915D564E100F520D0 /* CSSettings.h */,
 			);
 			path = SensePlatform;
+			sourceTree = "<group>";
+		};
+		3EACDD84172E927900975C8D /* plugins */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = plugins;
+			path = "sense platform/plugins";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
