@@ -329,8 +329,11 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	
 	NSData* contents;
     NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:input options:0 error:&error];
-	NSString *jsonInput = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSString* jsonInput;
+    if (input != nil) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:input options:0 error:&error];
+        jsonInput = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
 	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
 	
 	//handle unauthorized error
