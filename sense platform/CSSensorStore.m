@@ -270,6 +270,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     NSLog(@"Adding data for %@ (%@)", sensorName, sensorId);
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
+
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
 
 	//retrieve/create entry for this sensor

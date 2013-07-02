@@ -167,7 +167,11 @@ static CSSensorStore* sensorStore;
     [[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
     NSError* error;
-    id jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    id jsonValue;
+    if (value != nil)
+        jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    if (error != nil)
+        jsonValue = value;
     [sensor commitValue:jsonValue withTimestamp:[timestamp timeIntervalSince1970]];
 }
 
