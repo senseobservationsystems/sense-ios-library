@@ -265,9 +265,9 @@ void someScheduleFunction(void* context) {
     };
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
-    //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
+    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
-    [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
+    //[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
     NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
     while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
