@@ -199,10 +199,12 @@ static CLLocation* lastAcceptedPoint;
 }
 
 - (void) setBackgroundRunningEnable:(BOOL) enable {
-    if (enable)
+    if (enable) {
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
-    else {
+        [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
+    } else {
         [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(stopMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
     }
 }
 
