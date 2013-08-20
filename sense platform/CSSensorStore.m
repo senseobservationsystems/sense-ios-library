@@ -312,7 +312,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		for (CSSensor* sensor in sensors) {
 			[[CSSettings sharedSettings] setSensor:sensor.name enabled:NO persistent:NO];
 		}
-        
+
         [locationSensor setBackgroundRunningEnable:NO];
 		//flush data
 		[self forceDataFlush];

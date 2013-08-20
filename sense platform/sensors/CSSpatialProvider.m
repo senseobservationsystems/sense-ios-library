@@ -217,8 +217,6 @@ void someScheduleFunction(void* context) {
 
 
 - (void) poll {
-    //NSLog(@"^^^ Spatial provider poll invoked. ^^^");
-
     //prepare array for data
     NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
@@ -244,36 +242,40 @@ void someScheduleFunction(void* context) {
         }
         */
         counter++;
-        [deviceMotionArray addObject:deviceMotion];
-        
-        //send this sample so others can listen to the data
-        NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
-        NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
-                              deviceMotion, @"data",
-                              [NSNumber numberWithDouble:timestamp], @"timestamp",
-                              nil];
-        NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
-        [[NSNotificationCenter defaultCenter] postNotification:notification];
-
+       if (sample < nrSamples) {
+            [deviceMotionArray addObject:deviceMotion];
+            sample++;
+            //send this sample so others can listen to the data
+            NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
+            NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  deviceMotion, @"data",
+                                  [NSNumber numberWithDouble:timestamp], @"timestamp",
+                                  nil];
+            NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
+        }
         //if we've sampled enough
-        if (++sample >= nrSamples) {
-            [motionManager stopDeviceMotionUpdates];
+        if (sample >= nrSamples) {
             //signal that we're done collecting
             [dataCollectedCondition broadcast];
         }
+
         counter--;
     };
     motionManager.deviceMotionUpdateInterval = 1./frequency;
     [dataCollectedCondition lock];
-    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
+    //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
-    //[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
+    [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
     NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
     while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
         //wait until all data collected, or a timeout
-        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1]];
+        NSTimeInterval timeout = MAX(1.0/frequency * nrSamples * 2 + 1, 0.1);
+        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:timeout]];
     }
+    //[motionManager performSelectorOnMainThread:@selector(stopDeviceMotionUpdates) withObject:nil waitUntilDone:YES];
+    [motionManager stopDeviceMotionUpdates];
     [dataCollectedCondition unlock];
 
 
@@ -581,7 +583,7 @@ void someScheduleFunction(void* context) {
                 dispatch_source_cancel(pollTimerGCD);
                 dispatch_release(pollTimerGCD);
             }
-            uint64_t leeway = newInterval * 0.1 * NSEC_PER_SEC; //10% leeway
+            uint64_t leeway = newInterval * 0.3 * NSEC_PER_SEC; //30% leeway
             pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
             dispatch_source_set_event_handler(pollTimerGCD, ^{
                 [self schedulePoll];

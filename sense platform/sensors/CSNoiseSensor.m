@@ -151,7 +151,7 @@
     
 	audioRecorder.delegate = self;
 	BOOL started = [audioRecorder recordForDuration:sampleDuration];
-	NSLog(@"recorder %@", started? @"started":@"failed to start");
+	//NSLog(@"recorder %@", started? @"started":@"failed to start");
 	if (NO == started || audioRecorder.isRecording == NO) {
 		//try again later
 		[self scheduleRecording];
@@ -166,7 +166,7 @@
             dispatch_source_cancel(volumeTimer);
             dispatch_release(volumeTimer);
         }
-        uint64_t leeway = volumeSampleInterval * 0.05 * NSEC_PER_SEC; //5% leeway
+        uint64_t leeway = volumeSampleInterval * 0.3 * NSEC_PER_SEC; //30% leeway
         volumeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, volumeTimerQueue);
         dispatch_source_set_event_handler(volumeTimer, ^{
             [audioRecorder updateMeters];
@@ -205,7 +205,6 @@
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
-	NSLog(@"recorder stopped");
 
     @synchronized(volumeTimerLock) {
         if (volumeTimer) {
