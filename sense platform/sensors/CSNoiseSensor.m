@@ -219,9 +219,6 @@
 		double timestamp = [[NSDate date] timeIntervalSince1970];
 
         double level = 20 * log10(volumeSum / nrVolumeSamples);
- 
-		//TODO: save file...
-		[recorder deleteRecording];
 	
 		NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 											CSroundedNumber(level, 1), @"value",
@@ -241,7 +238,6 @@
 -(void)audioRecorderBeginInterruption:(AVAudioRecorder *)recorder {
 	NSLog(@"Noise sensor interrupted.");
     [recorder stop];
-	[recorder deleteRecording];
     [self scheduleRecording];
 }
 

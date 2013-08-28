@@ -53,7 +53,6 @@
 @end
 
 
-
 @implementation CSSensorStore {
     CSSender* sender;
 	
@@ -352,7 +351,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) uploadAndClearData {
     dispatch_sync(uploadQueueGCD, ^{
         @autoreleasepool {
-        	[self uploadData];
+            @try {
+               	[self uploadData];
+            }
+            @catch (NSException *exception) {
+                [self uploadData];
+            }
         }
     });
 
@@ -549,8 +553,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) forceDataFlushAndBlock {
     dispatch_sync(uploadQueueGCD, ^{
         @autoreleasepool {
+            @try {
+                [self uploadData];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"Exception during forced data flush and block: %@", exception);
+            }
 
-        [self uploadData];
         }
     });
 }
@@ -558,8 +567,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) forceDataFlush {
     dispatch_async(uploadQueueGCD, ^{
         @autoreleasepool {
-
-        [self uploadData];
+            @try {
+                [self uploadData];
+            }
+            @catch (NSException *exception) {
+                 NSLog(@"Exception during forced data flush and block: %@", exception);
+            }
         }
     });
 }
