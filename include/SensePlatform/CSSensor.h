@@ -44,13 +44,15 @@
 - (NSString*) deviceType;
 ///Returns the description of the sensor
 - (NSDictionary*) sensorDescription;
+//The device of the sensor
+- (NSDictionary*) device;
 ///Returns wether this sensor is available
 + (BOOL) isAvailable;
 ///Returns the sensor id of the sensor, a unique name that is used by the library to uniquely identify the sensor. This is NOT the id of the sensor in Common Sense
 - (NSString*) sensorId;
 
 ///Create sensor id
-+ (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType;
++ (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType andDevice:(NSDictionary*)device;
 ///Extract sensor name from the sensor id
 + (NSString*) sensorNameFromSensorId:(NSString*) sensorId;
 @end

@@ -23,6 +23,7 @@
     NSString* dataType;
 }
 - (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields;
+- (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields device:(NSDictionary*) device;
 - (void) commitValue:(NSString*)value withTimestamp:(NSTimeInterval)timestamp;
 @end
 

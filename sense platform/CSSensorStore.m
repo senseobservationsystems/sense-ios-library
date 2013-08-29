@@ -150,7 +150,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(generalSettingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeGeneral] object:nil];
 	}
 	return self;
-} 
+}
+
 
 - (void) makeRemoteDeviceSensors {
     NSMutableDictionary* mySensorIdMap = [NSMutableDictionary new];
@@ -159,7 +160,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	//get list of sensors from the server
     NSDictionary* response;
     @try {
-        response = [sender listSensorsForDevice:[CSSensorStore device]];
+        response = [sender listSensors];
     } @catch (NSException* e) {
         stop = YES;
     }
@@ -168,7 +169,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     //NSLog(@"Response: '%@', sensor list: '%@'", response, remoteSensors);
     if (stop || remoteSensors == nil) {
         //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
-        NSLog(@"Couldn't get a list of sensors for the device. Don't make ");
+        NSLog(@"Couldn't get a list of sensors. Don't make ");
         return;
     }
 
@@ -179,7 +180,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             NSString* remoteId = [remoteSensor valueForKey:@"id"];
             NSString* name = [remoteSensor valueForKey:@"name"];
             NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
-            NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType];
+            NSDictionary* device = [remoteSensor valueForKey:@"device"];
+            NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType andDevice:device];
             //update sensor id map
             [mySensorIdMap setValue:remoteId forKey:sensorId];
         }
@@ -193,8 +195,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 			NSDictionary* description = [sender createSensorWithDescription:[sensor sensorDescription]];
             id sensorIdString = [description valueForKey:@"id"];
    			if (description != nil && sensorIdString != nil) {
-				//link sensor to this device
-				[sender connectSensor:sensorIdString ToDevice:[CSSensorStore device]];
+				//link sensor to device
+                if (sensor.device != nil) {
+                    [sender connectSensor:sensorIdString ToDevice:sensor.device];
+                }
 
                 //store sensor id in the map
   				[mySensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
@@ -204,6 +208,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             }
 		}
 	}
+    
     @synchronized(sensorIdMapLock) {
         sensorIdMap = mySensorIdMap;
     }
@@ -670,13 +675,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
                 NSString* dName = [remoteSensor valueForKey:@"name"];
                 NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
+                NSDictionary* device = [remoteSensor valueForKey:@"device"];
                 if (dName == nil || ([sensorName caseInsensitiveCompare:dName] != NSOrderedSame))
                     continue;
                 
                 sensorId = [remoteSensor valueForKey:@"id"];
                 //update sensor id map
                 @synchronized(sensorIdMapLock) {
-                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType andDevice:device]];
                 }
                 break;
             }

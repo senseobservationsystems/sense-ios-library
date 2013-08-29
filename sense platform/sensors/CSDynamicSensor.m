@@ -21,10 +21,12 @@
 
 @implementation CSDynamicSensor {
     NSDictionary* fields;
+    NSDictionary* deviceDict;
 }
 - (NSString*) name {return sensorName;}
 - (NSString*) deviceType {return deviceType;}
 + (BOOL) isAvailable {return YES;}
+- (NSDictionary*) device {return deviceDict;}
 
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data
@@ -62,9 +64,23 @@
         displayName = dispName;
         deviceType = devType;
         dataType = datType;
+        deviceDict = [super device];
 	}
 	return self;
 }
+
+- (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields device:(NSDictionary*) device {
+	self = [super init];
+	if (self) {
+        sensorName = name;
+        displayName = dispName;
+        deviceType = devType;
+        dataType = datType;
+        deviceDict = device;
+	}
+	return self;
+}
+
 
 - (void) commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp {
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:

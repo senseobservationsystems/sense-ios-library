@@ -171,7 +171,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSDictionary*) listSensors {
-	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000"] withMethod:@"GET" withInput:nil];
+	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000&details=full"] withMethod:@"GET" withInput:nil];
 }
 
 - (NSDictionary*) listSensorsForDevice:(NSDictionary*)device {

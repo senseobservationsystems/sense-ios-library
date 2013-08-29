@@ -392,7 +392,7 @@ void someScheduleFunction(void* context) {
                                header, @"header",
                                sampleInterval, @"interval",
                                nil];
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
         
     }
 
@@ -414,7 +414,7 @@ void someScheduleFunction(void* context) {
                                sampleInterval, @"interval",
                                 nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasAcceleration) {
@@ -435,7 +435,7 @@ void someScheduleFunction(void* context) {
                                sampleInterval, @"interval",
                                nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
     
     if (hasRotation) {
@@ -456,7 +456,7 @@ void someScheduleFunction(void* context) {
                                sampleInterval, @"interval",
                                nil];
 
-        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil deviceType:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
     }
 }
 
