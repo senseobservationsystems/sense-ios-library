@@ -402,7 +402,8 @@ void someScheduleFunction(void* context) {
         [deviceMotionArray enumerateObjectsUsingBlock:^(CMDeviceMotion* motion, NSUInteger index, BOOL *stop) {
             NSNumber* x = CSroundedNumber((motion.gravity.x + motion.userAcceleration.x) * G, 3);
             NSNumber* y = CSroundedNumber((motion.gravity.y + motion.userAcceleration.y) * G, 3);
-            NSNumber* z = CSroundedNumber((motion.gravity.z + motion.userAcceleration.z) * G, 3);
+            //z-axis is in other direction in CommonSense (thanks Android!)
+            NSNumber* z = CSroundedNumber(-(motion.gravity.z + motion.userAcceleration.z) * G, 3);
             [values addObject:[NSArray arrayWithObjects:x,y,z, nil]];
         }];
 
@@ -423,7 +424,8 @@ void someScheduleFunction(void* context) {
         [deviceMotionArray enumerateObjectsUsingBlock:^(CMDeviceMotion* motion, NSUInteger index, BOOL *stop) {
             NSNumber* x = CSroundedNumber(motion.userAcceleration.x * G, 3);
             NSNumber* y = CSroundedNumber(motion.userAcceleration.y * G, 3);
-            NSNumber* z = CSroundedNumber(motion.userAcceleration.z * G, 3);
+            //z-axis is in other direction in CommonSense (thanks Android!)
+            NSNumber* z = CSroundedNumber(-motion.userAcceleration.z * G, 3);
             [values addObject:[NSArray arrayWithObjects:x,y,z, nil]];
         }];
         
@@ -501,7 +503,8 @@ void someScheduleFunction(void* context) {
     if (hasAccelerometer) {
         double x = motion.gravity.x + motion.userAcceleration.x;
         double y = motion.gravity.y + motion.userAcceleration.y;
-        double z = motion.gravity.z + motion.userAcceleration.z;
+        //z-axis is in other direction in CommonSense (thanks Android!)
+        double z = -(motion.gravity.z + motion.userAcceleration.z);
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         CSroundedNumber(x * G,3), CSaccelerationXKey,
                                         CSroundedNumber(y * G, 3), CSaccelerationYKey,
@@ -515,13 +518,13 @@ void someScheduleFunction(void* context) {
         
         [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
         
-        
     }
     
     if (hasAcceleration) {
         double x = motion.userAcceleration.x * G;
         double y = motion.userAcceleration.y * G;
-        double z = motion.userAcceleration.z * G;
+        //z-axis is in other direction in CommonSense (thanks Android!)
+        double z = -motion.userAcceleration.z * G;
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                         CSroundedNumber(x, 3), CSaccelerationXKey,
                                         CSroundedNumber(y, 3), CSaccelerationYKey,
@@ -564,7 +567,7 @@ void someScheduleFunction(void* context) {
         } else if ([setting.name isEqualToString:kCSSpatialSettingNrSamples]) {
             nrSamples = [setting.value intValue];
         }
-        
+
         //restart
         if (enableCounter > 0) {
             [self schedulePollWithInterval:interval];

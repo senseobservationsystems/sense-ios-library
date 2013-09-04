@@ -140,7 +140,7 @@
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SensePlatformTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		3E148BA8160A12010010A0D1 /* SensePlatformTestAppTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SensePlatformTestAppTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E148BA8160A12010010A0D1 /* .octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E148BB0160A12010010A0D1 /* SensePlatformTestAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SensePlatformTestAppTests-Info.plist"; sourceTree = "<group>"; };
 		3E148BB2160A12010010A0D1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3E148BB4160A12010010A0D1 /* SensePlatformTestAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensePlatformTestAppTests.h; sourceTree = "<group>"; };
@@ -361,7 +361,7 @@
 			children = (
 				3E820D6A15D40AB50001A3EC /* libSensePlatform.a */,
 				3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */,
-				3E148BA8160A12010010A0D1 /* SensePlatformTestAppTests.octest */,
+				3E148BA8160A12010010A0D1 /* .octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -542,7 +542,7 @@
 			);
 			name = SensePlatformTestAppTests;
 			productName = SensePlatformTestAppTests;
-			productReference = 3E148BA8160A12010010A0D1 /* SensePlatformTestAppTests.octest */;
+			productReference = 3E148BA8160A12010010A0D1 /* .octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		3E820D6915D40AB50001A3EC /* SensePlatform */ = {
@@ -726,13 +726,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP4.app/Contents/Developer/Library/Frameworks\"",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatformTestApp/SensePlatformTestApp-Prefix.pch";
-				INFOPLIST_FILE = "SensePlatformTestApp/SensePlatformTestApp-Info.plist";
+				INFOPLIST_FILE = "SensePlatformTestAppTests/SensePlatformTestAppTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_TEST_FLAGS = "-ObjC -all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -750,13 +746,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP4.app/Contents/Developer/Library/Frameworks\"",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatformTestApp/SensePlatformTestApp-Prefix.pch";
-				INFOPLIST_FILE = "SensePlatformTestApp/SensePlatformTestApp-Info.plist";
+				INFOPLIST_FILE = "SensePlatformTestAppTests/SensePlatformTestAppTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_TEST_FLAGS = "-ObjC -all_load";
@@ -780,15 +772,11 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SensePlatformTestApp/SensePlatformTestApp-Prefix.pch";
-				INFOPLIST_FILE = "SensePlatformTestAppTests/SensePlatformTestAppTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -806,15 +794,11 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SensePlatformTestApp/SensePlatformTestApp-Prefix.pch";
-				INFOPLIST_FILE = "SensePlatformTestAppTests/SensePlatformTestAppTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
