@@ -348,7 +348,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	}
 
 	//check response code
-	if ([response statusCode] < 200 || [response statusCode] > 300)
+	if ([response statusCode] < 200 || [response statusCode] >= 300)
 	{
 		//Ai, some error that couldn't be resolved. Log and throw exception
 		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);

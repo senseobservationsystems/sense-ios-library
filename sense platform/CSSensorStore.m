@@ -506,12 +506,17 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
-    NSString* sensorId = [self resolveSensorIdForSensorName:name onlyThisDevice:onlyFromDevice];    
-
-    if (sensorId) {
-        return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
-    } else
-        return nil;
+    @try {
+        NSString* sensorId = [self resolveSensorIdForSensorName:name onlyThisDevice:onlyFromDevice];
+        
+        if (sensorId) {
+            return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
+        } else
+            return nil;
+    }
+    @catch (NSException *exception) {
+        return NULL;
+    }
 }
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
