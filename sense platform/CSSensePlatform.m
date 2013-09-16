@@ -52,7 +52,7 @@ static CSSensorStore* sensorStore;
 }
 
 + (void) flushDataAndBlock {
-    [[CSSensorStore sharedSensorStore] forceDataFlush];
+    [[CSSensorStore sharedSensorStore] forceDataFlushAndBlock];
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
