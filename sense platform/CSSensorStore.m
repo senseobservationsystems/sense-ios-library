@@ -375,7 +375,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @synchronized(uploadTimerLock) {
         if (uploadTimerGCD) {
             dispatch_source_cancel(uploadTimerGCD);
-            dispatch_release(uploadTimerGCD);
         }
         uint64_t leeway = MAX(interval * 0.1, 1ull) * NSEC_PER_SEC;
         uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
@@ -395,7 +394,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @synchronized(uploadTimerLock) {
         if (uploadTimerGCD) {
             dispatch_source_cancel(uploadTimerGCD);
-            dispatch_release(uploadTimerGCD);
             uploadTimerGCD = NULL;
         }
     }
@@ -698,10 +696,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 
-
 + (NSDictionary*) device {
     NSString* type = [[UIDevice currentDevice] platformString];
-    
+
+ 	//NSString* uuid = [[UIDevice currentDevice] identifierForVendor];
 	NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
 	NSDictionary* device = [NSDictionary dictionaryWithObjectsAndKeys:
 							uuid, @"uuid",

@@ -76,6 +76,8 @@ static CLLocation* lastAcceptedPoint;
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
+        locationManager.activityType = CLActivityTypeOther;
+        locationManager.pausesLocationUpdatesAutomatically = NO;
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
@@ -87,12 +89,18 @@ static CLLocation* lastAcceptedPoint;
 	return self;
 }
 
+// Newer delegate method
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    for (CLLocation* location in locations) {
+        [self locationManager:manager didUpdateToLocation: location fromLocation: nil];
+    }
+}
 
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation
-{
+		   fromLocation:(CLLocation *)oldLocation {
+
     if (isEnabled == NO) {
         return;
     }
@@ -172,6 +180,10 @@ static CLLocation* lastAcceptedPoint;
     
 }
 
+- (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"Location manager failed with error %@", error);
+}
+
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
@@ -192,10 +204,11 @@ static CLLocation* lastAcceptedPoint;
 	}
 	else {
         [newSampleTimer invalidate];
-        //[locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(stopMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
 		//[locationManager stopUpdatingLocation];
         //as this needs to be enabled to run in the background, rather switch to the lowest accuracy
-        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+        //locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
 		[samples removeAllObjects];
 	}
 	isEnabled = enable;

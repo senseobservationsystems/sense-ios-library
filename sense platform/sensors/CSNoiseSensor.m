@@ -164,7 +164,6 @@
     @synchronized(volumeTimerLock) {
         if (volumeTimer) {
             dispatch_source_cancel(volumeTimer);
-            dispatch_release(volumeTimer);
         }
         uint64_t leeway = volumeSampleInterval * 0.3 * NSEC_PER_SEC; //30% leeway
         volumeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, volumeTimerQueue);
@@ -194,7 +193,6 @@
         @synchronized(volumeTimerLock) {
             if (volumeTimer) {
                 dispatch_source_cancel(volumeTimer);
-                dispatch_release(volumeTimer);
                 volumeTimer = NULL;
             }
         }
@@ -209,7 +207,6 @@
     @synchronized(volumeTimerLock) {
         if (volumeTimer) {
             dispatch_source_cancel(volumeTimer);
-            dispatch_release(volumeTimer);
             volumeTimer = NULL;
         }
     }

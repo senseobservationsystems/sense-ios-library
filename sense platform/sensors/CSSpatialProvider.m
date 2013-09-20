@@ -584,7 +584,6 @@ void someScheduleFunction(void* context) {
         @synchronized(pollTimerLock) {
             if (pollTimerGCD) {
                 dispatch_source_cancel(pollTimerGCD);
-                dispatch_release(pollTimerGCD);
             }
             uint64_t leeway = newInterval * 0.3 * NSEC_PER_SEC; //30% leeway
             pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
@@ -618,7 +617,6 @@ void someScheduleFunction(void* context) {
     @synchronized(pollTimerLock) {
         if (pollTimerGCD) {
             dispatch_source_cancel(pollTimerGCD);
-            dispatch_release(pollTimerGCD);
             pollTimerGCD = NULL;
         }
     }
