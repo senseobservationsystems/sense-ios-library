@@ -288,7 +288,7 @@ void someScheduleFunction(void* context) {
     NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
     
     //either send all samples, or just the first
-    BOOL rawSamples = NO, stats = NO;
+    BOOL rawSamples = NO, stats = YES;
     BOOL burst = nrSamples > 1;
     
     if (rawSamples)

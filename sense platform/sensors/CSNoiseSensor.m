@@ -68,13 +68,13 @@
 	self = [super init];
 	if (self) {
 		
-		//define audio category to allow mixing
+		//define audio category to allow mixing. Since ios7 this doesn't work any more. If we do that we fail to record in the background
 		NSError *setCategoryError = nil;
 		[[AVAudioSession sharedInstance]
 		 setCategory: AVAudioSessionCategoryPlayAndRecord
 		 error: &setCategoryError];
 		OSStatus propertySetError = 0;
-		UInt32 value = true;
+		UInt32 value = 0;
 		NSError* error;
         [[AVAudioSession sharedInstance] setActive:NO error:&error];
 
@@ -83,13 +83,15 @@
 													sizeof (value),
 													&value
 													);
+        /*
         value = kAudioSessionOverrideAudioRoute_Speaker;
         propertySetError = AudioSessionSetProperty (
                                                     kAudioSessionProperty_OverrideAudioRoute,
 													sizeof (value),
 													&value
 													);
-        [[AVAudioSession sharedInstance] setActive:YES error:&error];
+         */
+        //[[AVAudioSession sharedInstance] setActive:YES error:&error];
 		//set recording file
 		NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
@@ -140,15 +142,16 @@
 - (void) startRecording {
     UInt32 audioIsPlaying = 0;
     UInt32 size = sizeof(audioIsPlaying);
+    /* This check seem to return true always on ios7. TODO: enable on ios <7?
     AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &size, &audioIsPlaying);
     if (audioIsPlaying) {
         // Recording can interfere with others apps playing/recording. Don't record when another app is playing should improve user experience,
         // at the cost of some missing data.
         [self scheduleRecording];
         return;
-    }
-
-    
+    }*/
+    NSError* error;
+    [[AVAudioSession sharedInstance] setActive:YES error:&error];
 	audioRecorder.delegate = self;
 	BOOL started = [audioRecorder recordForDuration:sampleDuration];
 	//NSLog(@"recorder %@", started? @"started":@"failed to start");
@@ -198,6 +201,8 @@
         }
 		audioRecorder.delegate = nil;
 		[audioRecorder stop];
+        NSError* error;
+        [[AVAudioSession sharedInstance] setActive:NO error:&error];
 	}
     isEnabled = enable;
 }
@@ -239,6 +244,7 @@
 }
 
 - (void)audioRecorderEndInterruption:(AVAudioRecorder *)recorder withFlags:(NSUInteger)flags {
+    [self scheduleRecording];
 }
 
 
