@@ -17,8 +17,8 @@
 #import <Foundation/Foundation.h>
 
 @interface CSSender : NSObject {
-	@private
 	NSString* sessionCookie;
+  	@private
 	NSDictionary* urls;
 	NSString* username;
 	NSString* passwordHash;

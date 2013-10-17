@@ -92,8 +92,19 @@ static CSSensorStore* sensorStore;
     return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
 }
 
-+(void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
++ (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
     [[CSSensorStore sharedSensorStore] giveFeedbackOnState:state from:from to:to label:label];
+}
+
++ (NSString*) getSessionCookie {
+    NSString* cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+    if (cookie == nil) {
+        NSString* user = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
+        NSString* hash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+        [CSSensePlatform loginWithUser:user andPasswordHash:hash];
+        cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+    }
+    return cookie;
 }
 
 + (void) applyIVitalitySettings {

@@ -141,8 +141,8 @@
 
 - (void) startRecording {
     UInt32 audioIsPlaying = 0;
-    UInt32 size = sizeof(audioIsPlaying);
     /* This check seem to return true always on ios7. TODO: enable on ios <7?
+    UInt32 size = sizeof(audioIsPlaying);
     AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &size, &audioIsPlaying);
     if (audioIsPlaying) {
         // Recording can interfere with others apps playing/recording. Don't record when another app is playing should improve user experience,

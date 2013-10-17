@@ -62,6 +62,13 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * @returns Wether the registration succeeded
  */
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password withEmail:(NSString*) email;
+
+/** Get the session cookie for Common Sense
+ *  Once the user has logged in to CommonSense this method can be used to retrieve the session cookie for an apps own usage. Note that the format is "session_id=<session_id>".
+ *  @returns The session id to communicate with CommonSense, nil if there is no session cookie.
+ */
++ (NSString*) getSessionCookie;
+
 /// Setup the platform for use with iVitality
 + (void) applyIVitalitySettings;
 

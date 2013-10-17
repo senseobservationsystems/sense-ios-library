@@ -699,10 +699,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 + (NSDictionary*) device {
     NSString* type = [[UIDevice currentDevice] platformString];
 
- 	//NSString* uuid = [[UIDevice currentDevice] identifierForVendor];
-	NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
+ 	NSUUID* uuid = [[UIDevice currentDevice] identifierForVendor];
+	//NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
 	NSDictionary* device = [NSDictionary dictionaryWithObjectsAndKeys:
-							uuid, @"uuid",
+							[uuid UUIDString], @"uuid",
 							type, @"type",
 							nil];
 	return device;
