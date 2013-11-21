@@ -36,6 +36,7 @@
 #import "CSConnectionSensor.h"
 #import "CSPreferencesSensor.h"
 #import "BloodPressureSensor.h"
+#import "CSDisplaySensor.h"
 #import <sqlite3.h>
 #import "CSSender.h"
 
@@ -128,6 +129,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
  							[CSAccelerometerSensor class],
 							[CSAccelerationSensor class],
 							[CSRotationSensor class],
+                            [CSDisplaySensor class],
                             //[CSJumpSensor class],
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
