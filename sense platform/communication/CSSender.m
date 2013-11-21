@@ -94,8 +94,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	NSDictionary* post = [NSDictionary dictionaryWithObjectsAndKeys:
 						  userPost, @"user",
 						  nil];
-	
-	NSString* json = [post JSONRepresentation];
+    
+    NSError *jsonError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:post options:0 error:&jsonError];
+	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 	
 	NSURL* url = [self makeUrlFor:@"users"];
 	NSData* contents;
@@ -109,7 +111,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
 		//interpret json response to set error
-		*error = [[responded JSONValue] valueForKey:@"error"];
+        NSError *jsonError = nil;
+        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
+   		*error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
 	}
 	return didSucceed;
 }
@@ -126,7 +130,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 						  passwordHash, @"password",
 						  nil];
 
-	NSString* json = [post JSONRepresentation];;
+    NSError *jsonError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:post options:0 error:&jsonError];
+	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
 	NSURL* url = [self makeUrlFor:@"login"];
 	NSData* contents;
@@ -142,8 +148,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		succeeded = NO;
 	} else {
 		//interpret JSON
-		NSString* jsonString = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
-		NSDictionary* jsonResponse = [jsonString JSONValue];
+		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
 		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
 	}
     
@@ -166,7 +171,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSDictionary*) listSensors {
-	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000"] withMethod:@"GET" withInput:nil];
+	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000&details=full"] withMethod:@"GET" withInput:nil];
 }
 
 - (NSDictionary*) listSensorsForDevice:(NSDictionary*)device {
@@ -252,15 +257,17 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	NSString* method = @"POST";
     NSURL* url = [self makeUrlForSensor:sensorId];
 	NSData* contents;
-    NSString* jsonData = [sensorData JSONRepresentation];
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonData output:&contents cookie:sessionCookie];
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
+	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
 	
 	//handle unauthorized error
 	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
 		//relogin (session might've expired)
 		if ([self login]) {
             //redo request
-            response = [self doRequestTo:url method:method input:jsonData output:&contents cookie:sessionCookie];
+            response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
         }
 	}
     
@@ -324,18 +331,24 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	}
 	
 	NSData* contents;
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:[input JSONRepresentation] output:&contents cookie:sessionCookie];
+    NSError *error = nil;
+    NSString* jsonInput;
+    if (input != nil) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:input options:0 error:&error];
+        jsonInput = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
 	
 	//handle unauthorized error
 	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
 		//relogin (session might've expired)
 		[self login];
 		//redo request
-		response = [self doRequestTo:url method:method input:[input JSONRepresentation] output:&contents cookie:sessionCookie];
+		response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
 	}
 
 	//check response code
-	if ([response statusCode] < 200 || [response statusCode] > 300)
+	if ([response statusCode] < 200 || [response statusCode] >= 300)
 	{
 		//Ai, some error that couldn't be resolved. Log and throw exception
 		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
@@ -347,17 +360,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
     if (contents && contents.length > 0) {
         //interpret JSON
-        NSString* jsonString = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
         NSDictionary* jsonResponse = nil;
-        @try {
-            jsonResponse = [jsonString JSONValue];
-        }
-        @catch (NSException *exception) {
-            
-        }
-        @finally {
-            
-        }
+        NSError *error = nil;
+        jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&error];
+
         return jsonResponse;
     } else {
         return nil;
@@ -373,14 +379,18 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 			return nil;
 	}
 	
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:[input JSONRepresentation] output:&contents cookie:sessionCookie];
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:input options:0 error:&error];
+	NSString *jsonInput = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
 	
 	//handle unauthorized error
 	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
 		//relogin (session might've expired)
 		[self login];
 		//redo request
-		response = [self doRequestTo:url method:method input:[input JSONRepresentation] output:&contents cookie:sessionCookie];
+		response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
 	}
     
 	//check response code

@@ -244,18 +244,22 @@ static CSSettings* sharedSettingsInstance = nil;
 
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent {
     if (persistent) {
-        //get sensor settings;
-        NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
-        NSMutableDictionary* typeSettings = [settings valueForKey:name];
-        if (typeSettings == nil) {
-            //create if it doesn't already exist
-            typeSettings = [NSMutableDictionary new];
-            [settings setObject:typeSettings forKey:name];
-        }
+        @synchronized(settings) {
+            //get sensor settings;
+            NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
+            NSMutableDictionary* typeSettings = [settings valueForKey:name];
+            if (typeSettings == nil) {
+                //create if it doesn't already exist
+                typeSettings = [NSMutableDictionary new];
+                @synchronized(settings) {
+                    [settings setObject:typeSettings forKey:name];
+                }
+            }
         
-        //commit setting
-        [typeSettings setObject:value forKey:setting];
-        [self storeSettings];
+            //commit setting
+            [typeSettings setObject:value forKey:setting];
+            [self storeSettings];
+        }
     }
 	
 	//create notification object
@@ -316,12 +320,15 @@ static CSSettings* sharedSettingsInstance = nil;
 
 - (void) storeSettings {
 	@try {
-		NSString *error;
+		NSError *error;
 		NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 		NSString *plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
-		NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:settings
-																	   format:NSPropertyListXMLFormat_v1_0
-															 errorDescription:&error];
+        
+        NSData *plistData;
+        @synchronized (settings) {
+            plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+        }
+
 		if(plistData) {
 			[plistData writeToFile:plistPath atomically:YES];
 		}
@@ -353,11 +360,12 @@ static CSSettings* sharedSettingsInstance = nil;
     
     //copy settings that aren't in the local settings with the default settings
     
-    for (NSString* key in defaultSettings) {
-        if ([settings valueForKey:key] == nil) {
-            [settings setValue:[defaultSettings objectForKey:key] forKey:key];
+    @synchronized(settings) {
+        for (NSString* key in defaultSettings) {
+            if ([settings valueForKey:key] == nil) {
+                [settings setValue:[defaultSettings objectForKey:key] forKey:key];
+            }
         }
     }
-    
 }
 @end

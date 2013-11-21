@@ -62,11 +62,58 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * @returns Wether the registration succeeded
  */
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password withEmail:(NSString*) email;
+
+/** Get the session cookie for Common Sense
+ *  Once the user has logged in to CommonSense this method can be used to retrieve the session cookie for an apps own usage. Note that the format is "session_id=<session_id>".
+ *  @returns The session id to communicate with CommonSense, nil if there is no session cookie.
+ */
++ (NSString*) getSessionCookie;
+
 /// Setup the platform for use with iVitality
 + (void) applyIVitalitySettings;
-/** Add a data point for a sensor, if the sensor doesn't exist it will be created
+
+/** Add a data point for a sensor that belongs to this device, if the sensor doesn't exist it will be created
+ * @param sensorName the sensor name
+ * @param displayName the display name of the sensor
+ * @param description the deviceType/description of the sensor
+ * @param dataType the data type for the data of the sensor.
+ * @param stringValue A JSON encoded data point
  */
-+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName deviceType:(NSString*)deviceType dataType:(NSString*)dataType value:(NSString*)value timestamp:(NSDate*)timestamp;
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp;
+
+/** Add a data point for a sensor that belongs to this device, if the sensor doesn't exist it will be created. 
+ * @param sensorName the sensor name
+ * @param displayName the display name of the sensor
+ * @param description the deviceType/description of the sensor
+ * @param dataType the data type for the data of the sensor.
+ * @param jsonValue The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).
+ */
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp;
+
+/** Add a data point for a sensor, if the sensor doesn't exist it will be created
+ * @param sensorName the sensor name
+ * @param displayName the display name of the sensor
+ * @param description the deviceType/description of the sensor
+ * @param dataType the data type for the data of the sensor.
+ * @param stringValue A JSON encoded data point
+ * @param deviceType the type of the device the sensor should be attached to (nil for no device)
+ * @param deviceUUID the uuid of the device the sensor should be attached to (nil for no device)
+ */
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description deviceType:(NSString*) deviceType deviceUUID:(NSString*) deviceUUID dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp;
+
+
+/** Add a data point for a sensor, if the sensor doesn't exist it will be created
+ * @param sensorName the sensor name
+ * @param displayName the display name of the sensor
+ * @param description the deviceType/description of the sensor
+ * @param dataType the data type for the data of the sensor.
+ * @param jsonValue The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).
+ * @param deviceType the type of the device the sensor should be attached to (nil for no device)
+ * @param deviceUUID the uuid of the device the sensor should be attached to (nil for no device)
+ */
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description deviceType:(NSString*) deviceType deviceUUID:(NSString*) deviceUUID dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp;
+
+
 /// This function isn't operational.
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;
 /** Retrieve a number of values of a sensor from Common Sense. returns nrLastPoints of the latest values.

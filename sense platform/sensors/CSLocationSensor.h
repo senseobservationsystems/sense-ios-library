@@ -22,7 +22,7 @@
 
 }
 
-@property BOOL isEnabled;
+@property (assign) BOOL isEnabled;
 
 - (void) setBackgroundRunningEnable:(BOOL) enable;
 @end

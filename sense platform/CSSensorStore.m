@@ -36,7 +36,7 @@
 #import "CSConnectionSensor.h"
 #import "CSPreferencesSensor.h"
 #import "BloodPressureSensor.h"
-#import "CSMiscSensor.h"
+#import "CSDisplaySensor.h"
 #import <sqlite3.h>
 #import "CSSender.h"
 
@@ -52,7 +52,6 @@
 - (void) instantiateSensors;
 - (NSUInteger) nrPointsToSend:(NSArray*) data;
 @end
-
 
 
 @implementation CSSensorStore {
@@ -130,10 +129,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
  							[CSAccelerometerSensor class],
 							[CSAccelerationSensor class],
 							[CSRotationSensor class],
+                            [CSDisplaySensor class],
                             //[CSJumpSensor class],
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
-							//[MiscSensor class],
 							nil];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];
@@ -153,7 +152,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(generalSettingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeGeneral] object:nil];
 	}
 	return self;
-} 
+}
+
 
 - (void) makeRemoteDeviceSensors {
     NSMutableDictionary* mySensorIdMap = [NSMutableDictionary new];
@@ -162,7 +162,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	//get list of sensors from the server
     NSDictionary* response;
     @try {
-        response = [sender listSensorsForDevice:[CSSensorStore device]];
+        response = [sender listSensors];
     } @catch (NSException* e) {
         stop = YES;
     }
@@ -171,7 +171,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     //NSLog(@"Response: '%@', sensor list: '%@'", response, remoteSensors);
     if (stop || remoteSensors == nil) {
         //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
-        NSLog(@"Couldn't get a list of sensors for the device. Don't make ");
+        NSLog(@"Couldn't get a list of sensors. Don't make ");
         return;
     }
 
@@ -182,7 +182,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             NSString* remoteId = [remoteSensor valueForKey:@"id"];
             NSString* name = [remoteSensor valueForKey:@"name"];
             NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
-            NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType];
+            NSDictionary* device = [remoteSensor valueForKey:@"device"];
+            NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType andDevice:device];
             //update sensor id map
             [mySensorIdMap setValue:remoteId forKey:sensorId];
         }
@@ -196,8 +197,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 			NSDictionary* description = [sender createSensorWithDescription:[sensor sensorDescription]];
             id sensorIdString = [description valueForKey:@"id"];
    			if (description != nil && sensorIdString != nil) {
-				//link sensor to this device
-				[sender connectSensor:sensorIdString ToDevice:[CSSensorStore device]];
+				//link sensor to device
+                if (sensor.device != nil) {
+                    [sender connectSensor:sensorIdString ToDevice:sensor.device];
+                }
 
                 //store sensor id in the map
   				[mySensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
@@ -207,6 +210,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             }
 		}
 	}
+    
     @synchronized(sensorIdMapLock) {
         sensorIdMap = mySensorIdMap;
     }
@@ -268,10 +272,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
-    //NSLog(@"Adding data for %@ (%@)", sensorName, sensorId);
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
+
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
+    
+    //FIXME: TODO: ugly hack to not send burst sensors
+    if ([sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
 
 	//retrieve/create entry for this sensor
 	@synchronized(self) {
@@ -311,7 +318,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		for (CSSensor* sensor in sensors) {
 			[[CSSettings sharedSettings] setSensor:sensor.name enabled:NO persistent:NO];
 		}
-        
+
         [locationSensor setBackgroundRunningEnable:NO];
 		//flush data
 		[self forceDataFlush];
@@ -350,7 +357,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) uploadAndClearData {
     dispatch_sync(uploadQueueGCD, ^{
-        	[self uploadData];
+        @autoreleasepool {
+            @try {
+               	[self uploadData];
+            }
+            @catch (NSException *exception) {
+                [self uploadData];
+            }
+        }
     });
 
 	@synchronized(self){
@@ -363,13 +377,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @synchronized(uploadTimerLock) {
         if (uploadTimerGCD) {
             dispatch_source_cancel(uploadTimerGCD);
-            dispatch_release(uploadTimerGCD);
         }
         uint64_t leeway = MAX(interval * 0.1, 1ull) * NSEC_PER_SEC;
         uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
         dispatch_source_set_event_handler(uploadTimerGCD, ^{
             dispatch_async(uploadQueueGCD, ^{
+                @autoreleasepool {
                 [self uploadOperation];
+                }
             });
         });
         dispatch_source_set_timer(uploadTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, leeway);
@@ -381,7 +396,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @synchronized(uploadTimerLock) {
         if (uploadTimerGCD) {
             dispatch_source_cancel(uploadTimerGCD);
-            dispatch_release(uploadTimerGCD);
             uploadTimerGCD = NULL;
         }
     }
@@ -492,12 +506,17 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
-    NSString* sensorId = [self resolveSensorIdForSensorName:name onlyThisDevice:onlyFromDevice];    
-
-    if (sensorId) {
-        return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
-    } else
-        return nil;
+    @try {
+        NSString* sensorId = [self resolveSensorIdForSensorName:name onlyThisDevice:onlyFromDevice];
+        
+        if (sensorId) {
+            return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
+        } else
+            return nil;
+    }
+    @catch (NSException *exception) {
+        return NULL;
+    }
 }
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
@@ -543,13 +562,28 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) forceDataFlushAndBlock {
     dispatch_sync(uploadQueueGCD, ^{
-        [self uploadData];
+        @autoreleasepool {
+            @try {
+                [self uploadData];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"Exception during forced data flush and block: %@", exception);
+            }
+
+        }
     });
 }
 
 - (void) forceDataFlush {
     dispatch_async(uploadQueueGCD, ^{
-        [self uploadData];
+        @autoreleasepool {
+            @try {
+                [self uploadData];
+            }
+            @catch (NSException *exception) {
+                 NSLog(@"Exception during forced data flush and block: %@", exception);
+            }
+        }
     });
 }
 
@@ -587,13 +621,21 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     //Heuristic to estimate the nr of points to send.
     NSUInteger points=0;
     int size = 0;
-    int sizeOfNextPoint = [[[data objectAtIndex:points] JSONRepresentation] length];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    int sizeOfNextPoint = [json length];
     do {
         points++;
         size += sizeOfNextPoint;
         if (points >= data.count)
             break; //there is no next point...
-        sizeOfNextPoint = [[[data objectAtIndex:points] JSONRepresentation] length];
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
+        NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        sizeOfNextPoint = [json length];
+
         //add some bytes for overhead
         sizeOfNextPoint += 10;
     } while (size + sizeOfNextPoint < MAX_BYTES_TO_UPLOAD_AT_ONCE);
@@ -638,13 +680,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
                 NSString* dName = [remoteSensor valueForKey:@"name"];
                 NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
+                NSDictionary* device = [remoteSensor valueForKey:@"device"];
                 if (dName == nil || ([sensorName caseInsensitiveCompare:dName] != NSOrderedSame))
                     continue;
                 
                 sensorId = [remoteSensor valueForKey:@"id"];
                 //update sensor id map
                 @synchronized(sensorIdMapLock) {
-                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType]];
+                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType andDevice:device]];
                 }
                 break;
             }
@@ -655,13 +698,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 
-
 + (NSDictionary*) device {
     NSString* type = [[UIDevice currentDevice] platformString];
-    
-	NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
+
+ 	NSUUID* uuid = [[UIDevice currentDevice] identifierForVendor];
+	//NSString* uuid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
 	NSDictionary* device = [NSDictionary dictionaryWithObjectsAndKeys:
-							uuid, @"uuid",
+							[uuid UUIDString], @"uuid",
 							type, @"type",
 							nil];
 	return device;

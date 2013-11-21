@@ -16,7 +16,6 @@
 #import <CoreMotion/CMAccelerometer.h>
 #import <CoreMotion/CMMotionManager.h>
 #import "CSOrientationSensor.h"
-#import "CSJSON.h"
 
 
 @implementation CSOrientationSensor
@@ -47,7 +46,10 @@ static const double G = 9.81;
 							@"float", attitudeYawKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",
