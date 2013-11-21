@@ -79,30 +79,35 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
+    int appState = [UIApplication sharedApplication].applicationState;
 	NSLog(@"%@ %@", enable ? @"Enabling":@"Disabling", [self name]);
 
 	isEnabled = enable;
     
     if (enable) {
         if (enableFlag < 1) {
-        //register for notifications...
-        //as this one is only committed when it changes, commit current value
+            //register for notifications...
+            //as this one is only committed when it changes, commit current value
         
-        // register to the darwin notificaitons
-        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+            // register to the darwin notificaitons
+            CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
                                         (__bridge const void *)(self), // observer
                                         displayStatusChanged, // callback
                                         CFSTR("com.apple.springboard.lockcomplete"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
         
-        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+            CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
                                         (__bridge const void *)(self), // observer
                                         displayStatusChanged, // callback
                                         CFSTR("com.apple.springboard.lockstate"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
-        enableFlag = 1;
+            enableFlag = 1;
+            // if app is in the foreground send that screen is on
+            if (appState == 1) {
+                [self commitDisplayState:TRUE];
+            }
         }
     } else {
         enableFlag = -1;
