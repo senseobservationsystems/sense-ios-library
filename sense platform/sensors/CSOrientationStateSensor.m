@@ -17,7 +17,7 @@
 #import "CSOrientationStateSensor.h"
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
-
+#import "Formatting.h"
 @implementation CSOrientationStateSensor
 
 - (NSString*) name {return @"device orientation";}
@@ -75,7 +75,7 @@
 			break;
 	}
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										orientationString, @"value",

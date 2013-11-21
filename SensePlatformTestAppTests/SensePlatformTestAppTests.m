@@ -44,7 +44,7 @@ static NSString* const password = @";jadsf8wurljksdfw3rw";
     NSString* name = @"TestSensor";
     NSString* value = @"Some value";
     NSDate* timestamp = [NSDate date];
-    [CSSensePlatform addDataPointForSensor:name displayName:name deviceType:name dataType:kCSDATA_TYPE_STRING value:value timestamp:timestamp];
+    [CSSensePlatform addDataPointForSensor:name displayName:name description:name dataType:kCSDATA_TYPE_STRING jsonValue:value timestamp:timestamp];
     [CSSensePlatform flushData];
 
     //let's be nice and give it some time
@@ -62,6 +62,24 @@ static NSString* const password = @";jadsf8wurljksdfw3rw";
         return;
     }
     STFail(@"Didn't get the data from Common Sense");
+}
+
+- (void)testAddDataFunction
+{
+    [CSSensePlatform initialize];
+    [CSSensePlatform loginWithUser:user andPassword:password];
+    NSString* name = @"TestSensor";
+    NSString* value = @"Some value";
+    NSDate* timestamp = [NSDate date];
+    [CSSensePlatform addDataPointForSensor:@"test default 1" displayName:@"test default 1" description:name dataType:kCSDATA_TYPE_STRING stringValue:value timestamp:timestamp];
+    [CSSensePlatform addDataPointForSensor:@"test default 2" displayName:@"test default 2" description:name dataType:kCSDATA_TYPE_STRING jsonValue:value timestamp:timestamp];
+    [CSSensePlatform addDataPointForSensor:name displayName:name description:name deviceType:@"Another device" deviceUUID:@"0a12" dataType:kCSDATA_TYPE_STRING jsonValue:value timestamp:timestamp];
+    [CSSensePlatform addDataPointForSensor:name displayName:name description:name deviceType:nil deviceUUID:nil dataType:kCSDATA_TYPE_STRING jsonValue:value timestamp:timestamp];
+    [CSSensePlatform addDataPointForSensor:name displayName:name description:name deviceType:@"Another device2" deviceUUID:@"0b2" dataType:kCSDATA_TYPE_STRING stringValue:value timestamp:timestamp];
+    [CSSensePlatform flushData];
+    
+    //let's be nice and give it some time
+    [NSThread sleepForTimeInterval:15];
 }
 
 @end

@@ -17,21 +17,27 @@
 #import "CSDynamicSensor.h"
 #import "CSDataStore.h"
 #import "CSSensePlatform.h"
-#import "CSJSON.h"
+#import "Formatting.h"
 
 @implementation CSDynamicSensor {
     NSDictionary* fields;
+    NSDictionary* deviceDict;
 }
 - (NSString*) name {return sensorName;}
 - (NSString*) deviceType {return deviceType;}
 + (BOOL) isAvailable {return YES;}
+- (NSDictionary*) device {return deviceDict;}
 
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data
     NSString* dataStructure = @"";
     if ([dataType isEqualToString: kCSDATA_TYPE_JSON]) {
-        if (fields != nil)
-            dataStructure = [fields JSONRepresentation];
+        if (fields != nil) {
+            NSError* error = nil;
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:fields options:0 error:&error];
+            dataStructure = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+        }
         return [NSDictionary dictionaryWithObjectsAndKeys:
                 [self name], @"name",
        			[self displayName], @"display_name",
@@ -58,14 +64,28 @@
         displayName = dispName;
         deviceType = devType;
         dataType = datType;
+        deviceDict = [super device];
 	}
 	return self;
 }
 
-- (void) commitValue:(NSString*)value withTimestamp:(NSString*)timestamp {
+- (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields device:(NSDictionary*) device {
+	self = [super init];
+	if (self) {
+        sensorName = name;
+        displayName = dispName;
+        deviceType = devType;
+        dataType = datType;
+        deviceDict = device;
+	}
+	return self;
+}
+
+
+- (void) commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp {
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										value, @"value",
-										timestamp,@"date",
+										CSroundedNumber(timestamp, 3),@"date",
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
 }
@@ -73,12 +93,12 @@
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
-	NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
+	//NSLog(@"%@ %@ sensor (id=%@)", enable ? @"Enabling":@"Disabling", sensorName, self.sensorId);
 	isEnabled = enable;
 }
 
 - (void) dealloc {
-    NSLog(@"Deallocating %@", sensorName);
+    //NSLog(@"Deallocating %@", sensorName);
 	self.isEnabled = NO;
 }
 

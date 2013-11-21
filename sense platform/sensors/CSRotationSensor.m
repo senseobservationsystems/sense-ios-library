@@ -17,7 +17,6 @@
 #import <CoreMotion/CoreMotion.h>
 #import "CSRotationSensor.h"
 #import "CSAccelerometerSensor.h"
-#import "CSJSON.h"
 
 
 @implementation CSRotationSensor
@@ -41,7 +40,10 @@
 							@"float", CSaccelerationZKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",
