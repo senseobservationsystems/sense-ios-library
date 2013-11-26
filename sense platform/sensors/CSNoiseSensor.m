@@ -116,8 +116,8 @@
 }
 
 - (void) startRecording {
-    UInt32 audioIsPlaying = 0;
     /* This check seem to return true always on ios7. TODO: enable on ios <7?
+    UInt32 audioIsPlaying = 0;
     UInt32 size = sizeof(audioIsPlaying);
     AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &size, &audioIsPlaying);
     if (audioIsPlaying) {

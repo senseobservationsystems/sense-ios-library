@@ -92,13 +92,13 @@ static CLLocation* lastAcceptedPoint;
 // Newer delegate method
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     for (CLLocation* location in locations) {
-        [self locationManager:manager didUpdateToLocation: location fromLocation: nil];
+        [self locationManager:manager updateToLocation: location fromLocation: nil];
     }
 }
 
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
+    updateToLocation:(CLLocation *)newLocation
 		   fromLocation:(CLLocation *)oldLocation {
 
     if (isEnabled == NO) {
