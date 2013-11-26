@@ -67,31 +67,7 @@
 - (id) init {
 	self = [super init];
 	if (self) {
-		
-		//define audio category to allow mixing. Since ios7 this doesn't work any more. If we do that we fail to record in the background
-		NSError *setCategoryError = nil;
-		[[AVAudioSession sharedInstance]
-		 setCategory: AVAudioSessionCategoryPlayAndRecord
-		 error: &setCategoryError];
-		OSStatus propertySetError = 0;
-		UInt32 value = 0;
 		NSError* error;
-        [[AVAudioSession sharedInstance] setActive:NO error:&error];
-
-		propertySetError = AudioSessionSetProperty (
-													kAudioSessionProperty_OverrideCategoryMixWithOthers,
-													sizeof (value),
-													&value
-													);
-        /*
-        value = kAudioSessionOverrideAudioRoute_Speaker;
-        propertySetError = AudioSessionSetProperty (
-                                                    kAudioSessionProperty_OverrideAudioRoute,
-													sizeof (value),
-													&value
-													);
-         */
-        //[[AVAudioSession sharedInstance] setActive:YES error:&error];
 		//set recording file
 		NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
@@ -189,6 +165,31 @@
 	NSLog(@"Enabling noise sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
 	isEnabled = enable;
 	if (enable) {
+        
+		//define audio category to allow mixing. Since ios7 this doesn't work any more. If we do that we fail to record in the background
+		NSError *setCategoryError = nil;
+		[[AVAudioSession sharedInstance]
+		 setCategory: AVAudioSessionCategoryPlayAndRecord
+		 error: &setCategoryError];
+		OSStatus propertySetError = 0;
+		UInt32 value = 0;
+		NSError* error;
+        [[AVAudioSession sharedInstance] setActive:NO error:&error];
+        
+		propertySetError = AudioSessionSetProperty (
+													kAudioSessionProperty_OverrideCategoryMixWithOthers,
+													sizeof (value),
+													&value
+													);
+        /*
+         value = kAudioSessionOverrideAudioRoute_Speaker;
+         propertySetError = AudioSessionSetProperty (
+         kAudioSessionProperty_OverrideAudioRoute,
+         sizeof (value),
+         &value
+         );
+         */
+        //[[AVAudioSession sharedInstance] setActive:YES error:&error];
 		if (NO==audioRecorder.recording) {
 			[self startRecording];
 		}
