@@ -17,78 +17,78 @@
 #import <Foundation/Foundation.h>
 
 //notifications
-NSString* const CSsettingLoginChangedNotification;
-NSString* const settingSynchronisationChangedNotification;
-NSString* const CSanySettingChangedNotification;
+extern NSString* const CSsettingLoginChangedNotification;
+extern NSString* const settingSynchronisationChangedNotification;
+extern NSString* const CSanySettingChangedNotification;
 
 //setting types
-NSString* const kCSSettingTypeGeneral;
-NSString* const kCSSettingTypeBiometric;
-NSString* const kCSSettingTypeLocation;
-NSString* const kCSSettingTypeSpatial;
-NSString* const kCSSettingTypeAmbience;
+extern NSString* const kCSSettingTypeGeneral;
+extern NSString* const kCSSettingTypeBiometric;
+extern NSString* const kCSSettingTypeLocation;
+extern NSString* const kCSSettingTypeSpatial;
+extern NSString* const kCSSettingTypeAmbience;
 
 
 //general settings
-NSString* const kCSGeneralSettingUsername;
-NSString* const kCSGeneralSettingPassword;
-NSString* const kCSGeneralSettingSenseEnabled;
-NSString* const kCSGeneralSettingUploadInterval;
-NSString* const kCSGeneralSettingPollInterval;
-NSString* const kCSGeneralSettingAutodetect;
-NSString* const kCSGeneralSettingUploadToCommonSense;
+extern NSString* const kCSGeneralSettingUsername;
+extern NSString* const kCSGeneralSettingPassword;
+extern NSString* const kCSGeneralSettingSenseEnabled;
+extern NSString* const kCSGeneralSettingUploadInterval;
+extern NSString* const kCSGeneralSettingPollInterval;
+extern NSString* const kCSGeneralSettingAutodetect;
+extern NSString* const kCSGeneralSettingUploadToCommonSense;
 
 //biometric settings
-NSString* const kCSBiometricSettingGender;
-NSString* const kCSBiometricSettingBirthDate;
-NSString* const kCSBiometricSettingWeight;
-NSString* const kCSBiometricSettingHeight;
-NSString* const kCSBiometricSettingBodyFat;
-NSString* const kCSBiometricSettingMaxPulse;
+extern NSString* const kCSBiometricSettingGender;
+extern NSString* const kCSBiometricSettingBirthDate;
+extern NSString* const kCSBiometricSettingWeight;
+extern NSString* const kCSBiometricSettingHeight;
+extern NSString* const kCSBiometricSettingBodyFat;
+extern NSString* const kCSBiometricSettingMaxPulse;
 
 
 //activity settings
-NSString* const kCSActivitySettingDetection;
-NSString* const kCSActivitySettingPrivacy;
+extern NSString* const kCSActivitySettingDetection;
+extern NSString* const kCSActivitySettingPrivacy;
 
 //location settings
-NSString* const kCSLocationSettingAccuracy;
-NSString* const kCSLocationSettingMinimumDistance;
+extern NSString* const kCSLocationSettingAccuracy;
+extern NSString* const kCSLocationSettingMinimumDistance;
 
 //spatial settings
-NSString* const kCSSpatialSettingInterval;
-NSString* const kCSSpatialSettingFrequency;
-NSString* const kCSSpatialSettingNrSamples;
+extern NSString* const kCSSpatialSettingInterval;
+extern NSString* const kCSSpatialSettingFrequency;
+extern NSString* const kCSSpatialSettingNrSamples;
 
 //ambience settings
-NSString* const kCSAmbienceSettingInterval;
+extern NSString* const kCSAmbienceSettingInterval;
 
 
 //Most settings are numbers (with SI units, i.e. seconds, meters, kg, percent etc.). Categorical values should be one of the following strings
 //boolean
-NSString* const kCSSettingYES;
-NSString* const kCSSettingNO;
+extern NSString* const kCSSettingYES;
+extern NSString* const kCSSettingNO;
 
 //upload interval
-NSString* const kCSGeneralSettingUploadIntervalNightly;
-NSString* const kCSGeneralSettingUploadIntervalWifi;
-NSString* const kCSGeneralSettingUploadIntervalAdaptive;
+extern NSString* const kCSGeneralSettingUploadIntervalNightly;
+extern NSString* const kCSGeneralSettingUploadIntervalWifi;
+extern NSString* const kCSGeneralSettingUploadIntervalAdaptive;
 
 //biometric
-NSString* const kCSBiometricSettingGenderMale;
-NSString* const kCSBiometricSettingGenderFemale;
+extern NSString* const kCSBiometricSettingGenderMale;
+extern NSString* const kCSBiometricSettingGenderFemale;
 
 //activity detection
-NSString* const kCSActivitySettingDetectionDetectOnly;
-NSString* const kCSActivitySettingDetectionIgnore;
-NSString* const kCSActivitySettingDetectionDetectAndUpload;
+extern NSString* const kCSActivitySettingDetectionDetectOnly;
+extern NSString* const kCSActivitySettingDetectionIgnore;
+extern NSString* const kCSActivitySettingDetectionDetectAndUpload;
 
 //activity privacy
-NSString* const kCSActivitySettingPrivacyPrivate;
-NSString* const kCSActivitySettingPrivacyFriends;
-NSString* const kCSActivitySettingPrivacyFriendsOfFriends;
-NSString* const kCSActivitySettingPrivacyActivitiesCommunity;
-NSString* const kCSActivitySettingPrivacyPublic;
+extern NSString* const kCSActivitySettingPrivacyPrivate;
+extern NSString* const kCSActivitySettingPrivacyFriends;
+extern NSString* const kCSActivitySettingPrivacyFriendsOfFriends;
+extern NSString* const kCSActivitySettingPrivacyActivitiesCommunity;
+extern NSString* const kCSActivitySettingPrivacyPublic;
 
 
 @interface CSSetting : NSObject

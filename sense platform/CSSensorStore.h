@@ -22,9 +22,9 @@
 @interface CSSensorStore : NSObject <CSDataStore> {
 }
 
-@property (readonly, retain) NSArray* allAvailableSensorClasses;
-@property (readonly, retain) NSArray* sensors;
-@property (readonly, retain) CSSender* sender;
+@property (readonly) NSArray* allAvailableSensorClasses;
+@property (readonly) NSArray* sensors;
+@property (readonly) CSSender* sender;
 
 
 + (CSSensorStore*) sharedSensorStore;

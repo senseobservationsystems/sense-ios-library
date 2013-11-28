@@ -24,6 +24,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "CSSettings.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 //Declare private methods using empty category
 @interface CSNoiseSensor()
@@ -67,13 +68,13 @@
 	self = [super init];
 	if (self) {
 		
-		//define audio category to allow mixing
+		//define audio category to allow mixing. Since ios7 this doesn't work any more. If we do that we fail to record in the background
 		NSError *setCategoryError = nil;
 		[[AVAudioSession sharedInstance]
 		 setCategory: AVAudioSessionCategoryPlayAndRecord
 		 error: &setCategoryError];
 		OSStatus propertySetError = 0;
-		UInt32 value = true;
+		UInt32 value = 0;
 		NSError* error;
         [[AVAudioSession sharedInstance] setActive:NO error:&error];
 
@@ -82,13 +83,15 @@
 													sizeof (value),
 													&value
 													);
+        /*
         value = kAudioSessionOverrideAudioRoute_Speaker;
         propertySetError = AudioSessionSetProperty (
                                                     kAudioSessionProperty_OverrideAudioRoute,
 													sizeof (value),
 													&value
 													);
-        [[AVAudioSession sharedInstance] setActive:YES error:&error];
+         */
+        //[[AVAudioSession sharedInstance] setActive:YES error:&error];
 		//set recording file
 		NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
@@ -129,12 +132,16 @@
 - (void) scheduleRecording {
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
+        @autoreleasepool {
+
         [self startRecording];
+        }
     });
 }
 
 - (void) startRecording {
     UInt32 audioIsPlaying = 0;
+    /* This check seem to return true always on ios7. TODO: enable on ios <7?
     UInt32 size = sizeof(audioIsPlaying);
     AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &size, &audioIsPlaying);
     if (audioIsPlaying) {
@@ -142,12 +149,12 @@
         // at the cost of some missing data.
         [self scheduleRecording];
         return;
-    }
-
-    
+    }*/
+    NSError* error;
+    [[AVAudioSession sharedInstance] setActive:YES error:&error];
 	audioRecorder.delegate = self;
 	BOOL started = [audioRecorder recordForDuration:sampleDuration];
-	NSLog(@"recorder %@", started? @"started":@"failed to start");
+	//NSLog(@"recorder %@", started? @"started":@"failed to start");
 	if (NO == started || audioRecorder.isRecording == NO) {
 		//try again later
 		[self scheduleRecording];
@@ -160,9 +167,8 @@
     @synchronized(volumeTimerLock) {
         if (volumeTimer) {
             dispatch_source_cancel(volumeTimer);
-            dispatch_release(volumeTimer);
         }
-        uint64_t leeway = volumeSampleInterval * 0.05 * NSEC_PER_SEC; //5% leeway
+        uint64_t leeway = volumeSampleInterval * 0.3 * NSEC_PER_SEC; //30% leeway
         volumeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, volumeTimerQueue);
         dispatch_source_set_event_handler(volumeTimer, ^{
             [audioRecorder updateMeters];
@@ -190,23 +196,22 @@
         @synchronized(volumeTimerLock) {
             if (volumeTimer) {
                 dispatch_source_cancel(volumeTimer);
-                dispatch_release(volumeTimer);
                 volumeTimer = NULL;
             }
         }
 		audioRecorder.delegate = nil;
 		[audioRecorder stop];
+        NSError* error;
+        [[AVAudioSession sharedInstance] setActive:NO error:&error];
 	}
     isEnabled = enable;
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
-	NSLog(@"recorder stopped");
 
     @synchronized(volumeTimerLock) {
         if (volumeTimer) {
             dispatch_source_cancel(volumeTimer);
-            dispatch_release(volumeTimer);
             volumeTimer = NULL;
         }
     }
@@ -216,13 +221,10 @@
 		double timestamp = [[NSDate date] timeIntervalSince1970];
 
         double level = 20 * log10(volumeSum / nrVolumeSamples);
- 
-		//TODO: save file...
-		[recorder deleteRecording];
 	
 		NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-											[NSString stringWithFormat:@"%.1f", level], @"value",
-											[NSString stringWithFormat:@"%.0f",timestamp], @"date",
+											CSroundedNumber(level, 1), @"value",
+											CSroundedNumber(timestamp, 3), @"date",
 											nil];
 	
 		[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
@@ -238,11 +240,11 @@
 -(void)audioRecorderBeginInterruption:(AVAudioRecorder *)recorder {
 	NSLog(@"Noise sensor interrupted.");
     [recorder stop];
-	[recorder deleteRecording];
     [self scheduleRecording];
 }
 
 - (void)audioRecorderEndInterruption:(AVAudioRecorder *)recorder withFlags:(NSUInteger)flags {
+    [self scheduleRecording];
 }
 
 

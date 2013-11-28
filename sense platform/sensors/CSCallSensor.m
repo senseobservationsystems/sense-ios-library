@@ -18,8 +18,8 @@
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import "CSJSON.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 
 @implementation CSCallSensor
@@ -43,7 +43,10 @@ static NSString* disconnected = @"idle";
 							@"string", stateKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",
@@ -67,7 +70,7 @@ static NSString* disconnected = @"idle";
 	//only react to changes
 	//if (enable == isEnabled) return;
 	NSLog(@"%@ call sensor (id=%@)", enable ? @"Enabling":@"Disabling", self.sensorId);
-	
+	CSCallSensor* __block selfRef = self;
 	if (enable) {
 		callCenter.callEventHandler = ^(CTCall* inCTCall) {
 			NSLog(@"%@: %@",inCTCall.callID, inCTCall.callState);
@@ -86,13 +89,13 @@ static NSString* disconnected = @"idle";
 											callState, stateKey,
 											nil];
 			
-			NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+			NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 			
 			NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-												[newItem JSONRepresentation], @"value",
+												newItem, @"value",
 												timestamp,@"date",
 												nil];
-			[self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];
 			
 		};
 	} else {
