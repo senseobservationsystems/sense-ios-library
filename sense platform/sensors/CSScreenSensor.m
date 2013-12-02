@@ -13,23 +13,14 @@
 #import "CSSensePlatform.h"
 
 static NSString* screenKey = @"screen";
-/* refToSelf, displayCompleteFlag, enableFlag need to be global since we use them in the callback function */
-// Pointer to it's self to use in the call back function
-id refToSelf;
+/* refToSelf, displayCompleteFlag, enableFlag need to be global since we use them in the callback function.  NOTE: only works for one instance of CSScreenSensor! */
+// Pointer to it's self to use in the call back function.
+static id refToSelf;
 // flag for seperation of lock/unlock events
-BOOL displayCompleteFlag;
-
-// flag to detect and control the screen state at the first time
-typedef enum enableFlagTypes {
-    SCREEN_SENSOR_DISABLED = 0,
-    SCREEN_SENSOR_INIT = 1,
-    SCREEN_SENSOR_ENABLED = 2
-} enableFlagState;
-
-enableFlagState enableFlag;
+static BOOL displayCompleteFlag;
 
 @implementation CSScreenSensor {
-    
+
 }
 
 - (NSString*) name {return kCSSENSOR_SCREEN_STATE;}
@@ -60,29 +51,26 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 	if (self) {
         refToSelf = self;
         displayCompleteFlag = NO;
-        enableFlag = SCREEN_SENSOR_INIT;
 	}
 	return self;
 }
 
 
 - (void) commitDisplayState:(BOOL) isScreenTurnedOn {
-    if (isEnabled) {
-        NSString* value = isScreenTurnedOn ? @"on" : @"off";
-        
-        NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-        
-        NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                        value, screenKey,
+    NSString* value = isScreenTurnedOn ? @"on" : @"off";
+    
+    NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
+    
+    NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                    value, screenKey,
+                                    nil];
+    
+    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        newItem, @"value",
+                                        timestamp,@"date",
                                         nil];
-        
-        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            newItem, @"value",
-                                            timestamp,@"date",
-                                            nil];
-        
-        [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    }
+    
+    [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
 }
 
 - (BOOL) isEnabled {return isEnabled;}
@@ -91,42 +79,37 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
-    int appState = [UIApplication sharedApplication].applicationState;
+    UIApplicationState appState = [UIApplication sharedApplication].applicationState;
 	NSLog(@"%@ %@", enable ? @"Enabling":@"Disabling", [self name]);
 
-	isEnabled = enable;
-    
-    if (enable) {
-        //if (enableFlag < 1) {
-        if (enableFlag != SCREEN_SENSOR_ENABLED) {
-            //register for notifications...
-            //as this one is only committed when it changes, commit current value
-        
-            // register to the darwin notificaitons
-            CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+   
+    if (enable && isEnabled == NO) {
+        // register to the darwin notifications
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
                                         (__bridge const void *)(self), // observer
                                         displayStatusChanged, // callback
                                         CFSTR("com.apple.springboard.lockcomplete"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
         
-            CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
                                         (__bridge const void *)(self), // observer
                                         displayStatusChanged, // callback
                                         CFSTR("com.apple.springboard.lockstate"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
-            enableFlag = SCREEN_SENSOR_ENABLED;
-            // if app is in the foreground send that screen is on
-            if (appState == 1) {
-                [self commitDisplayState:TRUE];
-            }
+
+        //as this one is only committed when it changes, commit current value
+        // if app is in the foreground send that screen is on
+        if (appState == UIApplicationStateActive) {
+            [self commitDisplayState:TRUE];
         }
-    } else {
-        enableFlag = SCREEN_SENSOR_DISABLED;
+    } else if (enable == NO && isEnabled == YES){
         // unregister from the darwin notifications
         CFNotificationCenterRemoveObserver(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge const void *)(self), NULL, NULL);
     }
+    
+  	isEnabled = enable;
 }
 
 - (void) dealloc {
@@ -153,16 +136,12 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
         NSLog(@"DISPLAY OFF\n");
         display = NO;
         displayCompleteFlag = NO;
-        if (enableFlag == SCREEN_SENSOR_ENABLED) {
-            [refToSelf commitDisplayState:display];
-        }
+        [refToSelf commitDisplayState:display];
     }
     else if ([lockState isEqualToString:@"com.apple.springboard.lockstate"] && displayCompleteFlag == NO) {
         NSLog(@"DISPLAY ON\n");
         displayCompleteFlag = NO;
         display = YES;
-        if (enableFlag == SCREEN_SENSOR_ENABLED) {
-            [refToSelf commitDisplayState:display];
-        }
+        [refToSelf commitDisplayState:display];
     }
 }
