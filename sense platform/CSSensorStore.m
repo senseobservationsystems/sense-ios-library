@@ -201,7 +201,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                 if (sensor.device != nil) {
                     [sender connectSensor:sensorIdString ToDevice:sensor.device];
                 }
-
                 //store sensor id in the map
   				[mySensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
 				NSLog(@"Created %@ sensor with id %@", sensor.sensorId, sensorIdString);
@@ -261,7 +260,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @synchronized(sensors) {
         sensor.dataStore = self;
         for(CSSensor* s in sensors) {
-            if ([s matchesDescription:[sensor sensorDescription]]) {
+            if ([s.sensorId isEqualToString:sensor.sensorId]) {
                 //list already contains sensor, don't add
                 return;
             }
@@ -278,7 +277,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
     
     //FIXME: TODO: ugly hack to not send burst sensors
-    if ([sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
+    //if ([sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
 
 	//retrieve/create entry for this sensor
 	@synchronized(self) {
