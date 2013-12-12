@@ -61,6 +61,7 @@ NSString* const kCSSpatialSettingNrSamples = @"number of samples";
 
 //ambiance settings
 NSString* const kCSAmbienceSettingInterval = @"pollInterval";
+NSString* const kCSAmbienceSettingSampleOnlyWhenScreenLocked = @"sampleOnlyWhenScreenLocked";
 
 //categorical values
 NSString* const kCSSettingYES = @"1";

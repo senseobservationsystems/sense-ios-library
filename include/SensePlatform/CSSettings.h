@@ -62,6 +62,7 @@ extern NSString* const kCSSpatialSettingNrSamples;
 
 //ambience settings
 extern NSString* const kCSAmbienceSettingInterval;
+extern NSString* const kCSAmbienceSettingSampleOnlyWhenScreenLocked;
 
 
 //Most settings are numbers (with SI units, i.e. seconds, meters, kg, percent etc.). Categorical values should be one of the following strings
