@@ -26,11 +26,7 @@
 #import "CSDataStore.h"
 #import "Formatting.h"
 
-#define AVLinearPCMIsNonInterleavedKey AVLinearPCMIsNonInterleaved
 #define SCALE_FACTOR 32767
-
-
-int tesing = 0;
 
 //Declare private methods using empty category
 @interface CSNoiseSensor()
@@ -42,17 +38,9 @@ int tesing = 0;
     AVAudioRecorder* audioRecorder;
     NSTimeInterval sampleInterval;
     NSTimeInterval sampleDuration;
-    NSTimeInterval volumeSampleInterval;
-	
-    double volumeSum;
-    NSInteger nrVolumeSamples;
-    
+	   
     dispatch_queue_t recordQueue;
-    dispatch_queue_t volumeTimerQueue;
-    dispatch_source_t volumeTimer;
-    NSObject* volumeTimerLock;
     
-    //---------------------------------
     double lowPassResults;
     NSURL* recording;
     int numberOfPackets;
@@ -82,60 +70,8 @@ int tesing = 0;
 	self = [super init];
 	if (self) {
         
-        //BOOL screenSensor = [[CSSettings sharedSettings] isSensorEnabled:kCSSENSOR_SCREEN_STATE];
-        //NSLog(@"******&*&*&*&*&**&*&&* SCREEN_SENSOR: %d", screenSensor);
-        //if (screenSensor == YES) {
-        //    NSLog(@"****************** SCREEN SENSOR IS ON");
-        //}
-        
         //subscribe to sensor data
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewData:) name:kCSNewSensorDataNotification object:nil];
-		
-		//define audio category to allow mixing. Since ios7 this doesn't work any more. If we do that we fail to record in the background
-		/* NSError *setCategoryError = nil;
-		[[AVAudioSession sharedInstance]
-		 setCategory: AVAudioSessionCategoryPlayAndRecord
-		 error: &setCategoryError];
-		OSStatus propertySetError = 0;
-		UInt32 value = 0;
-		NSError* error;
-        [[AVAudioSession sharedInstance] setActive:NO error:&error];
-
-		propertySetError = AudioSessionSetProperty (
-													kAudioSessionProperty_OverrideCategoryMixWithOthers,
-													sizeof (value),
-													&value
-													); */
-        /*
-        value = kAudioSessionOverrideAudioRoute_Speaker;
-        propertySetError = AudioSessionSetProperty (
-                                                    kAudioSessionProperty_OverrideAudioRoute,
-													sizeof (value),
-													&value
-													);
-         */
-        //[[AVAudioSession sharedInstance] setActive:YES error:&error];
-		//set recording file
-		/*NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-																  NSUserDomainMask, YES) objectAtIndex:0];
-		NSString* path = [rootPath stringByAppendingPathComponent:@"recording.wav"];
-		NSURL* recording = [NSURL fileURLWithPath: path];*/
-        
-		
-		/*
-		NSDictionary* recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-										[NSNumber numberWithInt:kAudioFormatAppleLossless], AVFormatIDKey,
-										[NSNumber numberWithFloat:44100.0], AVSampleRateKey,
-										[NSNumber numberWithInt: 1], AVNumberOfChannelsKey,
-										nil];
-		 */
-
-		/*audioRecorder = [[AVAudioRecorder alloc] initWithURL:recording settings:nil error:&error];
-		if (nil == audioRecorder) {
-			NSLog(@"Recorder could not be initialised. Error: %@", error);
-		}
-		audioRecorder.delegate = self;
-		audioRecorder.meteringEnabled = YES;*/
         
         //register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -144,23 +80,17 @@ int tesing = 0;
         
         
         sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
-        //sampleInterval = 6; // seconds
         sampleDuration = 10; // seconds
-		volumeSampleInterval = 0.2;
-        
-
         
         recordQueue = dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
-        volumeTimerQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        volumeTimerLock = [[NSObject alloc] init];
         
         // configuration of the audio session
-        // call audioSessionConfiguration
         [self audioSessionConfiguration];
-        // call audioRecorderConfiguration
+        // configuration of the audio recorder
         [self audioRecorderConfiguration];
         numberOfPackets = 0;
         screenIsOn = YES;
+        sampleOnlyWhenScreenLocked = YES;
 	}
 	return self;
 }
@@ -226,9 +156,6 @@ int tesing = 0;
             NSLog(@"setPreferredDataSource failed. Error: %@", theError);
         }
     }
-    // register interrupt notification
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interruptionHandler:) name:AVAudioSessionInterruptionNotification object:session];
-    
 }
 
 /** Initalize and configure the audio recorder
@@ -258,7 +185,6 @@ int tesing = 0;
         audioRecorder.meteringEnabled = YES;
         [audioRecorder prepareToRecord];
     }
-    //[audioRecorder recordForDuration:sampleDuration];
     interruptedOnRecording = NO;
 }
 
@@ -273,32 +199,18 @@ int tesing = 0;
 }
 
 - (void) startRecording {
-    NSLog(@"*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^*^ RECORDING");
-    NSLog(@"$$$$$$$$$$$$$ sampleOnlyWhenScreenLocked: %d", sampleOnlyWhenScreenLocked);
-
-    BOOL started = NO;
     
-    //UInt32 audioIsPlaying = 0;
-    /* This check seem to return true always on ios7. TODO: enable on ios <7?
-    UInt32 size = sizeof(audioIsPlaying);
-    AudioSessionGetProperty(kAudioSessionProperty_OtherAudioIsPlaying, &size, &audioIsPlaying);
-    if (audioIsPlaying) {
-        // Recording can interfere with others apps playing/recording. Don't record when another app is playing should improve user experience,
-        // at the cost of some missing data.
-        [self scheduleRecording];
-        return;
-    }*/
-    //NSError* error;
-    //[[AVAudioSession sharedInstance] setActive:YES error:&error];
-	//audioRecorder.delegate = self;
+    BOOL started = NO;
     
     // sample continuously, independant of the state of the screen
     if (sampleOnlyWhenScreenLocked == NO) {
+        NSLog(@"-----------RECORDING STARTED-----------");
         started = [audioRecorder recordForDuration:sampleDuration];
     }
     // sample only when the screen is locked
     else {
         if (screenIsOn == NO) {
+            NSLog(@"-----------RECORDING STARTED-----------");
             started = [audioRecorder recordForDuration:sampleDuration];
         }
         else {
@@ -306,8 +218,6 @@ int tesing = 0;
             return;
         }
     }
-    
-	//BOOL started = [audioRecorder recordForDuration:sampleDuration];
     
 	//NSLog(@"recorder %@", started? @"started":@"failed to start");
 	if (NO == started || audioRecorder.isRecording == NO) {
@@ -323,24 +233,15 @@ int tesing = 0;
 	//only react to changes
 	if (enable == isEnabled) return;
     
-    sampleOnlyWhenScreenLocked = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingSampleOnlyWhenScreenLocked] isEqualToString:kCSSettingYES];
+    //sampleOnlyWhenScreenLocked = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingSampleOnlyWhenScreenLocked] isEqualToString:kCSSettingYES];
     
-    NSLog(@"$$$$$$$$$$$$$ sampleOnlyWhenScreenLocked: %d", sampleOnlyWhenScreenLocked);
-	
 	NSLog(@"Enabling noise sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
 	isEnabled = enable;
-    //if (enable && sampleOnlyWhenScreenLocked == NO) {
 	if (enable) {
 		if (NO==audioRecorder.recording) {
 			[self startRecording];
 		}
 	} else {
-        @synchronized(volumeTimerLock) {
-            if (volumeTimer) {
-                dispatch_source_cancel(volumeTimer);
-                volumeTimer = NULL;
-            }
-        }
 		audioRecorder.delegate = nil;
 		[audioRecorder stop];
         NSError* error;
@@ -351,34 +252,10 @@ int tesing = 0;
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
 
-    NSLog(@"DID FINISH RECORDING ***************");
-    
-    /* @synchronized(volumeTimerLock) {
-        if (volumeTimer) {
-            dispatch_source_cancel(volumeTimer);
-            volumeTimer = NULL;
-        }
-    }
+    NSLog(@"-----------RECORDING STOPED-----------");
 
-	if (didSucceed && nrVolumeSamples > 0)	{
-		//take timestamp
-		double timestamp = [[NSDate date] timeIntervalSince1970];
-
-        double level = 20 * log10(volumeSum / nrVolumeSamples);
-	
-		NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-											CSroundedNumber(level, 1), @"value",
-											CSroundedNumber(timestamp, 3), @"date",
-											nil];
-	
-		[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-	} else {
-		NSLog(@"recorder finished unsuccesfully");
-	} */
-    
     if (didSucceed ==TRUE) {
         // calculate the audio recording volume in dBs
-        // call computeAudioVolume
         [self computeAudioVolume];
         NSLog(@"recorder finished succesfully");
     }
@@ -414,7 +291,6 @@ int tesing = 0;
     UInt64 packetsCount = 0;
     
     // open recording file
-    NSLog(@"------------------**************** audio file: %@", recording);
     result = AudioFileOpenURL(CFBridgingRetain(recording), kAudioFileReadPermission, 0, &recordingFile);
     if (result != 0) {
         NSLog(@"Couldn't open recording file. Error: %d", (int) result);
@@ -430,9 +306,9 @@ int tesing = 0;
     if (result != noErr) {
         NSLog(@"Error: Getting property %d\n", (int)result);
     }
-    else {
-        NSLog(@"Number of pakcets: %llu\n", packetsCount);
-    }
+    //else {
+    //    NSLog(@"Number of pakcets: %llu\n", packetsCount);
+    //}
     numberOfPackets = (int) packetsCount;
     
     rawSampleData = (short int*) malloc(numberOfPackets * sizeof(short int));
@@ -453,7 +329,7 @@ int tesing = 0;
     avgOfRawSampleData = sumOfRawSampleData / numberOfPackets;
     rootAvgOfRawSampleData = sqrt(avgOfRawSampleData);
     volumeOfAudioSignal = 10 * (log10(avgOfRawSampleData));
-    NSLog(@"---------- Audio recording volume(dB): %f ----------", volumeOfAudioSignal);
+    NSLog(@"-----------Audio recording volume(dB): %f-----------", volumeOfAudioSignal);
     
     //take timestamp
     double timestamp = [[NSDate date] timeIntervalSince1970];
@@ -479,7 +355,7 @@ int tesing = 0;
         NSLog(@"Error: Getting property %d\n", (int)result);
     }
     else {
-        NSLog(@"---------- Audio recording duration: %f ----------", (Float64) duration);
+        NSLog(@"-----------Audio recording duration: %f-----------", (Float64) duration);
     }
     
     free(rawSampleData);
@@ -511,6 +387,10 @@ int tesing = 0;
 			sampleInterval = [setting.value doubleValue];
 		} else if ([setting.name isEqualToString:kCSAmbienceSettingSampleOnlyWhenScreenLocked]) {
             sampleOnlyWhenScreenLocked = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingSampleOnlyWhenScreenLocked] isEqualToString:kCSSettingYES];
+            // enable the screen sensor if it is disabled when you want to sample only when the screen is locked
+            if (sampleOnlyWhenScreenLocked == YES) {
+                [[CSSettings sharedSettings] setSensor:kCSSENSOR_SCREEN_STATE enabled:YES];
+            }
         }
 	}
 	@catch (NSException * e) {
@@ -533,8 +413,6 @@ int tesing = 0;
         // if you record stop
         NSString* json = [notification.userInfo valueForKey:@"value"];
         NSString *screenState = [json valueForKey:@"screen"];
-        NSLog(@"SCREENNNNNNNNNNNNNNNNNNNNNNNNNNN");
-        NSLog(@"SCREEN STATE: %@",  screenState);
         
         // keep track of the state of the screen
         if ([screenState isEqualToString:@"off"])
@@ -542,49 +420,10 @@ int tesing = 0;
         else {
             screenIsOn = YES;
             if ([audioRecorder isRecording] == YES) {
-                NSLog(@"RECORDINGGGGGGGGGGGGGG");
-                [audioRecorder stop];
-            }
-            //[self audioRecorderBeginInterruption:audioRecorder];
-            //[[AVAudioSession sharedInstance] setActive:NO error:nil];
-        }
-        
-        // screen on
-        /* if ([screenState isEqualToString:@"on"]) {
-            if ([audioRecorder isRecording] == TRUE) {
                 [audioRecorder stop];
             }
         }
-        // screen off
-        else {
-            
-        }
-        
-        if (sampleOnlyWhenScreenLocked == FALSE) {
-            
-        }
-        if (sampleOnlyWhenScreenLocked == TRUE) {
-            //[self startRecording];
-            //[self scheduleRecording];
-        } */
     }
-    /* NSString* sensor = notification.object;
-    if ([sensor isEqualToString:@"step counter"]) {
-        NSString* json = [notification.userInfo valueForKey:@"value"];
-        NSDate* date = [NSDate dateWithTimeIntervalSince1970:[[notification.userInfo valueForKey:@"date"] doubleValue]];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @autoreleasepool {
-                NSString* entry = [NSString stringWithFormat:@"%@: %@", [dateFormatter stringFromDate:date], json];
-                [fallLog insertObject:entry atIndex:0];
-                while ([fallLog count] > MAX_ENTRIES) {
-                    [fallLog removeLastObject];
-                }
-                
-                [self.logText setText:[fallLog componentsJoinedByString:@"\n"]];
-            }
-        });
-    } */
 }
 
 @end
