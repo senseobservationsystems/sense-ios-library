@@ -17,6 +17,7 @@
 #import "CSNoiseSensor.h"
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AVFoundation/AVAudioSession.h>
 #import <AVFoundation/AVAssetReader.h>
 #import <AVFoundation/AVAssetReaderOutput.h>
 #import <CoreMedia/CMBlockBuffer.h>
@@ -25,8 +26,7 @@
 #import "CSSettings.h"
 #import "CSDataStore.h"
 #import "Formatting.h"
-
-#define SCALE_FACTOR 32767
+#import "CSSensePlatform.h"
 
 //Declare private methods using empty category
 @interface CSNoiseSensor()
@@ -80,7 +80,7 @@
         
         
         sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
-        sampleDuration = 10; // seconds
+        sampleDuration = 3; // seconds
         
         recordQueue = dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
         
@@ -103,11 +103,9 @@
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *activationError = nil;
     NSError *categoryError = nil;
-    AVAudioSessionPortDescription *appPortInput = nil;
+
     // audio session category
     NSString *appAudioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
-    NSError *theError = nil;
-    BOOL result = YES;
     
     // Sets audio session category and mode=default
     if (![session setCategory:appAudioSessionCategory withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker error:&categoryError]) {
@@ -115,45 +113,135 @@
     }
     // activate session
     if (![session setActive:YES error:&activationError]) {
-        NSLog(@"Audio session can't be actived. Error: %@", activationError);
+        NSLog(@"Audio session can't be activated. Error: %@", activationError);
     }
-    
-    /* Availabe inputs */
-    NSArray *deviceInputs = [session availableInputs];
-    for (AVAudioSessionPortDescription *input in deviceInputs) {
-        // set as an input the build-in microphone
-        if ([input.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
-            appPortInput = input;
-            break;
+
+    //Check that AVAudioSession.availableInputs exists, if so we're running ios7 or later and we can set the audio preferences
+    if ([session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
+        NSLog(@"AVAudioSessionOrientationBottom = %@", AVAudioSessionOrientationBottom);
+        AVAudioSessionPortDescription *appPortInput = nil;
+        NSError *__autoreleasing theError = nil;
+        NSError *__autoreleasing * theErrorWrapper = &theError;
+        BOOL result = YES;
+        /* Availabe inputs */
+        NSArray *deviceInputs;
+        //NSArray *deviceInputs = [session availableInputs];
+        @try {
+            SEL selAvailableInputs = NSSelectorFromString(@"availableInputs");
+            NSInvocation* availableInputsInvocation = [NSInvocation invocationWithMethodSignature:[[session class] instanceMethodSignatureForSelector:selAvailableInputs]];
+            [availableInputsInvocation setSelector:selAvailableInputs];
+            [availableInputsInvocation setTarget:session];
+            [availableInputsInvocation invoke];
+            [availableInputsInvocation getReturnValue:&deviceInputs];
+        } @catch (NSException* exception) {
+            //TODO: make exception
+            NSLog(@"Exception trying to invoke ios7 method session.availableInputs: %@", exception);
+            return;
         }
-    }
-    
-    /* Set preferred input port */
-    theError = nil;
-    result = [session setPreferredInput:appPortInput error:&theError];
-    if (!result)
-    {
-        // an error occurred. Handle it!
-        NSLog(@"setPreferredInput failed. Error: %@", theError);
-    }
-    
-    // set preferred input data source
-    AVAudioSessionDataSourceDescription *bottomMic = nil;
-    for (AVAudioSessionDataSourceDescription *source in appPortInput.dataSources) {
-        if ([source.orientation isEqualToString:AVAudioSessionOrientationBottom]) {
-            bottomMic = source;
-            break;
+        for (AVAudioSessionPortDescription *input in deviceInputs) {
+            // set as an input the build-in microphone
+            if ([input.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
+                appPortInput = input;
+                break;
+            }
         }
-    }
-    
-    if (bottomMic) {
-        // Set a preference for the front data source.
+        
+        if (appPortInput == nil) {
+            NSLog(@"No build-in microphone found.");
+            return;
+        }
+        
+        /* Set preferred input port */
         theError = nil;
-        result = [appPortInput setPreferredDataSource:bottomMic error:&theError];
+        //Call ios7 method
+        //result = [session setPreferredInput:appPortInput error:&theError];
+        @try {
+            SEL selSetPreferredInput = NSSelectorFromString(@"setPreferredInput:error:");
+            NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[session class] instanceMethodSignatureForSelector:selSetPreferredInput]];
+            [setPreferredInput setSelector:selSetPreferredInput];
+            [setPreferredInput setTarget:session];
+            [setPreferredInput setArgument:&appPortInput atIndex:2];
+            [setPreferredInput setArgument:&theErrorWrapper atIndex:3];
+            [setPreferredInput invoke];
+            [setPreferredInput getReturnValue:&result];
+        } @catch (NSException* exception) {
+            //TODO: make exception
+            NSLog(@"Exception trying to invoke ios7 method session.setPreferredInput:error: %@", exception);
+            return;
+        }
+        
         if (!result)
         {
             // an error occurred. Handle it!
-            NSLog(@"setPreferredDataSource failed. Error: %@", theError);
+            NSLog(@"setPreferredInput failed. Error: %@", theError);
+            return;
+        }
+        
+        // set preferred input data source
+        AVAudioSessionDataSourceDescription *bottomMic = nil;
+        
+        NSArray *dataSources; // = appPortInput.dataSources
+        @try {
+            SEL selDataSources = NSSelectorFromString(@"dataSources");
+            NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[appPortInput class] instanceMethodSignatureForSelector:selDataSources]];
+            [setPreferredInput setSelector:selDataSources];
+            [setPreferredInput setTarget:appPortInput];
+            [setPreferredInput invoke];
+            [setPreferredInput getReturnValue:&dataSources];
+        } @catch (NSException* exception) {
+            //TODO: make exception
+            NSLog(@"Exception trying to invoke ios7 method appPortInput.dataSources%@", exception);
+            return;
+        }
+        
+        
+        for (AVAudioSessionDataSourceDescription *source in dataSources) {
+            NSString* orientation; // = source.orientation
+            @try {
+                SEL selDataSources = NSSelectorFromString(@"orientation");
+                NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[source class] instanceMethodSignatureForSelector:selDataSources]];
+                [setPreferredInput setSelector:selDataSources];
+                [setPreferredInput setTarget:source];
+                [setPreferredInput invoke];
+                [setPreferredInput getReturnValue:&orientation];
+            } @catch (NSException* exception) {
+                //TODO: make exception
+                NSLog(@"Exception trying to invoke ios7 method source.orientation: %@", exception);
+                return;
+            }
+
+            //AVAudioSessionOrientationBottom, can't check whether this exists. Instead use the string...
+            NSString* myAVAudioSessionOrientationBottom = @"Bottom";
+            if ([orientation isEqualToString:myAVAudioSessionOrientationBottom]) {
+                bottomMic = source;
+                break;
+            }
+        }
+        
+        if (bottomMic) {
+            // Set a preference for the bottom data source.
+            theError = nil;
+            //result = [appPortInput setPreferredDataSource:bottomMic error:&theError];
+            @try {
+                SEL selSetPreferredInput = NSSelectorFromString(@"setPreferredDataSource:error:");
+                NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[appPortInput class] instanceMethodSignatureForSelector:selSetPreferredInput]];
+                [setPreferredInput setSelector:selSetPreferredInput];
+                [setPreferredInput setTarget:appPortInput];
+                [setPreferredInput setArgument:&bottomMic atIndex:2];
+                [setPreferredInput setArgument:&theErrorWrapper atIndex:3];
+                [setPreferredInput invoke];
+                [setPreferredInput getReturnValue:&result];
+            } @catch (NSException* exception) {
+                //TODO: make exception
+                NSLog(@"Exception trying to invoke ios7 method appPortInput.setPreferredDataSource:error: %@", exception);
+                return;
+            }
+            
+            if (!result)
+            {
+                // an error occurred. Handle it!
+                NSLog(@"setPreferredDataSource failed. Error: %@", theError);
+            }
         }
     }
 }
@@ -204,13 +292,13 @@
     
     // sample continuously, independant of the state of the screen
     if (sampleOnlyWhenScreenLocked == NO) {
-        NSLog(@"-----------RECORDING STARTED-----------");
+        NSLog(@"start recording audio");
         started = [audioRecorder recordForDuration:sampleDuration];
     }
     // sample only when the screen is locked
     else {
         if (screenIsOn == NO) {
-            NSLog(@"-----------RECORDING STARTED-----------");
+            NSLog(@"start recording audio");
             started = [audioRecorder recordForDuration:sampleDuration];
         }
         else {
@@ -233,9 +321,9 @@
 	//only react to changes
 	if (enable == isEnabled) return;
     
-    //sampleOnlyWhenScreenLocked = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingSampleOnlyWhenScreenLocked] isEqualToString:kCSSettingYES];
+    sampleOnlyWhenScreenLocked = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingSampleOnlyWhenScreenLocked] isEqualToString:kCSSettingYES];
     
-	NSLog(@"Enabling noise sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
+	NSLog(@"%@ noise sensor (id=%@)", enable ? @"Enabling" : @"Disabling", self.sensorId);
 	isEnabled = enable;
 	if (enable) {
 		if (NO==audioRecorder.recording) {
@@ -251,9 +339,6 @@
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
-
-    NSLog(@"-----------RECORDING STOPED-----------");
-
     if (didSucceed ==TRUE) {
         // calculate the audio recording volume in dBs
         [self computeAudioVolume];
@@ -319,9 +404,7 @@
         if (result != noErr) {
             NSLog(@"Couldn't read audio data from recording file. Error: %d", (int) result);
         }
-        // optional use of a scale factor
-        //if (sampleData < 0)
-        //rawSampleData[i] = sampleData + SCALE_FACTOR;
+
         rawSampleData[i] = sampleData;
         sumOfRawSampleData = sumOfRawSampleData + (rawSampleData[i] * rawSampleData[i]);
     }
@@ -329,7 +412,6 @@
     avgOfRawSampleData = sumOfRawSampleData / numberOfPackets;
     rootAvgOfRawSampleData = sqrt(avgOfRawSampleData);
     volumeOfAudioSignal = 10 * (log10(avgOfRawSampleData));
-    NSLog(@"-----------Audio recording volume(dB): %f-----------", volumeOfAudioSignal);
     
     //take timestamp
     double timestamp = [[NSDate date] timeIntervalSince1970];
@@ -353,9 +435,6 @@
     result = AudioFileGetProperty(recordingFile, kAudioFilePropertyEstimatedDuration, &propertySize, &duration);
     if (result != noErr) {
         NSLog(@"Error: Getting property %d\n", (int)result);
-    }
-    else {
-        NSLog(@"-----------Audio recording duration: %f-----------", (Float64) duration);
     }
     
     free(rawSampleData);
@@ -408,7 +487,7 @@
 
 - (void) onNewData:(NSNotification*)notification {
     NSString* sensor = notification.object;
-    if ([sensor isEqualToString:@"screen activity"]) {
+    if ([sensor isEqualToString:kCSSENSOR_SCREEN_STATE]) {
         // if receive dispaly event and the sampleonly flag is no do nothing otherwise call schedule but
         // if you record stop
         NSString* json = [notification.userInfo valueForKey:@"value"];
