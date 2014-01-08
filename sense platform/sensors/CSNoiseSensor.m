@@ -83,11 +83,7 @@
         sampleDuration = 3; // seconds
         
         recordQueue = dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
-        
-        // configuration of the audio session
-        [self audioSessionConfiguration];
-        // configuration of the audio recorder
-        [self audioRecorderConfiguration];
+
         numberOfPackets = 0;
         screenIsOn = YES;
         sampleOnlyWhenScreenLocked = YES;
@@ -98,7 +94,7 @@
 /** Configure the audio session of the app
  *
  */
-- (void) audioSessionConfiguration
+- (void) configureAudioSession
 {
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *activationError = nil;
@@ -118,7 +114,6 @@
 
     //Check that AVAudioSession.availableInputs exists, if so we're running ios7 or later and we can set the audio preferences
     if ([session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
-        NSLog(@"AVAudioSessionOrientationBottom = %@", AVAudioSessionOrientationBottom);
         AVAudioSessionPortDescription *appPortInput = nil;
         NSError *__autoreleasing theError = nil;
         NSError *__autoreleasing * theErrorWrapper = &theError;
@@ -249,7 +244,7 @@
 /** Initalize and configure the audio recorder
  *
  */
-- (void) audioRecorderConfiguration
+- (void) configureAudioRecording
 {
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     /* Specifies the recording file */
@@ -270,7 +265,6 @@
     }
     else {
         audioRecorder.delegate = self;
-        audioRecorder.meteringEnabled = YES;
         [audioRecorder prepareToRecord];
     }
     interruptedOnRecording = NO;
@@ -327,7 +321,12 @@
 	isEnabled = enable;
 	if (enable) {
 		if (NO==audioRecorder.recording) {
-			[self startRecording];
+            // configure the audio session
+            [self configureAudioSession];
+            // configure the audio recorder
+            [self configureAudioRecording];
+
+            [self startRecording];
 		}
 	} else {
 		audioRecorder.delegate = nil;
