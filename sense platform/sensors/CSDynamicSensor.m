@@ -44,7 +44,7 @@
                 [self deviceType], @"device_type",
                 @"", @"pager_type",
                 dataType, @"data_type",
-                @"", @"data_structure",
+                dataStructure, @"data_structure",
                 nil];
     }
     
