@@ -30,13 +30,32 @@ NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 
 static CSSensorStore* sensorStore;
 
-
 @implementation CSSensePlatform {
 
 }
 
 + (void) initialize {
     sensorStore = [CSSensorStore sharedSensorStore];
+    
+    //store version information
+    NSString* appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+    NSString* appIdentifier = [NSBundle mainBundle].bundleIdentifier;
+    NSString* buildVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString * appVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString* locale = [[NSLocale currentLocale] localeIdentifier];
+    
+    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                          //@"<sense version>", @"sense_platform_version",
+                          //@"<Cortex version>", @"cortex_version",
+                          appName, @"app_name",
+                          appVersionString, @"app_version",
+                          buildVersion, @"app_build",
+                          locale, @"locale",
+                          [UIDevice currentDevice].systemName, @"os",
+                          [UIDevice currentDevice].systemVersion, @"os_version",
+                          nil];
+    //add data point for app version
+    [CSSensePlatform addDataPointForSensor:@"app_version" displayName:@"App Version" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
 }
 
 + (NSArray*) availableSensors {

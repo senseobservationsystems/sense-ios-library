@@ -295,10 +295,6 @@
             NSLog(@"start recording audio");
             started = [audioRecorder recordForDuration:sampleDuration];
         }
-        else {
-            [self scheduleRecording];
-            return;
-        }
     }
     
 	//NSLog(@"recorder %@", started? @"started":@"failed to start");
