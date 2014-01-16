@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		3EBEAF4D1887FADE009F81C1 /* GenVersion */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 3EBEAF4E1887FADE009F81C1 /* Build configuration list for PBXAggregateTarget "GenVersion" */;
+			buildPhases = (
+				3EBEAF511887FAE9009F81C1 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = GenVersion;
+			productName = GenVersion;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
@@ -113,6 +127,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
 			remoteInfo = "Sense platform";
+		};
+		3EBEAF551887FBD4009F81C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EBEAF4D1887FADE009F81C1;
+			remoteInfo = GenVersion;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -234,6 +255,7 @@
 		3E9C157F15D574DB00F520D0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3EBEAF571887FCA9009F81C1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
 		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -492,6 +514,7 @@
 		3E9C155415D564E100F520D0 /* SensePlatform */ = {
 			isa = PBXGroup;
 			children = (
+				3EBEAF571887FCA9009F81C1 /* CSVersion.h */,
 				3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */,
 				3E9C155615D564E100F520D0 /* CSSensePlatform.h */,
 				3E9C155715D564E100F520D0 /* CSSensor.h */,
@@ -557,10 +580,12 @@
 				3E820D6615D40AB50001A3EC /* Sources */,
 				3E820D6715D40AB50001A3EC /* Frameworks */,
 				3E4F273817033C7A0045588C /* CopyFiles */,
+				3EBEAF441887ED21009F81C1 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */,
 			);
 			name = SensePlatform;
 			productName = "Sense platform iOS";
@@ -590,6 +615,7 @@
 				3E820D6915D40AB50001A3EC /* SensePlatform */,
 				3E148B90160A12000010A0D1 /* SensePlatformTestApp */,
 				3E148BA7160A12010010A0D1 /* SensePlatformTestAppTests */,
+				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
 			);
 		};
 /* End PBXProject section */
@@ -629,6 +655,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		3EBEAF441887ED21009F81C1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "git=/usr/local/git/bin/git\nversion=`git describe --tags --dirty`\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" > CSVersion.h";
+		};
+		3EBEAF511887FAE9009F81C1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\nPRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\nPOST=\"#endif\"\necho -e ${PRE} > ${VERSIONFILE}\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\necho ${POST} >> ${VERSIONFILE}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -709,6 +761,11 @@
 			isa = PBXTargetDependency;
 			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
 			targetProxy = 3E148BC1160A12560010A0D1 /* PBXContainerItemProxy */;
+		};
+		3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EBEAF4D1887FADE009F81C1 /* GenVersion */;
+			targetProxy = 3EBEAF551887FBD4009F81C1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -901,6 +958,20 @@
 			};
 			name = Release;
 		};
+		3EBEAF4F1887FADE009F81C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3EBEAF501887FADE009F81C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -939,6 +1010,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		3EBEAF4E1887FADE009F81C1 /* Build configuration list for PBXAggregateTarget "GenVersion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EBEAF4F1887FADE009F81C1 /* Debug */,
+				3EBEAF501887FADE009F81C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

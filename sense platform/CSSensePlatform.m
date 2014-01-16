@@ -18,6 +18,7 @@
 #import "CSSensorStore.h"
 #import "CSSettings.h"
 #import "CSDynamicSensor.h"
+#import "CSVersion.h"
 //#import "BloodPressureSensor.h"
 
 NSString * const kCSDATA_TYPE_JSON = @"json";
@@ -45,8 +46,11 @@ static CSSensorStore* sensorStore;
     NSString* locale = [[NSLocale currentLocale] localeIdentifier];
     
     NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
-                          //@"<sense version>", @"sense_platform_version",
-                          //@"<Cortex version>", @"cortex_version",
+#ifdef SENSE_PLATFORM_VERSION
+                          [NSString stringWithFormat:@"%s", SENSE_PLATFORM_VERSION], @"sense_platform_version",
+#else
+#error SENSE_PLATFORM_VERSION undefined
+#endif
                           appName, @"app_name",
                           appVersionString, @"app_version",
                           buildVersion, @"app_build",

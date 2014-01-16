@@ -115,8 +115,8 @@
     //Check that AVAudioSession.availableInputs exists, if so we're running ios7 or later and we can set the audio preferences
     if ([session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
         AVAudioSessionPortDescription *appPortInput = nil;
-        NSError *__autoreleasing theError = nil;
-        NSError *__autoreleasing * theErrorWrapper = &theError;
+        __autoreleasing NSError * theError = nil;
+        __autoreleasing NSError ** theErrorWrapper = &theError;
         BOOL result = YES;
         /* Availabe inputs */
         NSArray *deviceInputs;
@@ -325,8 +325,8 @@
             [self startRecording];
 		}
 	} else {
-		audioRecorder.delegate = nil;
 		[audioRecorder stop];
+		audioRecorder.delegate = nil;
         NSError* error;
         [[AVAudioSession sharedInstance] setActive:NO error:&error];
 	}
@@ -468,9 +468,8 @@
         }
 	}
 	@catch (NSException * e) {
-		NSLog(@"spatial provider: Exception thrown while changing setting: %@", e);
+		NSLog(@"%@: Exception thrown while changing setting: %@", self.name, e);
 	}
-	
 }
 
 - (void) dealloc {
