@@ -19,7 +19,6 @@
 @interface CSSender : NSObject {
 	NSString* sessionCookie;
   	@private
-	NSDictionary* urls;
 	NSString* username;
 	NSString* passwordHash;
 }

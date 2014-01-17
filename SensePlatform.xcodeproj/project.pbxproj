@@ -50,9 +50,7 @@
 		3E148BD9160A19A20010A0D1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
 		3E148BDA160A19A20010A0D1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
 		3E148BDB160A19A20010A0D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
-		3E148BDC160A1C420010A0D1 /* CommonSense.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E820DBC15D40B100001A3EC /* CommonSense.plist */; };
 		3E148BDD160A1C4D0010A0D1 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E820DBE15D40B100001A3EC /* Settings.plist */; };
-		3E148BDE160A1C950010A0D1 /* CommonSense.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E820DBC15D40B100001A3EC /* CommonSense.plist */; };
 		3E148BDF160A1C9D0010A0D1 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E820DBE15D40B100001A3EC /* Settings.plist */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
@@ -177,8 +175,6 @@
 		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		3E820D6A15D40AB50001A3EC /* libSensePlatform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSensePlatform.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E820D6D15D40AB50001A3EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		3E820DBC15D40B100001A3EC /* CommonSense.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CommonSense.plist; sourceTree = "<group>"; };
-		3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SensePlatform-Info.plist"; sourceTree = "<group>"; };
 		3E820DBE15D40B100001A3EC /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
 		3E820DC415D40B180001A3EC /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Hash.h"; sourceTree = "<group>"; };
@@ -405,8 +401,6 @@
 		3E820DBB15D40B100001A3EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DBC15D40B100001A3EC /* CommonSense.plist */,
-				3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */,
 				3E820DBE15D40B100001A3EC /* Settings.plist */,
 			);
 			path = resources;
@@ -626,7 +620,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E148BDF160A1C9D0010A0D1 /* Settings.plist in Resources */,
-				3E148BDE160A1C950010A0D1 /* CommonSense.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,7 +628,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E148BDD160A1C4D0010A0D1 /* Settings.plist in Resources */,
-				3E148BDC160A1C420010A0D1 /* CommonSense.plist in Resources */,
 				3E148BB3160A12010010A0D1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

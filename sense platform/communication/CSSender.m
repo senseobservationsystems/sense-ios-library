@@ -17,19 +17,18 @@
 #import "CSSender.h"
 #import "NSString+MD5Hash.h"
 
-//Declare private methods using empty category
-@interface CSSender()
-- (NSDictionary*) doJsonRequestTo:(NSURL*) url withMethod:(NSString*)method withInput:(NSDictionary*) input;
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie;
-- (NSURL*) makeUrlFor:(NSString*) action;
-- (NSURL*) makeUrlForSensor:(NSString*) sensorId;
-- (NSURL*) makeUrlForAddingSensorToDevice:(NSString*) sensorId;
-- (NSURL*) makeSensorsUrlForDeviceId:(NSInteger)deviceId;
-- (NSURL*) makeUrlForSharingSensor:(NSString*) sensorId;
-@end
+static const NSString* kUrlBaseURL = @"https://api.sense-os.nl";
+static const NSString* kUrlJsonSuffix = @".json";
+static const NSString* kUrlData = @"data";
+static const NSString* kUrlDevices = @"devices";
+static const NSString* kUrlLogin = @"login";
+static const NSString* kUrlLogout = @"logout";
+static const NSString* kUrlSensorDevice = @"device";
+static const NSString* kUrlSensors = @"sensors";
+static const NSString* kUrlUsers = @"users";
+
 
 @implementation CSSender
-@synthesize urls;
 @synthesize sessionCookie;
 
 static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
@@ -40,26 +39,6 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     self = [super init];
     if (self)
 	{
-		//initialise urls from plist
-        NSString* errorDesc = nil;
-        NSPropertyListFormat format;
-        NSString* plistPath;
-        plistPath = [[NSBundle mainBundle] pathForResource:@"CommonSense" ofType:@"plist"];
-        
-        NSData* plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
-        NSDictionary* temp = (NSDictionary *)[NSPropertyListSerialization
-											  propertyListFromData:plistXML
-											  mutabilityOption:NSPropertyListImmutable
-											  format:&format
-											  errorDescription:&errorDesc];
-        if (!temp) {
-            NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
-        }
-		
-		self.urls = temp;
-		
-		//initialise nils
-		self.sessionCookie = nil;
     }
     return self;
 }
@@ -470,9 +449,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 - (NSURL*) makeUrlFor:(NSString*) action append:(NSString*) appendix
 {
 	NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:action],
-					 [urls valueForKey:@"jsonSuffix"],
+					 kUrlBaseURL,
+					 action,
+					 kUrlJsonSuffix,
                      appendix];
 	
 	return [NSURL URLWithString:url];
@@ -480,22 +459,22 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
 - (NSURL*) makeUrlForSensor:(NSString*) sensorId {
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"sensors"],
+					 kUrlBaseURL,
+					 kUrlSensors,
 					 sensorId,
- 					 [urls valueForKey:@"data"],
-					 [urls valueForKey:@"jsonSuffix"]];
+ 					 kUrlData,
+					 kUrlJsonSuffix];
 	
 	return [NSURL URLWithString:url];
 }
 
 - (NSURL*) makeSensorsUrlForDeviceId:(NSInteger)deviceId {
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%d/%@%@%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"devices"],
+					 kUrlBaseURL,
+					 kUrlDevices,
 					 deviceId,
- 					 [urls valueForKey:@"sensors"],
-					 [urls valueForKey:@"jsonSuffix"],
+ 					 kUrlSensors,
+					 kUrlJsonSuffix,
                      @"?per_page=1000"];
 	
 	return [NSURL URLWithString:url];
@@ -503,33 +482,33 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
 - (NSURL*) makeUrlForAddingSensorToDevice:(NSString*) sensorId {
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"sensors"],
+					 kUrlBaseURL,
+					 kUrlSensors,
 					 sensorId,
- 					 [urls valueForKey:@"sensorDevice"],
-					 [urls valueForKey:@"jsonSuffix"]];
+ 					 kUrlSensorDevice,
+					 kUrlJsonSuffix];
 	
 	return [NSURL URLWithString:url];
 }
 
 - (NSURL*) makeUrlForSharingSensor:(NSString*) sensorId {
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"sensors"],
+					 kUrlBaseURL,
+					 kUrlSensors,
 					 sensorId,
- 					 [urls valueForKey:@"users"],
-					 [urls valueForKey:@"jsonSuffix"]];
+ 					 kUrlUsers,
+					 kUrlJsonSuffix];
 	
 	return [NSURL URLWithString:url];
 }
 
 - (NSURL*) makeUrlForGettingSensorData:(NSString*) sensorId nrPoints:(NSInteger) nrPoints order:(NSString*) order {
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%i&sort=%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"sensors"],
+					 kUrlBaseURL,
+					 kUrlSensors,
 					 sensorId,
- 					 [urls valueForKey:@"data"],
-					 [urls valueForKey:@"jsonSuffix"],
+ 					 kUrlData,
+					 kUrlJsonSuffix,
                      nrPoints,
                      order];
 	
@@ -539,23 +518,23 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 - (NSURL*) makeUrlForServiceMethod:(NSString*) method sensorId:(NSString*) sensorId stateSensorId:(NSString*) stateSensorId {
     //example: http://api.sense-os.nl/sensors/1/services/1/method_name.json
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@/%@/%@%@",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"sensors"],
+					 kUrlBaseURL,
+					 kUrlSensors,
 					 sensorId,
  					 @"services",
                      stateSensorId,
 					 method,
-                     [urls valueForKey:@"jsonSuffix"]];
+                     kUrlJsonSuffix];
 	
 	return [NSURL URLWithString:url];
 }
 - (NSURL*) makeUrlForConnectedSensors:(NSString*) sensorId {
 	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=1000",
-					 [urls valueForKey:@"baseUrl"],
-					 [urls valueForKey:@"sensors"],
+					 kUrlBaseURL,
+					 kUrlSensors,
 					 sensorId,
  					 @"sensors",
-					 [urls valueForKey:@"jsonSuffix"]];
+					 kUrlJsonSuffix];
 	
 	return [NSURL URLWithString:url];
 }                     
