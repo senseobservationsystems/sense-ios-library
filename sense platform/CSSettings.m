@@ -92,21 +92,10 @@ NSString* const kCSActivitySettingPrivacyPublic = @"public";
 @synthesize value;
 @end
 
-
-@interface CSSettings (private) 
-- (void) storeSettings;
-- (void) loadSettingsFromPath:(NSString*)path;
-- (void) anySettingChanged:(NSString*)setting value:(NSString*)value;
-@end
-
 @implementation CSSettings {
 @private NSMutableDictionary* settings;
-@private NSMutableDictionary* general;
-@private NSMutableDictionary* location;
 @private NSMutableDictionary* sensorEnables;
 }
-//@synthesize general;
-//@synthesize location;
 
 //Singleton instance
 static CSSettings* sharedSettingsInstance = nil;
@@ -140,30 +129,54 @@ static CSSettings* sharedSettingsInstance = nil;
         NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
         plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
-			//fallback to default settings
-			plistPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
-        }
-		@try {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+            @try {
 			[self loadSettingsFromPath:plistPath];
 		}
-		@catch (NSException * e) {
-			NSLog(@"Settings: exception thrown while loading settings: %@", e);
-			settings = nil;
-		}
+            @catch (NSException * e) {
+                NSLog(@"Settings: exception while loading settings: %@", e);
+                settings = nil;
+            }
+        }
+	
 		if (settings == nil) {
-			//fall back to defaults
-			@try {
-				[self loadSettingsFromPath:[[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"]];
-			}
-			@catch (NSException * e) {
-				NSLog(@"Settings: exception thrown while loading default settings. THIS IS VERY SERIOUS: %@", e);
-				settings = nil;
-			}
+            //fall back to defaults
+            [self loadSettingsFromDictionary:[CSSettings getMutableDefaults]];
 		}
+
         [self ensureLatestVersion];
+        
+        NSLog(@"Settings: %@", settings);
 	}
 	return self;
+}
+
++ (NSMutableDictionary*) getMutableDefaults {
+    NSMutableDictionary* general = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                             @"1800", kCSGeneralSettingUploadInterval,
+                             kCSSettingYES, kCSGeneralSettingUploadToCommonSense,
+                             kCSSettingYES, kCSGeneralSettingSenseEnabled,
+                             nil];
+    NSMutableDictionary* ambience = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              kCSSettingNO, kCSAmbienceSettingSampleOnlyWhenScreenLocked,
+                              @"60", kCSAmbienceSettingInterval,
+                             nil];
+    NSMutableDictionary* position = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              @"100", kCSLocationSettingAccuracy,
+                              nil];
+    NSMutableDictionary* spatial = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              @"60", kCSSpatialSettingInterval,
+                              @"50", kCSSpatialSettingFrequency,
+                              @"150", kCSSpatialSettingNrSamples,
+                              nil];
+    NSMutableDictionary* defaults = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              general, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeGeneral],
+                              ambience, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeAmbience],
+                              position, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeLocation],
+                              spatial, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeSpatial],
+                              nil];
+
+    return defaults;
 }
 
 #pragma mark - 
@@ -309,9 +322,23 @@ static CSSettings* sharedSettingsInstance = nil;
 		NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
 		return;
 	}
-	//instantiate subsections of settings
-	general = [settings valueForKey:@"general"];
-	location = [settings valueForKey:@"location"];
+	sensorEnables = [settings valueForKey:@"sensorEnables"];
+	if (sensorEnables == nil) {
+		sensorEnables = [NSMutableDictionary new];
+		[settings setObject:sensorEnables forKey:@"sensorEnables"];
+	}
+}
+
+- (void) loadSettingsFromDictionary:(NSDictionary*)dict {
+	NSLog(@"Loading settings from dictionary.");
+	
+    settings = [dict mutableCopy];
+    
+	if (!settings)
+	{
+		NSLog(@"Error loading settings from dictionary.");
+		return;
+	}
 	sensorEnables = [settings valueForKey:@"sensorEnables"];
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
@@ -343,21 +370,7 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (void) ensureLatestVersion {
-    //open default settings
-    NSString* errorDesc = nil;
-	NSPropertyListFormat format;
-    NSString* defaultPath = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"plist"];
-    NSData* plistXML = [[NSFileManager defaultManager] contentsAtPath:defaultPath];
-	NSDictionary* defaultSettings = (NSDictionary *)[NSPropertyListSerialization
-                                                     propertyListFromData:plistXML
-                                                     mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                                                     format:&format
-                                                     errorDescription:&errorDesc];
-	if (!defaultSettings)
-	{
-		NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
-		return;
-	}
+	NSDictionary* defaultSettings = [CSSettings getMutableDefaults];
     
     //copy settings that aren't in the local settings with the default settings
     
