@@ -15,10 +15,10 @@
  */
 
 #import "CSLocationSensor.h"
-#import "CSJSON.h"
 #import "CSSettings.h"
 #import "math.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 @implementation CSLocationSensor {
     CLLocationManager* locationManager;
@@ -58,7 +58,10 @@ static CLLocation* lastAcceptedPoint;
 								@"float", speedKey,
 								nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 				[self name], @"name",
 				[self deviceType], @"device_type",
@@ -73,6 +76,8 @@ static CLLocation* lastAcceptedPoint;
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
+        locationManager.activityType = CLActivityTypeOther;
+        locationManager.pausesLocationUpdatesAutomatically = NO;
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
@@ -84,12 +89,18 @@ static CLLocation* lastAcceptedPoint;
 	return self;
 }
 
+// Newer delegate method
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    for (CLLocation* location in locations) {
+        [self locationManager:manager updateToLocation: location fromLocation: nil];
+    }
+}
 
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation
-{
+    updateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation {
+
     if (isEnabled == NO) {
         return;
     }
@@ -147,26 +158,30 @@ static CLLocation* lastAcceptedPoint;
 
 
 	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									roundedNumber(longitude, 8), longitudeKey,
-									roundedNumber(latitude, 8), latitudeKey,
-									roundedNumber(horizontalAccuracy, 8), horizontalAccuracyKey,
+									CSroundedNumber(longitude, 8), longitudeKey,
+									CSroundedNumber(latitude, 8), latitudeKey,
+									CSroundedNumber(horizontalAccuracy, 8), horizontalAccuracyKey,
 									nil];
 	if (newLocation.speed >=0) {
-		[newItem setObject:roundedNumber(speed, 1) forKey:speedKey];
+		[newItem setObject:CSroundedNumber(speed, 1) forKey:speedKey];
 	}
 	if (newLocation.verticalAccuracy >= 0) {
-		[newItem setObject:roundedNumber(altitude, 0) forKey:altitudeKey];
-		[newItem setObject:roundedNumber(verticalAccuracy, 0) forKey:verticalAccuracyKey];
+		[newItem setObject:CSroundedNumber(altitude, 0) forKey:altitudeKey];
+		[newItem setObject:CSroundedNumber(verticalAccuracy, 0) forKey:verticalAccuracyKey];
 	}
 	
 	double timestamp = [newLocation.timestamp timeIntervalSince1970];
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										[newItem JSONRepresentation], @"value",
-										roundedNumber(timestamp, 3), @"date",
+										newItem, @"value",
+										CSroundedNumber(timestamp, 3), @"date",
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
     
+}
+
+- (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"Location manager failed with error %@", error);
 }
 
 - (BOOL) isEnabled {return isEnabled;}
@@ -189,10 +204,11 @@ static CLLocation* lastAcceptedPoint;
 	}
 	else {
         [newSampleTimer invalidate];
-        //[locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(stopMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
 		//[locationManager stopUpdatingLocation];
         //as this needs to be enabled to run in the background, rather switch to the lowest accuracy
-        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+        //locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
 		[samples removeAllObjects];
 	}
 	isEnabled = enable;
@@ -222,10 +238,6 @@ static CLLocation* lastAcceptedPoint;
 	@catch (NSException * e) {
 		NSLog(@"LocationSensor: Exception thrown while applying location settings: %@", e);
 	}
-}
-
-NSNumber* roundedNumber(double number, int decimals) {
-    return [NSNumber numberWithDouble:round(number * pow(10,decimals)) / pow(10,decimals)];
 }
 
 - (void) dealloc {

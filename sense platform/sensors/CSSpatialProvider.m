@@ -15,7 +15,6 @@
  */
 
 #import "CSSpatialProvider.h"
-#import "CSJSON.h"
 #import "CSSensorStore.h"
 #import "NSNotificationCenter+MainThread.h"
 #import "CSSettings.h"
@@ -23,6 +22,8 @@
 #import "CSMotionFeaturesSensor.h"
 #import "CSJumpSensor.h"
 #import <pthread.h>
+#import "Formatting.h"
+#import "CSSensePlatform.h"
 
 static const double G = 9.81;
 static const double radianInDegrees = 180.0 / M_PI;
@@ -45,13 +46,12 @@ static const double radianInDegrees = 180.0 / M_PI;
     NSObject* pollTimerLock;
     
     
-    NSCondition* headingAvailable;
-    BOOL updatingHeading;
-    
     NSTimeInterval interval;
     NSInteger nrSamples;
     double frequency;
+    bool continuous;
     NSTimeInterval timestampOffset;
+    bool isSampling;
     
     CSJumpSensor* jumpDetector;
     
@@ -97,10 +97,7 @@ static const double radianInDegrees = 180.0 / M_PI;
         pollQueueGCD = dispatch_queue_create("com.sense.sense_platform.pollQueue", NULL);
         pollTimerQueueGCD = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         pollTimerLock = [[NSObject alloc] init];
-        
-        headingAvailable = [[NSCondition alloc] init];
-        updatingHeading = NO;
-		
+
 		//enable
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(accelerometerEnabledChanged:)
@@ -174,15 +171,54 @@ static const double radianInDegrees = 180.0 / M_PI;
 
 - (void) schedulePoll {
         dispatch_async(pollQueueGCD, ^{
-            [self poll];
+            @autoreleasepool {
+
+            if (!isSampling) {
+                isSampling = YES;
+                @try {
+                    [self poll];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"Exception in polling motion sensors: %@\n%@", exception, [NSThread callStackSymbols]);
+                }
+                isSampling = NO;
+
+                if (continuous) {
+                    [self schedulePoll];
+                }
+            }
+            }
         });
+
+    /* DEBUG*/
+    //dispatch_async_f(pollQueueGCD, (__bridge void *)(self), someScheduleFunction);
 }
 
-- (void) poll {
-    NSLog(@"^^^ Spatial provider poll invoked. ^^^");
+void someScheduleFunction(void* context) {
+    @autoreleasepool {
 
+    CSSpatialProvider* self = (__bridge CSSpatialProvider*) context;
+    if (!self->isSampling) {
+        self->isSampling = YES;
+        @try {
+            [self poll];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception in polling motion sensors: %@\n%@", exception, [NSThread callStackSymbols]);
+        }
+        self->isSampling = NO;
+        
+        if (self->continuous) {
+            [self schedulePoll];
+        }
+    }
+    }
+}
+
+
+- (void) poll {
     //prepare array for data
-    __block NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
+    NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
 
     NSCondition* dataCollectedCondition = [NSCondition new];
@@ -204,16 +240,26 @@ static const double radianInDegrees = 180.0 / M_PI;
             NSLog(@"Processing too slow, skipping point, this corrupts sensor input temporarily!");
             return;
         }
-         */
+        */
         counter++;
-        [deviceMotionArray addObject:deviceMotion];
-
+       if (sample < nrSamples) {
+            [deviceMotionArray addObject:deviceMotion];
+            sample++;
+            //send this sample so others can listen to the data
+            NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
+            NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  deviceMotion, @"data",
+                                  [NSNumber numberWithDouble:timestamp], @"timestamp",
+                                  nil];
+            NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
+        }
         //if we've sampled enough
-        if (++sample >= nrSamples) {
-            [motionManager stopDeviceMotionUpdates];
+        if (sample >= nrSamples) {
             //signal that we're done collecting
             [dataCollectedCondition broadcast];
         }
+
         counter--;
     };
     motionManager.deviceMotionUpdateInterval = 1./frequency;
@@ -225,26 +271,25 @@ static const double radianInDegrees = 180.0 / M_PI;
     NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
     while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
         //wait until all data collected, or a timeout
-        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1]];
+        NSTimeInterval timeout = MAX(1.0/frequency * nrSamples * 2 + 1, 0.1);
+        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:timeout]];
     }
+    //[motionManager performSelectorOnMainThread:@selector(stopDeviceMotionUpdates) withObject:nil waitUntilDone:YES];
+    [motionManager stopDeviceMotionUpdates];
     [dataCollectedCondition unlock];
-    
+
+
     if (sample < nrSamples) {
         NSLog(@"Error while polling the motion sensors.");
         [motionManager stopDeviceMotionUpdates];
         return;
     }
-    NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
-    //post device motion //TODO: is there a better way to efficiently share data?
-    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:deviceMotionArray, @"data",
-                          [NSNumber numberWithDouble:timestamp], @"timestamp",
-                          nil];
-    NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
-    [[NSNotificationCenter defaultCenter] postNotification:notification];
 
+    NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
     
     //either send all samples, or just the first
     BOOL rawSamples = NO, stats = YES;
+    BOOL burst = nrSamples > 1;
     
     if (rawSamples)
         [self commitRawSamples:deviceMotionArray];
@@ -252,9 +297,13 @@ static const double radianInDegrees = 180.0 / M_PI;
         NSRange range = NSMakeRange(0, 1);
         [self commitRawSamples:[deviceMotionArray subarrayWithRange:range]];
     }
-    
+
     if (stats) {
         [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
+    }
+
+    if (burst) {
+        [self commitBurst:deviceMotionArray];
     }
 }
 
@@ -290,34 +339,133 @@ static const double radianInDegrees = 180.0 / M_PI;
     [[CSSensorStore sharedSensorStore] addSensor:motionFeaturesSensor];
     
     //commit motion energy
-    NSString* value = [NSString stringWithFormat:@"%.3f", magnitudeAvg];
     NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        value, @"value",
-                                        [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                        CSroundedNumber(magnitudeAvg, 3), @"value",
+                                        CSroundedNumber(timestamp, 3),@"date",
                                         nil];
     [motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
     
-    value = [[NSDictionary dictionaryWithObjectsAndKeys:
-							[NSString stringWithFormat:@"%.3f", magnitudeAvg], accelerationAvg,
-							[NSString stringWithFormat:@"%.3f", magnitudeStddev], accelerationStddev,
+    NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
+							CSroundedNumber(magnitudeAvg, 3), accelerationAvg,
+							CSroundedNumber(magnitudeStddev, 3), accelerationStddev,
 							//@"", accelerationKurtosis,
-							[NSString stringWithFormat:@"%.3f", totalRotAvg], rotationAvg,
-							[NSString stringWithFormat:@"%.3f", totalRotStddev], rotationStddev,
+							CSroundedNumber(totalRotAvg, 3), rotationAvg,
+							CSroundedNumber(totalRotStddev, 3), rotationStddev,
 							//@"", rotationKurtosis,
-							nil] JSONRepresentation];
+							nil];
     
     valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
                                         value, @"value",
-                                        [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                        CSroundedNumber(timestamp, 3),@"date",
                                         nil];
     [motionFeaturesSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionFeaturesSensor.sensorId];
+}
+
+- (void) commitBurst:(NSArray*)deviceMotionArray {
+    BOOL hasOrientation = orientationSensor != nil && orientationSensor.isEnabled;
+    BOOL hasAccelerometer = accelerometerSensor != nil && accelerometerSensor.isEnabled;
+    BOOL hasAcceleration = accelerationSensor != nil && accelerationSensor.isEnabled;
+    BOOL hasRotation = rotationSensor != nil && rotationSensor.isEnabled;
+    
+    NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
+    NSTimeInterval timestampEnd = ((CMDeviceMotion*)[deviceMotionArray lastObject]).timestamp + timestampOffset;
+    NSTimeInterval dt = timestampEnd - timestamp;
+
+    //Commit samples for the sensors
+    if (hasOrientation) {
+        NSMutableArray* values = [[NSMutableArray alloc] initWithCapacity:deviceMotionArray.count];
+        
+        [deviceMotionArray enumerateObjectsUsingBlock:^(CMDeviceMotion* motion, NSUInteger index, BOOL* stop) {
+            NSNumber* pitch = CSroundedNumber(motion.attitude.pitch * radianInDegrees, 3);
+            NSNumber* roll = CSroundedNumber(motion.attitude.roll * radianInDegrees, 3);
+            double yawPrimitive = motion.attitude.yaw * radianInDegrees;
+            if (yawPrimitive < 0)
+                yawPrimitive += 360;
+            NSNumber* yaw = CSroundedNumber(yawPrimitive, 3);
+            [values addObject:[NSArray arrayWithObjects:pitch,roll,yaw, nil]];
+        }];
+        
+        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count], 0);
+        NSString* header = [NSString stringWithFormat:@"%@,%@,%@", attitudePitchKey, attitudeRollKey, attitudeYawKey];
+        NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
+                               values, @"values",
+                               header, @"header",
+                               sampleInterval, @"interval",
+                               nil];
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ORIENTATION_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+        
+    }
+
+    if (hasAccelerometer) {
+        NSMutableArray* values = [[NSMutableArray alloc] initWithCapacity:deviceMotionArray.count];
+        
+        [deviceMotionArray enumerateObjectsUsingBlock:^(CMDeviceMotion* motion, NSUInteger index, BOOL *stop) {
+            NSNumber* x = CSroundedNumber((motion.gravity.x + motion.userAcceleration.x) * G, 3);
+            NSNumber* y = CSroundedNumber((motion.gravity.y + motion.userAcceleration.y) * G, 3);
+            //z-axis is in other direction in CommonSense (thanks Android!)
+            NSNumber* z = CSroundedNumber(-(motion.gravity.z + motion.userAcceleration.z) * G, 3);
+            [values addObject:[NSArray arrayWithObjects:x,y,z, nil]];
+        }];
+
+        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count], 0);
+        NSString* header = [NSString stringWithFormat:@"%@,%@,%@", CSaccelerationXKey, CSaccelerationYKey, CSaccelerationZKey];
+        NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
+                               values, @"values",
+                               header, @"header",
+                               sampleInterval, @"interval",
+                                nil];
+
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELEROMETER_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+    }
+    
+    if (hasAcceleration) {
+        NSMutableArray* values = [[NSMutableArray alloc] initWithCapacity:deviceMotionArray.count];
+        
+        [deviceMotionArray enumerateObjectsUsingBlock:^(CMDeviceMotion* motion, NSUInteger index, BOOL *stop) {
+            NSNumber* x = CSroundedNumber(motion.userAcceleration.x * G, 3);
+            NSNumber* y = CSroundedNumber(motion.userAcceleration.y * G, 3);
+            //z-axis is in other direction in CommonSense (thanks Android!)
+            NSNumber* z = CSroundedNumber(-motion.userAcceleration.z * G, 3);
+            [values addObject:[NSArray arrayWithObjects:x,y,z, nil]];
+        }];
+        
+        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count], 0);
+        NSString* header = [NSString stringWithFormat:@"%@,%@,%@", CSaccelerationXKey, CSaccelerationYKey, CSaccelerationZKey];
+        NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
+                               values, @"values",
+                               header, @"header",
+                               sampleInterval, @"interval",
+                               nil];
+
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ACCELERATION_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+    }
+    
+    if (hasRotation) {
+        NSMutableArray* values = [[NSMutableArray alloc] initWithCapacity:deviceMotionArray.count];
+        
+        [deviceMotionArray enumerateObjectsUsingBlock:^(CMDeviceMotion* motion, NSUInteger index, BOOL* stop) {
+            NSNumber* pitch = CSroundedNumber(motion.rotationRate.x * radianInDegrees, 3);
+            NSNumber* roll = CSroundedNumber(motion.rotationRate.y * radianInDegrees, 3);
+            NSNumber* yaw = CSroundedNumber(motion.rotationRate.z * radianInDegrees, 3);
+            [values addObject:[NSArray arrayWithObjects:pitch,roll,yaw, nil]];
+        }];
+        
+        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count], 0);
+        NSString* header = [NSString stringWithFormat:@"%@,%@,%@", attitudePitchKey, attitudeRollKey, attitudeYawKey];
+        NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
+                               values, @"values",
+                               header, @"header",
+                               sampleInterval, @"interval",
+                               nil];
+
+        [CSSensePlatform addDataPointForSensor:kCSSENSOR_ROTATION_BURST displayName:nil description:nil dataType:kCSDATA_TYPE_JSON jsonValue:value timestamp:[NSDate dateWithTimeIntervalSince1970:timestamp]];
+    }
 }
 
 - (void) commitRawSamples:(NSArray*) deviceMotionArray {
     for (size_t i = 0; i < [deviceMotionArray count]; i++) {
         CMDeviceMotion* motion = [deviceMotionArray objectAtIndex:i];
         [self commitRawSample:motion];
-        
     }
 }
 
@@ -338,14 +486,14 @@ static const double radianInDegrees = 180.0 / M_PI;
         if (yaw < 0) yaw += 360;
         
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                        [NSString stringWithFormat:@"%.3f", attitude.pitch * radianInDegrees], attitudePitchKey,
-                                        [NSString stringWithFormat:@"%.3f", attitude.roll * radianInDegrees], attitudeRollKey,
-                                        [NSString stringWithFormat:@"%.0f", yaw], attitudeYawKey,
+                                        CSroundedNumber(attitude.pitch * radianInDegrees, 3), attitudePitchKey,
+                                        CSroundedNumber(attitude.roll * radianInDegrees, 3), attitudeRollKey,
+                                        CSroundedNumber(yaw, 3), attitudeYawKey,
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
-                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                            newItem, @"value",
+                                            CSroundedNumber(timestamp, 3), @"date",
                                             nil];
         [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
         
@@ -355,36 +503,37 @@ static const double radianInDegrees = 180.0 / M_PI;
     if (hasAccelerometer) {
         double x = motion.gravity.x + motion.userAcceleration.x;
         double y = motion.gravity.y + motion.userAcceleration.y;
-        double z = motion.gravity.z + motion.userAcceleration.z;
+        //z-axis is in other direction in CommonSense (thanks Android!)
+        double z = -(motion.gravity.z + motion.userAcceleration.z);
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                        [NSString stringWithFormat:@"%.3f", x * G], CSaccelerationXKey,
-                                        [NSString stringWithFormat:@"%.3f", y * G], CSaccelerationYKey,
-                                        [NSString stringWithFormat:@"%.3f", z * G], CSaccelerationZKey,
+                                        CSroundedNumber(x * G,3), CSaccelerationXKey,
+                                        CSroundedNumber(y * G, 3), CSaccelerationYKey,
+                                        CSroundedNumber(z * G, 3), CSaccelerationZKey,
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
-                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                            newItem, @"value",
+                                            CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         
         [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
-        
         
     }
     
     if (hasAcceleration) {
         double x = motion.userAcceleration.x * G;
         double y = motion.userAcceleration.y * G;
-        double z = motion.userAcceleration.z * G;
+        //z-axis is in other direction in CommonSense (thanks Android!)
+        double z = -motion.userAcceleration.z * G;
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                        [NSString stringWithFormat:@"%.3f", x], CSaccelerationXKey,
-                                        [NSString stringWithFormat:@"%.3f", y], CSaccelerationYKey,
-                                        [NSString stringWithFormat:@"%.3f", z], CSaccelerationZKey,
+                                        CSroundedNumber(x, 3), CSaccelerationXKey,
+                                        CSroundedNumber(y, 3), CSaccelerationYKey,
+                                        CSroundedNumber(z, 3), CSaccelerationZKey,
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
-                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                            newItem, @"value",
+                                            CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
     }
@@ -394,33 +543,34 @@ static const double radianInDegrees = 180.0 / M_PI;
         double roll = motion.rotationRate.y * radianInDegrees;
         double yaw = motion.rotationRate.z * radianInDegrees;
         NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                        [NSString stringWithFormat:@"%.3f", pitch], attitudePitchKey,
-                                        [NSString stringWithFormat:@"%.3f", roll], attitudeRollKey,
-                                        [NSString stringWithFormat:@"%.3f", yaw], attitudeYawKey,
+                                        CSroundedNumber(pitch, 3), attitudePitchKey,
+                                        CSroundedNumber(roll, 3), attitudeRollKey,
+                                        CSroundedNumber(yaw, 3), attitudeYawKey,
                                         nil];
         
         NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            [newItem JSONRepresentation], @"value",
-                                            [NSString stringWithFormat:@"%.3f", timestamp],@"date",
+                                            newItem, @"value",
+                                            CSroundedNumber(timestamp, 3),@"date",
                                             nil];
         [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];
     }
 }
+
 - (void) settingChanged: (NSNotification*) notification {
     @try {
         CSSetting* setting = notification.object;
         NSLog(@"Spatial: setting %@ changed to %@.", setting.name, setting.value);
         if ([setting.name isEqualToString:kCSSpatialSettingInterval]) {
             interval = [setting.value doubleValue];
-
-            //restart
-            if (enableCounter > 0) {
-                [self schedulePollWithInterval:interval];
-            }
         } else if ([setting.name isEqualToString:kCSSpatialSettingFrequency]) {
             frequency = [setting.value doubleValue];
         } else if ([setting.name isEqualToString:kCSSpatialSettingNrSamples]) {
             nrSamples = [setting.value intValue];
+        }
+
+        //restart
+        if (enableCounter > 0) {
+            [self schedulePollWithInterval:interval];
         }
     }
     @catch (NSException * e) {
@@ -429,28 +579,44 @@ static const double radianInDegrees = 180.0 / M_PI;
 }
 
 - (void) schedulePollWithInterval:(NSTimeInterval) newInterval {
-    [motionManager stopDeviceMotionUpdates];
-    @synchronized(pollTimerLock) {
-        if (pollTimerGCD) {
-            dispatch_source_cancel(pollTimerGCD);
-            dispatch_release(pollTimerGCD);
+    void (^innerSchedule)() = ^() {
+        [motionManager stopDeviceMotionUpdates];
+        @synchronized(pollTimerLock) {
+            if (pollTimerGCD) {
+                dispatch_source_cancel(pollTimerGCD);
+            }
+            uint64_t leeway = newInterval * 0.3 * NSEC_PER_SEC; //30% leeway
+            pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
+            dispatch_source_set_event_handler(pollTimerGCD, ^{
+                [self schedulePoll];
+            });
+            
+            dispatch_source_set_timer(pollTimerGCD, dispatch_time(DISPATCH_TIME_NOW, newInterval * NSEC_PER_SEC), newInterval * NSEC_PER_SEC, leeway);
+            dispatch_resume(pollTimerGCD);
         }
-        uint64_t leeway = newInterval * 0.05 * NSEC_PER_SEC; //5% leeway
-        pollTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, pollTimerQueueGCD);
-        dispatch_source_set_event_handler(pollTimerGCD, ^{
-            [self schedulePoll];
-        });
-        dispatch_source_set_timer(pollTimerGCD, dispatch_walltime(NULL, newInterval * NSEC_PER_SEC), newInterval * NSEC_PER_SEC, leeway);
-        dispatch_resume(pollTimerGCD);
+    };
+
+    bool newContinuous = nrSamples / frequency >= newInterval - 1;
+    if (continuous && newContinuous) {
+        [self schedulePoll];
+    } else if (!continuous && newContinuous) {
+        [self stopPolling];
+        continuous = YES;
+        [self schedulePoll];
+    } else if (continuous && !newContinuous) {
+        continuous = NO;
+        innerSchedule();
+    } else { //!continuous && !newContinuous
+        innerSchedule();
     }
 }
 
 - (void) stopPolling {
+    continuous = NO;
     [motionManager stopDeviceMotionUpdates];
     @synchronized(pollTimerLock) {
         if (pollTimerGCD) {
             dispatch_source_cancel(pollTimerGCD);
-            dispatch_release(pollTimerGCD);
             pollTimerGCD = NULL;
         }
     }

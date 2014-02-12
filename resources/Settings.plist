@@ -24,6 +24,8 @@
 	</dict>
 	<key>SettingsTypeambience</key>
 	<dict>
+		<key>sampleOnlyWhenScreenLocked</key>
+		<string>NO</string>
 		<key>pollInterval</key>
 		<string>60</string>
 	</dict>

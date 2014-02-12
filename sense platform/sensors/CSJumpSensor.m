@@ -17,7 +17,6 @@
 #import "CSJumpSensor.h"
 #import <CoreMotion/CoreMotion.h>
 #import "CSDataStore.h"
-#import "CSJSON.h"
 
 #define DEGREES_PER_RADIAN (180.0 / M_PI)
 
@@ -60,7 +59,10 @@ static NSString* const jumpLandingHeadingKey = @"landing heading";
 							@"string", jumpLandingHeadingKey,
 							nil];
 	//make string, as per spec
-	NSString* json = [format JSONRepresentation];
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			[self name], @"name",
 			[self deviceType], @"device_type",
@@ -181,7 +183,7 @@ static NSString* const jumpLandingHeadingKey = @"landing heading";
 	double timestamp = [[NSDate date] timeIntervalSince1970];
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										[newItem JSONRepresentation], @"value",
+										newItem, @"value",
 										[NSString stringWithFormat:@"%.3f",timestamp],@"date",
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];

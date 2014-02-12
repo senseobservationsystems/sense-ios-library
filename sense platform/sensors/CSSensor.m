@@ -16,6 +16,7 @@
 
 #import "CSSensor.h"
 #import "CSSettings.h"
+#import "CSSensorStore.h"
 
 
 @implementation CSSensor
@@ -26,6 +27,7 @@
 - (NSString*) name {return @"";}
 - (NSString*) displayName {return [self name];}
 - (NSString*) deviceType {return @"";}
+- (NSDictionary*) device {return [CSSensorStore device];}
 
 //check name and device_type (as per senseApp)
 - (BOOL) matchesDescription:(NSDictionary*) description {
@@ -68,15 +70,24 @@
 }
 
 - (NSString*) sensorId {
-    return [CSSensor sensorIdFromName:self.name andDeviceType:self.deviceType];
+    return [CSSensor sensorIdFromName:self.name andDeviceType:self.deviceType andDevice:self.device];
 }
 
-+ (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType {
++ (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)description andDevice:(NSDictionary *)device {
     NSString* separator = @"/";
     NSString* escapedSeparator = @"//";
     NSString* escapedName = [name stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
-    NSString* escapedDeviceType = [deviceType stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
-    return [NSString stringWithFormat:@"%@%@%@", escapedName, separator, escapedDeviceType];
+    NSString* escapedDescription = [description stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    
+    if (device != nil) {
+        NSString* deviceType = [device valueForKey:@"type"];
+        NSString* deviceUUID = [device valueForKey:@"uuid"];
+        NSString* escapedDeviceType = [deviceType stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+        NSString* escapedDeviceUUID = [deviceUUID stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+        return [NSString stringWithFormat:@"%@%@%@%@%@%@%@", escapedName, separator, escapedDescription, separator, escapedDeviceType, separator, escapedDeviceUUID];
+    } else {
+        return [NSString stringWithFormat:@"%@%@%@", escapedName, separator, escapedDescription];
+    }
 }
 
 + (NSString*) sensorNameFromSensorId:(NSString*) sensorId {

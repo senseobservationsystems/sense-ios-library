@@ -17,6 +17,7 @@
 #import "CSConnectionSensor.h"
 #import "CSReachability.h"
 #import "CSDataStore.h"
+#import "Formatting.h"
 
 @implementation CSConnectionSensor
 
@@ -69,7 +70,7 @@
     }
 	
 	
-	NSNumber* timestamp = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
 	
 	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 										statusString, @"value",
@@ -84,7 +85,7 @@
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
-	NSLog(@"Enabling connection type sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
+	//NSLog(@"Enabling connection type sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
 	if (enable) {
 		[internetReach startNotifier];
 		[self reachabilityChanged:nil];
@@ -98,7 +99,6 @@
 - (void) dealloc {
 	self.isEnabled = NO;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
 }
 
 @end
