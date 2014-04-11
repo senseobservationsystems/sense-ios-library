@@ -59,6 +59,9 @@
 		3E4F274517033D200045588C /* CSApplicationStateChange.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */; };
 		3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* CSDynamicSensor.h */; };
 		3E4F28BB170DB4750045588C /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4F28BA170DB4750045588C /* Formatting.m */; };
+		3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F4D18F7D7CF0008415A /* CSStorage.m */; };
+		3E513F5018F7DDE60008415A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E513F4F18F7DDE60008415A /* libsqlite3.dylib */; };
+		3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5218F81D2C0008415A /* CSDataPoint.m */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
 		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */; };
@@ -171,6 +174,11 @@
 		3E148BD0160A18DC0010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3E4F28B9170DB4750045588C /* Formatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Formatting.h; path = utils/Formatting.h; sourceTree = "<group>"; };
 		3E4F28BA170DB4750045588C /* Formatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Formatting.m; path = utils/Formatting.m; sourceTree = "<group>"; };
+		3E513F4C18F7D7CF0008415A /* CSStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStorage.h; sourceTree = "<group>"; };
+		3E513F4D18F7D7CF0008415A /* CSStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorage.m; sourceTree = "<group>"; };
+		3E513F4F18F7DDE60008415A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		3E513F5118F81D2C0008415A /* CSDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataPoint.h; sourceTree = "<group>"; };
+		3E513F5218F81D2C0008415A /* CSDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDataPoint.m; sourceTree = "<group>"; };
 		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		3E820D6A15D40AB50001A3EC /* libSensePlatform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSensePlatform.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -301,6 +309,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E513F5018F7DDE60008415A /* libsqlite3.dylib in Frameworks */,
 				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
 				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
 				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
@@ -390,6 +399,7 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3E513F4F18F7DDE60008415A /* libsqlite3.dylib */,
 				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
 				3E148B7A160A11280010A0D1 /* SenTestingKit.framework */,
 				3E148B7C160A11280010A0D1 /* UIKit.framework */,
@@ -420,6 +430,10 @@
 				3E820E0515D40B180001A3EC /* CSSettings.m */,
 				3E836CD1171C4BB800D7494C /* CSSensorRequirements.h */,
 				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
+				3E513F4C18F7D7CF0008415A /* CSStorage.h */,
+				3E513F4D18F7D7CF0008415A /* CSStorage.m */,
+				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
+				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
 			);
 			path = "sense platform";
 			sourceTree = "<group>";
@@ -592,7 +606,7 @@
 		3E820D6115D40AB50001A3EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -709,6 +723,7 @@
 				3E820E1D15D40B190001A3EC /* BloodPressureSensor.m in Sources */,
 				3E820E1F15D40B190001A3EC /* FootpodSensor.m in Sources */,
 				3E820E2115D40B190001A3EC /* CSBatterySensor.m in Sources */,
+				3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */,
 				3E820E2315D40B190001A3EC /* CSCallSensor.m in Sources */,
 				3E820E2515D40B190001A3EC /* CSCompassSensor.m in Sources */,
 				3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */,
@@ -728,6 +743,7 @@
 				FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */,
 				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
 				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
+				3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */,
 				3E820E4715D40B190001A3EC /* CSSettings.m in Sources */,
 				3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
@@ -912,6 +928,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -920,6 +937,10 @@
 		3E820D7815D40AB50001A3EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -930,13 +951,17 @@
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
-				VALID_ARCHS = "i386 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
 			name = Debug;
 		};
 		3E820D7915D40AB50001A3EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					i386,
+				);
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -946,7 +971,7 @@
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
-				VALID_ARCHS = "i386 armv7 armv7s";
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
 			name = Release;
 		};
@@ -1010,6 +1035,7 @@
 				3EBEAF501887FADE009F81C1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
