@@ -38,6 +38,7 @@
 - (NSDictionary*) createSensorWithDescription:(NSDictionary*) description;
 - (BOOL) connectSensor:(NSString*)sensorId ToDevice:(NSDictionary*) device;
 - (BOOL) uploadData:(NSArray*) data forSensorId:(NSString*)sensorId;
+- (BOOL) uploadDataForMultipleSensors:(NSArray*) data;
 - (BOOL) shareSensor: (NSString*)sensorId WithUser:(NSString*)user;
 - (NSArray*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints;
 - (BOOL) giveFeedbackToStateSensor:(NSString*)sensorId from:(NSDate*) from to:(NSDate*)to label:(NSString*) label;

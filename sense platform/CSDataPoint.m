@@ -9,5 +9,13 @@
 #import "CSDataPoint.h"
 
 @implementation CSDataPoint
+- (NSDictionary*) device {
+    return [NSDictionary dictionaryWithObjectsAndKeys:self.deviceType, @"type",
+                          self.deviceUUID, @"uuid",
+                          nil];
+}
 
+- (NSDictionary*) timeValueDict {
+    return [NSJSONSerialization JSONObjectWithData:[self.timeValue dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+}
 @end

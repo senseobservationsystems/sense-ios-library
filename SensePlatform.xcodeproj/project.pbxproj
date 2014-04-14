@@ -50,8 +50,6 @@
 		3E148BD9160A19A20010A0D1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
 		3E148BDA160A19A20010A0D1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
 		3E148BDB160A19A20010A0D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
-		3E148BDD160A1C4D0010A0D1 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E820DBE15D40B100001A3EC /* Settings.plist */; };
-		3E148BDF160A1C9D0010A0D1 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3E820DBE15D40B100001A3EC /* Settings.plist */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
 		3E4F273B17033CD60045588C /* CSSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155715D564E100F520D0 /* CSSensor.h */; };
@@ -62,6 +60,7 @@
 		3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F4D18F7D7CF0008415A /* CSStorage.m */; };
 		3E513F5018F7DDE60008415A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E513F4F18F7DDE60008415A /* libsqlite3.dylib */; };
 		3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5218F81D2C0008415A /* CSDataPoint.m */; };
+		3E513F5D18FC18150008415A /* CSUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5C18FC18150008415A /* CSUploader.m */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
 		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */; };
@@ -179,11 +178,13 @@
 		3E513F4F18F7DDE60008415A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		3E513F5118F81D2C0008415A /* CSDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataPoint.h; sourceTree = "<group>"; };
 		3E513F5218F81D2C0008415A /* CSDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDataPoint.m; sourceTree = "<group>"; };
+		3E513F5B18FC18150008415A /* CSUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUploader.h; sourceTree = "<group>"; };
+		3E513F5C18FC18150008415A /* CSUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUploader.m; sourceTree = "<group>"; };
 		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		3E820D6A15D40AB50001A3EC /* libSensePlatform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSensePlatform.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E820D6D15D40AB50001A3EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		3E820DBE15D40B100001A3EC /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
+		3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SensePlatform-Info.plist"; sourceTree = "<group>"; };
 		3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
 		3E820DC415D40B180001A3EC /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Hash.h"; sourceTree = "<group>"; };
 		3E820DC515D40B180001A3EC /* NSString+MD5Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5Hash.m"; sourceTree = "<group>"; };
@@ -411,7 +412,7 @@
 		3E820DBB15D40B100001A3EC /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DBE15D40B100001A3EC /* Settings.plist */,
+				3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -434,6 +435,8 @@
 				3E513F4D18F7D7CF0008415A /* CSStorage.m */,
 				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
 				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
+				3E513F5B18FC18150008415A /* CSUploader.h */,
+				3E513F5C18FC18150008415A /* CSUploader.m */,
 			);
 			path = "sense platform";
 			sourceTree = "<group>";
@@ -633,15 +636,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E148BDF160A1C9D0010A0D1 /* Settings.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3E148BA5160A12010010A0D1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3E148BDD160A1C4D0010A0D1 /* Settings.plist in Resources */,
 				3E148BB3160A12010010A0D1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -711,6 +705,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */,
+				3E513F5D18FC18150008415A /* CSUploader.m in Sources */,
 				3E820E0A15D40B190001A3EC /* NSString+MD5Hash.m in Sources */,
 				3E820E0C15D40B190001A3EC /* CSSender.m in Sources */,
 				3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */,

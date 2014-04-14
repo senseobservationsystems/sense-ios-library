@@ -37,8 +37,9 @@
 #import "CSPreferencesSensor.h"
 #import "BloodPressureSensor.h"
 #import "CSScreenSensor.h"
-#import <sqlite3.h>
 #import "CSSender.h"
+#import "CSStorage.h"
+#import "CSUploader.h"
 
 #import "CSSpatialProvider.h"
 
@@ -56,6 +57,9 @@
 
 @implementation CSSensorStore {
     CSSender* sender;
+    CSStorage* storage;
+    CSUploader* uploader;
+    
 	
 	NSMutableDictionary* sensorData;
 	BOOL serviceEnabled;
@@ -114,6 +118,11 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
+        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+																  NSUserDomainMask, YES) objectAtIndex:0];
+        NSString* dbPath =[rootPath stringByAppendingPathComponent:@"data.db"];
+        storage = [[CSStorage alloc] initWithPath:dbPath];
+        uploader = [[CSUploader alloc] initWithStorage:storage andSender:sender];
 		
 		//all sensor classes
 		allSensorClasses = [NSArray arrayWithObjects:
@@ -269,17 +278,34 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         [sensors addObject:sensor];
     }
 }
+
+- (void) addDataForSensor:(NSString*) sensor description:(NSString*) description dateValue:(NSDictionary*) dateValue {
+    NSData* valueData = [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
+    double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
+    //TODO: these values are not being used
+    NSString* deviceType = @"";
+    NSString* deviceUUID = @"";
+    NSString* dataType = @"";
+
+   [storage storeSensor:sensor description:description deviceType:deviceType device:deviceUUID dataType:dataType value:value timestamp:timestamp];
+}
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
+    
+   
+
 
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
-    
+    [self addDataForSensor:sensorName description:sensorName dateValue:data];
+
     //FIXME: TODO: ugly hack to not send burst sensors
     //if ([sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
 
 	//retrieve/create entry for this sensor
+    /*
 	@synchronized(self) {
 		NSMutableArray* entry = [sensorData valueForKey:sensorId];
 		if (entry == nil) {
@@ -290,6 +316,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		//add data
 		[entry addObject:data];
 	}
+     */
 }
 
 - (void) enabledChanged:(id) notification {
@@ -431,6 +458,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 
 - (BOOL) uploadData {
+    return [uploader upload];
     BOOL allSucceed = YES;
 	NSMutableDictionary* myData;
 	//take over sensorData

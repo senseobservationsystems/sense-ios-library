@@ -9,14 +9,17 @@
 #import <Foundation/Foundation.h>
 
 @interface CSDataPoint : NSObject {
-    long long dataPointID; //This is being set by CSStorage.
-    NSDate* timestamp;
-    NSString* sensor;
-    NSString* sensorDescription;
-    NSString* deviceType;
-    NSString* device;
-    NSString* dataType;
-    NSString* data;
 }
 
+- (NSDictionary*) device;
+- (NSDictionary*) timeValueDict;
+
+@property long long dataPointID; //This is being set by CSStorage.
+@property NSDate* timestamp;
+@property NSString* sensor;
+@property NSString* sensorDescription;
+@property NSString* deviceType;
+@property NSString* deviceUUID;
+@property NSString* dataType;
+@property NSString* timeValue; //json {"date":<unix timestamp>, "value":<value>}
 @end
