@@ -652,7 +652,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
 	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
-    int sizeOfNextPoint = [json length];
+    size_t sizeOfNextPoint = [json length];
     do {
         points++;
         size += sizeOfNextPoint;

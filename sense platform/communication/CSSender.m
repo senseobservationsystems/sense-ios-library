@@ -165,7 +165,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 			
 			if (([type caseInsensitiveCompare:[device valueForKey:@"type"]] == 0) && ([uuid caseInsensitiveCompare:[device valueForKey:@"uuid"]] == 0)) {
 				deviceId = [[remoteDevice valueForKey:@"id"] integerValue];
-				NSLog(@"Mathed device with id %d", deviceId);
+				NSLog(@"Mathed device with id %ld", (long)deviceId);
 				break;
 			}
 		}
@@ -256,7 +256,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
         return YES;
 	} else {
         //Ai, some error that couldn't be resolved. Log and return error
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
 		return NO;
@@ -299,7 +299,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
         return YES;
 	} else {
         //Ai, some error that couldn't be resolved. Log and return error
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
 		return NO;
@@ -373,7 +373,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	if ([response statusCode] < 200 || [response statusCode] >= 300)
 	{
 		//Ai, some error that couldn't be resolved. Log and throw exception
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
         //TODO: throw clean exception that details the exception
@@ -419,7 +419,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	if ([response statusCode] < 200 || [response statusCode] > 300)
 	{
 		//Ai, some error that couldn't be resolved. Log and throw exception
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
         //TODO: throw clean exception that details the exception
@@ -472,7 +472,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	
 	//log response
 	if (response) {
-		NSLog(@"%@ \"%@\" responded with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" responded with status code %ld", method, url, (long)[response statusCode]);
 	}
 	
 	if (output != nil)
@@ -512,10 +512,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSURL*) makeSensorsUrlForDeviceId:(NSInteger)deviceId {
-	NSString* url = [NSString stringWithFormat: @"%@/%@/%d/%@%@%@",
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%ld/%@%@%@",
 					 kUrlBaseURL,
 					 kUrlDevices,
-					 deviceId,
+					 (long)deviceId,
  					 kUrlSensors,
 					 kUrlJsonSuffix,
                      @"?per_page=1000"];
@@ -546,13 +546,13 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSURL*) makeUrlForGettingSensorData:(NSString*) sensorId nrPoints:(NSInteger) nrPoints order:(NSString*) order {
-	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%i&sort=%@",
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%li&sort=%@",
 					 kUrlBaseURL,
 					 kUrlSensors,
 					 sensorId,
  					 kUrlData,
 					 kUrlJsonSuffix,
-                     nrPoints,
+                     (long)nrPoints,
                      order];
 	
 	return [NSURL URLWithString:url];
