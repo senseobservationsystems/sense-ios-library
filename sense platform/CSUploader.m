@@ -9,8 +9,10 @@
 #import "CSUploader.h"
 #import "CSDataPoint.h"
 #import "CSSensorStore.h"
+#import "CSSensorIdKey.h"
 
-static const size_t ROW_LIMIT = 100;
+static const size_t ROW_LIMIT = 500;
+static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
 
 @implementation CSUploader {
     CSStorage* storage;
@@ -24,8 +26,13 @@ static const size_t ROW_LIMIT = 100;
     if (self) {
         self->storage = theStorage;
         self->sender = theSender;
-        //TODO: get this
-        lastUploadedRowId = 0;
+        
+        NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
+        lastUploadedRowId = [prefs integerForKey:lastUploadedRowIdKey];
+        
+        //Can't be greater than the current last dataPoint id. Enforce this to handle cases where we have a new database but old lastUploadedRowId value
+        lastUploadedRowId = MIN(lastUploadedRowId, [self->storage getLastDataPointId]);
+        
     }
     return self;
 }
@@ -33,9 +40,30 @@ static const size_t ROW_LIMIT = 100;
 #pragma mark - Uploading
 
 - (BOOL) upload {
+    long long lastDataPointId = [self->storage getLastDataPointId];
+    BOOL goOn = YES;
+    BOOL succeed;
+    while (goOn) {
+        succeed = [self singleUpload];
+        //TODO: depending on error do action
+        if (!succeed) {
+            //Error occured, clear the cache as it might be invalid
+            self->sensorIdCache = nil;
+            goOn = NO;
+        }
+        if (lastUploadedRowId >= lastDataPointId) {
+            goOn = NO;
+        }
+    }
+    return succeed;
+}
+
+- (BOOL) singleUpload {
     //get enough data from storage for a single upload
     //TODO: check size?
-    NSArray* data = [storage getSensorDataPointsFromId:lastUploadedRowId limit:ROW_LIMIT];
+    NSArray* data = [storage getSensorDataPointsFromId:lastUploadedRowId+1 limit:ROW_LIMIT];
+    if (data.count == 0)
+        return YES;
     //extract sensors
     NSSet* sensors = getSensorSet(data);
     //resolve sensorids
@@ -53,7 +81,7 @@ static const size_t ROW_LIMIT = 100;
     BOOL succeed = [sender uploadDataForMultipleSensors:perSensorData];
     if (succeed) {
         CSDataPoint* last = [data lastObject];
-        self->lastUploadedRowId = last.dataPointID;
+        [self setLastUploadedRowId:last.dataPointID];
         return YES;
     }
     return NO;
@@ -65,6 +93,10 @@ static const size_t ROW_LIMIT = 100;
 /* Return a dictionary with all resolved ids */
 - (NSDictionary*) resolveSensorIds:(NSArray*) sensors {
     NSDictionary* resolved;
+    
+    
+    //WORKAROUND: CommonSense silently ignores sensors that you cannot upload to (e.g. deleted sensors). To minimise impact invalidate the cache so we'll always get the most recent data.
+    self->sensorIdCache = nil;
     
     //resolve locally from cache
     resolved = [self resolveFromCacheSensorIds:sensors];
@@ -86,20 +118,22 @@ static const size_t ROW_LIMIT = 100;
     if (resolved.count == sensors.count) {
         return resolved;
     }
+    resolved  = [resolved mutableCopy];
     
     //We got a couple of sensors that can't be found on the server. Create them
     size_t nrUnresolved = sensors.count - resolved.count;
     NSMutableArray* unresolved = [[NSMutableArray alloc] initWithCapacity:nrUnresolved];
     
     //create array of unresolved sensors
-    for (NSString* sensorId in sensors) {
-        if ([resolved valueForKey:sensorId] == nil) {
+    for (CSSensorIdKey* sensorId in sensors) {
+        if ([resolved objectForKey:sensorId] == nil) {
             [unresolved addObject:sensorId];
         }
     }
     
+    NSMutableDictionary* mResolved = [resolved mutableCopy];
     //create each sensor
-	for (NSString* sensorId in unresolved) {
+	for (CSSensorIdKey* sensorId in unresolved) {
         NSLog(@"Creating %@ sensor...", sensorId);
         NSDictionary* description = getSensorDescription(sensorId);
 		NSDictionary* remoteDescription = [sender createSensorWithDescription:description];
@@ -109,22 +143,23 @@ static const size_t ROW_LIMIT = 100;
             continue;
         }
         //link sensor to device
-        NSDictionary* device = getSensorDevice(sensorId);
+        NSDictionary* device = [sensorId device];
         if (device != nil) {
             [sender connectSensor:remoteId ToDevice:device];
             //TODO: handle error
         }
-        [resolved setValue:remoteId forKey:sensorId];
+        //TODO:copying? mutable
+        [mResolved setObject:remoteId forKey:sensorId];
     }
     
-    //Note: the cache is not out-of-date and will be updated next time we try to resolve one of the created sensors
+    //Note: the cache is now out-of-date and will be updated next time we try to resolve one of the created sensors
     
     return resolved;
 }
 
 - (NSDictionary*) resolveFromCacheSensorIds:(NSArray*) sensors {
     NSMutableDictionary* resolved = [[NSMutableDictionary alloc] initWithCapacity:sensors.count];
-    for (NSString* sensorIdLocal in sensors) {
+    for (CSSensorIdKey* sensorIdLocal in sensors) {
         NSString* remoteId = [sensorIdCache objectForKey:sensorIdLocal];
         if (remoteId != nil) {
             [resolved setObject:remoteId forKey:sensorIdLocal];
@@ -148,9 +183,10 @@ static const size_t ROW_LIMIT = 100;
             NSString* name = [remoteSensor valueForKey:@"name"];
             NSString* description = [remoteSensor valueForKey:@"device_type"];
             NSDictionary* device = [remoteSensor valueForKey:@"device"];
-            NSString* localId = [CSSensor sensorIdFromName:name andDeviceType:description andDevice:device];
+            //NSString* localId = [CSSensor sensorIdFromName:name andDeviceType:description andDevice:device];
+            CSSensorIdKey* localId = [[CSSensorIdKey alloc] initWithName:name description:description device:device];
             NSString* remoteId = [remoteSensor valueForKey:@"id"];
-            [mappedSensors setValue:remoteId forKey:localId];
+            [mappedSensors setObject:remoteId forKey:localId];
         }
     }
     return mappedSensors;
@@ -162,28 +198,21 @@ static const size_t ROW_LIMIT = 100;
 NSSet* getSensorSet(NSArray* data) {
     NSMutableSet* sensorSet = [[NSMutableSet alloc] init];
     for (CSDataPoint* dp in data) {
-        NSString* sensorId = [CSSensor sensorIdFromName:dp.sensor andDeviceType:dp.sensorDescription andDevice:dp.device];
+        CSSensorIdKey *sensorId = [[CSSensorIdKey alloc] initWithName:dp.sensor description:dp.sensorDescription deviceType:dp.deviceType deviceUUID:dp.deviceUUID];
         [sensorSet addObject:sensorId];
     }
     return sensorSet;
 }
 
-NSDictionary* getSensorDescription(NSString* sensorId) {
+NSDictionary* getSensorDescription(CSSensorIdKey* sensorId) {
     //TODO: ensure descriptions end up in the table
     //TODO: get description from table
-    NSString* name = [CSSensor sensorNameFromSensorId:sensorId];
 	return [NSDictionary dictionaryWithObjectsAndKeys:
-			name, @"name",
-			name, @"device_type",
+			sensorId.name, @"name",
+			sensorId.description, @"device_type",
 			@"", @"pager_type",
 			kCSDATA_TYPE_STRING, @"data_type",
 			nil];
-}
-
-NSDictionary* getSensorDevice(NSString* sensorId) {
-    //TODO: get device from the table
-    return nil;
-    return [CSSensorStore device];
 }
 
 NSArray* formattedData(NSArray* data, NSDictionary* sensorMapping) {
@@ -193,8 +222,8 @@ NSArray* formattedData(NSArray* data, NSDictionary* sensorMapping) {
     NSMutableDictionary* perSensor = [[NSMutableDictionary alloc] initWithCapacity:sensorMapping.count];
     
     for (CSDataPoint* dp in data) {
-        NSString* sensorId = [CSSensor sensorIdFromName:dp.sensor andDeviceType:dp.sensorDescription andDevice:dp.device];
-        NSString* remoteId = [sensorMapping valueForKey:sensorId];
+        CSSensorIdKey* sensorId = [[CSSensorIdKey alloc] initWithName:dp.sensor description:dp.sensorDescription device:dp.device];
+        NSString* remoteId = [sensorMapping objectForKey:sensorId];
         NSDictionary* sensorEntry = [perSensor valueForKey:remoteId];
         NSMutableArray* sensorData = [sensorEntry valueForKey:@"data"];
         if (sensorData == nil) {
@@ -207,6 +236,12 @@ NSArray* formattedData(NSArray* data, NSDictionary* sensorMapping) {
     
     //per sensor actually needs to be an array, convert here
     return [perSensor allValues];
+}
+
+- (void) setLastUploadedRowId:(long long) value {
+    self->lastUploadedRowId = value;
+    NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setInteger:value forKey:lastUploadedRowIdKey];
 }
 
 @end

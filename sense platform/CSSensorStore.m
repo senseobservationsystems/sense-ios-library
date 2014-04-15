@@ -279,27 +279,26 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
-- (void) addDataForSensor:(NSString*) sensor description:(NSString*) description dateValue:(NSDictionary*) dateValue {
+- (void) addDataForSensorId:(NSString*) sensorId dateValue:(NSDictionary*) dateValue {
     NSData* valueData = [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
     NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
     double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
+    NSString* name = [CSSensor sensorNameFromSensorId:sensorId];
+    NSString* description = [CSSensor sensorDescriptionFromSensorId:sensorId];
     //TODO: these values are not being used
-    NSString* deviceType = @"";
-    NSString* deviceUUID = @"";
-    NSString* dataType = @"";
+    NSString* deviceType = [CSSensor sensorDeviceTypeFromSensorId:sensorId];
+    NSString* deviceUUID = [CSSensor sensorDeviceUUIDFromSensorId:sensorId];
+    NSString* dataType = @""; //Not being used
 
-   [storage storeSensor:sensor description:description deviceType:deviceType device:deviceUUID dataType:dataType value:value timestamp:timestamp];
+   [storage storeSensor:name description:description deviceType:deviceType device:deviceUUID dataType:dataType value:value timestamp:timestamp];
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
     //post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
-    
-   
-
 
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
-    [self addDataForSensor:sensorName description:sensorName dateValue:data];
+    [self addDataForSensorId:sensorId dateValue:data];
 
     //FIXME: TODO: ugly hack to not send burst sensors
     //if ([sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;

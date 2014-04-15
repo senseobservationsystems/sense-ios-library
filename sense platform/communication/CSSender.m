@@ -26,6 +26,7 @@ static const NSString* kUrlLogout = @"logout";
 static const NSString* kUrlSensorDevice = @"device";
 static const NSString* kUrlSensors = @"sensors";
 static const NSString* kUrlUsers = @"users";
+static const NSString* kUrlUploadMultipleSensors = @"sensors/data";
 
 
 @implementation CSSender
@@ -273,7 +274,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
         
 	}
 	NSString* method = @"POST";
-    NSURL* url = [NSURL URLWithString:@"https://api.sense-os.nl/sensors/data"];
+    NSURL* url = [self makeUrlFor:kUrlUploadMultipleSensors];
 	NSData* contents;
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
@@ -483,13 +484,15 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return response;
 }
 
+#pragma mark - Urls
+
 ///Creates the url using CommonSense.plist
-- (NSURL*) makeUrlFor:(NSString*) action
+- (NSURL*) makeUrlFor:(const NSString*) action
 {
 	return [self makeUrlFor:action append:@""];
 }
 
-- (NSURL*) makeUrlFor:(NSString*) action append:(NSString*) appendix
+- (NSURL*) makeUrlFor:(const NSString*) action append:(NSString*) appendix
 {
 	NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
 					 kUrlBaseURL,

@@ -129,7 +129,18 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
 
 - (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit {
     NSMutableArray* results = [NSMutableArray new];
-    const char* query = [[NSString stringWithFormat:@"SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM data where id >= %lli limit %zu", start, limit] UTF8String];
+    if (start <= self->lastRowIdInStorage) {
+        [results addObjectsFromArray:[self getSensorDataPointsFromId:start limit:limit table:@"data"]];
+    }
+    limit -= results.count;
+    if (limit >0)
+        [results addObjectsFromArray:[self getSensorDataPointsFromId:start limit:limit table:@"buf.data"]];
+    return results;
+}
+
+- (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit table: (NSString*) table{
+    NSMutableArray* results = [NSMutableArray new];
+    const char* query = [[NSString stringWithFormat:@"SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM %@ where id >= %lli limit %zu", table, start, limit] UTF8String];
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);
     NSInteger ret = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
@@ -144,7 +155,7 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
             p.deviceUUID = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 5)];
             p.dataType = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 6)];
             p.timeValue = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 7)];
-
+            
             [results addObject:p];
         }
     } else if (ret != SQLITE_NOTFOUND) {
@@ -152,9 +163,10 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
     }
     sqlite3_finalize(stmt);
     pthread_mutex_unlock(&dbMutex);
-
+    
     return results;
 }
+
 
 #pragma mark - maintenance
 - (void) writeDbToFile {
@@ -213,6 +225,10 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
         NSLog(@"cleanPersistentDb failure: %s", sqlite3_errmsg(db));
     }
     pthread_mutex_unlock(&dbMutex);
+}
+
+- (long long) getLastDataPointId {
+    return self->lastDataPointid;
 }
 
 @end

@@ -103,6 +103,7 @@
 		3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
 		3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
 		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
+		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */; };
 /* End PBXBuildFile section */
 
@@ -261,6 +262,8 @@
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3EBEAF571887FCA9009F81C1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
+		3EE091EB18FD597300A04ED4 /* CSSensorIdKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorIdKey.h; sourceTree = "<group>"; };
+		3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIdKey.m; sourceTree = "<group>"; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
 		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -497,6 +500,8 @@
 				3E820E0015D40B180001A3EC /* CSSpatialProvider.m */,
 				3E820E0115D40B180001A3EC /* CSUserProximity.h */,
 				3E820E0215D40B180001A3EC /* CSUserProximity.m */,
+				3EE091EB18FD597300A04ED4 /* CSSensorIdKey.h */,
+				3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */,
 			);
 			path = sensors;
 			sourceTree = "<group>";
@@ -719,6 +724,7 @@
 				3E820E2115D40B190001A3EC /* CSBatterySensor.m in Sources */,
 				3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */,
 				3E820E2315D40B190001A3EC /* CSCallSensor.m in Sources */,
+				3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */,
 				3E820E2515D40B190001A3EC /* CSCompassSensor.m in Sources */,
 				3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */,
 				3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */,

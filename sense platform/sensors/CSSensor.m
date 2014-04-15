@@ -78,35 +78,63 @@
     NSString* escapedSeparator = @"//";
     NSString* escapedName = [name stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
     NSString* escapedDescription = [description stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
-    
+    NSString* deviceType = @"";
+    NSString* deviceUUID = @"";
     if (device != nil) {
-        NSString* deviceType = [device valueForKey:@"type"];
-        NSString* deviceUUID = [device valueForKey:@"uuid"];
-        NSString* escapedDeviceType = [deviceType stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
-        NSString* escapedDeviceUUID = [deviceUUID stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
-        return [NSString stringWithFormat:@"%@%@%@%@%@%@%@", escapedName, separator, escapedDescription, separator, escapedDeviceType, separator, escapedDeviceUUID];
-    } else {
-        return [NSString stringWithFormat:@"%@%@%@", escapedName, separator, escapedDescription];
+        deviceType = [device valueForKey:@"type"];
+        deviceUUID = [device valueForKey:@"uuid"];
     }
+
+    NSString* escapedDeviceType = [deviceType stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    NSString* escapedDeviceUUID = [deviceUUID stringByReplacingOccurrencesOfString:separator withString:escapedSeparator];
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@%@", escapedName, separator, escapedDescription, separator, escapedDeviceType, separator, escapedDeviceUUID];
 }
 
 + (NSString*) sensorNameFromSensorId:(NSString*) sensorId {
+    return [[CSSensor componentsFromSensorId:sensorId] objectAtIndex:0];
+}
++ (NSString*) sensorDescriptionFromSensorId:(NSString*) sensorId {
+    return [[CSSensor componentsFromSensorId:sensorId] objectAtIndex:1];
+}
++ (NSString*) sensorDeviceTypeFromSensorId:(NSString*) sensorId {
+    return [[CSSensor componentsFromSensorId:sensorId] objectAtIndex:2];
+}
++ (NSString*) sensorDeviceUUIDFromSensorId:(NSString*) sensorId {
+    return [[CSSensor componentsFromSensorId:sensorId] objectAtIndex:3];
+}
+
++ (NSArray*) componentsFromSensorId:(NSString*) sensorId {
+    NSMutableArray* components = [[NSMutableArray alloc] init];
     //extract sensor name
-    NSMutableString* name = [[NSMutableString alloc] init];
+    NSMutableString* entry = [[NSMutableString alloc] init];
     for (size_t i = 0; i < sensorId.length; i++) {
         char ch = [sensorId characterAtIndex:i];
         if (ch != '/'){
-            [name appendFormat:@"%c", ch];
+            [entry appendFormat:@"%c", ch];
         } else {
-            if (i+1 < sensorId.length && [sensorId characterAtIndex:i+1] == '/') {
-                //skip, as this is an escaped slash
-                i++;
-                continue;
+            if (i+1 >= sensorId.length) {
+                //last entry is empty
+                entry = [[NSMutableString alloc] init];
+                break;
             }
-            break;
+            if ([sensorId characterAtIndex:i+1] == '/') {
+                //escaped character
+                i++;
+                [entry appendFormat:@"%c", [sensorId characterAtIndex:i]];
+                continue;
+            } else {
+                //component separator
+                [components addObject:entry];
+                entry = [[NSMutableString alloc] init];
+            }
         }
     }
-    return name;
+    [components addObject:entry];
+    //This should've returned 4 entries: name/description/deviceType/uuid, if not just fill in the missing components as empty
+    while (components.count < 4) {
+        [components addObject:@""];
+    }
+    return components;
 }
 
 @end
