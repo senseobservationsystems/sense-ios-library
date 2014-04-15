@@ -231,4 +231,9 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
     return self->lastDataPointid;
 }
 
+- (void) flush {
+    [self writeDbToFile];
+    [self cleanBuffer];
+}
+
 @end
