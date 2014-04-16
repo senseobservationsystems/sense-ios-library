@@ -26,6 +26,7 @@ static const NSString* kUrlLogout = @"logout";
 static const NSString* kUrlSensorDevice = @"device";
 static const NSString* kUrlSensors = @"sensors";
 static const NSString* kUrlUsers = @"users";
+static const NSString* kUrlUploadMultipleSensors = @"sensors/data";
 
 
 @implementation CSSender
@@ -149,11 +150,24 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return [response statusCode] == 200;
 }
 
-- (NSDictionary*) listSensors {
-	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000&details=full"] withMethod:@"GET" withInput:nil];
+- (NSArray*) listSensors {
+    NSMutableArray* sensors = [[NSMutableArray alloc] init];
+    NSDictionary* response = nil;
+    NSInteger page = 0;
+    do {
+        NSString* params = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
+        response = [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:params] withMethod:@"GET" withInput:nil];
+        if (response == nil)
+            break;
+        [sensors addObjectsFromArray:[response valueForKey:@"sensors"]];
+        page++;
+    } while (response.count == 1000);
+    if (response == nil)
+        return nil;
+    return sensors;
 }
 
-- (NSDictionary*) listSensorsForDevice:(NSDictionary*)device {
+- (NSArray*) listSensorsForDevice:(NSDictionary*)device {
 	//get device
 	NSArray* devices = [[self doJsonRequestTo:[self makeUrlFor:@"devices" append:@"?per_page=1000"] withMethod:@"GET" withInput:nil] valueForKey:@"devices"];
 	NSInteger deviceId = -1;
@@ -165,16 +179,30 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 			
 			if (([type caseInsensitiveCompare:[device valueForKey:@"type"]] == 0) && ([uuid caseInsensitiveCompare:[device valueForKey:@"uuid"]] == 0)) {
 				deviceId = [[remoteDevice valueForKey:@"id"] integerValue];
-				NSLog(@"Mathed device with id %d", deviceId);
+				NSLog(@"Mathed device with id %ld", (long)deviceId);
 				break;
 			}
 		}
 	}
 	
 	//if device unknown, then it follows it has no sensors
-	if (deviceId == -1) return [NSDictionary dictionaryWithObjectsAndKeys:[NSArray array], @"sensors", nil];
+	if (deviceId == -1)
+        return [NSArray array];
 
-	return [self doJsonRequestTo:[self makeSensorsUrlForDeviceId:deviceId] withMethod:@"GET" withInput:nil];
+    NSMutableArray* sensors = [[NSMutableArray alloc] init];
+    NSDictionary* response = nil;
+    NSInteger page = 0;
+    do {
+        NSString* params = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
+        response = [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:params] withMethod:@"GET" withInput:nil];
+        if (response == nil)
+            break;
+        [sensors addObjectsFromArray:[response valueForKey:@"sensors"]];
+        page++;
+    } while (response.count == 1000);
+    if (response == nil)
+        return nil;
+    return sensors;
 }
 
 - (NSDictionary*) listConnectedSensorsFor:(NSString*)sensorId {
@@ -256,7 +284,50 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
         return YES;
 	} else {
         //Ai, some error that couldn't be resolved. Log and return error
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
+		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+		NSLog(@"Responded: %@", responded);
+		return NO;
+    }
+}
+
+- (BOOL) uploadDataForMultipleSensors:(NSArray*) data {
+	NSDictionary* sensorData = [NSDictionary dictionaryWithObjectsAndKeys:
+                                data, @"sensors", nil];
+    //make session
+	if (sessionCookie == nil) {
+		if (NO == [self login])
+			return NO;
+        
+	}
+	NSString* method = @"POST";
+    NSURL* url = [self makeUrlFor:kUrlUploadMultipleSensors];
+	NSData* contents;
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
+    if (error) {
+        NSLog(@"Error serializing data to json.");
+        return NO;
+    }
+	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
+	
+	//handle unauthorized error
+	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
+		//relogin (session might've expired)
+		if ([self login]) {
+            //redo request
+            response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
+        }
+	}
+    
+	//check response code
+	if ([response statusCode] > 200 && [response statusCode] < 300)
+	{
+        return YES;
+	} else {
+        //Ai, some error that couldn't be resolved. Log and return error
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
 		return NO;
@@ -330,7 +401,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	if ([response statusCode] < 200 || [response statusCode] >= 300)
 	{
 		//Ai, some error that couldn't be resolved. Log and throw exception
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
         //TODO: throw clean exception that details the exception
@@ -376,7 +447,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	if ([response statusCode] < 200 || [response statusCode] > 300)
 	{
 		//Ai, some error that couldn't be resolved. Log and throw exception
-		NSLog(@"%@ \"%@\" failed with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
 		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
 		NSLog(@"Responded: %@", responded);
         //TODO: throw clean exception that details the exception
@@ -429,7 +500,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	
 	//log response
 	if (response) {
-		NSLog(@"%@ \"%@\" responded with status code %d", method, url, [response statusCode]);
+		NSLog(@"%@ \"%@\" responded with status code %ld", method, url, (long)[response statusCode]);
 	}
 	
 	if (output != nil)
@@ -440,13 +511,15 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return response;
 }
 
+#pragma mark - Urls
+
 ///Creates the url using CommonSense.plist
-- (NSURL*) makeUrlFor:(NSString*) action
+- (NSURL*) makeUrlFor:(const NSString*) action
 {
 	return [self makeUrlFor:action append:@""];
 }
 
-- (NSURL*) makeUrlFor:(NSString*) action append:(NSString*) appendix
+- (NSURL*) makeUrlFor:(const NSString*) action append:(NSString*) appendix
 {
 	NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
 					 kUrlBaseURL,
@@ -469,10 +542,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSURL*) makeSensorsUrlForDeviceId:(NSInteger)deviceId {
-	NSString* url = [NSString stringWithFormat: @"%@/%@/%d/%@%@%@",
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%ld/%@%@%@",
 					 kUrlBaseURL,
 					 kUrlDevices,
-					 deviceId,
+					 (long)deviceId,
  					 kUrlSensors,
 					 kUrlJsonSuffix,
                      @"?per_page=1000"];
@@ -503,13 +576,13 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSURL*) makeUrlForGettingSensorData:(NSString*) sensorId nrPoints:(NSInteger) nrPoints order:(NSString*) order {
-	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%i&sort=%@",
+	NSString* url = [NSString stringWithFormat: @"%@/%@/%@/%@%@?per_page=%li&sort=%@",
 					 kUrlBaseURL,
 					 kUrlSensors,
 					 sensorId,
  					 kUrlData,
 					 kUrlJsonSuffix,
-                     nrPoints,
+                     (long)nrPoints,
                      order];
 	
 	return [NSURL URLWithString:url];

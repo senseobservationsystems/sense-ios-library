@@ -319,7 +319,7 @@ static CSSettings* sharedSettingsInstance = nil;
 									   errorDescription:&errorDesc];
 	if (!settings)
 	{
-		NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+		NSLog(@"Error reading plist: %@, format: %u", errorDesc, format);
 		return;
 	}
 	sensorEnables = [settings valueForKey:@"sensorEnables"];
