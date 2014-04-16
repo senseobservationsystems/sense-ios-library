@@ -215,14 +215,20 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
 }
 
 
-- (void) cleanPersistentDb {
+- (void) removeDataBeforeId:(long long) rowId {
+    [self removeDataTillId:rowId table:@"buf.data"];
+    [self removeDataTillId:rowId table:@"data"];
+
+}
+
+- (void) removeDataTillId:(long long) rowId table:(NSString*) table {
     //TODO: do something usefull, like deleting uploaded points, look at disk space... whatever.
-    NSLog(@"Deleting old values from db file");
+    NSLog(@"Deleting values from storage");
     //delete values older than 60 days
-    const char* query = [[NSString stringWithFormat:@"DELETE FROM data where timestamp < %f", ([[NSDate date] timeIntervalSince1970] - 60.0 * 24 * 60 * 60)] UTF8String];
+    const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where id <= %lli", table, rowId] UTF8String];
     pthread_mutex_lock(&dbMutex);
     if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK) {
-        NSLog(@"cleanPersistentDb failure: %s", sqlite3_errmsg(db));
+        NSLog(@"removeDataTillId failure: %s", sqlite3_errmsg(db));
     }
     pthread_mutex_unlock(&dbMutex);
 }

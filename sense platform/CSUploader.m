@@ -30,7 +30,7 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
         NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
         lastUploadedRowId = [prefs integerForKey:lastUploadedRowIdKey];
         
-        //Can't be greater than the current last dataPoint id. Enforce this to handle cases where we have a new database but old lastUploadedRowId value
+        //Can't be greater than the current last dataPoint id. Enforce this to handle cases where e.g. the database was emptied
         lastUploadedRowId = MIN(lastUploadedRowId, [self->storage getLastDataPointId]);
         
     }
@@ -38,6 +38,10 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
 }
 
 #pragma mark - Uploading
+
+- (long long) lastUploadedRowId {
+    return self->lastUploadedRowId;
+}
 
 - (BOOL) upload {
     long long lastDataPointId = [self->storage getLastDataPointId];

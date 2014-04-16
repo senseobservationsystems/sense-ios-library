@@ -13,4 +13,5 @@
 @interface CSUploader : NSObject
 - (id) initWithStorage:(CSStorage*) theStorage andSender:(CSSender*) theSender;
 - (BOOL) upload;
+- (long long) lastUploadedRowId;
 @end
