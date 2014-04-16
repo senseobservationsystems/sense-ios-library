@@ -139,7 +139,7 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
     //create each sensor
 	for (CSSensorIdKey* sensorId in unresolved) {
         NSLog(@"Creating %@ sensor...", sensorId);
-        NSDictionary* description = getSensorDescription(sensorId);
+        NSDictionary* description = [self getSensorDescriptionForSensorId:sensorId];
 		NSDictionary* remoteDescription = [sender createSensorWithDescription:description];
         NSString* remoteId = [remoteDescription valueForKey:@"id"];
         if (remoteId == nil) {
@@ -158,7 +158,7 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
     
     //Note: the cache is now out-of-date and will be updated next time we try to resolve one of the created sensors
     
-    return resolved;
+    return mResolved;
 }
 
 - (NSDictionary*) resolveFromCacheSensorIds:(NSArray*) sensors {
@@ -208,9 +208,23 @@ NSSet* getSensorSet(NSArray* data) {
     return sensorSet;
 }
 
-NSDictionary* getSensorDescription(CSSensorIdKey* sensorId) {
-    //TODO: ensure descriptions end up in the table
-    //TODO: get description from table
+
+- (NSDictionary*) getSensorDescriptionForSensorId:(CSSensorIdKey*) sensorId {
+    //get from storage
+    NSString* jsonDescription = [self->storage getSensorDescriptionForSensor:sensorId.name description:sensorId.description deviceType:sensorId.deviceType device:sensorId.deviceUUID];
+    
+    if (jsonDescription != nil) {
+        NSError* jsonError;
+        
+        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:[jsonDescription dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+        if (jsonContents)
+            return jsonContents;
+        else {
+            NSLog(@"Error parsing json sensor description %@", jsonError);
+        }
+    }
+
+    //no known description, let's fabricate something from the information we have
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			sensorId.name, @"name",
 			sensorId.description, @"device_type",

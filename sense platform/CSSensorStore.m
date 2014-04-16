@@ -173,8 +173,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	//instantiate sensors
 	for (Class aClass in allAvailableSensorClasses) {
 		if ([aClass isAvailable]) {
-			id newSensor = [[aClass alloc] init];
+			CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
 			[sensors addObject:newSensor];
+            //save sensor description in storage
+            if (newSensor.sensorDescription != nil) {
+                NSString* type = [newSensor.device valueForKey:@"type"];
+                NSString* uuid = [newSensor.device valueForKey:@"uuid"];
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
+                NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                [self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
+            }
 		}
 	}
     
@@ -216,6 +224,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
         
         [sensors addObject:sensor];
+        if (sensor.sensorDescription != nil) {
+            NSString* type = [sensor.device valueForKey:@"type"];
+            NSString* uuid = [sensor.device valueForKey:@"uuid"];
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:sensor.sensorDescription options:0 error:nil];
+            NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [self->storage storeSensorDescription:json forSensor:sensor.name description:sensor.deviceType deviceType:type device:uuid];
+        }
     }
 }
 

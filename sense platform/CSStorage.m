@@ -105,6 +105,15 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
 
     lastRowIdInStorage = lastDataPointid;
     
+    //Create table for sensor descriptions.
+    //create the table
+    const char *sql_stmt_sensor_descriptions = "CREATE TABLE IF NOT EXISTS sensor_descriptions (sensor_name TEXT, sensor_description TEXT, device_type TEXT, device TEXT, json_description TEXT, PRIMARY KEY (sensor_name, sensor_description, device_type, device))";
+    
+    if (sqlite3_exec(db, sql_stmt_sensor_descriptions, NULL, NULL, &errMsg) != SQLITE_OK) {
+        pthread_mutex_unlock(&dbMutex);
+        @throw [NSException exceptionWithName:@"DB error creating table sensor_descriptions" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
+    }
+    
     pthread_mutex_unlock(&dbMutex);
 }
 
@@ -167,6 +176,26 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
     return results;
 }
 
+#pragma mark - delete
+
+- (void) removeDataBeforeId:(long long) rowId {
+    [self removeDataTillId:rowId table:@"buf.data"];
+    [self removeDataTillId:rowId table:@"data"];
+    
+}
+
+- (void) removeDataTillId:(long long) rowId table:(NSString*) table {
+    //TODO: do something usefull, like deleting uploaded points, look at disk space... whatever.
+    NSLog(@"Deleting values from storage");
+    //delete values older than 60 days
+    const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where id <= %lli", table, rowId] UTF8String];
+    pthread_mutex_lock(&dbMutex);
+    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK) {
+        NSLog(@"removeDataTillId failure: %s", sqlite3_errmsg(db));
+    }
+    pthread_mutex_unlock(&dbMutex);
+}
+
 
 #pragma mark - maintenance
 - (void) writeDbToFile {
@@ -214,32 +243,51 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
     pthread_mutex_unlock(&dbMutex);
 }
 
-
-- (void) removeDataBeforeId:(long long) rowId {
-    [self removeDataTillId:rowId table:@"buf.data"];
-    [self removeDataTillId:rowId table:@"data"];
-
+- (void) flush {
+    [self writeDbToFile];
+    [self cleanBuffer];
 }
 
-- (void) removeDataTillId:(long long) rowId table:(NSString*) table {
-    //TODO: do something usefull, like deleting uploaded points, look at disk space... whatever.
-    NSLog(@"Deleting values from storage");
-    //delete values older than 60 days
-    const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where id <= %lli", table, rowId] UTF8String];
-    pthread_mutex_lock(&dbMutex);
-    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK) {
-        NSLog(@"removeDataTillId failure: %s", sqlite3_errmsg(db));
-    }
-    pthread_mutex_unlock(&dbMutex);
-}
-
+#pragma mark - status
 - (long long) getLastDataPointId {
     return self->lastDataPointid;
 }
 
-- (void) flush {
-    [self writeDbToFile];
-    [self cleanBuffer];
+#pragma mark - sensor_descriptions
+- (void) storeSensorDescription:(NSString*) jsonDescription forSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device {
+    //insert into db
+    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT INTO sensor_descriptions (sensor_name, sensor_description, device_type, device, json_description) VALUES ('%@', '%@', '%@', '%@', '%@');",sensor, description, deviceType, device, jsonDescription] UTF8String];
+    
+    int ret;
+    pthread_mutex_lock(&dbMutex);
+    ret = sqlite3_exec(db, sql_stmt, NULL, NULL, NULL);
+    
+    if (ret != SQLITE_OK) {
+        NSLog(@"Database Error inserting sensor description into sensor_descriptions: %s", sqlite3_errmsg(db));
+        //@throw [NSException exceptionWithName:@"DB error" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
+    }
+    pthread_mutex_unlock(&dbMutex);
+}
+
+- (NSString*) getSensorDescriptionForSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device {
+    
+    NSString* jsonDescription = nil;
+    const char* query = [[NSString stringWithFormat:@"SELECT json_description FROM sensor_descriptions where sensor_name = '%@' AND sensor_description = '%@' AND device_type = '%@' AND device = '%@' limit 1", sensor, description, deviceType, device] UTF8String];
+    sqlite3_stmt* stmt;
+    pthread_mutex_lock(&dbMutex);
+    NSInteger ret = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
+    if (ret == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            jsonDescription = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 0)];
+            break;
+        }
+    } else if (ret != SQLITE_NOTFOUND) {
+    }
+    sqlite3_finalize(stmt);
+    pthread_mutex_unlock(&dbMutex);
+    
+    
+    return jsonDescription;
 }
 
 @end

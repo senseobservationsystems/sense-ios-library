@@ -15,4 +15,7 @@
 - (void) removeDataBeforeId:(long long) rowId;
 - (long long) getLastDataPointId;
 - (void) flush;
+
+- (void) storeSensorDescription:(NSString*) jsonDescription forSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device;
+- (NSString*) getSensorDescriptionForSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device;
 @end
