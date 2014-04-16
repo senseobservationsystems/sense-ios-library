@@ -150,11 +150,24 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return [response statusCode] == 200;
 }
 
-- (NSDictionary*) listSensors {
-	return [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:@"?per_page=1000&details=full"] withMethod:@"GET" withInput:nil];
+- (NSArray*) listSensors {
+    NSMutableArray* sensors = [[NSMutableArray alloc] init];
+    NSDictionary* response = nil;
+    NSInteger page = 0;
+    do {
+        NSString* params = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
+        response = [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:params] withMethod:@"GET" withInput:nil];
+        if (response == nil)
+            break;
+        [sensors addObjectsFromArray:[response valueForKey:@"sensors"]];
+        page++;
+    } while (response.count == 1000);
+    if (response == nil)
+        return nil;
+    return sensors;
 }
 
-- (NSDictionary*) listSensorsForDevice:(NSDictionary*)device {
+- (NSArray*) listSensorsForDevice:(NSDictionary*)device {
 	//get device
 	NSArray* devices = [[self doJsonRequestTo:[self makeUrlFor:@"devices" append:@"?per_page=1000"] withMethod:@"GET" withInput:nil] valueForKey:@"devices"];
 	NSInteger deviceId = -1;
@@ -173,9 +186,23 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	}
 	
 	//if device unknown, then it follows it has no sensors
-	if (deviceId == -1) return [NSDictionary dictionaryWithObjectsAndKeys:[NSArray array], @"sensors", nil];
+	if (deviceId == -1)
+        return [NSArray array];
 
-	return [self doJsonRequestTo:[self makeSensorsUrlForDeviceId:deviceId] withMethod:@"GET" withInput:nil];
+    NSMutableArray* sensors = [[NSMutableArray alloc] init];
+    NSDictionary* response = nil;
+    NSInteger page = 0;
+    do {
+        NSString* params = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
+        response = [self doJsonRequestTo:[self makeUrlFor:@"sensors" append:params] withMethod:@"GET" withInput:nil];
+        if (response == nil)
+            break;
+        [sensors addObjectsFromArray:[response valueForKey:@"sensors"]];
+        page++;
+    } while (response.count == 1000);
+    if (response == nil)
+        return nil;
+    return sensors;
 }
 
 - (NSDictionary*) listConnectedSensorsFor:(NSString*)sensorId {

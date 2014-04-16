@@ -256,7 +256,7 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
 #pragma mark - sensor_descriptions
 - (void) storeSensorDescription:(NSString*) jsonDescription forSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device {
     //insert into db
-    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT INTO sensor_descriptions (sensor_name, sensor_description, device_type, device, json_description) VALUES ('%@', '%@', '%@', '%@', '%@');",sensor, description, deviceType, device, jsonDescription] UTF8String];
+    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO sensor_descriptions (sensor_name, sensor_description, device_type, device, json_description) VALUES ('%@', '%@', '%@', '%@', '%@');",sensor, description, deviceType, device, jsonDescription] UTF8String];
     
     int ret;
     pthread_mutex_lock(&dbMutex);

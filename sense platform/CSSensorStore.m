@@ -560,18 +560,17 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     //in case it isn't in the local mapping, resolve the sensor id remotely
     if (sensorId == nil) {
         //get list of sensors from the server
-        NSDictionary* response;
+        NSArray* remoteSensors;
         @try {
             if (onlyThisDevice)
-                response = [sender listSensorsForDevice:[CSSensorStore device]];
+                remoteSensors = [sender listSensorsForDevice:[CSSensorStore device]];
             else 
-                response = [sender listSensors];
+                remoteSensors = [sender listSensors];
         } @catch (NSException* e) {
             //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
             NSLog(@"Couldn't get a list of sensors for the device: %@ ", e.description);
             return nil;
         }
-        NSArray* remoteSensors = [response valueForKey:@"sensors"];
         
         if (remoteSensors == nil)
             return nil;

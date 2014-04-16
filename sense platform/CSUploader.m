@@ -89,7 +89,6 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
         return YES;
     }
     return NO;
-
 }
 
 #pragma mark - Sensors
@@ -174,10 +173,8 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
 
 - (NSDictionary*) getRemoteSensors {
     //get list of sensors from the server
-    NSDictionary* response;
     NSArray* remoteSensors;
-    response = [sender listSensors];
-    remoteSensors = [response valueForKey:@"sensors"];
+    remoteSensors = [sender listSensors];
     
     NSMutableDictionary* mappedSensors = [[NSMutableDictionary alloc] initWithCapacity:remoteSensors.count];
     //create mappings
