@@ -12,7 +12,8 @@
 #import "CSDataPoint.h"
 
 static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, keep retrying until this timeout elapses. In milliseconds.
-static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writing back to storage. Saves power and flash
+static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
+static const size_t BUFFER_NR_ROWS = 10000;
 
 @implementation CSStorage {
     NSString* dbPath;
@@ -136,20 +137,9 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
 
 #pragma mark - retrieve
 
-- (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit {
+- (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit{
     NSMutableArray* results = [NSMutableArray new];
-    if (start <= self->lastRowIdInStorage) {
-        [results addObjectsFromArray:[self getSensorDataPointsFromId:start limit:limit table:@"data"]];
-    }
-    limit -= results.count;
-    if (limit >0)
-        [results addObjectsFromArray:[self getSensorDataPointsFromId:start limit:limit table:@"buf.data"]];
-    return results;
-}
-
-- (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit table: (NSString*) table{
-    NSMutableArray* results = [NSMutableArray new];
-    const char* query = [[NSString stringWithFormat:@"SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM %@ where id >= %lli limit %zu", table, start, limit] UTF8String];
+    const char* query = [[NSString stringWithFormat:@"SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM buf.data where id >= %lli union SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM data where id >= %lli limit %zu", start, start, limit] UTF8String];
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);
     NSInteger ret = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
@@ -185,9 +175,6 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
 }
 
 - (void) removeDataTillId:(long long) rowId table:(NSString*) table {
-    //TODO: do something usefull, like deleting uploaded points, look at disk space... whatever.
-    NSLog(@"Deleting values from storage");
-    //delete values older than 60 days
     const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where id <= %lli", table, rowId] UTF8String];
     pthread_mutex_lock(&dbMutex);
     if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK) {
@@ -232,11 +219,27 @@ static const double DB_WRITEBACK_TIMEINTERVAL = 15 * 60;// interval between writ
     }
     
     pthread_mutex_unlock(&dbMutex);
+    
+    //trim the buffer
+    [self trimBufferToSize:BUFFER_NR_ROWS];
 }
 
 - (void) cleanBuffer {
     //delete from the buffer all persisted rows
     const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", lastRowIdInStorage] UTF8String];
+    pthread_mutex_lock(&dbMutex);
+    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
+        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
+    pthread_mutex_unlock(&dbMutex);
+}
+
+- (void) trimBufferToSize:(size_t) nr {
+    //delete from the buffer all persisted rows, but keep 'nr' points.
+    //Note that the actual size of the buffer might end up to be different from 'nr'. it's a cache, so we're a bit lenient with that.
+    //e.g. when there are unpersisted rows, this function will NEVER delete those
+    long long nrInMem = lastDataPointid - lastRowIdInStorage;
+    long long deleteThreshold = lastRowIdInStorage - MAX(nr - nrInMem, 0);
+    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", deleteThreshold] UTF8String];
     pthread_mutex_lock(&dbMutex);
     if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
         NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
