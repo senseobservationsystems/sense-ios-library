@@ -16,6 +16,7 @@
 
 #import "CSSender.h"
 #import "NSString+MD5Hash.h"
+#import "NSData+GZIP.h"
 
 static const NSString* kUrlBaseURL = @"https://api.sense-os.nl";
 static const NSString* kUrlJsonSuffix = @".json";
@@ -469,6 +470,8 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	//Cookie
 	if (cookie != nil)
 		[urlRequest setValue:cookie forHTTPHeaderField:@"cookie"];
+    //Accept compressed response
+    [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 	
 	if (input != nil)
 	{
@@ -476,7 +479,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		[urlRequest setValue:@"application/json" forHTTPHeaderField:@"content-type"];
 		const char* bytes = [input UTF8String];
 		NSData * body = [NSData dataWithBytes:bytes length: strlen(bytes)];
-		[urlRequest setHTTPBody:body];
+        
+        //compress the body
+        [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+		[urlRequest setHTTPBody:[body gzippedData]];
 	}
 	
 	//connect

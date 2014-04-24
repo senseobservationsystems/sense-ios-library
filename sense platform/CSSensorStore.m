@@ -463,6 +463,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     dispatch_sync(uploadQueueGCD, ^{
         @autoreleasepool {
             @try {
+                //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
+                [storage flush];
                 [self uploadData];
                 [self->storage flush];
             }
@@ -475,6 +477,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) forceDataFlush {
+    //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
+    [storage flush];
+    //schedule an upload
     dispatch_async(uploadQueueGCD, ^{
         @autoreleasepool {
             @try {
