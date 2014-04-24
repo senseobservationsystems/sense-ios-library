@@ -385,7 +385,7 @@ void someScheduleFunction(void* context) {
             [values addObject:[NSArray arrayWithObjects:pitch,roll,yaw, nil]];
         }];
         
-        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count], 0);
+        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count] - 1, 0);
         NSString* header = [NSString stringWithFormat:@"%@,%@,%@", attitudePitchKey, attitudeRollKey, attitudeYawKey];
         NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
                                values, @"values",
