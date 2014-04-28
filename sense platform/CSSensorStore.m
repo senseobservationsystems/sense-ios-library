@@ -265,12 +265,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	serviceEnabled = enable;
     CSLocationSensor* locationSensor;
     @synchronized(sensors) {
-    for (CSSensor* s in sensors) {
-        if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
-            locationSensor = (CSLocationSensor*)s;
-            break;
-        }
-    }
 
 	if (NO == enable) {
 		/* Previously sensors were deallocated (by removing their references), however that has some problems
@@ -282,14 +276,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 			[[CSSettings sharedSettings] setSensor:sensor.name enabled:NO persistent:NO];
 		}
 
-        [locationSensor setBackgroundRunningEnable:NO];
 		//flush data
 		[self forceDataFlush];
         
         //set timer
         [self stopUploading];
 	} else {
-        [locationSensor setBackgroundRunningEnable:YES];
         //send notifications to notify sensors whether they should activate themselves
         for (CSSensor* sensor in sensors) {
 			[[CSSettings sharedSettings] sendNotificationForSensor:sensor.name];
@@ -297,6 +289,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         //enable uploading
         [self setSyncRate:syncRate];
 	}
+        
+    NSString* backgroundHackEnabled = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingBackgroundRestarthack];
+    [self setBackgroundHackEnabled:([backgroundHackEnabled isEqualToString:kCSSettingYES] && enable)];
     waitTime = 0;
     }
 }
@@ -511,8 +506,20 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             }
 		} else if ([setting.name isEqualToString:kCSGeneralSettingSenseEnabled]) {
 			[self setEnabled:[setting.value boolValue]];
-		}
+		} else if ([setting.name isEqualToString:kCSGeneralSettingBackgroundRestarthack]) {
+            [self setBackgroundHackEnabled:[setting.value isEqualToString:kCSSettingYES]];
+        }
 	}
+}
+
+- (void) setBackgroundHackEnabled:(BOOL) enable {
+    for (CSSensor* s in sensors) {
+        if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
+            CSLocationSensor* locationSensor = (CSLocationSensor*)s;
+            [locationSensor setBackgroundRunningEnable:enable];
+            break;
+        }
+    }
 }
 
 - (void) setSyncRate: (int) newRate {
