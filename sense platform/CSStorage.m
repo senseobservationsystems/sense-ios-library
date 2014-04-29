@@ -13,7 +13,8 @@
 
 static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, keep retrying until this timeout elapses. In milliseconds.
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
-static const size_t BUFFER_NR_ROWS = 10000;
+static const size_t BUFFER_NR_ROWS = 1000;
+static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 
 @implementation CSStorage {
     NSString* dbPath;
@@ -32,12 +33,17 @@ static const size_t BUFFER_NR_ROWS = 10000;
 
         //set timer to store buffered data
         [NSTimer scheduledTimerWithTimeInterval:DB_WRITEBACK_TIMEINTERVAL target:self selector:@selector(writeDbToFile) userInfo:nil repeats:YES];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(flush) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     }
     
     return self;
 }
 
 - (void) databaseInit {
+    //Not sure sqlite might use a lot of memory, try to limit this somewhat.
+    sqlite3_soft_heap_limit64(10*1024*1024);
+
     //Note: leaking errMsg on error
     char *errMsg = NULL;
     //open the database
@@ -133,6 +139,10 @@ static const size_t BUFFER_NR_ROWS = 10000;
         //@throw [NSException exceptionWithName:@"DB error" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
     }
     pthread_mutex_unlock(&dbMutex);
+    
+    if (lastDataPointid - lastRowIdInStorage >= BUFFER_WRITEBACK_THRESHOLD) {
+        [self flush];
+    }
 }
 
 #pragma mark - retrieve
