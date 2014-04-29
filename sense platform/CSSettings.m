@@ -37,6 +37,7 @@ NSString* const kCSGeneralSettingUploadInterval = @"synchronisationRate";
 NSString* const kCSGeneralSettingPollInterval = @"pollRate";
 NSString* const kCSGeneralSettingAutodetect = @"auto detect";
 NSString* const kCSGeneralSettingUploadToCommonSense = @"upload to CommonSense";
+NSString* const kCSGeneralSettingBackgroundRestarthack = @"enableBackgroundRestarthack";
 
 //biometric settings
 NSString* const kCSBiometricSettingGender = @"gender";
