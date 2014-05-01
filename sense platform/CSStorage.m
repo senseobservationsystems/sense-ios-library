@@ -149,7 +149,9 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 
 - (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit{
     NSMutableArray* results = [NSMutableArray new];
-    const char* query = [[NSString stringWithFormat:@"SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM buf.data where id >= %lli union SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM data where id >= %lli limit %zu", start, start, limit] UTF8String];
+
+    /* Query data table and buffer. We need the limits inside the query to avoid reading in the whole table. Subqueries are needed to get the limits inside */
+    const char* query = [[NSString stringWithFormat: @"SELECT * FROM (SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM buf.data where id >= %lli limit %zu) UNION SELECT * FROM  (SELECT id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value FROM data where id >= %lli limit %zu) order by id LIMIT %zu", start, limit, start, limit, limit] UTF8String];
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);
     NSInteger ret = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
