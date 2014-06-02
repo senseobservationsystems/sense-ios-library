@@ -38,6 +38,7 @@ extern NSString* const kCSSENSOR_PREFERENCES;
 extern NSString* const kCSSENSOR_SCREEN_STATE;
 extern NSString* const kCSSENSOR_ROTATION;
 extern NSString* const kCSSENSOR_ROTATION_BURST;
+extern NSString* const kCSSENSOR_STEP_COUNTER;
 extern NSString* const kCSSENSOR_JUMP;
 
 #endif

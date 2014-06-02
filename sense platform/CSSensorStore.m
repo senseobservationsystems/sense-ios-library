@@ -41,6 +41,7 @@
 #import "CSSender.h"
 #import "CSStorage.h"
 #import "CSUploader.h"
+#import "CSStepCounterProcessorSensor.h"
 
 #import "CSSpatialProvider.h"
 
@@ -144,6 +145,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
                             [CSActivityProcessorSensor class],
+                            //[CSStepCounterProcessorSensor class],
 							nil];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];

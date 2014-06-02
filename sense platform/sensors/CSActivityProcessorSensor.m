@@ -70,7 +70,6 @@ static const NSString* activityKey = @"activity";
             if (activities == nil || error != nil)
                 return;
             for (CMMotionActivity* activity in activities) {
-                 NSLog(@"query activity: %@", activity);
                 [self handleActivity:activity];
             }
             NSLog(@"");
@@ -82,7 +81,6 @@ static const NSString* activityKey = @"activity";
         CMMotionActivityHandler activityHandler = ^(CMMotionActivity* activity) {
             if (activity == nil)
                 return;
-            NSLog(@"activity: %@", activity);
             [self handleActivity:activity];
             
         };
