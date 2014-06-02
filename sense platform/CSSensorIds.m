@@ -19,6 +19,7 @@ NSString* const kCSSENSOR_ACCELERATION = @"linear acceleration";
 NSString* const kCSSENSOR_ACCELERATION_BURST = @"linear acceleration (burst-mode)";
 NSString* const kCSSENSOR_ACCELEROMETER = @"accelerometer";
 NSString* const kCSSENSOR_ACCELEROMETER_BURST = @"accelerometer (burst-mode)";
+NSString* const kCSSENSOR_ACTIVITY = @"activity";
 NSString* const kCSSENSOR_BATTERY = @"battery";
 NSString* const kCSSENSOR_BLOOD_PRESSURE = @"blood_pressure";
 NSString* const kCSSENSOR_CALL = @"call state";
