@@ -10,6 +10,7 @@
 #import <sqlite3.h>
 #import <pthread.h>
 #import "CSDataPoint.h"
+#import <UIKit/UIKit.h>
 
 static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, keep retrying until this timeout elapses. In milliseconds.
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash

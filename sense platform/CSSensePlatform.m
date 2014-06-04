@@ -19,6 +19,7 @@
 #import "CSSettings.h"
 #import "CSDynamicSensor.h"
 #import "CSVersion.h"
+#import <UIKit/UIKit.h>
 //#import "BloodPressureSensor.h"
 
 NSString * const kCSDATA_TYPE_JSON = @"json";

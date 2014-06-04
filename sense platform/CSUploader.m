@@ -10,6 +10,7 @@
 #import "CSDataPoint.h"
 #import "CSSensorStore.h"
 #import "CSSensorIdKey.h"
+#import "CSSensePlatform.h"
 
 static const size_t ROW_LIMIT = 500;
 static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
