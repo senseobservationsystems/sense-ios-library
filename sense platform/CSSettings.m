@@ -37,6 +37,7 @@ NSString* const kCSGeneralSettingUploadInterval = @"synchronisationRate";
 NSString* const kCSGeneralSettingPollInterval = @"pollRate";
 NSString* const kCSGeneralSettingAutodetect = @"auto detect";
 NSString* const kCSGeneralSettingUploadToCommonSense = @"upload to CommonSense";
+NSString* const kCSGeneralSettingBackgroundRestarthack = @"enableBackgroundRestarthack";
 
 //biometric settings
 NSString* const kCSBiometricSettingGender = @"gender";
@@ -319,7 +320,7 @@ static CSSettings* sharedSettingsInstance = nil;
 									   errorDescription:&errorDesc];
 	if (!settings)
 	{
-		NSLog(@"Error reading plist: %@, format: %d", errorDesc, format);
+		NSLog(@"Error reading plist: %@, format: %u", errorDesc, format);
 		return;
 	}
 	sensorEnables = [settings valueForKey:@"sensorEnables"];

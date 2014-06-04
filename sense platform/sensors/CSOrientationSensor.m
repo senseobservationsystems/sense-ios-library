@@ -25,9 +25,6 @@ NSString* attitudeRollKey = @"roll";
 NSString* attitudePitchKey = @"pitch";
 NSString* attitudeYawKey = @"azimuth";
 
-static const double G = 9.81;
-
-
 - (NSString*) name {return kCSSENSOR_ORIENTATION;}
 - (NSString*) deviceType {return [self name];}
 //TODO: check for availability

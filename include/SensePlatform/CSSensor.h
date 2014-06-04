@@ -55,4 +55,10 @@
 + (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType andDevice:(NSDictionary*)device;
 ///Extract sensor name from the sensor id
 + (NSString*) sensorNameFromSensorId:(NSString*) sensorId;
+///extract sensor description from the sensor id
++ (NSString*) sensorDescriptionFromSensorId:(NSString*) sensorId;
+///extract sensor device type from the sensor id
++ (NSString*) sensorDeviceTypeFromSensorId:(NSString*) sensorId;
+///extract sensor device uuid from the sensor id
++ (NSString*) sensorDeviceUUIDFromSensorId:(NSString*) sensorId;
 @end

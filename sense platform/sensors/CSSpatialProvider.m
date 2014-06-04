@@ -85,7 +85,7 @@ static const double radianInDegrees = 180.0 / M_PI;
             interval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval] doubleValue];
    			frequency = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingFrequency] doubleValue];
   			nrSamples = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingNrSamples] intValue];
-            NSLog(@"interval %.0f, freq %.0f, nrSamples %i", interval, frequency, nrSamples);
+            NSLog(@"interval %.0f, freq %.0f, nrSamples %li", interval, frequency, (long)nrSamples);
 		}
 		@catch (NSException * e) {
 			NSLog(@"spatial provider: Exception thrown while setting: %@", e);
@@ -385,7 +385,7 @@ void someScheduleFunction(void* context) {
             [values addObject:[NSArray arrayWithObjects:pitch,roll,yaw, nil]];
         }];
         
-        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count], 0);
+        NSNumber* sampleInterval = CSroundedNumber(dt * 1000.0 / [deviceMotionArray count] - 1, 0);
         NSString* header = [NSString stringWithFormat:@"%@,%@,%@", attitudePitchKey, attitudeRollKey, attitudeYawKey];
         NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
                                values, @"values",

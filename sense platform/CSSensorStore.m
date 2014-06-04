@@ -37,8 +37,9 @@
 #import "CSPreferencesSensor.h"
 #import "BloodPressureSensor.h"
 #import "CSScreenSensor.h"
-#import <sqlite3.h>
 #import "CSSender.h"
+#import "CSStorage.h"
+#import "CSUploader.h"
 
 #import "CSSpatialProvider.h"
 
@@ -56,6 +57,9 @@
 
 @implementation CSSensorStore {
     CSSender* sender;
+    CSStorage* storage;
+    CSUploader* uploader;
+    
 	
 	NSMutableDictionary* sensorData;
 	BOOL serviceEnabled;
@@ -114,6 +118,11 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
+        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+																  NSUserDomainMask, YES) objectAtIndex:0];
+        NSString* dbPath =[rootPath stringByAppendingPathComponent:@"data.db"];
+        storage = [[CSStorage alloc] initWithPath:dbPath];
+        uploader = [[CSUploader alloc] initWithStorage:storage andSender:sender];
 		
 		//all sensor classes
 		allSensorClasses = [NSArray arrayWithObjects:
@@ -155,66 +164,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 
-- (void) makeRemoteDeviceSensors {
-    NSMutableDictionary* mySensorIdMap = [NSMutableDictionary new];
-    
-    BOOL stop = NO;
-	//get list of sensors from the server
-    NSDictionary* response;
-    @try {
-        response = [sender listSensors];
-    } @catch (NSException* e) {
-        stop = YES;
-    }
-    
-  	NSArray* remoteSensors = [response valueForKey:@"sensors"];
-    //NSLog(@"Response: '%@', sensor list: '%@'", response, remoteSensors);
-    if (stop || remoteSensors == nil) {
-        //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
-        NSLog(@"Couldn't get a list of sensors. Don't make ");
-        return;
-    }
-
-    //push all ids in the sensorId map
-    for (id remoteSensor in remoteSensors) {
-        //determine whether the sensor matches
-        if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
-            NSString* remoteId = [remoteSensor valueForKey:@"id"];
-            NSString* name = [remoteSensor valueForKey:@"name"];
-            NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
-            NSDictionary* device = [remoteSensor valueForKey:@"device"];
-            NSString* sensorId = [CSSensor sensorIdFromName:name andDeviceType:deviceType andDevice:device];
-            //update sensor id map
-            [mySensorIdMap setValue:remoteId forKey:sensorId];
-        }
-    }
-
-    bool allSucces = YES;
-	//create sensors that aren't assigned an id yet
-	for (CSSensor* sensor in sensors) {
-		if ([mySensorIdMap objectForKey:sensor.sensorId] == NULL) {
-			NSLog(@"Creating %@ sensor...", sensor.sensorId);
-			NSDictionary* description = [sender createSensorWithDescription:[sensor sensorDescription]];
-            id sensorIdString = [description valueForKey:@"id"];
-   			if (description != nil && sensorIdString != nil) {
-				//link sensor to device
-                if (sensor.device != nil) {
-                    [sender connectSensor:sensorIdString ToDevice:sensor.device];
-                }
-                //store sensor id in the map
-  				[mySensorIdMap setValue:sensorIdString forKey:sensor.sensorId];
-				NSLog(@"Created %@ sensor with id %@", sensor.sensorId, sensorIdString);
-			} else {
-                allSucces = NO;
-            }
-		}
-	}
-    
-    @synchronized(sensorIdMapLock) {
-        sensorIdMap = mySensorIdMap;
-    }
-}
-
 - (void) instantiateSensors {
     @synchronized(sensors) {
 	//release current sensors
@@ -224,8 +173,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	//instantiate sensors
 	for (Class aClass in allAvailableSensorClasses) {
 		if ([aClass isAvailable]) {
-			id newSensor = [[aClass alloc] init];
+			CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
 			[sensors addObject:newSensor];
+            //save sensor description in storage
+            if (newSensor.sensorDescription != nil) {
+                NSString* type = [newSensor.device valueForKey:@"type"];
+                NSString* uuid = [newSensor.device valueForKey:@"uuid"];
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
+                NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                [self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
+            }
 		}
 	}
     
@@ -267,7 +224,28 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         }
         
         [sensors addObject:sensor];
+        if (sensor.sensorDescription != nil) {
+            NSString* type = [sensor.device valueForKey:@"type"];
+            NSString* uuid = [sensor.device valueForKey:@"uuid"];
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:sensor.sensorDescription options:0 error:nil];
+            NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            [self->storage storeSensorDescription:json forSensor:sensor.name description:sensor.deviceType deviceType:type device:uuid];
+        }
     }
+}
+
+- (void) addDataForSensorId:(NSString*) sensorId dateValue:(NSDictionary*) dateValue {
+    NSData* valueData = [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
+    double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
+    NSString* name = [CSSensor sensorNameFromSensorId:sensorId];
+    NSString* description = [CSSensor sensorDescriptionFromSensorId:sensorId];
+    //TODO: these values are not being used
+    NSString* deviceType = [CSSensor sensorDeviceTypeFromSensorId:sensorId];
+    NSString* deviceUUID = [CSSensor sensorDeviceUUIDFromSensorId:sensorId];
+    NSString* dataType = @""; //Not being used
+
+   [storage storeSensor:name description:description deviceType:deviceType device:deviceUUID dataType:dataType value:value timestamp:timestamp];
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
@@ -275,21 +253,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
 
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
-    
-    //FIXME: TODO: ugly hack to not send burst sensors
-    //if ([sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
-
-	//retrieve/create entry for this sensor
-	@synchronized(self) {
-		NSMutableArray* entry = [sensorData valueForKey:sensorId];
-		if (entry == nil) {
-			entry = [[NSMutableArray alloc] init];
-			[sensorData setValue:entry forKey:sensorId];
-		}
-        
-		//add data
-		[entry addObject:data];
-	}
+    [self addDataForSensorId:sensorId dateValue:data];
 }
 
 - (void) enabledChanged:(id) notification {
@@ -301,12 +265,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	serviceEnabled = enable;
     CSLocationSensor* locationSensor;
     @synchronized(sensors) {
-    for (CSSensor* s in sensors) {
-        if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
-            locationSensor = (CSLocationSensor*)s;
-            break;
-        }
-    }
 
 	if (NO == enable) {
 		/* Previously sensors were deallocated (by removing their references), however that has some problems
@@ -318,14 +276,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 			[[CSSettings sharedSettings] setSensor:sensor.name enabled:NO persistent:NO];
 		}
 
-        [locationSensor setBackgroundRunningEnable:NO];
 		//flush data
 		[self forceDataFlush];
         
         //set timer
         [self stopUploading];
 	} else {
-        [locationSensor setBackgroundRunningEnable:YES];
         //send notifications to notify sensors whether they should activate themselves
         for (CSSensor* sensor in sensors) {
 			[[CSSettings sharedSettings] sendNotificationForSensor:sensor.name];
@@ -333,6 +289,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         //enable uploading
         [self setSyncRate:syncRate];
 	}
+        
+    NSString* backgroundHackEnabled = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingBackgroundRestarthack];
+    [self setBackgroundHackEnabled:([backgroundHackEnabled isEqualToString:kCSSettingYES] && enable)];
     waitTime = 0;
     }
 }
@@ -431,77 +390,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 
 - (BOOL) uploadData {
-    BOOL allSucceed = YES;
-	NSMutableDictionary* myData;
-	//take over sensorData
-	@synchronized(self){
-		myData = sensorData;
-		sensorData = [NSMutableDictionary new];
-	}
-
-    //refresh sensors, if one of the id's isn't in the map
-	for (NSString* sensorId in myData) {    
-        if (sensorIdMap == nil || [sensorIdMap objectForKey:sensorId] == NULL) {
-            [self makeRemoteDeviceSensors];
-            break;
-        }
+    BOOL succeed =  [uploader upload];
+    if (succeed) {
+        //clean up storage. Maybe we should keep some data, but for now the storage is only used as a buffer before sending to CommonSense
+        
+        [self->storage removeDataBeforeId:[uploader lastUploadedRowId]];
     }
-    
-    //for all sensors we have data for, send the data
-	for (NSString* sensorId in myData) {
-        NSMutableArray* data= [myData valueForKey:sensorId];
-        if ([sensorIdMap valueForKey:sensorId] == NULL) {
-            //skip this sensor if we don't have a remote id for this sensor.
-            allSucceed = NO;
-            continue;
-        }
-        //split the data, as the server limits the size per request
-        //TODO: refactor this ugly but critical code, a proper transparent implementation should be done with respect to error handling
-        while (data.count > 0) {
-            //determine number of points to sent use heuristic to estimate size
-            NSUInteger points = [self nrPointsToSend:data];
-
-            NSRange range = NSMakeRange(0, points);
-            NSArray* dataPart = [data subarrayWithRange:range];
-            BOOL succeed = NO;
-            @try {
-                succeed = [sender uploadData:dataPart forSensorId: [sensorIdMap valueForKey:sensorId]];
-            } @catch (NSException* e) {
-                NSLog(@"SenseStore: Exception while uploading data: %@", e);
-            }
-            
-            if (succeed == YES ) {
-                //remove sent data
-                [data removeObjectsInRange:range];
-            } else {
-                allSucceed = NO;
-                NSLog(@"Upload failed");
-                //don't check the reason for failure, just erase this sensor id
-                @synchronized(sensorIdMapLock) {
-                    [sensorIdMap removeObjectForKey:sensorId];
-                }
-                //get out of this loop and continue with the next sensor.
-                break;
-            }
-        }
-	}
-    
-    //resubmit unsent data (if any)  into sensorData
-    @synchronized(self) {
-        for (NSString* sensorId in myData) {
-            NSMutableArray* unsent = [myData valueForKey:sensorId];
-            if (unsent.count > 0) {
-                NSMutableArray* entry = [sensorData valueForKey:sensorId];
-                if (entry == nil) {
-                    [sensorData setValue:unsent forKey:sensorId];
-                }
-                else {
-                    [entry addObjectsFromArray:unsent];
-                }
-            }
-        }
-    }
-    return allSucceed;
+    return succeed;
 }
 
 - (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
@@ -563,7 +458,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     dispatch_sync(uploadQueueGCD, ^{
         @autoreleasepool {
             @try {
+                //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
+                [storage flush];
                 [self uploadData];
+                [self->storage flush];
             }
             @catch (NSException *exception) {
                 NSLog(@"Exception during forced data flush and block: %@", exception);
@@ -574,10 +472,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) forceDataFlush {
+    //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
+    [storage flush];
+    //schedule an upload
     dispatch_async(uploadQueueGCD, ^{
         @autoreleasepool {
             @try {
                 [self uploadData];
+                [self->storage flush];
             }
             @catch (NSException *exception) {
                  NSLog(@"Exception during forced data flush and block: %@", exception);
@@ -604,8 +506,20 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             }
 		} else if ([setting.name isEqualToString:kCSGeneralSettingSenseEnabled]) {
 			[self setEnabled:[setting.value boolValue]];
-		}
+		} else if ([setting.name isEqualToString:kCSGeneralSettingBackgroundRestarthack]) {
+            [self setBackgroundHackEnabled:[setting.value isEqualToString:kCSSettingYES]];
+        }
 	}
+}
+
+- (void) setBackgroundHackEnabled:(BOOL) enable {
+    for (CSSensor* s in sensors) {
+        if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
+            CSLocationSensor* locationSensor = (CSLocationSensor*)s;
+            [locationSensor setBackgroundRunningEnable:enable];
+            break;
+        }
+    }
 }
 
 - (void) setSyncRate: (int) newRate {
@@ -624,7 +538,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
 	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
-    int sizeOfNextPoint = [json length];
+    size_t sizeOfNextPoint = [json length];
     do {
         points++;
         size += sizeOfNextPoint;
@@ -642,6 +556,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (NSString*) resolveSensorIdForSensorName:(NSString*) sensorName onlyThisDevice:(BOOL)onlyThisDevice {
+    /* TODO: remove this. There is some code in uploader that could be used */
     //try to resolve the id from the local mapping
     NSString* sensorId;
     for (NSString* extendedID in sensorIdMap) {
@@ -657,18 +572,17 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     //in case it isn't in the local mapping, resolve the sensor id remotely
     if (sensorId == nil) {
         //get list of sensors from the server
-        NSDictionary* response;
+        NSArray* remoteSensors;
         @try {
             if (onlyThisDevice)
-                response = [sender listSensorsForDevice:[CSSensorStore device]];
+                remoteSensors = [sender listSensorsForDevice:[CSSensorStore device]];
             else 
-                response = [sender listSensors];
+                remoteSensors = [sender listSensors];
         } @catch (NSException* e) {
             //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
             NSLog(@"Couldn't get a list of sensors for the device: %@ ", e.description);
             return nil;
         }
-        NSArray* remoteSensors = [response valueForKey:@"sensors"];
         
         if (remoteSensors == nil)
             return nil;
