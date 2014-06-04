@@ -140,7 +140,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							[CSRotationSensor class],
                             [CSScreenSensor class],
                             //[CSJumpSensor class],
-							//[PreferencesSensor class],
+							[CSPreferencesSensor class],
 							//[BloodPressureSensor class],
 							nil];
 		
@@ -263,7 +263,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 -(void) setEnabled:(BOOL) enable {
 	serviceEnabled = enable;
-    CSLocationSensor* locationSensor;
     @synchronized(sensors) {
 
 	if (NO == enable) {
