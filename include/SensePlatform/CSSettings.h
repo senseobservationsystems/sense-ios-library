@@ -37,6 +37,7 @@ extern NSString* const kCSGeneralSettingUploadInterval;
 extern NSString* const kCSGeneralSettingPollInterval;
 extern NSString* const kCSGeneralSettingAutodetect;
 extern NSString* const kCSGeneralSettingUploadToCommonSense;
+extern NSString* const kCSGeneralSettingDontUploadBursts;
 extern NSString* const kCSGeneralSettingBackgroundRestarthack;
 
 //biometric settings

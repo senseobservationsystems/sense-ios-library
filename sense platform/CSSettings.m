@@ -37,6 +37,7 @@ NSString* const kCSGeneralSettingUploadInterval = @"synchronisationRate";
 NSString* const kCSGeneralSettingPollInterval = @"pollRate";
 NSString* const kCSGeneralSettingAutodetect = @"auto detect";
 NSString* const kCSGeneralSettingUploadToCommonSense = @"upload to CommonSense";
+NSString* const kCSGeneralSettingDontUploadBursts = @"dontUploadBurstData";
 NSString* const kCSGeneralSettingBackgroundRestarthack = @"enableBackgroundRestarthack";
 
 //biometric settings
@@ -146,8 +147,6 @@ static CSSettings* sharedSettingsInstance = nil;
 		}
 
         [self ensureLatestVersion];
-        
-        NSLog(@"Settings: %@", settings);
 	}
 	return self;
 }
