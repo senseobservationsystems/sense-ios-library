@@ -121,7 +121,6 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
     if (resolved.count == sensors.count) {
         return resolved;
     }
-    resolved  = [resolved mutableCopy];
     
     //We got a couple of sensors that can't be found on the server. Create them
     size_t nrUnresolved = sensors.count - resolved.count;
@@ -154,7 +153,7 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
         //TODO:copying? mutable
         [mResolved setObject:remoteId forKey:sensorId];
     }
-    
+
     //Note: the cache is now out-of-date and will be updated next time we try to resolve one of the created sensors
     
     return mResolved;
@@ -175,6 +174,9 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
     //get list of sensors from the server
     NSArray* remoteSensors;
     remoteSensors = [sender listSensors];
+    
+    if (remoteSensors == nil)
+        return nil;
     
     NSMutableDictionary* mappedSensors = [[NSMutableDictionary alloc] initWithCapacity:remoteSensors.count];
     //create mappings
