@@ -257,6 +257,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
 
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
+    BOOL dontUploadBursts = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingDontUploadBursts] isEqualToString:kCSSettingYES];
+    if (dontUploadBursts && [sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
+
     [self addDataForSensorId:sensorId dateValue:data];
 }
 
