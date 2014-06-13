@@ -112,8 +112,11 @@
         NSLog(@"Audio session can't be activated. Error: %@", activationError);
     }
 
+    
+    /* Disabled all this stuff to set the prefered audio input. It caused an occasional crash of the app, reprodocible by disabling the noise sensor.
+     */
     //Check that AVAudioSession.availableInputs exists, if so we're running ios7 or later and we can set the audio preferences
-    if ([session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
+    if (NO && [session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
         AVAudioSessionPortDescription *appPortInput = nil;
         __autoreleasing NSError * theError = nil;
         __autoreleasing NSError ** theErrorWrapper = &theError;
@@ -417,8 +420,9 @@
                                         CSroundedNumber(level, 1), @"value",
                                         CSroundedNumber(timestamp, 3), @"date",
                                         nil];
-	
-    [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+	if (numberOfPackets > 0) {
+        [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    }
     
     // Total duration of recording
     propertySize = 0;

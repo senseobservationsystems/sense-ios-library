@@ -59,7 +59,7 @@ static CSSensorStore* sensorStore;
                           [UIDevice currentDevice].systemVersion, @"os_version",
                           nil];
     //add data point for app version
-    [CSSensePlatform addDataPointForSensor:@"app_version" displayName:@"App Version" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
+    [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
 }
 
 + (NSArray*) availableSensors {

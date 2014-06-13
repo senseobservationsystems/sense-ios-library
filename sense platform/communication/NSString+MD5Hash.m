@@ -8,7 +8,7 @@
     const char* bytes = [string UTF8String];
     unsigned char hash[CC_MD5_DIGEST_LENGTH];
 	
-    CC_MD5(bytes, strlen(bytes), hash);
+    CC_MD5(bytes, (unsigned int)strlen(bytes), hash);
 	
 	//represent
     NSMutableString *hashString = [NSMutableString string];
