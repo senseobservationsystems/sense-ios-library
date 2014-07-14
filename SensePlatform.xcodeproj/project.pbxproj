@@ -58,7 +58,6 @@
 		3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* CSDynamicSensor.h */; };
 		3E4F28BB170DB4750045588C /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4F28BA170DB4750045588C /* Formatting.m */; };
 		3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F4D18F7D7CF0008415A /* CSStorage.m */; };
-		3E513F5018F7DDE60008415A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E513F4F18F7DDE60008415A /* libsqlite3.dylib */; };
 		3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5218F81D2C0008415A /* CSDataPoint.m */; };
 		3E513F5D18FC18150008415A /* CSUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5C18FC18150008415A /* CSUploader.m */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
@@ -322,7 +321,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E513F5018F7DDE60008415A /* libsqlite3.dylib in Frameworks */,
 				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
 				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
 				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
