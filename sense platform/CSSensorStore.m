@@ -270,7 +270,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 -(void) setEnabled:(BOOL) enable {
 	serviceEnabled = enable;
-    CSLocationSensor* locationSensor;
     @synchronized(sensors) {
 
 	if (NO == enable) {

@@ -258,7 +258,7 @@ NSArray* formattedData(NSArray* data, NSDictionary* sensorMapping) {
 - (void) setLastUploadedRowId:(long long) value {
     self->lastUploadedRowId = value;
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setInteger:value forKey:lastUploadedRowIdKey];
+    [prefs setInteger:(int)value forKey:lastUploadedRowIdKey];
 }
 
 @end
