@@ -9,5 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface CSSensorRequirements : NSObject
+- (void) setRequirements:(NSArray*) requirements byConsumer:(id) consumer;
+- (void) clearRequirementsForConsumer:(id) consumer;
 
 @end
