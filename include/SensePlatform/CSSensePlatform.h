@@ -16,9 +16,12 @@
 
 #import <Foundation/Foundation.h>
 
-//Include all sensors
+//Include all header files
+#include "CSVersion.h"
 #include "CSSensor.h"
 #include "CSSensorIds.h"
+#include "CSSensorRequirements.h"
+#include "CSSettings.h"
 
 extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;

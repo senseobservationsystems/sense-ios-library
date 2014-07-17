@@ -61,6 +61,8 @@
 		3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5218F81D2C0008415A /* CSDataPoint.m */; };
 		3E513F5D18FC18150008415A /* CSUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5C18FC18150008415A /* CSUploader.m */; };
 		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
+		3E743E1E1976E9E1009F571B /* CSSensorRequirements.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */; };
+		3E743E1F1976E9E7009F571B /* CSVersion.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3EBEAF571887FCA9009F81C1 /* CSVersion.h */; };
 		3E74DBA7193C8AF100E471A9 /* CSActivityProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */; };
 		3E74DBAA193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E74DBA9193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m */; };
 		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
@@ -147,6 +149,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				3E743E1F1976E9E7009F571B /* CSVersion.h in CopyFiles */,
+				3E743E1E1976E9E1009F571B /* CSSensorRequirements.h in CopyFiles */,
 				3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */,
 				3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */,
 				3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */,
@@ -185,6 +189,7 @@
 		3E513F5C18FC18150008415A /* CSUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUploader.m; sourceTree = "<group>"; };
 		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
+		3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorRequirements.h; sourceTree = "<group>"; };
 		3E74DBA5193C8AF100E471A9 /* CSActivityProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSActivityProcessorSensor.h; sourceTree = "<group>"; };
 		3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSActivityProcessorSensor.m; sourceTree = "<group>"; };
 		3E74DBA8193CC9AB00E471A9 /* CSStepCounterProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStepCounterProcessorSensor.h; sourceTree = "<group>"; };
@@ -253,7 +258,6 @@
 		3E820E0415D40B180001A3EC /* CSSensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorStore.m; sourceTree = "<group>"; };
 		3E820E0515D40B180001A3EC /* CSSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSettings.m; sourceTree = "<group>"; };
 		3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SensePlatform-Prefix.pch"; sourceTree = "<group>"; };
-		3E836CD1171C4BB800D7494C /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorRequirements.h; sourceTree = "<group>"; };
 		3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorRequirements.m; sourceTree = "<group>"; };
 		3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationStateChange.h; sourceTree = "<group>"; };
 		3E9C155615D564E100F520D0 /* CSSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensePlatform.h; sourceTree = "<group>"; };
@@ -441,7 +445,6 @@
 				3E820E0315D40B180001A3EC /* CSSensorStore.h */,
 				3E820E0415D40B180001A3EC /* CSSensorStore.m */,
 				3E820E0515D40B180001A3EC /* CSSettings.m */,
-				3E836CD1171C4BB800D7494C /* CSSensorRequirements.h */,
 				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
 				3E513F4C18F7D7CF0008415A /* CSStorage.h */,
 				3E513F4D18F7D7CF0008415A /* CSStorage.m */,
@@ -543,6 +546,7 @@
 		3E9C155415D564E100F520D0 /* SensePlatform */ = {
 			isa = PBXGroup;
 			children = (
+				3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */,
 				3EBEAF571887FCA9009F81C1 /* CSVersion.h */,
 				3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */,
 				3E9C155615D564E100F520D0 /* CSSensePlatform.h */,

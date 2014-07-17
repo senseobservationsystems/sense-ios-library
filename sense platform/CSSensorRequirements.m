@@ -8,14 +8,14 @@
 
 #import "CSSensorRequirements.h"
 #import "CSSettings.h"
-#import "CSSensePlatform.m"
+#import "CSSensePlatform.h"
 
-static NSString* const kCSREQUIREMENT_FIELD_OPTIONAL = @"optional";
-static NSString* const kCSREQUIREMENT_FIELD_SENSOR_NAME = @"sensor_name";
-static NSString* const kCSREQUIREMENT_FIELD_REASON = @"reason";
-static NSString* const kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL = @"sample_interval";
-static NSString* const kCSREQUIREMENT_FIELD_SAMPLE_ACCURACY = @"sample_accuracy";
-static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
+NSString* const kCSREQUIREMENT_FIELD_OPTIONAL = @"optional";
+NSString* const kCSREQUIREMENT_FIELD_SENSOR_NAME = @"sensor_name";
+NSString* const kCSREQUIREMENT_FIELD_REASON = @"reason";
+NSString* const kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL = @"sample_interval";
+NSString* const kCSREQUIREMENT_FIELD_SAMPLE_ACCURACY = @"sample_accuracy";
+NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
 
 @implementation CSSensorRequirements {
     /* Datastructure: requirementsPerConsumer is an dictionary indexed by consumer. The value is an array of requirements. A requirement is a dictionary.
@@ -23,21 +23,77 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
     NSMutableDictionary* requirementsPerConsumer;
 }
 
+#pragma mark Singleton functions
+
+//Singleton instance
+static CSSensorRequirements* sharedRequirementsInstance = nil;
+
++ (CSSensorRequirements*) sharedRequirements {
+	if (sharedRequirementsInstance == nil) {
+		sharedRequirementsInstance = [[super allocWithZone:NULL] init];
+	}
+	return sharedRequirementsInstance;
+}
+
+//override to ensure singleton
++ (id)allocWithZone:(NSZone *)zone
+{
+    return [self sharedRequirements];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return self;
+}
+
 - (id) init {
     self = [super init];
     if (self) {
         requirementsPerConsumer = [[NSMutableDictionary alloc] init];
+        self.isEnabled = YES;
     }
     return self;
 }
 
+#pragma mark - Interface functions
+
 - (void) setRequirements:(NSArray*) requirements byConsumer:(NSString*) consumer {
+    NSDictionary* previous = [requirementsPerConsumer copy];
     [requirementsPerConsumer setValue:requirements forKey:consumer];
+    
+    if (self.isEnabled) {
+        [self performActionForRequirementsUpdateFrom:previous to:requirementsPerConsumer];
+    }
 }
 
-- (void) clearRequirementsForConsumer:(id) consumer {
+- (void) clearRequirementsForConsumer:(NSString*) consumer {
+     NSDictionary* previous = [requirementsPerConsumer copy];
     [requirementsPerConsumer removeObjectForKey:consumer];
+
+    if (self.isEnabled) {
+        [self performActionForRequirementsUpdateFrom:previous to:requirementsPerConsumer];
+    }
+
 }
+
+- (void) setIsEnabled:(BOOL)isEnabled {
+    if (isEnabled) {
+        //TODO: disable all sensors
+        [self performActionForRequirementsUpdateFrom:nil to:requirementsPerConsumer];
+    } else {
+    }
+    _isEnabled = isEnabled;
+}
+
++ (NSDictionary*) requirementForSensor:(NSString*) sensor {
+    return @{kCSREQUIREMENT_FIELD_SENSOR_NAME:sensor};
+}
+
++ (NSDictionary*) requirementForSensor:(NSString*) sensor withInterval:(NSTimeInterval)interval {
+    return @{kCSREQUIREMENT_FIELD_SENSOR_NAME:sensor, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:[NSNumber numberWithDouble:interval]};
+}
+
+#pragma mark - Private functions
 
 - (void) performActionForRequirementsUpdateFrom:(NSDictionary*) previousRequirements to:(NSDictionary*) newRequirements {
     NSDictionary* perSensorOld = [self perSensorRequirementsFrom:previousRequirements];
@@ -58,9 +114,8 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
         NSDictionary* newRequirement = [self mergeRequirements:[perSensorNew valueForKey:sensor] forSensor:sensor];
         [self updateSettingFromRequirement:oldRequirement to:newRequirement];
     }
-
-    //merge into single requirement
 }
+
 
 - (NSDictionary*) perSensorRequirementsFrom:(NSDictionary*)perConsumerRequirements {
     NSMutableDictionary* perSensor = [[NSMutableDictionary alloc] init];
@@ -71,6 +126,7 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
             NSMutableArray* list = [perSensor valueForKey:sensor];
             if (list == nil) {
                 list = [[NSMutableArray alloc] init];
+                [perSensor setValue:list forKey:sensor];
             }
             [list addObject:requirement];
         }
@@ -90,7 +146,7 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
     [merged setValue:sensor forKey:kCSREQUIREMENT_FIELD_SENSOR_NAME];
     for (NSDictionary* requirement in requirements) {
         //skip requirements not for this sensor
-        if (NO == [sensor isEqualToString:[requirements valueForKey:kCSREQUIREMENT_FIELD_SENSOR_NAME] ]) {
+        if (NO == [sensor isEqualToString:[requirement valueForKey:kCSREQUIREMENT_FIELD_SENSOR_NAME] ]) {
             continue;
         }
         noMerged += 1;
@@ -117,6 +173,10 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
 
 - (void) updateSettingFromRequirement:(NSDictionary*) from to:(NSDictionary*) to {
     NSString* sensor = [to valueForKey:kCSREQUIREMENT_FIELD_SENSOR_NAME];
+    
+    if ([to isEqualToDictionary:from]) {
+        return;
+    }
 
     if (to == nil && from != nil) {
         //disable sensor
@@ -126,6 +186,7 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
     }
     
     //TODO: improve! for now just some ad-hoc code to make it work
+    //TODO: merge fields for motion sensors
     
     NSArray* motionSensors = @[kCSSENSOR_ACCELERATION, kCSSENSOR_ACCELEROMETER, kCSSENSOR_MOTION_ENERGY, kCSSENSOR_MOTION_FEATURES, kCSSENSOR_ORIENTATION, kCSSENSOR_ROTATION, kCSSENSOR_ACCELERATION_BURST, kCSSENSOR_ACCELEROMETER_BURST, kCSSENSOR_ROTATION_BURST, kCSSENSOR_ORIENTATION_BURST];
 
@@ -156,7 +217,6 @@ static NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
         //enable sensor
         [[CSSettings sharedSettings] setSensor:sensor enabled:YES];
     }
-    
 }
 
 @end
