@@ -290,6 +290,11 @@ static CSSettings* sharedSettingsInstance = nil;
 	return YES;
 }
 
+- (void) resetToDefaults {
+    [self loadSettingsFromDictionary:[CSSettings getMutableDefaults]];
+    [self storeSettings];
+}
+
 
 
 #pragma mark -
