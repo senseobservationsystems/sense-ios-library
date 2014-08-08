@@ -57,7 +57,25 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 
 #pragma mark - Interface functions
 
+- (NSArray*) uglyHackForBurstSensors:(NSArray*) requirements {
+    NSMutableArray* newSet = [requirements mutableCopy];
+    for (NSDictionary* requirement in requirements) {
+        NSString* sensorName = requirement[kCSREQUIREMENT_FIELD_SENSOR_NAME];
+        NSRange range = [sensorName rangeOfString:@" (burst-mode)"];
+        if (range.location != NSNotFound) {
+            NSMutableDictionary* new = [requirement mutableCopy];
+            NSString* nonBurstSensor = [sensorName substringWithRange:NSMakeRange(0, range.location)];
+            new[kCSREQUIREMENT_FIELD_SENSOR_NAME] = nonBurstSensor;
+            [newSet addObject:new];
+        }
+    
+    }
+    return newSet;
+}
+
 - (void) setRequirements:(NSArray*) requirements byConsumer:(NSString*) consumer {
+    requirements = [self uglyHackForBurstSensors:requirements];
+    
     NSDictionary* previous = [requirementsPerConsumer copy];
     [requirementsPerConsumer setValue:requirements forKey:consumer];
     

@@ -18,7 +18,7 @@
 #import "NSString+MD5Hash.h"
 #import "NSData+GZIP.h"
 
-static const NSString* kUrlBaseURL = @"https://api2.sense-os.nl";
+static const NSString* kUrlBaseURL = @"http://api.dev.sense-os.nl";
 static const NSString* kUrlJsonSuffix = @".json";
 static const NSString* kUrlData = @"data";
 static const NSString* kUrlDevices = @"devices";

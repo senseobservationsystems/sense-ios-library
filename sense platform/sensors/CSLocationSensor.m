@@ -77,7 +77,6 @@ static CLLocation* lastAcceptedPoint;
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
         locationManager.activityType = CLActivityTypeOther;
-        locationManager.pausesLocationUpdatesAutomatically = NO;
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
@@ -197,6 +196,8 @@ static CLLocation* lastAcceptedPoint;
 		} @catch (NSException* e) {
 			NSLog(@"Exception setting position accuracy: %@", e);
 		}
+        //set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
+        locationManager.pausesLocationUpdatesAutomatically = NO;
 		[samples removeAllObjects];
         //NOTE: using significant location updates doesn't allow the phone to sense while running in the background
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
