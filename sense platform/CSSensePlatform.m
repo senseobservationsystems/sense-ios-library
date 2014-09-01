@@ -124,8 +124,10 @@ static CSSensorStore* sensorStore;
     if (cookie == nil) {
         NSString* user = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
         NSString* hash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
-        [CSSensePlatform loginWithUser:user andPasswordHash:hash];
-        cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+        if (user != nil && hash != nil) {
+            [CSSensePlatform loginWithUser:user andPasswordHash:hash];
+            cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+        }
     }
     return cookie;
 }
@@ -195,7 +197,7 @@ static CSSensorStore* sensorStore;
 }
 
 
-+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString *)description device:(NSDictionary*)device dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp {
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString *)description device:(NSDictionary*)device dataType:(NSString*)dataType stringValue:(id)value timestamp:(NSDate*)timestamp {
     
     NSMutableDictionary* fields;
 
@@ -233,8 +235,8 @@ static CSSensorStore* sensorStore;
     [[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
     NSError* error;
-    id jsonValue;
-    if (value != nil)
+    id jsonValue = value;
+    if (value != nil && [value isKindOfClass:[NSString class]])
         jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
     if (error != nil)
         jsonValue = value;

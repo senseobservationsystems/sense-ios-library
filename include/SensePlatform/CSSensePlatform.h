@@ -102,7 +102,7 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * @param deviceType the type of the device the sensor should be attached to (nil for no device)
  * @param deviceUUID the uuid of the device the sensor should be attached to (nil for no device)
  */
-+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description deviceType:(NSString*) deviceType deviceUUID:(NSString*) deviceUUID dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp;
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description deviceType:(NSString*) deviceType deviceUUID:(NSString*) deviceUUID dataType:(NSString*)dataType stringValue:(id)value timestamp:(NSDate*)timestamp;
 
 
 /** Add a data point for a sensor, if the sensor doesn't exist it will be created
