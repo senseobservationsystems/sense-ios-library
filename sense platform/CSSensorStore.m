@@ -92,9 +92,10 @@
 static CSSensorStore* sharedSensorStoreInstance = nil;
 
 + (CSSensorStore*) sharedSensorStore {
-	if (sharedSensorStoreInstance == nil) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
 		sharedSensorStoreInstance = [[super allocWithZone:NULL] init];
-	}
+    });
 	return sharedSensorStoreInstance;	
 }
 

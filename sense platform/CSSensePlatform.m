@@ -220,7 +220,7 @@ static CSSensorStore* sensorStore;
             
         }
         @catch (NSException *exception) {
-            NSLog(@"SensePlatform addDataPointForSensor: error extracting datatype from sensor value");
+            NSLog(@"SensePlatform addDataPointForSensor %@: error extracting datatype from sensor value (%@)", sensorName, value);
         }
     }
     if (displayName == nil)

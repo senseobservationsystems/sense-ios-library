@@ -21,6 +21,11 @@ NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
     /* Datastructure: requirementsPerConsumer is an dictionary indexed by consumer. The value is an array of requirements. A requirement is a dictionary.
     */
     NSMutableDictionary* requirementsPerConsumer;
+    
+    //lock to prevent problems when updating requirements from different threads
+    NSObject* lock;
+    //actionQueue used to set the setting after a requirement is updated. This is a sequential queue to ensure proper ordering
+    dispatch_queue_t actionQueue;
 }
 
 #pragma mark Singleton functions
@@ -49,6 +54,8 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 - (id) init {
     self = [super init];
     if (self) {
+        lock = [[NSObject alloc] init];
+        actionQueue = dispatch_queue_create("requirements update queue", 0);
         requirementsPerConsumer = [[NSMutableDictionary alloc] init];
         self.isEnabled = YES;
     }
@@ -74,30 +81,33 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 }
 
 - (void) setRequirements:(NSArray*) requirements byConsumer:(NSString*) consumer {
+    @synchronized(lock) {
     requirements = [self uglyHackForBurstSensors:requirements];
     
     NSDictionary* previous = [requirementsPerConsumer copy];
     [requirementsPerConsumer setValue:requirements forKey:consumer];
     
     if (self.isEnabled) {
-        [self performActionForRequirementsUpdateFrom:previous to:requirementsPerConsumer];
+        [self performActionForRequirementsUpdateFrom:previous to:[requirementsPerConsumer copy]];
+    }
     }
 }
 
 - (void) clearRequirementsForConsumer:(NSString*) consumer {
+    @synchronized(lock) {
      NSDictionary* previous = [requirementsPerConsumer copy];
     [requirementsPerConsumer removeObjectForKey:consumer];
 
     if (self.isEnabled) {
-        [self performActionForRequirementsUpdateFrom:previous to:requirementsPerConsumer];
+        [self performActionForRequirementsUpdateFrom:previous to:[requirementsPerConsumer copy]];
     }
-
+    }
 }
 
 - (void) setIsEnabled:(BOOL)isEnabled {
     if (isEnabled) {
         //TODO: disable all sensors
-        [self performActionForRequirementsUpdateFrom:nil to:requirementsPerConsumer];
+        [self performActionForRequirementsUpdateFrom:nil to:[requirementsPerConsumer copy]];
     } else {
     }
     _isEnabled = isEnabled;
@@ -114,24 +124,28 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 #pragma mark - Private functions
 
 - (void) performActionForRequirementsUpdateFrom:(NSDictionary*) previousRequirements to:(NSDictionary*) newRequirements {
-    NSDictionary* perSensorOld = [self perSensorRequirementsFrom:previousRequirements];
-    NSDictionary* perSensorNew = [self perSensorRequirementsFrom:newRequirements];
-    
-    //for all sensors in old but not in new, disable them
-    for (NSString* sensor in perSensorOld) {
-        NSArray* list = [perSensorNew valueForKey:sensor];
-        if (list == nil) {
-            //disable the sensor
-            [[CSSettings sharedSettings] setSensor:sensor enabled: NO];
+    //dispatch this to prevent a possible deadlock. If action code tries to get the requirement lock.
+    //Just to be sure, could happen if requirements are set as a consequent of another requirement
+    dispatch_async(actionQueue, ^() {
+        NSDictionary* perSensorOld = [self perSensorRequirementsFrom:previousRequirements];
+        NSDictionary* perSensorNew = [self perSensorRequirementsFrom:newRequirements];
+        
+        //for all sensors in old but not in new, disable them
+        for (NSString* sensor in perSensorOld) {
+            NSArray* list = [perSensorNew valueForKey:sensor];
+            if (list == nil) {
+                //disable the sensor
+                [[CSSettings sharedSettings] setSensor:sensor enabled: NO];
+            }
         }
-    }
-    
-    //for all sensors in new, update settings
-    for (NSString* sensor in perSensorNew) {
-        NSDictionary* oldRequirement = [self mergeRequirements:[perSensorOld valueForKey:sensor] forSensor:sensor];
-        NSDictionary* newRequirement = [self mergeRequirements:[perSensorNew valueForKey:sensor] forSensor:sensor];
-        [self updateSettingFromRequirement:oldRequirement to:newRequirement];
-    }
+        
+        //for all sensors in new, update settings
+        for (NSString* sensor in perSensorNew) {
+            NSDictionary* oldRequirement = [self mergeRequirements:[perSensorOld valueForKey:sensor] forSensor:sensor];
+            NSDictionary* newRequirement = [self mergeRequirements:[perSensorNew valueForKey:sensor] forSensor:sensor];
+            [self updateSettingFromRequirement:oldRequirement to:newRequirement];
+        }
+    });
 }
 
 

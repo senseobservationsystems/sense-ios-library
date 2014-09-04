@@ -103,9 +103,10 @@ NSString* const kCSActivitySettingPrivacyPublic = @"public";
 static CSSettings* sharedSettingsInstance = nil;
 
 + (CSSettings*) sharedSettings {
-	if (sharedSettingsInstance == nil) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
 		sharedSettingsInstance = [[super allocWithZone:NULL] init];
-	}
+    });
 	return sharedSettingsInstance;	
 }
 
@@ -256,8 +257,7 @@ static CSSettings* sharedSettingsInstance = nil;
     return [self setSettingType:type setting:setting value:value persistent: YES];
 }
 
-- (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent {
-    if (persistent) {
+- (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent {   if (persistent) {
         @synchronized(settings) {
             //get sensor settings;
             NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
