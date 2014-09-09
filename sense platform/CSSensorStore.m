@@ -158,7 +158,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
         
 		//set settings and initialise sensors
-        [self instantiateSensors];
+        if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
+            [self instantiateSensors];
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^() {
+                [self instantiateSensors];
+            });
+        }
+            
 		[self applyGeneralSettings];
         
 		//register for change in settings
