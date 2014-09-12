@@ -106,9 +106,9 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 
 - (void) setIsEnabled:(BOOL)isEnabled {
     if (isEnabled) {
-        //TODO: disable all sensors
         [self performActionForRequirementsUpdateFrom:nil to:[requirementsPerConsumer copy]];
     } else {
+        [self performActionForRequirementsUpdateFrom:[requirementsPerConsumer copy] to:nil];
     }
     _isEnabled = isEnabled;
 }
