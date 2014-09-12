@@ -35,6 +35,11 @@ static CSSensorStore* sensorStore;
 
 }
 
++ (void) initializeWithApplicationKey: (NSString*) applicationKey {
+    [CSSensorStore sharedSensorStore].sender.applicationKey = applicationKey;
+    [self initialize];
+}
+
 + (void) initialize {
     sensorStore = [CSSensorStore sharedSensorStore];
     

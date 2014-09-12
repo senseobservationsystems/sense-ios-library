@@ -18,16 +18,17 @@
 #import "NSString+MD5Hash.h"
 #import "NSData+GZIP.h"
 
-static const NSString* kUrlBaseURL = @"http://api.dev.sense-os.nl";
-static const NSString* kUrlJsonSuffix = @".json";
-static const NSString* kUrlData = @"data";
-static const NSString* kUrlDevices = @"devices";
-static const NSString* kUrlLogin = @"login";
-static const NSString* kUrlLogout = @"logout";
-static const NSString* kUrlSensorDevice = @"device";
-static const NSString* kUrlSensors = @"sensors";
-static const NSString* kUrlUsers = @"users";
-static const NSString* kUrlUploadMultipleSensors = @"sensors/data";
+static NSString* kUrlBaseURL = @"http://api.dev.sense-os.nl";
+static NSString* kUrlJsonSuffix = @".json";
+static NSString* kUrlData = @"data";
+static NSString* kUrlDevices = @"devices";
+static NSString* kUrlAuthentication= @"https://auth.sense-os.nl/v1/login";
+//static NSString* kUrlAuthentication= @"http://auth.staging.sense-os.nl/login";
+static NSString* kUrlLogout = @"logout";
+static NSString* kUrlSensorDevice = @"device";
+static NSString* kUrlSensors = @"sensors";
+static NSString* kUrlUsers = @"users";
+static NSString* kUrlUploadMultipleSensors = @"sensors/data";
 
 
 @implementation CSSender
@@ -115,7 +116,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:post options:0 error:&jsonError];
 	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
-	NSURL* url = [self makeUrlFor:@"login"];
+    NSURL* url = [NSURL URLWithString:kUrlAuthentication];
 	NSData* contents;
 	NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil];
 
@@ -470,6 +471,8 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	//Cookie
 	if (cookie != nil)
 		[urlRequest setValue:cookie forHTTPHeaderField:@"cookie"];
+    if (self.applicationKey != nil)
+        [urlRequest setValue:self.applicationKey forHTTPHeaderField:@"APPLICATION-KEY"];
     //Accept compressed response
     [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 	
@@ -479,10 +482,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		[urlRequest setValue:@"application/json" forHTTPHeaderField:@"content-type"];
 		const char* bytes = [input UTF8String];
 		NSData * body = [NSData dataWithBytes:bytes length: strlen(bytes)];
-        
         //compress the body
-        [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-		[urlRequest setHTTPBody:[body gzippedData]];
+        //[urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+		//[urlRequest setHTTPBody:[body gzippedData]];
+		[urlRequest setHTTPBody:body];
 	}
 	
 	//connect

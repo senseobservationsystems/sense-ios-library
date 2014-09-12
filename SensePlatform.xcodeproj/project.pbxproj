@@ -603,7 +603,7 @@
 			name = SensePlatformTestAppTests;
 			productName = SensePlatformTestAppTests;
 			productReference = 3E148BA8160A12010010A0D1 /* .octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		3E820D6915D40AB50001A3EC /* SensePlatform */ = {
 			isa = PBXNativeTarget;
@@ -981,6 +981,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;

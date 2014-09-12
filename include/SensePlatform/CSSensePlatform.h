@@ -41,6 +41,10 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 @interface CSSensePlatform : NSObject
 /// Initializes the sense platform.
 + (void) initialize;
+/* Initialize the Sense Platform
+ * @param applicationKey the application key to identify this application to Common Sense
+ */
++ (void) initializeWithApplicationKey: (NSString*) applicationKey;
 /// Returns a list of available sensors of the device
 + (NSArray*) availableSensors;
 /// To be called upon termination of the app, allows the platform to flush it's caches to Common Sense

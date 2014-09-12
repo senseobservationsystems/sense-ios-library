@@ -10,7 +10,7 @@
 
 @interface CSSensorIdKey : NSObject<NSCopying>
 @property NSString* name;
-@property NSString* description;
+@property NSString* sensorDescription;
 @property NSString* deviceType;
 @property NSString* deviceUUID;
 
