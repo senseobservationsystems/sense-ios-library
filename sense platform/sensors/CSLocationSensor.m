@@ -183,13 +183,36 @@ static CLLocation* lastAcceptedPoint;
     NSLog(@"Location manager failed with error %@", error);
 }
 
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    NSString* statusString = @"Unknown";
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+            statusString = @"authorized always";
+            break;
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            statusString = @"authorized when in use";
+            break;
+        case kCLAuthorizationStatusDenied:
+            statusString = @"authorization denied";
+            break;
+        case kCLAuthorizationStatusNotDetermined:
+            statusString = @"authorization undetermined";
+            break;
+        case kCLAuthorizationStatusRestricted:
+            statusString = @"authorization restricted";
+            break;
+    }
+    
+    NSLog(@"New location authorization: %@", statusString);
+    
+}
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
 	//only react to changes
 	//if (enable == isEnabled) return;
 	
-	NSLog(@"Enabling location sensor (id=%@): %@", self.sensorId, enable ? @"yes":@"no");
+	NSLog(@"%@ location sensor", enable ? @"Enabling":@"Disabling");
 	if (enable) {
 		@try {
 			locationManager.desiredAccuracy = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy] intValue];
@@ -199,6 +222,9 @@ static CLLocation* lastAcceptedPoint;
         //set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
         locationManager.pausesLocationUpdatesAutomatically = NO;
 		[samples removeAllObjects];
+        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
+        }
         //NOTE: using significant location updates doesn't allow the phone to sense while running in the background
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
         [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
@@ -217,6 +243,9 @@ static CLLocation* lastAcceptedPoint;
 
 - (void) setBackgroundRunningEnable:(BOOL) enable {
     if (enable) {
+        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
+        }
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
         [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
     } else {
