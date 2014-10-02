@@ -139,11 +139,31 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
             }
         }
         
+        NSNumber* motionSampleInterval;
+        NSArray* motionSensors = @[kCSSENSOR_ACCELERATION, kCSSENSOR_ACCELEROMETER, kCSSENSOR_MOTION_ENERGY, kCSSENSOR_MOTION_FEATURES, kCSSENSOR_ORIENTATION, kCSSENSOR_ROTATION, kCSSENSOR_ACCELERATION_BURST, kCSSENSOR_ACCELEROMETER_BURST, kCSSENSOR_ROTATION_BURST, kCSSENSOR_ORIENTATION_BURST];
+        
         //for all sensors in new, update settings
         for (NSString* sensor in perSensorNew) {
             NSDictionary* oldRequirement = [self mergeRequirements:[perSensorOld valueForKey:sensor] forSensor:sensor];
             NSDictionary* newRequirement = [self mergeRequirements:[perSensorNew valueForKey:sensor] forSensor:sensor];
             [self updateSettingFromRequirement:oldRequirement to:newRequirement];
+            
+            //merge all motion intervals into a single value
+            if ([motionSensors containsObject:sensor]) {
+                NSNumber* interval = [newRequirement valueForKey:kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL];
+                if (interval != nil) {
+                    if (motionSampleInterval == nil)
+                        motionSampleInterval = interval;
+                    else if ([interval doubleValue] < [motionSampleInterval doubleValue])
+                        motionSampleInterval = interval;
+                }
+            }
+        }
+        
+        if (motionSampleInterval != nil) {
+            double currentValue = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval] doubleValue];
+            if (currentValue != [motionSampleInterval doubleValue])
+                [[CSSettings sharedSettings] setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval value:[motionSampleInterval stringValue]];
         }
     });
 }
@@ -215,19 +235,6 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
         NSString* sensor = [to valueForKey:kCSREQUIREMENT_FIELD_SENSOR_NAME];
         [[CSSettings sharedSettings] setSensor:sensor enabled:NO];
         return;
-    }
-    
-    //TODO: improve! for now just some ad-hoc code to make it work
-    //TODO: merge fields for motion sensors
-    
-    NSArray* motionSensors = @[kCSSENSOR_ACCELERATION, kCSSENSOR_ACCELEROMETER, kCSSENSOR_MOTION_ENERGY, kCSSENSOR_MOTION_FEATURES, kCSSENSOR_ORIENTATION, kCSSENSOR_ROTATION, kCSSENSOR_ACCELERATION_BURST, kCSSENSOR_ACCELEROMETER_BURST, kCSSENSOR_ROTATION_BURST, kCSSENSOR_ORIENTATION_BURST];
-
-    if ([motionSensors containsObject:sensor]) {
-        //set interval setting
-        NSNumber* interval = [to valueForKey:kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL];
-        if (interval != nil) {
-            [[CSSettings sharedSettings] setSettingType:kCSSettingTypeSpatial setting:kCSSpatialSettingInterval value:[interval stringValue]];
-        }
     }
     
     if ([sensor isEqualToString:kCSSENSOR_LOCATION]) {
