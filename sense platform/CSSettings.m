@@ -360,14 +360,14 @@ static CSSettings* sharedSettingsInstance = nil;
         NSData *plistData;
         @synchronized (settings) {
             plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+            
+            if(plistData) {
+                [plistData writeToFile:plistPath atomically:YES];
+            }
+            else {
+                NSLog(@"%@", error);
+            }
         }
-
-		if(plistData) {
-			[plistData writeToFile:plistPath atomically:YES];
-		}
-		else {
-			NSLog(@"%@", error);
-		}
 	}
 	@catch (NSException * e) {
 		NSLog(@"Settings:Exception thrown while storing settings: %@", e);
