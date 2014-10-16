@@ -245,12 +245,15 @@ static CSSettings* sharedSettingsInstance = nil;
 
 
 - (NSString*) getSettingType: (NSString*) type setting:(NSString*) setting {
-	NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
-	NSMutableDictionary* typeSettings = [settings valueForKey:name];
-	if (typeSettings != nil) {
-		return [typeSettings objectForKey: setting];
-	}
-	return nil;
+    NSString* ret;
+    @synchronized(settings) {
+        NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
+        NSMutableDictionary* typeSettings = [settings valueForKey:name];
+        if (typeSettings != nil) {
+            ret = [typeSettings objectForKey: setting];
+        }
+    }
+    return ret;
 }
 
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value {
@@ -258,40 +261,40 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent {   if (persistent) {
-        @synchronized(settings) {
-            //get sensor settings;
-            NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
-            NSMutableDictionary* typeSettings = [settings valueForKey:name];
-            if (typeSettings == nil) {
-                //create if it doesn't already exist
-                typeSettings = [NSMutableDictionary new];
-                @synchronized(settings) {
-                    [settings setObject:typeSettings forKey:name];
-                }
-            }
-        
-            //commit setting
-            [typeSettings setObject:value forKey:setting];
-            [self storeSettings];
+    @synchronized(settings) {
+        //get sensor settings;
+        NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
+        NSMutableDictionary* typeSettings = [settings valueForKey:name];
+        if (typeSettings == nil) {
+            //create if it doesn't already exist
+            typeSettings = [NSMutableDictionary new];
+            [settings setObject:typeSettings forKey:name];
         }
+        
+        //commit setting
+        [typeSettings setObject:value forKey:setting];
     }
-	
-	//create notification object
-	CSSetting* notificationObject = [[CSSetting alloc] init];
-	notificationObject.name = setting;
-	notificationObject.value = value;
-	
-	//send notification
-	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:[[self class] settingChangedNotificationNameForType:type] object:notificationObject]];
-	[self anySettingChanged:setting value:value];
-	
-	//free
-	
-	return YES;
+    [self storeSettings];
+}
+    
+    //create notification object
+    CSSetting* notificationObject = [[CSSetting alloc] init];
+    notificationObject.name = setting;
+    notificationObject.value = value;
+    
+    //send notification
+    [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:[[self class] settingChangedNotificationNameForType:type] object:notificationObject]];
+    [self anySettingChanged:setting value:value];
+    
+    //free
+    
+    return YES;
 }
 
 - (void) resetToDefaults {
-    [self loadSettingsFromDictionary:[CSSettings getMutableDefaults]];
+    @synchronized(settings) {
+        [self loadSettingsFromDictionary:[CSSettings getMutableDefaults]];
+    }
     [self storeSettings];
 }
 
@@ -352,13 +355,13 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (void) storeSettings {
-	@try {
-		NSError *error;
-		NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-		NSString *plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
-        
-        NSData *plistData;
-        @synchronized (settings) {
+    @synchronized (settings) {
+        @try {
+            NSError *error;
+            NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            NSString *plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
+            
+            NSData *plistData;
             plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
             
             if(plistData) {
@@ -368,10 +371,10 @@ static CSSettings* sharedSettingsInstance = nil;
                 NSLog(@"%@", error);
             }
         }
-	}
-	@catch (NSException * e) {
-		NSLog(@"Settings:Exception thrown while storing settings: %@", e);
-	}
+        @catch (NSException * e) {
+            NSLog(@"Settings:Exception thrown while storing settings: %@", e);
+        }
+    }
 }
 
 - (void) ensureLatestVersion {
