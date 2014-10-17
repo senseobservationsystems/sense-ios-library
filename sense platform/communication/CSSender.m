@@ -23,7 +23,7 @@ static NSString* kUrlJsonSuffix = @".json";
 static NSString* kUrlData = @"data";
 static NSString* kUrlDevices = @"devices";
 static NSString* kUrlAuthentication= @"https://auth.sense-os.nl/v1/login";
-//static NSString* kUrlAuthentication= @"http://auth.staging.sense-os.nl/login";
+//static NSString* kUrlAuthentication= @"http://auth-api.sense-os.nl/login";
 static NSString* kUrlLogout = @"logout";
 static NSString* kUrlSensorDevice = @"device";
 static NSString* kUrlSensors = @"sensors";
@@ -483,9 +483,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		const char* bytes = [input UTF8String];
 		NSData * body = [NSData dataWithBytes:bytes length: strlen(bytes)];
         //compress the body
-        //[urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-		//[urlRequest setHTTPBody:[body gzippedData]];
-		[urlRequest setHTTPBody:body];
+        [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+		[urlRequest setHTTPBody:[body gzippedData]];
+		//[urlRequest setHTTPBody:body];
 	}
 	
 	//connect
@@ -508,8 +508,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	}
 	
 	//log response
-	if (response) {
-		NSLog(@"%@ \"%@\" responded with status code %ld", method, url, (long)[response statusCode]);
+    if (response) {
+        NSLog(@"%@ \"%@\" responded with status code %ld", method, url, (long)[response statusCode]);
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+            NSLog(@"Sent: %@", input);
+            NSLog(@"Received: %@", [[NSString alloc] initWithBytes:responseData.bytes length:responseData.length encoding:NSUTF8StringEncoding]);
+        }
 	}
 	
 	if (output != nil)
