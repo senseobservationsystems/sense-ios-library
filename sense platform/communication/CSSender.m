@@ -18,12 +18,11 @@
 #import "NSString+MD5Hash.h"
 #import "NSData+GZIP.h"
 
-static NSString* kUrlBaseURL = @"http://api.dev.sense-os.nl";
+static NSString* kUrlBaseURL = @"https://api.sense-os.nl";
 static NSString* kUrlJsonSuffix = @".json";
 static NSString* kUrlData = @"data";
 static NSString* kUrlDevices = @"devices";
-static NSString* kUrlAuthentication= @"https://auth.sense-os.nl/v1/login";
-//static NSString* kUrlAuthentication= @"http://auth-api.sense-os.nl/login";
+static NSString* kUrlAuthentication= @"https://auth-api.sense-os.nl/v1/login";
 static NSString* kUrlLogout = @"logout";
 static NSString* kUrlSensorDevice = @"device";
 static NSString* kUrlSensors = @"sensors";
