@@ -13,13 +13,13 @@
     self = [super init];
     if (self) {
         self.name = name;
-        self.description = description;
+        self.sensorDescription = description;
         self.deviceType = deviceType;
         self.deviceUUID = deviceUUID;
         if (self.name == nil)
             self.name = @"";
-        if (self.description == nil)
-            self.description = @"";
+        if (self.sensorDescription == nil)
+            self.sensorDescription = @"";
         if (self.deviceType == nil)
             self.deviceType = @"";
         if (self.deviceUUID == nil)
@@ -32,14 +32,14 @@
     self = [super init];
     if (self) {
         self.name = name;
-        self.description = description;
+        self.sensorDescription = description;
         self.deviceType = [device valueForKey:@"type"];
         self.deviceUUID = [device valueForKey:@"uuid"];
 
         if (self.name == nil)
             self.name = @"";
         if (self.description == nil)
-            self.description = @"";
+            self.sensorDescription = @"";
         if (self.deviceType == nil)
             self.deviceType = @"";
         if (self.deviceUUID == nil)
@@ -49,7 +49,7 @@
 }
 
 - (id) copyWithZone:(NSZone*) zone {
-    CSSensorIdKey* copy = [[CSSensorIdKey allocWithZone:zone] initWithName:self.name description:self.description deviceType:self.deviceType deviceUUID:self.deviceUUID];
+    CSSensorIdKey* copy = [[CSSensorIdKey allocWithZone:zone] initWithName:self.name description:self.sensorDescription deviceType:self.deviceType deviceUUID:self.deviceUUID];
     return copy;
 }
 
@@ -69,7 +69,7 @@
     //if both are nil they are also considered equal
     if (!(self.name == other.name || [self.name isEqual:other.name]))
         return NO;
-    if (!(self.description == other.description || [self.description isEqual:other.description]))
+    if (!(self.sensorDescription == other.sensorDescription || [self.sensorDescription isEqual:other.sensorDescription]))
         return NO;
     if (!(self.deviceType == other.deviceType || [self.deviceType isEqual:other.deviceType]))
         return NO;
@@ -80,6 +80,6 @@
 }
 
 - (NSUInteger) hash {
-    return [self.name hash] ^ [self.description hash] ^ [self.deviceType hash] ^ [self.deviceUUID hash];
+    return [self.name hash] ^ [self.sensorDescription hash] ^ [self.deviceType hash] ^ [self.deviceUUID hash];
 }
 @end

@@ -16,9 +16,12 @@
 
 #import <Foundation/Foundation.h>
 
-//Include all sensors
+//Include all header files
+#include "CSVersion.h"
 #include "CSSensor.h"
 #include "CSSensorIds.h"
+#include "CSSensorRequirements.h"
+#include "CSSettings.h"
 
 extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;
@@ -38,6 +41,10 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 @interface CSSensePlatform : NSObject
 /// Initializes the sense platform.
 + (void) initialize;
+/* Initialize the Sense Platform
+ * @param applicationKey the application key to identify this application to Common Sense
+ */
++ (void) initializeWithApplicationKey: (NSString*) applicationKey;
 /// Returns a list of available sensors of the device
 + (NSArray*) availableSensors;
 /// To be called upon termination of the app, allows the platform to flush it's caches to Common Sense
@@ -99,7 +106,7 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * @param deviceType the type of the device the sensor should be attached to (nil for no device)
  * @param deviceUUID the uuid of the device the sensor should be attached to (nil for no device)
  */
-+ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description deviceType:(NSString*) deviceType deviceUUID:(NSString*) deviceUUID dataType:(NSString*)dataType stringValue:(NSString*)value timestamp:(NSDate*)timestamp;
++ (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description deviceType:(NSString*) deviceType deviceUUID:(NSString*) deviceUUID dataType:(NSString*)dataType stringValue:(id)value timestamp:(NSDate*)timestamp;
 
 
 /** Add a data point for a sensor, if the sensor doesn't exist it will be created
