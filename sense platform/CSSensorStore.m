@@ -42,6 +42,7 @@
 #import "CSStorage.h"
 #import "CSUploader.h"
 #import "CSStepCounterProcessorSensor.h"
+#import "CSTimeZoneSensor.h"
 
 #import "CSSpatialProvider.h"
 
@@ -146,6 +147,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
                             [CSActivityProcessorSensor class],
+                            [CSTimeZoneSensor class],
                             //[CSStepCounterProcessorSensor class],
 							nil];
 		
