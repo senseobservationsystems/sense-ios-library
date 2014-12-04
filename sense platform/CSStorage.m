@@ -128,7 +128,8 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 
 - (void) storeSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device dataType:(NSString*) dataType value:(NSString*) value timestamp:(double) timestamp {
     //insert into db
-    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT INTO buf.data (id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value) VALUES (%lli, %f, '%@', '%@', '%@', '%@', '%@', '%@');", ++lastDataPointid , timestamp, sensor, description, deviceType, device, dataType, value] UTF8String];
+    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT INTO buf.data (id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value) VALUES (%lli, %f, %@, %@, %@, %@, %@, %@);", ++lastDataPointid , timestamp, quotedAndEncodedString(sensor), quotedAndEncodedString(description), quotedAndEncodedString(deviceType),
+                             quotedAndEncodedString(device), quotedAndEncodedString(dataType), quotedAndEncodedString(value)] UTF8String];
 
     int ret;
     pthread_mutex_lock(&dbMutex);
@@ -160,12 +161,12 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
             CSDataPoint* p = [[CSDataPoint alloc] init];
             p.dataPointID = sqlite3_column_int64(stmt, 0);
             p.timestamp = [NSDate dateWithTimeIntervalSince1970:sqlite3_column_double(stmt, 1)];
-            p.sensor = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 2)];
-            p.sensorDescription = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 3)];
-            p.deviceType = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 4)];
-            p.deviceUUID = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 5)];
-            p.dataType = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 6)];
-            p.timeValue = [NSString stringWithUTF8String:(const char*)sqlite3_column_text(stmt, 7)];
+            p.sensor = decodedString((const char*)sqlite3_column_text(stmt, 2));
+            p.sensorDescription = decodedString((const char*)sqlite3_column_text(stmt, 3));
+            p.deviceType = decodedString((const char*)sqlite3_column_text(stmt, 4));
+            p.deviceUUID = decodedString((const char*)sqlite3_column_text(stmt, 5));
+            p.dataType = decodedString((const char*)sqlite3_column_text(stmt, 6));
+            p.timeValue = decodedString((const char*)sqlite3_column_text(stmt, 7));
             
             [results addObject:p];
         }
@@ -271,7 +272,8 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 #pragma mark - sensor_descriptions
 - (void) storeSensorDescription:(NSString*) jsonDescription forSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device {
     //insert into db
-    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO sensor_descriptions (sensor_name, sensor_description, device_type, device, json_description) VALUES ('%@', '%@', '%@', '%@', '%@');",sensor, description, deviceType, device, jsonDescription] UTF8String];
+    const char *sql_stmt = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO sensor_descriptions (sensor_name, sensor_description, device_type, device, json_description) VALUES (%@, %@, %@, %@, %@);",
+                             quotedAndEncodedString(sensor), quotedAndEncodedString(description), quotedAndEncodedString(deviceType), quotedAndEncodedString(device), quotedAndEncodedString(jsonDescription)] UTF8String];
     
     int ret;
     pthread_mutex_lock(&dbMutex);
@@ -287,7 +289,8 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 - (NSString*) getSensorDescriptionForSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device {
     
     NSString* jsonDescription = nil;
-    const char* query = [[NSString stringWithFormat:@"SELECT json_description FROM sensor_descriptions where sensor_name = '%@' AND sensor_description = '%@' AND device_type = '%@' AND device = '%@' limit 1", sensor, description, deviceType, device] UTF8String];
+    const char* query = [[NSString stringWithFormat:@"SELECT json_description FROM sensor_descriptions where sensor_name = %@ AND sensor_description = %@ AND device_type = %@ AND device = %@ limit 1",
+                          quotedAndEncodedString(sensor), quotedAndEncodedString(description), quotedAndEncodedString(deviceType), quotedAndEncodedString(device)] UTF8String];
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);
     NSInteger ret = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
@@ -303,6 +306,20 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
     
     
     return jsonDescription;
+}
+
+static NSString* quotedAndEncodedString(NSString* input) {
+    if (input == nil) {
+        return nil;
+    }
+    return [NSString stringWithFormat:@"\'%@\'",[input stringByReplacingOccurrencesOfString:@"'" withString:@"''"]];
+}
+
+static NSString* decodedString(const char* encoded) {
+    if (encoded == nil) {
+        return nil;
+    }
+    return [[NSString stringWithUTF8String:encoded] stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
 }
 
 @end
