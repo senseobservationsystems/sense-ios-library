@@ -124,22 +124,19 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
     // the "com.apple.springboard.lockcomplete" notification will always come after the "com.apple.springboard.lockstate" notification
     CFStringRef nameCFString = (CFStringRef)name;
     NSString *lockState = (__bridge NSString*)nameCFString;
-    //NSLog(@"Darwin notification: %@",name);
     BOOL display = NO;
     
     if([lockState isEqualToString:@"com.apple.springboard.lockcomplete"] && displayCompleteFlag == NO)
     {
         displayCompleteFlag = YES;
+        [refToSelf commitDisplayState:display];
+        display = NO;
     }
     else if ([lockState isEqualToString:@"com.apple.springboard.lockstate"] && displayCompleteFlag == YES)
     {
-        NSLog(@"DISPLAY OFF\n");
-        display = NO;
         displayCompleteFlag = NO;
-        [refToSelf commitDisplayState:display];
     }
     else if ([lockState isEqualToString:@"com.apple.springboard.lockstate"] && displayCompleteFlag == NO) {
-        NSLog(@"DISPLAY ON\n");
         displayCompleteFlag = NO;
         display = YES;
         [refToSelf commitDisplayState:display];

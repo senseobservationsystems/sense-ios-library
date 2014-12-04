@@ -161,4 +161,8 @@ extern NSString* const kCSActivitySettingPrivacyPublic;
  * @param passwordHash the hash of the password
  */
 - (BOOL) setLogin:(NSString*)user withPasswordHash:(NSString*) passwordHash;
+
+/** Reset the settings to defaults.
+ */
+- (void) resetToDefaults;
 @end

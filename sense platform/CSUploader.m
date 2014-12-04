@@ -210,7 +210,7 @@ NSSet* getSensorSet(NSArray* data) {
 
 - (NSDictionary*) getSensorDescriptionForSensorId:(CSSensorIdKey*) sensorId {
     //get from storage
-    NSString* jsonDescription = [self->storage getSensorDescriptionForSensor:sensorId.name description:sensorId.description deviceType:sensorId.deviceType device:sensorId.deviceUUID];
+    NSString* jsonDescription = [self->storage getSensorDescriptionForSensor:sensorId.name description:sensorId.sensorDescription deviceType:sensorId.deviceType device:sensorId.deviceUUID];
     
     if (jsonDescription != nil) {
         NSError* jsonError;
@@ -226,7 +226,7 @@ NSSet* getSensorSet(NSArray* data) {
     //no known description, let's fabricate something from the information we have
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			sensorId.name, @"name",
-			sensorId.description, @"device_type",
+			sensorId.sensorDescription, @"device_type",
 			@"", @"pager_type",
 			kCSDATA_TYPE_STRING, @"data_type",
 			nil];
@@ -258,7 +258,7 @@ NSArray* formattedData(NSArray* data, NSDictionary* sensorMapping) {
 - (void) setLastUploadedRowId:(long long) value {
     self->lastUploadedRowId = value;
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setInteger:value forKey:lastUploadedRowIdKey];
+    [prefs setInteger:(int)value forKey:lastUploadedRowIdKey];
 }
 
 @end

@@ -42,6 +42,7 @@
 #import "CSStorage.h"
 #import "CSUploader.h"
 #import "CSStepCounterProcessorSensor.h"
+#import "CSTimeZoneSensor.h"
 
 #import "CSSpatialProvider.h"
 
@@ -92,9 +93,10 @@
 static CSSensorStore* sharedSensorStoreInstance = nil;
 
 + (CSSensorStore*) sharedSensorStore {
-	if (sharedSensorStoreInstance == nil) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
 		sharedSensorStoreInstance = [[super allocWithZone:NULL] init];
-	}
+    });
 	return sharedSensorStoreInstance;	
 }
 
@@ -145,6 +147,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
                             [CSActivityProcessorSensor class],
+                            [CSTimeZoneSensor class],
                             //[CSStepCounterProcessorSensor class],
 							nil];
 		
@@ -157,7 +160,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
         
 		//set settings and initialise sensors
-        [self instantiateSensors];
+        if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
+            [self instantiateSensors];
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^() {
+                [self instantiateSensors];
+            });
+        }
+            
 		[self applyGeneralSettings];
         
 		//register for change in settings
@@ -270,7 +280,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 -(void) setEnabled:(BOOL) enable {
 	serviceEnabled = enable;
-    CSLocationSensor* locationSensor;
     @synchronized(sensors) {
 
 	if (NO == enable) {
@@ -400,7 +409,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     BOOL succeed =  [uploader upload];
     if (succeed) {
         //clean up storage. Maybe we should keep some data, but for now the storage is only used as a buffer before sending to CommonSense
-        
         [self->storage removeDataBeforeId:[uploader lastUploadedRowId]];
     }
     return succeed;

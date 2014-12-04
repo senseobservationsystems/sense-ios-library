@@ -37,4 +37,6 @@ NSString* const kCSSENSOR_SCREEN_STATE = @"screen activity";
 NSString* const kCSSENSOR_MOTION_ENERGY = @"motion energy";
 NSString* const kCSSENSOR_MOTION_FEATURES = @"motion features";
 NSString* const kCSSENSOR_STEP_COUNTER = @"step_counter";
+NSString* const kCSSENSOR_TIME = @"time";
+NSString* const kCSSENSOR_TIMEZONE = @"time_zone";
 NSString* const kCSSENSOR_JUMP = @"jump";

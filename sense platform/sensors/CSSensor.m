@@ -104,32 +104,12 @@
 }
 
 + (NSArray*) componentsFromSensorId:(NSString*) sensorId {
-    NSMutableArray* components = [[NSMutableArray alloc] init];
-    //extract sensor name
-    NSMutableString* entry = [[NSMutableString alloc] init];
-    for (size_t i = 0; i < sensorId.length; i++) {
-        char ch = [sensorId characterAtIndex:i];
-        if (ch != '/'){
-            [entry appendFormat:@"%c", ch];
-        } else {
-            if (i+1 >= sensorId.length) {
-                //last entry is empty
-                entry = [[NSMutableString alloc] init];
-                break;
-            }
-            if ([sensorId characterAtIndex:i+1] == '/') {
-                //escaped character
-                i++;
-                [entry appendFormat:@"%c", [sensorId characterAtIndex:i]];
-                continue;
-            } else {
-                //component separator
-                [components addObject:entry];
-                entry = [[NSMutableString alloc] init];
-            }
-        }
-    }
-    [components addObject:entry];
+    
+    NSArray* tmp = [[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"];
+
+    //TODO:with empty values something might go wrong. E.g. name//device/device. The description is empty. This will put the wrong fields...
+    
+    NSMutableArray* components = [tmp mutableCopy];
     //This should've returned 4 entries: name/description/deviceType/uuid, if not just fill in the missing components as empty
     while (components.count < 4) {
         [components addObject:@""];

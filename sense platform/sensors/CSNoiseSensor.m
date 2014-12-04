@@ -28,6 +28,8 @@
 #import "Formatting.h"
 #import "CSSensePlatform.h"
 
+static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
+
 //Declare private methods using empty category
 @interface CSNoiseSensor()
 - (void) startRecording;
@@ -47,6 +49,8 @@
     BOOL interruptedOnRecording;
     BOOL sampleOnlyWhenScreenLocked;
     BOOL screenIsOn;
+    
+    NSArray* requirements;
 }
 
 - (NSString*) name {return kCSSENSOR_NOISE;}
@@ -87,6 +91,8 @@
         numberOfPackets = 0;
         screenIsOn = YES;
         sampleOnlyWhenScreenLocked = YES;
+        
+        self->requirements = @[@{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_SCREEN_STATE}];
 	}
 	return self;
 }
@@ -277,7 +283,6 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
         @autoreleasepool {
-
         [self startRecording];
         }
     });
@@ -319,6 +324,9 @@
 	NSLog(@"%@ noise sensor (id=%@)", enable ? @"Enabling" : @"Disabling", self.sensorId);
 	isEnabled = enable;
 	if (enable) {
+        if (sampleOnlyWhenScreenLocked)
+            [[CSSensorRequirements sharedRequirements] setRequirements:self->requirements byConsumer:CONSUMER_NAME];
+
 		if (NO==audioRecorder.recording) {
             // configure the audio session
             [self configureAudioSession];
@@ -332,6 +340,7 @@
 		audioRecorder.delegate = nil;
         NSError* error;
         [[AVAudioSession sharedInstance] setActive:NO error:&error];
+        [[CSSensorRequirements sharedRequirements] clearRequirementsForConsumer:CONSUMER_NAME];
 	}
     isEnabled = enable;
 }
@@ -467,7 +476,9 @@
             sampleOnlyWhenScreenLocked = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingSampleOnlyWhenScreenLocked] isEqualToString:kCSSettingYES];
             // enable the screen sensor if it is disabled when you want to sample only when the screen is locked
             if (sampleOnlyWhenScreenLocked == YES) {
-                [[CSSettings sharedSettings] setSensor:kCSSENSOR_SCREEN_STATE enabled:YES];
+                [[CSSensorRequirements sharedRequirements] setRequirements:self->requirements byConsumer:CONSUMER_NAME];
+            } else {
+                [[CSSensorRequirements sharedRequirements] clearRequirementsForConsumer:CONSUMER_NAME];
             }
         }
 	}

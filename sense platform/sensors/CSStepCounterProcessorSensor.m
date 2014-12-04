@@ -99,9 +99,9 @@ static NSString* stepsKey = @"total";
     }
 }
 
-- (void) handleStepCount:(NSInteger) steps atDate:(NSDate*) date {
+- (void) handleStepCount:(long long) steps atDate:(NSDate*) date {
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithInteger:steps], stepsKey,
+                           [NSNumber numberWithLongLong:steps], stepsKey,
                            nil];
     NSTimeInterval timestamp = [date timeIntervalSince1970];
     
@@ -112,7 +112,7 @@ static NSString* stepsKey = @"total";
     [self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
     
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setInteger:steps forKey:CSCMLastStepCount];
+    [prefs setInteger:(int)steps forKey:CSCMLastStepCount];
 }
 
 -(void) dealloc {
