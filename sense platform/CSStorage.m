@@ -300,7 +300,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
         //calculate number of rows to keep
         long nRowsToKeep = percentToKeep * [self getNumberOfRowsInDb:@"data"];
         
-        NSLog(@"Trimming local storage to keep only %d percent (or %i datapoints)", percentToKeep, nRowsToKeep);
+        NSLog(@"Trimming local storage to keep only %f percent (or %li datapoints)", percentToKeep, nRowsToKeep);
         
         //remove oldest rows while keeping nRowsToKeep
         [self trimLocalStorageToRowsToKeep:nRowsToKeep];
