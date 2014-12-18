@@ -275,14 +275,14 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
 }
 
 /*
- * Checks if database is smaller than MAX_DB_SIZE_ON_DISK and if not, reduces DB size to something that is slightly smaller than MAX_DB_SIZE_ON_DISK by removing oldest rows (with the lowest IDs) from the database
+ * Checks if database is smaller than MAX_DB_SIZE_ON_DISK and if not, reduces DB size to something that is MAX_DB_SIZE_ON_DISK or 90% of free space plus what we already use by removing oldest rows (with the lowest IDs) from the database
  *
  */
 - (void) trimLocalStorageIfNeeded {
     NSNumber *dbSize = [self getDbSize];
     NSNumber *freeSpace = [self getFreeSpaceOnDisk];
     
-    NSLog(@"Size of current local storage: %i kb", ([dbSize intValue]/1000));
+    //NSLog(@"Size of current local storage: %i kb", ([dbSize intValue]/1000));
     
     
     //Set spacelimit to the min the MAXDB_SIZE_ON_DISK or 90% of the free space + what we already use; this way we never run out of space
@@ -291,7 +291,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
     if([dbSize intValue] > spaceLimit) {
         
         //calculate percentage of database to be keep
-        double percentToKeep = ((MAX_DB_SIZE_ON_DISK / [dbSize doubleValue]) - 0.02); //remove 2% extra to create some extra space
+        double percentToKeep = ((spaceLimit / [dbSize doubleValue]));
         
         //calculate number of rows to keep
         long nRowsToKeep = percentToKeep * [self getNumberOfRowsInDb:@"data"];
