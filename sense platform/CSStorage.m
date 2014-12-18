@@ -15,7 +15,9 @@ static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, k
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
 static const size_t BUFFER_NR_ROWS = 1000;
 static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
-static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
+//static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
+static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
+
 
 @implementation CSStorage {
     NSString* dbPath;
@@ -288,6 +290,8 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
     //Set spacelimit to the min the MAXDB_SIZE_ON_DISK or 90% of the free space + what we already use; this way we never run out of space
     int spaceLimit = MAX_DB_SIZE_ON_DISK < (0.9*[freeSpace intValue]+[dbSize intValue]) ? MAX_DB_SIZE_ON_DISK : (0.9*[freeSpace intValue]+[dbSize intValue]);
     
+    NSLog(@"Spacelimit: %i kb", spaceLimit/1000);
+    
     if([dbSize intValue] > spaceLimit) {
         
         //calculate percentage of database to be keep
@@ -295,6 +299,8 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
         
         //calculate number of rows to keep
         long nRowsToKeep = percentToKeep * [self getNumberOfRowsInDb:@"data"];
+        
+        NSLog(@"Trimming local storage to keep only %d percent (or %i datapoints)", percentToKeep, nRowsToKeep);
         
         //remove oldest rows while keeping nRowsToKeep
         [self trimLocalStorageToRowsToKeep:nRowsToKeep];
