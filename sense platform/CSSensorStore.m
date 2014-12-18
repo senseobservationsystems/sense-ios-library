@@ -409,6 +409,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     BOOL succeed =  [uploader upload];
     if (succeed) {
         //clean up storage. Maybe we should keep some data, but for now the storage is only used as a buffer before sending to CommonSense
+
+        //TODO: clean only data from more than 24 hours ago (check for errors, limit total storage space)
         [self->storage removeDataBeforeId:[uploader lastUploadedRowId]];
     }
     return succeed;

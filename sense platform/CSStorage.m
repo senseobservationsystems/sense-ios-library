@@ -187,6 +187,34 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
     
 }
 
+/*
+ * Removes all data from before a certain date from buffer and main data store
+ * @param: dateThreshold is the date which marks the threshold, all data older than (from before) the date will be removed
+ */
+- (void) removeDataBeforeTime:(NSDate *) dateThreshold {
+    [self removeDataBeforeTime:dateThreshold fromTable:@"buf.data"];
+    [self removeDataBeforeTime:dateThreshold fromTable:@"data"];
+}
+
+/*
+ * Removes all data from before a certain date
+ * @param: table that data will be removed from
+ * @param: dateThreshold is the date which marks the threshold, all data older (from before) the date will be removed
+ */
+
+- (void) removeDataBeforeTime:(NSDate *) dateThreshold fromTable: (NSString*) table {
+
+    long long dateThresholdmilliseconds = (long long)([dateThreshold timeIntervalSince1970] * 1000.0);
+     
+    const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where timestamp < %lli", table, dateThresholdmilliseconds] UTF8String];
+    pthread_mutex_lock(&dbMutex);
+    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK) {
+        NSLog(@"removeDataTillId failure: %s", sqlite3_errmsg(db));
+    }
+    pthread_mutex_unlock(&dbMutex);
+    
+}
+
 - (void) removeDataTillId:(long long) rowId table:(NSString*) table {
     const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where id <= %lli", table, rowId] UTF8String];
     pthread_mutex_lock(&dbMutex);
