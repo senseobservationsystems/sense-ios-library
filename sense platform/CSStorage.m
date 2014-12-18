@@ -15,6 +15,7 @@ static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, k
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
 static const size_t BUFFER_NR_ROWS = 1000;
 static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
+static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
 
 @implementation CSStorage {
     NSString* dbPath;
@@ -54,6 +55,7 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
         @throw [NSException exceptionWithName:@"DB error opening database" reason:@"Couldn't open database file" userInfo:nil];
 
     }
+    
     //setup
     sqlite3_busy_timeout(db, DEFAULT_DB_LOCK_TIMEOUT);
     
@@ -189,24 +191,22 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 
 /*
  * Removes all data from before a certain date from buffer and main data store
- * @param: dateThreshold is the date which marks the threshold, all data older than (from before) the date will be removed
+ * @param: dateThreshold The date which marks the threshold, all data older than (from before) the date will be removed
  */
 - (void) removeDataBeforeTime:(NSDate *) dateThreshold {
     [self removeDataBeforeTime:dateThreshold fromTable:@"buf.data"];
     [self removeDataBeforeTime:dateThreshold fromTable:@"data"];
 }
 
+
 /*
  * Removes all data from before a certain date
- * @param: table that data will be removed from
- * @param: dateThreshold is the date which marks the threshold, all data older (from before) the date will be removed
+ * @param: table Table that data will be removed from
+ * @param: dateThreshold The date which marks the threshold, all data older (from before) the date will be removed
  */
-
 - (void) removeDataBeforeTime:(NSDate *) dateThreshold fromTable: (NSString*) table {
 
-    long long dateThresholdmilliseconds = (long long)([dateThreshold timeIntervalSince1970] * 1000.0);
-     
-    const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where timestamp < %lli", table, dateThresholdmilliseconds] UTF8String];
+    const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where timestamp < %lli", table, (long long)([dateThreshold timeIntervalSince1970])] UTF8String];
     pthread_mutex_lock(&dbMutex);
     if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK) {
         NSLog(@"removeDataTillId failure: %s", sqlite3_errmsg(db));
@@ -215,6 +215,10 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
     
 }
 
+/*
+ * Removes all data from before a certain row id
+ * @param: table Table that data will be removed from
+ * @param: rowId The id of the highest numbered row that will be removed, together with all rows with lower numbered ids */
 - (void) removeDataTillId:(long long) rowId table:(NSString*) table {
     const char* query = [[NSString stringWithFormat:@"DELETE FROM %@ where id <= %lli", table, rowId] UTF8String];
     pthread_mutex_lock(&dbMutex);
@@ -226,6 +230,7 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 
 
 #pragma mark - maintenance
+
 - (void) writeDbToFile {
     NSLog(@"Writing data buffer to file");
     
@@ -263,15 +268,96 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
     
     //trim the buffer
     [self trimBufferToSize:BUFFER_NR_ROWS];
+    
+    //Check if database is not too large and remove data if too large
+    [self trimLocalStorageIfNeeded];
+    
 }
+
+/*
+ * Checks if database is smaller than MAX_DB_SIZE_ON_DISK and if not, reduces DB size to something that is slightly smaller than MAX_DB_SIZE_ON_DISK by removing oldest rows (with the lowest IDs) from the database
+ *
+ * Still todo is a check to see if the device is not running out of space
+ */
+- (void) trimLocalStorageIfNeeded {
+    NSNumber *dbSize = [self getDbSize];
+    NSLog(@"Size of current local storage: %i kb", ([dbSize intValue]/1000));
+    
+    if([dbSize intValue] > MAX_DB_SIZE_ON_DISK) {
+        
+        //calculate percentage of database to be keep
+        double percentToKeep = ((MAX_DB_SIZE_ON_DISK / [dbSize doubleValue]) - 0.02); //remove 2% extra to create some extra space
+        
+        //calculate number of rows to keep
+        long nRowsToKeep = percentToKeep * [self getNumberOfRowsInDb:@"data"];
+        
+        //remove oldest rows while keeping nRowsToKeep
+        [self trimLocalStorageToRowsToKeep:nRowsToKeep];
+    }
+    
+    //TODO: Check if we are not running out of disk space and maybe remove data if we are
+}
+
+/*
+ * Get the total number of rows in a database
+ * @param dbName SQL Identifier of the database name
+ */
+
+- (long) getNumberOfRowsInDb:(NSString *) dbName {
+    
+    const char* queryRowId = [[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", dbName] UTF8String];
+    sqlite3_stmt* stmt;
+    
+    if (sqlite3_prepare_v2(db, queryRowId, -1, &stmt, NULL) == SQLITE_OK) {
+    
+        NSInteger ret = sqlite3_step(stmt);
+        if (ret == SQLITE_ROW) {
+            return sqlite3_column_int(stmt, 0);
+        } else {
+            NSLog(@"Database error: getting count of rows didn't return SQLITE_ROW");
+            return 0;
+        }
+    } else {
+        NSLog(@"Database error: getting count of rows");
+        return 0;
+    }
+}
+
+/*
+ * Returns the size of the local storage database in bytes
+ */
+- (NSNumber *) getDbSize {
+    NSError *error = nil;
+    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:dbPath error:&error];
+    NSLog(@"Local database store size: %@ bytes", [fileAttributes objectForKey:NSFileSize]);
+    
+    return [fileAttributes objectForKey:NSFileSize];
+}
+
+/*
+ * Returns the number of bytes of free space on the disk
+ */
+
+- (NSNumber *) getFreeSpaceOnDisk {
+    NSError *error = nil;
+    NSDictionary *fileSystemAttributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:dbPath error:&error];
+    NSLog(@"Free space on file system: %@ bytes", [fileSystemAttributes objectForKey:NSFileSystemFreeSize]);
+    
+    return [fileSystemAttributes objectForKey:NSFileSystemFreeSize];
+}
+
 
 - (void) cleanBuffer {
     //delete from the buffer all persisted rows
-    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", lastRowIdInStorage] UTF8String];
-    pthread_mutex_lock(&dbMutex);
-    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
-        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
-    pthread_mutex_unlock(&dbMutex);
+    [self removeDataTillId:lastRowIdInStorage table:@"buf.data"];
+
+
+//      OLD CODE -- has been replaced by removeDataTillId so can probably be removed ^JJ
+//    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", lastRowIdInStorage] UTF8String];
+//    pthread_mutex_lock(&dbMutex);
+//    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
+//        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
+//    pthread_mutex_unlock(&dbMutex);
 }
 
 - (void) trimBufferToSize:(size_t) nr {
@@ -280,11 +366,27 @@ static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
     //e.g. when there are unpersisted rows, this function will NEVER delete those
     long long nrInMem = lastDataPointid - lastRowIdInStorage;
     long long deleteThreshold = lastRowIdInStorage - MAX(nr - nrInMem, 0);
-    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", deleteThreshold] UTF8String];
-    pthread_mutex_lock(&dbMutex);
-    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
-        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
-    pthread_mutex_unlock(&dbMutex);
+    [self removeDataTillId:deleteThreshold table:@"buf.data"];
+
+//      OLD CODE -- has been replaced by removeDataTillId so can probably be removed ^JJ
+//    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", deleteThreshold] UTF8String];
+//    pthread_mutex_lock(&dbMutex);
+//    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
+//        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
+//    pthread_mutex_unlock(&dbMutex);
+}
+
+/*
+ * Delete all rows of the database except the nrToKeep most recent rows based on id field
+ * @param nrToKeep Number of most recent rows to keep (oldest rows will be removed first)
+ *
+ */
+- (void) trimLocalStorageToRowsToKeep:(size_t) nrToKeep {
+    //delete from the local storage all persisted rows, but keep 'nrToKeep' points.
+    //Note that the actual size of the local storage might end up to be different from 'nr'
+    //e.g. when there are unpersisted rows, this function will NEVER delete those
+    long long deleteThreshold = lastRowIdInStorage - nrToKeep;
+    [self removeDataTillId:deleteThreshold table:@"data"];
 }
 
 - (void) flush {
