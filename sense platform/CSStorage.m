@@ -318,12 +318,14 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);
     if (sqlite3_prepare_v2(db, queryRowId, -1, &stmt, NULL) == SQLITE_OK) {
-        pthread_mutex_unlock(&dbMutex);
         NSInteger ret = sqlite3_step(stmt);
         if (ret == SQLITE_ROW) {
-            return sqlite3_column_int(stmt, 0);
+            long nRows = sqlite3_column_int(stmt, 0);
+            pthread_mutex_unlock(&dbMutex);
+            return  nRows;
         } else {
             NSLog(@"Database error: getting count of rows didn't return SQLITE_ROW");
+            pthread_mutex_unlock(&dbMutex);
             return 0;
         }
     } else {
