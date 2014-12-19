@@ -15,8 +15,8 @@ static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, k
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
 static const size_t BUFFER_NR_ROWS = 1000;
 static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
-//static const int MAX_DB_SIZE_ON_DISK = 1000*1000*500; // 500mb
-static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
+static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
+//static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
 
 
 @implementation CSStorage {
@@ -316,9 +316,9 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
     
     const char* queryRowId = [[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", dbName] UTF8String];
     sqlite3_stmt* stmt;
-    
+    pthread_mutex_lock(&dbMutex);
     if (sqlite3_prepare_v2(db, queryRowId, -1, &stmt, NULL) == SQLITE_OK) {
-    
+        pthread_mutex_unlock(&dbMutex);
         NSInteger ret = sqlite3_step(stmt);
         if (ret == SQLITE_ROW) {
             return sqlite3_column_int(stmt, 0);
@@ -327,9 +327,11 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
             return 0;
         }
     } else {
+        pthread_mutex_unlock(&dbMutex);
         NSLog(@"Database error: getting count of rows");
         return 0;
     }
+
 }
 
 /*
