@@ -49,6 +49,7 @@
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
 #define MAX_UPLOAD_INTERVAL 3600
+#define LOCAL_STORAGE_TIME 3600*24*31 //thirty-one days in seconds
 
 @interface CSSensorStore (private)
 - (void) applyGeneralSettings;
@@ -408,8 +409,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (BOOL) uploadData {
     BOOL succeed =  [uploader upload];
     if (succeed) {
-        //clean up storage. Maybe we should keep some data, but for now the storage is only used as a buffer before sending to CommonSense
-        [self->storage removeDataBeforeId:[uploader lastUploadedRowId]];
+
+        //Clean up storage by removing data that is older than LOCAL_STORAGE_TIME
+        NSDate *cutOffTime = [NSDate dateWithTimeIntervalSince1970: ([[NSDate date] timeIntervalSince1970] - LOCAL_STORAGE_TIME)];
+
+        NSLog(@"Deleting all data before %@", [NSDateFormatter localizedStringFromDate:cutOffTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]);
+        
+        [self->storage removeDataBeforeTime: cutOffTime];
     }
     return succeed;
 }
