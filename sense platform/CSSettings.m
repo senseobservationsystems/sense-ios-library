@@ -365,10 +365,10 @@ static CSSettings* sharedSettingsInstance = nil;
             plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
             
             if(plistData) {
-                [plistData writeToFile:plistPath atomically:YES];
+                [plistData writeToFile:plistPath options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication error:&error];
             }
-            else {
-                NSLog(@"%@", error);
+            if (error) {
+                NSLog(@"Error storing the settings: %@", error);
             }
         }
         @catch (NSException * e) {
