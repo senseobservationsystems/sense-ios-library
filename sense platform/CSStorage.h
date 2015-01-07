@@ -26,4 +26,12 @@
 
 - (void) storeSensorDescription:(NSString*) jsonDescription forSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device;
 - (NSString*) getSensorDescriptionForSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device;
+
+/** Retrieve all the sensor data stored in the database between a certain time interval.
+ * @param name The name of the sensor to get the data from
+ * @param startDate The date and time at which to start looking for datapoints
+ * @param endDate The date and time at which to stop looking for datapoints
+ * @return an array of values, each value is a dictonary that descirbes the data point
+ */
+- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate;
 @end

@@ -266,6 +266,9 @@ static CSSensorStore* sensorStore;
      */
 }
 
++ (NSArray*) getDataForSensor:(NSString *)name onlyFromDevice:(bool)onlyFromDevice nrLastPoints:(NSInteger)nrLastPoints {
+    
+}
 
 + (NSString*) dataTypeOf:(NSString*) value {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
