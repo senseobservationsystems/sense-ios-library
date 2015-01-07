@@ -32,6 +32,24 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     if (self) {
         dbPath = databaseFilePath;
         pthread_mutex_init(&dbMutex, NULL);
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:dbPath] == YES) {
+            //ensure encryption attribute is set. Needed when the file was created by an earlier version that didn't set this.
+            NSError* error = nil;
+            BOOL succeed = [[NSFileManager defaultManager] setAttributes:@{NSFileProtectionKey:NSFileProtectionCompleteUntilFirstUserAuthentication} ofItemAtPath:dbPath error:&error];
+            if (succeed == NO) {
+                NSLog(@"Unable to use iOS data protection for the database. Error %@", [error localizedDescription]);
+            }
+            
+        } else {
+            //create file with encryption attribute set
+            BOOL succeed = [[NSFileManager defaultManager] createFileAtPath:dbPath contents:nil attributes:@{NSFileProtectionKey:NSFileProtectionCompleteUntilFirstUserAuthentication}];
+            if (succeed == NO) {
+                NSLog(@"Unable to create the database file using iOS data protection");
+            }
+        }
+
+
         [self databaseInit];
 
         //set timer to store buffered data
