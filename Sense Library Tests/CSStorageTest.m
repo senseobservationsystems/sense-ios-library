@@ -79,4 +79,12 @@
     XCTAssertEqual(result.count, 0, @"Data found in sensordata store despite using incorrect time interval");
 }
 
+/**
+ * Tests the function for removing data before a certain time period
+ */
+- (void) testRemoveDataBeforeTime {
+    
+    
+}
+
 @end

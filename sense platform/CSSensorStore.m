@@ -50,12 +50,14 @@
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
 #define MAX_UPLOAD_INTERVAL 3600
 #define LOCAL_STORAGE_TIME 3600*24*31 //thirty-one days in seconds
+#define TIME_INTERVAL_TO_CHECK_DATA_REMOVAL 3600*12 //12 hours in seconds
 
 @interface CSSensorStore (private)
 - (void) applyGeneralSettings;
 - (BOOL) uploadData;
 - (void) instantiateSensors;
 - (NSUInteger) nrPointsToSend:(NSArray*) data;
+
 @end
 
 
@@ -70,6 +72,7 @@
 	NSTimeInterval syncRate;
     NSTimeInterval waitTime;
 	NSDate* lastUpload;
+    NSDate* lastDeletionDate;
 	NSTimeInterval pollRate;
 	NSDate* lastPoll;
     dispatch_queue_t uploadQueueGCD;
@@ -122,6 +125,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
+        lastDeletionDate = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
         NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
@@ -404,18 +408,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
-
-
 - (BOOL) uploadData {
     BOOL succeed =  [uploader upload];
     if (succeed) {
-
-        //Clean up storage by removing data that is older than LOCAL_STORAGE_TIME
-        NSDate *cutOffTime = [NSDate dateWithTimeIntervalSince1970: ([[NSDate date] timeIntervalSince1970] - LOCAL_STORAGE_TIME)];
-
-        NSLog(@"Deleting all data before %@", [NSDateFormatter localizedStringFromDate:cutOffTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]);
-        
-        [self->storage removeDataBeforeTime: cutOffTime];
+        if([lastDeletionDate timeIntervalSinceNow] > TIME_INTERVAL_TO_CHECK_DATA_REMOVAL) { // if last deletion was more than limit ago remove old data again
+            
+            //Clean up storage by removing data that is older than LOCAL_STORAGE_TIME
+            NSDate *cutOffTime = [NSDate dateWithTimeIntervalSince1970: ([[NSDate date] timeIntervalSince1970] - LOCAL_STORAGE_TIME)];
+            
+            NSLog(@"Deleting all data before %@", [NSDateFormatter localizedStringFromDate:cutOffTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]);
+            
+            [self->storage removeDataBeforeTime: cutOffTime];
+            lastDeletionDate = [NSDate date]; // reset to now
+        }
     }
     return succeed;
 }

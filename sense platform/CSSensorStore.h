@@ -49,7 +49,7 @@
 /* Ensure all sensor data is flushed, used to reduce memory usage.
  * Flushing in this order, on failure continue with the next:
  * - flush to server
- * - flush to disk (not impemented)
+ * - flush to disk 
  * - delete
  */
 - (void) forceDataFlush;
