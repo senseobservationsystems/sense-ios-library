@@ -434,6 +434,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
+    return [self->storage getDataFromSensor:name from:startDate to:endDate];
+}
+
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
     NSString* sensorId = [self resolveSensorIdForSensorName:state onlyThisDevice:NO];
 

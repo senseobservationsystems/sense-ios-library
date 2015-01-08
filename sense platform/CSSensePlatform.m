@@ -116,6 +116,10 @@ static CSSensorStore* sensorStore;
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
 }
 
++ (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
+    return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate];
+}
+
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
     return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
 }
@@ -266,9 +270,9 @@ static CSSensorStore* sensorStore;
      */
 }
 
-+ (NSArray*) getDataForSensor:(NSString *)name onlyFromDevice:(bool)onlyFromDevice nrLastPoints:(NSInteger)nrLastPoints {
-    
-}
+//+ (NSArray*) getDataForSensor:(NSString *)name onlyFromDevice:(bool)onlyFromDevice nrLastPoints:(NSInteger)nrLastPoints {
+//    
+//}
 
 + (NSString*) dataTypeOf:(NSString*) value {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];

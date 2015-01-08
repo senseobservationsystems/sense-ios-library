@@ -36,7 +36,14 @@
 - (void) enabledChanged:(id) notification;
 - (void) setSyncRate: (int) newRate;
 - (void) addSensor:(CSSensor*) sensor;
+
 - (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
+
+/** 
+ * 
+ */
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate;
+
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
 
 /* Ensure all sensor data is flushed, used to reduce memory usage.

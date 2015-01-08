@@ -25,7 +25,8 @@
     [super tearDown];
 }
 
-- (void)testExample {
+- (void)testStoreData {
+    
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
 }

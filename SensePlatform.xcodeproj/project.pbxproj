@@ -110,9 +110,18 @@
 		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		3EF47FBA19093D3E00104D69 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF47FB919093D3E00104D69 /* NSData+GZIP.m */; };
 		A96D6ECF1A5C49FF00554BBC /* Sense_Library_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */; };
-		A96D6ED01A5C49FF00554BBC /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
-		A96D6ED71A5C4B2500554BBC /* CSStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A96D6ED61A5C4B2500554BBC /* CSStorageTests.m */; };
-		A96D6ED81A5C4B2500554BBC /* CSStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A96D6ED61A5C4B2500554BBC /* CSStorageTests.m */; };
+		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
+		A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */; };
+		A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
+		A99F99D61A5D8B7800D6CB76 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E513F4F18F7DDE60008415A /* libsqlite3.dylib */; };
+		A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
+		A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
+		A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
+		A99F99DC1A5D8C4300D6CB76 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
+		A99F99DD1A5D8C4D00D6CB76 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
+		A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
+		A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
+		A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */; };
 /* End PBXBuildFile section */
 
@@ -293,7 +302,9 @@
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sense_Library_Tests.m; sourceTree = "<group>"; };
-		A96D6ED61A5C4B2500554BBC /* CSStorageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSStorageTests.m; path = "Sense Library Tests/CSStorageTests.m"; sourceTree = "<group>"; };
+		A96D6ED91A5D147700554BBC /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
+		A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
+		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
 		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -358,7 +369,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A96D6ED01A5C49FF00554BBC /* libSensePlatform.a in Frameworks */,
+				A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */,
+				A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */,
+				A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */,
+				A99F99DD1A5D8C4D00D6CB76 /* AudioToolbox.framework in Frameworks */,
+				A99F99DC1A5D8C4300D6CB76 /* AVFoundation.framework in Frameworks */,
+				A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */,
+				A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */,
+				A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */,
+				A99F99D61A5D8B7800D6CB76 /* libsqlite3.dylib in Frameworks */,
+				A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */,
+				A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,7 +427,6 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
-				A96D6ED61A5C4B2500554BBC /* CSStorageTests.m */,
 				3EACDD84172E927900975C8D /* plugins */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
@@ -445,6 +465,8 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A99F99D71A5D8C1300D6CB76 /* libz.dylib */,
+				A96D6ED91A5D147700554BBC /* Xcode.app */,
 				3E513F4F18F7DDE60008415A /* libsqlite3.dylib */,
 				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
 				3E148B7A160A11280010A0D1 /* SenTestingKit.framework */,
@@ -599,6 +621,7 @@
 		A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */ = {
 			isa = PBXGroup;
 			children = (
+				A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */,
 				A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */,
 				A96D6ECC1A5C49FF00554BBC /* Supporting Files */,
 			);
@@ -844,7 +867,6 @@
 				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
 				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
 				3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */,
-				A96D6ED71A5C4B2500554BBC /* CSStorageTests.m in Sources */,
 				3E820E4715D40B190001A3EC /* CSSettings.m in Sources */,
 				3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
@@ -859,7 +881,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A96D6ECF1A5C49FF00554BBC /* Sense_Library_Tests.m in Sources */,
-				A96D6ED81A5C4B2500554BBC /* CSStorageTests.m in Sources */,
+				A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1212,6 +1234,7 @@
 				A96D6ED51A5C49FF00554BBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
