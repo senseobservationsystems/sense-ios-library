@@ -15,8 +15,9 @@ static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, k
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
 static const size_t BUFFER_NR_ROWS = 1000;
 static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
-static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
-//static const int MAX_DB_SIZE_ON_DISK = 1000*50; // 50kb
+static const long MAX_NR_OF_PAGES = 100*1000; // 100mb assuming one page is 1024kb
+
+//static const long MINIMUM_FREE_SPACE = 1000*1000*20; //20mb
 
 
 @implementation CSStorage {
@@ -46,7 +47,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
 - (void) databaseInit {
     //Not sure sqlite might use a lot of memory, try to limit this somewhat.
     sqlite3_soft_heap_limit64(10*1024*1024);
-
+    
     //Note: leaking errMsg on error
     char *errMsg = NULL;
     //open the database
@@ -55,7 +56,6 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
         //ai, we need to recover
         pthread_mutex_unlock(&dbMutex);
         @throw [NSException exceptionWithName:@"DB error opening database" reason:@"Couldn't open database file" userInfo:nil];
-
     }
     
     //setup
@@ -68,8 +68,15 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
         @throw [NSException exceptionWithName:@"DB error attaching memory buffer" reason:@"Couldn't create buffer" userInfo:nil];
     }
     
+    // Limit the number of pages. When full, an INSERT will return SQLITE_FULL.
+    const char *sql_stmt = [[NSString stringWithFormat:@"PRAGMA max_page_count = %li", MAX_NR_OF_PAGES] UTF8String];
+    if (sqlite3_exec(db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK) {
+        pthread_mutex_unlock(&dbMutex);
+        @throw [NSException exceptionWithName:@"DB error setting max_page_count" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
+    }
+    
     //create the table
-    const char *sql_stmt = "CREATE TABLE IF NOT EXISTS data (ID INTEGER PRIMARY KEY, timestamp real, sensor_name TEXT, sensor_description TEXT, device_type TEXT, device TEXT, data_type TEXT, value TEXT)";
+    sql_stmt = "CREATE TABLE IF NOT EXISTS data (ID INTEGER PRIMARY KEY, timestamp real, sensor_name TEXT, sensor_description TEXT, device_type TEXT, device TEXT, data_type TEXT, value TEXT)";
 
     if (sqlite3_exec(db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK) {
         pthread_mutex_unlock(&dbMutex);
@@ -130,6 +137,16 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
 
 #pragma mark - store
 
+/**
+ * Store a new sensor data point in the buffer. Note that if the db is full, 20% of rows will be removed and the function is called again.
+ * @param sensor Name of the sensor to store the value in
+ * @param description Description of the sensor
+ * @param deviceType Device type text
+ * @param device String identifier of the device
+ * @param dataType Don't know
+ * @param value Can be a JSON string or just a string representation of the value to store
+ * @param timestamp In seconds since 1970 representing when the value occured
+ */
 - (void) storeSensor:(NSString*) sensor description:(NSString*) description deviceType:(NSString*) deviceType device:(NSString*) device dataType:(NSString*) dataType value:(NSString*) value timestamp:(double) timestamp {
     //insert into db
     const char *sql_stmt = [[NSString stringWithFormat:@"INSERT INTO buf.data (id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value) VALUES (%lli, %f, %@, %@, %@, %@, %@, %@);", ++lastDataPointid , timestamp, quotedAndEncodedString(sensor), quotedAndEncodedString(description), quotedAndEncodedString(deviceType),
@@ -138,8 +155,17 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     int ret;
     pthread_mutex_lock(&dbMutex);
     ret = sqlite3_exec(db, sql_stmt, NULL, NULL, NULL);
-
-    if (ret != SQLITE_OK) {
+    
+    if (ret == SQLITE_FULL) {
+        pthread_mutex_unlock(&dbMutex);
+        NSLog(@"Database is full");
+        
+        //remove lines
+        [self trimLocalStorageTo:0.8]; //trim to 80% of rows by removing 20% of oldest rows
+        
+        //and retry
+        [self storeSensor:sensor description:description deviceType:deviceType device:device dataType:dataType value:value timestamp:timestamp];
+    } else if (ret != SQLITE_OK) {
         NSLog(@"Database Error inserting sensor data into buffer: %s", sqlite3_errmsg(db));
         //@throw [NSException exceptionWithName:@"DB error" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
     }
@@ -250,7 +276,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     
 }
 
-/*
+/**
  * Removes all data from before a certain date from buffer and main data store
  * @param: dateThreshold The date which marks the threshold, all data older than (from before) the date will be removed
  */
@@ -260,7 +286,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
 }
 
 
-/*
+/**
  * Removes all data from before a certain date
  * @param: table Table that data will be removed from
  * @param: dateThreshold The date which marks the threshold, all data older (from before) the date will be removed
@@ -276,7 +302,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     
 }
 
-/*
+/**
  * Removes all data from before a certain row id
  * @param: table Table that data will be removed from
  * @param: rowId The id of the highest numbered row that will be removed, together with all rows with lower numbered ids */
@@ -293,13 +319,39 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
 #pragma mark - maintenance
 
 - (void) writeDbToFile {
-    NSLog(@"Writing data buffer to file");
+    [self writeDbToFileWithAttemptCount:0];
+}
+
+/**
+ * Function to write the buffer to the db file. Checks if the db is full, if so, removes 20% of the rows (oldest rows) and makes a new attempt to write the db to file. When 10 recursive attempts have been made, the function gives up.
+ * @param attemptCount parameter to keep track of the number of attempts that have already been made to write db to file
+ */
+- (void) writeDbToFileWithAttemptCount: (int) attemptCount {
+  //  NSLog(@"Writing data buffer to file");
     
    const char* query = [[NSString stringWithFormat:@"insert into data (id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value) select id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value from buf.data as bv where id > %lli", lastRowIdInStorage] UTF8String];
     pthread_mutex_lock(&dbMutex);
     char* errMsg;
     BOOL succeed = YES;
-    if (sqlite3_exec(db, query, NULL, NULL, &errMsg) != SQLITE_OK) {
+    
+    int queryResult = sqlite3_exec(db, query, NULL, NULL, &errMsg);
+    
+    if (queryResult == SQLITE_FULL) {
+        pthread_mutex_unlock(&dbMutex);
+        NSLog(@"Database is full: %s", errMsg);
+        
+        //remove lines
+        [self trimLocalStorageTo:0.8]; //trim to 80% of rows by removing 20% of oldest rows
+
+        //and retry
+        if( attemptCount < 10) {
+            attemptCount++;
+            [self writeDbToFileWithAttemptCount: attemptCount];
+        } else {
+            NSLog(@"More than 10 attempts have been made to clean up the db and write buffer to file but this did not succeed yet. DB is still full. Something went horribly wrong.");
+        }
+    }
+    else if (queryResult != SQLITE_OK) {
         NSLog(@"writeDbToFile DB failure: %s", errMsg);
         succeed = NO;
     }
@@ -329,51 +381,35 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     
     //trim the buffer
     [self trimBufferToSize:BUFFER_NR_ROWS];
-    
-    //Check if database is not too large and remove data if too large
-    [self trimLocalStorageIfNeeded];
-    
 }
 
-/*
- * Checks if database is smaller than MAX_DB_SIZE_ON_DISK and if not, reduces DB size to something that is MAX_DB_SIZE_ON_DISK or 90% of free space plus what we already use by removing oldest rows (with the lowest IDs) from the database
- *
+/**
+ * Checks if database is smaller than numberOfBytes and if not, reduces DB size to something that is numberOfBytes or 90% of free space plus what we already use by removing oldest rows (with the lowest IDs) from the database
+ * @param numberOfBytes number of bytes that the local storage can be on the disk
  */
-- (void) trimLocalStorageIfNeeded {
-    NSNumber *dbSize = [self getDbSize];
-    NSNumber *freeSpace = [self getFreeSpaceOnDisk];
-    
-    //NSLog(@"Size of current local storage: %i kb", ([dbSize intValue]/1000));
-    
-    
-    //Set spacelimit to the min the MAXDB_SIZE_ON_DISK or 90% of the free space + what we already use; this way we never run out of space
-    int spaceLimit = MAX_DB_SIZE_ON_DISK < (0.9*[freeSpace intValue]+[dbSize intValue]) ? MAX_DB_SIZE_ON_DISK : (0.9*[freeSpace intValue]+[dbSize intValue]);
-    
-    NSLog(@"Spacelimit: %i kb", spaceLimit/1000);
-    
-    if([dbSize intValue] > spaceLimit) {
+
+//TODO change function to remove percentage of rows instead of based on nr of bytes
+- (void) trimLocalStorageTo: (double) percentToKeep {
+
+    //calculate number of rows to keep
+    long nRowsToKeep = percentToKeep * [self getNumberOfRowsInTable:@"data"];
         
-        //calculate percentage of database to be keep
-        double percentToKeep = ((spaceLimit / [dbSize doubleValue]));
+    NSLog(@"Trimming local storage to keep only %f percent (or %li datapoints)", percentToKeep, nRowsToKeep);
         
-        //calculate number of rows to keep
-        long nRowsToKeep = percentToKeep * [self getNumberOfRowsInDb:@"data"];
-        
-        NSLog(@"Trimming local storage to keep only %f percent (or %li datapoints)", percentToKeep, nRowsToKeep);
-        
-        //remove oldest rows while keeping nRowsToKeep
-        [self trimLocalStorageToRowsToKeep:nRowsToKeep];
-    }
+    //remove oldest rows while keeping nRowsToKeep
+    [self trimLocalStorageToRowsToKeep:nRowsToKeep];
+
 }
 
-/*
+
+/**
  * Get the total number of rows in a database
  * @param dbName SQL Identifier of the database name
  */
 
-- (long) getNumberOfRowsInDb:(NSString *) dbName {
+- (long) getNumberOfRowsInTable:(NSString *) table {
     
-    const char* queryRowId = [[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", dbName] UTF8String];
+    const char* queryRowId = [[NSString stringWithFormat:@"SELECT COUNT(*) FROM %@", table] UTF8String];
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);
     if (sqlite3_prepare_v2(db, queryRowId, -1, &stmt, NULL) == SQLITE_OK) {
@@ -401,7 +437,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
 - (NSNumber *) getDbSize {
     NSError *error = nil;
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:dbPath error:&error];
-    NSLog(@"Local database store size: %@ bytes", [fileAttributes objectForKey:NSFileSize]);
+   // NSLog(@"Local database store size: %@ bytes", [fileAttributes objectForKey:NSFileSize]);
     
     return [fileAttributes objectForKey:NSFileSize];
 }
@@ -413,7 +449,7 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
 - (NSNumber *) getFreeSpaceOnDisk {
     NSError *error = nil;
     NSDictionary *fileSystemAttributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:dbPath error:&error];
-    NSLog(@"Free space on file system: %@ bytes", [fileSystemAttributes objectForKey:NSFileSystemFreeSize]);
+    //NSLog(@"Free space on file system: %@ bytes", [fileSystemAttributes objectForKey:NSFileSystemFreeSize]);
     
     return [fileSystemAttributes objectForKey:NSFileSystemFreeSize];
 }
@@ -423,13 +459,6 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     //delete from the buffer all persisted rows
     [self removeDataTillId:lastRowIdInStorage table:@"buf.data"];
 
-
-//      OLD CODE -- has been replaced by removeDataTillId so can probably be removed ^JJ
-//    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", lastRowIdInStorage] UTF8String];
-//    pthread_mutex_lock(&dbMutex);
-//    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
-//        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
-//    pthread_mutex_unlock(&dbMutex);
 }
 
 - (void) trimBufferToSize:(size_t) nr {
@@ -440,15 +469,9 @@ static const int MAX_DB_SIZE_ON_DISK = 1000*1000*100; // 100mb
     long long deleteThreshold = lastRowIdInStorage - MAX(nr - nrInMem, 0);
     [self removeDataTillId:deleteThreshold table:@"buf.data"];
 
-//      OLD CODE -- has been replaced by removeDataTillId so can probably be removed ^JJ
-//    const char* query = [[NSString stringWithFormat:@"DELETE FROM buf.data where id <= %lli", deleteThreshold] UTF8String];
-//    pthread_mutex_lock(&dbMutex);
-//    if (sqlite3_exec(db, query, NULL, NULL, NULL) != SQLITE_OK)
-//        NSLog(@"Database Error. cleanBuffer failure: %s", sqlite3_errmsg(db));
-//    pthread_mutex_unlock(&dbMutex);
 }
 
-/*
+/**
  * Delete all rows of the database except the nrToKeep most recent rows based on id field
  * @param nrToKeep Number of most recent rows to keep (oldest rows will be removed first)
  *
