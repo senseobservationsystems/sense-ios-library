@@ -15,7 +15,7 @@ static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, k
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
 static const size_t BUFFER_NR_ROWS = 1000;
 static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
-static const long MAX_NR_OF_PAGES = 100*1000; // 100mb assuming one page is 1024kb
+static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
 
 //static const long MINIMUM_FREE_SPACE = 1000*1000*20; //20mb
 
@@ -68,17 +68,36 @@ static const long MAX_NR_OF_PAGES = 100*1000; // 100mb assuming one page is 1024
         @throw [NSException exceptionWithName:@"DB error attaching memory buffer" reason:@"Couldn't create buffer" userInfo:nil];
     }
     
+    // get the current page size.
+    const char *sql_stmt = [[NSString stringWithFormat:@"PRAGMA page_size"] UTF8String];
+    sqlite3_stmt* stmt_ps;
+    long long page_size = 1;
+    NSInteger ret = sqlite3_prepare_v2(db, sql_stmt, -1, &stmt_ps, NULL);
+    if (ret == SQLITE_OK) {
+        while (sqlite3_step(stmt_ps) == SQLITE_ROW) {
+            page_size = sqlite3_column_int64(stmt_ps, 0);
+        }
+    } else {
+        pthread_mutex_unlock(&dbMutex);
+        @throw [NSException exceptionWithName:@"DB error getting page size" reason:@"Couldn't get page size" userInfo:nil];
+
+    }
+    
+    long max_page_count = MAX_DB_SIZE / page_size;
+    
+    NSLog(@"Max db size: %li, Page size: %lli, Max page count: %li", MAX_DB_SIZE, page_size, max_page_count);
+    
     // Limit the number of pages. When full, an INSERT will return SQLITE_FULL.
-    const char *sql_stmt = [[NSString stringWithFormat:@"PRAGMA max_page_count = %li", MAX_NR_OF_PAGES] UTF8String];
-    if (sqlite3_exec(db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK) {
+    const char *sql_stmt_max_pages = [[NSString stringWithFormat:@"PRAGMA max_page_count = %li", max_page_count] UTF8String];
+    if (sqlite3_exec(db, sql_stmt_max_pages, NULL, NULL, &errMsg) != SQLITE_OK) {
         pthread_mutex_unlock(&dbMutex);
         @throw [NSException exceptionWithName:@"DB error setting max_page_count" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
     }
     
     //create the table
-    sql_stmt = "CREATE TABLE IF NOT EXISTS data (ID INTEGER PRIMARY KEY, timestamp real, sensor_name TEXT, sensor_description TEXT, device_type TEXT, device TEXT, data_type TEXT, value TEXT)";
+    const char *sql_stmt_create1 = "CREATE TABLE IF NOT EXISTS data (ID INTEGER PRIMARY KEY, timestamp real, sensor_name TEXT, sensor_description TEXT, device_type TEXT, device TEXT, data_type TEXT, value TEXT)";
 
-    if (sqlite3_exec(db, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK) {
+    if (sqlite3_exec(db, sql_stmt_create1, NULL, NULL, &errMsg) != SQLITE_OK) {
         pthread_mutex_unlock(&dbMutex);
         @throw [NSException exceptionWithName:@"DB error creating table data" reason:[NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding] userInfo:nil];
     }
@@ -318,15 +337,11 @@ static const long MAX_NR_OF_PAGES = 100*1000; // 100mb assuming one page is 1024
 
 #pragma mark - maintenance
 
-- (void) writeDbToFile {
-    [self writeDbToFileWithAttemptCount:0];
-}
-
 /**
- * Function to write the buffer to the db file. Checks if the db is full, if so, removes 20% of the rows (oldest rows) and makes a new attempt to write the db to file. When 10 recursive attempts have been made, the function gives up.
- * @param attemptCount parameter to keep track of the number of attempts that have already been made to write db to file
+ * Function to write the buffer to the db file. Checks if the db is full, if so, removes 20% of the rows (oldest rows) and makes a new attempt to write the db to file.
  */
-- (void) writeDbToFileWithAttemptCount: (int) attemptCount {
+- (void) writeDbToFile {
+
   //  NSLog(@"Writing data buffer to file");
     
    const char* query = [[NSString stringWithFormat:@"insert into data (id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value) select id, timestamp, sensor_name, sensor_description, device_type, device, data_type, value from buf.data as bv where id > %lli", lastRowIdInStorage] UTF8String];
@@ -334,27 +349,31 @@ static const long MAX_NR_OF_PAGES = 100*1000; // 100mb assuming one page is 1024
     char* errMsg;
     BOOL succeed = YES;
     
-    int queryResult = sqlite3_exec(db, query, NULL, NULL, &errMsg);
+    int attemptCount = 0;
+    int queryResult;
+    while ((queryResult = sqlite3_exec(db, query, NULL, NULL, &errMsg)) == SQLITE_FULL) {
     
-    if (queryResult == SQLITE_FULL) {
-        pthread_mutex_unlock(&dbMutex);
         NSLog(@"Database is full: %s", errMsg);
         
         //remove lines
+        pthread_mutex_unlock(&dbMutex);
         [self trimLocalStorageTo:0.8]; //trim to 80% of rows by removing 20% of oldest rows
-
-        //and retry
-        if( attemptCount < 10) {
+        pthread_mutex_lock(&dbMutex);
+        
+        //and retry if less than 20 attempts have been made
+        if( attemptCount < 20) {
             attemptCount++;
-            [self writeDbToFileWithAttemptCount: attemptCount];
         } else {
-            NSLog(@"More than 10 attempts have been made to clean up the db and write buffer to file but this did not succeed yet. DB is still full. Something went horribly wrong.");
+            NSLog(@"More than 20 attempts have been made to clean up the db and write buffer to file but this did not succeed yet. DB is still full. Something went horribly wrong.");
+            break;
         }
     }
-    else if (queryResult != SQLITE_OK) {
+    
+    if (queryResult != SQLITE_OK) {
         NSLog(@"writeDbToFile DB failure: %s", errMsg);
         succeed = NO;
     }
+    
     if (errMsg)
         sqlite3_free(errMsg);
 
@@ -387,8 +406,6 @@ static const long MAX_NR_OF_PAGES = 100*1000; // 100mb assuming one page is 1024
  * Checks if database is smaller than numberOfBytes and if not, reduces DB size to something that is numberOfBytes or 90% of free space plus what we already use by removing oldest rows (with the lowest IDs) from the database
  * @param numberOfBytes number of bytes that the local storage can be on the disk
  */
-
-//TODO change function to remove percentage of rows instead of based on nr of bytes
 - (void) trimLocalStorageTo: (double) percentToKeep {
 
     //calculate number of rows to keep
