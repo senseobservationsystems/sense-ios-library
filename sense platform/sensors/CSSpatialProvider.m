@@ -218,10 +218,10 @@ void someScheduleFunction(void* context) {
 
 - (void) poll {
     //prepare array for data
-    NSMutableArray* deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
+    NSMutableArray* __block deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
     __block int sample = 0;
 
-    NSCondition* dataCollectedCondition = [NSCondition new];
+    NSCondition* __block dataCollectedCondition = [NSCondition new];
 
     __block NSInteger counter = 0;
 

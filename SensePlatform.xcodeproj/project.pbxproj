@@ -109,6 +109,19 @@
 		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		3EF47FBA19093D3E00104D69 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF47FB919093D3E00104D69 /* NSData+GZIP.m */; };
+		A96D6ECF1A5C49FF00554BBC /* Sense_Library_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */; };
+		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
+		A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */; };
+		A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
+		A99F99D61A5D8B7800D6CB76 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E513F4F18F7DDE60008415A /* libsqlite3.dylib */; };
+		A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
+		A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
+		A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
+		A99F99DC1A5D8C4300D6CB76 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
+		A99F99DD1A5D8C4D00D6CB76 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
+		A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
+		A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
+		A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */; };
 /* End PBXBuildFile section */
 
@@ -140,6 +153,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3EBEAF4D1887FADE009F81C1;
 			remoteInfo = GenVersion;
+		};
+		A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
+			remoteInfo = SensePlatform;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -279,6 +299,12 @@
 		3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIdKey.m; sourceTree = "<group>"; };
 		3EF47FB819093D3E00104D69 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
 		3EF47FB919093D3E00104D69 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
+		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sense_Library_Tests.m; sourceTree = "<group>"; };
+		A96D6ED91A5D147700554BBC /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
+		A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
+		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
 		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -336,6 +362,24 @@
 				3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */,
 				3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */,
 				3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A96D6EC71A5C49FF00554BBC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */,
+				A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */,
+				A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */,
+				A99F99DD1A5D8C4D00D6CB76 /* AudioToolbox.framework in Frameworks */,
+				A99F99DC1A5D8C4300D6CB76 /* AVFoundation.framework in Frameworks */,
+				A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */,
+				A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */,
+				A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */,
+				A99F99D61A5D8B7800D6CB76 /* libsqlite3.dylib in Frameworks */,
+				A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */,
+				A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +445,7 @@
 				3E820DBF15D40B180001A3EC /* sense platform */,
 				3E820DBB15D40B100001A3EC /* resources */,
 				3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */,
+				A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
 				3E820D6B15D40AB50001A3EC /* Products */,
 			);
@@ -412,6 +457,7 @@
 				3E820D6A15D40AB50001A3EC /* libSensePlatform.a */,
 				3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */,
 				3E148BA8160A12010010A0D1 /* .octest */,
+				A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -419,6 +465,8 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A99F99D71A5D8C1300D6CB76 /* libz.dylib */,
+				A96D6ED91A5D147700554BBC /* Xcode.app */,
 				3E513F4F18F7DDE60008415A /* libsqlite3.dylib */,
 				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
 				3E148B7A160A11280010A0D1 /* SenTestingKit.framework */,
@@ -570,6 +618,24 @@
 			path = "sense platform/plugins";
 			sourceTree = "<group>";
 		};
+		A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */,
+				A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */,
+				A96D6ECC1A5C49FF00554BBC /* Supporting Files */,
+			);
+			path = "Sense Library Tests";
+			sourceTree = "<group>";
+		};
+		A96D6ECC1A5C49FF00554BBC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A96D6ECD1A5C49FF00554BBC /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -629,6 +695,24 @@
 			productReference = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		A96D6EC91A5C49FF00554BBC /* Sense Library Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "Sense Library Tests" */;
+			buildPhases = (
+				A96D6EC61A5C49FF00554BBC /* Sources */,
+				A96D6EC71A5C49FF00554BBC /* Frameworks */,
+				A96D6EC81A5C49FF00554BBC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */,
+			);
+			name = "Sense Library Tests";
+			productName = "Sense Library Tests";
+			productReference = A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -637,6 +721,11 @@
 			attributes = {
 				LastTestingUpgradeCheck = 0610;
 				LastUpgradeCheck = 0510;
+				TargetAttributes = {
+					A96D6EC91A5C49FF00554BBC = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
 			};
 			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -654,6 +743,7 @@
 				3E148B90160A12000010A0D1 /* SensePlatformTestApp */,
 				3E148BA7160A12010010A0D1 /* SensePlatformTestAppTests */,
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
+				A96D6EC91A5C49FF00554BBC /* Sense Library Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -664,6 +754,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E148BB3160A12010010A0D1 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A96D6EC81A5C49FF00554BBC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,6 +876,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A96D6EC61A5C49FF00554BBC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A96D6ECF1A5C49FF00554BBC /* Sense_Library_Tests.m in Sources */,
+				A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -801,6 +907,11 @@
 			isa = PBXTargetDependency;
 			target = 3EBEAF4D1887FADE009F81C1 /* GenVersion */;
 			targetProxy = 3EBEAF551887FBD4009F81C1 /* PBXContainerItemProxy */;
+		};
+		A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
+			targetProxy = A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1011,6 +1122,63 @@
 			};
 			name = Release;
 		};
+		A96D6ED41A5C49FF00554BBC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A96D6ED51A5C49FF00554BBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1055,6 +1223,15 @@
 			buildConfigurations = (
 				3EBEAF4F1887FADE009F81C1 /* Debug */,
 				3EBEAF501887FADE009F81C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "Sense Library Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A96D6ED41A5C49FF00554BBC /* Debug */,
+				A96D6ED51A5C49FF00554BBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
