@@ -36,13 +36,24 @@
 - (void) enabledChanged:(id) notification;
 - (void) setSyncRate: (int) newRate;
 - (void) addSensor:(CSSensor*) sensor;
+
 - (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
+
+/** 
+ * Retrieve data from a sensor that is stored locally between a certain time interval
+ * @param name The name of the sensor as an NSString
+ * @param startDate The date and time of the first datapoint to look for (inclusive)
+ * @param endDate The data and time of the last datapoint to look for (exclusive)
+ * @result An array with dictionaries of time-value pairs
+ */
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate;
+
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
 
 /* Ensure all sensor data is flushed, used to reduce memory usage.
  * Flushing in this order, on failure continue with the next:
  * - flush to server
- * - flush to disk (not impemented)
+ * - flush to disk 
  * - delete
  */
 - (void) forceDataFlush;
