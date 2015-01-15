@@ -22,12 +22,14 @@
 
 @implementation CSLocationSensor {
     CLLocationManager* locationManager;
+    NSTimer *pauseLocationSamplingTimer;
+    UIBackgroundTaskIdentifier bgTask;
 	int accuracyPreference;
 	NSMutableArray* samples;
-    
-    NSTimer* newSampleTimer;
     CLLocation* previousLocation;
+    bool cortexAutoPausingEnabled;
 }
+
 //constants
 static NSString* longitudeKey = @"longitude";
 static NSString* latitudeKey = @"latitude";
@@ -76,6 +78,8 @@ static CLLocation* lastAcceptedPoint;
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
+        
+//TODO: check if this is the best type to pick
         locationManager.activityType = CLActivityTypeOther;
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
@@ -83,7 +87,6 @@ static CLLocation* lastAcceptedPoint;
 		
 		samples = [[NSMutableArray alloc] initWithCapacity:maxSamples];
         previousLocation = nil;
-        newSampleTimer = nil;
 	}
 	return self;
 }
@@ -177,7 +180,40 @@ static CLLocation* lastAcceptedPoint;
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
     
+    if(cortexAutoPausingEnabled) {
+        
+        NSLog(@"Pausing location sampling ...");
+        
+        // Schedule location manager to run again in 120 seconds
+        UIApplication *app = [UIApplication sharedApplication];
+        bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+            bgTask = UIBackgroundTaskInvalid;
+            NSLog(@"End of tolerate time. Application should be suspended now if we do not ask more 'tolerance'");
+        }];
+        
+        if (bgTask == UIBackgroundTaskInvalid) {
+            NSLog(@"This application does not support background mode");
+        } else {
+            //if application supports background mode, we'll see this log.
+            //NSLog(@"Application will continue to run in background");
+        }
+        
+        [locationManager stopUpdatingLocation];
+        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
+        [[NSRunLoop currentRunLoop] addTimer:pauseLocationSamplingTimer forMode:NSRunLoopCommonModes];
+    }
+    
 }
+
+- (void) turnOnLocationSampling {
+    
+    NSLog(@"Restarting location updates");
+    [locationManager startUpdatingLocation];
+    
+    //NSLog(@"Background Time:%f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
+    [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+}
+
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"Location manager failed with error %@", error);
@@ -226,11 +262,12 @@ static CLLocation* lastAcceptedPoint;
             [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
         }
         //NOTE: using significant location updates doesn't allow the phone to sense while running in the background
+//TODO: do we need both startUpdatingLocation and startMonitoringSignificantLocationChanges?
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
         [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
 	}
 	else {
-        [newSampleTimer invalidate];
+        [pauseLocationSamplingTimer invalidate];
         [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:NO];
         [locationManager performSelectorOnMainThread:@selector(stopMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
 		//[locationManager stopUpdatingLocation];
@@ -261,7 +298,9 @@ static CLLocation* lastAcceptedPoint;
 
 		if ([setting.name isEqualToString:kCSLocationSettingAccuracy]) {
 			locationManager.desiredAccuracy = [setting.value integerValue];
-		} else if ([setting.name isEqualToString:@"interval"]) {
+        } else if ([setting.name isEqualToString:kCSLocationSettingCortexAutoPausing]) {
+            cortexAutoPausingEnabled = [setting.value boolValue];
+        } else if ([setting.name isEqualToString:@"interval"]) {
         } else if ([setting.name isEqualToString:@"locationAdaptive"]) {
         }
 	}

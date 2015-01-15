@@ -55,6 +55,7 @@ NSString* const kCSActivitySettingPrivacy = @"privacy";
 //location settings keys
 NSString* const kCSLocationSettingAccuracy = @"accuracy";
 NSString* const kCSLocationSettingMinimumDistance = @"minimumDistance";
+NSString* const kCSLocationSettingCortexAutoPausing = @"autoPausing";
 
 //spatial settings
 NSString* const kCSSpatialSettingInterval = @"pollInterval";

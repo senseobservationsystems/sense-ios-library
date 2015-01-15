@@ -241,7 +241,7 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
     //make database query (SORT by timestamp) for buffer and main hd db
     const char* query = [[NSString stringWithFormat:@"SELECT * FROM (SELECT timestamp, value FROM buf.data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f UNION SELECT timestamp, value FROM data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f) ORDER BY timestamp ASC", name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970]] UTF8String];
     
-    NSLog(@"Executing query: %s", query);
+    //NSLog(@"Executing query: %s", query);
     
     sqlite3_stmt* stmt;
     pthread_mutex_lock(&dbMutex);

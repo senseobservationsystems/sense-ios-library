@@ -56,6 +56,8 @@ extern NSString* const kCSActivitySettingPrivacy;
 //location settings
 extern NSString* const kCSLocationSettingAccuracy;
 extern NSString* const kCSLocationSettingMinimumDistance;
+extern NSString* const kCSLocationSettingCortexAutoPausing;
+
 
 //spatial settings
 extern NSString* const kCSSpatialSettingInterval;
