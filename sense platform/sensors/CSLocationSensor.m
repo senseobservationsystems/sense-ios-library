@@ -27,6 +27,8 @@
 	int accuracyPreference;
 	NSMutableArray* samples;
     CLLocation* previousLocation;
+    
+    //the boolean to enable or disable the automated pausing of location updates
     bool cortexAutoPausingEnabled;
 }
 

@@ -20,6 +20,8 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
 //static const long MINIMUM_FREE_SPACE = 1000*1000*20; //20mb
 
 
+
+
 @implementation CSStorage {
     NSString* dbPath;
     sqlite3* db;
