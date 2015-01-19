@@ -30,6 +30,19 @@
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString* dbPath =[rootPath stringByAppendingPathComponent:@"data.db"];
     
+    // cleanup database file so test always start with clean environment
+    NSError *err;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    err = nil;
+    NSURL *url = [NSURL fileURLWithPath:dbPath];
+    
+    [fm removeItemAtPath:[url path] error:&err];
+    
+    if(err) {
+        NSLog(@"File Manager: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
+    } else {
+        NSLog(@"File %@ deleted.",dbPath);
+    }
     storage = [[CSStorage alloc] initWithPath:dbPath];
     
     startDate = [NSDate date];
