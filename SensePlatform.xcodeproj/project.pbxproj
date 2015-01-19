@@ -302,7 +302,6 @@
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A96D6ECE1A5C49FF00554BBC /* Sense_Library_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sense_Library_Tests.m; sourceTree = "<group>"; };
-		A96D6ED91A5D147700554BBC /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../../Applications/Xcode.app; sourceTree = "<group>"; };
 		A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
@@ -466,7 +465,6 @@
 			isa = PBXGroup;
 			children = (
 				A99F99D71A5D8C1300D6CB76 /* libz.dylib */,
-				A96D6ED91A5D147700554BBC /* Xcode.app */,
 				3E513F4F18F7DDE60008415A /* libsqlite3.dylib */,
 				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
 				3E148B7A160A11280010A0D1 /* SenTestingKit.framework */,
