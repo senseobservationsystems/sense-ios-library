@@ -182,7 +182,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 }
 
-
 - (void) instantiateSensors {
     @synchronized(sensors) {
 	//release current sensors

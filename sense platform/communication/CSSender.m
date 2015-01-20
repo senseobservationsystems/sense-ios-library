@@ -19,10 +19,15 @@
 #import "NSData+GZIP.h"
 
 static NSString* kUrlBaseURL = @"https://api.sense-os.nl";
+static NSString* kUrlBaseURLLive = @"https://api.sense-os.nl";
+static NSString* kUrlBaseURLStaging = @"http://api.staging.sense-os.nl";
 static NSString* kUrlJsonSuffix = @".json";
 static NSString* kUrlData = @"data";
 static NSString* kUrlDevices = @"devices";
 static NSString* kUrlAuthentication= @"https://auth-api.sense-os.nl/v1/login";
+static NSString* kUrlAuthenticationLive= @"https://auth-api.sense-os.nl/v1/login";
+static NSString* kUrlAuthenticationStaging= @"http://auth-api.staging.sense-os.nl/v1/login";
+
 static NSString* kUrlLogout = @"logout";
 static NSString* kUrlSensorDevice = @"device";
 static NSString* kUrlSensors = @"sensors";
@@ -41,10 +46,17 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     self = [super init];
     if (self)
 	{
+        if([[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging]) {
+            [self setupForStaging];
+        } else {
+            [self setupForLive];
+        };
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(generalSettingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeGeneral] object:nil];
+
     }
     return self;
 }
-
 
 #pragma mark -
 #pragma mark Public methods
@@ -622,5 +634,27 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 					 kUrlJsonSuffix];
 	
 	return [NSURL URLWithString:url];
-}                     
+}
+
+
+- (void) generalSettingChanged: (NSNotification*) notification {
+    if ([notification.object isKindOfClass:[CSSetting class]]) {
+        CSSetting* setting = notification.object;
+        if ([setting.name isEqualToString:kCSGeneralSettingUseStaging]) {
+            if(setting.value) { [self setupForStaging];} else { [self setupForLive];};
+        }
+      }
+}
+
+- (void) setupForStaging {
+    kUrlAuthentication = kUrlAuthenticationStaging;
+    kUrlBaseURL = kUrlBaseURLStaging;
+}
+
+- (void) setupForLive {
+    kUrlAuthentication = kUrlAuthenticationLive;
+    kUrlBaseURL = kUrlBaseURLLive;
+}
+
+
 @end

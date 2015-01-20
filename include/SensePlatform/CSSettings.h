@@ -39,6 +39,7 @@ extern NSString* const kCSGeneralSettingAutodetect;
 extern NSString* const kCSGeneralSettingUploadToCommonSense;
 extern NSString* const kCSGeneralSettingDontUploadBursts;
 extern NSString* const kCSGeneralSettingBackgroundRestarthack;
+extern NSString* const kCSGeneralSettingUseStaging;
 
 //biometric settings
 extern NSString* const kCSBiometricSettingGender;
