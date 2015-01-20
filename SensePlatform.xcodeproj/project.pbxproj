@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		0E6E7FB91A6ED31500ABF530 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6E7FAD1A6ED2FA00ABF530 /* libcrypto.a */; };
+		0E6E7FBA1A6ED31500ABF530 /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6E7FB41A6ED30300ABF530 /* libsqlcipher.a */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E148B96160A12010010A0D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B95160A12010010A0D1 /* CoreGraphics.framework */; };
@@ -126,6 +128,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0E6E7FAC1A6ED2FA00ABF530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9069D28C0FCE659A0042E34C;
+			remoteInfo = crypto;
+		};
+		0E6E7FB31A6ED30300ABF530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC046055464E500DB518D;
+			remoteInfo = sqlcipher;
+		};
+		0E6E7FB51A6ED31000ABF530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC045055464E500DB518D;
+			remoteInfo = sqlcipher;
+		};
+		0E6E7FB71A6ED31000ABF530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9069D28B0FCE659A0042E34C;
+			remoteInfo = crypto;
+		};
 		3E148BAC160A12010010A0D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
@@ -184,6 +214,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "library/openssl-xcode/openssl.xcodeproj"; sourceTree = "<group>"; };
+		0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = library/sqlcipher/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7A160A11280010A0D1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -353,6 +385,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E6E7FB91A6ED31500ABF530 /* libcrypto.a in Frameworks */,
+				0E6E7FBA1A6ED31500ABF530 /* libsqlcipher.a in Frameworks */,
 				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
 				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
 				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
@@ -385,6 +419,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E6E7FA91A6ED2FA00ABF530 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0E6E7FAD1A6ED2FA00ABF530 /* libcrypto.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0E6E7FAF1A6ED30300ABF530 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0E6E7FB41A6ED30300ABF530 /* libsqlcipher.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -426,6 +476,8 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
+				0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */,
+				0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */,
 				3EACDD84172E927900975C8D /* plugins */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
@@ -686,6 +738,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				0E6E7FB61A6ED31000ABF530 /* PBXTargetDependency */,
+				0E6E7FB81A6ED31000ABF530 /* PBXTargetDependency */,
 				3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */,
 			);
 			name = SensePlatform;
@@ -735,6 +789,16 @@
 			mainGroup = 3E820D5F15D40AB50001A3EC;
 			productRefGroup = 3E820D6B15D40AB50001A3EC /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0E6E7FA91A6ED2FA00ABF530 /* Products */;
+					ProjectRef = 0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */;
+				},
+				{
+					ProductGroup = 0E6E7FAF1A6ED30300ABF530 /* Products */;
+					ProjectRef = 0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				3E820D6915D40AB50001A3EC /* SensePlatform */,
@@ -745,6 +809,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		0E6E7FAD1A6ED2FA00ABF530 /* libcrypto.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcrypto.a;
+			remoteRef = 0E6E7FAC1A6ED2FA00ABF530 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0E6E7FB41A6ED30300ABF530 /* libsqlcipher.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libsqlcipher.a;
+			remoteRef = 0E6E7FB31A6ED30300ABF530 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3E148B8F160A12000010A0D1 /* Resources */ = {
@@ -886,6 +967,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0E6E7FB61A6ED31000ABF530 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqlcipher;
+			targetProxy = 0E6E7FB51A6ED31000ABF530 /* PBXContainerItemProxy */;
+		};
+		0E6E7FB81A6ED31000ABF530 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = crypto;
+			targetProxy = 0E6E7FB71A6ED31000ABF530 /* PBXContainerItemProxy */;
+		};
 		3E148BAD160A12010010A0D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3E148B90160A12000010A0D1 /* SensePlatformTestApp */;
@@ -1080,7 +1171,10 @@
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-DSQLITE_HAS_CODEC",
+				);
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1098,7 +1192,10 @@
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-DSQLITE_HAS_CODEC",
+				);
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
