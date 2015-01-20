@@ -151,4 +151,8 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * @param label The label of the Feedback, e.g. 'Sit'
  */
 + (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
+/**
+ * @return Unique identifier for the device
+ */
++ (NSString*) getDeviceId;
 @end

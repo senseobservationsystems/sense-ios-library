@@ -291,4 +291,8 @@ static CSSensorStore* sensorStore;
     }
     return kCSDATA_TYPE_STRING;
 }
+
++ (NSString*) getDeviceId {
+    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+}
 @end
