@@ -10,12 +10,14 @@
 #import <sqlite3.h>
 #import <pthread.h>
 #import "CSDataPoint.h"
+#import "CSSettings.h"
 
 static const int DEFAULT_DB_LOCK_TIMEOUT = 200; //when the database is locked, keep retrying until this timeout elapses. In milliseconds.
 static const double DB_WRITEBACK_TIMEINTERVAL = 10 * 60;// interval between writing back to storage. Saves power and flash
 static const size_t BUFFER_NR_ROWS = 1000;
 static const size_t BUFFER_WRITEBACK_THRESHOLD = 1000;
 static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
+static const char *SALT = "I3oL@YeQo8!pU3qe";
 
 //static const long MINIMUM_FREE_SPACE = 1000*1000*20; //20mb
 
@@ -28,6 +30,7 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
     pthread_mutex_t dbMutex;
     long long lastDataPointid;
     long long lastRowIdInStorage;
+    BOOL isEncrypted;
 }
 
 #pragma mark - initialization
@@ -41,6 +44,7 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
         [NSTimer scheduledTimerWithTimeInterval:DB_WRITEBACK_TIMEINTERVAL target:self selector:@selector(writeDbToFile) userInfo:nil repeats:YES];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(flush) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeGeneral] object:nil];
     }
     
     return self;
@@ -54,10 +58,40 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
     char *errMsg = NULL;
     //open the database
     pthread_mutex_lock(&dbMutex);
+    
     if (sqlite3_open_v2([dbPath UTF8String], &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
-        //ai, we need to recover
         pthread_mutex_unlock(&dbMutex);
         @throw [NSException exceptionWithName:@"DB error opening database" reason:@"Couldn't open database file" userInfo:nil];
+    }
+    
+    // check if we are using encryption
+    if (sqlite3_exec(db, (const char*) "SELECT count(*) FROM sqlite_master;", NULL, NULL, NULL) == SQLITE_OK) {
+        isEncrypted = NO;
+    } else {
+        // maybe it's encrypted, close and reopen the file
+        sqlite3_close_v2(db);
+        if (sqlite3_open_v2([dbPath UTF8String], &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
+            pthread_mutex_unlock(&dbMutex);
+            @throw [NSException exceptionWithName:@"DB error opening database" reason:@"Couldn't open database file" userInfo:nil];
+        }
+        
+        const char *key = [[self getEncryptionKey] UTF8String];
+        sqlite3_key(db, key, (int)strlen(key));
+        
+        errMsg = NULL;
+        if (sqlite3_exec(db, (const char*) "SELECT count(*) FROM sqlite_master;", NULL, NULL, &errMsg) == SQLITE_OK) {
+            isEncrypted = YES;
+        } else {
+            NSLog(@"Failed to open file with key reason:%s", errMsg);
+            // ups! something wrong. maybe the database is corrupt. Let's start with clean database and start over
+            sqlite3_close_v2(db);
+            [CSStorage deleteFileWithPath:dbPath error:nil];
+            
+            pthread_mutex_unlock(&dbMutex);
+            [self databaseInit];
+            
+            return;
+        }
     }
     
     //setup
@@ -79,7 +113,9 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
         while (sqlite3_step(stmt_ps) == SQLITE_ROW) {
             page_size = sqlite3_column_int64(stmt_ps, 0);
         }
+        sqlite3_finalize(stmt_ps);
     } else {
+        sqlite3_finalize(stmt_ps);
         pthread_mutex_unlock(&dbMutex);
         @throw [NSException exceptionWithName:@"DB error getting page size" reason:@"Couldn't get page size" userInfo:nil];
 
@@ -138,9 +174,12 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
             
             NSLog(@"Database error: getting max rowid didn't return SQLITE_ROW");
         }
+        sqlite3_finalize(stmt);
     } else {
+        sqlite3_finalize(stmt);
         @throw [NSException exceptionWithName:@"DB error getting last row id" reason:[NSString stringWithCString:sqlite3_errmsg(db) encoding:NSUTF8StringEncoding] userInfo:nil];
     }
+    
 
     lastRowIdInStorage = lastDataPointid;
     
@@ -397,7 +436,7 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
     } else {
         NSLog(@"Database error: getting max rowid");
     }
-    
+    sqlite3_finalize(stmt);
     pthread_mutex_unlock(&dbMutex);
     
     //trim the buffer
@@ -436,13 +475,16 @@ static const long MAX_DB_SIZE = 100*1000*1000; // 100mb
         if (ret == SQLITE_ROW) {
             long nRows = sqlite3_column_int(stmt, 0);
             pthread_mutex_unlock(&dbMutex);
+            sqlite3_finalize(stmt);
             return  nRows;
         } else {
             NSLog(@"Database error: getting count of rows didn't return SQLITE_ROW");
+            sqlite3_finalize(stmt);
             pthread_mutex_unlock(&dbMutex);
             return 0;
         }
     } else {
+        sqlite3_finalize(stmt);
         pthread_mutex_unlock(&dbMutex);
         NSLog(@"Database error: getting count of rows");
         return 0;
@@ -565,5 +607,132 @@ static NSString* decodedString(const char* encoded) {
     }
     return [[NSString stringWithUTF8String:encoded] stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
 }
+
+#pragma mark - database encryption
+/**
+ * Get encryption key from settings, if not found, use device uuid
+ */
+- (NSString*) getEncryptionKey {
+    NSString* key = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingLocalStorageEncryptionKey];
+    
+    // use uuid
+    if (key == nil) {
+        key = [[[[UIDevice currentDevice] identifierForVendor] UUIDString] stringByAppendingFormat:@"%s", SALT];
+        
+        if (key == nil) {
+            @throw [NSException exceptionWithName:@"DB error generating key" reason:@"Couldn't get device uuid" userInfo:nil];
+        }
+    }
+    
+    return key;
+}
+
+- (void) changeStorageEncryptionEnabled:(BOOL) enable {
+    if (enable == isEncrypted) { // already same, nothing todo
+        return;
+    } else {
+
+        NSString *tempDbPath = [dbPath stringByAppendingString:@"-temp.db"];
+        [CSStorage deleteFileWithPath:tempDbPath error:nil];
+
+        @try {
+            [self flush];
+            pthread_mutex_lock(&dbMutex);
+            
+            // convert database
+            // attach temp database
+            char *errMsg = NULL;
+            NSString *query;
+            const char *key;
+            if (enable) { // plain -> encrypted
+                key = [[self getEncryptionKey] UTF8String];
+            } else { // encrypted -> plain
+                key = "";
+            }
+
+            query =  [NSString stringWithFormat:@"ATTACH DATABASE '%@' AS tempDB KEY '%s'", tempDbPath, key];
+            if (sqlite3_exec(db, [query UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
+                pthread_mutex_unlock(&dbMutex);
+                @throw [NSException exceptionWithName:@"Attaching temporary database error" reason:[NSString stringWithUTF8String:errMsg] userInfo:nil];
+                
+            }
+        
+            // export databse
+            query = @"SELECT sqlcipher_export('tempDB')";
+            if (sqlite3_exec(db, [query UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
+                pthread_mutex_unlock(&dbMutex);
+                @throw [NSException exceptionWithName:@"Exporting database error" reason:[NSString stringWithUTF8String:errMsg] userInfo:nil];
+                
+            }
+            
+            // detach temp database
+            query = @"DETACH DATABASE tempDB";
+            int ret = sqlite3_exec(db, [query UTF8String], NULL, NULL, &errMsg);
+            if (ret != SQLITE_OK) {
+                pthread_mutex_unlock(&dbMutex);
+                @throw [NSException exceptionWithName:@"Detatching tempDB error" reason:[NSString stringWithUTF8String:errMsg] userInfo:nil];
+                
+            }
+            
+            // rename temp database to primary
+            sqlite3_close_v2(db);
+            
+            NSFileManager *filemgr = [NSFileManager defaultManager];
+            
+            NSURL *oldPath = [NSURL fileURLWithPath:tempDbPath];
+            NSURL *newPath= [NSURL fileURLWithPath:dbPath];
+            
+            NSError* err = nil;
+            [CSStorage deleteFileWithPath:dbPath error:&err];
+            
+            if (err != nil ) {
+                @throw [NSException exceptionWithName:@"Removing main fail error" reason:err.description userInfo:nil];
+            }
+            
+            if (![filemgr moveItemAtURL: oldPath toURL: newPath error: &err]) {
+                NSLog(@"Moving temporary file error reason: %@", err.description);
+            }
+
+            pthread_mutex_unlock(&dbMutex);
+            
+            // reopen database
+            [self databaseInit];
+            
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Encrypting database error: %@ reason: %@", exception.name, exception.reason);
+        }
+        @finally {
+            [CSStorage deleteFileWithPath:tempDbPath error:nil];
+        }
+    }
+
+}
+
+#pragma mark auxilary function
++(void) deleteFileWithPath:(NSString*) path error:(NSError**) err {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    
+    err = nil;
+    [fm removeItemAtPath:[url path] error:err];
+}
+
+
+
+- (void) settingChanged: (NSNotification*) notification  {
+    @try {
+        CSSetting* setting = notification.object;
+        NSLog(@"Local Storage setting %@ changed to %@.", setting.name, setting.value);
+        
+        if ([setting.name isEqualToString:kCSGeneralSettingLocalStorageEncryption]) {
+            [self changeStorageEncryptionEnabled:[setting.value isEqualToString:kCSSettingYES]];
+        }
+    }
+    @catch (NSException * e) {
+        NSLog(@"LocationSensor: Exception thrown while applying location settings: %@", e);
+    }
+}
+
 
 @end

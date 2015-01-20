@@ -1,4 +1,4 @@
-//
+    //
 //  CSStorageTest.m
 //  SensePlatform
 //
@@ -11,6 +11,7 @@
 #import "CSSensePlatform.h"
 #import "CSSensorStore.h"
 #import "CSStorage.h"
+#import <sqlite3.h>
 
 
 
@@ -31,18 +32,16 @@
     NSString* dbPath =[rootPath stringByAppendingPathComponent:@"data.db"];
     
     // cleanup database file so test always start with clean environment
-    NSError *err;
-    NSFileManager *fm = [NSFileManager defaultManager];
-    err = nil;
-    NSURL *url = [NSURL fileURLWithPath:dbPath];
-    
-    [fm removeItemAtPath:[url path] error:&err];
-    
-    if(err) {
-        NSLog(@"File Manager: %@ %d %@", [err domain], [err code], [[err userInfo] description]);
+    NSError *err = nil;
+    [CSStorage deleteFileWithPath:dbPath error:&err];
+    if (err == nil) {
+        NSLog(@"Deleted file at '%@'", dbPath);
     } else {
-        NSLog(@"File %@ deleted.",dbPath);
+        NSLog(@"File Manager: %@ %ld %@", [err domain], [err code], [[err userInfo] description]);
     }
+    
+    // default unencrypted
+    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingLocalStorageEncryption value: kCSSettingNO];
     storage = [[CSStorage alloc] initWithPath:dbPath];
     
     startDate = [NSDate date];
@@ -50,7 +49,6 @@
     
     //put one datapoint in the database
     [storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
-
 }
 
 - (void)tearDown {
@@ -140,5 +138,47 @@
     //If we get to here, that is just awesome
     XCTAssertTrue(true);
 }
+
+/**
+ * Given the database is not encrypted, enabling the encryption should preserve existing database
+ */
+-(void) testChangeDatabaseEncryptionSettings {
+    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString* dbPath =[rootPath stringByAppendingPathComponent:@"data-enc.db"];
+    
+    // make sure the file is not exists
+    NSError *err = nil;
+    [CSStorage deleteFileWithPath:dbPath error:&err];
+    if (err != nil) {
+        NSLog(@"failed deleting file");
+    }
+    
+    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingLocalStorageEncryption value: kCSSettingNO];
+    
+    CSStorage* storage2 = [[CSStorage alloc] initWithPath:dbPath];
+    
+    // try inserting one point
+    startDate = [NSDate date];
+    sensorName = @"testSensor";
+    
+    [storage2 storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
+    [storage2 flush];
+    
+    long count = [storage2 getNumberOfRowsInTable:@"data"];
+    XCTAssertEqual(count, 1);
+    
+    // enable encryption
+    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingLocalStorageEncryption value: kCSSettingYES];
+
+    // verify the data exists
+    count = [storage2 getNumberOfRowsInTable:@"data"];
+    XCTAssertEqual(count, 1);
+    
+    // now change it to unencrypted
+    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingLocalStorageEncryption value: kCSSettingNO];
+    count = [storage2 getNumberOfRowsInTable:@"data"];
+    XCTAssertEqual(count, 1);
+}
+
 
 @end
