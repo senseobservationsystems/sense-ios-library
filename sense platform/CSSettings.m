@@ -167,7 +167,7 @@ static CSSettings* sharedSettingsInstance = nil;
                             nil];
     NSMutableDictionary* position = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"100", kCSLocationSettingAccuracy,
-                              kCSSettingYES, kCSLocationSettingCortexAutoPausing,
+                              kCSSettingNO, kCSLocationSettingCortexAutoPausing,
                               nil];
     NSMutableDictionary* spatial = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"60", kCSSpatialSettingInterval,
