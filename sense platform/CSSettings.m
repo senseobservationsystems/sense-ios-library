@@ -159,13 +159,15 @@ static CSSettings* sharedSettingsInstance = nil;
                              @"1800", kCSGeneralSettingUploadInterval,
                              kCSSettingYES, kCSGeneralSettingUploadToCommonSense,
                              kCSSettingYES, kCSGeneralSettingSenseEnabled,
+                             kCSSettingNO, kCSGeneralSettingUseStaging,
                              nil];
     NSMutableDictionary* ambience = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               kCSSettingNO, kCSAmbienceSettingSampleOnlyWhenScreenLocked,
                               @"60", kCSAmbienceSettingInterval,
-                             nil];
+                            nil];
     NSMutableDictionary* position = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"100", kCSLocationSettingAccuracy,
+                              kCSSettingNO, kCSLocationSettingCortexAutoPausing,
                               nil];
     NSMutableDictionary* spatial = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"60", kCSSpatialSettingInterval,
