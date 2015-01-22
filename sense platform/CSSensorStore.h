@@ -19,6 +19,11 @@
 #import "CSSender.h"
 #import "CSSensor.h"
 
+/**
+ Handles sensor data storing and uploading
+ 
+ Data is stored locally for 30 days. After a succesfull upload, older data is removed.
+ */
 @interface CSSensorStore : NSObject <CSDataStore> {
 }
 

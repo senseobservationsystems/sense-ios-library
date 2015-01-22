@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ Handles sensor data storage in an SQLite database
+ 
+ Data is first stored in a buffer in memory. After each 1000 datapoints it is written to disk. Disk storage is limited to 100mb. If this limit is exceeded or the disk is full, 20% of the oldest datapoints are removed.
+ */
 @interface CSStorage : NSObject
 
 - (id) initWithPath:(NSString*) databaseFilePath;

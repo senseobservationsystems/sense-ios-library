@@ -40,7 +40,8 @@ static CSSensorStore* sensorStore;
     [self initialize];
 }
 
-+ (void) initialize {
++(void) initialize {
+
     sensorStore = [CSSensorStore sharedSensorStore];
     
     //store version information

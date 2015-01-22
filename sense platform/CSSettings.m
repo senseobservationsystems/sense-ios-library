@@ -39,6 +39,7 @@ NSString* const kCSGeneralSettingAutodetect = @"auto detect";
 NSString* const kCSGeneralSettingUploadToCommonSense = @"upload to CommonSense";
 NSString* const kCSGeneralSettingDontUploadBursts = @"dontUploadBurstData";
 NSString* const kCSGeneralSettingBackgroundRestarthack = @"enableBackgroundRestarthack";
+NSString* const kCSGeneralSettingUseStaging = @"useStaging";
 
 //biometric settings
 NSString* const kCSBiometricSettingGender = @"gender";
@@ -55,6 +56,7 @@ NSString* const kCSActivitySettingPrivacy = @"privacy";
 //location settings keys
 NSString* const kCSLocationSettingAccuracy = @"accuracy";
 NSString* const kCSLocationSettingMinimumDistance = @"minimumDistance";
+NSString* const kCSLocationSettingCortexAutoPausing = @"autoPausing";
 
 //spatial settings
 NSString* const kCSSpatialSettingInterval = @"pollInterval";
