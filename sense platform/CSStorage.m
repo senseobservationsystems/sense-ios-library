@@ -193,6 +193,8 @@ static const char *SALT = "I3oL@YeQo8!pU3qe";
     }
     
     pthread_mutex_unlock(&dbMutex);
+    
+    NSLog(@"Database at '%@' initialized", dbPath);
 }
 
 #pragma mark - store
@@ -694,10 +696,16 @@ static NSString* decodedString(const char* encoded) {
             }
 
             pthread_mutex_unlock(&dbMutex);
+
             
             // reopen database
             [self databaseInit];
             
+            if (enable) { // plain -> encrypted
+                NSLog(@"SenseLibrary Finished encrypting database %@", dbPath);
+            } else { // encrypted -> plain
+                NSLog(@"SenseLibrary Finished decrypting database %@", dbPath);
+            }
         }
         @catch (NSException *exception) {
             NSLog(@"Encrypting database error: %@ reason: %@", exception.name, exception.reason);
