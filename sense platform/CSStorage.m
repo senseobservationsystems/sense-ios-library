@@ -39,6 +39,10 @@ static const char *SALT = "I3oL@YeQo8!pU3qe";
         dbPath = databaseFilePath;
         pthread_mutex_init(&dbMutex, NULL);
         [self databaseInit];
+        
+        // setup encryption
+        BOOL shouldUseEncryption = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingLocalStorageEncryption] isEqualToString:kCSSettingYES];
+        [self changeStorageEncryptionEnabled:shouldUseEncryption];
 
         //set timer to store buffered data
         [NSTimer scheduledTimerWithTimeInterval:DB_WRITEBACK_TIMEINTERVAL target:self selector:@selector(writeDbToFile) userInfo:nil repeats:YES];
