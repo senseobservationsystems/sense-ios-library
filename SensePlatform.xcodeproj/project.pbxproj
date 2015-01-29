@@ -21,8 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		0E6E7FB91A6ED31500ABF530 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6E7FAD1A6ED2FA00ABF530 /* libcrypto.a */; };
-		0E6E7FBA1A6ED31500ABF530 /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6E7FB41A6ED30300ABF530 /* libsqlcipher.a */; };
+		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E148B96160A12010010A0D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B95160A12010010A0D1 /* CoreGraphics.framework */; };
@@ -115,7 +114,6 @@
 		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
 		A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */; };
 		A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
-		A99F99D61A5D8B7800D6CB76 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E513F4F18F7DDE60008415A /* libsqlite3.dylib */; };
 		A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -128,34 +126,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0E6E7FAC1A6ED2FA00ABF530 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9069D28C0FCE659A0042E34C;
-			remoteInfo = crypto;
-		};
-		0E6E7FB31A6ED30300ABF530 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC046055464E500DB518D;
-			remoteInfo = sqlcipher;
-		};
-		0E6E7FB51A6ED31000ABF530 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC045055464E500DB518D;
-			remoteInfo = sqlcipher;
-		};
-		0E6E7FB71A6ED31000ABF530 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9069D28B0FCE659A0042E34C;
-			remoteInfo = crypto;
-		};
 		3E148BAC160A12010010A0D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
@@ -214,8 +184,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "library/openssl-xcode/openssl.xcodeproj"; sourceTree = "<group>"; };
-		0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = library/sqlcipher/sqlcipher.xcodeproj; sourceTree = "<group>"; };
+		0E801F8E1A7AA90C00A3F9CC /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		0E801F8F1A7AA90C00A3F9CC /* keywordhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keywordhash.h; sourceTree = "<group>"; };
+		0E801F901A7AA90C00A3F9CC /* opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opcodes.h; sourceTree = "<group>"; };
+		0E801F911A7AA90C00A3F9CC /* parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parse.h; sourceTree = "<group>"; };
+		0E801F921A7AA90C00A3F9CC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7A160A11280010A0D1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -235,7 +210,6 @@
 		3E4F28BA170DB4750045588C /* Formatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Formatting.m; path = utils/Formatting.m; sourceTree = "<group>"; };
 		3E513F4C18F7D7CF0008415A /* CSStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStorage.h; sourceTree = "<group>"; };
 		3E513F4D18F7D7CF0008415A /* CSStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorage.m; sourceTree = "<group>"; };
-		3E513F4F18F7DDE60008415A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		3E513F5118F81D2C0008415A /* CSDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataPoint.h; sourceTree = "<group>"; };
 		3E513F5218F81D2C0008415A /* CSDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDataPoint.m; sourceTree = "<group>"; };
 		3E513F5B18FC18150008415A /* CSUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUploader.h; sourceTree = "<group>"; };
@@ -385,8 +359,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E6E7FB91A6ED31500ABF530 /* libcrypto.a in Frameworks */,
-				0E6E7FBA1A6ED31500ABF530 /* libsqlcipher.a in Frameworks */,
 				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
 				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
 				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
@@ -395,6 +367,7 @@
 				3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */,
 				3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */,
 				3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */,
+				0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,7 +383,6 @@
 				A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */,
 				A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */,
 				A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */,
-				A99F99D61A5D8B7800D6CB76 /* libsqlite3.dylib in Frameworks */,
 				A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */,
 				A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */,
 			);
@@ -419,20 +391,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E6E7FA91A6ED2FA00ABF530 /* Products */ = {
+		0E801F8B1A7AA90C00A3F9CC /* libraries */ = {
 			isa = PBXGroup;
 			children = (
-				0E6E7FAD1A6ED2FA00ABF530 /* libcrypto.a */,
+				0E801F8C1A7AA90C00A3F9CC /* sqlcipher */,
 			);
-			name = Products;
+			path = libraries;
 			sourceTree = "<group>";
 		};
-		0E6E7FAF1A6ED30300ABF530 /* Products */ = {
+		0E801F8C1A7AA90C00A3F9CC /* sqlcipher */ = {
 			isa = PBXGroup;
 			children = (
-				0E6E7FB41A6ED30300ABF530 /* libsqlcipher.a */,
+				0E801F8D1A7AA90C00A3F9CC /* include */,
+				0E801F941A7AA90C00A3F9CC /* libsqlcipher */,
 			);
-			name = Products;
+			path = sqlcipher;
+			sourceTree = "<group>";
+		};
+		0E801F8D1A7AA90C00A3F9CC /* include */ = {
+			isa = PBXGroup;
+			children = (
+				0E801F8E1A7AA90C00A3F9CC /* config.h */,
+				0E801F8F1A7AA90C00A3F9CC /* keywordhash.h */,
+				0E801F901A7AA90C00A3F9CC /* opcodes.h */,
+				0E801F911A7AA90C00A3F9CC /* parse.h */,
+				0E801F921A7AA90C00A3F9CC /* sqlite3.h */,
+				0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 		3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */ = {
@@ -476,8 +462,7 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
-				0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */,
-				0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */,
+				0E801F8B1A7AA90C00A3F9CC /* libraries */,
 				3EACDD84172E927900975C8D /* plugins */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
@@ -517,7 +502,6 @@
 			isa = PBXGroup;
 			children = (
 				A99F99D71A5D8C1300D6CB76 /* libz.dylib */,
-				3E513F4F18F7DDE60008415A /* libsqlite3.dylib */,
 				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
 				3E148B7A160A11280010A0D1 /* SenTestingKit.framework */,
 				3E148B7C160A11280010A0D1 /* UIKit.framework */,
@@ -738,8 +722,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				0E6E7FB61A6ED31000ABF530 /* PBXTargetDependency */,
-				0E6E7FB81A6ED31000ABF530 /* PBXTargetDependency */,
 				3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */,
 			);
 			name = SensePlatform;
@@ -789,16 +771,6 @@
 			mainGroup = 3E820D5F15D40AB50001A3EC;
 			productRefGroup = 3E820D6B15D40AB50001A3EC /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 0E6E7FA91A6ED2FA00ABF530 /* Products */;
-					ProjectRef = 0E6E7FA81A6ED2FA00ABF530 /* openssl.xcodeproj */;
-				},
-				{
-					ProductGroup = 0E6E7FAF1A6ED30300ABF530 /* Products */;
-					ProjectRef = 0E6E7FAE1A6ED30300ABF530 /* sqlcipher.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				3E820D6915D40AB50001A3EC /* SensePlatform */,
@@ -809,23 +781,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		0E6E7FAD1A6ED2FA00ABF530 /* libcrypto.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libcrypto.a;
-			remoteRef = 0E6E7FAC1A6ED2FA00ABF530 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0E6E7FB41A6ED30300ABF530 /* libsqlcipher.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libsqlcipher.a;
-			remoteRef = 0E6E7FB31A6ED30300ABF530 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3E148B8F160A12000010A0D1 /* Resources */ = {
@@ -967,16 +922,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0E6E7FB61A6ED31000ABF530 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = sqlcipher;
-			targetProxy = 0E6E7FB51A6ED31000ABF530 /* PBXContainerItemProxy */;
-		};
-		0E6E7FB81A6ED31000ABF530 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = crypto;
-			targetProxy = 0E6E7FB71A6ED31000ABF530 /* PBXContainerItemProxy */;
-		};
 		3E148BAD160A12010010A0D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3E148B90160A12000010A0D1 /* SensePlatformTestApp */;
@@ -1181,7 +1126,16 @@
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/yulrizka/Desktop,
+					"$(PROJECT_DIR)/libraries/sqlcipher",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1202,7 +1156,16 @@
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/yulrizka/Desktop,
+					"$(PROJECT_DIR)/libraries/sqlcipher",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
