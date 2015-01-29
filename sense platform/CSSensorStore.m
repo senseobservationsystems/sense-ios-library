@@ -253,7 +253,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) addDataForSensorId:(NSString*) sensorId dateValue:(NSDictionary*) dateValue {
-    NSData* valueData = [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    NSData* valueData;
+    @try {
+        valueData  =  [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    }
+    @catch (NSException *exception) {
+        return;
+    }
+
     NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
     double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
     NSString* name = [CSSensor sensorNameFromSensorId:sensorId];

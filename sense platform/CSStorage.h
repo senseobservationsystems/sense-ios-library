@@ -81,4 +81,16 @@
  */
 - (long) getNumberOfRowsInTable:(NSString *) table;
 
+/**
+ * Helper function to delete file on storage
+ * @param path file path
+ * @param err error
+ */
++(void) deleteFileWithPath:(NSString*) path error:(NSError**) err;
+
+/**
+ * Change whether to use encrytion for local storage
+ */
+- (void) changeStorageEncryptionEnabled:(BOOL) enable;
+
 @end
