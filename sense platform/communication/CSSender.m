@@ -46,7 +46,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     self = [super init];
     if (self)
 	{
-        if([[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging]) {
+        if([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging] isEqualToString:kCSSettingYES]) {
             [self setupForStaging];
         } else {
             [self setupForLive];
