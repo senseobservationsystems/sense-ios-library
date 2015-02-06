@@ -122,9 +122,9 @@
     NSLog(@"Number of rows after trimming: %li", [storage getNumberOfRowsInTable:@"data"]);
     
     //Fill up like crazy so that we have some decently sized db
-    for( int i = 0; i < 1100000; i++) { // add 1000000 points
+    for( int i = 0; i < 110000; i++) { // add 1000000 points
 
-        NSString* value = [NSString stringWithFormat:@"Point %i",i];
+        NSString* value = [NSString stringWithFormat:@"Point %i: ...............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................",i];
         
         //put one datapoint in the database
         [storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:value timestamp:[[NSDate date] timeIntervalSince1970]];
