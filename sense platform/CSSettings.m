@@ -369,6 +369,7 @@ static CSSettings* sharedSettingsInstance = nil;
             NSString *plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
             
             NSData *plistData;
+			//TODO: ^JJ Got a BAD ACCESS here when starting the app! Settings seems to initialized properly. Error is nil.  
             plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
             
             if(plistData) {

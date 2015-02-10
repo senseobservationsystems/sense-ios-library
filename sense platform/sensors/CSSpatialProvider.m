@@ -219,14 +219,14 @@ void someScheduleFunction(void* context) {
 - (void) poll {
     //prepare array for data
     NSMutableArray* __block deviceMotionArray = [[NSMutableArray alloc] initWithCapacity:nrSamples];
+	NSCondition* __block dataCollectedCondition = [NSCondition new];
+	__block NSInteger counter = 0;
     __block int sample = 0;
 
-    NSCondition* __block dataCollectedCondition = [NSCondition new];
-
-    __block NSInteger counter = 0;
-
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
-        if (deviceMotion == nil)
+		
+		//Note to the future: In rare cases accessing the deviceMotionArray has caused a EXC_BAD_ACCESS because it has already been released. This might have something to do with the motion update scheduling. For now, we just check if it is not nil before continuing.
+		if ((deviceMotion == nil) || (deviceMotionArray == nil))
             return;
         if (jumpSensorEnabled) {
             [jumpDetector pushDeviceMotion:deviceMotion andManager:motionManager];
@@ -242,9 +242,15 @@ void someScheduleFunction(void* context) {
         }
         */
         counter++;
-       if (sample < nrSamples) {
-            [deviceMotionArray addObject:deviceMotion];
-            sample++;
+		
+		if (sample < nrSamples) {
+			
+			//NSLog(@"Polling sample: %i, Array count: %i", sample, deviceMotionArray.count);
+			
+			//Add the new sample and increase the sample counter
+		    [deviceMotionArray addObject:deviceMotion];
+		    sample++;
+			
             //send this sample so others can listen to the data
             NSTimeInterval timestamp = deviceMotion.timestamp + timestampOffset;
             NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -254,32 +260,41 @@ void someScheduleFunction(void* context) {
             NSNotification* notification = [NSNotification notificationWithName:kCSNewMotionDataNotification object:self userInfo:data];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
         }
+		
         //if we've sampled enough
         if (sample >= nrSamples) {
             //signal that we're done collecting
-            [dataCollectedCondition broadcast];
+			[dataCollectedCondition broadcast];
         }
 
         counter--;
     };
+	
     motionManager.deviceMotionUpdateInterval = 1./frequency;
+	
+	//Lock this code block from other threads
     [dataCollectedCondition lock];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical toQueue:operations withHandler:deviceMotionHandler];
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
-    [motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
-    NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
-    while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
+	//Start motion updates
+	[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
+
+	//Wait while enough samples have been collected or timeout has been passed that is twice the time of the number of samples
+	NSDate* timeout = [NSDate dateWithTimeIntervalSinceNow:1.0/frequency * nrSamples * 2 + 1];
+	while (sample < nrSamples && [timeout timeIntervalSinceNow] > 0) {
         //wait until all data collected, or a timeout
-        NSTimeInterval timeout = MAX(1.0/frequency * nrSamples * 2 + 1, 0.1);
-        [dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:timeout]];
+		NSTimeInterval waitTime = MAX(1.0/frequency * nrSamples * 2 + 1, 0.1);
+		[dataCollectedCondition waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:waitTime]];
     }
+	
     //[motionManager performSelectorOnMainThread:@selector(stopDeviceMotionUpdates) withObject:nil waitUntilDone:YES];
-    [motionManager stopDeviceMotionUpdates];
+	//Stop motion updates and unlock
+	[motionManager stopDeviceMotionUpdates];
     [dataCollectedCondition unlock];
 
-
-    if (sample < nrSamples) {
+	//Check if data was collected as expected and did not timeout
+    if ((sample < nrSamples) || (deviceMotionArray.count < nrSamples)) {
         NSLog(@"Error while polling the motion sensors.");
         [motionManager stopDeviceMotionUpdates];
         return;
