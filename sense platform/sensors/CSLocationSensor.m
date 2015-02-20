@@ -201,7 +201,7 @@ static CLLocation* lastAcceptedPoint;
         }
         
         [locationManager stopUpdatingLocation];
-        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
+        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:pauseLocationSamplingTimer forMode:NSRunLoopCommonModes];
     }
     
