@@ -39,12 +39,16 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * This is the high-level interface for the sense platform.
  */
 @interface CSSensePlatform : NSObject
-/// Initializes the sense platform.
+/// Initializes the sense platform. Shorthand for initiliazeWithTesting: FALSE;
 + (void) initialize;
+
 /* Initialize the Sense Platform
  * @param applicationKey the application key to identify this application to Common Sense
  */
 + (void) initializeWithApplicationKey: (NSString*) applicationKey;
+
+
+
 /// Returns a list of available sensors of the device
 + (NSArray*) availableSensors;
 /// To be called upon termination of the app, allows the platform to flush it's caches to Common Sense
@@ -123,13 +127,23 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
 
 /// This function isn't operational.
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback;
+
 /** Retrieve a number of values of a sensor from Common Sense. returns nrLastPoints of the latest values.
  * @param name The name of the sensor to get data from
  * @param onlyFromDevice Wether or not to only look through sensors that are part of this device. Searches all sensors, including those of this device, if set to NO
  * @param nrLastPoints Number of points to retrieve, this function always returns the latest values for the sensor.
- * @returns an array of values, each value is a dictionary that describes the data point
+ * @return an array of values, each value is a dictionary that describes the data point
  */
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
+
+/** Retrieve all the sensor data stored locally between a certain time interval.
+ * @param name The name of the sensor to get the data from
+ * @param startDate The date and time at which to start looking for datapoints
+ * @param endDate The date and time at which to stop looking for datapoints
+ * @return an arrat of values, each value is a dictonary that descirbes the data point
+*/
++ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
+
 /** Give feedback on a state sensor.
  * @param state The state to give feedback on.
  * @param from The start date for the feedback.
@@ -137,4 +151,8 @@ typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInte
  * @param label The label of the Feedback, e.g. 'Sit'
  */
 + (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
+/**
+ * @return Unique identifier for the device
+ */
++ (NSString*) getDeviceId;
 @end

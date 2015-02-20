@@ -27,4 +27,8 @@
 }
 
 - (id) initWithCompass:(CSCompassSensor*)compass orientation:(CSOrientationSensor*)orientation accelerometer:(CSAccelerometerSensor*)accelerometer acceleration:(CSAccelerationSensor*)acceleration rotation:(CSRotationSensor*)rotation jumpSensor:(CSJumpSensor*) jumpSensor;
+
+/** Poll the motion sensors once **/
+- (void) poll;
+
 @end
