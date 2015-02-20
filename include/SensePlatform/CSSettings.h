@@ -39,6 +39,9 @@ extern NSString* const kCSGeneralSettingAutodetect;
 extern NSString* const kCSGeneralSettingUploadToCommonSense;
 extern NSString* const kCSGeneralSettingDontUploadBursts;
 extern NSString* const kCSGeneralSettingBackgroundRestarthack;
+extern NSString* const kCSGeneralSettingLocalStorageEncryption;
+extern NSString* const kCSGeneralSettingLocalStorageEncryptionKey;
+extern NSString* const kCSGeneralSettingUseStaging;
 
 //biometric settings
 extern NSString* const kCSBiometricSettingGender;
@@ -56,6 +59,8 @@ extern NSString* const kCSActivitySettingPrivacy;
 //location settings
 extern NSString* const kCSLocationSettingAccuracy;
 extern NSString* const kCSLocationSettingMinimumDistance;
+extern NSString* const kCSLocationSettingCortexAutoPausing; /*** Setting for automatically pausing location updates for two minutes after a new datapoint has come in, this might save battery life ***/
+
 
 //spatial settings
 extern NSString* const kCSSpatialSettingInterval;
