@@ -337,7 +337,8 @@ static CSSettings* sharedSettingsInstance = nil;
 		NSLog(@"Error reading plist: %@, format: %ul", errorDesc, (unsigned)format);
 		return;
 	}
-	sensorEnables = [settings valueForKey:@"sensorEnables"];
+    sensorEnables = [[settings valueForKey:@"sensorEnables"] mutableCopy];
+
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
 		[settings setObject:sensorEnables forKey:@"sensorEnables"];
@@ -354,7 +355,7 @@ static CSSettings* sharedSettingsInstance = nil;
 		NSLog(@"Error loading settings from dictionary.");
 		return;
 	}
-	sensorEnables = [settings valueForKey:@"sensorEnables"];
+	sensorEnables = [[settings valueForKey:@"sensorEnables"] mutableCopy];
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
 		[settings setObject:sensorEnables forKey:@"sensorEnables"];
@@ -368,8 +369,11 @@ static CSSettings* sharedSettingsInstance = nil;
             NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
             NSString *plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
             
+            // persist the sensorEnables
+            [settings setObject:sensorEnables forKey:@"sensorEnables"];
+            
             NSData *plistData;
-			//TODO: ^JJ Got a BAD ACCESS here when starting the app! Settings seems to initialized properly. Error is nil.  
+
             plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
             
             if(plistData) {
