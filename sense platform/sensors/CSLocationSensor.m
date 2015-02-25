@@ -129,7 +129,7 @@ static CLLocation* lastAcceptedPoint;
 									CSroundedNumber(accuracy, 8), horizontalAccuracyKey,
 									CSroundedNumber(verticalAccuracy, 8), verticalAccuracyKey,
 									CSroundedNumber(speed, 8), speedKey,
-									CSroundedNumber(heading, 8), speedKey,
+									CSroundedNumber(heading, 8), headingKey,
 									nil];
 	
 	double timestamp = [eventDate timeIntervalSince1970];
