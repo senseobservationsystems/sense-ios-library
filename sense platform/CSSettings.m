@@ -59,6 +59,8 @@ NSString* const kCSActivitySettingPrivacy = @"privacy";
 NSString* const kCSLocationSettingAccuracy = @"accuracy";
 NSString* const kCSLocationSettingMinimumDistance = @"minimumDistance";
 NSString* const kCSLocationSettingCortexAutoPausing = @"autoPausing";
+NSString* const kCSLocationSettingRecordVisits = @"recordVisits";
+NSString* const kCSLocationSettingRecordHeadingUpdates = @"recordHeadings";
 
 //spatial settings
 NSString* const kCSSpatialSettingInterval = @"pollInterval";
@@ -171,6 +173,8 @@ static CSSettings* sharedSettingsInstance = nil;
     NSMutableDictionary* position = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"100", kCSLocationSettingAccuracy,
                               kCSSettingNO, kCSLocationSettingCortexAutoPausing,
+							  kCSSettingNO, kCSLocationSettingRecordVisits,			// Set to NO by default because we don't know how it impacts battery life
+							  kCSSettingNO, kCSLocationSettingRecordHeadingUpdates, // Set to NO by default because we don't know how it impacts battery life
                               nil];
     NSMutableDictionary* spatial = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"60", kCSSpatialSettingInterval,

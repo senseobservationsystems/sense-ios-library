@@ -39,6 +39,8 @@ static NSString* altitudeKey = @"altitude";
 static NSString* horizontalAccuracyKey = @"accuracy";
 static NSString* verticalAccuracyKey = @"vertical accuracy";
 static NSString* speedKey = @"speed";
+static NSString* eventKey = @"event";
+static NSString* headingKey = @"heading";
 static const int maxSamples = 7;
 static const int minDistance = 10; //meters
 static const int minInterval = 60; //seconds
@@ -54,13 +56,16 @@ static CLLocation* lastAcceptedPoint;
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data
 	NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
+								@"string", eventKey,
 								@"float", longitudeKey,
 								@"float", latitudeKey,
 								@"float", altitudeKey,
 								@"float", horizontalAccuracyKey,
 								@"float", verticalAccuracyKey,
 								@"float", speedKey,
+								@"float", headingKey,
 								nil];
+	
 	//make string, as per spec
     NSError* error = nil;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
@@ -100,6 +105,90 @@ static CLLocation* lastAcceptedPoint;
     }
 }
 
+/**
+ * Whenever a new heading update is detected, this function stores the heading data into a sensor
+ */
+- (void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading	{
+
+	NSString *event = @"headingUpdate";
+	NSDate *eventDate = [newHeading timestamp];
+	
+	double latitude = -1.0;
+	double longitude = -1.0;
+	double accuracy = 0.0;
+	double speed = -1.0;
+	double altitude = -1.0;
+	double verticalAccuracy = 0.0;
+	double heading = [newHeading trueHeading];
+	
+	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									event, eventKey,
+									CSroundedNumber(longitude, 8), longitudeKey,
+									CSroundedNumber(latitude, 8), latitudeKey,
+									CSroundedNumber(altitude, 8), altitudeKey,
+									CSroundedNumber(accuracy, 8), horizontalAccuracyKey,
+									CSroundedNumber(verticalAccuracy, 8), verticalAccuracyKey,
+									CSroundedNumber(speed, 8), speedKey,
+									CSroundedNumber(heading, 8), speedKey,
+									nil];
+	
+	double timestamp = [eventDate timeIntervalSince1970];
+	
+	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+										newItem, @"value",
+										CSroundedNumber(timestamp, 3), @"date",
+										nil];
+	
+	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+}
+
+/**
+ * Whenever a new visit update (departure or arrival) is detected, this function stores the visit data into a sensor
+ */
+- (void) locationManager:(CLLocationManager *)manager didVisit:(CLVisit *)visit {
+	
+	NSString *event;
+	NSDate *eventDate;
+	
+	if ([[visit departureDate] isEqualToDate: [NSDate distantFuture]]) {
+		// User has arrived, but not left, the location
+		event = @"arrival";
+		eventDate = [visit arrivalDate];
+	} else {
+		// The visit is complete, the user has left
+		event = @"departure";
+		eventDate = [visit departureDate];
+	}
+	
+	double latitude = [visit coordinate].latitude;
+	double longitude = [visit coordinate].longitude;
+	double accuracy = [visit horizontalAccuracy];
+	double speed = 0.0;
+	double altitude = -1.0;
+	double verticalAccuracy = 0.0;
+	double heading = -1.0;
+	
+	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									event, eventKey,
+									CSroundedNumber(longitude, 8), longitudeKey,
+									CSroundedNumber(latitude, 8), latitudeKey,
+									CSroundedNumber(altitude, 8), altitudeKey,
+									CSroundedNumber(accuracy, 8), horizontalAccuracyKey,
+									CSroundedNumber(verticalAccuracy, 8), verticalAccuracyKey,
+									CSroundedNumber(speed, 8), speedKey,
+									CSroundedNumber(heading, 8), headingKey,
+									nil];
+	
+	double timestamp = [eventDate timeIntervalSince1970];
+	
+	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+										newItem, @"value",
+										CSroundedNumber(timestamp, 3), @"date",
+										nil];
+	
+	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+}
+
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void)locationManager:(CLLocationManager *)manager
     updateToLocation:(CLLocation *)newLocation
@@ -108,6 +197,8 @@ static CLLocation* lastAcceptedPoint;
     if (isEnabled == NO) {
         return;
     }
+	
+	NSString* event = @"location_update";
 	double longitude = newLocation.coordinate.longitude;
 	double latitude = newLocation.coordinate.latitude;
 	double altitude = newLocation.altitude;
@@ -162,6 +253,7 @@ static CLLocation* lastAcceptedPoint;
 
 
 	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									event, eventKey,
 									CSroundedNumber(longitude, 8), longitudeKey,
 									CSroundedNumber(latitude, 8), latitudeKey,
 									CSroundedNumber(horizontalAccuracy, 8), horizontalAccuracyKey,
@@ -173,6 +265,8 @@ static CLLocation* lastAcceptedPoint;
 		[newItem setObject:CSroundedNumber(altitude, 0) forKey:altitudeKey];
 		[newItem setObject:CSroundedNumber(verticalAccuracy, 0) forKey:verticalAccuracyKey];
 	}
+	
+	[newItem setObject:CSroundedNumber(-1.0, 0) forKey:headingKey];
 	
 	double timestamp = [newLocation.timestamp timeIntervalSince1970];
 	
@@ -216,7 +310,6 @@ static CLLocation* lastAcceptedPoint;
     [[UIApplication sharedApplication] endBackgroundTask:bgTask];
 }
 
-
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"Location manager failed with error %@", error);
 }
@@ -240,9 +333,7 @@ static CLLocation* lastAcceptedPoint;
             statusString = @"authorization restricted";
             break;
     }
-    
     NSLog(@"New location authorization: %@", statusString);
-    
 }
 - (BOOL) isEnabled {return isEnabled;}
 
@@ -257,21 +348,41 @@ static CLLocation* lastAcceptedPoint;
 		} @catch (NSException* e) {
 			NSLog(@"Exception setting position accuracy: %@", e);
 		}
+		
         //set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
         locationManager.pausesLocationUpdatesAutomatically = NO;
+		
 		[samples removeAllObjects];
+		
         if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
         }
-        //NOTE: using significant location updates doesn't allow the phone to sense while running in the background
-//TODO: do we need both startUpdatingLocation and startMonitoringSignificantLocationChanges?
+		
+        //NOTE: using only significant location updates doesn't allow the phone to sense while running in the background
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
         [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
+		
+		if([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeLocation setting:kCSLocationSettingRecordVisits] boolValue]) {
+			[locationManager startMonitoringVisits];
+		}
+		else {
+			[locationManager stopMonitoringVisits];
+		}
+		
+		if([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeLocation setting:kCSLocationSettingRecordHeadingUpdates] boolValue]) {
+			[locationManager startUpdatingHeading];
+		}
+		else {
+			[locationManager stopUpdatingHeading];
+		}
+		
 	}
 	else {
         [pauseLocationSamplingTimer invalidate];
         [locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:NO];
         [locationManager performSelectorOnMainThread:@selector(stopMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
+		[locationManager stopUpdatingHeading];
+		[locationManager stopMonitoringVisits];
 		//[locationManager stopUpdatingLocation];
         //as this needs to be enabled to run in the background, rather switch to the lowest accuracy
         //locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
@@ -304,7 +415,16 @@ static CLLocation* lastAcceptedPoint;
             cortexAutoPausingEnabled = [setting.value boolValue];
         } else if ([setting.name isEqualToString:@"interval"]) {
         } else if ([setting.name isEqualToString:@"locationAdaptive"]) {
-        }
+		} else if ([setting.name isEqualToString:kCSLocationSettingRecordVisits]) {
+			//Setting for starting and stopping the monitoring of visits
+			if([setting.value boolValue]) {[locationManager startMonitoringVisits];}
+			else {[locationManager stopMonitoringVisits];}
+		} else if ([setting.name isEqualToString:kCSLocationSettingRecordHeadingUpdates]) {
+			//Setting for starting and stopping the monitoring of heading updates
+			if([setting.value boolValue]) {[locationManager startUpdatingHeading];}
+			else {[locationManager stopUpdatingHeading];}
+		}
+
 	}
 	@catch (NSException * e) {
 		NSLog(@"LocationSensor: Exception thrown while applying location settings: %@", e);
