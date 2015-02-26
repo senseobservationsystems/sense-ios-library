@@ -53,6 +53,7 @@
 		
 		//listen enable/disable notifications for visits sensor
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(visitsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
 	}
 	return self;
 }
@@ -163,6 +164,11 @@
 }
 
 - (void) setIsEnabled:(BOOL) enable {
+	[self enableLocationUpdates:enable];
+	self.isEnabled = enable;
+}
+
+- (void) enableLocationUpdates:(BOOL) enable {
 	
 	NSLog(@"%@ location provider", enable ? @"Enabling":@"Disabling");
 	
@@ -197,6 +203,15 @@
 // provided for backwards compatibility
 - (void) setBackgroundRunningEnable:(BOOL) enable {
 	[self setIsEnabled:enable];
+}
+
+// when the location sensor gets enabled we should start location updates; when it gets disabled, we turn it back to the location providers setting
+- (void) locationsEnabledChanged: (NSNotification*) notification {
+	if(locationSensor.isEnabled) {
+		[self enableLocationUpdates:locationSensor.isEnabled];
+	} else {
+		[self enableLocationUpdates:self.isEnabled];
+	}
 }
 
 - (void) visitsEnabledChanged: (NSNotification*) notification {
