@@ -82,7 +82,7 @@ static CLLocation* lastAcceptedPoint;
 		locationManager.delegate = self;
         
 //TODO: check if this is the best type to pick
-        locationManager.activityType = CLActivityTypeOther;
+        locationManager.activityType = CLActivityTypeOther;// test Automotive Nav, TypeFitness, TypeOtherNav
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
@@ -182,6 +182,8 @@ static CLLocation* lastAcceptedPoint;
 										nil];
 	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
     
+//NSLog(@"Background Time:%f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
+    
     if(cortexAutoPausingEnabled) {
         
         NSLog(@"Pausing location sampling ...");
@@ -197,12 +199,25 @@ static CLLocation* lastAcceptedPoint;
             NSLog(@"This application does not support background mode");
         } else {
             //if application supports background mode, we'll see this log.
-            //NSLog(@"Application will continue to run in background");
+            NSLog(@"Application will continue to run in background");
+            /*while(TRUE)
+            {
+                NSLog(@"Background time Remaining: %f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
+                [NSThread sleepForTimeInterval:1]; //wait for 1 sec
+            }*/
         }
         
+        double timeInterval = 180;
+        double timeLeftForBackground = app.backgroundTimeRemaining;
+        NSLog(@"Total time left in background:%f",timeLeftForBackground);
+        if (timeLeftForBackground < timeInterval) {
+          timeInterval = timeLeftForBackground - 5.0;
+            NSLog(@"Time Interval Between Location Update:%f", timeInterval);
+        }
         [locationManager stopUpdatingLocation];
-        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
+        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:pauseLocationSamplingTimer forMode:NSRunLoopCommonModes];
+        // 180 sec is risky, since bg remaining time sometime could droup to 167 sec, test can only continue untill say 150 sec to be sure enough time is left for app to run in bg
     }
     
 }
@@ -212,7 +227,8 @@ static CLLocation* lastAcceptedPoint;
     NSLog(@"Restarting location updates");
     [locationManager startUpdatingLocation];
     
-    //NSLog(@"Background Time:%f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
+    
+     NSLog(@"Background Time:%f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
     [[UIApplication sharedApplication] endBackgroundTask:bgTask];
 }
 
