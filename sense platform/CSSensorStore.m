@@ -24,6 +24,7 @@
 #import "UIDevice+Hardware.h"
 
 #import "CSLocationSensor.h"
+#import "CSVisitsSensor.h"
 #import "CSBatterySensor.h"
 #import "CSCompassSensor.h"
 #import "CSAccelerometerSensor.h"
@@ -45,6 +46,7 @@
 #import "CSTimeZoneSensor.h"
 
 #import "CSSpatialProvider.h"
+#import "CSLocationProvider.h"
 
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
@@ -65,7 +67,6 @@
     CSSender* sender;
     CSStorage* storage;
     CSUploader* uploader;
-    
 	
 	NSMutableDictionary* sensorData;
 	BOOL serviceEnabled;
@@ -88,6 +89,7 @@
     NSObject* sensorIdMapLock;
 	
 	CSSpatialProvider* spatialProvider;
+	CSLocationProvider* locationProvider;
 }
 @synthesize allAvailableSensorClasses;
 @synthesize sensors;
@@ -136,6 +138,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		//all sensor classes
 		allSensorClasses = [NSArray arrayWithObjects:
 							[CSLocationSensor class],
+							[CSVisitsSensor class],
 							[CSBatterySensor class],
 							[CSCallSensor class],
  							[CSConnectionSensor class],
@@ -184,50 +187,55 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) instantiateSensors {
     @synchronized(sensors) {
-	//release current sensors
-	spatialProvider=nil;
-	[sensors removeAllObjects];
-    
-	//instantiate sensors
-	for (Class aClass in allAvailableSensorClasses) {
-		if ([aClass isAvailable]) {
-			CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
-			[sensors addObject:newSensor];
-            //save sensor description in storage
-            if (newSensor.sensorDescription != nil) {
-                NSString* type = [newSensor.device valueForKey:@"type"];
-                NSString* uuid = [newSensor.device valueForKey:@"uuid"];
-                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
-                NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                [self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
-            }
+		//release current sensors
+		spatialProvider=nil;
+		[sensors removeAllObjects];
+		
+		//instantiate sensors
+		for (Class aClass in allAvailableSensorClasses) {
+			if ([aClass isAvailable]) {
+				CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
+				[sensors addObject:newSensor];
+				//save sensor description in storage
+				if (newSensor.sensorDescription != nil) {
+					NSString* type = [newSensor.device valueForKey:@"type"];
+					NSString* uuid = [newSensor.device valueForKey:@"uuid"];
+					NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
+					NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+					[self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
+				}
+			}
 		}
-	}
-    
-	//set self as data store
-	for (CSSensor* sensor in sensors) {
-		sensor.dataStore = self;
-	}
-	
-	//initialise spatial provider
-	CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
-	for (CSSensor* sensor in sensors) {
-		if ([sensor isKindOfClass:[CSCompassSensor class]])
-			compass = (CSCompassSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSOrientationSensor class]])
-			orientation = (CSOrientationSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
-			accelerometer = (CSAccelerometerSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
-			acceleration = (CSAccelerationSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSRotationSensor class]])
-			rotation = (CSRotationSensor*)sensor;
-        else if ([sensor isKindOfClass:[CSJumpSensor class]])
-			jumpSensor = (CSJumpSensor*)sensor;
-	}
-	
-	spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
-        
+		
+		//set self as data store
+		for (CSSensor* sensor in sensors) {
+			sensor.dataStore = self;
+		}
+		
+		//initialise spatial provider
+		CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
+		CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
+		for (CSSensor* sensor in sensors) {
+			if ([sensor isKindOfClass:[CSCompassSensor class]])
+				compass = (CSCompassSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSOrientationSensor class]])
+				orientation = (CSOrientationSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
+				accelerometer = (CSAccelerometerSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
+				acceleration = (CSAccelerationSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSRotationSensor class]])
+				rotation = (CSRotationSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSJumpSensor class]])
+				jumpSensor = (CSJumpSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSLocationSensor class]])
+				location = (CSLocationSensor*) sensor;
+			else if ([sensor isKindOfClass:[CSVisitsSensor class]])
+				visits = (CSVisitsSensor*) sensor;
+		}
+		
+		spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
+		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
     }
 }
 
@@ -551,7 +559,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) setBackgroundHackEnabled:(BOOL) enable {
     for (CSSensor* s in sensors) {
         if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
-            CSLocationSensor* locationSensor = (CSLocationSensor*)s;
+            CSLocationProvider* locationSensor = (CSLocationProvider*)s;
             [locationSensor setBackgroundRunningEnable:enable];
             break;
         }

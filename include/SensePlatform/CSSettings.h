@@ -60,8 +60,6 @@ extern NSString* const kCSActivitySettingPrivacy;
 extern NSString* const kCSLocationSettingAccuracy;
 extern NSString* const kCSLocationSettingMinimumDistance;
 extern NSString* const kCSLocationSettingCortexAutoPausing;		/** Setting for automatically pausing location updates for two minutes after a new datapoint has come in, this might save battery life **/
-extern NSString* const kCSLocationSettingRecordVisits;			/** Setting for turning on/off the recording CLVisit objects into kCSSENSOR_VISITS **/
-extern NSString* const kCSLocationSettingRecordHeadingUpdates;	/** Setting for turning on/off the recording CLHeading objects into kCSSENSOR_HEADINGS **/
 
 //spatial settings
 extern NSString* const kCSSpatialSettingInterval;
