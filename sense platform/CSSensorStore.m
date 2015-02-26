@@ -557,13 +557,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) setBackgroundHackEnabled:(BOOL) enable {
-    for (CSSensor* s in sensors) {
-        if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
-            CSLocationProvider* locationSensor = (CSLocationProvider*)s;
-            [locationSensor setBackgroundRunningEnable:enable];
-            break;
-        }
-    }
+	//when only enabling the locationProvider and not the locationSensor the location updates are used for background monitoring but are not stored
+	locationProvider.isEnabled = YES;
 }
 
 - (void) setSyncRate: (int) newRate {
