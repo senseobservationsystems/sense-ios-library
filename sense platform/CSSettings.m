@@ -39,6 +39,9 @@ NSString* const kCSGeneralSettingAutodetect = @"auto detect";
 NSString* const kCSGeneralSettingUploadToCommonSense = @"upload to CommonSense";
 NSString* const kCSGeneralSettingDontUploadBursts = @"dontUploadBurstData";
 NSString* const kCSGeneralSettingBackgroundRestarthack = @"enableBackgroundRestarthack";
+NSString* const kCSGeneralSettingLocalStorageEncryption = @"enableLocalStorageEncryption";
+NSString* const kCSGeneralSettingLocalStorageEncryptionKey = @"localStorageEncryptionKey";
+NSString* const kCSGeneralSettingUseStaging = @"useStaging";
 
 //biometric settings
 NSString* const kCSBiometricSettingGender = @"gender";
@@ -55,6 +58,7 @@ NSString* const kCSActivitySettingPrivacy = @"privacy";
 //location settings keys
 NSString* const kCSLocationSettingAccuracy = @"accuracy";
 NSString* const kCSLocationSettingMinimumDistance = @"minimumDistance";
+NSString* const kCSLocationSettingCortexAutoPausing = @"autoPausing";
 
 //spatial settings
 NSString* const kCSSpatialSettingInterval = @"pollInterval";
@@ -157,13 +161,16 @@ static CSSettings* sharedSettingsInstance = nil;
                              @"1800", kCSGeneralSettingUploadInterval,
                              kCSSettingYES, kCSGeneralSettingUploadToCommonSense,
                              kCSSettingYES, kCSGeneralSettingSenseEnabled,
-                             nil];
+                             kCSSettingNO, kCSGeneralSettingLocalStorageEncryption,
+                             kCSSettingNO, kCSGeneralSettingUseStaging,                             
+			     nil];
     NSMutableDictionary* ambience = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               kCSSettingNO, kCSAmbienceSettingSampleOnlyWhenScreenLocked,
                               @"60", kCSAmbienceSettingInterval,
-                             nil];
+                            nil];
     NSMutableDictionary* position = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"100", kCSLocationSettingAccuracy,
+                              kCSSettingNO, kCSLocationSettingCortexAutoPausing,
                               nil];
     NSMutableDictionary* spatial = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               @"60", kCSSpatialSettingInterval,
@@ -330,7 +337,8 @@ static CSSettings* sharedSettingsInstance = nil;
 		NSLog(@"Error reading plist: %@, format: %ul", errorDesc, (unsigned)format);
 		return;
 	}
-	sensorEnables = [settings valueForKey:@"sensorEnables"];
+    sensorEnables = [[settings valueForKey:@"sensorEnables"] mutableCopy];
+
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
 		[settings setObject:sensorEnables forKey:@"sensorEnables"];
@@ -347,7 +355,7 @@ static CSSettings* sharedSettingsInstance = nil;
 		NSLog(@"Error loading settings from dictionary.");
 		return;
 	}
-	sensorEnables = [settings valueForKey:@"sensorEnables"];
+	sensorEnables = [[settings valueForKey:@"sensorEnables"] mutableCopy];
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
 		[settings setObject:sensorEnables forKey:@"sensorEnables"];
@@ -361,7 +369,11 @@ static CSSettings* sharedSettingsInstance = nil;
             NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
             NSString *plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
             
+            // persist the sensorEnables
+            [settings setObject:sensorEnables forKey:@"sensorEnables"];
+            
             NSData *plistData;
+
             plistData = [NSPropertyListSerialization dataWithPropertyList:settings format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
             
             if(plistData) {

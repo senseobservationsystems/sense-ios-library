@@ -82,8 +82,4 @@ static NSString* const password = @";jadsf8wurljksdfw3rw";
     [NSThread sleepForTimeInterval:15];
 }
 
-- (void) testStorage {
-    CSSt
-}
-
 @end
