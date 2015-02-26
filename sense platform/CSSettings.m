@@ -342,7 +342,10 @@ static CSSettings* sharedSettingsInstance = nil;
 	sensorEnables = [settings valueForKey:@"sensorEnables"];
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
-		[settings setObject:sensorEnables forKey:@"sensorEnables"];
+        
+        @synchronized(settings) {
+            [settings setObject:sensorEnables forKey:@"sensorEnables"];
+        }
 	}
 }
 
@@ -359,7 +362,9 @@ static CSSettings* sharedSettingsInstance = nil;
 	sensorEnables = [settings valueForKey:@"sensorEnables"];
 	if (sensorEnables == nil) {
 		sensorEnables = [NSMutableDictionary new];
-		[settings setObject:sensorEnables forKey:@"sensorEnables"];
+        @synchronized(settings) {
+            [settings setObject:sensorEnables forKey:@"sensorEnables"];
+        }
 	}
 }
 
