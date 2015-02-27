@@ -160,12 +160,12 @@
 
 
 - (BOOL) isEnabled {
-	return self.isEnabled;
+	return isEnabled;
 }
 
 - (void) setIsEnabled:(BOOL) enable {
 	[self enableLocationUpdates:enable];
-	self.isEnabled = enable;
+	isEnabled = enable;
 }
 
 - (void) enableLocationUpdates:(BOOL) enable {

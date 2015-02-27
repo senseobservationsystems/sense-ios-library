@@ -27,7 +27,7 @@
  Note that if you don't need location information this provider is still necessary for running the app in the background. To make sure it uses the least amount of battery when running in the background you want to increase the desired accuracy and the auto pausing feature (both can be found in CSSettings.h)
  */
 @interface CSLocationProvider : NSObject <CLLocationManagerDelegate>{
-
+	BOOL isEnabled;
 }
 
 /** 
