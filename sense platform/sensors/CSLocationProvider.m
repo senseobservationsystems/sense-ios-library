@@ -113,11 +113,19 @@
             NSLog(@"This application does not support background mode");
         }
         
+        double timeInterval = 180;
+        double timeLeftForBackground = app.backgroundTimeRemaining;
+        NSLog(@"Total time left in background:%f",timeLeftForBackground);
+        if (timeLeftForBackground < timeInterval) {
+            timeInterval = timeLeftForBackground - 5.0;
+            NSLog(@"Time Interval Between Location Update:%f", timeInterval);
+        }
+        
         [locationManager stopUpdatingLocation];
 		
 		//TODO: make the interval a setting
 		//TODO: check if the interval is not higher than the required sample frequency for location updates;
-        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
+        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
         [[NSRunLoop currentRunLoop] addTimer:pauseLocationSamplingTimer forMode:NSRunLoopCommonModes];
     }
     
