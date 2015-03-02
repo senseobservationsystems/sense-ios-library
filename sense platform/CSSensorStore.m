@@ -24,6 +24,7 @@
 #import "UIDevice+Hardware.h"
 
 #import "CSLocationSensor.h"
+#import "CSVisitsSensor.h"
 #import "CSBatterySensor.h"
 #import "CSCompassSensor.h"
 #import "CSAccelerometerSensor.h"
@@ -45,16 +46,20 @@
 #import "CSTimeZoneSensor.h"
 
 #import "CSSpatialProvider.h"
+#import "CSLocationProvider.h"
 
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
 #define MAX_UPLOAD_INTERVAL 3600
+#define LOCAL_STORAGE_TIME 3600*24*31 //thirty-one days in seconds
+#define TIME_INTERVAL_TO_CHECK_DATA_REMOVAL 3600*12 //12 hours in seconds
 
 @interface CSSensorStore (private)
 - (void) applyGeneralSettings;
 - (BOOL) uploadData;
 - (void) instantiateSensors;
 - (NSUInteger) nrPointsToSend:(NSArray*) data;
+
 @end
 
 
@@ -62,13 +67,13 @@
     CSSender* sender;
     CSStorage* storage;
     CSUploader* uploader;
-    
 	
 	NSMutableDictionary* sensorData;
 	BOOL serviceEnabled;
 	NSTimeInterval syncRate;
     NSTimeInterval waitTime;
 	NSDate* lastUpload;
+    NSDate* lastDeletionDate;
 	NSTimeInterval pollRate;
 	NSDate* lastPoll;
     dispatch_queue_t uploadQueueGCD;
@@ -84,6 +89,7 @@
     NSObject* sensorIdMapLock;
 	
 	CSSpatialProvider* spatialProvider;
+	CSLocationProvider* locationProvider;
 }
 @synthesize allAvailableSensorClasses;
 @synthesize sensors;
@@ -121,6 +127,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
+        lastDeletionDate = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
         NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
@@ -131,6 +138,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		//all sensor classes
 		allSensorClasses = [NSArray arrayWithObjects:
 							[CSLocationSensor class],
+							[CSVisitsSensor class],
 							[CSBatterySensor class],
 							[CSCallSensor class],
  							[CSConnectionSensor class],
@@ -177,53 +185,57 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 }
 
-
 - (void) instantiateSensors {
     @synchronized(sensors) {
-	//release current sensors
-	spatialProvider=nil;
-	[sensors removeAllObjects];
-    
-	//instantiate sensors
-	for (Class aClass in allAvailableSensorClasses) {
-		if ([aClass isAvailable]) {
-			CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
-			[sensors addObject:newSensor];
-            //save sensor description in storage
-            if (newSensor.sensorDescription != nil) {
-                NSString* type = [newSensor.device valueForKey:@"type"];
-                NSString* uuid = [newSensor.device valueForKey:@"uuid"];
-                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
-                NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-                [self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
-            }
+		//release current sensors
+		spatialProvider=nil;
+		[sensors removeAllObjects];
+		
+		//instantiate sensors
+		for (Class aClass in allAvailableSensorClasses) {
+			if ([aClass isAvailable]) {
+				CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
+				[sensors addObject:newSensor];
+				//save sensor description in storage
+				if (newSensor.sensorDescription != nil) {
+					NSString* type = [newSensor.device valueForKey:@"type"];
+					NSString* uuid = [newSensor.device valueForKey:@"uuid"];
+					NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
+					NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+					[self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
+				}
+			}
 		}
-	}
-    
-	//set self as data store
-	for (CSSensor* sensor in sensors) {
-		sensor.dataStore = self;
-	}
-	
-	//initialise spatial provider
-	CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
-	for (CSSensor* sensor in sensors) {
-		if ([sensor isKindOfClass:[CSCompassSensor class]])
-			compass = (CSCompassSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSOrientationSensor class]])
-			orientation = (CSOrientationSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
-			accelerometer = (CSAccelerometerSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
-			acceleration = (CSAccelerationSensor*)sensor;
-		else if ([sensor isKindOfClass:[CSRotationSensor class]])
-			rotation = (CSRotationSensor*)sensor;
-        else if ([sensor isKindOfClass:[CSJumpSensor class]])
-			jumpSensor = (CSJumpSensor*)sensor;
-	}
-	
-	spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
-        
+		
+		//set self as data store
+		for (CSSensor* sensor in sensors) {
+			sensor.dataStore = self;
+		}
+		
+		//initialise spatial provider
+		CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
+		CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
+		for (CSSensor* sensor in sensors) {
+			if ([sensor isKindOfClass:[CSCompassSensor class]])
+				compass = (CSCompassSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSOrientationSensor class]])
+				orientation = (CSOrientationSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
+				accelerometer = (CSAccelerometerSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
+				acceleration = (CSAccelerationSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSRotationSensor class]])
+				rotation = (CSRotationSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSJumpSensor class]])
+				jumpSensor = (CSJumpSensor*)sensor;
+			else if ([sensor isKindOfClass:[CSLocationSensor class]])
+				location = (CSLocationSensor*) sensor;
+			else if ([sensor isKindOfClass:[CSVisitsSensor class]])
+				visits = (CSVisitsSensor*) sensor;
+		}
+		
+		spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
+		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
     }
 }
 
@@ -249,7 +261,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) addDataForSensorId:(NSString*) sensorId dateValue:(NSDictionary*) dateValue {
-    NSData* valueData = [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    NSData* valueData;
+    @try {
+        valueData  =  [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    }
+    @catch (NSException *exception) {
+        return;
+    }
+
     NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
     double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
     NSString* name = [CSSensor sensorNameFromSensorId:sensorId];
@@ -403,13 +422,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
-
-
 - (BOOL) uploadData {
     BOOL succeed =  [uploader upload];
     if (succeed) {
-        //clean up storage. Maybe we should keep some data, but for now the storage is only used as a buffer before sending to CommonSense
-        [self->storage removeDataBeforeId:[uploader lastUploadedRowId]];
+        if([lastDeletionDate timeIntervalSinceNow] > TIME_INTERVAL_TO_CHECK_DATA_REMOVAL) { // if last deletion was more than limit ago remove old data again
+            
+            //Clean up storage by removing data that is older than LOCAL_STORAGE_TIME
+            NSDate *cutOffTime = [NSDate dateWithTimeIntervalSince1970: ([[NSDate date] timeIntervalSince1970] - LOCAL_STORAGE_TIME)];
+            
+            NSLog(@"Deleting all data before %@", [NSDateFormatter localizedStringFromDate:cutOffTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]);
+            
+            [self->storage removeDataBeforeTime: cutOffTime];
+            lastDeletionDate = [NSDate date]; // reset to now
+        }
     }
     return succeed;
 }
@@ -426,6 +451,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @catch (NSException *exception) {
         return NULL;
     }
+}
+
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
+    return [self->storage getDataFromSensor:name from:startDate to:endDate];
 }
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
@@ -528,13 +557,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) setBackgroundHackEnabled:(BOOL) enable {
-    for (CSSensor* s in sensors) {
-        if ([s.name isEqualToString:kCSSENSOR_LOCATION]) {
-            CSLocationSensor* locationSensor = (CSLocationSensor*)s;
-            [locationSensor setBackgroundRunningEnable:enable];
-            break;
-        }
-    }
+	//when only enabling the locationProvider and not the locationSensor the location updates are used for background monitoring but are not stored
+	locationProvider.isEnabled = YES;
 }
 
 - (void) setSyncRate: (int) newRate {

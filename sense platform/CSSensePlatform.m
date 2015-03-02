@@ -40,7 +40,8 @@ static CSSensorStore* sensorStore;
     [self initialize];
 }
 
-+ (void) initialize {
++(void) initialize {
+
     sensorStore = [CSSensorStore sharedSensorStore];
     
     //store version information
@@ -114,6 +115,10 @@ static CSSensorStore* sensorStore;
 + (void) logout {
     [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
+}
+
++ (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
+    return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate];
 }
 
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
@@ -266,6 +271,9 @@ static CSSensorStore* sensorStore;
      */
 }
 
+//+ (NSArray*) getDataForSensor:(NSString *)name onlyFromDevice:(bool)onlyFromDevice nrLastPoints:(NSInteger)nrLastPoints {
+//    
+//}
 
 + (NSString*) dataTypeOf:(NSString*) value {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
@@ -282,5 +290,9 @@ static CSSensorStore* sensorStore;
         }
     }
     return kCSDATA_TYPE_STRING;
+}
+
++ (NSString*) getDeviceId {
+    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
 @end
