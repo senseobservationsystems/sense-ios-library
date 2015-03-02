@@ -2,3 +2,4 @@ doc/
 .DS_STORE
 xcuserdata
 project.xcworkspace
+CSVersion.h

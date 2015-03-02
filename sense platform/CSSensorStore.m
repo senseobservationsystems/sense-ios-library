@@ -49,12 +49,15 @@
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
 #define MAX_UPLOAD_INTERVAL 3600
+#define LOCAL_STORAGE_TIME 3600*24*31 //thirty-one days in seconds
+#define TIME_INTERVAL_TO_CHECK_DATA_REMOVAL 3600*12 //12 hours in seconds
 
 @interface CSSensorStore (private)
 - (void) applyGeneralSettings;
 - (BOOL) uploadData;
 - (void) instantiateSensors;
 - (NSUInteger) nrPointsToSend:(NSArray*) data;
+
 @end
 
 
@@ -69,6 +72,7 @@
 	NSTimeInterval syncRate;
     NSTimeInterval waitTime;
 	NSDate* lastUpload;
+    NSDate* lastDeletionDate;
 	NSTimeInterval pollRate;
 	NSDate* lastPoll;
     dispatch_queue_t uploadQueueGCD;
@@ -121,6 +125,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 		lastUpload = [NSDate date];
 		lastPoll = [NSDate date];
+        lastDeletionDate = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
         NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																  NSUserDomainMask, YES) objectAtIndex:0];
@@ -176,7 +181,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	}
 	return self;
 }
-
 
 - (void) instantiateSensors {
     @synchronized(sensors) {
@@ -249,7 +253,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) addDataForSensorId:(NSString*) sensorId dateValue:(NSDictionary*) dateValue {
-    NSData* valueData = [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    NSData* valueData;
+    @try {
+        valueData  =  [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
+    }
+    @catch (NSException *exception) {
+        return;
+    }
+
     NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
     double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
     NSString* name = [CSSensor sensorNameFromSensorId:sensorId];
@@ -403,13 +414,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
-
-
 - (BOOL) uploadData {
     BOOL succeed =  [uploader upload];
     if (succeed) {
-        //clean up storage. Maybe we should keep some data, but for now the storage is only used as a buffer before sending to CommonSense
-        [self->storage removeDataBeforeId:[uploader lastUploadedRowId]];
+        if([lastDeletionDate timeIntervalSinceNow] > TIME_INTERVAL_TO_CHECK_DATA_REMOVAL) { // if last deletion was more than limit ago remove old data again
+            
+            //Clean up storage by removing data that is older than LOCAL_STORAGE_TIME
+            NSDate *cutOffTime = [NSDate dateWithTimeIntervalSince1970: ([[NSDate date] timeIntervalSince1970] - LOCAL_STORAGE_TIME)];
+            
+            NSLog(@"Deleting all data before %@", [NSDateFormatter localizedStringFromDate:cutOffTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]);
+            
+            [self->storage removeDataBeforeTime: cutOffTime];
+            lastDeletionDate = [NSDate date]; // reset to now
+        }
     }
     return succeed;
 }
@@ -426,6 +443,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     @catch (NSException *exception) {
         return NULL;
     }
+}
+
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
+    return [self->storage getDataFromSensor:name from:startDate to:endDate];
 }
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
