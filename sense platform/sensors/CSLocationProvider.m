@@ -111,11 +111,12 @@
         
         if (bgTask == UIBackgroundTaskInvalid) {
             NSLog(@"This application does not support background mode");
+            return;
         }
         
         double timeInterval = 180;
         double timeLeftForBackground = app.backgroundTimeRemaining;
-        NSLog(@"Total time left in background:%f",timeLeftForBackground);
+        //NSLog(@"Total time left in background:%f",timeLeftForBackground);
         if (timeLeftForBackground < timeInterval) {
             timeInterval = timeLeftForBackground - 5.0;
             NSLog(@"Time Interval Between Location Update:%f", timeInterval);

@@ -223,6 +223,7 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setSensor:(NSString*) sensor enabled:(BOOL) enable persistent:(BOOL) persistent {
+    NSLog(@"CSSetting Sensor '%@' %@", sensor, enable ? @"Enabled" : @"Disabled");
 	NSNumber* enableObject = [NSNumber numberWithBool:enable];
     NSString* key = [NSString stringWithFormat:@"%@", sensor];
     if (persistent) {
