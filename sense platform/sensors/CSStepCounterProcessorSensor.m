@@ -12,7 +12,8 @@
 #import "Formatting.h"
 
 static NSString* CSCMLastStepCount = @"CSCMLastStepCount";
-static NSString* stepsKey = @"total";
+static NSString* stepsPerMinuteKey = @"steps per minute";
+static NSString* totalKey = @"total";
 static const int SAMPLE_INTERVAL = 60;
 
 @implementation CSStepCounterProcessorSensor {
@@ -132,7 +133,8 @@ static const int SAMPLE_INTERVAL = 60;
 -(void) persistDataStep:(long long) stepCount totalCount:(long long) total date:(NSDate*) date {
     
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithLongLong:stepCount], stepsKey,
+                           [NSNumber numberWithLongLong:stepCount], stepsPerMinuteKey,
+                           [NSNumber numberWithLongLong:total], totalKey,
                            nil];
     NSTimeInterval timestamp = [date timeIntervalSince1970];
     NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
