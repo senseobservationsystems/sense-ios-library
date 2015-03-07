@@ -7,25 +7,29 @@
 //
 
 #import "CSStepCounterProcessorSensor.h"
-#import <CoreMotion/CoreMotion.h>
+#import <CoreMotion/CMPedometer.h>
 #import "CSDataStore.h"
 #import "Formatting.h"
 
 static NSString* CSCMLastStepCount = @"CSCMLastStepCount";
 static NSString* stepsKey = @"total";
+static const int SAMPLE_INTERVAL = 60;
 
 @implementation CSStepCounterProcessorSensor {
-    CMStepCounter* stepCounter;
+    CMPedometer* stepCounter;
     NSOperationQueue* operations;
-    long long lastStepCount;
-    //used from inside the query block, a bit ugly, it it does the job
+
+    long long lastStepCount; // current window step cout
+    NSDate* lastDate; // start of current window
+
     NSDate* startDate;
-    NSDate* endDate;
+    long long startStepCount; // store number of total step before the session start
+    long long processedStepCount;
 }
 
 - (NSString*) name {return kCSSENSOR_STEP_COUNTER;}
 - (NSString*) deviceType {return @"apple_motion_processor";}
-+ (BOOL) isAvailable {return [CMStepCounter isStepCountingAvailable];}
++ (BOOL) isAvailable {return [CMPedometer isStepCountingAvailable];}
 
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data
@@ -50,7 +54,7 @@ static NSString* stepsKey = @"total";
 - (id) init {
 	self = [super init];
 	if (self) {
-		stepCounter = [[CMStepCounter alloc] init];
+		stepCounter = [[CMPedometer alloc] init];
         operations = [[NSOperationQueue alloc] init];
 	}
 	return self;
@@ -64,55 +68,78 @@ static NSString* stepsKey = @"total";
         //store the date of the activity
         NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
         self->lastStepCount = [prefs integerForKey:CSCMLastStepCount];
+        
+        // todo preprocess to continue from last data point
+        self->startStepCount = 0;
+        self->processedStepCount = 0;
+        
         //handle real-time step updates
-        CMStepUpdateHandler stepCounterHandler = ^(NSInteger steps, NSDate* date, NSError* error) {
-            if (steps == 0 || error != nil)
-                return;
-            [self handleStepCount:lastStepCount + steps atDate:date];
-        };
         self->lastStepCount = 0;
-        [stepCounter startStepCountingUpdatesToQueue:operations updateOn:30 withHandler:stepCounterHandler];
+        self->startDate = [NSDate date];
+        self->lastDate = self->startDate;
+        [stepCounter startPedometerUpdatesFromDate:self->startDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
+            [self handlePushStepCountData:pedometerData];
+        }];
     } else {
-        [stepCounter stopStepCountingUpdates];
+        [stepCounter stopPedometerUpdates];
     }
 
 	isEnabled = enable;
 }
 
-/* Obsolete, method used to get steps data for when the app wasn't running. A bit complex and maybe undesired.*/
+/**
+ * Unimplemented, method used to get steps data for when the app wasn't running.
+ * A bit complex and maybe undesired.
+ * @deprecated
+ */
 - (void) queryStepsFrom:(NSDate*)from to:(NSDate*)to withInterval:(NSTimeInterval) dt {
-    //use startDate and endDate from the block to keep track of the period.
-    startDate = from;
-    endDate = [startDate dateByAddingTimeInterval:dt];
-    NSTimeInterval period = [to timeIntervalSinceDate:from];
-    int noPeriods = ceil(period/dt);
-    CMStepQueryHandler stepQueryHandler = ^(NSInteger steps, NSError* error) {
-        if (error != nil)
-            [self handleStepCount:steps atDate:endDate];
-        startDate = endDate;
-        endDate = [startDate dateByAddingTimeInterval:dt];
-        
-        NSLog(@"query steps: %li", (long)steps);
-    };
-    for (int i = 0; i < noPeriods; i++) {
-        [stepCounter queryStepCountStartingFrom:startDate to:endDate toQueue:operations withHandler:stepQueryHandler];//
-    }
+    // deprecated
 }
 
-- (void) handleStepCount:(long long) steps atDate:(NSDate*) date {
+/**
+ * Function to handle when there is step count update, this will group the data into an interval 
+ * and save to store
+ * @param data data structure returned by CoreMotion
+ **/
+- (void) handlePushStepCountData:(CMPedometerData*) data {
+    long long currentStepCount = [data.numberOfSteps longLongValue] - self->processedStepCount;
+    
+    if (currentStepCount == 0) { return; }
+    
+    NSDate* now = [NSDate date];
+    
+    if ([now timeIntervalSinceDate:self->lastDate] < SAMPLE_INTERVAL) {
+        // last date is still in the minute, update lastStepCount
+        self->lastStepCount += currentStepCount;
+    } else {
+        // last date is different window, persist last data point, update the new
+        
+        if (self->processedStepCount != 0) {
+            long long totalStepCounter = self->startStepCount + processedStepCount;
+            [self persistDataStep:self->lastStepCount totalCount:totalStepCounter date:self->lastDate];
+        }
+        
+        self->lastStepCount = currentStepCount;
+        self->lastDate = now;
+    }
+
+    self->processedStepCount += currentStepCount;
+}
+
+/**
+ * Function to store step point to CSStorage
+ **/
+-(void) persistDataStep:(long long) stepCount totalCount:(long long) total date:(NSDate*) date {
+    
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithLongLong:steps], stepsKey,
+                           [NSNumber numberWithLongLong:stepCount], stepsKey,
                            nil];
     NSTimeInterval timestamp = [date timeIntervalSince1970];
-    
     NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
                                         value, @"value",
                                         CSroundedNumber(timestamp, 3),@"date",
                                         nil];
     [self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
-    
-    NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setInteger:(int)steps forKey:CSCMLastStepCount];
 }
 
 -(void) dealloc {

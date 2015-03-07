@@ -156,7 +156,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							//[BloodPressureSensor class],
                             [CSActivityProcessorSensor class],
                             [CSTimeZoneSensor class],
-                            //[CSStepCounterProcessorSensor class],
+                            [CSStepCounterProcessorSensor class],
 							nil];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];
