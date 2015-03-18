@@ -15,6 +15,7 @@ static NSString* CSCMLastStepCount = @"CSCMLastStepCount";
 static NSString* stepsPerMinuteKey = @"steps per minute";
 static NSString* totalKey = @"total";
 static const int SAMPLE_INTERVAL = 60;
+static const BOOL PERIODIC_SAMPLING = YES;
 
 @implementation CSStepCounterProcessorSensor {
     CMPedometer* stepCounter;
@@ -26,6 +27,8 @@ static const int SAMPLE_INTERVAL = 60;
     NSDate* startDate;
     long long startStepCount; // store number of total step before the session start
     long long processedStepCount;
+    
+    NSTimer* timer;
 }
 
 - (NSString*) name {return kCSSENSOR_STEP_COUNTER;}
@@ -78,14 +81,41 @@ static const int SAMPLE_INTERVAL = 60;
         self->lastStepCount = 0;
         self->startDate = [NSDate date];
         self->lastDate = self->startDate;
-        [stepCounter startPedometerUpdatesFromDate:self->startDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
-            [self handlePushStepCountData:pedometerData];
-        }];
+        
+        if (PERIODIC_SAMPLING) {
+            if (timer == nil ) {
+                timer = [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(doTick) userInfo:nil repeats:YES];
+            }
+        } else {
+            [stepCounter startPedometerUpdatesFromDate:self->startDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
+                [self handlePushStepCountData:pedometerData error:error];
+            }];
+        }
     } else {
-        [stepCounter stopPedometerUpdates];
+        
+        if (PERIODIC_SAMPLING) {
+            if (timer != nil) {
+                [timer invalidate];
+                timer = nil;
+            }
+        } else {
+            [stepCounter stopPedometerUpdates];
+        }
     }
 
 	isEnabled = enable;
+}
+
+- (void) doTick {
+    NSDate *endWindow = [NSDate date];
+    NSDate *startWindow = [endWindow dateByAddingTimeInterval:-SAMPLE_INTERVAL];
+    
+    [stepCounter queryPedometerDataFromDate:startWindow toDate:endWindow withHandler:^(CMPedometerData *pedometerData, NSError *error) {
+        if (error != nil) {
+            return;
+        }
+        [self persistDataStep:[pedometerData.numberOfSteps longLongValue] totalCount:0 date:pedometerData.endDate];
+    }];
 }
 
 /**
@@ -98,11 +128,15 @@ static const int SAMPLE_INTERVAL = 60;
 }
 
 /**
- * Function to handle when there is step count update, this will group the data into an interval 
+ * Function to handle when there is step count update, this will group the data into an interval
  * and save to store
  * @param data data structure returned by CoreMotion
  **/
-- (void) handlePushStepCountData:(CMPedometerData*) data {
+- (void) handlePushStepCountData:(CMPedometerData*) data error:(NSError*) error {
+    if (error != nil) {
+        return;
+    }
+    
     long long currentStepCount = [data.numberOfSteps longLongValue] - self->processedStepCount;
     
     if (currentStepCount == 0) { return; }
