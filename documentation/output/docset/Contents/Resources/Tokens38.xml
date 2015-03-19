@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSSpatialProvider.html">
+	<File path="Classes/CSSetting.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSSpatialProvider</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSpatialProvider.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSetting</TokenIdentifier>
+			<Abstract type="html">Setting for automatically pausing location updates for two minutes after a new datapoint has come in, this might save battery life *</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
             
 			
 			<NodeRef refid="38"/>
@@ -13,26 +13,74 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSpatialProvider/initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/setName:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSpatialProvider.h</DeclaredIn>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
-			<Declaration>- (id)initWithCompass:(CSCompassSensor *)compass orientation:(CSOrientationSensor *)orientation accelerometer:(CSAccelerometerSensor *)accelerometer acceleration:(CSAccelerationSensor *)acceleration rotation:(CSRotationSensor *)rotation jumpSensor:(CSJumpSensor *)jumpSensor</Declaration>
+			<Declaration>@property (copy) NSString *name</Declaration>
 			
 			
-			<Anchor>//api/name/initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:</Anchor>
+			<Anchor>//api/name/name</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSpatialProvider/poll</TokenIdentifier>
-			<Abstract type="html">Poll the motion sensors once *</Abstract>
-			<DeclaredIn>CSSpatialProvider.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/name</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
-			<Declaration>- (void)poll</Declaration>
+			<Declaration>@property (copy) NSString *name</Declaration>
 			
 			
-			<Anchor>//api/name/poll</Anchor>
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSetting/name</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>@property (copy) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/setValue:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>@property (copy) NSString *value</Declaration>
+			
+			
+			<Anchor>//api/name/value</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/value</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>@property (copy) NSString *value</Declaration>
+			
+			
+			<Anchor>//api/name/value</Anchor>
+            <NodeRef refid="38"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSetting/value</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>@property (copy) NSString *value</Declaration>
+			
+			
+			<Anchor>//api/name/value</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		

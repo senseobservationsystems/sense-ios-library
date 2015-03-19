@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSAccelerationSensor.html">
+	<File path="docs/source/Introduction.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSAccelerationSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSAccelerationSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/doc/Introduction</TokenIdentifier>
+			<Abstract type="html">The Sense iOS library is an open source library that provides easy access to sensor information coming from sensors in the phone, and creates an easy interface to the CommonSense backend (to learn more about CommonSense visit developer.sense-os.nl). It reads most of the available sensor and state information that iOS provides and stores this in a local database. This sensor information is regularly uploaded to CommonSense if a user is logged in. The library can not only be used to collect phone data, developers can also create custom sensors and store and upload data to those sensors. </Abstract>
+			<DeclaredIn>Introduction-template.markdown</DeclaredIn>
             
 			
 			<NodeRef refid="5"/>

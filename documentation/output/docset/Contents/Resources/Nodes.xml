@@ -13,6 +13,8 @@
 						<NodeRef refid="1"/>
 						<NodeRef refid="2"/>
 						<NodeRef refid="3"/>
+						<NodeRef refid="4"/>
+						<NodeRef refid="5"/>
 						
 					</Subnodes>
 				</Node>
@@ -22,8 +24,6 @@
 					<Name>Classes</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="4"/>
-						<NodeRef refid="5"/>
 						<NodeRef refid="6"/>
 						<NodeRef refid="7"/>
 						<NodeRef refid="8"/>
@@ -64,6 +64,8 @@
 						<NodeRef refid="43"/>
 						<NodeRef refid="44"/>
 						<NodeRef refid="45"/>
+						<NodeRef refid="46"/>
+						<NodeRef refid="47"/>
 						
 					</Subnodes>
 				</Node>
@@ -73,8 +75,8 @@
 					<Name>Categories</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="46"/>
-						<NodeRef refid="47"/>
+						<NodeRef refid="48"/>
+						<NodeRef refid="49"/>
 						
 					</Subnodes>
 				</Node>
@@ -84,7 +86,7 @@
 					<Name>Protocols</Name>
 					<Path>index.html</Path>
 					<Subnodes>
-						<NodeRef refid="48"/>
+						<NodeRef refid="50"/>
 						
 					</Subnodes>
 				</Node>
@@ -95,7 +97,7 @@
                     <Name>Blocks</Name>
                     <Path>index.html</Path>
                     <Subnodes>
-                        <NodeRef refid="49"/>
+                        <NodeRef refid="51"/>
                         
                     </Subnodes>
                 </Node>
@@ -110,17 +112,27 @@
             
         </Node>
 		<Node id="2" type="section">
+            <Name>Background services</Name>
+            <Path>docs/source/Tutorials/Background services.html</Path>
+            
+        </Node>
+		<Node id="3" type="section">
+            <Name>Battery usage</Name>
+            <Path>docs/source/Tutorials/Battery usage.html</Path>
+            
+        </Node>
+		<Node id="4" type="section">
             <Name>Getting started</Name>
             <Path>docs/source/Getting started.html</Path>
             
         </Node>
-		<Node id="3" type="section">
+		<Node id="5" type="section">
             <Name>Introduction</Name>
             <Path>docs/source/Introduction.html</Path>
             
         </Node>
 		
-		<Node id="4" type="file" documentType="reference">
+		<Node id="6" type="file" documentType="reference">
             <Name>BloodPressureSensor</Name>
             <Path>Classes/BloodPressureSensor.html</Path>
             
@@ -147,22 +159,22 @@
             </Subnodes>
             
         </Node>
-		<Node id="5" type="file" documentType="reference">
+		<Node id="7" type="file" documentType="reference">
             <Name>CSAccelerationSensor</Name>
             <Path>Classes/CSAccelerationSensor.html</Path>
             
         </Node>
-		<Node id="6" type="file" documentType="reference">
+		<Node id="8" type="file" documentType="reference">
             <Name>CSAccelerometerSensor</Name>
             <Path>Classes/CSAccelerometerSensor.html</Path>
             
         </Node>
-		<Node id="7" type="file" documentType="reference">
+		<Node id="9" type="file" documentType="reference">
             <Name>CSActivityProcessorSensor</Name>
             <Path>Classes/CSActivityProcessorSensor.html</Path>
             
         </Node>
-		<Node id="8" type="file" documentType="reference">
+		<Node id="10" type="file" documentType="reference">
             <Name>CSAntPlusController</Name>
             <Path>Classes/CSAntPlusController.html</Path>
             
@@ -189,7 +201,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="9" type="file" documentType="reference">
+		<Node id="11" type="file" documentType="reference">
             <Name>CSApplicationStateChangeMsg</Name>
             <Path>Classes/CSApplicationStateChangeMsg.html</Path>
             
@@ -216,7 +228,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="10" type="file" documentType="reference">
+		<Node id="12" type="file" documentType="reference">
             <Name>CSBatterySensor</Name>
             <Path>Classes/CSBatterySensor.html</Path>
             
@@ -243,17 +255,17 @@
             </Subnodes>
             
         </Node>
-		<Node id="11" type="file" documentType="reference">
+		<Node id="13" type="file" documentType="reference">
             <Name>CSCallSensor</Name>
             <Path>Classes/CSCallSensor.html</Path>
             
         </Node>
-		<Node id="12" type="file" documentType="reference">
+		<Node id="14" type="file" documentType="reference">
             <Name>CSCompassSensor</Name>
             <Path>Classes/CSCompassSensor.html</Path>
             
         </Node>
-		<Node id="13" type="file" documentType="reference">
+		<Node id="15" type="file" documentType="reference">
             <Name>CSConnectionSensor</Name>
             <Path>Classes/CSConnectionSensor.html</Path>
             
@@ -280,7 +292,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="14" type="file" documentType="reference">
+		<Node id="16" type="file" documentType="reference">
             <Name>CSDataPoint</Name>
             <Path>Classes/CSDataPoint.html</Path>
             
@@ -313,7 +325,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="15" type="file" documentType="reference">
+		<Node id="17" type="file" documentType="reference">
             <Name>CSDynamicSensor</Name>
             <Path>Classes/CSDynamicSensor.html</Path>
             
@@ -340,7 +352,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="16" type="file" documentType="reference">
+		<Node id="18" type="file" documentType="reference">
             <Name>CSJumpSensor</Name>
             <Path>Classes/CSJumpSensor.html</Path>
             
@@ -367,7 +379,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="17" type="file" documentType="reference">
+		<Node id="19" type="file" documentType="reference">
             <Name>CSLocationProvider</Name>
             <Path>Classes/CSLocationProvider.html</Path>
             
@@ -400,7 +412,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="18" type="file" documentType="reference">
+		<Node id="20" type="file" documentType="reference">
             <Name>CSLocationSensor</Name>
             <Path>Classes/CSLocationSensor.html</Path>
             
@@ -427,22 +439,22 @@
             </Subnodes>
             
         </Node>
-		<Node id="19" type="file" documentType="reference">
+		<Node id="21" type="file" documentType="reference">
             <Name>CSMotionEnergySensor</Name>
             <Path>Classes/CSMotionEnergySensor.html</Path>
             
         </Node>
-		<Node id="20" type="file" documentType="reference">
+		<Node id="22" type="file" documentType="reference">
             <Name>CSMotionFeaturesSensor</Name>
             <Path>Classes/CSMotionFeaturesSensor.html</Path>
             
         </Node>
-		<Node id="21" type="file" documentType="reference">
+		<Node id="23" type="file" documentType="reference">
             <Name>CSMovingSensor</Name>
             <Path>Classes/CSMovingSensor.html</Path>
             
         </Node>
-		<Node id="22" type="file" documentType="reference">
+		<Node id="24" type="file" documentType="reference">
             <Name>CSNoiseSensor</Name>
             <Path>Classes/CSNoiseSensor.html</Path>
             
@@ -469,12 +481,12 @@
             </Subnodes>
             
         </Node>
-		<Node id="23" type="file" documentType="reference">
+		<Node id="25" type="file" documentType="reference">
             <Name>CSOrientationSensor</Name>
             <Path>Classes/CSOrientationSensor.html</Path>
             
         </Node>
-		<Node id="24" type="file" documentType="reference">
+		<Node id="26" type="file" documentType="reference">
             <Name>CSOrientationStateSensor</Name>
             <Path>Classes/CSOrientationStateSensor.html</Path>
             
@@ -501,7 +513,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="25" type="file" documentType="reference">
+		<Node id="27" type="file" documentType="reference">
             <Name>CSPGSensePlatform</Name>
             <Path>Classes/CSPGSensePlatform.html</Path>
             
@@ -534,7 +546,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="26" type="file" documentType="reference">
+		<Node id="28" type="file" documentType="reference">
             <Name>CSPreferencesSensor</Name>
             <Path>Classes/CSPreferencesSensor.html</Path>
             
@@ -561,7 +573,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="27" type="file" documentType="reference">
+		<Node id="29" type="file" documentType="reference">
             <Name>CSReachability</Name>
             <Path>Classes/CSReachability.html</Path>
             
@@ -594,12 +606,12 @@
             </Subnodes>
             
         </Node>
-		<Node id="28" type="file" documentType="reference">
+		<Node id="30" type="file" documentType="reference">
             <Name>CSRotationSensor</Name>
             <Path>Classes/CSRotationSensor.html</Path>
             
         </Node>
-		<Node id="29" type="file" documentType="reference">
+		<Node id="31" type="file" documentType="reference">
             <Name>CSScreenSensor</Name>
             <Path>Classes/CSScreenSensor.html</Path>
             
@@ -626,7 +638,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="30" type="file" documentType="reference">
+		<Node id="32" type="file" documentType="reference">
             <Name>CSSender</Name>
             <Path>Classes/CSSender.html</Path>
             
@@ -659,7 +671,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="31" type="file" documentType="reference">
+		<Node id="33" type="file" documentType="reference">
             <Name>CSSensePlatform</Name>
             <Path>Classes/CSSensePlatform.html</Path>
             
@@ -686,7 +698,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="32" type="file" documentType="reference">
+		<Node id="34" type="file" documentType="reference">
             <Name>CSSensor</Name>
             <Path>Classes/CSSensor.html</Path>
             
@@ -725,7 +737,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="33" type="file" documentType="reference">
+		<Node id="35" type="file" documentType="reference">
             <Name>CSSensorIdKey</Name>
             <Path>Classes/CSSensorIdKey.html</Path>
             
@@ -758,7 +770,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="34" type="file" documentType="reference">
+		<Node id="36" type="file" documentType="reference">
             <Name>CSSensorRequirements</Name>
             <Path>Classes/CSSensorRequirements.html</Path>
             
@@ -797,7 +809,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="35" type="file" documentType="reference">
+		<Node id="37" type="file" documentType="reference">
             <Name>CSSensorStore</Name>
             <Path>Classes/CSSensorStore.html</Path>
             
@@ -836,7 +848,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="36" type="file" documentType="reference">
+		<Node id="38" type="file" documentType="reference">
             <Name>CSSetting</Name>
             <Path>Classes/CSSetting.html</Path>
             
@@ -863,7 +875,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="37" type="file" documentType="reference">
+		<Node id="39" type="file" documentType="reference">
             <Name>CSSettings</Name>
             <Path>Classes/CSSettings.html</Path>
             
@@ -896,7 +908,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="38" type="file" documentType="reference">
+		<Node id="40" type="file" documentType="reference">
             <Name>CSSpatialProvider</Name>
             <Path>Classes/CSSpatialProvider.html</Path>
             
@@ -923,12 +935,12 @@
             </Subnodes>
             
         </Node>
-		<Node id="39" type="file" documentType="reference">
+		<Node id="41" type="file" documentType="reference">
             <Name>CSStepCounterProcessorSensor</Name>
             <Path>Classes/CSStepCounterProcessorSensor.html</Path>
             
         </Node>
-		<Node id="40" type="file" documentType="reference">
+		<Node id="42" type="file" documentType="reference">
             <Name>CSStorage</Name>
             <Path>Classes/CSStorage.html</Path>
             
@@ -961,12 +973,12 @@
             </Subnodes>
             
         </Node>
-		<Node id="41" type="file" documentType="reference">
+		<Node id="43" type="file" documentType="reference">
             <Name>CSTimeZoneSensor</Name>
             <Path>Classes/CSTimeZoneSensor.html</Path>
             
         </Node>
-		<Node id="42" type="file" documentType="reference">
+		<Node id="44" type="file" documentType="reference">
             <Name>CSUploader</Name>
             <Path>Classes/CSUploader.html</Path>
             
@@ -993,7 +1005,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="43" type="file" documentType="reference">
+		<Node id="45" type="file" documentType="reference">
             <Name>CSUserProximity</Name>
             <Path>Classes/CSUserProximity.html</Path>
             
@@ -1020,7 +1032,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="44" type="file" documentType="reference">
+		<Node id="46" type="file" documentType="reference">
             <Name>CSVisitsSensor</Name>
             <Path>Classes/CSVisitsSensor.html</Path>
             
@@ -1047,7 +1059,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="45" type="file" documentType="reference">
+		<Node id="47" type="file" documentType="reference">
             <Name>FootpodSensor</Name>
             <Path>Classes/FootpodSensor.html</Path>
             
@@ -1075,7 +1087,7 @@
             
         </Node>
 		
-		<Node id="46" type="file" documentType="reference">
+		<Node id="48" type="file" documentType="reference">
             <Name>NSNotificationCenter(CSMainThread)</Name>
             <Path>Categories/NSNotificationCenter+CSMainThread.html</Path>
             
@@ -1102,7 +1114,7 @@
             </Subnodes>
             
         </Node>
-		<Node id="47" type="file" documentType="reference">
+		<Node id="49" type="file" documentType="reference">
             <Name>NSString(CSMD5Hash)</Name>
             <Path>Categories/NSString+CSMD5Hash.html</Path>
             
@@ -1136,7 +1148,7 @@
             
         </Node>
 		
-        <Node id="48" type="file" documentType="reference">
+        <Node id="50" type="file" documentType="reference">
             <Name>CSDataStore</Name>
             <Path>Protocols/CSDataStore.html</Path>
             
@@ -1165,7 +1177,7 @@
         </Node>
 		
         
-        <Node id="49" type="file" documentType="reference">
+        <Node id="51" type="file" documentType="reference">
             <Name>bpmCallBack</Name>
             <Path>Blocks/bpmCallBack.html</Path>
             

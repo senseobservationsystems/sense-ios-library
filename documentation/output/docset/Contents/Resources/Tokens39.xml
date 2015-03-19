@@ -1,16 +1,229 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSStepCounterProcessorSensor.html">
+	<File path="Classes/CSSettings.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSStepCounterProcessorSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSStepCounterProcessorSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSettings</TokenIdentifier>
+			<Abstract type="html">This singleton is used to control the settings of the sense platform. Using this class sensors can be enabled/disabled and specific settings be set.</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
             
 			
 			<NodeRef refid="39"/>
 		</Token>
 		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSettings/sharedSettings</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>+ (CSSettings *)sharedSettings</Declaration>
+			
+			
+			<Anchor>//api/name/sharedSettings</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSettings/enabledChangedNotificationNameForSensor:</TokenIdentifier>
+			<Abstract type="html">Returns the name of enable notifications for the specified sensor</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>+ (NSString *)enabledChangedNotificationNameForSensor:(NSString *)sensor</Declaration>
+			
+			
+			<Anchor>//api/name/enabledChangedNotificationNameForSensor:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSettings/settingChangedNotificationNameForType:</TokenIdentifier>
+			<Abstract type="html">///Returns the name of the notification send when a setting of the specified type changes</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>+ (NSString *)settingChangedNotificationNameForType:(NSString *)type</Declaration>
+			
+			
+			<Anchor>//api/name/settingChangedNotificationNameForType:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSensor:enabled:</TokenIdentifier>
+			<Abstract type="html">Enable/disable the specified sensor, setting is persistent</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)setSensor:(NSString *)sensor enabled:(BOOL)enable</Declaration>
+			
+			
+			<Anchor>//api/name/setSensor:enabled:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSensor:enabled:persistent:</TokenIdentifier>
+			<Abstract type="html">Enable/disable the specified sensor</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)setSensor:(NSString *)sensor enabled:(BOOL)enable persistent:(BOOL)persistent</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>enable</Name>
+					<Abstract type="html">wether to enable or disable the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>persistent</Name>
+					<Abstract type="html">whether this setting is persistent</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setSensor:enabled:persistent:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/isSensorEnabled:</TokenIdentifier>
+			<Abstract type="html">Returns wether the specified sensor is enabled</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isSensorEnabled:(NSString *)sensor</Declaration>
+			
+			
+			<Anchor>//api/name/isSensorEnabled:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/sendNotificationForSensor:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (void)sendNotificationForSensor:(NSString *)sensor</Declaration>
+			
+			
+			<Anchor>//api/name/sendNotificationForSensor:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/getSettingType:setting:</TokenIdentifier>
+			<Abstract type="html">Get the value of the specified setting</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (NSString *)getSettingType:(NSString *)type setting:(NSString *)setting</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>type</Name>
+					<Abstract type="html">the setting type</Abstract>
+				</Parameter><Parameter>
+					<Name>setting</Name>
+					<Abstract type="html">the specific setting for the type</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">the value of the setting</Abstract></ReturnValue>
+			<Anchor>//api/name/getSettingType:setting:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSettingType:setting:value:</TokenIdentifier>
+			<Abstract type="html">Set the value of the specified setting, the setting is persistent</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)setSettingType:(NSString *)type setting:(NSString *)setting value:(NSString *)value</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>type</Name>
+					<Abstract type="html">the setting type</Abstract>
+				</Parameter><Parameter>
+					<Name>setting</Name>
+					<Abstract type="html">the specific setting for the type</Abstract>
+				</Parameter><Parameter>
+					<Name>value</Name>
+					<Abstract type="html">the value of to set the setting to</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setSettingType:setting:value:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSettingType:setting:value:persistent:</TokenIdentifier>
+			<Abstract type="html">Set the value of the specified setting</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)setSettingType:(NSString *)type setting:(NSString *)setting value:(NSString *)value persistent:(BOOL)persistent</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>type</Name>
+					<Abstract type="html">the setting type</Abstract>
+				</Parameter><Parameter>
+					<Name>setting</Name>
+					<Abstract type="html">the specific setting for the type</Abstract>
+				</Parameter><Parameter>
+					<Name>value</Name>
+					<Abstract type="html">the value of to set the setting to</Abstract>
+				</Parameter><Parameter>
+					<Name>persistent</Name>
+					<Abstract type="html">whether the setting should be persistent</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setSettingType:setting:value:persistent:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setLogin:withPassword:</TokenIdentifier>
+			<Abstract type="html">Login with user and password</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)setLogin:(NSString *)user withPassword:(NSString *)password</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>user</Name>
+					<Abstract type="html">the username</Abstract>
+				</Parameter><Parameter>
+					<Name>password</Name>
+					<Abstract type="html">the plain password</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setLogin:withPassword:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setLogin:withPasswordHash:</TokenIdentifier>
+			<Abstract type="html">Login with user and a hash of the password</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)setLogin:(NSString *)user withPasswordHash:(NSString *)passwordHash</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>user</Name>
+					<Abstract type="html">the username</Abstract>
+				</Parameter><Parameter>
+					<Name>passwordHash</Name>
+					<Abstract type="html">the hash of the password</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setLogin:withPasswordHash:</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/resetToDefaults</TokenIdentifier>
+			<Abstract type="html">Reset the settings to defaults.</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (void)resetToDefaults</Declaration>
+			
+			
+			<Anchor>//api/name/resetToDefaults</Anchor>
+            <NodeRef refid="39"/>
+		</Token>
 		
         
         

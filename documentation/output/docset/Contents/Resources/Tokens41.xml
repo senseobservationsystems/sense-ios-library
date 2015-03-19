@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSTimeZoneSensor.html">
+	<File path="Classes/CSStepCounterProcessorSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSTimeZoneSensor</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSStepCounterProcessorSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSTimeZoneSensor.h</DeclaredIn>
+			<DeclaredIn>CSStepCounterProcessorSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="41"/>

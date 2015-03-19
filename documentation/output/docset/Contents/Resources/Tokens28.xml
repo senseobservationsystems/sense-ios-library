@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSRotationSensor.html">
+	<File path="Classes/CSPreferencesSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSRotationSensor</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSPreferencesSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSRotationSensor.h</DeclaredIn>
+			<DeclaredIn>CSPreferencesSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="28"/>
 		</Token>
 		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSPreferencesSensor/commitPreference:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSPreferencesSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)commitPreference:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/commitPreference:</Anchor>
+            <NodeRef refid="28"/>
+		</Token>
 		
         
         

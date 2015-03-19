@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="docs/source/Getting started.html">
+	<File path="docs/source/Tutorials/Background services.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/doc/Getting started</TokenIdentifier>
-			<Abstract type="html">## Installation</Abstract>
-			<DeclaredIn>Getting started-template.markdown</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/doc/Background services</TokenIdentifier>
+			<Abstract type="html">In order for the library to be able to sample data it needs to run continuously in the background. This is not always allowed by Apple. Therefore, to run in the background, the app makes use of location services. </Abstract>
+			<DeclaredIn>Background services-template.markdown</DeclaredIn>
             
 			
 			<NodeRef refid="2"/>

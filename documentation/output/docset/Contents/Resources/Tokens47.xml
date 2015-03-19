@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Categories/NSString+CSMD5Hash.html">
+	<File path="Classes/FootpodSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cat/NSString(CSMD5Hash)</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/FootpodSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSString+MD5Hash.h</DeclaredIn>
+			<DeclaredIn>FootpodSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="47"/>
@@ -13,26 +13,26 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSString/MD5Hash</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/FootpodSensor/initWithConnection:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSString+MD5Hash.h</DeclaredIn>
+			<DeclaredIn>FootpodSensor.h</DeclaredIn>
 			
-			<Declaration>- (NSString *)MD5Hash</Declaration>
+			<Declaration>- (id)initWithConnection:(WFSensorConnection *)connection</Declaration>
 			
 			
-			<Anchor>//api/name/MD5Hash</Anchor>
+			<Anchor>//api/name/initWithConnection:</Anchor>
             <NodeRef refid="47"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSString/MD5HashOf:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/FootpodSensor/checkData</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSString+MD5Hash.h</DeclaredIn>
+			<DeclaredIn>FootpodSensor.h</DeclaredIn>
 			
-			<Declaration>+ (NSString *)MD5HashOf:(NSString *)string</Declaration>
+			<Declaration>- (void)checkData</Declaration>
 			
 			
-			<Anchor>//api/name/MD5HashOf:</Anchor>
+			<Anchor>//api/name/checkData</Anchor>
             <NodeRef refid="47"/>
 		</Token>
 		

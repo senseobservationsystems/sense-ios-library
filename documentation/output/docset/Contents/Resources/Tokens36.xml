@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSSetting.html">
+	<File path="Classes/CSSensorRequirements.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSSetting</TokenIdentifier>
-			<Abstract type="html">Setting for automatically pausing location updates for two minutes after a new datapoint has come in, this might save battery life *</Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSensorRequirements</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
             
 			
 			<NodeRef refid="36"/>
@@ -13,74 +13,98 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/setName:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensorRequirements/sharedRequirements</TokenIdentifier>
+			<Abstract type="html">Get singleton instance</Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
-			<Declaration>@property (copy) NSString *name</Declaration>
+			<Declaration>+ (CSSensorRequirements *)sharedRequirements</Declaration>
 			
 			
-			<Anchor>//api/name/name</Anchor>
+			<Anchor>//api/name/sharedRequirements</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/name</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensorRequirements/requirementForSensor:</TokenIdentifier>
+			<Abstract type="html">Helper function to create a requirement for a sensor</Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
-			<Declaration>@property (copy) NSString *name</Declaration>
+			<Declaration>+ (NSDictionary *)requirementForSensor:(NSString *)sensor</Declaration>
 			
 			
-			<Anchor>//api/name/name</Anchor>
+			<Anchor>//api/name/requirementForSensor:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSSetting/name</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensorRequirements/requirementForSensor:withInterval:</TokenIdentifier>
+			<Abstract type="html">Helper function to create a requirement for a sensor with an interval</Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
-			<Declaration>@property (copy) NSString *name</Declaration>
+			<Declaration>+ (NSDictionary *)requirementForSensor:(NSString *)sensor withInterval:(NSTimeInterval)interval</Declaration>
 			
 			
-			<Anchor>//api/name/name</Anchor>
+			<Anchor>//api/name/requirementForSensor:withInterval:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/setValue:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/setRequirements:byConsumer:</TokenIdentifier>
+			<Abstract type="html">Set requirements for a specific consumer. Overwrites previous requirement for the consumer</Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
-			<Declaration>@property (copy) NSString *value</Declaration>
+			<Declaration>- (void)setRequirements:(NSArray *)requirements byConsumer:(NSString *)consumer</Declaration>
 			
 			
-			<Anchor>//api/name/value</Anchor>
+			<Anchor>//api/name/setRequirements:byConsumer:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/value</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/clearRequirementsForConsumer:</TokenIdentifier>
+			<Abstract type="html">Clear the requirements of a consumer</Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
-			<Declaration>@property (copy) NSString *value</Declaration>
+			<Declaration>- (void)clearRequirementsForConsumer:(NSString *)consumer</Declaration>
 			
 			
-			<Anchor>//api/name/value</Anchor>
+			<Anchor>//api/name/clearRequirementsForConsumer:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSSetting/value</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/setIsEnabled:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
-			<Declaration>@property (copy) NSString *value</Declaration>
+			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
 			
 			
-			<Anchor>//api/name/value</Anchor>
+			<Anchor>//api/name/isEnabled</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/isEnabled</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
+			
+			
+			<Anchor>//api/name/isEnabled</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorRequirements/isEnabled</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
+			
+			
+			<Anchor>//api/name/isEnabled</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
