@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/BloodPressureSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/BloodPressureSensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BloodPressureSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="4"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/BloodPressureSensor/syncMeasurements:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>BloodPressureSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)syncMeasurements:(bpmCallBack)cb</Declaration>
+			
+			
+			<Anchor>//api/name/syncMeasurements:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

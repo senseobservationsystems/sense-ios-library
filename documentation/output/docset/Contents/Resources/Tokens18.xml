@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSLocationSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSLocationSensor</TokenIdentifier>
+			<Abstract type="html">Sensor for storing location updates</Abstract>
+			<DeclaredIn>CSLocationSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="18"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSLocationSensor/storeLocation:withDesiredAccuracy:</TokenIdentifier>
+			<Abstract type="html">Store a new location point in the location sensor. If the sensor is not enabled the point will not be stored.</Abstract>
+			<DeclaredIn>CSLocationSensor.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)storeLocation:(CLLocation *)location withDesiredAccuracy:(int)desiredAccuracy</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>location</Name>
+					<Abstract type="html">The location object to store</Abstract>
+				</Parameter><Parameter>
+					<Name>desired</Name>
+					<Abstract type="html">accuracy, used to check if the new point should be accepted or not</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">returns whether the new location point was accepted. Note that if the sensor is not enabled the point will not be stored.</Abstract></ReturnValue>
+			<Anchor>//api/name/storeLocation:withDesiredAccuracy:</Anchor>
+            <NodeRef refid="18"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSBatterySensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSBatterySensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSBatterySensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="10"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSBatterySensor/commitBatteryState:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSBatterySensor.h</DeclaredIn>
+			
+			<Declaration>- (void)commitBatteryState:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/commitBatteryState:</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

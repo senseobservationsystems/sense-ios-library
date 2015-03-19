@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSNoiseSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSNoiseSensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSNoiseSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="22"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSNoiseSensor/settingChanged:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSNoiseSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)settingChanged:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/settingChanged:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>API and Architecture overview Document</title>
+
+	<link rel="stylesheet" href="../../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../../index.html">Home</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview-contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">API and Architecture overview Document</h1>
+
+					<p>This section provides a description of the high level overview of the Sense iOS Library. All classes belonging to the library are prefixed CS standing for CommonSense.</p>
+
+<h2>Interface</h2>
+
+<p><img src="images/interface-hierarchy.png" alt="interface hierarchy" align="center"/></p>
+
+<p>The library has three main interface classes for any app that uses the library: CSSensePlatform, CSSettings, and CSRequirements.</p>
+
+<h3>CSSensorRequirements</h3>
+
+<p>CSSensorRequirements is a singleton that can be accessed through</p>
+
+<pre><code>[CSSensorRequirements sharedRequirements]
+</code></pre>
+
+<p>CSRequirements provides an extra layer on top of the CSSettings to manage potentially conflicting settings. The idea there is that all the different requirements coming from different sources are compared and the lowest value is used as the setting. Hence, the CSSensorRequirements updates the settings. Right now, requirements are used for settings related to indivdual sensors (including enabling/disabling and sample frequency).</p>
+
+<h3>CSSettings</h3>
+
+<p>The other two main interfaces to developers are provided by CSSettings.h and CSSensorRequirements.h. CSSettings is a singleton that manages all the settings in the app and can be accessed through</p>
+
+<pre><code>[CSSettings sharedSettings]
+</code></pre>
+
+<p>Settings manage the behavior of individual sensors and data providers, but also manage more general aspects of the app. Several methods are available for storing a setting and retrieving it. Moreover, whenever a setting is changed, a notification is send so that the new setting can be taken into account at other places.</p>
+
+<h3>CSSensePlatform</h3>
+
+<p>The primary interface is provided in CSSensePlatform.h. CSSensePlatform uses only class methods so there is never an instance of the CSSensePlatform. Instead, whenever</p>
+
+<pre><code>[CSSensePlatform initialize];
+</code></pre>
+
+<p>is called, this initializes a <a href="../../Classes/CSSensorStore.html">CSSensorStore</a> object (a singleton) which coordinates most of the behavior in the app including local and remote persistency. Next to that, the <a href="../../Classes/CSSensePlatform.html">CSSensePlatform</a> provides functions for logging in, logging out, and registering a user (see also User Management), storing data in sensors (see also Persistency and Sensors), and retrieving data from sensors.</p>
+
+<h2>Specialist objects</h2>
+
+<p><img src="images/specialist-object-hierarchy.png" alt="Sepcialist object illustration" align="center"/></p>
+
+<p>Several specialist classes exist to further support and manages the behavior of the app.</p>
+
+<h3><a href="../../Classes/CSStorage.html">CSStorage</a></h3>
+
+<p>The <a href="../../Classes/CSStorage.html">CSStorage</a> class provides local persistency through an SQLite database. It contains tables for all the sensor data and with a list of all the sensors.</p>
+
+<h3><a href="../../Classes/CSUploader.html">CSUploader</a></h3>
+
+<p>Uploads the data to the CommonSense cloud.</p>
+
+<h3><a href="../../Classes/CSSender.html">CSSender</a></h3>
+
+<p>Contains all the code for connecting with the CommonSense cloud.</p>
+
+<h3>CSDatastore</h3>
+
+<p>Protocol fro objects that can store sensor data.</p>
+
+<h3><a href="../../Classes/CSSensorStore.html">CSSensorStore</a></h3>
+
+<p>The <a href="../../Classes/CSSensorStore.html">CSSensorStore</a> is a central class that has instances of the sensors, of a <a href="../../Classes/CSStorage.html">CSStorage</a> instance, of a <a href="../../Classes/CSUploader.html">CSUploader</a> instance, and of a <a href="../../Classes/CSSender.html">CSSender</a> instance. It coordinates the storing and uploading behavior and instantiates sensors and sensor data providers.</p>
+
+<h2>Sensors</h2>
+
+<p><img src="images/sensors-hierarchy.png" alt="Sepcialist object illustration" align="center"/></p>
+
+<p>Next to the main interface classes a number of different sensors are available, mostly corresponding to the physical sensors in the phone.
+Every sensor is responsible for storing the sensor data and providing a data format for the stored data.
+All specific sensor classes inherit from <a href="../../Classes/CSSensor.html">CSSensor</a>, which provides standard behavior for each sensor.
+In some cases, the sensor is also responsible for sampling the data based on the sample frequency, or to listening to event updates.
+In other cases, sensors get data from a provider class. Currently, there is a <a href="../../Classes/CSLocationProvider.html">CSLocationProvider</a> for data to the
+LocationSensor and VisistsSensor, and a <a href="../../Classes/CSSpatialProvider.html">CSSpatialProvider</a> for data for the accelerometer sensor, motion features sensor,
+rotation sensor, compass sensor, orientation sensor, acceleration sensor, and motion energy sensor.
+Detailed specification of the different sensors can be found at the Sensors section.</p>
+
+<p>Sensors can also be defined at runtime instead of at compile time by using an instance of the <a href="../../Classes/CSDynamicSensor.html">CSDynamicSensor</a> class,
+which inherits from <a href="../../Classes/CSSensor.html">CSSensor</a> and can be given a name and dataformat at runtime.</p>
+
+<p>A number of special legacy sensors are also still included in the library.
+<a href="../../Classes/CSJumpSensor.html">CSJumpSensor</a> was used for Cosmic Jump Start game and detects jumps.
+CSAntPlusSensor is used to connect with the Wahoo Ant+ dongle, and the FootPodSensor and <a href="../../Classes/BloodPressureSensor.html">BloodPressureSensor</a> connect to specifc Ant+ hardware devices.</p>
+
+					<footer>
+						<div class="footer-copyright">
+							
+							<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-19</p>
+							
+							
+							<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+							
+						</div>
+					</footer>
+				</main>
+			</div>
+		</div>
+	</article>
+
+	<script src="../../js/script.js"></script>
+</body>
+</html>

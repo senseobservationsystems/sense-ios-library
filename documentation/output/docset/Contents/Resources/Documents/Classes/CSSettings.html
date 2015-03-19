@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>CSSettings Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/enabledChangedNotificationNameForSensor:">+ enabledChangedNotificationNameForSensor:</option>
+		
+		<option value="//api/name/settingChangedNotificationNameForType:">+ settingChangedNotificationNameForType:</option>
+		
+		<option value="//api/name/sharedSettings">+ sharedSettings</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/getSettingType:setting:">- getSettingType:setting:</option>
+		
+		<option value="//api/name/isSensorEnabled:">- isSensorEnabled:</option>
+		
+		<option value="//api/name/resetToDefaults">- resetToDefaults</option>
+		
+		<option value="//api/name/sendNotificationForSensor:">- sendNotificationForSensor:</option>
+		
+		<option value="//api/name/setLogin:withPassword:">- setLogin:withPassword:</option>
+		
+		<option value="//api/name/setLogin:withPasswordHash:">- setLogin:withPasswordHash:</option>
+		
+		<option value="//api/name/setSensor:enabled:">- setSensor:enabled:</option>
+		
+		<option value="//api/name/setSensor:enabled:persistent:">- setSensor:enabled:persistent:</option>
+		
+		<option value="//api/name/setSettingType:setting:value:">- setSettingType:setting:value:</option>
+		
+		<option value="//api/name/setSettingType:setting:value:persistent:">- setSettingType:setting:value:persistent:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">CSSettings Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>CSSettings.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>This singleton is used to control the settings of the sense platform. Using this class sensors can be enabled/disabled and specific settings be set.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/sharedSettings" title="sharedSettings"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedSettings">+&nbsp;sharedSettings</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>+ (CSSettings *)sharedSettings</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enabledChangedNotificationNameForSensor:" title="enabledChangedNotificationNameForSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enabledChangedNotificationNameForSensor:">+&nbsp;enabledChangedNotificationNameForSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns the name of enable notifications for the specified sensor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)enabledChangedNotificationNameForSensor:(NSString *)<em>sensor</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/settingChangedNotificationNameForType:" title="settingChangedNotificationNameForType:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/settingChangedNotificationNameForType:">+&nbsp;settingChangedNotificationNameForType:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>///Returns the name of the notification send when a setting of the specified type changes</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)settingChangedNotificationNameForType:(NSString *)<em>type</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSensor:enabled:" title="setSensor:enabled:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSensor:enabled:">&ndash;&nbsp;setSensor:enabled:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Enable/disable the specified sensor, setting is persistent</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)setSensor:(NSString *)<em>sensor</em> enabled:(BOOL)<em>enable</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSensor:enabled:persistent:" title="setSensor:enabled:persistent:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSensor:enabled:persistent:">&ndash;&nbsp;setSensor:enabled:persistent:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Enable/disable the specified sensor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)setSensor:(NSString *)<em>sensor</em> enabled:(BOOL)<em>enable</em> persistent:(BOOL)<em>persistent</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>enable</code></th>
+						<td><p>wether to enable or disable the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>persistent</code></th>
+						<td><p>whether this setting is persistent</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isSensorEnabled:" title="isSensorEnabled:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isSensorEnabled:">&ndash;&nbsp;isSensorEnabled:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns wether the specified sensor is enabled</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)isSensorEnabled:(NSString *)<em>sensor</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sendNotificationForSensor:" title="sendNotificationForSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendNotificationForSensor:">&ndash;&nbsp;sendNotificationForSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)sendNotificationForSensor:(NSString *)<em>sensor</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getSettingType:setting:" title="getSettingType:setting:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getSettingType:setting:">&ndash;&nbsp;getSettingType:setting:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get the value of the specified setting</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getSettingType:(NSString *)<em>type</em> setting:(NSString *)<em>setting</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>the setting type</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>setting</code></th>
+						<td><p>the specific setting for the type</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>the value of the setting</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSettingType:setting:value:" title="setSettingType:setting:value:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSettingType:setting:value:">&ndash;&nbsp;setSettingType:setting:value:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the value of the specified setting, the setting is persistent</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)setSettingType:(NSString *)<em>type</em> setting:(NSString *)<em>setting</em> value:(NSString *)<em>value</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>the setting type</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>setting</code></th>
+						<td><p>the specific setting for the type</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>the value of to set the setting to</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSettingType:setting:value:persistent:" title="setSettingType:setting:value:persistent:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSettingType:setting:value:persistent:">&ndash;&nbsp;setSettingType:setting:value:persistent:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the value of the specified setting</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)setSettingType:(NSString *)<em>type</em> setting:(NSString *)<em>setting</em> value:(NSString *)<em>value</em> persistent:(BOOL)<em>persistent</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>the setting type</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>setting</code></th>
+						<td><p>the specific setting for the type</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>the value of to set the setting to</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>persistent</code></th>
+						<td><p>whether the setting should be persistent</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setLogin:withPassword:" title="setLogin:withPassword:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setLogin:withPassword:">&ndash;&nbsp;setLogin:withPassword:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Login with user and password</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)setLogin:(NSString *)<em>user</em> withPassword:(NSString *)<em>password</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>the username</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>password</code></th>
+						<td><p>the plain password</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setLogin:withPasswordHash:" title="setLogin:withPasswordHash:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setLogin:withPasswordHash:">&ndash;&nbsp;setLogin:withPasswordHash:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Login with user and a hash of the password</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)setLogin:(NSString *)<em>user</em> withPasswordHash:(NSString *)<em>passwordHash</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>the username</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>passwordHash</code></th>
+						<td><p>the hash of the password</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/resetToDefaults" title="resetToDefaults"></a>
+	<h3 class="method-title"><code><a href="#//api/name/resetToDefaults">&ndash;&nbsp;resetToDefaults</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Reset the settings to defaults.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)resetToDefaults</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-19</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Categories/NSNotificationCenter+CSMainThread.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cat/NSNotificationCenter(CSMainThread)</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+            
+			
+			<NodeRef refid="46"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnMainThread:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			
+			<Declaration>- (void)postNotificationOnMainThread:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/postNotificationOnMainThread:</Anchor>
+            <NodeRef refid="46"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnMainThreadName:object:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			
+			<Declaration>- (void)postNotificationOnMainThreadName:(NSString *)aName object:(id)anObject</Declaration>
+			
+			
+			<Anchor>//api/name/postNotificationOnMainThreadName:object:</Anchor>
+            <NodeRef refid="46"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnMainThreadName:object:userInfo:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			
+			<Declaration>- (void)postNotificationOnMainThreadName:(NSString *)aName object:(id)anObject userInfo:(NSDictionary *)aUserInfo</Declaration>
+			
+			
+			<Anchor>//api/name/postNotificationOnMainThreadName:object:userInfo:</Anchor>
+            <NodeRef refid="46"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnBackgroundThread:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			
+			<Declaration>- (void)postNotificationOnBackgroundThread:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/postNotificationOnBackgroundThread:</Anchor>
+            <NodeRef refid="46"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnBackgroundThreadName:object:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			
+			<Declaration>- (void)postNotificationOnBackgroundThreadName:(NSString *)aName object:(id)anObject</Declaration>
+			
+			
+			<Anchor>//api/name/postNotificationOnBackgroundThreadName:object:</Anchor>
+            <NodeRef refid="46"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnBackgroundThreadName:object:userInfo:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			
+			<Declaration>- (void)postNotificationOnBackgroundThreadName:(NSString *)aName object:(id)anObject userInfo:(NSDictionary *)aUserInfo</Declaration>
+			
+			
+			<Anchor>//api/name/postNotificationOnBackgroundThreadName:object:userInfo:</Anchor>
+            <NodeRef refid="46"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

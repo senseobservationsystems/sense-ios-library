@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSVisitsSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSVisitsSensor</TokenIdentifier>
+			<Abstract type="html">Sensor for storing visits</Abstract>
+			<DeclaredIn>CSVisitsSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="44"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSVisitsSensor/storeVisit:</TokenIdentifier>
+			<Abstract type="html">Processes a new visit object and stores it in the sensor. If the sensor is not enabled the point will not be stored.</Abstract>
+			<DeclaredIn>CSVisitsSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)storeVisit:(CLVisit *)visit</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>visit</Name>
+					<Abstract type="html">The visit object</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/storeVisit:</Anchor>
+            <NodeRef refid="44"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

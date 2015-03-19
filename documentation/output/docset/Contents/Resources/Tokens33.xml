@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSSensorIdKey.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSensorIdKey</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+            
+			
+			<NodeRef refid="33"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/setName:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/name</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorIdKey/name</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/setSensorDescription:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *sensorDescription</Declaration>
+			
+			
+			<Anchor>//api/name/sensorDescription</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/sensorDescription</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *sensorDescription</Declaration>
+			
+			
+			<Anchor>//api/name/sensorDescription</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorIdKey/sensorDescription</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *sensorDescription</Declaration>
+			
+			
+			<Anchor>//api/name/sensorDescription</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/setDeviceType:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *deviceType</Declaration>
+			
+			
+			<Anchor>//api/name/deviceType</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/deviceType</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *deviceType</Declaration>
+			
+			
+			<Anchor>//api/name/deviceType</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorIdKey/deviceType</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *deviceType</Declaration>
+			
+			
+			<Anchor>//api/name/deviceType</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/setDeviceUUID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *deviceUUID</Declaration>
+			
+			
+			<Anchor>//api/name/deviceUUID</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/deviceUUID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *deviceUUID</Declaration>
+			
+			
+			<Anchor>//api/name/deviceUUID</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorIdKey/deviceUUID</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>@property NSString *deviceUUID</Declaration>
+			
+			
+			<Anchor>//api/name/deviceUUID</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/initWithName:description:deviceType:deviceUUID:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithName:(NSString *)name description:(NSString *)description deviceType:(NSString *)deviceType deviceUUID:(NSString *)deviceUUID</Declaration>
+			
+			
+			<Anchor>//api/name/initWithName:description:deviceType:deviceUUID:</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/initWithName:description:device:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithName:(NSString *)name description:(NSString *)description device:(NSDictionary *)device</Declaration>
+			
+			
+			<Anchor>//api/name/initWithName:description:device:</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorIdKey/device</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorIdKey.h</DeclaredIn>
+			
+			<Declaration>- (NSDictionary *)device</Declaration>
+			
+			
+			<Anchor>//api/name/device</Anchor>
+            <NodeRef refid="33"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSUserProximity.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSUserProximity</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSUserProximity.h</DeclaredIn>
+            
+			
+			<NodeRef refid="43"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSUserProximity/commitUserProximity:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSUserProximity.h</DeclaredIn>
+			
+			<Declaration>- (void)commitUserProximity:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/commitUserProximity:</Anchor>
+            <NodeRef refid="43"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

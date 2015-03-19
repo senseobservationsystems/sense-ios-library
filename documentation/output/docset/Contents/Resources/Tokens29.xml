@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSScreenSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSScreenSensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSScreenSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="29"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSScreenSensor/commitDisplayState:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSScreenSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)commitDisplayState:(BOOL)isScreenTurnedOn</Declaration>
+			
+			
+			<Anchor>//api/name/commitDisplayState:</Anchor>
+            <NodeRef refid="29"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

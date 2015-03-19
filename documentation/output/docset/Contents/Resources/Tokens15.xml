@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/CSDynamicSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/CSDynamicSensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSDynamicSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="15"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSDynamicSensor/initWithName:displayName:deviceType:dataType:fields:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSDynamicSensor.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithName:(NSString *)name displayName:(NSString *)dispName deviceType:(NSString *)devType dataType:(NSString *)datType fields:(NSDictionary *)fields</Declaration>
+			
+			
+			<Anchor>//api/name/initWithName:displayName:deviceType:dataType:fields:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSDynamicSensor/initWithName:displayName:deviceType:dataType:fields:device:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSDynamicSensor.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithName:(NSString *)name displayName:(NSString *)dispName deviceType:(NSString *)devType dataType:(NSString *)datType fields:(NSDictionary *)fields device:(NSDictionary *)device</Declaration>
+			
+			
+			<Anchor>//api/name/initWithName:displayName:deviceType:dataType:fields:device:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSDynamicSensor/commitValue:withTimestamp:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSDynamicSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp</Declaration>
+			
+			
+			<Anchor>//api/name/commitValue:withTimestamp:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

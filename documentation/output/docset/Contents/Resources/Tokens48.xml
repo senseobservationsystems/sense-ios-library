@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/CSDataStore.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/CSDataStore</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSDataStore.h</DeclaredIn>
+            
+			
+			<NodeRef refid="48"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/CSDataStore/commitFormattedData:forSensorId:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSDataStore.h</DeclaredIn>
+			
+			<Declaration>- (void)commitFormattedData:(NSDictionary *)data forSensorId:(NSString *)sensorClass</Declaration>
+			
+			
+			<Anchor>//api/name/commitFormattedData:forSensorId:</Anchor>
+            <NodeRef refid="48"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>
