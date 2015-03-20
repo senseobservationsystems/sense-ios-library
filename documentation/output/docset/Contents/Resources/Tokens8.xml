@@ -4,7 +4,9 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/doc/Security</TokenIdentifier>
-			<Abstract type="html">Security </Abstract>
+			<Abstract type="html">The library uses SQLLite for storing the sensor data locally. It acts as a buffer before uploading data to CommonSense Platform.
+In order to store data securely, the library support data encription by using SQLChiper library
+To use it you only need to change a settings</Abstract>
 			<DeclaredIn>Security-template.markdown</DeclaredIn>
             
 			

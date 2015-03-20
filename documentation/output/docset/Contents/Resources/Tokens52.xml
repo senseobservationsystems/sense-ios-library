@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/FootpodSensor.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/FootpodSensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>FootpodSensor.h</DeclaredIn>
+            
+			
+			<NodeRef refid="52"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/FootpodSensor/initWithConnection:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>FootpodSensor.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithConnection:(WFSensorConnection *)connection</Declaration>
+			
+			
+			<Anchor>//api/name/initWithConnection:</Anchor>
+            <NodeRef refid="52"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/FootpodSensor/checkData</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>FootpodSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)checkData</Declaration>
+			
+			
+			<Anchor>//api/name/checkData</Anchor>
+            <NodeRef refid="52"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>
