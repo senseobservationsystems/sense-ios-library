@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Categories/NSNotificationCenter+CSMainThread.html">
+	<File path="Classes/CSUploader.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cat/NSNotificationCenter(CSMainThread)</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSUploader</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			<DeclaredIn>CSUploader.h</DeclaredIn>
             
 			
 			<NodeRef refid="48"/>
@@ -13,74 +13,38 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnMainThread:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSUploader/initWithStorage:andSender:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			<DeclaredIn>CSUploader.h</DeclaredIn>
 			
-			<Declaration>- (void)postNotificationOnMainThread:(NSNotification *)notification</Declaration>
+			<Declaration>- (id)initWithStorage:(CSStorage *)theStorage andSender:(CSSender *)theSender</Declaration>
 			
 			
-			<Anchor>//api/name/postNotificationOnMainThread:</Anchor>
+			<Anchor>//api/name/initWithStorage:andSender:</Anchor>
             <NodeRef refid="48"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnMainThreadName:object:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSUploader/upload</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			<DeclaredIn>CSUploader.h</DeclaredIn>
 			
-			<Declaration>- (void)postNotificationOnMainThreadName:(NSString *)aName object:(id)anObject</Declaration>
+			<Declaration>- (BOOL)upload</Declaration>
 			
 			
-			<Anchor>//api/name/postNotificationOnMainThreadName:object:</Anchor>
+			<Anchor>//api/name/upload</Anchor>
             <NodeRef refid="48"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnMainThreadName:object:userInfo:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSUploader/lastUploadedRowId</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
+			<DeclaredIn>CSUploader.h</DeclaredIn>
 			
-			<Declaration>- (void)postNotificationOnMainThreadName:(NSString *)aName object:(id)anObject userInfo:(NSDictionary *)aUserInfo</Declaration>
-			
-			
-			<Anchor>//api/name/postNotificationOnMainThreadName:object:userInfo:</Anchor>
-            <NodeRef refid="48"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnBackgroundThread:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
-			
-			<Declaration>- (void)postNotificationOnBackgroundThread:(NSNotification *)notification</Declaration>
+			<Declaration>- (long long)lastUploadedRowId</Declaration>
 			
 			
-			<Anchor>//api/name/postNotificationOnBackgroundThread:</Anchor>
-            <NodeRef refid="48"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnBackgroundThreadName:object:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
-			
-			<Declaration>- (void)postNotificationOnBackgroundThreadName:(NSString *)aName object:(id)anObject</Declaration>
-			
-			
-			<Anchor>//api/name/postNotificationOnBackgroundThreadName:object:</Anchor>
-            <NodeRef refid="48"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/NSNotificationCenter/postNotificationOnBackgroundThreadName:object:userInfo:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>NSNotificationCenter+MainThread.h</DeclaredIn>
-			
-			<Declaration>- (void)postNotificationOnBackgroundThreadName:(NSString *)aName object:(id)anObject userInfo:(NSDictionary *)aUserInfo</Declaration>
-			
-			
-			<Anchor>//api/name/postNotificationOnBackgroundThreadName:object:userInfo:</Anchor>
+			<Anchor>//api/name/lastUploadedRowId</Anchor>
             <NodeRef refid="48"/>
 		</Token>
 		

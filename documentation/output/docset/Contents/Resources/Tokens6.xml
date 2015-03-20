@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/BloodPressureSensor.html">
+	<File path="docs/source/Logging and debugging.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/BloodPressureSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>BloodPressureSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/doc/Logging and debugging</TokenIdentifier>
+			<Abstract type="html">There is some functionality for logging usage and problems and debugging them. </Abstract>
+			<DeclaredIn>Logging and debugging-template.markdown</DeclaredIn>
             
 			
 			<NodeRef refid="6"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/BloodPressureSensor/syncMeasurements:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>BloodPressureSensor.h</DeclaredIn>
-			
-			<Declaration>- (void)syncMeasurements:(bpmCallBack)cb</Declaration>
-			
-			
-			<Anchor>//api/name/syncMeasurements:</Anchor>
-            <NodeRef refid="6"/>
-		</Token>
 		
         
         

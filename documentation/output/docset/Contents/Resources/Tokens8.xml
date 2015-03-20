@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSAccelerometerSensor.html">
+	<File path="docs/source/Security.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSAccelerometerSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSAccelerometerSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/doc/Security</TokenIdentifier>
+			<Abstract type="html">Security </Abstract>
+			<DeclaredIn>Security-template.markdown</DeclaredIn>
             
 			
 			<NodeRef refid="8"/>

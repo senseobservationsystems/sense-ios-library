@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSSensorRequirements.html">
+	<File path="Classes/CSSender.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSSensorRequirements</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSender</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
+			<DeclaredIn>CSSender.h</DeclaredIn>
             
 			
 			<NodeRef refid="36"/>
@@ -13,98 +13,290 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensorRequirements/sharedRequirements</TokenIdentifier>
-			<Abstract type="html">Get singleton instance</Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
-			
-			<Declaration>+ (CSSensorRequirements *)sharedRequirements</Declaration>
-			
-			
-			<Anchor>//api/name/sharedRequirements</Anchor>
-            <NodeRef refid="36"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensorRequirements/requirementForSensor:</TokenIdentifier>
-			<Abstract type="html">Helper function to create a requirement for a sensor</Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
-			
-			<Declaration>+ (NSDictionary *)requirementForSensor:(NSString *)sensor</Declaration>
-			
-			
-			<Anchor>//api/name/requirementForSensor:</Anchor>
-            <NodeRef refid="36"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensorRequirements/requirementForSensor:withInterval:</TokenIdentifier>
-			<Abstract type="html">Helper function to create a requirement for a sensor with an interval</Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
-			
-			<Declaration>+ (NSDictionary *)requirementForSensor:(NSString *)sensor withInterval:(NSTimeInterval)interval</Declaration>
-			
-			
-			<Anchor>//api/name/requirementForSensor:withInterval:</Anchor>
-            <NodeRef refid="36"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/setRequirements:byConsumer:</TokenIdentifier>
-			<Abstract type="html">Set requirements for a specific consumer. Overwrites previous requirement for the consumer</Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
-			
-			<Declaration>- (void)setRequirements:(NSArray *)requirements byConsumer:(NSString *)consumer</Declaration>
-			
-			
-			<Anchor>//api/name/setRequirements:byConsumer:</Anchor>
-            <NodeRef refid="36"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/clearRequirementsForConsumer:</TokenIdentifier>
-			<Abstract type="html">Clear the requirements of a consumer</Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
-			
-			<Declaration>- (void)clearRequirementsForConsumer:(NSString *)consumer</Declaration>
-			
-			
-			<Anchor>//api/name/clearRequirementsForConsumer:</Anchor>
-            <NodeRef refid="36"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/setIsEnabled:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/setUrls:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
+			<DeclaredIn>CSSender.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
+			<Declaration>@property NSDictionary *urls</Declaration>
 			
 			
-			<Anchor>//api/name/isEnabled</Anchor>
+			<Anchor>//api/name/urls</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/isEnabled</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/urls</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
+			<DeclaredIn>CSSender.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
+			<Declaration>@property NSDictionary *urls</Declaration>
 			
 			
-			<Anchor>//api/name/isEnabled</Anchor>
+			<Anchor>//api/name/urls</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSSensorRequirements/isEnabled</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSender/urls</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
+			<DeclaredIn>CSSender.h</DeclaredIn>
 			
-			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
+			<Declaration>@property NSDictionary *urls</Declaration>
 			
 			
-			<Anchor>//api/name/isEnabled</Anchor>
+			<Anchor>//api/name/urls</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/setSessionCookie:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>@property NSString *sessionCookie</Declaration>
+			
+			
+			<Anchor>//api/name/sessionCookie</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/sessionCookie</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>@property NSString *sessionCookie</Declaration>
+			
+			
+			<Anchor>//api/name/sessionCookie</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSender/sessionCookie</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>@property NSString *sessionCookie</Declaration>
+			
+			
+			<Anchor>//api/name/sessionCookie</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/setApplicationKey:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>@property NSString *applicationKey</Declaration>
+			
+			
+			<Anchor>//api/name/applicationKey</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/applicationKey</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>@property NSString *applicationKey</Declaration>
+			
+			
+			<Anchor>//api/name/applicationKey</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSender/applicationKey</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>@property NSString *applicationKey</Declaration>
+			
+			
+			<Anchor>//api/name/applicationKey</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/init</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/setUser:andPasswordHash:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (void)setUser:(NSString *)user andPasswordHash:(NSString *)hash</Declaration>
+			
+			
+			<Anchor>//api/name/setUser:andPasswordHash:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/isLoggedIn</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isLoggedIn</Declaration>
+			
+			
+			<Anchor>//api/name/isLoggedIn</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/registerUser:withPassword:withEmail:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)registerUser:(NSString *)user withPassword:(NSString *)pass withEmail:(NSString *)email error:(NSString **)error</Declaration>
+			
+			
+			<Anchor>//api/name/registerUser:withPassword:withEmail:error:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/login</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)login</Declaration>
+			
+			
+			<Anchor>//api/name/login</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/logout</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)logout</Declaration>
+			
+			
+			<Anchor>//api/name/logout</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/listSensors</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)listSensors</Declaration>
+			
+			
+			<Anchor>//api/name/listSensors</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/listSensorsForDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)listSensorsForDevice:(NSDictionary *)device</Declaration>
+			
+			
+			<Anchor>//api/name/listSensorsForDevice:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/createSensorWithDescription:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (NSDictionary *)createSensorWithDescription:(NSDictionary *)description</Declaration>
+			
+			
+			<Anchor>//api/name/createSensorWithDescription:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/connectSensor:ToDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)connectSensor:(NSString *)sensorId ToDevice:(NSDictionary *)device</Declaration>
+			
+			
+			<Anchor>//api/name/connectSensor:ToDevice:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/uploadData:forSensorId:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)uploadData:(NSArray *)data forSensorId:(NSString *)sensorId</Declaration>
+			
+			
+			<Anchor>//api/name/uploadData:forSensorId:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/uploadDataForMultipleSensors:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)uploadDataForMultipleSensors:(NSArray *)data</Declaration>
+			
+			
+			<Anchor>//api/name/uploadDataForMultipleSensors:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/shareSensor:WithUser:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)shareSensor:(NSString *)sensorId WithUser:(NSString *)user</Declaration>
+			
+			
+			<Anchor>//api/name/shareSensor:WithUser:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/getDataFromSensor:nrPoints:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getDataFromSensor:(NSString *)sensorId nrPoints:(NSInteger)nrPoints</Declaration>
+			
+			
+			<Anchor>//api/name/getDataFromSensor:nrPoints:</Anchor>
+            <NodeRef refid="36"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSender/giveFeedbackToStateSensor:from:to:label:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSender.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)giveFeedbackToStateSensor:(NSString *)sensorId from:(NSDate *)from to:(NSDate *)to label:(NSString *)label</Declaration>
+			
+			
+			<Anchor>//api/name/giveFeedbackToStateSensor:from:to:label:</Anchor>
             <NodeRef refid="36"/>
 		</Token>
 		

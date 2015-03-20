@@ -1,112 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSReachability.html">
+	<File path="Classes/CSOrientationSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSReachability</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSOrientationSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
+			<DeclaredIn>CSOrientationSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="29"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSReachability/reachabilityWithHostName:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>+ (CSReachability *)reachabilityWithHostName:(NSString *)hostName</Declaration>
-			
-			
-			<Anchor>//api/name/reachabilityWithHostName:</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSReachability/reachabilityWithAddress:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>+ (CSReachability *)reachabilityWithAddress:(const struct sockaddr_in *)hostAddress</Declaration>
-			
-			
-			<Anchor>//api/name/reachabilityWithAddress:</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSReachability/reachabilityForInternetConnection</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>+ (CSReachability *)reachabilityForInternetConnection</Declaration>
-			
-			
-			<Anchor>//api/name/reachabilityForInternetConnection</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSReachability/reachabilityForLocalWiFi</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>+ (CSReachability *)reachabilityForLocalWiFi</Declaration>
-			
-			
-			<Anchor>//api/name/reachabilityForLocalWiFi</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSReachability/startNotifier</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)startNotifier</Declaration>
-			
-			
-			<Anchor>//api/name/startNotifier</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSReachability/stopNotifier</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>- (void)stopNotifier</Declaration>
-			
-			
-			<Anchor>//api/name/stopNotifier</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSReachability/currentReachabilityStatus</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>- (NetworkStatus)currentReachabilityStatus</Declaration>
-			
-			
-			<Anchor>//api/name/currentReachabilityStatus</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSReachability/connectionRequired</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSReachability.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)connectionRequired</Declaration>
-			
-			
-			<Anchor>//api/name/connectionRequired</Anchor>
-            <NodeRef refid="29"/>
-		</Token>
 		
         
         

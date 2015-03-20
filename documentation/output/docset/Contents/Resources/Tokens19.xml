@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSLocationProvider.html">
+	<File path="Classes/CSConnectionSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSLocationProvider</TokenIdentifier>
-			<Abstract type="html">Provider that handles all the location related tracking
-Receives location points and visits from the OS and processes them.</Abstract>
-			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CSConnectionSensor</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSConnectionSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="19"/>
@@ -14,75 +13,14 @@ Receives location points and visits from the OS and processes them.</Abstract>
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSLocationProvider/initWithLocationSensor:andVisitsSensor:</TokenIdentifier>
-			<Abstract type="html">Init method with a location sensor and visits sensor to store the data in</Abstract>
-			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/instm/CSConnectionSensor/reachabilityChanged:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSConnectionSensor.h</DeclaredIn>
 			
-			<Declaration>- (id)initWithLocationSensor:(CSLocationSensor *)lSensor andVisitsSensor:(CSVisitsSensor *)vSensor</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>lSensor</Name>
-					<Abstract type="html">The location sensor</Abstract>
-				</Parameter><Parameter>
-					<Name>vSensor</Name>
-					<Abstract type="html">The visits sensor</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">Returns self</Abstract></ReturnValue>
-			<Anchor>//api/name/initWithLocationSensor:andVisitsSensor:</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSLocationProvider/setIsEnabled:</TokenIdentifier>
-			<Abstract type="html">This enabled/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, it means the desired accuracy is set and both location updates and significant location updates are started or stopped. Note that if the resulting location points should also be stored, the LocationSensor should be enabled separately.</Abstract>
-			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
-			
-			<Declaration>@property (assign) BOOL isEnabled</Declaration>
+			<Declaration>- (void)reachabilityChanged:(NSNotification *)note</Declaration>
 			
 			
-			<Anchor>//api/name/isEnabled</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSLocationProvider/isEnabled</TokenIdentifier>
-			<Abstract type="html">This enabled/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, it means the desired accuracy is set and both location updates and significant location updates are started or stopped. Note that if the resulting location points should also be stored, the LocationSensor should be enabled separately.</Abstract>
-			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
-			
-			<Declaration>@property (assign) BOOL isEnabled</Declaration>
-			
-			
-			<Anchor>//api/name/isEnabled</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSLocationProvider/isEnabled</TokenIdentifier>
-			<Abstract type="html">This enabled/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, it means the desired accuracy is set and both location updates and significant location updates are started or stopped. Note that if the resulting location points should also be stored, the LocationSensor should be enabled separately.</Abstract>
-			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
-			
-			<Declaration>@property (assign) BOOL isEnabled</Declaration>
-			
-			
-			<Anchor>//api/name/isEnabled</Anchor>
-            <NodeRef refid="19"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSLocationProvider/setBackgroundRunningEnable:</TokenIdentifier>
-			<Abstract type="html">	This enables/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, this means that location updates and significant location updates are enabled/disabaled. Note that when using this function, the desired accuracy should still be handled seperately throught the kCSLocationSettingAccuracy setting. </Abstract>
-			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
-			
-			<Declaration>- (void)setBackgroundRunningEnable:(BOOL)enable</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>enable</Name>
-					<Abstract type="html">Setting whether to enable or disable the location monitoring for running in the background</Abstract>
-				</Parameter>
-			</Parameters>
-			
-			<Anchor>//api/name/setBackgroundRunningEnable:</Anchor>
+			<Anchor>//api/name/reachabilityChanged:</Anchor>
             <NodeRef refid="19"/>
 		</Token>
 		

@@ -4,7 +4,8 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/doc/Getting started</TokenIdentifier>
-			<Abstract type="html">## Installation</Abstract>
+			<Abstract type="html">Getting started
+=================</Abstract>
 			<DeclaredIn>Getting started-template.markdown</DeclaredIn>
             
 			

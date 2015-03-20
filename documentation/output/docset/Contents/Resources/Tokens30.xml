@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSRotationSensor.html">
+	<File path="Classes/CSOrientationStateSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSRotationSensor</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSOrientationStateSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSRotationSensor.h</DeclaredIn>
+			<DeclaredIn>CSOrientationStateSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="30"/>
 		</Token>
 		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSOrientationStateSensor/commitOrientation:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSOrientationStateSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)commitOrientation:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/commitOrientation:</Anchor>
+            <NodeRef refid="30"/>
+		</Token>
 		
         
         

@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSMotionFeaturesSensor.html">
+	<File path="Classes/CSJumpSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSMotionFeaturesSensor</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSJumpSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSMotionFeaturesSensor.h</DeclaredIn>
+			<DeclaredIn>CSJumpSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="22"/>
 		</Token>
 		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSJumpSensor/pushDeviceMotion:andManager:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSJumpSensor.h</DeclaredIn>
+			
+			<Declaration>- (void)pushDeviceMotion:(CMDeviceMotion *)motion andManager:(CMMotionManager *)motionManager</Declaration>
+			
+			
+			<Anchor>//api/name/pushDeviceMotion:andManager:</Anchor>
+            <NodeRef refid="22"/>
+		</Token>
 		
         
         

@@ -1,10 +1,8 @@
 
 In order for the library to be able to sample data it needs to run continuously in the background. This is not always allowed by Apple. Therefore, to run in the background, the app makes use of location services. 
 
-## What to do to make the app run in the background
-The location services should be enabled by the developer. There are several ways to enable them in the library. One way is to enable one of the sensors 
-
-	kCSSENSOR_LOCATION or kCSSENSORVISITS
+## Make the app run in the background
+The location services should be enabled by the developer. There are several ways to enable them in the library. One way is to enable one of the sensors <code>kCSSENSOR_LOCATION</code> or <code>kCSSENSORVISITS</code>
 
 that uses the location provider by setting a requirement on it: 
 
@@ -18,15 +16,17 @@ This will enable that particular sensor and the location sensing to be able to r
  
 Note that whenever this setting or requirement is processed the user will be asked to provide permission to use location services. 
 
-There are than a few more steps to take into account. First, you need to add to your info.plist file the UIBackgroundModes: "App registers for location updates".
+There are than a few more steps to take into account. First, you need to add to your info.plist file the UIBackgroundModes: "App registers for location updates". Whenever you submit your app to Apple for review, you need to explain the reason for the location updates and provide a warning about battery usage. An example could be:
 
-Whenever you submit your app to Apple for review, you need to explain the reason for the location updates and provide a warning about battery usage. An example could be:
-
-	The app enables the user to track their physical activity. For this the app accesses locations and the accelerometer sensor, hence the app declares support for location in the UIBackgroundModes.
+<blockquote>
+The app enables the user to track their physical activity. For this the app accesses locations and the accelerometer sensor, hence the app declares support for location in the UIBackgroundModes.
+</blockquote>
 
 And this could be an example of a user facing disclaimer that is also required by Apple:
 
-	Disclaimer: Continued use of GPS running in the background can dramatically decrease battery life. This app accesses your location to enable you to track your sleep and activity.
+<blockquote>
+Disclaimer: Continued use of GPS running in the background can dramatically decrease battery life. This app accesses your location to enable you to track your sleep and activity.
+</blockquote>
 
-@warning
+<b>Warning</b><br>
 Whenever the app crashes for some reason it does not sample data anymore. The app will restart itself on a significant location update (for this, significantLocationUpdates are turned on). However, when there is no significant location update for a while this might cause missing data and could influence the quality of subsequent processing. Hence, it is important to minimize crashes for apps using the library while running in the background. 

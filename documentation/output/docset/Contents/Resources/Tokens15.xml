@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSConnectionSensor.html">
+	<File path="Classes/CSApplicationStateChangeMsg.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSConnectionSensor</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSApplicationStateChangeMsg</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSConnectionSensor.h</DeclaredIn>
+			<DeclaredIn>CSApplicationStateChange.h</DeclaredIn>
             
 			
 			<NodeRef refid="15"/>
@@ -13,14 +13,38 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSConnectionSensor/reachabilityChanged:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/CSApplicationStateChangeMsg/setApplicationStateChange:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSConnectionSensor.h</DeclaredIn>
+			<DeclaredIn>CSApplicationStateChange.h</DeclaredIn>
 			
-			<Declaration>- (void)reachabilityChanged:(NSNotification *)note</Declaration>
+			<Declaration>@property (assign) CSApplicationStateChange applicationStateChange</Declaration>
 			
 			
-			<Anchor>//api/name/reachabilityChanged:</Anchor>
+			<Anchor>//api/name/applicationStateChange</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSApplicationStateChangeMsg/applicationStateChange</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSApplicationStateChange.h</DeclaredIn>
+			
+			<Declaration>@property (assign) CSApplicationStateChange applicationStateChange</Declaration>
+			
+			
+			<Anchor>//api/name/applicationStateChange</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSApplicationStateChangeMsg/applicationStateChange</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSApplicationStateChange.h</DeclaredIn>
+			
+			<Declaration>@property (assign) CSApplicationStateChange applicationStateChange</Declaration>
+			
+			
+			<Anchor>//api/name/applicationStateChange</Anchor>
             <NodeRef refid="15"/>
 		</Token>
 		

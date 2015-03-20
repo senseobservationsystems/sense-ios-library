@@ -1,3 +1,6 @@
+Getting started
+=================
+
 ## Installation
 
 The xcode project is setup as a static library. That means you can either compile the project and link against it, or add it as a cross-reference project in Xcode. The latter is explained below. See also this apple keynote.

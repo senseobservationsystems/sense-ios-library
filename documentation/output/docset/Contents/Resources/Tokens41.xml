@@ -1,16 +1,303 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSStepCounterProcessorSensor.html">
+	<File path="Classes/CSSensorStore.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSStepCounterProcessorSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSStepCounterProcessorSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSensorStore</TokenIdentifier>
+			<Abstract type="html">Handles sensor data storing and uploading</Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
             
 			
 			<NodeRef refid="41"/>
 		</Token>
 		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/setAllAvailableSensorClasses:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSArray *allAvailableSensorClasses</Declaration>
+			
+			
+			<Anchor>//api/name/allAvailableSensorClasses</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/allAvailableSensorClasses</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSArray *allAvailableSensorClasses</Declaration>
+			
+			
+			<Anchor>//api/name/allAvailableSensorClasses</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorStore/allAvailableSensorClasses</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSArray *allAvailableSensorClasses</Declaration>
+			
+			
+			<Anchor>//api/name/allAvailableSensorClasses</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/setSensors:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSArray *sensors</Declaration>
+			
+			
+			<Anchor>//api/name/sensors</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/sensors</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSArray *sensors</Declaration>
+			
+			
+			<Anchor>//api/name/sensors</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorStore/sensors</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) NSArray *sensors</Declaration>
+			
+			
+			<Anchor>//api/name/sensors</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/setSender:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CSSender *sender</Declaration>
+			
+			
+			<Anchor>//api/name/sender</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/sender</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CSSender *sender</Declaration>
+			
+			
+			<Anchor>//api/name/sender</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/CSSensorStore/sender</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) CSSender *sender</Declaration>
+			
+			
+			<Anchor>//api/name/sender</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensorStore/sharedSensorStore</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>+ (CSSensorStore *)sharedSensorStore</Declaration>
+			
+			
+			<Anchor>//api/name/sharedSensorStore</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensorStore/device</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>+ (NSDictionary *)device</Declaration>
+			
+			
+			<Anchor>//api/name/device</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/init</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/loginChanged</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)loginChanged</Declaration>
+			
+			
+			<Anchor>//api/name/loginChanged</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/setEnabled:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)setEnabled:(BOOL)enable</Declaration>
+			
+			
+			<Anchor>//api/name/setEnabled:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/enabledChanged:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)enabledChanged:(id)notification</Declaration>
+			
+			
+			<Anchor>//api/name/enabledChanged:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/setSyncRate:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)setSyncRate:(int)newRate</Declaration>
+			
+			
+			<Anchor>//api/name/setSyncRate:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/addSensor:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)addSensor:(CSSensor *)sensor</Declaration>
+			
+			
+			<Anchor>//api/name/addSensor:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/getDataForSensor:onlyFromDevice:nrLastPoints:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getDataForSensor:(NSString *)name onlyFromDevice:(bool)onlyFromDevice nrLastPoints:(NSInteger)nrLastPoints</Declaration>
+			
+			
+			<Anchor>//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/getLocalDataForSensor:from:to:</TokenIdentifier>
+			<Abstract type="html">Retrieve data from a sensor that is stored locally between a certain time interval</Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the sensor as an NSString</Abstract>
+				</Parameter><Parameter>
+					<Name>startDate</Name>
+					<Abstract type="html">The date and time of the first datapoint to look for (inclusive)</Abstract>
+				</Parameter><Parameter>
+					<Name>endDate</Name>
+					<Abstract type="html">The data and time of the last datapoint to look for (exclusive)</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">An array with dictionaries of time-value pairs</Abstract></ReturnValue>
+			<Anchor>//api/name/getLocalDataForSensor:from:to:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/giveFeedbackOnState:from:to:label:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)giveFeedbackOnState:(NSString *)state from:(NSDate *)from to:(NSDate *)to label:(NSString *)label</Declaration>
+			
+			
+			<Anchor>//api/name/giveFeedbackOnState:from:to:label:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/forceDataFlush</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)forceDataFlush</Declaration>
+			
+			
+			<Anchor>//api/name/forceDataFlush</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/forceDataFlushAndBlock</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)forceDataFlushAndBlock</Declaration>
+			
+			
+			<Anchor>//api/name/forceDataFlushAndBlock</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSensorStore/generalSettingChanged:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>CSSensorStore.h</DeclaredIn>
+			
+			<Declaration>- (void)generalSettingChanged:(NSNotification *)notification</Declaration>
+			
+			
+			<Anchor>//api/name/generalSettingChanged:</Anchor>
+            <NodeRef refid="41"/>
+		</Token>
 		
         
         

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSActivityProcessorSensor.html">
+	<File path="docs/source/User management.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSActivityProcessorSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSActivityProcessorSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/doc/User management</TokenIdentifier>
+			<Abstract type="html">User management interface functions are provided in CSSensePlatform.h. Note that the user management settings are managed by CSSensePlatform so there is no need to change them manually (although you could, it might mess things up if you don’t know what you are doing).</Abstract>
+			<DeclaredIn>User management-template.markdown</DeclaredIn>
             
 			
 			<NodeRef refid="9"/>

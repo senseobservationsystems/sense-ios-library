@@ -16,6 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
+/** @name Settings */
+
 //notifications
 extern NSString* const CSsettingLoginChangedNotification;
 extern NSString* const settingSynchronisationChangedNotification;
@@ -30,7 +32,19 @@ extern NSString* const kCSSettingTypeAmbience;
 
 
 //general settings
+
+/** 
+ User name of the user stored to login and logout and obtain a session ID
+ 
+ @value Any valid string
+ */
 extern NSString* const kCSGeneralSettingUsername;
+
+/** 
+ Password of the user stored to login and logout and obtain a session ID
+
+ Note: this a MD5 hashed password
+ */
 extern NSString* const kCSGeneralSettingPassword;
 extern NSString* const kCSGeneralSettingSenseEnabled;
 extern NSString* const kCSGeneralSettingUploadInterval;
