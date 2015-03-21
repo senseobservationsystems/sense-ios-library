@@ -1,52 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSUploader.html">
+	<File path="Classes/CSTimeZoneSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSUploader</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSTimeZoneSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSUploader.h</DeclaredIn>
+			<DeclaredIn>CSTimeZoneSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="48"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSUploader/initWithStorage:andSender:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSUploader.h</DeclaredIn>
-			
-			<Declaration>- (id)initWithStorage:(CSStorage *)theStorage andSender:(CSSender *)theSender</Declaration>
-			
-			
-			<Anchor>//api/name/initWithStorage:andSender:</Anchor>
-            <NodeRef refid="48"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSUploader/upload</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSUploader.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)upload</Declaration>
-			
-			
-			<Anchor>//api/name/upload</Anchor>
-            <NodeRef refid="48"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSUploader/lastUploadedRowId</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSUploader.h</DeclaredIn>
-			
-			<Declaration>- (long long)lastUploadedRowId</Declaration>
-			
-			
-			<Anchor>//api/name/lastUploadedRowId</Anchor>
-            <NodeRef refid="48"/>
-		</Token>
 		
         
         

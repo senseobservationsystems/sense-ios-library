@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSSensor.html">
+	<File path="Classes/CSSensePlatform.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSSensor</TokenIdentifier>
-			<Abstract type="html">The base object for each sensor.</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/cl/CSSensePlatform</TokenIdentifier>
+			<Abstract type="html">This is the high-level interface for the iOS sense platform library. CSSensePlatform uses only class methods so there is never an instance of the CSSensePlatform. Instead, whenever
+	
+	[CSSensePlatform initialize];</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
             
 			
 			<NodeRef refid="38"/>
@@ -13,278 +15,422 @@
 		
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/setIsEnabled:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/initialize</TokenIdentifier>
+			<Abstract type="html">Initializes the sense platform. This creates an instance of the CSSensorStore object.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property (assign) BOOL isEnabled</Declaration>
+			<Declaration>+ (void)initialize</Declaration>
 			
 			
-			<Anchor>//api/name/isEnabled</Anchor>
+			<Anchor>//api/name/initialize</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/isEnabled</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/initializeWithApplicationKey:</TokenIdentifier>
+			<Abstract type="html">Initialize the Sense Platform</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property (assign) BOOL isEnabled</Declaration>
+			<Declaration>+ (void)initializeWithApplicationKey:(NSString *)applicationKey</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>applicationKey</Name>
+					<Abstract type="html">the application key to identify this application to Common Sense</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/isEnabled</Anchor>
+			<Anchor>//api/name/initializeWithApplicationKey:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSSensor/isEnabled</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/registerUser:withPassword:withEmail:</TokenIdentifier>
+			<Abstract type="html">Register a user in CommonSense backend.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property (assign) BOOL isEnabled</Declaration>
-			
-			
-			<Anchor>//api/name/isEnabled</Anchor>
+			<Declaration>+ (BOOL)registerUser:(NSString *)user withPassword:(NSString *)password withEmail:(NSString *)email</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>user</Name>
+					<Abstract type="html">the username</Abstract>
+				</Parameter><Parameter>
+					<Name>password</Name>
+					<Abstract type="html">the plain text password</Abstract>
+				</Parameter><Parameter>
+					<Name>email</Name>
+					<Abstract type="html">the user&apos;s email address</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">Wether the registration succeeded</Abstract></ReturnValue>
+			<Anchor>//api/name/registerUser:withPassword:withEmail:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/setDataStore:</TokenIdentifier>
-			<Abstract type="html">The data store the sensor commits its obtained values to</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/loginWithUser:andPassword:</TokenIdentifier>
+			<Abstract type="html">Set the credentials to log in on Common Sense</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property id dataStore</Declaration>
-			
-			
-			<Anchor>//api/name/dataStore</Anchor>
+			<Declaration>+ (BOOL)loginWithUser:(NSString *)user andPassword:(NSString *)password</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>user</Name>
+					<Abstract type="html">Username used to identify the user (this does not necessarily have to be an email address)</Abstract>
+				</Parameter><Parameter>
+					<Name>password</Name>
+					<Abstract type="html">The password connected to the user account (not hashed yet)</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">whether the login succeeded
+*</Abstract></ReturnValue>
+			<Anchor>//api/name/loginWithUser:andPassword:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/dataStore</TokenIdentifier>
-			<Abstract type="html">The data store the sensor commits its obtained values to</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/loginWithUser:andPasswordHash:</TokenIdentifier>
+			<Abstract type="html">Set the credentials to log in on Common Sense</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property id dataStore</Declaration>
+			<Declaration>+ (BOOL)loginWithUser:(NSString *)user andPasswordHash:(NSString *)passwordHash</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>user</Name>
+					<Abstract type="html">Username used to identify the user (this does not necessarily have to be an email address)</Abstract>
+				</Parameter><Parameter>
+					<Name>password</Name>
+					<Abstract type="html">The password connected to the user account hashed using an MD5 hash
+*</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/dataStore</Anchor>
+			<Anchor>//api/name/loginWithUser:andPasswordHash:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSSensor/dataStore</TokenIdentifier>
-			<Abstract type="html">The data store the sensor commits its obtained values to</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/logout</TokenIdentifier>
+			<Abstract type="html">Logout
+This removes credentials from the settings and stops the uploading to CommonSense.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property id dataStore</Declaration>
+			<Declaration>+ (void)logout</Declaration>
 			
 			
-			<Anchor>//api/name/dataStore</Anchor>
+			<Anchor>//api/name/logout</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/setSensorId:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/getSessionCookie</TokenIdentifier>
+			<Abstract type="html">Get the session cookie for Common Sense</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *sensorId</Declaration>
+			<Declaration>+ (NSString *)getSessionCookie</Declaration>
 			
-			
-			<Anchor>//api/name/sensorId</Anchor>
+			<ReturnValue><Abstract type="html">The session id to communicate with CommonSense, nil if there is no session cookie.</Abstract></ReturnValue>
+			<Anchor>//api/name/getSessionCookie</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/sensorId</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:</TokenIdentifier>
+			<Abstract type="html">Add a data point for a sensor that belongs to this device, using a JSON encoded string.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *sensorId</Declaration>
+			<Declaration>+ (void)addDataPointForSensor:(NSString *)sensorName displayName:(NSString *)displayName description:(NSString *)description dataType:(NSString *)dataType stringValue:(NSString *)value timestamp:(NSDate *)timestamp</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sensorName</Name>
+					<Abstract type="html">the sensor name</Abstract>
+				</Parameter><Parameter>
+					<Name>displayName</Name>
+					<Abstract type="html">the display name of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>description</Name>
+					<Abstract type="html">the deviceType/description of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>dataType</Name>
+					<Abstract type="html">the data type for the data of the sensor.</Abstract>
+				</Parameter><Parameter>
+					<Name>value</Name>
+					<Abstract type="html">A JSON encoded data point</Abstract>
+				</Parameter><Parameter>
+					<Name>timestamp</Name>
+					<Abstract type="html">An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/sensorId</Anchor>
+			<Anchor>//api/name/addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/CSSensor/sensorId</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:</TokenIdentifier>
+			<Abstract type="html">Add a data point for a sensor that belongs to this device, using a JSONSerializable value object.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>@property (readonly) NSString *sensorId</Declaration>
+			<Declaration>+ (void)addDataPointForSensor:(NSString *)sensorName displayName:(NSString *)displayName description:(NSString *)description dataType:(NSString *)dataType jsonValue:(id)value timestamp:(NSDate *)timestamp</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sensorName</Name>
+					<Abstract type="html">the sensor name</Abstract>
+				</Parameter><Parameter>
+					<Name>displayName</Name>
+					<Abstract type="html">the display name of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>description</Name>
+					<Abstract type="html">the deviceType/description of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>dataType</Name>
+					<Abstract type="html">the data type for the data of the sensor.</Abstract>
+				</Parameter><Parameter>
+					<Name>value</Name>
+					<Abstract type="html">The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).</Abstract>
+				</Parameter><Parameter>
+					<Name>timestamp</Name>
+					<Abstract type="html">An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/sensorId</Anchor>
+			<Anchor>//api/name/addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/matchesDescription:</TokenIdentifier>
-			<Abstract type="html">Method to check wether the sensor matches the given description of the sensor</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:</TokenIdentifier>
+			<Abstract type="html">Add a data point for a sensor using a JSON encoded string object for the value, for a specific device.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (BOOL)matchesDescription:(NSDictionary *)description</Declaration>
+			<Declaration>+ (void)addDataPointForSensor:(NSString *)sensorName displayName:(NSString *)displayName description:(NSString *)description deviceType:(NSString *)deviceType deviceUUID:(NSString *)deviceUUID dataType:(NSString *)dataType stringValue:(id)value timestamp:(NSDate *)timestamp</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sensorName</Name>
+					<Abstract type="html">the sensor name</Abstract>
+				</Parameter><Parameter>
+					<Name>displayName</Name>
+					<Abstract type="html">the display name of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>description</Name>
+					<Abstract type="html">the deviceType/description of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>deviceType</Name>
+					<Abstract type="html">the type of the device the sensor should be attached to (nil for no device)</Abstract>
+				</Parameter><Parameter>
+					<Name>deviceUUID</Name>
+					<Abstract type="html">the uuid of the device the sensor should be attached to (nil for no device)</Abstract>
+				</Parameter><Parameter>
+					<Name>dataType</Name>
+					<Abstract type="html">the data type for the data of the sensor.</Abstract>
+				</Parameter><Parameter>
+					<Name>value</Name>
+					<Abstract type="html">A JSON encoded data point</Abstract>
+				</Parameter><Parameter>
+					<Name>timestamp</Name>
+					<Abstract type="html">An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/matchesDescription:</Anchor>
+			<Anchor>//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/enabledChanged:</TokenIdentifier>
-			<Abstract type="html">Method that will be invoked when the sensor is enabled/disabled</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:</TokenIdentifier>
+			<Abstract type="html">Add a data point for a sensor using a JSONSeriazable data object for the value, for a specific device.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (void)enabledChanged:(id)notification</Declaration>
+			<Declaration>+ (void)addDataPointForSensor:(NSString *)sensorName displayName:(NSString *)displayName description:(NSString *)description deviceType:(NSString *)deviceType deviceUUID:(NSString *)deviceUUID dataType:(NSString *)dataType jsonValue:(id)value timestamp:(NSDate *)timestamp</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sensorName</Name>
+					<Abstract type="html">the sensor name</Abstract>
+				</Parameter><Parameter>
+					<Name>displayName</Name>
+					<Abstract type="html">the display name of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>description</Name>
+					<Abstract type="html">the deviceType/description of the sensor</Abstract>
+				</Parameter><Parameter>
+					<Name>deviceType</Name>
+					<Abstract type="html">the type of the device the sensor should be attached to (nil for no device)</Abstract>
+				</Parameter><Parameter>
+					<Name>deviceUUID</Name>
+					<Abstract type="html">the uuid of the device the sensor should be attached to (nil for no device)</Abstract>
+				</Parameter><Parameter>
+					<Name>dataType</Name>
+					<Abstract type="html">the data type for the data of the sensor.</Abstract>
+				</Parameter><Parameter>
+					<Name>value</Name>
+					<Abstract type="html">The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).</Abstract>
+				</Parameter><Parameter>
+					<Name>timestamp</Name>
+					<Abstract type="html">An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/enabledChanged:</Anchor>
+			<Anchor>//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/name</TokenIdentifier>
-			<Abstract type="html">Returns name of the sensor</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/getDataForSensor:onlyFromDevice:nrLastPoints:</TokenIdentifier>
+			<Abstract type="html">Retrieve a number of values of a sensor from Common Sense.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (NSString *)name</Declaration>
-			
-			
-			<Anchor>//api/name/name</Anchor>
+			<Declaration>+ (NSArray *)getDataForSensor:(NSString *)name onlyFromDevice:(bool)onlyFromDevice nrLastPoints:(NSInteger)nrLastPoints</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the sensor to get data from</Abstract>
+				</Parameter><Parameter>
+					<Name>onlyFromDevice</Name>
+					<Abstract type="html">Wether or not to only look through sensors that are part of this device. Searches all sensors, including those of this device, if set to NO</Abstract>
+				</Parameter><Parameter>
+					<Name>nrLastPoints</Name>
+					<Abstract type="html">Number of points to retrieve, this function always returns the latest values for the sensor.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">an array of values, each value is a dictionary that describes the data point</Abstract></ReturnValue>
+			<Anchor>//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/displayName</TokenIdentifier>
-			<Abstract type="html">Returns the display name of the sensor</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/getLocalDataForSensor:from:to:</TokenIdentifier>
+			<Abstract type="html">Retrieve all the sensor data stored locally between a certain time interval.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (NSString *)displayName</Declaration>
-			
-			
-			<Anchor>//api/name/displayName</Anchor>
+			<Declaration>+ (NSArray *)getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>name</Name>
+					<Abstract type="html">The name of the sensor to get the data from</Abstract>
+				</Parameter><Parameter>
+					<Name>startDate</Name>
+					<Abstract type="html">The date and time at which to start looking for datapoints</Abstract>
+				</Parameter><Parameter>
+					<Name>endDate</Name>
+					<Abstract type="html">The date and time at which to stop looking for datapoints</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">an arrat of values, each value is a dictonary that descirbes the data point</Abstract></ReturnValue>
+			<Anchor>//api/name/getLocalDataForSensor:from:to:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/deviceType</TokenIdentifier>
-			<Abstract type="html">Returns the device type of the sensor</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/getDeviceId</TokenIdentifier>
+			<Abstract type="html">Returns a unique identifier for the device.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (NSString *)deviceType</Declaration>
+			<Declaration>+ (NSString *)getDeviceId</Declaration>
 			
-			
-			<Anchor>//api/name/deviceType</Anchor>
+			<ReturnValue><Abstract type="html">Unique identifier for the device</Abstract></ReturnValue>
+			<Anchor>//api/name/getDeviceId</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/sensorDescription</TokenIdentifier>
-			<Abstract type="html">Returns the description of the sensor</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/giveFeedbackOnState:from:to:label:</TokenIdentifier>
+			<Abstract type="html">Give feedback on a state sensor so that it can be used to learn.</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (NSDictionary *)sensorDescription</Declaration>
+			<Declaration>+ (void)giveFeedbackOnState:(NSString *)state from:(NSDate *)from to:(NSDate *)to label:(NSString *)label</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>state</Name>
+					<Abstract type="html">The state to give feedback on.</Abstract>
+				</Parameter><Parameter>
+					<Name>from</Name>
+					<Abstract type="html">The start date for the feedback.</Abstract>
+				</Parameter><Parameter>
+					<Name>to</Name>
+					<Abstract type="html">The end date for the feedback.</Abstract>
+				</Parameter><Parameter>
+					<Name>label</Name>
+					<Abstract type="html">The label of the Feedback, e.g. &apos;Sit&apos;</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/sensorDescription</Anchor>
+			<Anchor>//api/name/giveFeedbackOnState:from:to:label:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/device</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/availableSensors</TokenIdentifier>
+			<Abstract type="html">Returns a list of available sensors of the device</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (NSDictionary *)device</Declaration>
+			<Declaration>+ (NSArray *)availableSensors</Declaration>
 			
 			
-			<Anchor>//api/name/device</Anchor>
+			<Anchor>//api/name/availableSensors</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensor/isAvailable</TokenIdentifier>
-			<Abstract type="html">Returns wether this sensor is available</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/willTerminate</TokenIdentifier>
+			<Abstract type="html">To be called upon termination of the app, allows the platform to flush it&apos;s caches to Common Sense</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>+ (BOOL)isAvailable</Declaration>
+			<Declaration>+ (void)willTerminate</Declaration>
 			
 			
-			<Anchor>//api/name/isAvailable</Anchor>
+			<Anchor>//api/name/willTerminate</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSensor/sensorId</TokenIdentifier>
-			<Abstract type="html">Returns the sensor id of the sensor, a unique name that is used by the library to uniquely identify the sensor. This is NOT the id of the sensor in Common Sense</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/flushData</TokenIdentifier>
+			<Abstract type="html">Flush data to Common Sense</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>- (NSString *)sensorId</Declaration>
+			<Declaration>+ (void)flushData</Declaration>
 			
 			
-			<Anchor>//api/name/sensorId</Anchor>
+			<Anchor>//api/name/flushData</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensor/sensorIdFromName:andDeviceType:andDevice:</TokenIdentifier>
-			<Abstract type="html">Create sensor id</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/flushDataAndBlock</TokenIdentifier>
+			<Abstract type="html">Flush data to Common Sense, return after the flush is completed</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>+ (NSString *)sensorIdFromName:(NSString *)name andDeviceType:(NSString *)deviceType andDevice:(NSDictionary *)device</Declaration>
+			<Declaration>+ (void)flushDataAndBlock</Declaration>
 			
 			
-			<Anchor>//api/name/sensorIdFromName:andDeviceType:andDevice:</Anchor>
+			<Anchor>//api/name/flushDataAndBlock</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensor/sensorNameFromSensorId:</TokenIdentifier>
-			<Abstract type="html">Extract sensor name from the sensor id</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/synchronizeWithBloodPressureMonitor:</TokenIdentifier>
+			<Abstract type="html">This function isn&apos;t operational. (&lt;b class=&quot;deprecated&quot;&gt;Deprecated:&lt;/b&gt;&lt;span class=&quot;deprecated&quot;&gt; This function is not operational anymore. If it is working for you that is dumb luck; don&apos;t count on it.&lt;/span&gt;)</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>+ (NSString *)sensorNameFromSensorId:(NSString *)sensorId</Declaration>
+			<Declaration>+ (void)synchronizeWithBloodPressureMonitor:(bpmCallBack)callback</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>callback</Name>
+					<Abstract type="html">I don&apos;t know what this is .. ^JJ</Abstract>
+				</Parameter>
+			</Parameters>
 			
-			
-			<Anchor>//api/name/sensorNameFromSensorId:</Anchor>
+			<Anchor>//api/name/synchronizeWithBloodPressureMonitor:</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensor/sensorDescriptionFromSensorId:</TokenIdentifier>
-			<Abstract type="html">extract sensor description from the sensor id</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
+			<TokenIdentifier>//apple_ref/occ/clm/CSSensePlatform/applyIVitalitySettings</TokenIdentifier>
+			<Abstract type="html">Setup the platform for use with iVitality (&lt;b class=&quot;deprecated&quot;&gt;Deprecated:&lt;/b&gt;&lt;span class=&quot;deprecated&quot;&gt; This function will be removed in future version&lt;/span&gt;)</Abstract>
+			<DeclaredIn>CSSensePlatform.h</DeclaredIn>
 			
-			<Declaration>+ (NSString *)sensorDescriptionFromSensorId:(NSString *)sensorId</Declaration>
-			
-			
-			<Anchor>//api/name/sensorDescriptionFromSensorId:</Anchor>
-            <NodeRef refid="38"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensor/sensorDeviceTypeFromSensorId:</TokenIdentifier>
-			<Abstract type="html">extract sensor device type from the sensor id</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
-			
-			<Declaration>+ (NSString *)sensorDeviceTypeFromSensorId:(NSString *)sensorId</Declaration>
+			<Declaration>+ (void)applyIVitalitySettings</Declaration>
 			
 			
-			<Anchor>//api/name/sensorDeviceTypeFromSensorId:</Anchor>
-            <NodeRef refid="38"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/CSSensor/sensorDeviceUUIDFromSensorId:</TokenIdentifier>
-			<Abstract type="html">extract sensor device uuid from the sensor id</Abstract>
-			<DeclaredIn>CSSensor.h</DeclaredIn>
-			
-			<Declaration>+ (NSString *)sensorDeviceUUIDFromSensorId:(NSString *)sensorId</Declaration>
-			
-			
-			<Anchor>//api/name/sensorDeviceUUIDFromSensorId:</Anchor>
+			<Anchor>//api/name/applyIVitalitySettings</Anchor>
             <NodeRef refid="38"/>
 		</Token>
 		

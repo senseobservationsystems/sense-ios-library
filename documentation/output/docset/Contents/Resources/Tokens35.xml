@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="Classes/CSScreenSensor.html">
+	<File path="Classes/CSRotationSensor.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/cl/CSScreenSensor</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/cl/CSRotationSensor</TokenIdentifier>
 			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSScreenSensor.h</DeclaredIn>
+			<DeclaredIn>CSRotationSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="35"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSScreenSensor/commitDisplayState:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSScreenSensor.h</DeclaredIn>
-			
-			<Declaration>- (void)commitDisplayState:(BOOL)isScreenTurnedOn</Declaration>
-			
-			
-			<Anchor>//api/name/commitDisplayState:</Anchor>
-            <NodeRef refid="35"/>
-		</Token>
 		
         
         
