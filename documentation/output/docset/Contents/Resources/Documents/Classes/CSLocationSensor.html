@@ -96,7 +96,24 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Sensor for storing location updates</p>
+						<ul>
+<li>Sensor for storing location updates. Every time a new update comes in, it is stored. The rate with which updates come in is up to iOS.</li>
+</ul>
+
+
+<p>Note that when the cortex auto pausing feature is enabled updates are limited to once every three minutes.</p>
+
+<p><strong><em>JSON output value format</em></strong></p>
+
+<pre><code> {
+     "longitude": FLOAT;
+     "latitude": FLOAT;
+     "altitude": FLOAT;
+     "accuracy": FLOAT;
+     "vertical accuracy:" FLOAT;
+     "speed": FLOAT;
+ }
+</code></pre>
 					</div>
 					
 					

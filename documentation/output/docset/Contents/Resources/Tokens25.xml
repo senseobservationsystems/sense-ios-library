@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSLocationSensor</TokenIdentifier>
-			<Abstract type="html">Sensor for storing location updates</Abstract>
+			<Abstract type="html">* Sensor for storing location updates. Every time a new update comes in, it is stored. The rate with which updates come in is up to iOS.</Abstract>
 			<DeclaredIn>CSLocationSensor.h</DeclaredIn>
             
 			

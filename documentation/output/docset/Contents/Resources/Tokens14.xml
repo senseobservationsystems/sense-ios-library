@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSActivityProcessorSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores the activity detection value provided by iOS.</Abstract>
 			<DeclaredIn>CSActivityProcessorSensor.h</DeclaredIn>
             
 			

@@ -10,7 +10,21 @@
 #import <CoreLocation/CoreLocation.h>
 
 /**
- * Sensor for storing location updates
+ * Sensor for storing location updates. Every time a new update comes in, it is stored. The rate with which updates come in is up to iOS. 
+ 
+ Note that when the cortex auto pausing feature is enabled updates are limited to once every three minutes.
+ 
+ ___JSON output value format___
+ 
+	 {
+		 "longitude": FLOAT;
+		 "latitude": FLOAT;
+		 "altitude": FLOAT;
+		 "accuracy": FLOAT;
+         "vertical accuracy:" FLOAT;
+		 "speed": FLOAT;
+	 }
+ 
  */
 @interface CSLocationSensor : CSSensor {
 }

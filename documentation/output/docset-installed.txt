@@ -1,4 +1,4 @@
 Documentation set was installed to Xcode!
 
 Path: /Users/joris/Library/Developer/Shared/Documentation/DocSets/nl.sense-os.SensePlatform.docset
-Time: 2015-03-23 09:33:08 +0000
+Time: 2015-03-23 15:51:42 +0000
