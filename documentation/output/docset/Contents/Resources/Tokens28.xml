@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSMovingSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">This is not being used right now</Abstract>
 			<DeclaredIn>CSMovingSensor.h</DeclaredIn>
             
 			

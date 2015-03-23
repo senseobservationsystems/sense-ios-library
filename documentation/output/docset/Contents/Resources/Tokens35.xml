@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSRotationSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores rotation data.</Abstract>
 			<DeclaredIn>CSRotationSensor.h</DeclaredIn>
             
 			

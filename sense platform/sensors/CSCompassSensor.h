@@ -23,6 +23,25 @@ extern NSString* devYKey;
 extern NSString* devZKey;
 extern NSString* accuracyKey;
 
+/**
+ Sensor that stores compass data coming from the magnetometer sensor in the phone.
+ 
+ ___WARNING___ 
+ Data collection for this sensor is currently not implemented. This is still to be done in the CSSpatialProvider class.
+ 
+ See also Apple's CMDeviceMotion.h for more information.
+ 
+ ___JSON output value format___
+ 
+	 {
+		 "heading": FLOAT;
+		 "x": FLOAT;
+		 "y": FLOAT;
+		 "z": FLOAT;
+		 "accurcy": FLOAT;
+	 }
+	 
+ */
 @interface CSCompassSensor : CSSensor {
 }
 

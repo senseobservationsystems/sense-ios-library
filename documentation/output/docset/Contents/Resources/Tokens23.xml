@@ -4,25 +4,13 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSJumpSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor to store jump data. This is a legacy sensor that should be used carefully.</Abstract>
 			<DeclaredIn>CSJumpSensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="23"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSJumpSensor/pushDeviceMotion:andManager:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSJumpSensor.h</DeclaredIn>
-			
-			<Declaration>- (void)pushDeviceMotion:(CMDeviceMotion *)motion andManager:(CMMotionManager *)motionManager</Declaration>
-			
-			
-			<Anchor>//api/name/pushDeviceMotion:andManager:</Anchor>
-            <NodeRef refid="23"/>
-		</Token>
 		
         
         

@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSScreenSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor storing screen activity data. Currently stores whether the is turned on or turned off. This sensor is event based and only stores data upon changes.</Abstract>
 			<DeclaredIn>CSScreenSensor.h</DeclaredIn>
             
 			
@@ -14,11 +14,16 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSScreenSensor/commitDisplayState:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Stores state of the screen.</Abstract>
 			<DeclaredIn>CSScreenSensor.h</DeclaredIn>
 			
 			<Declaration>- (void)commitDisplayState:(BOOL)isScreenTurnedOn</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>isScreenTurnedOn</Name>
+					<Abstract type="html">Boolean describing if screen is on/off.</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/commitDisplayState:</Anchor>
             <NodeRef refid="36"/>

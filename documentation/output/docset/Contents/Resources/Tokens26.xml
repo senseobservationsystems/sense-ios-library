@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSMotionEnergySensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores derivate of the motion data in the form of motion energy; i.e., a measure of the total amount of motion that occured over a specific time frame.</Abstract>
 			<DeclaredIn>CSMotionEnergySensor.h</DeclaredIn>
             
 			

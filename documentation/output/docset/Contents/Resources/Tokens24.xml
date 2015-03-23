@@ -4,8 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSLocationProvider</TokenIdentifier>
-			<Abstract type="html">Provider that handles all the location related tracking
-Receives location points and visits from the OS and processes them.</Abstract>
+			<Abstract type="html">Provider that handles all the location related tracking. Receives location points and visits from the OS and processes them.</Abstract>
 			<DeclaredIn>CSLocationProvider.h</DeclaredIn>
             
 			

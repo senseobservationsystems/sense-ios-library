@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSCompassSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores compass data coming from the magnetometer sensor in the phone.</Abstract>
 			<DeclaredIn>CSCompassSensor.h</DeclaredIn>
             
 			

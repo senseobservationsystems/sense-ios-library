@@ -4,25 +4,13 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSUserProximity</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor storing proximity data. Currently stores whether the user is close to the device or not. This sensor is event based and only stores data upon changes.</Abstract>
 			<DeclaredIn>CSUserProximity.h</DeclaredIn>
             
 			
 			<NodeRef refid="50"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSUserProximity/commitUserProximity:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSUserProximity.h</DeclaredIn>
-			
-			<Declaration>- (void)commitUserProximity:(NSNotification *)notification</Declaration>
-			
-			
-			<Anchor>//api/name/commitUserProximity:</Anchor>
-            <NodeRef refid="50"/>
-		</Token>
 		
         
         

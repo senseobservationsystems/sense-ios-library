@@ -17,6 +17,20 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
+/**
+ Sensor that stores acceleration data using a gyroscope. Can only be used if a gyroscope is available in the device (iphone 4s and later?). 
+ 
+ See also CMDeviceMotion.h for more information about the userAcceleration field which is the data is stored here.
+ 
+ ___JSON output value format___
+
+	 {
+			"x-axis": FLOAT;
+			"y-axis": FLOAT;
+			"z-axis": FLOAT;
+	 }
+
+*/
 @interface CSAccelerationSensor : CSSensor {
 
 }

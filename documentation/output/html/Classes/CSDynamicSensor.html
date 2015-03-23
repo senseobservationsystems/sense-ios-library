@@ -43,6 +43,8 @@
 							<select id="jump-to">
 	<option value="top">Jump To&#133;</option>
 	
+	<option value="overview">Overview</option>
+	
 
 	
 	
@@ -94,6 +96,14 @@
 					
 
                     
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Sensor that be used to create a new sensor during runtime and store data in it.</p>
+					</div>
+					
+					
 
 					
 					
@@ -115,10 +125,67 @@
 
 		<div class="method-info-container">
 			
+			
+			<div class="method-subsection brief-description">
+				<p>Init new sensor for this device.</p>
+			</div>
+			
+		    
 
 			<div class="method-subsection method-declaration"><code>- (id)initWithName:(NSString *)<em>name</em> displayName:(NSString *)<em>dispName</em> deviceType:(NSString *)<em>devType</em> dataType:(NSString *)<em>datType</em> fields:(NSDictionary *)<em>fields</em></code></div>
 
 		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>Name of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dispName</code></th>
+						<td><p>Description of the sensor used to display name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>devType</code></th>
+						<td><p>Device type that the sensor belongs to</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>datType</code></th>
+						<td><p>Data type of the values being stored in the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>fields</code></th>
+						<td><p>Dictionary that stores all the fields with values as a JSON object</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSDynamicSensor.h</code></p>
+			</div>
+			
+			
 		</div>
 	</div>
 </div><div class="section-method">
@@ -131,10 +198,72 @@
 
 		<div class="method-info-container">
 			
+			
+			<div class="method-subsection brief-description">
+				<p>Init new sensor for any device.</p>
+			</div>
+			
+		    
 
 			<div class="method-subsection method-declaration"><code>- (id)initWithName:(NSString *)<em>name</em> displayName:(NSString *)<em>dispName</em> deviceType:(NSString *)<em>devType</em> dataType:(NSString *)<em>datType</em> fields:(NSDictionary *)<em>fields</em> device:(NSDictionary *)<em>device</em></code></div>
 
 		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>Name of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dispName</code></th>
+						<td><p>Description of the sensor used to display name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>devType</code></th>
+						<td><p>Device type that the sensor belongs to</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>datType</code></th>
+						<td><p>Data type of the values being stored in the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>fields</code></th>
+						<td><p>Dictionary that stores all the fields with values as a JSON object</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>Dictionary that describes the device.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSDynamicSensor.h</code></p>
+			</div>
+			
+			
 		</div>
 	</div>
 </div><div class="section-method">
@@ -147,10 +276,52 @@
 
 		<div class="method-info-container">
 			
+			
+			<div class="method-subsection brief-description">
+				<p>Store a value in the sensor.</p>
+			</div>
+			
+		    
 
 			<div class="method-subsection method-declaration"><code>- (void)commitValue:(id)<em>value</em> withTimestamp:(NSTimeInterval)<em>timestamp</em></code></div>
 
 		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The value to be stored, will be stored as a JSON string object. Can be anything.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>timestamp</code></th>
+						<td><p>Seconds since 1970 timestamp that describes time the value was collected.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSDynamicSensor.h</code></p>
+			</div>
+			
+			
 		</div>
 	</div>
 </div>
@@ -166,7 +337,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-20</p>
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-23</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

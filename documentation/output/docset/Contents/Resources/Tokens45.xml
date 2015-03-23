@@ -4,7 +4,14 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSSpatialProvider</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Class that provides data for the following sensors:
+	
+	- Compass sensor (currently not implemented)
+	- Orientation sensor
+	- Accelerometer sensor
+	- Acceleration sensor
+	- Rotation sensor
+	- Jump sensor (legacy, should probably be avoided)</Abstract>
 			<DeclaredIn>CSSpatialProvider.h</DeclaredIn>
             
 			
@@ -14,7 +21,13 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSpatialProvider/initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Init function taking the different sensors in which to store the data
+@param compass
+@param orientation
+@param accelerometer
+@param acceleration
+@param rotation
+@param jumpSensor</Abstract>
 			<DeclaredIn>CSSpatialProvider.h</DeclaredIn>
 			
 			<Declaration>- (id)initWithCompass:(CSCompassSensor *)compass orientation:(CSOrientationSensor *)orientation accelerometer:(CSAccelerometerSensor *)accelerometer acceleration:(CSAccelerationSensor *)acceleration rotation:(CSRotationSensor *)rotation jumpSensor:(CSJumpSensor *)jumpSensor</Declaration>

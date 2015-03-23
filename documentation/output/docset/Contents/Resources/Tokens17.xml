@@ -4,25 +4,13 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSBatterySensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores the battery information. This sensor is event based, it stores a new data with each 1% change in the value. When the state is charged, it stores new data regularly.</Abstract>
 			<DeclaredIn>CSBatterySensor.h</DeclaredIn>
             
 			
 			<NodeRef refid="17"/>
 		</Token>
 		
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSBatterySensor/commitBatteryState:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSBatterySensor.h</DeclaredIn>
-			
-			<Declaration>- (void)commitBatteryState:(NSNotification *)notification</Declaration>
-			
-			
-			<Anchor>//api/name/commitBatteryState:</Anchor>
-            <NodeRef refid="17"/>
-		</Token>
 		
         
         

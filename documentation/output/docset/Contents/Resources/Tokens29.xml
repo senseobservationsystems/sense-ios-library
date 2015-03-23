@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSNoiseSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores noise data collected from the phone&apos;s microphone. It does not store the actual audio but processes it an amount of decibel to describe the amount of ambient noise. Note that right now this sensor does its own data collection.</Abstract>
 			<DeclaredIn>CSNoiseSensor.h</DeclaredIn>
             
 			

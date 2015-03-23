@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSSetting</TokenIdentifier>
-			<Abstract type="html">Setting for automatically pausing location updates for two minutes after a new datapoint has come in, this might save battery life *</Abstract>
+			<Abstract type="html">Each individual setting is stored in a CSSetting object with a name and a value.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
             
 			
@@ -14,7 +14,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/setName:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The name of a certain setting. All names are stored and documented as constants in CSSettings.h.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>@property (copy) NSString *name</Declaration>
@@ -26,7 +26,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/name</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The name of a certain setting. All names are stored and documented as constants in CSSettings.h.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>@property (copy) NSString *name</Declaration>
@@ -38,7 +38,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instp/CSSetting/name</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The name of a certain setting. All names are stored and documented as constants in CSSettings.h.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>@property (copy) NSString *name</Declaration>
@@ -50,7 +50,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/setValue:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The value of a setting is always stored as a string. It can be used for storing number encoded values as strings. There are two special values</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>@property (copy) NSString *value</Declaration>
@@ -62,7 +62,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSetting/value</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The value of a setting is always stored as a string. It can be used for storing number encoded values as strings. There are two special values</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>@property (copy) NSString *value</Declaration>
@@ -74,7 +74,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instp/CSSetting/value</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">The value of a setting is always stored as a string. It can be used for storing number encoded values as strings. There are two special values</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>@property (copy) NSString *value</Declaration>

@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSOrientationSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores orientation data. See also CMDeviceMotion.h for more information about how the orientation is calculated.</Abstract>
 			<DeclaredIn>CSOrientationSensor.h</DeclaredIn>
             
 			

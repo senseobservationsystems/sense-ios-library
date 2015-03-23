@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSCallSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores the call state information. This sensor is event based, it stores a new data with each call that starts or ends or comes in. Ringing state indicates the user receiving a call, whereas dialing state indicates user making a call. It does not store caller information which is not available because of privacy reasons.</Abstract>
 			<DeclaredIn>CSCallSensor.h</DeclaredIn>
             
 			

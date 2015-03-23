@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSConnectionSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor storing connectivity data. Currently stores whether there is WiFi, Cell, or No connection. This sensor is event based and only stores data upon changes.</Abstract>
 			<DeclaredIn>CSConnectionSensor.h</DeclaredIn>
             
 			
@@ -14,11 +14,16 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSConnectionSensor/reachabilityChanged:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Method that processes a new reachability (connection) state.</Abstract>
 			<DeclaredIn>CSConnectionSensor.h</DeclaredIn>
 			
 			<Declaration>- (void)reachabilityChanged:(NSNotification *)note</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>note</Name>
+					<Abstract type="html">Notification containing the new state.</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/reachabilityChanged:</Anchor>
             <NodeRef refid="20"/>

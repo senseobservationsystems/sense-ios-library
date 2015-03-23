@@ -17,10 +17,18 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
-
+/** Sensor that can be used to store all the settings. Whenever a setting is changed it stores a new datapoint. 
+ 
+ This sensor is typically not being used anymore. It has been replaced by the local file in which settings are stored.
+ 
+ */
 @interface CSPreferencesSensor : CSSensor {
 
 }
+
+/** Store new settings value.
+ @param notification Notification containing the new settings value.
+ */
 - (void) commitPreference:(NSNotification*) notification;
 
 @end

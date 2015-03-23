@@ -18,11 +18,23 @@
 #import "CSSensor.h"
 @class CSReachability;
 
-
+/**
+ Sensor storing connectivity data. Currently stores whether there is WiFi, Cell, or No connection. This sensor is event based and only stores data upon changes.
+ 
+ ___JSON output value format___
+ 
+	"value": STRING; //"none", "mobile", "wifi"
+ 
+ 
+ */
 @interface CSConnectionSensor : CSSensor {
 	CSReachability* internetReach;
 }
 
+/**
+ Method that processes a new reachability (connection) state.
+ @param note Notification containing the new state.
+ */
 - (void) reachabilityChanged: (NSNotification* )note;
 
 @end

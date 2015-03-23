@@ -8,6 +8,9 @@
 
 #import "CSSensor.h"
 
+/**
+ 
+ */
 @interface CSActivityProcessorSensor : CSSensor
 
 @end

@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSPreferencesSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that can be used to store all the settings. Whenever a setting is changed it stores a new datapoint.</Abstract>
 			<DeclaredIn>CSPreferencesSensor.h</DeclaredIn>
             
 			
@@ -14,11 +14,16 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSPreferencesSensor/commitPreference:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Store new settings value.</Abstract>
 			<DeclaredIn>CSPreferencesSensor.h</DeclaredIn>
 			
 			<Declaration>- (void)commitPreference:(NSNotification *)notification</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>notification</Name>
+					<Abstract type="html">Notification containing the new settings value.</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/commitPreference:</Anchor>
             <NodeRef refid="33"/>

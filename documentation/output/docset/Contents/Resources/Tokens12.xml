@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSAccelerationSensor</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Sensor that stores acceleration data using a gyroscope. Can only be used if a gyroscope is available in the device (iphone 4s and later?).</Abstract>
 			<DeclaredIn>CSAccelerationSensor.h</DeclaredIn>
             
 			

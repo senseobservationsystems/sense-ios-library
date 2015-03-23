@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSSettings</TokenIdentifier>
-			<Abstract type="html">This singleton is used to control the settings of the sense platform. Using this class sensors can be enabled/disabled and specific settings be set.</Abstract>
+			<Abstract type="html">This singleton is used to control the settings of the sense platform. Using this class all available settings can be set.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
             
 			
@@ -14,7 +14,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/clm/CSSettings/sharedSettings</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Provides the singleton object for this class</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>+ (CSSettings *)sharedSettings</Declaration>
@@ -26,123 +26,100 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/clm/CSSettings/enabledChangedNotificationNameForSensor:</TokenIdentifier>
-			<Abstract type="html">Returns the name of enable notifications for the specified sensor</Abstract>
+			<Abstract type="html">Returns the name of enable notifications for the specified sensor. This can be used for an object to instantiate an observer.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>+ (NSString *)enabledChangedNotificationNameForSensor:(NSString *)sensor</Declaration>
-			
-			
+			<Parameters>
+				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">The of the sensor for which the enable notifications should be observed.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The name of the enable notifications for the specified sensor.</Abstract></ReturnValue>
 			<Anchor>//api/name/enabledChangedNotificationNameForSensor:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/clm/CSSettings/settingChangedNotificationNameForType:</TokenIdentifier>
-			<Abstract type="html">///Returns the name of the notification send when a setting of the specified type changes</Abstract>
+			<Abstract type="html">Returns the name of setting changed notifications for a specified type of settings. This can be used for an object to instantiate an observer.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>+ (NSString *)settingChangedNotificationNameForType:(NSString *)type</Declaration>
-			
-			
+			<Parameters>
+				<Parameter>
+					<Name>type</Name>
+					<Abstract type="html">The type of sensor changes that one wants to listen to. This can be either kCSSettingTypeGeneral, kCSSettingTypeGeneral, kCSSettingTypeLocation,kCSSettingTypeSpatial,kCSSettingTypeAmbience. See the overview of this class for more info.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">The name of the enable notifications for the specified type</Abstract></ReturnValue>
 			<Anchor>//api/name/settingChangedNotificationNameForType:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSensor:enabled:</TokenIdentifier>
-			<Abstract type="html">Enable/disable the specified sensor, setting is persistent</Abstract>
+			<Abstract type="html">Enable/disable the specified sensor, setting is persistent.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>- (BOOL)setSensor:(NSString *)sensor enabled:(BOOL)enable</Declaration>
-			
-			
+			<Parameters>
+				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">Name of the sensor to enable or disable</Abstract>
+				</Parameter><Parameter>
+					<Name>enable</Name>
+					<Abstract type="html">True if it should be enabled, false if sensor should be disabled</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">New value of the sensor&apos;s isEnabled method.</Abstract></ReturnValue>
 			<Anchor>//api/name/setSensor:enabled:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSensor:enabled:persistent:</TokenIdentifier>
-			<Abstract type="html">Enable/disable the specified sensor</Abstract>
+			<Abstract type="html">Enable/disable the specified sensor, specifying whether or not the setting should be persistent.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>- (BOOL)setSensor:(NSString *)sensor enabled:(BOOL)enable persistent:(BOOL)persistent</Declaration>
 			<Parameters>
 				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">Name of the sensor</Abstract>
+				</Parameter><Parameter>
 					<Name>enable</Name>
-					<Abstract type="html">wether to enable or disable the sensor</Abstract>
+					<Abstract type="html">Wether to enable or disable the sensor</Abstract>
 				</Parameter><Parameter>
 					<Name>persistent</Name>
-					<Abstract type="html">whether this setting is persistent</Abstract>
+					<Abstract type="html">Whether this setting is persistent</Abstract>
 				</Parameter>
 			</Parameters>
-			
+			<ReturnValue><Abstract type="html">New value of the sensor&apos;s isEnabled method.</Abstract></ReturnValue>
 			<Anchor>//api/name/setSensor:enabled:persistent:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/isSensorEnabled:</TokenIdentifier>
-			<Abstract type="html">Returns wether the specified sensor is enabled</Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
-			
-			<Declaration>- (BOOL)isSensorEnabled:(NSString *)sensor</Declaration>
-			
-			
-			<Anchor>//api/name/isSensorEnabled:</Anchor>
-            <NodeRef refid="44"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/sendNotificationForSensor:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
-			
-			<Declaration>- (void)sendNotificationForSensor:(NSString *)sensor</Declaration>
-			
-			
-			<Anchor>//api/name/sendNotificationForSensor:</Anchor>
-            <NodeRef refid="44"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/getSettingType:setting:</TokenIdentifier>
-			<Abstract type="html">Get the value of the specified setting</Abstract>
-			<DeclaredIn>CSSettings.h</DeclaredIn>
-			
-			<Declaration>- (NSString *)getSettingType:(NSString *)type setting:(NSString *)setting</Declaration>
-			<Parameters>
-				<Parameter>
-					<Name>type</Name>
-					<Abstract type="html">the setting type</Abstract>
-				</Parameter><Parameter>
-					<Name>setting</Name>
-					<Abstract type="html">the specific setting for the type</Abstract>
-				</Parameter>
-			</Parameters>
-			<ReturnValue><Abstract type="html">the value of the setting</Abstract></ReturnValue>
-			<Anchor>//api/name/getSettingType:setting:</Anchor>
-            <NodeRef refid="44"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/setSettingType:setting:value:</TokenIdentifier>
-			<Abstract type="html">Set the value of the specified setting, the setting is persistent</Abstract>
+			<Abstract type="html">Set the value of the specified setting, the setting is persistent.</Abstract>
 			<DeclaredIn>CSSettings.h</DeclaredIn>
 			
 			<Declaration>- (BOOL)setSettingType:(NSString *)type setting:(NSString *)setting value:(NSString *)value</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>type</Name>
-					<Abstract type="html">the setting type</Abstract>
+					<Abstract type="html">The setting type</Abstract>
 				</Parameter><Parameter>
 					<Name>setting</Name>
-					<Abstract type="html">the specific setting for the type</Abstract>
+					<Abstract type="html">The specific setting for the type</Abstract>
 				</Parameter><Parameter>
 					<Name>value</Name>
-					<Abstract type="html">the value of to set the setting to</Abstract>
+					<Abstract type="html">The value of to set the setting to</Abstract>
 				</Parameter>
 			</Parameters>
-			
+			<ReturnValue><Abstract type="html">Whether or not updating the setting was successful.</Abstract></ReturnValue>
 			<Anchor>//api/name/setSettingType:setting:value:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
@@ -156,19 +133,19 @@
 			<Parameters>
 				<Parameter>
 					<Name>type</Name>
-					<Abstract type="html">the setting type</Abstract>
+					<Abstract type="html">The setting type. See the overview above for the available types.</Abstract>
 				</Parameter><Parameter>
 					<Name>setting</Name>
-					<Abstract type="html">the specific setting for the type</Abstract>
+					<Abstract type="html">The specific setting for the type</Abstract>
 				</Parameter><Parameter>
 					<Name>value</Name>
-					<Abstract type="html">the value of to set the setting to</Abstract>
+					<Abstract type="html">The value of to set the setting to</Abstract>
 				</Parameter><Parameter>
 					<Name>persistent</Name>
-					<Abstract type="html">whether the setting should be persistent</Abstract>
+					<Abstract type="html">Whether the setting should be persistent</Abstract>
 				</Parameter>
 			</Parameters>
-			
+			<ReturnValue><Abstract type="html">Whether or not updating the setting was successful.</Abstract></ReturnValue>
 			<Anchor>//api/name/setSettingType:setting:value:persistent:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
@@ -210,6 +187,60 @@
 			</Parameters>
 			
 			<Anchor>//api/name/setLogin:withPasswordHash:</Anchor>
+            <NodeRef refid="44"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/isSensorEnabled:</TokenIdentifier>
+			<Abstract type="html">Returns wether the specified sensor is enabled</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isSensorEnabled:(NSString *)sensor</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">Name of the sensor to check</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">Whether or not the specified sensor is enabled</Abstract></ReturnValue>
+			<Anchor>//api/name/isSensorEnabled:</Anchor>
+            <NodeRef refid="44"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/sendNotificationForSensor:</TokenIdentifier>
+			<Abstract type="html">Send notifications for a specific sensor. Notifies all observers about this sensor.</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (void)sendNotificationForSensor:(NSString *)sensor</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">Name of the sensor</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/sendNotificationForSensor:</Anchor>
+            <NodeRef refid="44"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/CSSettings/getSettingType:setting:</TokenIdentifier>
+			<Abstract type="html">Get the value of the specified setting</Abstract>
+			<DeclaredIn>CSSettings.h</DeclaredIn>
+			
+			<Declaration>- (NSString *)getSettingType:(NSString *)type setting:(NSString *)setting</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>type</Name>
+					<Abstract type="html">the setting type</Abstract>
+				</Parameter><Parameter>
+					<Name>setting</Name>
+					<Abstract type="html">the specific setting for the type</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">the value of the setting</Abstract></ReturnValue>
+			<Anchor>//api/name/getSettingType:setting:</Anchor>
             <NodeRef refid="44"/>
 		</Token>
 		

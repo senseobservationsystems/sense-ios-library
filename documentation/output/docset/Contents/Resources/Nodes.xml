@@ -137,8 +137,8 @@
             
         </Node>
 		<Node id="6" type="section">
-            <Name>Logging and Debugging</Name>
-            <Path>docs/source/Logging and Debugging.html</Path>
+            <Name>Logging and debugging</Name>
+            <Path>docs/source/Logging and debugging.html</Path>
             
         </Node>
 		<Node id="7" type="section">
@@ -262,28 +262,6 @@
             <Name>CSBatterySensor</Name>
             <Path>Classes/CSBatterySensor.html</Path>
             
-                <Subnodes>
-                <Node type="section">
-                    <Path>Classes/CSBatterySensor.html</Path>
-                    <Name>Overview</Name>
-                    <Anchor>overview</Anchor>
-                </Node>
-                <Node type="section">
-                    <Path>Classes/CSBatterySensor.html</Path>
-                    <Name>Tasks</Name>
-                    <Anchor>tasks</Anchor>
-                </Node>
-                
-                
-                
-                <Node type="section">
-                    <Path>Classes/CSBatterySensor.html</Path>
-                    <Name>Instance Methods</Name>
-                    <Anchor>instance_methods</Anchor>
-                </Node>
-                
-            </Subnodes>
-            
         </Node>
 		<Node id="18" type="file" documentType="reference">
             <Name>CSCallSensor</Name>
@@ -385,28 +363,6 @@
 		<Node id="23" type="file" documentType="reference">
             <Name>CSJumpSensor</Name>
             <Path>Classes/CSJumpSensor.html</Path>
-            
-                <Subnodes>
-                <Node type="section">
-                    <Path>Classes/CSJumpSensor.html</Path>
-                    <Name>Overview</Name>
-                    <Anchor>overview</Anchor>
-                </Node>
-                <Node type="section">
-                    <Path>Classes/CSJumpSensor.html</Path>
-                    <Name>Tasks</Name>
-                    <Anchor>tasks</Anchor>
-                </Node>
-                
-                
-                
-                <Node type="section">
-                    <Path>Classes/CSJumpSensor.html</Path>
-                    <Name>Instance Methods</Name>
-                    <Anchor>instance_methods</Anchor>
-                </Node>
-                
-            </Subnodes>
             
         </Node>
 		<Node id="24" type="file" documentType="reference">
@@ -1038,28 +994,6 @@
 		<Node id="50" type="file" documentType="reference">
             <Name>CSUserProximity</Name>
             <Path>Classes/CSUserProximity.html</Path>
-            
-                <Subnodes>
-                <Node type="section">
-                    <Path>Classes/CSUserProximity.html</Path>
-                    <Name>Overview</Name>
-                    <Anchor>overview</Anchor>
-                </Node>
-                <Node type="section">
-                    <Path>Classes/CSUserProximity.html</Path>
-                    <Name>Tasks</Name>
-                    <Anchor>tasks</Anchor>
-                </Node>
-                
-                
-                
-                <Node type="section">
-                    <Path>Classes/CSUserProximity.html</Path>
-                    <Name>Instance Methods</Name>
-                    <Anchor>instance_methods</Anchor>
-                </Node>
-                
-            </Subnodes>
             
         </Node>
 		<Node id="51" type="file" documentType="reference">

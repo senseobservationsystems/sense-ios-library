@@ -124,7 +124,137 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>This singleton is used to control the settings of the sense platform. Using this class sensors can be enabled/disabled and specific settings be set.</p>
+						<p>This singleton is used to control the settings of the sense platform. Using this class all available settings can be set.</p>
+
+<p>Each setting is stored in a <a href="../Classes/CSSetting.html">CSSetting</a> object that contains a name and value (see above). All the potential settings are listed here, as well as their potential values. Several methods for changing and obtaining the settings are available and documented below.</p>
+
+<p><strong><em>Setting types</em></strong></p>
+
+<p>Each setting also has a type, which makes it easier to group them and listen only to setting changes of a specific type. Currently, 5 different types have been defined:</p>
+
+<ul>
+<li><code>kCSSettingTypeGeneral</code>: This a placeholder for all settings that don&rsquo;t belong to any of the other types.</li>
+<li><code>kCSSettingTypeBiometric</code>: User specific settings like age, height, date of birth, and gender.</li>
+<li><code>kCSSettingTypeLocation</code>: All settings related to the location sensor, visits sensor, and the location provider, including sampling settings and accuracy.</li>
+<li><code>kCSSettingTypeSpatial</code>: All settings related to the spatial settings and spatial data provider. This includes the accelerometer sensors and motion features.</li>
+<li><code>kCSSettingTypeAmbience</code>: All settings related to the ambience sensors. Right now this is only the noise sensor (microphone data).</li>
+</ul>
+
+
+<p><strong><em>General settings</em></strong></p>
+
+<ul>
+<li><code>kCSGeneralSettingUsername</code><br> The username of the user is stored as a setting for persistency. This is handled in <a href="../Classes/CSSensePlatform.html">CSSensePlatform</a> login, logout, and register methods so doesn&rsquo;t need to be set manually. Any valid string value is accepted.</li>
+<li><code>kCSGeneralSettingPassword</code><br> The password of the uer is stored as a setting for persistency. This is handled in <a href="../Classes/CSSensePlatform.html">CSSensePlatform</a> login, logout, and register methods so it doesn&rsquo;t to be set manually. Note that when encryption is enabled, the settings including the password are also encrypted. The password itself is stored as an MD5 hashed String.</li>
+<li><code>kCSGeneralSettingSenseEnabled</code><br> This is a shorthand for disabling all sensors and uploads to commonsense. When enabled, the old settings are restored, enabling all the sensors that have been individually enabled. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Enabled by default.</li>
+<li><code>kCSGeneralSettingUploadInterval</code><br> The interval is seconds specifies the time between consecutive uploads to commonsense. Value can be specified in seconds using a string. There are also three special settings available but they are not implement right now so they should not be used. 1800 seconds (30 minutes) by default.</li>
+<li><code>kCSGeneralSettingPollInterval</code><br> This setting is not being used currently. Polling intervals are specified per sensor.</li>
+<li><code>kCSGeneralSettingAutodetect</code><br> This setting is not being used.</li>
+<li><code>kCSGeneralSettingUploadToCommonSense</code><br> When enabled, data will be uploaded to commonsense according to a specified interval. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Enabled by default.</li>
+<li><code>kCSGeneralSettingDontUploadBursts</code><br>This specifies whether or not data from burst sensors should be uploaded to commonsense. Data in burst sensors contains all data that is often sampled at a high frequency. It can be used effectively for specific algorithms to detect behavior of the user for instance, but uploading it might take time, battery, and data usage. For improved battery usage, we advice not to upload burst data but only use it locally. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Enabled by default.</li>
+<li><code>kCSGeneralSettingBackgroundRestarthack</code><br>This settings enables the running of sense library in the background. For more details, see the Background services document. Enabled by default to be able to run in the background.</li>
+<li><code>kCSGeneralSettingLocalStorageEncryption</code><br>This setting enables or disables encryption of local data (settings file and sensordata database). Note that encryption will decrease performance slightly. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.</li>
+<li><code>kCSGeneralSettingLocalStorageEncryptionKey</code> Key used for encryption.</li>
+<li><code>kCSGeneralSettingUseStaging</code> This setting enables or disables the use of the staging server. It changes all URLs for remote communication to either the commonsense live API or the commonsense staging API. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.</li>
+</ul>
+
+
+<p><strong><em>Biometric settings</em></strong></p>
+
+<p>These are placeholders not currently being used actively. We discourage usage of them for now.</p>
+
+<ul>
+<li><code>kCSBiometricSettingGender</code></li>
+<li><code>kCSBiometricSettingBirthDate</code></li>
+<li><code>kCSBiometricSettingWeight</code></li>
+<li><code>kCSBiometricSettingHeight</code></li>
+<li><code>kCSBiometricSettingBodyFat</code></li>
+<li><code>kCSBiometricSettingMaxPulse</code></li>
+</ul>
+
+
+<p><strong><em>Activity settings</em></strong></p>
+
+<p>These are placeholder not currently being used actively. We discourage usage of them for now.</p>
+
+<ul>
+<li><code>kCSActivitySettingDetection</code></li>
+<li><code>kCSActivitySettingPrivacy</code></li>
+</ul>
+
+
+<p><strong><em>Location settings</em></strong></p>
+
+<ul>
+<li><code>kCSLocationSettingAccuracy</code><br> Accuracy with which iOS will detect location data points. Lower values will provide higher accuracy but will also use more battery. Apple generally distinguishes three levels: GPS, WiFi, Cell tower. GPS is the most accurate (&lt; 1 meter) but uses a lot of battery power. Wifi is accurate at around ~100 meters and uses less battery. Cell tower is accurate at about ~2 km and uses the least amount of battery. Setting is specified in meters (as a String). The default value is set to 100 meters.</li>
+<li><code>kCSLocationSettingMinimumDistance</code><br> Minimum distance used before getting a location update. When not specified it updates whenever iOS deems it relevant to update, this is recommended. Specified in meters. Uses the standard iOS functionality. Not set by default.</li>
+<li><code>kCSLocationSettingCortexAutoPausing</code><br>  Setting for automatically pausing location updates for three minutes after a new datapoint has come in, this might save battery life. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.</li>
+</ul>
+
+
+<p><strong><em>Spatial settings</em></strong></p>
+
+<ul>
+<li><code>kCSSpatialSettingInterval</code><br> Interval between sampling spatial (motion) data. Specified in seconds, by default set to 60 seconds.</li>
+<li><code>kCSSpatialSettingFrequency</code><br> Sample frequency of the motion data sampling. Specified in Herz. By default set to 50 Hz. Note that this is limited by hardware potential.</li>
+<li><code>kCSSpatialSettingNrSamples</code><br> Number of samples to collect for each sampling cycle. Specified in numbers of samples. By default set to 150 samples, this means 3 seconds of sampled data when using the standard of 50 Hz as sampling frequency.</li>
+</ul>
+
+
+<p><strong><em>Ambience settings</em></strong></p>
+
+<ul>
+<li><code>kCSAmbienceSettingInterval</code><br> Interval between sampling ambience (currently only noise) data. Specified in seconds, by default set to 60 seconds.</li>
+<li><code>kCSAmbienceSettingSampleOnlyWhenScreenLocked</code><br> Enabling or disabling sampling when the screen is on. When the screen is on and mircrophone is being sampled iOS shows a red bar at the top of the screen. This might scare users. A solution could be to only sample ambience (noise) data when the screen is turned off. When this setting is turned on, that is what will happen. Note that when the screen gets turned on at the moment the sampling has already started the sampling will be finished (and hence there is a small chance the red bar will be seen by the user). Disabled by default.</li>
+</ul>
+
+
+<p><strong><em><a href="../docs/source/Persistency.html">Persistency</a></em></strong></p>
+
+<p>Settings are by default persisted in a local storage file to make sure that when the app is killed settings are restored when restarted. The settings in the file are loaded whenever CSSettings.h is instantiated (if it exists). The settings file can be encrypted by setting the <code>kCSGeneralSettingLocalStorageEncryption</code> to Yes. When it does not exist a new file is created with the default settings.</p>
+
+<p><strong><em>Default settings</em></strong></p>
+
+<ul>
+<li>Upload interval to commonsense: 1800 seconds (<code>kCSGeneralSettingUploadInterval</code>)</li>
+<li>Enabling upload to commonsense: Yes (<code>kCSGeneralSettingUploadToCommonSense</code>)</li>
+<li>Enabling sensors that have been requested: Yes (<code>kCSGeneralSettingSenseEnabled</code>)</li>
+<li>Enabling encryption on the local storage: No (<code>kCSGeneralSettingLocalStorageEncryption</code>)</li>
+<li>Using the staging server: No (<code>kCSGeneralSettingUseStaging</code>)</li>
+<li>Sample ambience (noise) only when screen is locked: No (<code>kCSAmbienceSettingSampleOnlyWhenScreenLocked</code>)</li>
+<li>Sample interval for ambience (noise) sensors: 60 seconds (<code>kCSAmbienceSettingInterval</code>)</li>
+<li>Location sampling accuracy: 100 meters (<code>kCSLocationSettingAccuracy</code>)</li>
+<li>Automatically pausing the location sensing for 3 minutes between updates: No (<code>kCSLocationSettingCortexAutoPausing</code>)</li>
+<li>Interval of sampling spatial (motion) sensors: 60 seconds (<code>kCSSpatialSettingInterval</code>)</li>
+<li>Sample frequency when sampling spatial (motion) sensors: 50 Hz (<code>kCSSpatialSettingFrequency</code>)</li>
+<li>Number of samples to sample every cycle: 150 samples (<code>kCSSpatialSettingNrSamples</code>)</li>
+</ul>
+
+
+<p><strong><em>Listening to changes</em></strong></p>
+
+<p>When a setting is changed a notification is broadcasted to all listeners. To listen to sensor enabling or disabling, a class can declare</p>
+
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:[MySensor name]] object:nil];
+</code></pre>
+
+<p>Or to listen to other specific sensor notifications</p>
+
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enabledChanged:) name:[CSSettings settingChangedNotificationNameForSensor:[MySensor name]] object:nil];
+</code></pre>
+
+<p>To listen to notifications of a specific type</p>
+
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enabledChanged:) name:[CSSettings settingChangedNotificationNameForType:[MyObject type]] object:nil];
+</code></pre>
+
+<p><strong><em>Warning</em></strong></p>
+
+<p>Note that some of the functionality of this class should no longer be used directly by the developer but instead can be used through <a href="../Classes/CSSensorRequirements.html">CSSensorRequirements</a>.h, which provides a way of dealing with potentially conflicting settings. Especially the enabling/disabling of sensors or the setting of specific parameters for sensors should be done there. See <a href="../Classes/CSSensorRequirements.html">CSSensorRequirements</a>.h for more details.</p>
+
+<p><strong><em>Warning</em></strong></p>
+
+<p>Settings are not stored specifically for each user. Hence when another user would start using the same install of the app without removing it first, it would be using the same settings. Login/Register and Logout do clear the credential settings though.</p>
 					</div>
 					
 					
@@ -135,8 +265,8 @@
 						<a title="Tasks" name="tasks"></a>
 						
 
-						
-						
+						<a title="Class methods" name="task_Class methods"></a>
+						<h2 class="task-title">Class methods</h2>
 
 						<div class="task-list">
 							<div class="section-method">
@@ -149,10 +279,35 @@
 
 		<div class="method-info-container">
 			
+			
+			<div class="method-subsection brief-description">
+				<p>Provides the singleton object for this class</p>
+			</div>
+			
+		    
 
 			<div class="method-subsection method-declaration"><code>+ (CSSettings *)sharedSettings</code></div>
 
 		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
 		</div>
 	</div>
 </div><div class="section-method">
@@ -167,7 +322,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Returns the name of enable notifications for the specified sensor</p>
+				<p>Returns the name of enable notifications for the specified sensor. This can be used for an object to instantiate an observer.</p>
 			</div>
 			
 		    
@@ -176,7 +331,24 @@
 
 		    
 			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>The of the sensor for which the enable notifications should be observed.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
 
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The name of the enable notifications for the specified sensor.</p>
+			</div>
 			
 
 			
@@ -208,7 +380,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>///Returns the name of the notification send when a setting of the specified type changes</p>
+				<p>Returns the name of setting changed notifications for a specified type of settings. This can be used for an object to instantiate an observer.</p>
 			</div>
 			
 		    
@@ -217,7 +389,24 @@
 
 		    
 			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>The type of sensor changes that one wants to listen to. This can be either kCSSettingTypeGeneral, kCSSettingTypeGeneral, kCSSettingTypeLocation,kCSSettingTypeSpatial,kCSSettingTypeAmbience. See the overview of this class for more info.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
 
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The name of the enable notifications for the specified type</p>
+			</div>
 			
 
 			
@@ -237,7 +426,15 @@
 			
 		</div>
 	</div>
-</div><div class="section-method">
+</div>
+						</div>
+						
+
+						<a title="Setting settings (pun intended)" name="task_Setting settings (pun intended)"></a>
+						<h2 class="task-title">Setting settings (pun intended)</h2>
+
+						<div class="task-list">
+							<div class="section-method">
 	<a name="//api/name/setSensor:enabled:" title="setSensor:enabled:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/setSensor:enabled:">&ndash;&nbsp;setSensor:enabled:</a></code>
 </h3>
@@ -249,7 +446,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Enable/disable the specified sensor, setting is persistent</p>
+				<p>Enable/disable the specified sensor, setting is persistent.</p>
 			</div>
 			
 		    
@@ -258,11 +455,38 @@
 
 		    
 			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>Name of the sensor to enable or disable</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>enable</code></th>
+						<td><p>True if it should be enabled, false if sensor should be disabled</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
 
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>New value of the sensor&rsquo;s isEnabled method.</p>
+			</div>
 			
 
 			
 
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This notifies observers.</p>
+			</div>
 			
 
 			
@@ -290,7 +514,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Enable/disable the specified sensor</p>
+				<p>Enable/disable the specified sensor, specifying whether or not the setting should be persistent.</p>
 			</div>
 			
 		    
@@ -304,128 +528,18 @@
 				<table class="argument-def parameter-def">
 				
 					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>Name of the sensor</p></td>
+					</tr>
+				
+					<tr>
 						<th scope="row" class="argument-name"><code>enable</code></th>
-						<td><p>wether to enable or disable the sensor</p></td>
+						<td><p>Wether to enable or disable the sensor</p></td>
 					</tr>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>persistent</code></th>
-						<td><p>whether this setting is persistent</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">CSSettings.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/isSensorEnabled:" title="isSensorEnabled:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/isSensorEnabled:">&ndash;&nbsp;isSensorEnabled:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Returns wether the specified sensor is enabled</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (BOOL)isSensorEnabled:(NSString *)<em>sensor</em></code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">CSSettings.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/sendNotificationForSensor:" title="sendNotificationForSensor:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/sendNotificationForSensor:">&ndash;&nbsp;sendNotificationForSensor:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-
-			<div class="method-subsection method-declaration"><code>- (void)sendNotificationForSensor:(NSString *)<em>sensor</em></code></div>
-
-		    
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/getSettingType:setting:" title="getSettingType:setting:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/getSettingType:setting:">&ndash;&nbsp;getSettingType:setting:</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Get the value of the specified setting</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (NSString *)getSettingType:(NSString *)<em>type</em> setting:(NSString *)<em>setting</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>type</code></th>
-						<td><p>the setting type</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>setting</code></th>
-						<td><p>the specific setting for the type</p></td>
+						<td><p>Whether this setting is persistent</p></td>
 					</tr>
 				
 				</table>
@@ -435,12 +549,17 @@
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>the value of the setting</p>
+				<p>New value of the sensor&rsquo;s isEnabled method.</p>
 			</div>
 			
 
 			
 
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This notifies observers.</p>
+			</div>
 			
 
 			
@@ -468,7 +587,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Set the value of the specified setting, the setting is persistent</p>
+				<p>Set the value of the specified setting, the setting is persistent.</p>
 			</div>
 			
 		    
@@ -483,17 +602,17 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>type</code></th>
-						<td><p>the setting type</p></td>
+						<td><p>The setting type</p></td>
 					</tr>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>setting</code></th>
-						<td><p>the specific setting for the type</p></td>
+						<td><p>The specific setting for the type</p></td>
 					</tr>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>value</code></th>
-						<td><p>the value of to set the setting to</p></td>
+						<td><p>The value of to set the setting to</p></td>
 					</tr>
 				
 				</table>
@@ -501,9 +620,19 @@
 			
 
 			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Whether or not updating the setting was successful.</p>
+			</div>
+			
 
 			
 
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This notifies observers.</p>
+			</div>
 			
 
 			
@@ -546,22 +675,22 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>type</code></th>
-						<td><p>the setting type</p></td>
+						<td><p>The setting type. See the overview above for the available types.</p></td>
 					</tr>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>setting</code></th>
-						<td><p>the specific setting for the type</p></td>
+						<td><p>The specific setting for the type</p></td>
 					</tr>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>value</code></th>
-						<td><p>the value of to set the setting to</p></td>
+						<td><p>The value of to set the setting to</p></td>
 					</tr>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>persistent</code></th>
-						<td><p>whether the setting should be persistent</p></td>
+						<td><p>Whether the setting should be persistent</p></td>
 					</tr>
 				
 				</table>
@@ -569,9 +698,19 @@
 			
 
 			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Whether or not updating the setting was successful.</p>
+			</div>
+			
 
 			
 
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This notifies observers.</p>
+			</div>
 			
 
 			
@@ -703,7 +842,197 @@
 			
 		</div>
 	</div>
+</div>
+						</div>
+						
+
+						<a title="Getting settings" name="task_Getting settings"></a>
+						<h2 class="task-title">Getting settings</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/isSensorEnabled:" title="isSensorEnabled:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isSensorEnabled:">&ndash;&nbsp;isSensorEnabled:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns wether the specified sensor is enabled</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)isSensorEnabled:(NSString *)<em>sensor</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>Name of the sensor to check</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Whether or not the specified sensor is enabled</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div><div class="section-method">
+	<a name="//api/name/sendNotificationForSensor:" title="sendNotificationForSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendNotificationForSensor:">&ndash;&nbsp;sendNotificationForSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Send notifications for a specific sensor. Notifies all observers about this sensor.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)sendNotificationForSensor:(NSString *)<em>sensor</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>Name of the sensor</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getSettingType:setting:" title="getSettingType:setting:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getSettingType:setting:">&ndash;&nbsp;getSettingType:setting:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get the value of the specified setting</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSString *)getSettingType:(NSString *)<em>type</em> setting:(NSString *)<em>setting</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>type</code></th>
+						<td><p>the setting type</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>setting</code></th>
+						<td><p>the specific setting for the type</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>the value of the setting</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSettings.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Reset" name="task_Reset"></a>
+						<h2 class="task-title">Reset</h2>
+
+						<div class="task-list">
+							<div class="section-method">
 	<a name="//api/name/resetToDefaults" title="resetToDefaults"></a>
 	<h3 class="method-title"><code><a href="#//api/name/resetToDefaults">&ndash;&nbsp;resetToDefaults</a></code>
 </h3>
@@ -729,6 +1058,27 @@
 
 			
 
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The default settings are:</p>
+
+<ul>
+<li>Upload interval to commonsense: 1800 seconds (<code>kCSGeneralSettingUploadInterval</code>)</li>
+<li>Enabling upload to commonsense: Yes (<code>kCSGeneralSettingUploadToCommonSense</code>)</li>
+<li>Enabling sensors that have been requested: Yes (<code>kCSGeneralSettingSenseEnabled</code>)</li>
+<li>Enabling encryption on the local storage: No (<code>kCSGeneralSettingLocalStorageEncryption</code>)</li>
+<li>Using the staging server: No (<code>kCSGeneralSettingUseStaging</code>)</li>
+<li>Sample ambience (noise) only when screen is locked: No (<code>kCSAmbienceSettingSampleOnlyWhenScreenLocked</code>)</li>
+<li>Sample interval for ambience (noise) sensors: 60 seconds (<code>kCSAmbienceSettingInterval</code>)</li>
+<li>Location sampling accuracy: 100 meters (<code>kCSLocationSettingAccuracy</code>)</li>
+<li>Automatically pausing the location sensing for 3 minutes between updates: No (<code>kCSLocationSettingCortexAutoPausing</code>)</li>
+<li>Interval of sampling spatial (motion) sensors: 60 seconds (<code>kCSSpatialSettingInterval</code>)</li>
+<li>Sample frequency when sampling spatial (motion) sensors: 50 Hz (<code>kCSSpatialSettingFrequency</code>)</li>
+<li>Number of samples to sample every cycle: 150 samples (<code>kCSSpatialSettingNrSamples</code>)</li>
+</ul>
+
+			</div>
 			
 
 			
@@ -757,7 +1107,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-20</p>
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-23</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

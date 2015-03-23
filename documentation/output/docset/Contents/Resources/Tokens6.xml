@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tokens version="1.0">
-	<File path="docs/source/Logging and Debugging.html">
+	<File path="docs/source/Logging and debugging.html">
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/doc/Logging and Debugging</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/doc/Logging and debugging</TokenIdentifier>
 			<Abstract type="html">## Logging sensor</Abstract>
-			<DeclaredIn>Logging and Debugging-template.markdown</DeclaredIn>
+			<DeclaredIn>Logging and debugging-template.markdown</DeclaredIn>
             
 			
 			<NodeRef refid="6"/>
