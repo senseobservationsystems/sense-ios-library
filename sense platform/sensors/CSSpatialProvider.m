@@ -114,6 +114,14 @@ static const double radianInDegrees = 180.0 / M_PI;
         [[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(jumpEnabledChanged:)
 													 name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_JUMP] object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(accelerationEnabledChanged:)
+                                                     name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_ACCELERATION_BURST] object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(accelerationEnabledChanged:)
+                                                     name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_ACCELERATION] object:nil];
 		
 		//register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -145,6 +153,18 @@ static const double radianInDegrees = 180.0 / M_PI;
     }
     accelerometerSensorEnabled = enable;
 }
+
+- (void) accelerationEnabledChanged: (id) notification {
+    bool enable = [[notification object] boolValue];
+    if (enable != accelerationSensorEnabled) {
+        if (enable)
+            [self incEnable];
+        else
+            [self decEnable];
+    }
+    accelerationSensorEnabled = enable;
+}
+
 
 - (void) rotationEnabledChanged: (id) notification {
 	bool enable = [[notification object] boolValue] && (rotationSensor != nil);
