@@ -10,6 +10,7 @@
 #import "CSStorage.h"
 #import "CSSender.h"
 
+/** Uploads data to CommonSense */
 @interface CSUploader : NSObject
 - (id) initWithStorage:(CSStorage*) theStorage andSender:(CSSender*) theSender;
 - (BOOL) upload;

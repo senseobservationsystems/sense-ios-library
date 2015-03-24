@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSSensorStore</TokenIdentifier>
-			<Abstract type="html">Handles sensor data storing and uploading</Abstract>
+			<Abstract type="html">Handles sensor data storing and uploading. Start all sensors and data providers.</Abstract>
 			<DeclaredIn>CSSensorStore.h</DeclaredIn>
             
 			

@@ -135,83 +135,84 @@ extern NSString* const kCSActivitySettingPrivacyPublic;
  
  Each setting also has a type, which makes it easier to group them and listen only to setting changes of a specific type. Currently, 5 different types have been defined:
  
- - <code>kCSSettingTypeGeneral</code>: This a placeholder for all settings that don't belong to any of the other types.
- - <code>kCSSettingTypeBiometric</code>: User specific settings like age, height, date of birth, and gender.
- - <code>kCSSettingTypeLocation</code>: All settings related to the location sensor, visits sensor, and the location provider, including sampling settings and accuracy.
- - <code>kCSSettingTypeSpatial</code>: All settings related to the spatial settings and spatial data provider. This includes the accelerometer sensors and motion features.
- - <code>kCSSettingTypeAmbience</code>: All settings related to the ambience sensors. Right now this is only the noise sensor (microphone data).
+ - `kCSSettingTypeGeneral`: This a placeholder for all settings that don't belong to any of the other types.
+ - `kCSSettingTypeBiometric`: User specific settings like age, height, date of birth, and gender.
+ - `kCSSettingTypeLocation`: All settings related to the location sensor, visits sensor, and the location provider, including sampling settings and accuracy.
+ - `kCSSettingTypeSpatial`: All settings related to the spatial settings and spatial data provider. This includes the accelerometer sensors and motion features.
+ - `kCSSettingTypeAmbience`: All settings related to the ambience sensors. Right now this is only the noise sensor (microphone data).
  
  
 ___General settings___
  
- - <code>kCSGeneralSettingUsername</code><br> The username of the user is stored as a setting for persistency. This is handled in CSSensePlatform login, logout, and register methods so doesn't need to be set manually. Any valid string value is accepted.
- - <code>kCSGeneralSettingPassword</code><br> The password of the uer is stored as a setting for persistency. This is handled in CSSensePlatform login, logout, and register methods so it doesn't to be set manually. Note that when encryption is enabled, the settings including the password are also encrypted. The password itself is stored as an MD5 hashed String.
- - <code>kCSGeneralSettingSenseEnabled</code><br> This is a shorthand for disabling all sensors and uploads to commonsense. When enabled, the old settings are restored, enabling all the sensors that have been individually enabled. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Enabled by default.
- - <code>kCSGeneralSettingUploadInterval</code><br> The interval is seconds specifies the time between consecutive uploads to commonsense. Value can be specified in seconds using a string. There are also three special settings available but they are not implement right now so they should not be used. 1800 seconds (30 minutes) by default.
- - <code>kCSGeneralSettingPollInterval</code><br> This setting is not being used currently. Polling intervals are specified per sensor.
- - <code>kCSGeneralSettingAutodetect</code><br> This setting is not being used.
- - <code>kCSGeneralSettingUploadToCommonSense</code><br> When enabled, data will be uploaded to commonsense according to a specified interval. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Enabled by default.
- - <code>kCSGeneralSettingDontUploadBursts</code><br>This specifies whether or not data from burst sensors should be uploaded to commonsense. Data in burst sensors contains all data that is often sampled at a high frequency. It can be used effectively for specific algorithms to detect behavior of the user for instance, but uploading it might take time, battery, and data usage. For improved battery usage, we advice not to upload burst data but only use it locally. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Enabled by default.
- - <code>kCSGeneralSettingBackgroundRestarthack</code><br>This settings enables the running of sense library in the background. For more details, see the Background services document. Enabled by default to be able to run in the background.
- - <code>kCSGeneralSettingLocalStorageEncryption</code><br>This setting enables or disables encryption of local data (settings file and sensordata database). Note that encryption will decrease performance slightly. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.
- - <code>kCSGeneralSettingLocalStorageEncryptionKey</code> Key used for encryption.
- - <code>kCSGeneralSettingUseStaging</code> This setting enables or disables the use of the staging server. It changes all URLs for remote communication to either the commonsense live API or the commonsense staging API. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.
+ - `kCSGeneralSettingUsername`<br>
+	The username of the user is stored as a setting for persistency. This is handled in CSSensePlatform login, logout, and register methods so doesn't need to be set manually. Any valid string value is accepted.
+ - `kCSGeneralSettingPassword`<br> The password of the uer is stored as a setting for persistency. This is handled in CSSensePlatform login, logout, and register methods so it doesn't to be set manually. Note that when encryption is enabled, the settings including the password are also encrypted. The password itself is stored as an MD5 hashed String.
+ - `kCSGeneralSettingSenseEnabled`<br> This is a shorthand for disabling all sensors and uploads to commonsense. When enabled, the old settings are restored, enabling all the sensors that have been individually enabled. Values are `kCSSettingYes` or `kCSSettingNo`. Enabled by default.
+ - `kCSGeneralSettingUploadInterval`<br> The interval is seconds specifies the time between consecutive uploads to commonsense. Value can be specified in seconds using a string. There are also three special settings available but they are not implement right now so they should not be used. 1800 seconds (30 minutes) by default.
+ - `kCSGeneralSettingPollInterval`<br> This setting is not being used currently. Polling intervals are specified per sensor.
+ - `kCSGeneralSettingAutodetect`<br> This setting is not being used.
+ - `kCSGeneralSettingUploadToCommonSense`<br> When enabled, data will be uploaded to commonsense according to a specified interval. Values are `kCSSettingYes` or `kCSSettingNo`. Enabled by default.
+ - `kCSGeneralSettingDontUploadBursts`<br>This specifies whether or not data from burst sensors should be uploaded to commonsense. Data in burst sensors contains all data that is often sampled at a high frequency. It can be used effectively for specific algorithms to detect behavior of the user for instance, but uploading it might take time, battery, and data usage. For improved battery usage, we advice not to upload burst data but only use it locally. Values are `kCSSettingYes` or `kCSSettingNo`. Enabled by default.
+ - `kCSGeneralSettingBackgroundRestarthack`<br>This settings enables the running of sense library in the background. For more details, see the Background services document. Enabled by default to be able to run in the background.
+ - `kCSGeneralSettingLocalStorageEncryption`<br>This setting enables or disables encryption of local data (settings file and sensordata database). Note that encryption will decrease performance slightly. Values are `kCSSettingYes` or `kCSSettingNo`. Disabled by default.
+ - `kCSGeneralSettingLocalStorageEncryptionKey` Key used for encryption.
+ - `kCSGeneralSettingUseStaging` This setting enables or disables the use of the staging server. It changes all URLs for remote communication to either the commonsense live API or the commonsense staging API. Values are `kCSSettingYes` or `kCSSettingNo`. Disabled by default.
  
 ___Biometric settings___
 
  These are placeholders not currently being used actively. We discourage usage of them for now.
  
- - <code>kCSBiometricSettingGender</code>
- - <code>kCSBiometricSettingBirthDate</code>
- - <code>kCSBiometricSettingWeight</code>
- - <code>kCSBiometricSettingHeight</code>
- - <code>kCSBiometricSettingBodyFat</code>
- - <code>kCSBiometricSettingMaxPulse</code>
+ - `kCSBiometricSettingGender`
+ - `kCSBiometricSettingBirthDate`
+ - `kCSBiometricSettingWeight`
+ - `kCSBiometricSettingHeight`
+ - `kCSBiometricSettingBodyFat`
+ - `kCSBiometricSettingMaxPulse`
  
  
 ___Activity settings___
  
  These are placeholder not currently being used actively. We discourage usage of them for now.
  
- - <code>kCSActivitySettingDetection</code>
- - <code>kCSActivitySettingPrivacy</code>
+ - `kCSActivitySettingDetection`
+ - `kCSActivitySettingPrivacy`
  
 ___Location settings___
  
- - <code>kCSLocationSettingAccuracy</code><br> Accuracy with which iOS will detect location data points. Lower values will provide higher accuracy but will also use more battery. Apple generally distinguishes three levels: GPS, WiFi, Cell tower. GPS is the most accurate (< 1 meter) but uses a lot of battery power. Wifi is accurate at around ~100 meters and uses less battery. Cell tower is accurate at about ~2 km and uses the least amount of battery. Setting is specified in meters (as a String). The default value is set to 100 meters.
- - <code>kCSLocationSettingMinimumDistance</code><br> Minimum distance used before getting a location update. When not specified it updates whenever iOS deems it relevant to update, this is recommended. Specified in meters. Uses the standard iOS functionality. Not set by default.
- - <code>kCSLocationSettingCortexAutoPausing</code><br>	Setting for automatically pausing location updates for three minutes after a new datapoint has come in, this might save battery life. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.
+ - `kCSLocationSettingAccuracy`<br> Accuracy with which iOS will detect location data points. Lower values will provide higher accuracy but will also use more battery. Apple generally distinguishes three levels: GPS, WiFi, Cell tower. GPS is the most accurate (< 1 meter) but uses a lot of battery power. Wifi is accurate at around ~100 meters and uses less battery. Cell tower is accurate at about ~2 km and uses the least amount of battery. Setting is specified in meters (as a String). The default value is set to 100 meters.
+ - `kCSLocationSettingMinimumDistance`<br> Minimum distance used before getting a location update. When not specified it updates whenever iOS deems it relevant to update, this is recommended. Specified in meters. Uses the standard iOS functionality. Not set by default.
+ - `kCSLocationSettingCortexAutoPausing`<br>	Setting for automatically pausing location updates for three minutes after a new datapoint has come in, this might save battery life. Values are `kCSSettingYes` or `kCSSettingNo`. Disabled by default.
 
 ___Spatial settings___
  
- - <code>kCSSpatialSettingInterval</code><br> Interval between sampling spatial (motion) data. Specified in seconds, by default set to 60 seconds.
- - <code>kCSSpatialSettingFrequency</code><br> Sample frequency of the motion data sampling. Specified in Herz. By default set to 50 Hz. Note that this is limited by hardware potential.
- - <code>kCSSpatialSettingNrSamples</code><br> Number of samples to collect for each sampling cycle. Specified in numbers of samples. By default set to 150 samples, this means 3 seconds of sampled data when using the standard of 50 Hz as sampling frequency.
+ - `kCSSpatialSettingInterval`<br> Interval between sampling spatial (motion) data. Specified in seconds, by default set to 60 seconds.
+ - `kCSSpatialSettingFrequency`<br> Sample frequency of the motion data sampling. Specified in Herz. By default set to 50 Hz. Note that this is limited by hardware potential.
+ - `kCSSpatialSettingNrSamples`<br> Number of samples to collect for each sampling cycle. Specified in numbers of samples. By default set to 150 samples, this means 3 seconds of sampled data when using the standard of 50 Hz as sampling frequency.
 
 ___Ambience settings___
 
-  - <code>kCSAmbienceSettingInterval</code><br> Interval between sampling ambience (currently only noise) data. Specified in seconds, by default set to 60 seconds.
-  - <code>kCSAmbienceSettingSampleOnlyWhenScreenLocked</code><br> Enabling or disabling sampling when the screen is on. When the screen is on and mircrophone is being sampled iOS shows a red bar at the top of the screen. This might scare users. A solution could be to only sample ambience (noise) data when the screen is turned off. When this setting is turned on, that is what will happen. Note that when the screen gets turned on at the moment the sampling has already started the sampling will be finished (and hence there is a small chance the red bar will be seen by the user). Disabled by default.
+  - `kCSAmbienceSettingInterval`<br> Interval between sampling ambience (currently only noise) data. Specified in seconds, by default set to 60 seconds.
+  - `kCSAmbienceSettingSampleOnlyWhenScreenLocked`<br> Enabling or disabling sampling when the screen is on. When the screen is on and mircrophone is being sampled iOS shows a red bar at the top of the screen. This might scare users. A solution could be to only sample ambience (noise) data when the screen is turned off. When this setting is turned on, that is what will happen. Note that when the screen gets turned on at the moment the sampling has already started the sampling will be finished (and hence there is a small chance the red bar will be seen by the user). Disabled by default.
 
 
 ___Persistency___
  
-Settings are by default persisted in a local storage file to make sure that when the app is killed settings are restored when restarted. The settings in the file are loaded whenever CSSettings.h is instantiated (if it exists). The settings file can be encrypted by setting the <code>kCSGeneralSettingLocalStorageEncryption</code> to Yes. When it does not exist a new file is created with the default settings.
+Settings are by default persisted in a local storage file to make sure that when the app is killed settings are restored when restarted. The settings in the file are loaded whenever CSSettings.h is instantiated (if it exists). The settings file can be encrypted by setting the `kCSGeneralSettingLocalStorageEncryption` to Yes. When it does not exist a new file is created with the default settings.
  
 ___Default settings___
  
- - Upload interval to commonsense: 1800 seconds (<code>kCSGeneralSettingUploadInterval</code>)
- - Enabling upload to commonsense: Yes (<code>kCSGeneralSettingUploadToCommonSense</code>)
- - Enabling sensors that have been requested: Yes (<code>kCSGeneralSettingSenseEnabled</code>)
- - Enabling encryption on the local storage: No (<code>kCSGeneralSettingLocalStorageEncryption</code>)
- - Using the staging server: No (<code>kCSGeneralSettingUseStaging</code>)
- - Sample ambience (noise) only when screen is locked: No (<code>kCSAmbienceSettingSampleOnlyWhenScreenLocked</code>)
- - Sample interval for ambience (noise) sensors: 60 seconds (<code>kCSAmbienceSettingInterval</code>)
- - Location sampling accuracy: 100 meters (<code>kCSLocationSettingAccuracy</code>)
- - Automatically pausing the location sensing for 3 minutes between updates: No (<code>kCSLocationSettingCortexAutoPausing</code>)
- - Interval of sampling spatial (motion) sensors: 60 seconds (<code>kCSSpatialSettingInterval</code>)
- - Sample frequency when sampling spatial (motion) sensors: 50 Hz (<code>kCSSpatialSettingFrequency</code>)
- - Number of samples to sample every cycle: 150 samples (<code>kCSSpatialSettingNrSamples</code>)
+ - Upload interval to commonsense: 1800 seconds (`kCSGeneralSettingUploadInterval`)
+ - Enabling upload to commonsense: Yes (`kCSGeneralSettingUploadToCommonSense`)
+ - Enabling sensors that have been requested: Yes (`kCSGeneralSettingSenseEnabled`)
+ - Enabling encryption on the local storage: No (`kCSGeneralSettingLocalStorageEncryption`)
+ - Using the staging server: No (`kCSGeneralSettingUseStaging`)
+ - Sample ambience (noise) only when screen is locked: No (`kCSAmbienceSettingSampleOnlyWhenScreenLocked`)
+ - Sample interval for ambience (noise) sensors: 60 seconds (`kCSAmbienceSettingInterval`)
+ - Location sampling accuracy: 100 meters (`kCSLocationSettingAccuracy`)
+ - Automatically pausing the location sensing for 3 minutes between updates: No (`kCSLocationSettingCortexAutoPausing`)
+ - Interval of sampling spatial (motion) sensors: 60 seconds (`kCSSpatialSettingInterval`)
+ - Sample frequency when sampling spatial (motion) sensors: 50 Hz (`kCSSpatialSettingFrequency`)
+ - Number of samples to sample every cycle: 150 samples (`kCSSpatialSettingNrSamples`)
 
 
 ___Listening to changes___
@@ -360,18 +361,18 @@ Settings are not stored specifically for each user. Hence when another user woul
  
  The default settings are:
  
- - Upload interval to commonsense: 1800 seconds (<code>kCSGeneralSettingUploadInterval</code>)
- - Enabling upload to commonsense: Yes (<code>kCSGeneralSettingUploadToCommonSense</code>)
- - Enabling sensors that have been requested: Yes (<code>kCSGeneralSettingSenseEnabled</code>)
- - Enabling encryption on the local storage: No (<code>kCSGeneralSettingLocalStorageEncryption</code>)
- - Using the staging server: No (<code>kCSGeneralSettingUseStaging</code>)
- - Sample ambience (noise) only when screen is locked: No (<code>kCSAmbienceSettingSampleOnlyWhenScreenLocked</code>)
- - Sample interval for ambience (noise) sensors: 60 seconds (<code>kCSAmbienceSettingInterval</code>)
- - Location sampling accuracy: 100 meters (<code>kCSLocationSettingAccuracy</code>)
- - Automatically pausing the location sensing for 3 minutes between updates: No (<code>kCSLocationSettingCortexAutoPausing</code>)
- - Interval of sampling spatial (motion) sensors: 60 seconds (<code>kCSSpatialSettingInterval</code>)
- - Sample frequency when sampling spatial (motion) sensors: 50 Hz (<code>kCSSpatialSettingFrequency</code>)
- - Number of samples to sample every cycle: 150 samples (<code>kCSSpatialSettingNrSamples</code>)
+ - Upload interval to commonsense: 1800 seconds (`kCSGeneralSettingUploadInterval`)
+ - Enabling upload to commonsense: Yes (`kCSGeneralSettingUploadToCommonSense`)
+ - Enabling sensors that have been requested: Yes (`kCSGeneralSettingSenseEnabled`)
+ - Enabling encryption on the local storage: No (`kCSGeneralSettingLocalStorageEncryption`)
+ - Using the staging server: No (`kCSGeneralSettingUseStaging`)
+ - Sample ambience (noise) only when screen is locked: No (`kCSAmbienceSettingSampleOnlyWhenScreenLocked`)
+ - Sample interval for ambience (noise) sensors: 60 seconds (`kCSAmbienceSettingInterval`)
+ - Location sampling accuracy: 100 meters (`kCSLocationSettingAccuracy`)
+ - Automatically pausing the location sensing for 3 minutes between updates: No (`kCSLocationSettingCortexAutoPausing`)
+ - Interval of sampling spatial (motion) sensors: 60 seconds (`kCSSpatialSettingInterval`)
+ - Sample frequency when sampling spatial (motion) sensors: 50 Hz (`kCSSpatialSettingFrequency`)
+ - Number of samples to sample every cycle: 150 samples (`kCSSpatialSettingNrSamples`)
  */
 - (void) resetToDefaults;
 @end

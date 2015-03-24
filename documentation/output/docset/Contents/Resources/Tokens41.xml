@@ -4,7 +4,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/cl/CSSensorRequirements</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Handles requirements. Requirements are a layer on top of settings that help dealing with several incompatible settings. Right now requirements should be used to handle the enabling and disabling of sensors and to set the sample interval and accuracy for a sensor. Whenever two different consumer set different intervals or accuracies, the lowest value is used.</Abstract>
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
             
 			
@@ -30,7 +30,12 @@
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>+ (NSDictionary *)requirementForSensor:(NSString *)sensor</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">The sensor name for the sensor that should be enabled</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/requirementForSensor:</Anchor>
             <NodeRef refid="41"/>
@@ -42,7 +47,15 @@
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>+ (NSDictionary *)requirementForSensor:(NSString *)sensor withInterval:(NSTimeInterval)interval</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>sensor</Name>
+					<Abstract type="html">The sensor name for the sensor that should be enabled with a certain interval</Abstract>
+				</Parameter><Parameter>
+					<Name>interval</Name>
+					<Abstract type="html">Time interval describing the frequency with which the sensor should poll new data</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/requirementForSensor:withInterval:</Anchor>
             <NodeRef refid="41"/>
@@ -54,7 +67,15 @@
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>- (void)setRequirements:(NSArray *)requirements byConsumer:(NSString *)consumer</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>requirements</Name>
+					<Abstract type="html">Array of requirements to set for that consumer. See the example above for an example of the format</Abstract>
+				</Parameter><Parameter>
+					<Name>consumer</Name>
+					<Abstract type="html">Unique identifier for the consumer setting the requirement (e.g. app identifier or library identifier)</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/setRequirements:byConsumer:</Anchor>
             <NodeRef refid="41"/>
@@ -66,7 +87,12 @@
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>- (void)clearRequirementsForConsumer:(NSString *)consumer</Declaration>
-			
+			<Parameters>
+				<Parameter>
+					<Name>consumer</Name>
+					<Abstract type="html">Identifier of the consumer for which the requirements should be cleared.</Abstract>
+				</Parameter>
+			</Parameters>
 			
 			<Anchor>//api/name/clearRequirementsForConsumer:</Anchor>
             <NodeRef refid="41"/>
@@ -74,7 +100,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/setIsEnabled:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Whether the requirements are enabled or disabled. They are enabled by default. If disabled, changing a requirement will not affect the settings</Abstract>
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
@@ -86,7 +112,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/CSSensorRequirements/isEnabled</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Whether the requirements are enabled or disabled. They are enabled by default. If disabled, changing a requirement will not affect the settings</Abstract>
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>
@@ -98,7 +124,7 @@
 		
 		<Token>
 			<TokenIdentifier>//apple_ref/occ/instp/CSSensorRequirements/isEnabled</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">Whether the requirements are enabled or disabled. They are enabled by default. If disabled, changing a requirement will not affect the settings</Abstract>
 			<DeclaredIn>CSSensorRequirements.h</DeclaredIn>
 			
 			<Declaration>@property (nonatomic) BOOL isEnabled</Declaration>

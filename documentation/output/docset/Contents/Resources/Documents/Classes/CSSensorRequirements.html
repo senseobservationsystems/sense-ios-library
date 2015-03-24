@@ -43,6 +43,8 @@
 							<select id="jump-to">
 	<option value="top">Jump To&#133;</option>
 	
+	<option value="overview">Overview</option>
+	
 
 	
 	
@@ -108,6 +110,28 @@
 					
 
                     
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Handles requirements. Requirements are a layer on top of settings that help dealing with several incompatible settings. Right now requirements should be used to handle the enabling and disabling of sensors and to set the sample interval and accuracy for a sensor. Whenever two different consumer set different intervals or accuracies, the lowest value is used.</p>
+
+<p>Requirements are organized and stored per consumer. Hence, when setting a requirement one has to provide a unique string that identifies the consumer. This way, it is easy to remove consumer-related requirements later on again.</p>
+
+<p>Here is some example code for setting requirements, enabling four sensors and setting the sample interval and accuracy:</p>
+
+<pre><code> NSString* consumerName = @"com.consumer.name";
+ NSArray* commonRequirements = @[
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_ACCELERATION, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:@35},
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_ACCELEROMETER_BURST, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:@30},
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_NOISE, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:@10},
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_LOCATION, kCSREQUIREMENT_FIELD_SAMPLE_ACCURACY:@10000}
+ ];
+ [[CSSensorRequirements sharedRequirements] setRequirements:commonRequirements byConsumer:consumerName];
+</code></pre>
+					</div>
+					
+					
 
 					
 					
@@ -181,6 +205,18 @@
 
 		    
 			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>The sensor name for the sensor that should be enabled</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
 
 			
 
@@ -221,6 +257,23 @@
 			<div class="method-subsection method-declaration"><code>+ (NSDictionary *)requirementForSensor:(NSString *)<em>sensor</em> withInterval:(NSTimeInterval)<em>interval</em></code></div>
 
 		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>The sensor name for the sensor that should be enabled with a certain interval</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>interval</code></th>
+						<td><p>Time interval describing the frequency with which the sensor should poll new data</p></td>
+					</tr>
+				
+				</table>
+			</div>
 			
 
 			
@@ -263,6 +316,23 @@
 
 		    
 			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>requirements</code></th>
+						<td><p>Array of requirements to set for that consumer. See the example above for an example of the format</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>consumer</code></th>
+						<td><p>Unique identifier for the consumer setting the requirement (e.g. app identifier or library identifier)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
 
 			
 
@@ -304,6 +374,18 @@
 
 		    
 			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>consumer</code></th>
+						<td><p>Identifier of the consumer for which the requirements should be cleared.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
 
 			
 
@@ -334,10 +416,35 @@
 
 		<div class="method-info-container">
 			
+			
+			<div class="method-subsection brief-description">
+				<p>Whether the requirements are enabled or disabled. They are enabled by default. If disabled, changing a requirement will not affect the settings</p>
+			</div>
+			
+		    
 
 			<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL isEnabled</code></div>
 
 		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
 		</div>
 	</div>
 </div>
@@ -353,7 +460,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-23</p>
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-24</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
