@@ -128,8 +128,7 @@
 		bgTask = UIBackgroundTaskInvalid;
 	}];
 
-	//TODO: make the interval a setting
-	double timeInterval = 180;
+	double timeInterval = autoPausingInterval;
 	double timeLeftForBackground = [app backgroundTimeRemaining];
 	
 	// Check if we get a valid background task and time remaining value
