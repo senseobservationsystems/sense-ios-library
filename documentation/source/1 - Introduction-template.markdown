@@ -13,5 +13,3 @@ then be available on Xcode. If you go to Help > Documentation and API Reference.
 
 
 The library is actively maintained and extended. If you have specific feature request you can reach out to the Product Owner of the Sense iOS library at [freek@sense-labs.com](freek@sense-labs.com). He loves to hear your thoughts and opinions, and will cherish your feedback.
-
-<a href="Getting started">Continue to Getting Started</a>

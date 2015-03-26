@@ -10,7 +10,7 @@ CSSensorRequirements is a singleton that can be accessed through
 
 	[CSSensorRequirements sharedRequirements]
 
-CSRequirements provides an extra layer on top of the CSSettings to manage potentially conflicting settings. The idea there is that all the different requirements coming from different sources are compared and the lowest value is used as the setting. Hence, the CSSensorRequirements updates the settings. Right now, requirements are used for settings related to indivdual sensors (including enabling/disabling and sample frequency). 
+CSSensorRequirements provides an extra layer on top of the CSSettings to manage potentially conflicting settings. The idea there is that all the different requirements coming from different sources are compared and the lowest value is used as the setting. Hence, the CSSensorRequirements updates the settings. Right now, requirements are used for settings related to indivdual sensors (including enabling/disabling and sample frequency). 
 
 ### CSSettings
 The other two main interfaces to developers are provided by CSSettings.h and CSSensorRequirements.h. CSSettings is a singleton that manages all the settings in the app and can be accessed through
