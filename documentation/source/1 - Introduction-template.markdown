@@ -8,8 +8,7 @@ Currently, the library has been extensively tested with iOS 8. It also works wit
 The source code is available at https://github.com/senseobservationsystems/sense-ios-library
 
 Documentation is available online at [http://senseobservationsystems.github.io/sense-ios-library/](http://senseobservationsystems.github.io/sense-ios-library/). also available offline in form of html and appledoc.
-For apple doc you could copy the contents of `documentation/output/docset` to the shared documentation library to `/Users/USERNAME/Library/Developer/Shared/Documentation/DocSets/nl.sense-os.SensePlatform.docset`. The documentation will 
-then be available on Xcode. If you go to Help > Documentation and API Reference. It will be listed on Navigator
+For apple doc you could copy the documentation available for download in [Release page](https://github.com/senseobservationsystems/sense-ios-library/releases) to the shared documentation library to `/Users/USERNAME/Library/Developer/Shared/Documentation/DocSets/nl.sense-os.SensePlatform.docset`. The documentation will then be available on Xcode. If you go to Help > Documentation and API Reference. It will be listed on Navigator
 
 
 The library is actively maintained and extended. If you have specific feature request you can reach out to the Product Owner of the Sense iOS library at [freek@sense-labs.com](freek@sense-labs.com). He loves to hear your thoughts and opinions, and will cherish your feedback.
