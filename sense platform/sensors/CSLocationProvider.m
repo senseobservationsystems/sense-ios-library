@@ -26,8 +26,9 @@
 	CSLocationSensor *locationSensor;
 	CSVisitsSensor *visitsSensor;
     
-    //the boolean to enable or disable the automated pausing of location updates
-    bool cortexAutoPausingEnabled;
+	
+    bool locationUpdatesAutoPausingEnabled;		//the boolean to enable or disable the automated pausing of location updates
+	int autoPausingInterval;					//Interval to pause location updates when locationUpdatesAutoPausing is enabled.
 	NSTimer *pauseLocationSamplingTimer;
 	UIBackgroundTaskIdentifier bgTask;
 }
@@ -38,7 +39,11 @@
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
-        
+		
+		//default values also set in the default settings like this
+		locationUpdatesAutoPausingEnabled = FALSE;
+		autoPausingInterval = 180;
+		
 		//TODO: check if this is the best type to pick
         locationManager.activityType = CLActivityTypeOther;
 		
@@ -63,6 +68,10 @@
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
+		
+		//default values also set in the default settings like this
+		locationUpdatesAutoPausingEnabled = FALSE;
+		autoPausingInterval = 180;
 		
 		//TODO: check if this is the best type to pick
 		locationManager.activityType = CLActivityTypeOther;
@@ -94,49 +103,61 @@
 	[visitsSensor storeVisit:visit];
 }
 
-
-
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void)locationManager:(CLLocationManager *)manager updateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
 	
 	bool accepted = [locationSensor storeLocation: newLocation withDesiredAccuracy:manager.desiredAccuracy];
 	
-    if(cortexAutoPausingEnabled && accepted){
-		
-        // Schedule location manager to run again in 120 seconds
-        UIApplication *app = [UIApplication sharedApplication];
-        bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
-            bgTask = UIBackgroundTaskInvalid;
-        }];
-        
-        if (bgTask == UIBackgroundTaskInvalid) {
-            NSLog(@"This application does not support background mode");
-        }
-        
-        double timeInterval = 180;
-        double timeLeftForBackground = app.backgroundTimeRemaining;
-        NSLog(@"Total time left in background:%f",timeLeftForBackground);
-        if (timeLeftForBackground < timeInterval) {
-            timeInterval = timeLeftForBackground - 5.0;
-            NSLog(@"Time Interval Between Location Update:%f", timeInterval);
-        }
-        
-        [locationManager stopUpdatingLocation];
-		
-		//TODO: make the interval a setting
-		//TODO: check if the interval is not higher than the required sample frequency for location updates;
-        pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(turnOnLocationSampling)  userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:pauseLocationSamplingTimer forMode:NSRunLoopCommonModes];
-    }
+    if(locationUpdatesAutoPausingEnabled && accepted){
+		[self pauseLocationSampling];
+	}
     
 }
 
-- (void) turnOnLocationSampling {
-    
-    NSLog(@"Restarting location updates");
+/**
+ Schedules the location manager to stop updating locations and restart after 180 seconds.
+ 
+ Note: Every background task should be properly stopped otherwise the app is killed. This is done in [self resumeLocationUpdates].
+ */
+- (void) pauseLocationSampling {
+	
+	//Start a background task
+	UIApplication *app = [UIApplication sharedApplication];
+	bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+		[self resumeLocationSampling];
+		bgTask = UIBackgroundTaskInvalid;
+	}];
+
+	double timeInterval = autoPausingInterval;
+	double timeLeftForBackground = [app backgroundTimeRemaining];
+	
+	// Check if we get a valid background task and time remaining value
+	if( (timeLeftForBackground < 0) || (timeLeftForBackground > 10*60) || (bgTask == UIBackgroundTaskInvalid)) {
+		[self resumeLocationSampling];
+		return;
+	}
+	
+	// Check if we have enough time remaining for
+	if (timeLeftForBackground < timeInterval) {
+		timeInterval = timeLeftForBackground - 20.0;
+	}
+	
+	// Stop location updates
+	[locationManager stopUpdatingLocation];
+	
+	//Start the timer to restart the location updates
+	pauseLocationSamplingTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(resumeLocationSampling)  userInfo:nil repeats:NO];
+	[[NSRunLoop currentRunLoop] addTimer:pauseLocationSamplingTimer forMode:NSRunLoopCommonModes];
+}
+
+
+/**
+ Resume location sampling and stop the background task.
+ 
+ Note: This is used in conjunction with [self pauseLocationSampling].
+ */
+- (void) resumeLocationSampling {
     [locationManager startUpdatingLocation];
-    
-    //NSLog(@"Background Time:%f",[[UIApplication sharedApplication] backgroundTimeRemaining]);
     [[UIApplication sharedApplication] endBackgroundTask:bgTask];
 }
 
@@ -235,8 +256,10 @@
 		if ([setting.name isEqualToString:kCSLocationSettingAccuracy]) {
 			locationManager.desiredAccuracy = [setting.value integerValue];
         } else if ([setting.name isEqualToString:kCSLocationSettingCortexAutoPausing]) {
-            cortexAutoPausingEnabled = [setting.value boolValue];
-        } else if ([setting.name isEqualToString:@"interval"]) {
+            locationUpdatesAutoPausingEnabled = [setting.value boolValue];
+		} else if ([setting.name isEqualToString:kCSLocationSettingAutoPausingInterval]) {
+			autoPausingInterval = [setting.value intValue];
+		} else if ([setting.name isEqualToString:@"interval"]) {
         } else if ([setting.name isEqualToString:@"locationAdaptive"]) {
 		}
 	}
