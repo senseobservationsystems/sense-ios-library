@@ -282,7 +282,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 - (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
     NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
-    //post notification for the data
+	//post notification for the data
     [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
 
     if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
