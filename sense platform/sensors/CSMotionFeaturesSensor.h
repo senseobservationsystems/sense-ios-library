@@ -17,10 +17,24 @@
 #import "CSSensor.h"
 extern NSString* accelerationAvg;
 extern NSString* accelerationStddev;
-extern NSString* accelerationKurtosis;
+extern NSString* accelerationKurtosis; // is not being used right now
 extern NSString* rotationAvg;
 extern NSString* rotationStddev;
-extern NSString* rotationKurtosis;
+extern NSString* rotationKurtosis; // is not being used right now
+
+/**
+ Sensor that stores several derivates of the motion data in the form of motion energy features; i.e., different aspects of a measure of the total amount of motion that occured over a specific time frame. It currently provides mean, standard deviation and  of the acceleration and rotation of the device.
+ 
+ ___JSON output value format___
+
+	{
+		"acceleration average": FLOAT;
+ 		"acceleration stdev": FLOAT;
+ 		"rotation average": FLOAT;
+ 		"rotation stdev": FLOAT;
+	}
+
+ */
 
 @interface CSMotionFeaturesSensor : CSSensor
 

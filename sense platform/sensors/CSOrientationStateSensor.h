@@ -17,12 +17,21 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
-
+/**
+ Sensor that stores the state of the orientation of the phone. This sensor is event based, it stores a new data with each change in the value. Note that this orientation state does not necessarily correspond to the UI state, it is the state of the device itself.
+ 
+ ___JSON output value format___
+ 
+	"value": STRING; //"face up", "face down", "portrait", "portrait upside down", "landscape left", "landscape right", "unknown"
+ 
+ */
 @interface CSOrientationStateSensor : CSSensor {
-
+	
 }
 
-
+/** Store new orientation state after a change notification
+ @param notification Notification containing the new state information.
+ */
 - (void) commitOrientation:(NSNotification*) notification;
 
 

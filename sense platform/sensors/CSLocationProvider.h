@@ -19,12 +19,19 @@
 #import "CSVisitsSensor.h"
 
 /**
- Provider that handles all the location related tracking
- Receives location points and visits from the OS and processes them.
+ Provider that handles all the location related tracking. Receives location points and visits from the OS and processes them.
  
  It uses two sensors: CSLocationSensor and CSVisitsSensor for storing location data and visit data respectively.
  
- Note that if you don't need location information this provider is still necessary for running the app in the background. To make sure it uses the least amount of battery when running in the background you want to increase the desired accuracy and the auto pausing feature (both can be found in CSSettings.h)
+ Note that if you don't need location information this provider is still necessary for running the app in the background. To make sure it uses the least amount of battery when running in the background you want to increase the desired accuracy and the auto pausing feature (both can be found in CSSettings.h).
+ 
+ ___Location settings___
+ 
+ - <code>kCSLocationSettingAccuracy</code><br> Accuracy with which iOS will detect location data points. Lower values will provide higher accuracy but will also use more battery. Apple generally distinguishes three levels: GPS, WiFi, Cell tower. GPS is the most accurate (< 1 meter) but uses a lot of battery power. Wifi is accurate at around ~100 meters and uses less battery. Cell tower is accurate at about ~2 km and uses the least amount of battery. Setting is specified in meters (as a String). The default value is set to 100 meters.
+ - <code>kCSLocationSettingMinimumDistance</code><br> Minimum distance used before getting a location update. When not specified it updates whenever iOS deems it relevant to update, this is recommended. Specified in meters. Uses the standard iOS functionality. Not set by default.
+ - <code>kCSLocationSettingCortexAutoPausing</code><br>	Setting for automatically pausing location updates for three minutes after a new datapoint has come in, this might save battery life. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.
+
+ 
  */
 @interface CSLocationProvider : NSObject <CLLocationManagerDelegate>{
 	BOOL isEnabled;

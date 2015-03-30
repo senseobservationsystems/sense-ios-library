@@ -17,11 +17,20 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
-
+/**
+ Sensor storing proximity data. Currently stores whether the user is close to the device or not. This sensor is event based and only stores data upon changes.
+ 
+ ___JSON output value format___
+ 
+	"value": STRING; //"true", "false"
+ */
 @interface CSUserProximity : CSSensor {
 
 }
 
+/**
+ Stores new value when state changes.
+ @param notification Notification when state changes containing information about the new state.
 - (void) commitUserProximity:(NSNotification*) notification;
 
 @end

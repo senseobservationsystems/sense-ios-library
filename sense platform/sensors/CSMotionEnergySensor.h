@@ -16,6 +16,17 @@
 
 #import "CSSensor.h"
 
+
+/**
+ Sensor that stores derivate of the motion data in the form of motion energy; i.e., a measure of the total amount of motion that occured over a specific time frame. 
+ 
+ ___WARNING___ Since no time interval can be specified, this is currently implement as the average energy over all samples collected in a polling action.
+ 
+ ___JSON output value format___
+ 
+	"value": FLOAT;
+ 
+ */
 @interface CSMotionEnergySensor : CSSensor
 
 @end
