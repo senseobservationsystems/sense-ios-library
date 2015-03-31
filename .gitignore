@@ -3,4 +3,4 @@ doc/
 xcuserdata
 project.xcworkspace
 CSVersion.h
-documentation/source/*
+documentation/output/*

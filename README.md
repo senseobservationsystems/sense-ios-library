@@ -3,6 +3,8 @@ Sense iOS Platform Library
 
 Welcome to the Sense iOS library documentation. This documentation provides an overview of the behavior of the library and explains how it can be used. The goal is to provide an easy starting point for developers to get up to speed with the basics when first starting to use the library, and a comprehensive reference when needing specific information.
 
+This document is also available online at [http://senseobservationsystems.github.io/sense-ios-library/](http://senseobservationsystems.github.io/sense-ios-library/) and also `appledoc`. More information are available on Introduction section below.
+
 If there is information that you believe is incorrect, or if you are missing information, please do not hesitate to contact us. You can reach the authors at
 
 * [ahmy@sense-os.nl](ahmy@sense-os.nl)
