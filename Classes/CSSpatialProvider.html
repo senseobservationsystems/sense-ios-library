@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>CSSpatialProvider Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:">- initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:</option>
+		
+		<option value="//api/name/poll">- poll</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">CSSpatialProvider Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>CSSpatialProvider.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Class that provides data for the following sensors:</p>
+
+<pre><code>- Compass sensor (currently not implemented)
+- Orientation sensor
+- Accelerometer sensor
+- Acceleration sensor
+- Rotation sensor
+- Jump sensor (legacy, should probably be avoided)
+</code></pre>
+
+<p>It polls at fixed intervals to collect data and subseuqently stores that data in the individual sensors. The settings below can be used to further specify its behavior.</p>
+
+<p><strong><em>Spatial settings</em></strong></p>
+
+<ul>
+<li><code>kCSSpatialSettingInterval</code><br> Interval between sampling spatial (motion) data. Specified in seconds, by default set to 60 seconds.</li>
+<li><code>kCSSpatialSettingFrequency</code><br> Sample frequency of the motion data sampling. Specified in Herz. By default set to 50 Hz. Note that this is limited by hardware potential.</li>
+<li><code>kCSSpatialSettingNrSamples</code><br> Number of samples to collect for each sampling cycle. Specified in numbers of samples. By default set to 150 samples, this means 3 seconds of sampled data when using the standard of 50 Hz as sampling frequency.</li>
+</ul>
+
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:" title="initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:">&ndash;&nbsp;initWithCompass:orientation:accelerometer:acceleration:rotation:jumpSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Init function taking the different sensors in which to store the data
+@param compass
+@param orientation
+@param accelerometer
+@param acceleration
+@param rotation
+@param jumpSensor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)initWithCompass:(CSCompassSensor *)<em>compass</em> orientation:(CSOrientationSensor *)<em>orientation</em> accelerometer:(CSAccelerometerSensor *)<em>accelerometer</em> acceleration:(CSAccelerationSensor *)<em>acceleration</em> rotation:(CSRotationSensor *)<em>rotation</em> jumpSensor:(CSJumpSensor *)<em>jumpSensor</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSpatialProvider.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/poll" title="poll"></a>
+	<h3 class="method-title"><code><a href="#//api/name/poll">&ndash;&nbsp;poll</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Poll the motion sensors once *</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)poll</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSpatialProvider.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

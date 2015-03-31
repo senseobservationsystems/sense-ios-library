@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>CSSensorStore Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/allAvailableSensorClasses">allAvailableSensorClasses</option>
+		
+		<option value="//api/name/sender">sender</option>
+		
+		<option value="//api/name/sensors">sensors</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/device">+ device</option>
+		
+		<option value="//api/name/sharedSensorStore">+ sharedSensorStore</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/addSensor:">- addSensor:</option>
+		
+		<option value="//api/name/enabledChanged:">- enabledChanged:</option>
+		
+		<option value="//api/name/forceDataFlush">- forceDataFlush</option>
+		
+		<option value="//api/name/forceDataFlushAndBlock">- forceDataFlushAndBlock</option>
+		
+		<option value="//api/name/generalSettingChanged:">- generalSettingChanged:</option>
+		
+		<option value="//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:">- getDataForSensor:onlyFromDevice:nrLastPoints:</option>
+		
+		<option value="//api/name/getLocalDataForSensor:from:to:">- getLocalDataForSensor:from:to:</option>
+		
+		<option value="//api/name/giveFeedbackOnState:from:to:label:">- giveFeedbackOnState:from:to:label:</option>
+		
+		<option value="//api/name/init">- init</option>
+		
+		<option value="//api/name/loginChanged">- loginChanged</option>
+		
+		<option value="//api/name/setEnabled:">- setEnabled:</option>
+		
+		<option value="//api/name/setSyncRate:">- setSyncRate:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">CSSensorStore Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Conforms to</th>
+	<td><a href="../Protocols/CSDataStore.html">CSDataStore</a></td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>CSSensorStore.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Handles sensor data storing and uploading. Start all <a href="#//api/name/sensors">sensors</a> and data providers.</p>
+
+<p>Data is stored locally for 30 days. After a succesfull upload, older data is removed.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/allAvailableSensorClasses" title="allAvailableSensorClasses"></a>
+	<h3 class="method-title"><code><a href="#//api/name/allAvailableSensorClasses">&nbsp;&nbsp;allAvailableSensorClasses</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) NSArray *allAvailableSensorClasses</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sensors" title="sensors"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sensors">&nbsp;&nbsp;sensors</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) NSArray *sensors</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sender" title="sender"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sender">&nbsp;&nbsp;sender</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) CSSender *sender</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedSensorStore" title="sharedSensorStore"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedSensorStore">+&nbsp;sharedSensorStore</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>+ (CSSensorStore *)sharedSensorStore</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/device" title="device"></a>
+	<h3 class="method-title"><code><a href="#//api/name/device">+&nbsp;device</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>+ (NSDictionary *)device</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="method-title"><code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (id)init</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/loginChanged" title="loginChanged"></a>
+	<h3 class="method-title"><code><a href="#//api/name/loginChanged">&ndash;&nbsp;loginChanged</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)loginChanged</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setEnabled:" title="setEnabled:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setEnabled:">&ndash;&nbsp;setEnabled:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setEnabled:(BOOL)<em>enable</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enabledChanged:" title="enabledChanged:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enabledChanged:">&ndash;&nbsp;enabledChanged:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)enabledChanged:(id)<em>notification</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setSyncRate:" title="setSyncRate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setSyncRate:">&ndash;&nbsp;setSyncRate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)setSyncRate:(int)<em>newRate</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/addSensor:" title="addSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addSensor:">&ndash;&nbsp;addSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)addSensor:(CSSensor *)<em>sensor</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:" title="getDataForSensor:onlyFromDevice:nrLastPoints:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:">&ndash;&nbsp;getDataForSensor:onlyFromDevice:nrLastPoints:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getDataForSensor:(NSString *)<em>name</em> onlyFromDevice:(bool)<em>onlyFromDevice</em> nrLastPoints:(NSInteger)<em>nrLastPoints</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLocalDataForSensor:from:to:" title="getLocalDataForSensor:from:to:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:from:to:">&ndash;&nbsp;getLocalDataForSensor:from:to:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve data from a sensor that is stored locally between a certain time interval</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getLocalDataForSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The name of the sensor as an NSString</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>startDate</code></th>
+						<td><p>The date and time of the first datapoint to look for (inclusive)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>endDate</code></th>
+						<td><p>The data and time of the last datapoint to look for (exclusive)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An array with dictionaries of time-value pairs</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorStore.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/giveFeedbackOnState:from:to:label:" title="giveFeedbackOnState:from:to:label:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/giveFeedbackOnState:from:to:label:">&ndash;&nbsp;giveFeedbackOnState:from:to:label:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)giveFeedbackOnState:(NSString *)<em>state</em> from:(NSDate *)<em>from</em> to:(NSDate *)<em>to</em> label:(NSString *)<em>label</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/forceDataFlush" title="forceDataFlush"></a>
+	<h3 class="method-title"><code><a href="#//api/name/forceDataFlush">&ndash;&nbsp;forceDataFlush</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)forceDataFlush</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/forceDataFlushAndBlock" title="forceDataFlushAndBlock"></a>
+	<h3 class="method-title"><code><a href="#//api/name/forceDataFlushAndBlock">&ndash;&nbsp;forceDataFlushAndBlock</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)forceDataFlushAndBlock</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/generalSettingChanged:" title="generalSettingChanged:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/generalSettingChanged:">&ndash;&nbsp;generalSettingChanged:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)generalSettingChanged:(NSNotification *)<em>notification</em></code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

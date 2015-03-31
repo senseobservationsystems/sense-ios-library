@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>CSSensorRequirements Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/isEnabled">isEnabled</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/requirementForSensor:">+ requirementForSensor:</option>
+		
+		<option value="//api/name/requirementForSensor:withInterval:">+ requirementForSensor:withInterval:</option>
+		
+		<option value="//api/name/sharedRequirements">+ sharedRequirements</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/clearRequirementsForConsumer:">- clearRequirementsForConsumer:</option>
+		
+		<option value="//api/name/setRequirements:byConsumer:">- setRequirements:byConsumer:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">CSSensorRequirements Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>CSSensorRequirements.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Handles requirements. Requirements are a layer on top of settings that help dealing with several incompatible settings. Right now requirements should be used to handle the enabling and disabling of sensors and to set the sample interval and accuracy for a sensor. Whenever two different consumer set different intervals or accuracies, the lowest value is used.</p>
+
+<p>Requirements are organized and stored per consumer. Hence, when setting a requirement one has to provide a unique string that identifies the consumer. This way, it is easy to remove consumer-related requirements later on again.</p>
+
+<p>Here is some example code for setting requirements, enabling four sensors and setting the sample interval and accuracy:</p>
+
+<pre><code> NSString* consumerName = @"com.consumer.name";
+ NSArray* commonRequirements = @[
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_ACCELERATION, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:@35},
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_ACCELEROMETER_BURST, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:@30},
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_NOISE, kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL:@10},
+     @{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_LOCATION, kCSREQUIREMENT_FIELD_SAMPLE_ACCURACY:@10000}
+ ];
+ [[CSSensorRequirements sharedRequirements] setRequirements:commonRequirements byConsumer:consumerName];
+</code></pre>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/sharedRequirements" title="sharedRequirements"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedRequirements">+&nbsp;sharedRequirements</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get singleton instance</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (CSSensorRequirements *)sharedRequirements</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/requirementForSensor:" title="requirementForSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/requirementForSensor:">+&nbsp;requirementForSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Helper function to create a requirement for a sensor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSDictionary *)requirementForSensor:(NSString *)<em>sensor</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>The sensor name for the sensor that should be enabled</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/requirementForSensor:withInterval:" title="requirementForSensor:withInterval:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/requirementForSensor:withInterval:">+&nbsp;requirementForSensor:withInterval:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Helper function to create a requirement for a sensor with an interval</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSDictionary *)requirementForSensor:(NSString *)<em>sensor</em> withInterval:(NSTimeInterval)<em>interval</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensor</code></th>
+						<td><p>The sensor name for the sensor that should be enabled with a certain interval</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>interval</code></th>
+						<td><p>Time interval describing the frequency with which the sensor should poll new data</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setRequirements:byConsumer:" title="setRequirements:byConsumer:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setRequirements:byConsumer:">&ndash;&nbsp;setRequirements:byConsumer:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set requirements for a specific consumer. Overwrites previous requirement for the consumer</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setRequirements:(NSArray *)<em>requirements</em> byConsumer:(NSString *)<em>consumer</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>requirements</code></th>
+						<td><p>Array of requirements to set for that consumer. See the example above for an example of the format</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>consumer</code></th>
+						<td><p>Unique identifier for the consumer setting the requirement (e.g. app identifier or library identifier)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/clearRequirementsForConsumer:" title="clearRequirementsForConsumer:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/clearRequirementsForConsumer:">&ndash;&nbsp;clearRequirementsForConsumer:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Clear the requirements of a consumer</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)clearRequirementsForConsumer:(NSString *)<em>consumer</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>consumer</code></th>
+						<td><p>Identifier of the consumer for which the requirements should be cleared.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isEnabled" title="isEnabled"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isEnabled">&nbsp;&nbsp;isEnabled</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Whether the requirements are enabled or disabled. They are enabled by default. If disabled, changing a requirement will not affect the settings</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL isEnabled</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorRequirements.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

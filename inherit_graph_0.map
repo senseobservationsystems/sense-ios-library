@@ -1,7 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node3" href="$interface_c_s_application_state_change_msg.html" title="CSApplicationStateChangeMsg" alt="" coords="133,5,341,33"/>
-<area shape="rect" id="node5" href="$interface_c_s_sense_platform.html" title="CSSensePlatform" alt="" coords="174,57,301,85"/>
-<area shape="rect" id="node7" href="$interface_c_s_sensor.html" title="CSSensor" alt="" coords="196,109,278,137"/>
-<area shape="rect" id="node9" href="$interface_c_s_setting.html" title="CSSetting" alt="" coords="197,161,278,189"/>
-<area shape="rect" id="node11" href="$interface_c_s_settings.html" title="CSSettings" alt="" coords="193,213,281,241"/>
-</map>

@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>CSSensePlatform Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:">+ addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:</option>
+		
+		<option value="//api/name/addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:">+ addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:</option>
+		
+		<option value="//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:">+ addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:</option>
+		
+		<option value="//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:">+ addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:</option>
+		
+		<option value="//api/name/applyIVitalitySettings">+ applyIVitalitySettings</option>
+		
+		<option value="//api/name/availableSensors">+ availableSensors</option>
+		
+		<option value="//api/name/flushData">+ flushData</option>
+		
+		<option value="//api/name/flushDataAndBlock">+ flushDataAndBlock</option>
+		
+		<option value="//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:">+ getDataForSensor:onlyFromDevice:nrLastPoints:</option>
+		
+		<option value="//api/name/getDeviceId">+ getDeviceId</option>
+		
+		<option value="//api/name/getLocalDataForSensor:from:to:">+ getLocalDataForSensor:from:to:</option>
+		
+		<option value="//api/name/getSessionCookie">+ getSessionCookie</option>
+		
+		<option value="//api/name/giveFeedbackOnState:from:to:label:">+ giveFeedbackOnState:from:to:label:</option>
+		
+		<option value="//api/name/initialize">+ initialize</option>
+		
+		<option value="//api/name/initializeWithApplicationKey:">+ initializeWithApplicationKey:</option>
+		
+		<option value="//api/name/loginWithUser:andPassword:">+ loginWithUser:andPassword:</option>
+		
+		<option value="//api/name/loginWithUser:andPasswordHash:">+ loginWithUser:andPasswordHash:</option>
+		
+		<option value="//api/name/logout">+ logout</option>
+		
+		<option value="//api/name/registerUser:withPassword:withEmail:">+ registerUser:withPassword:withEmail:</option>
+		
+		<option value="//api/name/synchronizeWithBloodPressureMonitor:">+ synchronizeWithBloodPressureMonitor:</option>
+		
+		<option value="//api/name/willTerminate">+ willTerminate</option>
+		
+	</optgroup>
+	
+
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">CSSensePlatform Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>CSSensePlatform.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>This is the high-level interface for the iOS sense platform library. CSSensePlatform uses only class methods so there is never an instance of the CSSensePlatform. Instead, whenever</p>
+
+<pre><code>[CSSensePlatform initialize];
+</code></pre>
+
+<p>is called, this initializes a <a href="../Classes/CSSensorStore.html">CSSensorStore</a> object (a singleton) which coordinates most of the behavior in the app including local and remote persistency. Next to that, the CSSensePlatform provides functions for logging in, logging out, and registering a user, storing data in sensors, and retrieving data from sensors.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Initialization" name="task_Initialization"></a>
+						<h2 class="task-title">Initialization</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initialize" title="initialize"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initialize">+&nbsp;initialize</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes the sense platform. This creates an instance of the <a href="../Classes/CSSensorStore.html">CSSensorStore</a> object.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)initialize</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initializeWithApplicationKey:" title="initializeWithApplicationKey:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initializeWithApplicationKey:">+&nbsp;initializeWithApplicationKey:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initialize the Sense Platform</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)initializeWithApplicationKey:(NSString *)<em>applicationKey</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>applicationKey</code></th>
+						<td><p>the application key to identify this application to Common Sense</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="User management" name="task_User management"></a>
+						<h2 class="task-title">User management</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/registerUser:withPassword:withEmail:" title="registerUser:withPassword:withEmail:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/registerUser:withPassword:withEmail:">+&nbsp;registerUser:withPassword:withEmail:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Register a user in CommonSense backend.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)registerUser:(NSString *)<em>user</em> withPassword:(NSString *)<em>password</em> withEmail:(NSString *)<em>email</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>the username</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>password</code></th>
+						<td><p>the plain text password</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>email</code></th>
+						<td><p>the user&rsquo;s email address</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Wether the registration succeeded</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>There are no specific requirements for the user (username) or password. Username cannot exist yet as a CommonSense user though. The email address does not have to be unique. The returning boolean indicates if registration was successfull. If it was, the user is automatically logged in (the developer does not have to do this anymore) and the credentials are stored in the settings.</p>
+
+<p>Note that if registration fails, there is no way for the developer or end-user to know why it failed. This could be because of a username that is already in use, because of a problem on the cloud side, or because of a missing internet connection (among others).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/loginWithUser:andPassword:" title="loginWithUser:andPassword:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/loginWithUser:andPassword:">+&nbsp;loginWithUser:andPassword:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the credentials to log in on Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)loginWithUser:(NSString *)<em>user</em> andPassword:(NSString *)<em>password</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>Username used to identify the user (this does not necessarily have to be an email address)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>password</code></th>
+						<td><p>The password connected to the user account (not hashed yet)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>whether the login succeeded
+*</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.</p>
+
+<p>Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/loginWithUser:andPasswordHash:" title="loginWithUser:andPasswordHash:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/loginWithUser:andPasswordHash:">+&nbsp;loginWithUser:andPasswordHash:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the credentials to log in on Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)loginWithUser:(NSString *)<em>user</em> andPasswordHash:(NSString *)<em>passwordHash</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>Username used to identify the user (this does not necessarily have to be an email address)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>password</code></th>
+						<td><p>The password connected to the user account hashed using an MD5 hash
+*</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.</p>
+
+<p>Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/logout" title="logout"></a>
+	<h3 class="method-title"><code><a href="#//api/name/logout">+&nbsp;logout</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Logout
+This removes credentials from the settings and stops the uploading to CommonSense.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)logout</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getSessionCookie" title="getSessionCookie"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getSessionCookie">+&nbsp;getSessionCookie</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get the session cookie for Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)getSessionCookie</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>The session id to communicate with CommonSense, nil if there is no session cookie.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Whenever a user is logged in, it uses a session id from CommonSense to be able to interact with the cloud. To be able to manually call the CommonSense API one would need to obtain that Session ID. This is returned by the getSessionCookie function. Note that the format is &ldquo;session_id=&lt;session_id>&rdquo;.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Sensordata storage and access" name="task_Sensordata storage and access"></a>
+						<h2 class="task-title">Sensordata storage and access</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:" title="addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:">+&nbsp;addDataPointForSensor:displayName:description:dataType:stringValue:timestamp:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Add a data point for a sensor that belongs to this device, using a JSON encoded string.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)addDataPointForSensor:(NSString *)<em>sensorName</em> displayName:(NSString *)<em>displayName</em> description:(NSString *)<em>description</em> dataType:(NSString *)<em>dataType</em> stringValue:(NSString *)<em>value</em> timestamp:(NSDate *)<em>timestamp</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>the sensor name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>displayName</code></th>
+						<td><p>the display name of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>description</code></th>
+						<td><p>the deviceType/description of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataType</code></th>
+						<td><p>the data type for the data of the sensor.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>A JSON encoded data point</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>timestamp</code></th>
+						<td><p>An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>  If the sensor doesn&rsquo;t exist it will be created. Data will first be stored locally, and is directly available from local storage. After an upload has occured it is also available remotely.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:" title="addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:">+&nbsp;addDataPointForSensor:displayName:description:dataType:jsonValue:timestamp:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Add a data point for a sensor that belongs to this device, using a JSONSerializable value object.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)addDataPointForSensor:(NSString *)<em>sensorName</em> displayName:(NSString *)<em>displayName</em> description:(NSString *)<em>description</em> dataType:(NSString *)<em>dataType</em> jsonValue:(id)<em>value</em> timestamp:(NSDate *)<em>timestamp</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>the sensor name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>displayName</code></th>
+						<td><p>the display name of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>description</code></th>
+						<td><p>the deviceType/description of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataType</code></th>
+						<td><p>the data type for the data of the sensor.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>timestamp</code></th>
+						<td><p>An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>If the sensor doesn&rsquo;t exist it will be created. Data will first be stored locally, and is directly available from local storage. After an upload has occured it is also available remotely.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:" title="addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:">+&nbsp;addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:stringValue:timestamp:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Add a data point for a sensor using a JSON encoded string object for the value, for a specific device.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)addDataPointForSensor:(NSString *)<em>sensorName</em> displayName:(NSString *)<em>displayName</em> description:(NSString *)<em>description</em> deviceType:(NSString *)<em>deviceType</em> deviceUUID:(NSString *)<em>deviceUUID</em> dataType:(NSString *)<em>dataType</em> stringValue:(id)<em>value</em> timestamp:(NSDate *)<em>timestamp</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>the sensor name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>displayName</code></th>
+						<td><p>the display name of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>description</code></th>
+						<td><p>the deviceType/description of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceType</code></th>
+						<td><p>the type of the device the sensor should be attached to (nil for no device)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceUUID</code></th>
+						<td><p>the uuid of the device the sensor should be attached to (nil for no device)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataType</code></th>
+						<td><p>the data type for the data of the sensor.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>A JSON encoded data point</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>timestamp</code></th>
+						<td><p>An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>If the sensor doesn&rsquo;t exist it will be created. Data will first be stored locally, and is directly available from local storage. After an upload has occured it is also available remotely.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:" title="addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:">+&nbsp;addDataPointForSensor:displayName:description:deviceType:deviceUUID:dataType:jsonValue:timestamp:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Add a data point for a sensor using a JSONSeriazable data object for the value, for a specific device.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)addDataPointForSensor:(NSString *)<em>sensorName</em> displayName:(NSString *)<em>displayName</em> description:(NSString *)<em>description</em> deviceType:(NSString *)<em>deviceType</em> deviceUUID:(NSString *)<em>deviceUUID</em> dataType:(NSString *)<em>dataType</em> jsonValue:(id)<em>value</em> timestamp:(NSDate *)<em>timestamp</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>the sensor name</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>displayName</code></th>
+						<td><p>the display name of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>description</code></th>
+						<td><p>the deviceType/description of the sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceType</code></th>
+						<td><p>the type of the device the sensor should be attached to (nil for no device)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceUUID</code></th>
+						<td><p>the uuid of the device the sensor should be attached to (nil for no device)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>dataType</code></th>
+						<td><p>the data type for the data of the sensor.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The data object. Can be any JSONSerializable object (e.g. NSDictionary,NSArray, NSNumber, NSString).</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>timestamp</code></th>
+						<td><p>An NSDate object describing the time and date the value object occured. It will be used to organize the storing of the data and to later fetch the data.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>If the sensor doesn&rsquo;t exist it will be created. Data will first be stored locally, and is directly available from local storage. After an upload has occured it is also available remotely.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:" title="getDataForSensor:onlyFromDevice:nrLastPoints:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:">+&nbsp;getDataForSensor:onlyFromDevice:nrLastPoints:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve a number of values of a sensor from Common Sense.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSArray *)getDataForSensor:(NSString *)<em>name</em> onlyFromDevice:(bool)<em>onlyFromDevice</em> nrLastPoints:(NSInteger)<em>nrLastPoints</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The name of the sensor to get data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>onlyFromDevice</code></th>
+						<td><p>Wether or not to only look through sensors that are part of this device. Searches all sensors, including those of this device, if set to NO</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>nrLastPoints</code></th>
+						<td><p>Number of points to retrieve, this function always returns the latest values for the sensor.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>an array of values, each value is a dictionary that describes the data point</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This only looks at remote data, not at locally stored data. You can be sure that the data that is returned is for the specific user account. Can only be used if the user is logged in.-</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLocalDataForSensor:from:to:" title="getLocalDataForSensor:from:to:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:from:to:">+&nbsp;getLocalDataForSensor:from:to:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve all the sensor data stored locally between a certain time interval.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSArray *)getLocalDataForSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The name of the sensor to get the data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>startDate</code></th>
+						<td><p>The date and time at which to start looking for datapoints</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>endDate</code></th>
+						<td><p>The date and time at which to stop looking for datapoints</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>an arrat of values, each value is a dictonary that descirbes the data point</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:</p>
+
+<ul>
+<li>It is kept for 30 days. Data older than 30 days is removed.</li>
+<li>A maximum of 100 mb is kept. Users are likely to remove the app if there would be more storage space used. This should normally be ample for 30 days of data.</li>
+<li>The total amount of storage is limited if the disk space of the device is smaller than what is needed by the.</li>
+</ul>
+
+
+<p>These limitations are treated in a first in first out way. Hence, older data is removed first.</p><div class="warning"><p><strong>Warning:</strong> Sensordata is not stored in a user specific format. Hence, when the user logs out or the app starts to being used by a different user on the same device, the old settings and data remains accessible to the new user.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Miscelaneous" name="task_Miscelaneous"></a>
+						<h2 class="task-title">Miscelaneous</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/getDeviceId" title="getDeviceId"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDeviceId">+&nbsp;getDeviceId</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns a unique identifier for the device.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSString *)getDeviceId</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Unique identifier for the device</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Note that Apple has made some changes to the way devices can be identified. From a privacy perspective they have decided to not create device specific identifiers anymore, but instead deliver app specific identifiers. This means that when a certain user removes the app and reinstalls, it might give a different identifier than before. The identifier will still be unique, but subsequent installs cannot be linked anymore using the device ID.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/giveFeedbackOnState:from:to:label:" title="giveFeedbackOnState:from:to:label:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/giveFeedbackOnState:from:to:label:">+&nbsp;giveFeedbackOnState:from:to:label:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Give feedback on a state sensor so that it can be used to learn.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)giveFeedbackOnState:(NSString *)<em>state</em> from:(NSDate *)<em>from</em> to:(NSDate *)<em>to</em> label:(NSString *)<em>label</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>state</code></th>
+						<td><p>The state to give feedback on.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>from</code></th>
+						<td><p>The start date for the feedback.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>to</code></th>
+						<td><p>The end date for the feedback.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>label</code></th>
+						<td><p>The label of the Feedback, e.g. &lsquo;Sit&rsquo;</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Note that this functionality is not being used right now.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/availableSensors" title="availableSensors"></a>
+	<h3 class="method-title"><code><a href="#//api/name/availableSensors">+&nbsp;availableSensors</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Returns a list of available sensors of the device</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSArray *)availableSensors</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/willTerminate" title="willTerminate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/willTerminate">+&nbsp;willTerminate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>To be called upon termination of the app, allows the platform to flush it&rsquo;s caches to Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)willTerminate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/flushData" title="flushData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/flushData">+&nbsp;flushData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Flush data to Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)flushData</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/flushDataAndBlock" title="flushDataAndBlock"></a>
+	<h3 class="method-title"><code><a href="#//api/name/flushDataAndBlock">+&nbsp;flushDataAndBlock</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Flush data to Common Sense, return after the flush is completed</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)flushDataAndBlock</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/synchronizeWithBloodPressureMonitor:" title="synchronizeWithBloodPressureMonitor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/synchronizeWithBloodPressureMonitor:">+&nbsp;synchronizeWithBloodPressureMonitor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This function isn&rsquo;t operational. (<b class="deprecated">Deprecated:</b><span class="deprecated"> This function is not operational anymore. If it is working for you that is dumb luck; don&rsquo;t count on it.</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)synchronizeWithBloodPressureMonitor:(bpmCallBack)<em>callback</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>callback</code></th>
+						<td><p>I don&rsquo;t know what this is .. ^JJ</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/applyIVitalitySettings" title="applyIVitalitySettings"></a>
+	<h3 class="method-title"><code><a href="#//api/name/applyIVitalitySettings">+&nbsp;applyIVitalitySettings</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Setup the platform for use with iVitality (<b class="deprecated">Deprecated:</b><span class="deprecated"> This function will be removed in future version</span>)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)applyIVitalitySettings</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

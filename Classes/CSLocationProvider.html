@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>CSLocationProvider Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">SensePlatform </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">SenseLabs</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/isEnabled">isEnabled</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/initWithLocationSensor:andVisitsSensor:">- initWithLocationSensor:andVisitsSensor:</option>
+		
+		<option value="//api/name/setBackgroundRunningEnable:">- setBackgroundRunningEnable:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">CSLocationProvider Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Conforms to</th>
+	<td>CLLocationManagerDelegate</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>CSLocationProvider.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Provider that handles all the location related tracking. Receives location points and visits from the OS and processes them.</p>
+
+<p>It uses two sensors: <a href="../Classes/CSLocationSensor.html">CSLocationSensor</a> and <a href="../Classes/CSVisitsSensor.html">CSVisitsSensor</a> for storing location data and visit data respectively.</p>
+
+<p>Note that if you don&rsquo;t need location information this provider is still necessary for running the app in the background. To make sure it uses the least amount of battery when running in the background you want to increase the desired accuracy and the auto pausing feature (both can be found in <a href="../Classes/CSSettings.html">CSSettings</a>.h).</p>
+
+<p><strong><em>Location settings</em></strong></p>
+
+<ul>
+<li><code>kCSLocationSettingAccuracy</code><br> Accuracy with which iOS will detect location data points. Lower values will provide higher accuracy but will also use more battery. Apple generally distinguishes three levels: GPS, WiFi, Cell tower. GPS is the most accurate (&lt; 1 meter) but uses a lot of battery power. Wifi is accurate at around ~100 meters and uses less battery. Cell tower is accurate at about ~2 km and uses the least amount of battery. Setting is specified in meters (as a String). The default value is set to 100 meters.</li>
+<li><code>kCSLocationSettingMinimumDistance</code><br> Minimum distance used before getting a location update. When not specified it updates whenever iOS deems it relevant to update, this is recommended. Specified in meters. Uses the standard iOS functionality. Not set by default.</li>
+<li><code>kCSLocationSettingCortexAutoPausing</code><br>  Setting for automatically pausing location updates for three minutes after a new datapoint has come in, this might save battery life. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.</li>
+</ul>
+
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithLocationSensor:andVisitsSensor:" title="initWithLocationSensor:andVisitsSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithLocationSensor:andVisitsSensor:">&ndash;&nbsp;initWithLocationSensor:andVisitsSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Init method with a location sensor and visits sensor to store the data in</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)initWithLocationSensor:(CSLocationSensor *)<em>lSensor</em> andVisitsSensor:(CSVisitsSensor *)<em>vSensor</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>lSensor</code></th>
+						<td><p>The location sensor</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>vSensor</code></th>
+						<td><p>The visits sensor</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Returns self</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSLocationProvider.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isEnabled" title="isEnabled"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isEnabled">&nbsp;&nbsp;isEnabled</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This enabled/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, it means the desired accuracy is set and both location updates and significant location updates are started or stopped. Note that if the resulting location points should also be stored, the LocationSensor should be enabled separately.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (assign) BOOL isEnabled</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSLocationProvider.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setBackgroundRunningEnable:" title="setBackgroundRunningEnable:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setBackgroundRunningEnable:">&ndash;&nbsp;setBackgroundRunningEnable:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<pre><code>This enables/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, this means that location updates and significant location updates are enabled/disabaled. Note that when using this function, the desired accuracy should still be handled seperately throught the kCSLocationSettingAccuracy setting. 
+</code></pre>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setBackgroundRunningEnable:(BOOL)<em>enable</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>enable</code></th>
+						<td><p>Setting whether to enable or disable the location monitoring for running in the background</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="warning"><p><strong>Warning:</strong> This function is currently provided for backwards compatibility. It is replaced by <a href="#//api/name/isEnabled">isEnabled</a> property.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSLocationProvider.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>
