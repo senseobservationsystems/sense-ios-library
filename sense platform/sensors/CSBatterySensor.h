@@ -33,7 +33,10 @@
 	
 }
 
-/** Stores the battery state from a received notification
- @param notification Notification object that contains the new battery information.
+/**
+ *  Stores the battery state from a recevied notification
+ *
+ *  @param notification Notification object that contains the new battery information.
+ */
 - (void) commitBatteryState:(NSNotification*) notification;
 @end
