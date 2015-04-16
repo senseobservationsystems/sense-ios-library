@@ -44,6 +44,8 @@ extern NSString* const kCSGeneralSettingBackgroundRestarthack;
 extern NSString* const kCSGeneralSettingLocalStorageEncryption;
 extern NSString* const kCSGeneralSettingLocalStorageEncryptionKey;
 extern NSString* const kCSGeneralSettingUseStaging;
+extern NSString* const kCSGeneralSettingIsLoggedIn;
+
 
 //biometric settings
 extern NSString* const kCSBiometricSettingGender;

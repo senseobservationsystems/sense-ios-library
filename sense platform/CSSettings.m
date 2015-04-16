@@ -42,6 +42,7 @@ NSString* const kCSGeneralSettingBackgroundRestarthack = @"enableBackgroundResta
 NSString* const kCSGeneralSettingLocalStorageEncryption = @"enableLocalStorageEncryption";
 NSString* const kCSGeneralSettingLocalStorageEncryptionKey = @"localStorageEncryptionKey";
 NSString* const kCSGeneralSettingUseStaging = @"useStaging";
+NSString* const kCSGeneralSettingIsLoggedIn = @"isLoggedIn";
 
 //biometric settings
 NSString* const kCSBiometricSettingGender = @"gender";
@@ -163,7 +164,8 @@ static CSSettings* sharedSettingsInstance = nil;
                              kCSSettingYES, kCSGeneralSettingUploadToCommonSense,
                              kCSSettingYES, kCSGeneralSettingSenseEnabled,
                              kCSSettingNO, kCSGeneralSettingLocalStorageEncryption,
-                             kCSSettingNO, kCSGeneralSettingUseStaging,                             
+                             kCSSettingNO, kCSGeneralSettingUseStaging,
+                             kCSSettingNO, kCSGeneralSettingIsLoggedIn,
 			     nil];
     NSMutableDictionary* ambience = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               kCSSettingNO, kCSAmbienceSettingSampleOnlyWhenScreenLocked,

@@ -105,6 +105,12 @@ This removes credentials from the settings and stops the uploading to CommonSens
 */
 + (void) logout;
 
+/**
+ *  return if user is loggedin
+ *
+ *  @return state whether user is logged in
+ */
+- (BOOL) isLoggedId;
 
 /** Get the session cookie for Common Sense
 
