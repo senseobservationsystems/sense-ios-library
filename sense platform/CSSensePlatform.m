@@ -122,7 +122,7 @@ static CSSensorStore* sensorStore;
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingIsLoggedIn value:kCSSettingNO];
 }
 
-- (BOOL) isLoggedId {
+- (BOOL) isLoggedIn {
     return [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingIsLoggedIn] == kCSSettingYES;
 }
 
