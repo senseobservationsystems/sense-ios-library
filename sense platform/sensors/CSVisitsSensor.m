@@ -67,11 +67,11 @@ static NSString* eventKey = @"event";
 	
 	if ([[visit departureDate] isEqualToDate: [NSDate distantFuture]]) {
 		// User has arrived, but not left, the location
-		event = @"arrival";
+		event = @"arrive";
 		eventDate = [visit arrivalDate];
 	} else {
 		// The visit is complete, the user has left
-		event = @"departure";
+		event = @"depart";
 		eventDate = [visit departureDate];
 	}
 	
