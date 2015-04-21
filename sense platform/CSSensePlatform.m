@@ -90,7 +90,7 @@ static CSSensorStore* sensorStore;
     [[CSSettings sharedSettings] setLogin:user withPassword:password];
     BOOL succeed = [[CSSensorStore sharedSensorStore].sender login];
     if (succeed) {
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingIsLoggedIn value:kCSSettingYES];
+        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeState setting:kCSStateIsLoggedIn value:kCSSettingYES];
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
     return succeed;
@@ -100,7 +100,7 @@ static CSSensorStore* sensorStore;
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
     BOOL succeed = [sensorStore.sender login];
     if (succeed) {
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingIsLoggedIn value:kCSSettingYES];
+        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeState setting:kCSStateIsLoggedIn value:kCSSettingYES];
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
     
@@ -119,11 +119,11 @@ static CSSensorStore* sensorStore;
 + (void) logout {
     [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
-    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingIsLoggedIn value:kCSSettingNO];
+    [[CSSettings sharedSettings] setSettingType:kCSSettingTypeState setting:kCSStateIsLoggedIn value:kCSSettingNO];
 }
 
 - (BOOL) isLoggedIn {
-    return [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingIsLoggedIn] == kCSSettingYES;
+    return [[CSSettings sharedSettings] getSettingType:kCSSettingTypeState setting:kCSStateIsLoggedIn] == kCSSettingYES;
 }
 
 + (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
