@@ -74,6 +74,17 @@ static CSSensorStore* sensorStore;
     return [CSSensorStore sharedSensorStore].sensors;
 }
 
++ (BOOL) isAvailableSensor:(NSString*) sensorID {
+    NSArray *sensors = [CSSensePlatform availableSensors];
+    for (CSSensor *sensor in sensors) {
+        if ([sensor.name isEqualToString:sensorID]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 + (void) willTerminate {
     [[CSSensorStore sharedSensorStore] forceDataFlush];
 }
