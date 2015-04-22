@@ -29,7 +29,6 @@ extern NSString* const kCSSettingTypeBiometric;
 extern NSString* const kCSSettingTypeLocation;
 extern NSString* const kCSSettingTypeSpatial;
 extern NSString* const kCSSettingTypeAmbience;
-extern NSString* const kCSSettingTypeState;
 
 //general settings
 extern NSString* const kCSGeneralSettingUsername;
@@ -71,9 +70,6 @@ extern NSString* const kCSSpatialSettingNrSamples;
 //ambience settings
 extern NSString* const kCSAmbienceSettingInterval;
 extern NSString* const kCSAmbienceSettingSampleOnlyWhenScreenLocked;
-
-// state
-extern NSString* const kCSStateIsLoggedIn;
 
 
 //Most settings are numbers (with SI units, i.e. seconds, meters, kg, percent etc.). Categorical values should be one of the following strings

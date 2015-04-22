@@ -28,7 +28,6 @@ NSString* const kCSSettingTypeActivity = @"activity";
 NSString* const kCSSettingTypeLocation = @"position";
 NSString* const kCSSettingTypeSpatial = @"spatial";
 NSString* const kCSSettingTypeAmbience = @"ambience";
-NSString* const kCSSettingTypeState = @"state";
 
 //general settings keys
 NSString* const kCSGeneralSettingSenseEnabled = @"senseEnabled";
@@ -70,9 +69,6 @@ NSString* const kCSSpatialSettingNrSamples = @"number of samples";
 //ambiance settings
 NSString* const kCSAmbienceSettingInterval = @"pollInterval";
 NSString* const kCSAmbienceSettingSampleOnlyWhenScreenLocked = @"sampleOnlyWhenScreenLocked";
-
-//state
-NSString* const kCSStateIsLoggedIn = @"isLoggedIn";
 
 //categorical values
 NSString* const kCSSettingYES = @"1";
@@ -183,15 +179,11 @@ static CSSettings* sharedSettingsInstance = nil;
                               @"50", kCSSpatialSettingFrequency,
                               @"150", kCSSpatialSettingNrSamples,
                               nil];
-    NSMutableDictionary* state = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                     kCSSettingNO, kCSStateIsLoggedIn,
-                                     nil];
     NSMutableDictionary* defaults = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               general, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeGeneral],
                               ambience, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeAmbience],
                               position, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeLocation],
                               spatial, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeSpatial],
-                              state, [NSString stringWithFormat:@"SettingsType%@", kCSSettingTypeState],
                               nil];
 
     return defaults;
