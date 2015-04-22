@@ -21,9 +21,9 @@ static NSString* eventKey = @"event";
 	
 - (NSString*) name {return kCSSENSOR_VISITS;}
 - (NSString*) deviceType {return [self name];}
-//TODO: check for availability
+
 + (BOOL) isAvailable {
-	return YES;
+     return [[UIDevice currentDevice].systemVersion intValue] >= 8;
 }
 
 - (NSDictionary*) sensorDescription {
