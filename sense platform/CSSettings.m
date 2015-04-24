@@ -272,21 +272,21 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent {   if (persistent) {
-    @synchronized(settings) {
-        //get sensor settings;
-        NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
-        NSMutableDictionary* typeSettings = [settings valueForKey:name];
-        if (typeSettings == nil) {
-            //create if it doesn't already exist
-            typeSettings = [NSMutableDictionary new];
-            [settings setObject:typeSettings forKey:name];
-        }
+        @synchronized(settings) {
+            //get sensor settings;
+            NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
+            NSMutableDictionary* typeSettings = [settings valueForKey:name];
+            if (typeSettings == nil) {
+                //create if it doesn't already exist
+                typeSettings = [NSMutableDictionary new];
+                [settings setObject:typeSettings forKey:name];
+            }
         
-        //commit setting
-        [typeSettings setObject:value forKey:setting];
+            //commit setting
+            [typeSettings setObject:value forKey:setting];
+        }
+        [self storeSettings];
     }
-    [self storeSettings];
-}
     
     //create notification object
     CSSetting* notificationObject = [[CSSetting alloc] init];
