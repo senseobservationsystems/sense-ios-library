@@ -37,6 +37,7 @@ static CSSensorStore* sensorStore;
 
 + (void) initializeWithApplicationKey: (NSString*) applicationKey {
     [CSSensorStore sharedSensorStore].sender.applicationKey = applicationKey;
+    
     [self initialize];
 }
 
@@ -64,12 +65,24 @@ static CSSensorStore* sensorStore;
                           [UIDevice currentDevice].systemName, @"os",
                           [UIDevice currentDevice].systemVersion, @"os_version",
                           nil];
+    
     //add data point for app version
     [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
 }
 
 + (NSArray*) availableSensors {
     return [CSSensorStore sharedSensorStore].sensors;
+}
+
++ (BOOL) isAvailableSensor:(NSString*) sensorID {
+    NSArray *sensors = [CSSensePlatform availableSensors];
+    for (CSSensor *sensor in sensors) {
+        if ([sensor.name isEqualToString:sensorID]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 + (void) willTerminate {
@@ -115,6 +128,10 @@ static CSSensorStore* sensorStore;
 + (void) logout {
     [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
+}
+
+- (BOOL) isLoggedIn {
+    return [[CSSensorStore sharedSensorStore].sender isLoggedIn];
 }
 
 + (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {

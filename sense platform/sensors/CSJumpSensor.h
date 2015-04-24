@@ -23,8 +23,10 @@
 @interface CSJumpSensor : CSSensor
 
 /**
- New values are stored based on CMDeviceMotion and CMMotionManager objects that contain the jump data.
- @param motion Device motion object containing the jump data.
- @param motionManager Motion manager object which gathered the motion.
+ *   New values are stored based on CMDeviceMotion and CMMotionManager objects that contain the jump data.
+ *
+ *  @param motion        Device motion object containing the jump data.
+ *  @param motionManager Motion manager object which gathered the motion.
+ */
 - (void) pushDeviceMotion: (CMDeviceMotion*) motion andManager:(CMMotionManager*) motionManager;
 @end

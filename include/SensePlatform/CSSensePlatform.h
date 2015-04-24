@@ -105,6 +105,12 @@ This removes credentials from the settings and stops the uploading to CommonSens
 */
 + (void) logout;
 
+/**
+ *  return if user is loggedin
+ *
+ *  @return state whether user is logged in
+ */
+- (BOOL) isLoggedIn;
 
 /** Get the session cookie for Common Sense
 
@@ -233,6 +239,10 @@ These limitations are treated in a first in first out way. Hence, older data is 
 
 /// Returns a list of available sensors of the device
 + (NSArray*) availableSensors;
+
+/// return true if sensor with specific id is available. list of id available on CSSensorIds.h
++ (BOOL) isAvailableSensor:(NSString*) sensorID;
+
 /// To be called upon termination of the app, allows the platform to flush it's caches to Common Sense
 + (void) willTerminate;
 /// Flush data to Common Sense

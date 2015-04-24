@@ -28,9 +28,11 @@
 
 }
 
-/**
- Stores new value when state changes.
- @param notification Notification when state changes containing information about the new state.
+ /**
+ *  Stores new value when state changes.
+ *
+ *  @param notification Notification when state changes containing information about the new state.
+ */
 - (void) commitUserProximity:(NSNotification*) notification;
 
 @end

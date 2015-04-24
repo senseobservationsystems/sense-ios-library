@@ -30,7 +30,6 @@ extern NSString* const kCSSettingTypeLocation;
 extern NSString* const kCSSettingTypeSpatial;
 extern NSString* const kCSSettingTypeAmbience;
 
-
 //general settings
 extern NSString* const kCSGeneralSettingUsername;
 extern NSString* const kCSGeneralSettingPassword;
@@ -52,7 +51,6 @@ extern NSString* const kCSBiometricSettingWeight;
 extern NSString* const kCSBiometricSettingHeight;
 extern NSString* const kCSBiometricSettingBodyFat;
 extern NSString* const kCSBiometricSettingMaxPulse;
-
 
 //activity settings
 extern NSString* const kCSActivitySettingDetection;

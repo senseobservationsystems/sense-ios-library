@@ -163,7 +163,7 @@ static CSSettings* sharedSettingsInstance = nil;
                              kCSSettingYES, kCSGeneralSettingUploadToCommonSense,
                              kCSSettingYES, kCSGeneralSettingSenseEnabled,
                              kCSSettingNO, kCSGeneralSettingLocalStorageEncryption,
-                             kCSSettingNO, kCSGeneralSettingUseStaging,                             
+                             kCSSettingNO, kCSGeneralSettingUseStaging,
 			     nil];
     NSMutableDictionary* ambience = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               kCSSettingNO, kCSAmbienceSettingSampleOnlyWhenScreenLocked,
