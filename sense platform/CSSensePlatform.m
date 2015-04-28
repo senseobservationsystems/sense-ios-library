@@ -130,7 +130,7 @@ static CSSensorStore* sensorStore;
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
 }
 
-- (BOOL) isLoggedIn {
++ (BOOL) isLoggedIn {
     return [[CSSensorStore sharedSensorStore].sender isLoggedIn];
 }
 

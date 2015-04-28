@@ -110,7 +110,7 @@ This removes credentials from the settings and stops the uploading to CommonSens
  *
  *  @return state whether user is logged in
  */
-- (BOOL) isLoggedIn;
++ (BOOL) isLoggedIn;
 
 /** Get the session cookie for Common Sense
 
