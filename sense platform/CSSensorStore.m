@@ -101,14 +101,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 + (CSSensorStore*) sharedSensorStore {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-		sharedSensorStoreInstance = [[super allocWithZone:NULL] init];
+		sharedSensorStoreInstance = [[[super class] alloc] init];
     });
 	return sharedSensorStoreInstance;	
-}
-
-//override to ensure singleton
-+ (id)allocWithZone:(NSZone *)zone {
-    return [self sharedSensorStore];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
