@@ -110,15 +110,9 @@ static CSSettings* sharedSettingsInstance = nil;
 + (CSSettings*) sharedSettings {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-		sharedSettingsInstance = [[super allocWithZone:NULL] init];
+		sharedSettingsInstance = [[[self class] alloc] init];
     });
 	return sharedSettingsInstance;	
-}
-
-//override to ensure singleton
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return [self sharedSettings];
 }
 
 - (id)copyWithZone:(NSZone *)zone

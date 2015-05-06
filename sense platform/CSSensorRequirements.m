@@ -35,15 +35,9 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 
 + (CSSensorRequirements*) sharedRequirements {
 	if (sharedRequirementsInstance == nil) {
-		sharedRequirementsInstance = [[super allocWithZone:NULL] init];
+		sharedRequirementsInstance = [[[self class] alloc] init];
 	}
 	return sharedRequirementsInstance;
-}
-
-//override to ensure singleton
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return [self sharedRequirements];
 }
 
 - (id)copyWithZone:(NSZone *)zone
