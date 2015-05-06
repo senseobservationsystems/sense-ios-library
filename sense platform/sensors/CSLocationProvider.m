@@ -26,6 +26,7 @@
 
 	CSLocationSensor *locationSensor;
 	CSVisitsSensor *visitsSensor;
+    CSGeofenceSensor *geofenceSensor;
     
 	
     bool locationUpdatesAutoPausingEnabled;		//the boolean to enable or disable the automated pausing of location updates
@@ -44,13 +45,14 @@
         //init the sensors
         visitsSensor = [[CSVisitsSensor alloc] init];
         locationSensor = [[CSLocationSensor alloc] init];
+        geofenceSensor = [[CSGeofenceSensor alloc] init];
         
         [self initialize];
 	}
 	return self;
 }
 
-- (id) initWithLocationSensor: (CSLocationSensor *) lSensor andVisitsSensor: (CSVisitsSensor *) vSensor {
+- (id) initWithLocationSensor: (CSLocationSensor *) lSensor andVisitsSensor: (CSVisitsSensor *) vSensor andGeofenceSensor: (CSGeofenceSensor *) gSensor {
 	self = [super init];
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
@@ -58,6 +60,7 @@
 
         visitsSensor = vSensor;
         locationSensor = lSensor;
+        geofenceSensor = gSensor;
 
         [self initialize];
 	}
@@ -270,6 +273,17 @@
 	else {[locationManager performSelectorOnMainThread:@selector(stopMonitoringVisits) withObject:nil waitUntilDone:YES];}
 }
 
+- (void) geofenceEnabledChanged: (NSNotification*) notification {
+    if(geofenceSensor.isEnabled) {
+        for (id region in geofenceSensor.activeRegions) 
+            [locationManager performSelectorOnMainThread:@selector(startMonitoringForRegion:) withObject:region waitUntilDone:YES];
+    }
+    else {
+        for (id region in geofenceSensor.activeRegions)
+            [locationManager performSelectorOnMainThread:@selector(stopMonitoringForRegion:) withObject:region waitUntilDone:YES];
+    }
+}
+
 - (void) settingChanged: (NSNotification*) notification  {
 	@try {
 		CSSetting* setting = notification.object;
@@ -288,6 +302,28 @@
 	@catch (NSException * e) {
 		NSLog(@"LocationProvider: Exception thrown while applying location settings: %@", e);
 	}
+}
+
+
+- (void) removeFenceWithId: (NSString*) identifier {
+    CLRegion* region = [geofenceSensor getRegionWithIdentifier:identifier];
+    [geofenceSensor removeRegion:region];
+    [locationManager performSelectorOnMainThread:@selector(stopMonitoringForRegion:) withObject:region waitUntilDone:true];
+}
+
+- (void) addFenceWithLatitude: (double) lat andLongitude: (double) lon andRadius:(double) radius andId: (NSString*) identifier {
+    CLLocationCoordinate2D coordinates = CLLocationCoordinate2DMake(lat, lon);
+    CLRegion* region = (CLRegion*) [[CLCircularRegion alloc] initWithCenter:coordinates radius:radius identifier:identifier];
+    [geofenceSensor addRegion:region];
+    [locationManager performSelectorOnMainThread:@selector(startMonitoringForRegion:) withObject:region waitUntilDone:true];
+}
+
+- (void) locationManager:(CLLocationManager *) manager didEnterRegion:(CLRegion *) region {
+    [geofenceSensor storeRegionEvent:region withEnterRegion:YES];
+}
+
+- (void) locationManager:(CLLocationManager *) manager didExitRegion:(CLRegion *) region {
+    [geofenceSensor storeRegionEvent:region withEnterRegion:NO];
 }
 
 - (void) dealloc {

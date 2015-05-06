@@ -42,3 +42,4 @@ NSString* const kCSSENSOR_TIMEZONE = @"time_zone";
 NSString* const kCSSENSOR_JUMP = @"jump";
 NSString* const kCSSENSOR_LOUDNESS = @"loudness";
 NSString* const kCSSENSOR_VISITS = @"visits";
+NSString* const kCSSENSOR_GEOFENCE = @"geofence_sensor";

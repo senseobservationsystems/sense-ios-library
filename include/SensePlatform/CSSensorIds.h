@@ -44,5 +44,6 @@ extern NSString* const kCSSENSOR_TIMEZONE;
 extern NSString* const kCSSENSOR_JUMP;
 extern NSString* const kCSSENSOR_LOUDNESS;
 extern NSString* const kCSSENSOR_VISITS;
+extern NSString* const kCSSENSOR_GEOFENCE;
 
 #endif

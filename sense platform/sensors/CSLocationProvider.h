@@ -17,11 +17,12 @@
 #import <CoreLocation/CoreLocation.h>
 #import "CSLocationSensor.h"
 #import "CSVisitsSensor.h"
+#import "CSGeofenceSensor.h"
 
 /**
  Provider that handles all the location related tracking. Receives location points and visits from the OS and processes them.
  
- It uses two sensors: CSLocationSensor and CSVisitsSensor for storing location data and visit data respectively.
+ It uses three sensors: CSLocationSensor, CSVisitsSensor and CSGeofenceSensor for storing location data, visit data and geofencing data respectively.
  
  Note that if you don't need location information this provider is still necessary for running the app in the background. To make sure it uses the least amount of battery when running in the background you want to increase the desired accuracy and the auto pausing feature (both can be found in CSSettings.h).
  
@@ -49,7 +50,7 @@ To be able to use location sensing you need to add to your `info.plist` file the
  * @param vSensor The visits sensor
  * @return Returns self
  **/
-- (id) initWithLocationSensor: (CSLocationSensor *) lSensor andVisitsSensor: (CSVisitsSensor *) vSensor;
+- (id) initWithLocationSensor: (CSLocationSensor *) lSensor andVisitsSensor: (CSVisitsSensor *) vSensor andGeofenceSensor: (CSGeofenceSensor *) gSensor;
 
 
 /** This enabled/disables the required monitoring for in the background. It does not affect visits monitoring. In the current implementation, it means the desired accuracy is set and both location updates and significant location updates are started or stopped. Note that if the resulting location points should also be stored, the LocationSensor should be enabled separately.
@@ -64,6 +65,7 @@ To be able to use location sensing you need to add to your `info.plist` file the
  */
 - (void) setBackgroundRunningEnable:(BOOL) enable;
 
+
 /** 
  This function return the current authorization state for location updates.
 
@@ -75,5 +77,19 @@ To be able to use location sensing you need to add to your `info.plist` file the
  Function to make the LocationProvider obtain permission. Once the user either grants or denies permissions, this will generate a notification of that event.
  */
 - (void) requestPermission;
+
+/**
+ * Add a new fence and start tracking it.
+ * @param lat The latitude of the center of the fence
+ * @param lon The longitude of the center of the fence
+ * @param identifier A string to identify the fence with, can be anything. The sensor name will be "geofence_sensor_identifier"
+ */
+- (void) addFenceWithLatitude: (double) lat andLongitude: (double) lon andRadius:(double) radius andId: (NSString*) identifier;
+
+/**
+ * Stop tracking the fence with the given identifier
+ * @param identifier The string that identifies the fence (as specified when the fence was added)
+ */
+- (void) removeFenceWithId: (NSString*) identifier;
 
 @end
