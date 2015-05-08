@@ -135,11 +135,17 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
     NSURL* url = [NSURL URLWithString:kUrlAuthentication];
 	NSData* contents;
-	NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil];
+
+    NSError *httpError; // handle network related error
+    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil error:&httpError];
 
 	BOOL succeeded = YES;
 	//check response code
-	if ([response statusCode] != 200) {
+    
+    if (contents == nil) { // could make the request (possibly network problem)
+        *error = httpError;
+        succeeded = NO;
+    } else if ([response statusCode] != 200) {
 		NSLog(@"Couldn't login.");
 		NSString* responseBody = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
         
@@ -493,8 +499,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     return response;
 }
 
+- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie {
+    NSError* error;
+    return [self doRequestTo:url method:method input:input output:output cookie:cookie error:&error];
+}
 
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie
+- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie error:(NSError **) error
 {
 	NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url
 															  cachePolicy:NSURLRequestReloadIgnoringCacheData
@@ -524,21 +534,21 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	
 	//connect
 	NSHTTPURLResponse* response=nil;
-	NSError* error = nil;
 	NSData* responseData;
 	
 	//Synchronous request
 	responseData = [NSURLConnection sendSynchronousRequest:urlRequest
 										 returningResponse:&response
-													 error:&error];
+													 error:error];
+    
 	//don't handle errors in the request, just log them
-	if (error != nil) {
-		NSLog(@"Error during request \'%@\': %@",	[urlRequest description] ,	error);
-		NSLog(@"Error description: \'%@\'.", [error description] );
-		NSLog(@"Error userInfo: \'%@\'.", [error userInfo] );
-		NSLog(@"Error failure reason: \'%@\'.", [error localizedFailureReason] );
-		NSLog(@"Error recovery options reason: \'%@\'.", [error localizedRecoveryOptions] );
-		NSLog(@"Error recovery suggestion: \'%@\'.", [error localizedRecoverySuggestion] );
+	if (*error != nil) {
+		NSLog(@"Error during request \'%@\': %@",	[urlRequest description] ,	*error);
+		NSLog(@"Error description: \'%@\'.", [*error description] );
+		NSLog(@"Error userInfo: \'%@\'.", [*error userInfo] );
+		NSLog(@"Error failure reason: \'%@\'.", [*error localizedFailureReason] );
+		NSLog(@"Error recovery options reason: \'%@\'.", [*error localizedRecoveryOptions] );
+		NSLog(@"Error recovery suggestion: \'%@\'.", [*error localizedRecoverySuggestion] );
 	}
 	
 	//log response
