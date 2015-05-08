@@ -17,6 +17,7 @@
 #import "CSSender.h"
 #import "NSString+MD5Hash.h"
 #import "NSData+GZIP.h"
+#import "CSErrorDomain.h"
 
 static NSString* kUrlBaseURL = @"https://api.sense-os.nl";
 static NSString* kUrlBaseURLLive = @"https://api.sense-os.nl";
@@ -111,7 +112,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return didSucceed;
 }
 
-- (BOOL) login
+- (BOOL) login {
+    NSError* error;
+    return [self loginWithError:&error];
+}
+
+- (BOOL) loginWithError:(NSError **) error
 {
 	//invalidate current session
 	if (sessionCookie != nil)
@@ -133,15 +139,32 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
 	BOOL succeeded = YES;
 	//check response code
-	if ([response statusCode] != 200)
-	{
+	if ([response statusCode] != 200) {
 		NSLog(@"Couldn't login.");
-		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];		
-		NSLog(@"Responded: %@", responded);
+		NSString* responseBody = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+        
+        // try to parse json
+        NSError* jsonError = nil;
+        NSDictionary* jsonData = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
+        
+        NSString* errorMsg;
+        
+        if (jsonError != nil) { // response is not json return the content
+            errorMsg = responseBody;
+        } else {
+            errorMsg = [jsonData objectForKey:@"error"];
+        }
+        
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Failure loging in", nil), @"message": errorMsg};
+
+        *error = [NSError errorWithDomain:SensePlatformErrorDomain code:[response statusCode] userInfo:userInfo];
+        
+        
 		succeeded = NO;
 	} else {
 		//interpret JSON
 		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
+        
 		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
 	}
     

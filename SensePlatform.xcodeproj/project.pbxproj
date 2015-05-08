@@ -328,6 +328,7 @@
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
 		A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
+		DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSErrorDomain.h; sourceTree = "<group>"; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
 		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -539,22 +540,23 @@
 		3E820DBF15D40B180001A3EC /* sense platform */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
 				3E820DC115D40B180001A3EC /* communication */,
+				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
+				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
+				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
 				3E820DC815D40B180001A3EC /* CSDataStore.h */,
 				3E820DCE15D40B180001A3EC /* CSSensePlatform.m */,
 				3E820DCF15D40B180001A3EC /* CSSensorIds.m */,
-				3E820DD015D40B180001A3EC /* sensors */,
+				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
 				3E820E0315D40B180001A3EC /* CSSensorStore.h */,
 				3E820E0415D40B180001A3EC /* CSSensorStore.m */,
 				3E820E0515D40B180001A3EC /* CSSettings.m */,
-				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
 				3E513F4C18F7D7CF0008415A /* CSStorage.h */,
 				3E513F4D18F7D7CF0008415A /* CSStorage.m */,
-				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
-				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
 				3E513F5B18FC18150008415A /* CSUploader.h */,
 				3E513F5C18FC18150008415A /* CSUploader.m */,
+				DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */,
+				3E820DD015D40B180001A3EC /* sensors */,
 			);
 			path = "sense platform";
 			sourceTree = "<group>";

@@ -98,8 +98,14 @@ static CSSensorStore* sensorStore;
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
+    NSError* error;
+    return [[self class] loginWithUser:user andPassword:password andError:&error];
+}
+
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    BOOL succeed = [[CSSensorStore sharedSensorStore].sender login];
+    
+    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
     if (succeed) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
@@ -107,8 +113,14 @@ static CSSensorStore* sensorStore;
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
+    NSError* error;
+    return [[self class] loginWithUser:user andPasswordHash:passwordHash andError:&error];
+}
+
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
-    BOOL succeed = [sensorStore.sender login];
+    
+    BOOL succeed = [sensorStore.sender loginWithError:error];
     if (succeed) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
