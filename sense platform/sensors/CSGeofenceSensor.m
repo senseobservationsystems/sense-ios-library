@@ -17,7 +17,7 @@ static NSString* outOfRangeKey = @"out of range";
 
 NSString* sensorNameSuffix; // e.g. "_AGORAPHOBIA"
 
-NSMutableArray* activeRegions; //stores currently active regions (as CLRegions, e.g. "[5.210230, 12.423857, AGORAPHOBIA]")
+NSMutableArray* activeRegions; //stores currently active regions (as CLRegions wit lat/lon, radius and name, e.g. [5.210230, 12.423857, 100.0, AGORAPHOBIA])
 
 
 
@@ -28,12 +28,11 @@ NSMutableArray* activeRegions; //stores currently active regions (as CLRegions, 
 - (NSString*) deviceType {return [self name];}
 
 + (BOOL) isAvailable {
-    return [[UIDevice currentDevice].systemVersion intValue] >= 8;
+    return [[UIDevice currentDevice].systemVersion intValue] >= 7; //TODO check that this is correct (could also be lower)
 }
 
 - (NSDictionary*) sensorDescription {
     //create description for data format. programmer: make SURE it matches the format used to send data
-    //TODO later
     NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
                             @"int", outOfRangeKey,
                             nil];
@@ -70,20 +69,22 @@ NSMutableArray* activeRegions; //stores currently active regions (as CLRegions, 
 
 - (void) storeRegionEvent: (CLRegion *) region withEnterRegion: (BOOL) enter {
     NSString* identifier = region.identifier;
-    if (isEnabled == NO || [self isActive:identifier] == NO) {
+    //If the entire geofence sensor is disabled, OR if the current region/fence is not actively being listened for,
+    //do nothing
+    if (isEnabled == NO || [self isActive:region.identifier] == NO) {
         return;
     }
     
-    sensorNameSuffix = [@"_" stringByAppendingString:identifier];
+    sensorNameSuffix = [@"_" stringByAppendingString:region.identifier];
     int outOfRange = enter ? 0 : 1;
     
-    NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+    NSMutableDictionary* newEvent = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithInt:outOfRange], outOfRangeKey,
                                     nil];
     
-    double timestamp = [[NSDate date] timeIntervalSince1970]; //TODO do we want it to happen NOW? or get from locationmanager?
+    double timestamp = [[NSDate date] timeIntervalSince1970]; //TODO do we want timestamp to be NOW? or get time from locationmanager somehow? (difference would be only a couple of milliseconds)
     NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        newItem, @"value",
+                                        newEvent, @"value",
                                         CSroundedNumber(timestamp, 3), @"date",
                                         nil];
     [dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
@@ -115,6 +116,8 @@ NSMutableArray* activeRegions; //stores currently active regions (as CLRegions, 
         return [results firstObject];
 }
 
+//TODO I don't know how to implement this method. below is a copy-paste from the visits sensor, but
+//it needs to be checked that this is correct for the geofence sensor as well
 - (void) dealloc {
     self.isEnabled = NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
