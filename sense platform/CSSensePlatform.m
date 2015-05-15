@@ -324,4 +324,18 @@ static CSSensorStore* sensorStore;
 + (NSString*) getDeviceId {
     return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
+
++ (void) requestAllPermissions {
+    // for noise we cant obtain permissions without switching on the noise sensor, so it is not included here
+    
+    // request location updates permissions
+    [self requestLocationUpdatesPermission];
+    
+    // if any other permissions become a requirement in the app, add them below
+}
+
++ (void) requestLocationUpdatesPermission {
+    [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+}
+
 @end

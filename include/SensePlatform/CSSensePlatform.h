@@ -246,7 +246,17 @@ These limitations are treated in a first in first out way. Hence, older data is 
 + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
 
 
+/** @name Permissions */
 
+/** 
+ Force the Sense Library to obtain as many permissions as it can from the user right now.
+ */
++ (void) requestAllPermissions;
+
+/**
+ Force the Sense Library to obtain permission from the user to have location updates.
+ */
++ (void) requestLocationUpdatesPermission;
 
 /** @name Miscelaneous */
 
