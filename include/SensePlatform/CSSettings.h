@@ -98,6 +98,12 @@ extern NSString* const kCSActivitySettingPrivacyFriendsOfFriends;
 extern NSString* const kCSActivitySettingPrivacyActivitiesCommunity;
 extern NSString* const kCSActivitySettingPrivacyPublic;
 
+// provider identifiers
+extern NSString* const kCSLOCATION_PROVIDER;
+extern NSString* const kCSSPATIAL_PROVIDER;
+extern NSString* const kCSAMBIENCE_PROVIDER;
+extern NSString* const kCSEnableLocationProvider;
+
 
 /**
  Each individual setting is stored in a CSSetting object with a name and a value.
@@ -265,6 +271,11 @@ Settings are not stored specifically for each user. Hence when another user woul
  */
 + (NSString*) settingChangedNotificationNameForType:(NSString*) type;
 
+/** Returns the name of the permission request notification for a specific provider. This can be used to notify a provider that it should now request permissions.
+ @param provider The provider which should request its permissions.
+ @return The name of the request permission notification for the specified provider.
+ */
++ (NSString*) permissionRequestNotificationForProvider: (NSString*) provider;
 
 
 /** @name Setting settings (pun intended) */
