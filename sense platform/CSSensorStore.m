@@ -321,7 +321,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	}
         
     NSString* backgroundHackEnabled = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingBackgroundRestarthack];
-    [self setBackgroundHackEnabled:([backgroundHackEnabled isEqualToString:kCSSettingYES] && enable)];
     waitTime = 0;
     }
 }

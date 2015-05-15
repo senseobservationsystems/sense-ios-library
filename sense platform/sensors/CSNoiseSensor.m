@@ -335,6 +335,9 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 
             [self startRecording];
 		}
+        
+        // make sure the location provider is switched on we can keep running in the background
+        [[NSNotificationCenter defaultCenter] postNotificationName: kCSEnableLocationProvider object:nil];
 	} else {
 		[audioRecorder stop];
 		audioRecorder.delegate = nil;
