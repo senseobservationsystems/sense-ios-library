@@ -251,7 +251,7 @@
     // check to make sure we dont do this on iOS < 8
     if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         // check if we haven't already asked permissions
-        if (!((CLAuthorizationStatus)authorizationStatus == kCLAuthorizationStatusAuthorizedAlways)) {
+        if (!([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
             // request the permissions
             [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
         }
