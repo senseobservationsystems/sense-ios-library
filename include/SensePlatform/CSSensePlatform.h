@@ -83,6 +83,7 @@ Note that if registration fails, there is no way for the developer or end-user t
  *
  *  @param user     Username used to identify the user (this does not necessarily have to be an email address)
  *  @param password The password connected to the user account (not hashed yet)
+ *  @deprecated use loginWithUser:andPassword:andError instead
  *
  */
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
@@ -90,9 +91,9 @@ Note that if registration fails, there is no way for the developer or end-user t
 /**
  *  Set the credentials to log in on Common Sense
  *
- * This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
  *
- * Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
+ *  Returns a descriptive error if the login process fails.
  *
  *  @param user     Username used to identify the user (this does not necessarily have to be an email address)
  *  @param password The password connected to the user account (not hashed yet)
@@ -111,7 +112,6 @@ Note that if registration fails, there is no way for the developer or end-user t
  *
  *  @param user         username
  *  @param passwordHash md5 hased password
- *  @param error        error
  *  @deprecated use loginWIthUser:andPasswordHash:andError instead
  *
  *  @return whether the login is succsesful or not
@@ -124,7 +124,7 @@ Note that if registration fails, there is no way for the developer or end-user t
  *
  *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
  *
- *  Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
+ *  Returns a descriptive error if the login process fails.
  *
  *  @param user         username
  *  @param passwordHash md5 hased password
