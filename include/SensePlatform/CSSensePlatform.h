@@ -74,31 +74,65 @@ Note that if registration fails, there is no way for the developer or end-user t
 */
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password withEmail:(NSString*) email;
 
-
-
-/** 
-Set the credentials to log in on Common Sense
-
-This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
- 
-Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
- 
-@param user Username used to identify the user (this does not necessarily have to be an email address)
-@param password	The password connected to the user account (not hashed yet)
-@return whether the login succeeded
-**/
+/**
+ *  Set the credentials to log in on Common Sense
+ *
+ * This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ * Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
+ *
+ *  @param user     Username used to identify the user (this does not necessarily have to be an email address)
+ *  @param password The password connected to the user account (not hashed yet)
+ *  @deprecated use loginWithUser:andPassword:andError instead
+ *
+ */
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
 
 /**
-Set the credentials to log in on Common Sense
+ *  Set the credentials to log in on Common Sense
+ *
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ *  Returns a descriptive error if the login process fails.
+ *
+ *  @param user     Username used to identify the user (this does not necessarily have to be an email address)
+ *  @param password The password connected to the user account (not hashed yet)
+ *  @param error    error
+ *
+ *  @return whether the login succeeded
+ */
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error;
 
-This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
- 
-Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
-@param user Username used to identify the user (this does not necessarily have to be an email address)
-@param password	The password connected to the user account hashed using an MD5 hash
-**/
+/**
+ *  Set the credentials to log in on Common Sense
+ *
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ *  Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
+ *
+ *  @param user         username
+ *  @param passwordHash md5 hased password
+ *  @deprecated use loginWIthUser:andPasswordHash:andError instead
+ *
+ *  @return whether the login is succsesful or not
+ */
+
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash;
+
+/**
+ *  Set the credentials to log in on Common Sense
+ *
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ *  Returns a descriptive error if the login process fails.
+ *
+ *  @param user         username
+ *  @param passwordHash md5 hased password
+ *  @param error        error
+ *
+ *  @return whether the login is succsesful or not
+ */
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error;
 
 /** Logout
 This removes credentials from the settings and stops the uploading to CommonSense.
