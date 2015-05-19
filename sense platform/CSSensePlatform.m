@@ -120,7 +120,7 @@ static CSSensorStore* sensorStore;
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
     
-    BOOL succeed = [sensorStore.sender loginWithError:error];
+    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
     if (succeed) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
