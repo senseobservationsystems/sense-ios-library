@@ -335,7 +335,8 @@ static CSSensorStore* sensorStore;
 }
 
 + (void) requestLocationUpdatesPermission {
-    [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+    NSLog(@"[CSSensePlatform] Posting Location Permissions Notification!");
+    [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionRequestNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
 }
 
 @end

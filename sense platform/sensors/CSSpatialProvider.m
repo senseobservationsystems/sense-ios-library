@@ -667,6 +667,7 @@ void someScheduleFunction(void* context) {
         [self schedulePollWithInterval:interval];
         
         // make sure the location provider is switched on so the app will continue running in the background
+        NSLog(@"[Spatial Provider] Sending notification to Location Provider!");
         [[NSNotificationCenter defaultCenter] postNotificationName: kCSEnableLocationProvider object:nil];
     }
 }
