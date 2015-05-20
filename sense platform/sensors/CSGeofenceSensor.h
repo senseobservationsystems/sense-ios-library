@@ -6,7 +6,7 @@
 //
 //
 
-
+#import "CSSensor.h"
 #import <CoreLocation/CoreLocation.h>
 
 /**
