@@ -25,6 +25,7 @@
 
 #import "CSLocationSensor.h"
 #import "CSVisitsSensor.h"
+#import "CSGeofenceSensor.h"
 #import "CSBatterySensor.h"
 #import "CSCompassSensor.h"
 #import "CSAccelerometerSensor.h"
