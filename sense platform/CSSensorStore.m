@@ -152,6 +152,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                             [CSActivityProcessorSensor class],
                             [CSTimeZoneSensor class],
                             //[CSStepCounterProcessorSensor class],
+                            [CSGeofenceSensor class],
 							nil];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];
@@ -209,7 +210,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		
 		//initialise spatial provider
 		CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
-		CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
+        CSLocationSensor* location = nil; CSVisitsSensor* visits = nil; CSGeofenceSensor* geofence = nil;
 		for (CSSensor* sensor in sensors) {
 			if ([sensor isKindOfClass:[CSCompassSensor class]])
 				compass = (CSCompassSensor*)sensor;
@@ -227,10 +228,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 				location = (CSLocationSensor*) sensor;
 			else if ([sensor isKindOfClass:[CSVisitsSensor class]])
 				visits = (CSVisitsSensor*) sensor;
+            else if ([sensor isKindOfClass:[CSGeofenceSensor class]])
+                geofence = (CSGeofenceSensor*) sensor;
 		}
 		
 		spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
-		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
+		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits andGeofenceSensor:geofence];
     }
 }
 
