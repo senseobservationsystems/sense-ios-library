@@ -202,7 +202,7 @@
 // notification handler for switching on the locationProvider to make the location provider run
 - (void) setEnabledNotificationHandler: (NSNotification*) notification {
     NSLog(@"[LocationProvider] setEnabledNotificaiton received!");
-    [self setIsEnabled: TRUE];
+    [self setIsEnabled: YES];
 }
 
 - (void) enableLocationUpdates:(BOOL) enable {
