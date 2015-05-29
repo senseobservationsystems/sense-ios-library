@@ -208,6 +208,10 @@ static CSSettings* sharedSettingsInstance = nil;
     return [NSString stringWithFormat:@"%@CSPermissionRequestNotification", provider];
 }
 
++ (NSString*) permissionGrantedNotificationForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionGrantedNotification", provider];
+}
+
 - (BOOL) isSensorEnabled:(NSString*) sensor {
 	NSString* key = [NSString stringWithFormat:@"%@", sensor];
 	id object = [sensorEnables objectForKey:key];

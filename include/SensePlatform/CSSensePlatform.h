@@ -22,6 +22,7 @@
 #include "CSSensorIds.h"
 #include "CSSensorRequirements.h"
 #include "CSSettings.h"
+#include "CSLocationPermissionProtocol.h"
 
 extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;
@@ -248,15 +249,14 @@ These limitations are treated in a first in first out way. Hence, older data is 
 
 /** @name Permissions */
 
-/** 
- Force the Sense Library to obtain as many permissions as it can from the user right now.
- */
-+ (void) requestAllPermissions;
-
 /**
  Force the Sense Library to obtain permission from the user to have location updates.
  */
-+ (void) requestLocationUpdatesPermission;
++ (void) requestLocationUpdatesPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate;
+
++ (BOOL) arePermissionsMissing;
+
++ (BOOL) areLocationPermissionsMissing;
 
 /** @name Miscelaneous */
 

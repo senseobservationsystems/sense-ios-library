@@ -57,4 +57,17 @@
  * @param enable Setting whether to enable or disable the location monitoring for running in the background
  */
 - (void) setBackgroundRunningEnable:(BOOL) enable;
+
+/**
+ *  This function checks whether the LocationProvider currently has all the permissions it requires.
+ *
+ *  @return boolean inidicating whether there are permissions missing
+ */
+- (BOOL) isPermissionMissing;
+
+/**
+ * Function to make the LocationProvider obtain permissions.
+ */
+- (void) requestPermissions;
+
 @end

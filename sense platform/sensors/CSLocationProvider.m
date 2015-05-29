@@ -82,10 +82,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(visitsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
     
-    // listen for request permissions notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPermissionNotificationHandler:) name:[CSSettings permissionRequestNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
-    NSLog(@"[LocationProvider] subscribed to Permission Notifications!");
-    
     // listen for enable notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setEnabledNotificationHandler:) name:kCSEnableLocationProvider object:nil];
 }
@@ -171,6 +167,7 @@
     switch (status) {
         case kCLAuthorizationStatusAuthorizedAlways:
             statusString = @"authorized always";
+            [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionGrantedNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
             break;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             statusString = @"authorized when in use";
@@ -236,12 +233,6 @@
 	}
 }
 
-// notification handler for requesting permissions
-- (void) requestPermissionNotificationHandler: (NSNotification*) notification {
-    NSLog(@"[LocationProvider] request permission notification!");
-    [self requestPermissions];
-}
-
 // function for requesting permissions required by the locationProvider
 - (void) requestPermissions {
     // check to make sure we dont do this on iOS < 8
@@ -251,6 +242,15 @@
             // request the permissions
             [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
         }
+    }
+}
+
+- (BOOL) isPermissionMissing {
+    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        return [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways;
+    } else {
+        // on iOS < 8, return NO to pretend everything is ok
+        return NO;
     }
 }
 

@@ -65,5 +65,6 @@
 - (void) forceDataFlushAndBlock;
 - (void) generalSettingChanged: (NSNotification*) notification;
 
-
+- (BOOL) areLocationPermissionsMissing;
+- (void) requestLocationUpdatesPermission;
 @end

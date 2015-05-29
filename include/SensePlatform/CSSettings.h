@@ -277,6 +277,8 @@ Settings are not stored specifically for each user. Hence when another user woul
  */
 + (NSString*) permissionRequestNotificationForProvider: (NSString*) provider;
 
++ (NSString*) permissionGrantedNotificationForProvider: (NSString*) provider;
+
 
 /** @name Setting settings (pun intended) */
 

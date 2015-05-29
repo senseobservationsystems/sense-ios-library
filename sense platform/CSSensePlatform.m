@@ -30,9 +30,10 @@ NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
 NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 
 static CSSensorStore* sensorStore;
+__weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 @implementation CSSensePlatform {
-
+    
 }
 
 + (void) initializeWithApplicationKey: (NSString*) applicationKey {
@@ -41,8 +42,16 @@ static CSSensorStore* sensorStore;
     [self initialize];
 }
 
-+(void) initialize {
++ (void) initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self initializeOnce];
+    });
 
+}
+
++ (void) initializeOnce; {
+    
     sensorStore = [CSSensorStore sharedSensorStore];
     
     //store version information
@@ -68,6 +77,11 @@ static CSSensorStore* sensorStore;
     
     //add data point for app version
     [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
+    
+    // listen for notifications from the location provider indicating it has obtained permissions from the user
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationUpdatesPermissionGranted:) name:[CSSettings permissionGrantedNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
+    NSLog(@" Much Sense Platform! MOAR!");
+
 }
 
 + (NSArray*) availableSensors {
@@ -325,18 +339,28 @@ static CSSensorStore* sensorStore;
     return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
 
-+ (void) requestAllPermissions {
-    // for noise we cant obtain permissions without switching on the noise sensor, so it is not included here
-    
-    // request location updates permissions
-    [self requestLocationUpdatesPermission];
-    
-    // if any other permissions become a requirement in the app, add them below
++ (void) requestLocationUpdatesPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate {
+    NSLog(@"[CSSensePlatform] Requestion Location Update Permissions!");
+    locationPermissionDelegate = delegate;
+    [sensorStore requestLocationUpdatesPermission];
 }
 
-+ (void) requestLocationUpdatesPermission {
-    NSLog(@"[CSSensePlatform] Posting Location Permissions Notification!");
-    [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionRequestNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
++ (void) locationUpdatesPermissionGranted:(NSNotification*) notification {
+    NSLog(@"[CSSensePlatform] Received permission Granted notification, calling callback function!");
+    if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionGranted)]) {
+        [locationPermissionDelegate locationPermissionGranted];
+    } else {
+        NSLog(@" THATS A BAD DELEGATE!");
+    }
+}
+
++ (BOOL) arePermissionsMissing {
+    return [self areLocationPermissionsMissing];
+}
+
++ (BOOL) areLocationPermissionsMissing {
+    // TODO: refactor so we don't need all this indirection
+    return [sensorStore areLocationPermissionsMissing];
 }
 
 @end
