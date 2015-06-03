@@ -14,8 +14,61 @@
  * Author: Freek van Polen (freek@sense-labs.com)
  */
 
+/**
+ Protocol that any object requesting location permissions through the CSSensePlatform should implement.
+ After the user grants or denies permissions, one of these functions will be called on your object.
+ 
+ Below an example of how this could be implemented in a view object:
+ 
+ @interface TourViewController : UIViewController <CSLocationPermissionProtocol>
+ @end
+ 
+ @implementation TourViewController
+ 
+ - (IBAction)handlePermissionButtonClick:(id)sender {
+    [CSSensePlatform requestLocationPermissionWithDelegate: self];
+ }
+ 
+ - (void) locationPermissionGranted {
+    [self refreshView];
+ }
+ 
+ - (void) locationPermissionDenied {
+    [self refreshView];
+ }
+ 
+ - (void)viewDidLoad {
+    [super viewDidLoad];
+    [self refreshView];
+ }
+ 
+ - (void) refreshView {
+    CLAuthorizationStatus status = [CSSensePlatform locationPermissionState];
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+            break;
+        case kCLAuthorizationStatusDenied:
+            break;
+        case kCLAuthorizationStatusNotDetermined:
+            break;
+        default:
+            break;
+    }
+ }
+ 
+@end
+ 
+ */
 @protocol CSLocationPermissionProtocol <NSObject>
 
+/**
+ Callback that will be called in the event the user grants location updates permission.
+ */
 - (void) locationPermissionGranted;
+
+/**
+ Callback that will be called in the event the user denies location updates permission.
+ */
+- (void) locationPermissionDenied;
 
 @end

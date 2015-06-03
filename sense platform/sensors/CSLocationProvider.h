@@ -58,16 +58,16 @@
  */
 - (void) setBackgroundRunningEnable:(BOOL) enable;
 
-/**
- *  This function checks whether the LocationProvider currently has all the permissions it requires.
- *
- *  @return boolean inidicating whether there are permissions missing
+/** 
+ This function return the current authorization state for location updates.
+
+ @return CLAuthorizationStatus current authorization status of the CLLocationManager
  */
-- (BOOL) isPermissionMissing;
+- (CLAuthorizationStatus) permissionState;
 
 /**
- * Function to make the LocationProvider obtain permissions.
+ Function to make the LocationProvider obtain permission. Once the user either grants or denies permissions, this will generate a notification of that event.
  */
-- (void) requestPermissions;
+- (void) requestPermission;
 
 @end

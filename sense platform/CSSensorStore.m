@@ -655,12 +655,14 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return device;
 }
 
-- (BOOL) areLocationPermissionsMissing {
-    return [locationProvider isPermissionMissing];
+- (void) requestLocationPermission {
+    [locationProvider requestPermission];
 }
 
-- (void) requestLocationUpdatesPermission {
-    [locationProvider requestPermissions];
+- (CLAuthorizationStatus) locationPermissionState {
+    return [locationProvider permissionState];
 }
+
+
 @end
 

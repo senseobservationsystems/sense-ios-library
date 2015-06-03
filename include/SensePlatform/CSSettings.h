@@ -271,13 +271,17 @@ Settings are not stored specifically for each user. Hence when another user woul
  */
 + (NSString*) settingChangedNotificationNameForType:(NSString*) type;
 
-/** Returns the name of the permission request notification for a specific provider. This can be used to notify a provider that it should now request permissions.
- @param provider The provider which should request its permissions.
- @return The name of the request permission notification for the specified provider.
+/** Returns the name of the permission granted notification for a specific provider.
+ @param provider The provider for which the permission was granted.
+ @return The name of the permission granted notification.
  */
-+ (NSString*) permissionRequestNotificationForProvider: (NSString*) provider;
++ (NSString*) permissionGrantedForProvider: (NSString*) provider;
 
-+ (NSString*) permissionGrantedNotificationForProvider: (NSString*) provider;
+/** Returns the name of the permission denied notification for a specific provider.
+ @param provider The provider for which the permission was granted.
+ @return The name of the permission denied notification.
+ */
++ (NSString*) permissionDeniedForProvider: (NSString*) provider;
 
 
 /** @name Setting settings (pun intended) */

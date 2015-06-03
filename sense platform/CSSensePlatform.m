@@ -79,8 +79,9 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
     
     // listen for notifications from the location provider indicating it has obtained permissions from the user
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationUpdatesPermissionGranted:) name:[CSSettings permissionGrantedNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
-    NSLog(@" Much Sense Platform! MOAR!");
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionGranted:) name:[CSSettings permissionGrantedForProvider:kCSLOCATION_PROVIDER] object:nil];
+    // listen for notifications from the location provider indicating permission was denied by the user
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionDenied:) name:[CSSettings permissionDeniedForProvider:kCSLOCATION_PROVIDER] object:nil];
 
 }
 
@@ -339,28 +340,32 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
 
-+ (void) requestLocationUpdatesPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate {
-    NSLog(@"[CSSensePlatform] Requestion Location Update Permissions!");
++ (void) requestLocationPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate {
     locationPermissionDelegate = delegate;
-    [sensorStore requestLocationUpdatesPermission];
+    [sensorStore requestLocationPermission];
 }
 
-+ (void) locationUpdatesPermissionGranted:(NSNotification*) notification {
-    NSLog(@"[CSSensePlatform] Received permission Granted notification, calling callback function!");
++ (void) locationPermissionGranted:(NSNotification*) notification {
+    // make sure the delegate implements the selector, so we dont crash the app here.
     if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionGranted)]) {
         [locationPermissionDelegate locationPermissionGranted];
     } else {
-        NSLog(@" THATS A BAD DELEGATE!");
+
     }
 }
 
-+ (BOOL) arePermissionsMissing {
-    return [self areLocationPermissionsMissing];
++ (void) locationPermissionDenied:(NSNotification*) notification {
+    // make sure the delegate implements the selector, so we dont crash the app here.
+    if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionDenied)]) {
+        [locationPermissionDelegate locationPermissionDenied];
+    } else {
+        
+    }
 }
 
-+ (BOOL) areLocationPermissionsMissing {
++ (CLAuthorizationStatus) locationPermissionState; {
     // TODO: refactor so we don't need all this indirection
-    return [sensorStore areLocationPermissionsMissing];
+    return [sensorStore locationPermissionState];
 }
 
 @end

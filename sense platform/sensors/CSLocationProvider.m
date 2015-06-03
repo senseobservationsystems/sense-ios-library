@@ -167,22 +167,25 @@
     switch (status) {
         case kCLAuthorizationStatusAuthorizedAlways:
             statusString = @"authorized always";
-            [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionGrantedNotificationForProvider:kCSLOCATION_PROVIDER] object:nil];
-            break;
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            statusString = @"authorized when in use";
+            [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionGrantedForProvider:kCSLOCATION_PROVIDER] object:nil];
             break;
         case kCLAuthorizationStatusDenied:
             statusString = @"authorization denied";
+            [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionDeniedForProvider:kCSLOCATION_PROVIDER] object:nil];
             break;
         case kCLAuthorizationStatusNotDetermined:
             statusString = @"authorization undetermined";
             break;
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            statusString = @"authorized when in use";
+            break;
+
         case kCLAuthorizationStatusRestricted:
             statusString = @"authorization restricted";
             break;
     }
-    NSLog(@"New location authorization: %@", statusString);
+    // remove unnecessary NSLog statement.
+    // NSLog(@"New location authorization: %@", statusString);
 }
 
 
@@ -217,7 +220,7 @@
         locationManager.pausesLocationUpdatesAutomatically = NO;
         
         // make sure we have the correct permissions
-        [self requestPermissions];
+        [self requestPermission];
     
         //NOTE: using only significant location updates doesn't allow the phone to sense while running in the background
         [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
@@ -233,8 +236,7 @@
 	}
 }
 
-// function for requesting permissions required by the locationProvider
-- (void) requestPermissions {
+- (void) requestPermission {
     // check to make sure we dont do this on iOS < 8
     if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         // check if we haven't already asked permissions
@@ -245,13 +247,8 @@
     }
 }
 
-- (BOOL) isPermissionMissing {
-    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-        return [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways;
-    } else {
-        // on iOS < 8, return NO to pretend everything is ok
-        return NO;
-    }
+- (CLAuthorizationStatus) permissionState {
+    return [CLLocationManager authorizationStatus];
 }
 
 // provided for backwards compatibility

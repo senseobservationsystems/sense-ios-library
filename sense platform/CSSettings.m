@@ -204,12 +204,12 @@ static CSSettings* sharedSettingsInstance = nil;
 	return [NSString stringWithFormat:@"%@CSSettingChangedNotificationType", type];
 }
 
-+ (NSString*) permissionRequestNotificationForProvider: (NSString*) provider {
-    return [NSString stringWithFormat:@"%@CSPermissionRequestNotification", provider];
++ (NSString*) permissionGrantedForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionGrantedNotification", provider];
 }
 
-+ (NSString*) permissionGrantedNotificationForProvider: (NSString*) provider {
-    return [NSString stringWithFormat:@"%@CSPermissionGrantedNotification", provider];
++ (NSString*) permissionDeniedForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionDeniedNotification", provider];
 }
 
 - (BOOL) isSensorEnabled:(NSString*) sensor {
