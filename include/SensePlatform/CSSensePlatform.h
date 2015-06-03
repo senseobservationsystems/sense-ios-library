@@ -254,6 +254,7 @@ These limitations are treated in a first in first out way. Hence, older data is 
  
  Ask the CSSensePlatform to request location permissions from the user. This will ask the user for kCLAuthorizationStatusAuthorizedAlways permissions, meaning the app can always obtain location updates.
  The function will present the location permission dialog to the user, asynchronously. After the user responds to this dialog by either granting or denying the permissions, the corresponding callback on the provided delegate will be called. Make sure the delegate implements the protocol!
+ The reason we need a delegate object that implements predefined callback functions is that the permission request dialog is presented asynchronously to the user. That means that we would lose any callback context provided to this function. Using an object implementing a protocol, we can temporarily store a reference to the object and callback later when the user granted or denied the permissions.
  IMPORTANT: This function will do nothing on iOS < 8.
  IMPORTANT: If the user denies permission, the app will not run in the background until the user explicitly grants permission to the app in the iOS settings screen.
  
