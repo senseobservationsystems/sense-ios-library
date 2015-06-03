@@ -320,8 +320,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         [self setSyncRate:syncRate];
 	}
         
-    NSString* backgroundHackEnabled = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingBackgroundRestarthack];
-    [self setBackgroundHackEnabled:([backgroundHackEnabled isEqualToString:kCSSettingYES] && enable)];
     waitTime = 0;
     }
 }
@@ -656,5 +654,15 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							nil];
 	return device;
 }
+
+- (void) requestLocationPermission {
+    [locationProvider requestPermission];
+}
+
+- (CLAuthorizationStatus) locationPermissionState {
+    return [locationProvider permissionState];
+}
+
+
 @end
 

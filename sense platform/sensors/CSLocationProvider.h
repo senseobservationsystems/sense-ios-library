@@ -57,4 +57,17 @@
  * @param enable Setting whether to enable or disable the location monitoring for running in the background
  */
 - (void) setBackgroundRunningEnable:(BOOL) enable;
+
+/** 
+ This function return the current authorization state for location updates.
+
+ @return CLAuthorizationStatus current authorization status of the CLLocationManager
+ */
+- (CLAuthorizationStatus) permissionState;
+
+/**
+ Function to make the LocationProvider obtain permission. Once the user either grants or denies permissions, this will generate a notification of that event.
+ */
+- (void) requestPermission;
+
 @end

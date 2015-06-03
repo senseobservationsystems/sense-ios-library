@@ -94,6 +94,12 @@ NSString* const kCSActivitySettingPrivacyFriendsOfFriends = @"friends of friends
 NSString* const kCSActivitySettingPrivacyActivitiesCommunity = @"activities community";
 NSString* const kCSActivitySettingPrivacyPublic = @"public";
 
+// provider identifiers
+NSString* const kCSLOCATION_PROVIDER = @"location_provider";
+NSString* const kCSSPATIAL_PROVIDER = @"spatial_provider";
+NSString* const kCSAMBIENCE_PROVIDER = @"ambience_provider";
+NSString* const kCSEnableLocationProvider = @"location_provider_on";
+
 @implementation CSSetting
 @synthesize name;
 @synthesize value;
@@ -196,6 +202,14 @@ static CSSettings* sharedSettingsInstance = nil;
 
 + (NSString*) settingChangedNotificationNameForType:(NSString*) type {
 	return [NSString stringWithFormat:@"%@CSSettingChangedNotificationType", type];
+}
+
++ (NSString*) permissionGrantedForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionGrantedNotification", provider];
+}
+
++ (NSString*) permissionDeniedForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionDeniedNotification", provider];
 }
 
 - (BOOL) isSensorEnabled:(NSString*) sensor {

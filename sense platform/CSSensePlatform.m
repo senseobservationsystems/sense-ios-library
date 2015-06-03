@@ -30,9 +30,10 @@ NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
 NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 
 static CSSensorStore* sensorStore;
+__weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 @implementation CSSensePlatform {
-
+    
 }
 
 + (void) initializeWithApplicationKey: (NSString*) applicationKey {
@@ -41,8 +42,16 @@ static CSSensorStore* sensorStore;
     [self initialize];
 }
 
-+(void) initialize {
++ (void) initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self initializeOnce];
+    });
 
+}
+
++ (void) initializeOnce; {
+    
     sensorStore = [CSSensorStore sharedSensorStore];
     
     //store version information
@@ -68,6 +77,12 @@ static CSSensorStore* sensorStore;
     
     //add data point for app version
     [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
+    
+    // listen for notifications from the location provider indicating it has obtained permissions from the user
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionGranted:) name:[CSSettings permissionGrantedForProvider:kCSLOCATION_PROVIDER] object:nil];
+    // listen for notifications from the location provider indicating permission was denied by the user
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionDenied:) name:[CSSettings permissionDeniedForProvider:kCSLOCATION_PROVIDER] object:nil];
+
 }
 
 + (NSArray*) availableSensors {
@@ -324,4 +339,33 @@ static CSSensorStore* sensorStore;
 + (NSString*) getDeviceId {
     return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
+
++ (void) requestLocationPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate {
+    locationPermissionDelegate = delegate;
+    [sensorStore requestLocationPermission];
+}
+
++ (void) locationPermissionGranted:(NSNotification*) notification {
+    // make sure the delegate implements the selector, so we dont crash the app here.
+    if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionGranted)]) {
+        [locationPermissionDelegate locationPermissionGranted];
+    } else {
+
+    }
+}
+
++ (void) locationPermissionDenied:(NSNotification*) notification {
+    // make sure the delegate implements the selector, so we dont crash the app here.
+    if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionDenied)]) {
+        [locationPermissionDelegate locationPermissionDenied];
+    } else {
+        
+    }
+}
+
++ (CLAuthorizationStatus) locationPermissionState; {
+    // TODO: refactor so we don't need all this indirection
+    return [sensorStore locationPermissionState];
+}
+
 @end
