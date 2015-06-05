@@ -31,7 +31,13 @@
  - <code>kCSLocationSettingMinimumDistance</code><br> Minimum distance used before getting a location update. When not specified it updates whenever iOS deems it relevant to update, this is recommended. Specified in meters. Uses the standard iOS functionality. Not set by default.
  - <code>kCSLocationSettingCortexAutoPausing</code><br>	Setting for automatically pausing location updates for three minutes after a new datapoint has come in, this might save battery life. Values are <code>kCSSettingYes</code> or <code>kCSSettingNo</code>. Disabled by default.
 
+___Warning___
+To be able to use location sensing you need to add to your `info.plist` file the `UIBackgroundModes`:
  
+ - "App registers for location updates"
+ - and if you are using the noise sensor also add "App plays audio".
+ 
+ Note that from iOS 8 onwards you will also need to set NSLocationAlwaysUsageDescription in Info.plist because otherwise the app will not ask for permission. This is a text that is displayed in the dialog box asking the user for permission to use the location even when running in the backgroud.
  */
 @interface CSLocationProvider : NSObject <CLLocationManagerDelegate>{
 	BOOL isEnabled;

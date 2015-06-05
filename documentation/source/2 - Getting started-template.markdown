@@ -29,6 +29,8 @@ and also add to your `info.plist` file the `UIBackgroundModes`:
 * "App registers for location updates" 
 * and if you are using the noise sensor also add "App plays audio".
 
+Note that from iOS 8 onwards you will also need to set NSLocationAlwaysUsageDescription in Info.plist because otherwise the app will not ask for permission. This is a text that is displayed in the dialog box asking the user for permission to use the location even when running in the backgroud. 
+
 ## Using the library
 Below you will find some examples for using the library for common tasks.
 
