@@ -18,6 +18,17 @@
 			name = GenVersion;
 			productName = GenVersion;
 		};
+		DC097FA61ABAD37600BDDD09 /* GenDocumentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */;
+			buildPhases = (
+				DC097FAA1ABAD3C100BDDD09 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = GenDocumentation;
+			productName = GenDocumentation;
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -86,7 +97,7 @@
 		3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE515D40B180001A3EC /* CSConnectionSensor.m */; };
 		3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE715D40B180001A3EC /* CSDynamicSensor.m */; };
 		3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE915D40B180001A3EC /* CSJumpSensor.m */; };
-		3E820E2D15D40B190001A3EC /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEB15D40B180001A3EC /* CSLocationSensor.m */; };
+		3E820E2D15D40B190001A3EC /* CSLocationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEB15D40B180001A3EC /* CSLocationProvider.m */; };
 		3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */; };
 		3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF115D40B180001A3EC /* CSMotionFeaturesSensor.m */; };
 		3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF315D40B180001A3EC /* CSMovingSensor.m */; };
@@ -110,6 +121,8 @@
 		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		3EF47FBA19093D3E00104D69 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF47FB919093D3E00104D69 /* NSData+GZIP.m */; };
+		A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */; };
+		A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */; };
 		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
 		A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */; };
 		A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
@@ -260,8 +273,8 @@
 		3E820DE715D40B180001A3EC /* CSDynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDynamicSensor.m; sourceTree = "<group>"; };
 		3E820DE815D40B180001A3EC /* CSJumpSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJumpSensor.h; sourceTree = "<group>"; };
 		3E820DE915D40B180001A3EC /* CSJumpSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSJumpSensor.m; sourceTree = "<group>"; };
-		3E820DEA15D40B180001A3EC /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
-		3E820DEB15D40B180001A3EC /* CSLocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationSensor.m; sourceTree = "<group>"; };
+		3E820DEA15D40B180001A3EC /* CSLocationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationProvider.h; sourceTree = "<group>"; };
+		3E820DEB15D40B180001A3EC /* CSLocationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationProvider.m; sourceTree = "<group>"; };
 		3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionEnergySensor.h; sourceTree = "<group>"; };
 		3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMotionEnergySensor.m; sourceTree = "<group>"; };
 		3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionFeaturesSensor.h; sourceTree = "<group>"; };
@@ -307,6 +320,10 @@
 		3EF47FB919093D3E00104D69 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
+		A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationSensor.m; sourceTree = "<group>"; };
+		A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVisitsSensor.h; sourceTree = "<group>"; };
+		A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVisitsSensor.m; sourceTree = "<group>"; };
 		A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
@@ -575,8 +592,8 @@
 				3E820DE715D40B180001A3EC /* CSDynamicSensor.m */,
 				3E820DE815D40B180001A3EC /* CSJumpSensor.h */,
 				3E820DE915D40B180001A3EC /* CSJumpSensor.m */,
-				3E820DEA15D40B180001A3EC /* CSLocationSensor.h */,
-				3E820DEB15D40B180001A3EC /* CSLocationSensor.m */,
+				3E820DEA15D40B180001A3EC /* CSLocationProvider.h */,
+				3E820DEB15D40B180001A3EC /* CSLocationProvider.m */,
 				3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */,
 				3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */,
 				3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */,
@@ -589,6 +606,8 @@
 				3E820DF715D40B180001A3EC /* CSOrientationSensor.m */,
 				3E820DF815D40B180001A3EC /* CSOrientationStateSensor.h */,
 				3E820DF915D40B180001A3EC /* CSOrientationStateSensor.m */,
+				A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */,
+				A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */,
 				3E820DFA15D40B180001A3EC /* CSPreferencesSensor.h */,
 				3E820DFB15D40B180001A3EC /* CSPreferencesSensor.m */,
 				3E820DFC15D40B180001A3EC /* CSRotationSensor.h */,
@@ -604,6 +623,8 @@
 				3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */,
 				3E74DBA8193CC9AB00E471A9 /* CSStepCounterProcessorSensor.h */,
 				3E74DBA9193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m */,
+				A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */,
+				A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */,
 				3E7F33A21A13AA9100957AE2 /* CSTimeZoneSensor.h */,
 				3E7F33A31A13AA9100957AE2 /* CSTimeZoneSensor.m */,
 			);
@@ -761,6 +782,9 @@
 					A96D6EC91A5C49FF00554BBC = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
+					DC097FA61ABAD37600BDDD09 = {
+						CreatedOnToolsVersion = 6.2;
+					};
 				};
 			};
 			buildConfigurationList = 3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */;
@@ -779,6 +803,7 @@
 				3E148B90160A12000010A0D1 /* SensePlatformTestApp */,
 				3E148BA7160A12010010A0D1 /* SensePlatformTestAppTests */,
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
+				DC097FA61ABAD37600BDDD09 /* GenDocumentation */,
 				A96D6EC91A5C49FF00554BBC /* Sense Library Tests */,
 			);
 		};
@@ -842,6 +867,19 @@
 			shellPath = /bin/sh;
 			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\nPRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\nPOST=\"#endif\"\necho -e ${PRE} > ${VERSIONFILE}\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\necho ${POST} >> ${VERSIONFILE}";
 		};
+		DC097FAA1ABAD3C100BDDD09 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}\" \\\n--project-company \"SenseLabs\" \\\n--company-id \"nl.sense-os\" \\\n--output \"${PROJECT_DIR}/documentation/output\" \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--merge-categories \\\n--exit-threshold 2 \\\n--docset-platform-family iphoneos \\\n--ignore \"*.m\" \\\n--include \"${PROJECT_DIR}/documentation/source\" \\\n--ignore \"LoadableCategory.h\" \\\n--index-desc \"${PROJECT_DIR}/README.md\" \\\n\"${PROJECT_DIR}/sense platform\" \"${PROJECT_DIR}/include\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -888,7 +926,7 @@
 				3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */,
 				3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */,
 				3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */,
-				3E820E2D15D40B190001A3EC /* CSLocationSensor.m in Sources */,
+				3E820E2D15D40B190001A3EC /* CSLocationProvider.m in Sources */,
 				3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */,
 				3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */,
 				3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */,
@@ -896,6 +934,8 @@
 				3E820E3915D40B190001A3EC /* CSOrientationSensor.m in Sources */,
 				3E820E3B15D40B190001A3EC /* CSOrientationStateSensor.m in Sources */,
 				3E820E3D15D40B190001A3EC /* CSPreferencesSensor.m in Sources */,
+				A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */,
+				A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */,
 				3E820E3F15D40B190001A3EC /* CSRotationSensor.m in Sources */,
 				3E820E4015D40B190001A3EC /* CSSensor.m in Sources */,
 				3E820E4215D40B190001A3EC /* CSSpatialProvider.m in Sources */,
@@ -1251,6 +1291,20 @@
 			};
 			name = Release;
 		};
+		DC097FA71ABAD37600BDDD09 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DC097FA81ABAD37600BDDD09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1304,6 +1358,15 @@
 			buildConfigurations = (
 				A96D6ED41A5C49FF00554BBC /* Debug */,
 				A96D6ED51A5C49FF00554BBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC097FA71ABAD37600BDDD09 /* Debug */,
+				DC097FA81ABAD37600BDDD09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

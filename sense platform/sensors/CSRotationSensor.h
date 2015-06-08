@@ -17,6 +17,20 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
+/**
+ Sensor that stores rotation data. 
+ 
+ See also CMDeviceMotion.h for more information about the data is stored here.
+ 
+ ___JSON output value format___
+ 
+	 {
+		 "x-axis": FLOAT;
+		 "y-axis": FLOAT;
+		 "z-axis": FLOAT;
+	 }
+	 
+ */
 @interface CSRotationSensor : CSSensor {
 
 }

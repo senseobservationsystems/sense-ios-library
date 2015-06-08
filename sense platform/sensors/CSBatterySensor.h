@@ -17,8 +17,26 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
+/**
+ Sensor that stores the battery information. This sensor is event based, it stores a new data with each 1% change in the value. When the state is charged, it stores new data regularly.
+ 
+ ___JSON output value format___
+ 
+	 {
+		 "level": FLOAT;
+		 "status": STRING; //"Unknown", "Discharging", "Charging", "Full"
+	 }
+ 
+ */
+
 @interface CSBatterySensor : CSSensor {
+	
 }
 
+/**
+ *  Stores the battery state from a received notification
+ *
+ *  @param notification Notification object that contains the new battery information.
+ */
 - (void) commitBatteryState:(NSNotification*) notification;
 @end

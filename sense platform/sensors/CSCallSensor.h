@@ -18,7 +18,15 @@
 #import "CSSensor.h"
 #import <CoreTelephony/CTCallCenter.h>
 
-
+/**
+ Sensor that stores the call state information. This sensor is event based, it stores a new data with each call that starts or ends or comes in. Ringing state indicates the user receiving a call, whereas dialing state indicates user making a call. It does not store caller information which is not available because of privacy reasons.
+ 
+ ___JSON output value format___
+ 
+	{
+		"state": STRING; //"idle", "ringing", "dialing", "calling"
+	}
+ */
 @interface CSCallSensor : CSSensor {
 	CTCallCenter* callCenter;
 }

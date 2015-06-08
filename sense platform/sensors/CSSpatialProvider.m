@@ -114,6 +114,14 @@ static const double radianInDegrees = 180.0 / M_PI;
         [[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(jumpEnabledChanged:)
 													 name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_JUMP] object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(accelerationEnabledChanged:)
+                                                     name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_ACCELERATION_BURST] object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(accelerationEnabledChanged:)
+                                                     name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_ACCELERATION] object:nil];
 		
 		//register for setting changes
 		[[NSNotificationCenter defaultCenter] addObserver:self
@@ -145,6 +153,18 @@ static const double radianInDegrees = 180.0 / M_PI;
     }
     accelerometerSensorEnabled = enable;
 }
+
+- (void) accelerationEnabledChanged: (id) notification {
+    bool enable = [[notification object] boolValue];
+    if (enable != accelerationSensorEnabled) {
+        if (enable)
+            [self incEnable];
+        else
+            [self decEnable];
+    }
+    accelerationSensorEnabled = enable;
+}
+
 
 - (void) rotationEnabledChanged: (id) notification {
 	bool enable = [[notification object] boolValue] && (rotationSensor != nil);
@@ -222,10 +242,10 @@ void someScheduleFunction(void* context) {
 	NSCondition* __block dataCollectedCondition = [NSCondition new];
 	__block NSInteger counter = 0;
     __block int sample = 0;
+	__block bool isSampling = true;
 
     CMDeviceMotionHandler deviceMotionHandler = ^(CMDeviceMotion* deviceMotion, NSError* error) {
 		
-		//Note to the future: In rare cases accessing the deviceMotionArray has caused a EXC_BAD_ACCESS because it has already been released. This might have something to do with the motion update scheduling. For now, we just check if it is not nil before continuing.
 		if ((deviceMotion == nil) || (deviceMotionArray == nil))
             return;
         if (jumpSensorEnabled) {
@@ -243,7 +263,7 @@ void someScheduleFunction(void* context) {
         */
         counter++;
 		
-		if (sample < nrSamples) {
+		if ((sample < nrSamples) && (isSampling)) {
 			
 			//NSLog(@"Polling sample: %i, Array count: %i", sample, deviceMotionArray.count);
 			
@@ -278,6 +298,7 @@ void someScheduleFunction(void* context) {
     //[motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:operations withHandler:deviceMotionHandler];
 
 	//Start motion updates
+	isSampling = true;
 	[motionManager startDeviceMotionUpdatesToQueue:operations withHandler:deviceMotionHandler];
 
 	//Wait while enough samples have been collected or timeout has been passed that is twice the time of the number of samples
@@ -292,11 +313,13 @@ void someScheduleFunction(void* context) {
 	//Stop motion updates and unlock
 	[motionManager stopDeviceMotionUpdates];
     [dataCollectedCondition unlock];
-
+	isSampling = false;
+	[operations cancelAllOperations];
+	
 	//Check if data was collected as expected and did not timeout
     if ((sample < nrSamples) || (deviceMotionArray.count < nrSamples)) {
         NSLog(@"Error while polling the motion sensors.");
-        [motionManager stopDeviceMotionUpdates];
+		//[motionManager stopDeviceMotionUpdates];
         return;
     }
 

@@ -21,6 +21,19 @@ extern NSString* attitudeRollKey;
 extern NSString* attitudePitchKey;
 extern NSString* attitudeYawKey;
 
+/**
+ Sensor that stores orientation data. See also CMDeviceMotion.h for more information about how the orientation is calculated.
+ 
+ ___JSON output value format___
+
+	 {
+		 "roll": FLOAT;
+		 "pitch": FLOAT;
+		 "azimuth": FLOAT;
+	 }
+ 
+ */
+
 @interface CSOrientationSensor : CSSensor {
 
 }

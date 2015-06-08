@@ -18,6 +18,15 @@
 #import "CoreMotion/CoreMotion.h"
 #import "CSSensor.h"
 
+
+/** Sensor to store jump data. This is a legacy sensor that should be used carefully. */
 @interface CSJumpSensor : CSSensor
+
+ /**
+ *  New values are stored based on CMDeviceMotion and CMMotionManager objects that contain the jump data.
+ *
+ *  @param motion        Device motion object containing the jump data.
+ *  @param motionManager Motion manager object which gathered the motion.
+ */
 - (void) pushDeviceMotion: (CMDeviceMotion*) motion andManager:(CMMotionManager*) motionManager;
 @end

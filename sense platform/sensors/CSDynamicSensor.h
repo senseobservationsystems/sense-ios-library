@@ -16,14 +16,39 @@
 
 #import "CSSensor.h"
 
+
+/** Sensor that be used to create a new sensor during runtime and store data in it. */
 @interface CSDynamicSensor : CSSensor {
     NSString* sensorName;
     NSString* displayName;
     NSString* deviceType;
     NSString* dataType;
 }
+
+/** Init new sensor for this device.
+ @param name Name of the sensor
+ @param dispName Description of the sensor used to display name
+ @param devType Device type that the sensor belongs to
+ @param datType Data type of the values being stored in the sensor
+ @param fields Dictionary that stores all the fields with values as a JSON object
+ */
 - (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields;
+
+/** Init new sensor for any device.
+ @param name Name of the sensor
+ @param dispName Description of the sensor used to display name
+ @param devType Device type that the sensor belongs to
+ @param datType Data type of the values being stored in the sensor
+ @param fields Dictionary that stores all the fields with values as a JSON object
+ @param device Dictionary that describes the device.
+ */
 - (id) initWithName:(NSString*) name displayName:(NSString*) dispName deviceType:(NSString*)devType dataType:(NSString*) datType fields:(NSDictionary*) fields device:(NSDictionary*) device;
+
+/**
+ Store a value in the sensor.
+ @param value The value to be stored, will be stored as a JSON string object. Can be anything.
+ @param timestamp Seconds since 1970 timestamp that describes time the value was collected.
+ */
 - (void) commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp;
 @end
 

@@ -21,6 +21,21 @@ extern NSString* CSaccelerationXKey;
 extern NSString* CSaccelerationYKey;
 extern NSString* CSaccelerationZKey;
 
+/**
+ Sensor that stores accelerometer data coming from the accelerometer sensor in the phone.
+ 
+ See also Apple's CMDeviceMotion.h for more information.
+ 
+ ___JSON output value format___
+ 
+	 {
+		 "x-axis": FLOAT;
+		 "y-axis": FLOAT;
+		 "z-axis": FLOAT;
+	 }
+ 
+ */
+
 @interface CSAccelerometerSensor : CSSensor {
 
 }

@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 #import "CSSensor.h"
 
-
+/** This is not being used right now */
 @interface CSMovingSensor : CSSensor {
     
 }
