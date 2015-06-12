@@ -248,6 +248,15 @@ These limitations are treated in a first in first out way. Hence, older data is 
 + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
 
 
+/**
+
+ Remove all sensor data that are stored locally
+
+ Sensor data is not stored in a user spesific format. Application that only stores the data locally, ctrlRA abbvie for instance, has a problem when the user is changed, the value from previous user will be shown for the next user. Therefore, when the user is changed in the app, we need to remove all sensor data so the next user will not have the same values.
+ */
++ (void) removeLocalData;
+
+
 /** @name Permissions */
 
 /**
