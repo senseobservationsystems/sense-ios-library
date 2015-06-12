@@ -35,11 +35,13 @@
  * @param name The name of the sensor to get the data from
  * @param startDate The date and time at which to start looking for datapoints
  * @param endDate The date and time at which to stop looking for datapoints
+ * @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
+ * @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
  * @return an array of values, each value is a dictonary that descirbes the data point
  */
-- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate;
 
-
+- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
+	
 - (void) removeDataBeforeId:(long long) rowId;
 
 /**
