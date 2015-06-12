@@ -374,4 +374,8 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     return [sensorStore locationPermissionState];
 }
 
++ (void) removeLocalData {
+    [[CSSensorStore sharedSensorStore] removeLocalData];
+}
+
 @end

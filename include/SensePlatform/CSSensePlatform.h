@@ -252,6 +252,7 @@ These limitations are treated in a first in first out way. Hence, older data is 
 
 
 
+
 /** Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.
  
  Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
@@ -273,6 +274,15 @@ These limitations are treated in a first in first out way. Hence, older data is 
  */
 + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
 
+
+
+/**
+
+ Remove all sensor data that are stored locally
+
+ Sensor data is not stored in a user spesific format. Application that only stores the data locally, ctrlRA abbvie for instance, has a problem when the user is changed, the value from previous user will be shown for the next user. Therefore, when the user is changed in the app, we need to remove all sensor data so the next user will not have the same values.
+ */
++ (void) removeLocalData;
 
 
 
