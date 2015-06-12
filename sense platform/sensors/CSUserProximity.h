@@ -28,7 +28,7 @@
 
 }
 
-/**
+ /**
  *  Stores new value when state changes.
  *
  *  @param notification Notification when state changes containing information about the new state.

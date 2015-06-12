@@ -30,18 +30,28 @@ NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
 NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 
 static CSSensorStore* sensorStore;
+__weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 @implementation CSSensePlatform {
-
+    
 }
 
 + (void) initializeWithApplicationKey: (NSString*) applicationKey {
     [CSSensorStore sharedSensorStore].sender.applicationKey = applicationKey;
+    
     [self initialize];
 }
 
-+(void) initialize {
++ (void) initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self initializeOnce];
+    });
 
+}
+
++ (void) initializeOnce; {
+    
     sensorStore = [CSSensorStore sharedSensorStore];
     
     //store version information
@@ -64,12 +74,30 @@ static CSSensorStore* sensorStore;
                           [UIDevice currentDevice].systemName, @"os",
                           [UIDevice currentDevice].systemVersion, @"os_version",
                           nil];
+    
     //add data point for app version
     [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
+    
+    // listen for notifications from the location provider indicating it has obtained permissions from the user
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionGranted:) name:[CSSettings permissionGrantedForProvider:kCSLOCATION_PROVIDER] object:nil];
+    // listen for notifications from the location provider indicating permission was denied by the user
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionDenied:) name:[CSSettings permissionDeniedForProvider:kCSLOCATION_PROVIDER] object:nil];
+
 }
 
 + (NSArray*) availableSensors {
     return [CSSensorStore sharedSensorStore].sensors;
+}
+
++ (BOOL) isAvailableSensor:(NSString*) sensorID {
+    NSArray *sensors = [CSSensePlatform availableSensors];
+    for (CSSensor *sensor in sensors) {
+        if ([sensor.name isEqualToString:sensorID]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 + (void) willTerminate {
@@ -85,8 +113,14 @@ static CSSensorStore* sensorStore;
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
+    NSError* error;
+    return [[self class] loginWithUser:user andPassword:password andError:&error];
+}
+
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    BOOL succeed = [[CSSensorStore sharedSensorStore].sender login];
+    
+    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
     if (succeed) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
@@ -94,8 +128,14 @@ static CSSensorStore* sensorStore;
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
+    NSError* error;
+    return [[self class] loginWithUser:user andPasswordHash:passwordHash andError:&error];
+}
+
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
-    BOOL succeed = [sensorStore.sender login];
+    
+    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
     if (succeed) {
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
@@ -117,9 +157,19 @@ static CSSensorStore* sensorStore;
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
 }
 
-+ (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
-    return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate];
++ (BOOL) isLoggedIn {
+    return [[CSSensorStore sharedSensorStore].sender isLoggedIn];
 }
+
++ (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
+	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate andOrder: @"DESC" withLimit: 1000];
+}
+
++ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
+	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate andOrder:order withLimit: nrOfPoints];
+}
+
+
 
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
     return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
@@ -295,4 +345,33 @@ static CSSensorStore* sensorStore;
 + (NSString*) getDeviceId {
     return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }
+
++ (void) requestLocationPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate {
+    locationPermissionDelegate = delegate;
+    [sensorStore requestLocationPermission];
+}
+
++ (void) locationPermissionGranted:(NSNotification*) notification {
+    // make sure the delegate implements the selector, so we dont crash the app here.
+    if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionGranted)]) {
+        [locationPermissionDelegate locationPermissionGranted];
+    } else {
+
+    }
+}
+
++ (void) locationPermissionDenied:(NSNotification*) notification {
+    // make sure the delegate implements the selector, so we dont crash the app here.
+    if ([locationPermissionDelegate respondsToSelector:@selector(locationPermissionDenied)]) {
+        [locationPermissionDelegate locationPermissionDenied];
+    } else {
+        
+    }
+}
+
++ (CLAuthorizationStatus) locationPermissionState; {
+    // TODO: refactor so we don't need all this indirection
+    return [sensorStore locationPermissionState];
+}
+
 @end

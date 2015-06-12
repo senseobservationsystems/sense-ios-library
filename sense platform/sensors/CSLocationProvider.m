@@ -15,6 +15,7 @@
  */
 
 #import "CSLocationProvider.h"
+#import "CoreLocation/CLLocationManager.h"
 #import "CSSettings.h"
 #import "math.h"
 #import "CSDataStore.h"
@@ -40,25 +41,11 @@
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
 		
-		//default values also set in the default settings like this
-		locationUpdatesAutoPausingEnabled = FALSE;
-		autoPausingInterval = 180;
-		
-		//TODO: check if this is the best type to pick
-        locationManager.activityType = CLActivityTypeOther;
-		
-		//register for change in settings
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
-		
-		//init the sensors
-		visitsSensor = [[CSVisitsSensor alloc] init];
-		locationSensor = [[CSLocationSensor alloc] init];
-		
-		
-		//listen enable/disable notifications for visits sensor
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(visitsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+        //init the sensors
+        visitsSensor = [[CSVisitsSensor alloc] init];
+        locationSensor = [[CSLocationSensor alloc] init];
+        
+        [self initialize];
 	}
 	return self;
 }
@@ -68,25 +55,35 @@
 	if (self) {
 		locationManager = [[CLLocationManager alloc] init];
 		locationManager.delegate = self;
-		
-		//default values also set in the default settings like this
-		locationUpdatesAutoPausingEnabled = FALSE;
-		autoPausingInterval = 180;
-		
-		//TODO: check if this is the best type to pick
-		locationManager.activityType = CLActivityTypeOther;
-		
-		//register for change in settings
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
-		
-		visitsSensor = vSensor;
-		locationSensor = lSensor;
-		
-		//listen enable/disable notifications for visits sensor
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(visitsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+
+        visitsSensor = vSensor;
+        locationSensor = lSensor;
+
+        [self initialize];
 	}
 	return self;
+}
+
+- (void) initialize {
+    
+    //default values also set in the default settings like this
+    locationUpdatesAutoPausingEnabled = FALSE;
+    autoPausingInterval = 180;
+    
+    //TODO: check if this is the best type to pick
+    locationManager.activityType = CLActivityTypeOther;
+    
+    //register for change in settings
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeLocation] object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingChanged:) name:[CSSettings settingChangedNotificationNameForType:@"adaptive"] object:nil];
+    
+    
+    //listen enable/disable notifications for visits sensor
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(visitsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationsEnabledChanged:) name:[CSSettings enabledChangedNotificationNameForSensor:kCSSENSOR_VISITS] object:nil];
+    
+    // listen for enable notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setEnabledNotificationHandler:) name:kCSEnableLocationProvider object:nil];
 }
 
 // Newer delegate method
@@ -170,21 +167,25 @@
     switch (status) {
         case kCLAuthorizationStatusAuthorizedAlways:
             statusString = @"authorized always";
-            break;
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            statusString = @"authorized when in use";
+            [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionGrantedForProvider:kCSLOCATION_PROVIDER] object:nil];
             break;
         case kCLAuthorizationStatusDenied:
             statusString = @"authorization denied";
+            [[NSNotificationCenter defaultCenter] postNotificationName:[CSSettings permissionDeniedForProvider:kCSLOCATION_PROVIDER] object:nil];
             break;
         case kCLAuthorizationStatusNotDetermined:
             statusString = @"authorization undetermined";
             break;
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            statusString = @"authorized when in use";
+            break;
+
         case kCLAuthorizationStatusRestricted:
             statusString = @"authorization restricted";
             break;
     }
-    NSLog(@"New location authorization: %@", statusString);
+    // remove unnecessary NSLog statement.
+    // NSLog(@"New location authorization: %@", statusString);
 }
 
 
@@ -192,34 +193,40 @@
 	return isEnabled;
 }
 
+// enabled the location provider
 - (void) setIsEnabled:(BOOL) enable {
 	[self enableLocationUpdates:enable];
 	isEnabled = enable;
 }
 
+// notification handler for switching on the locationProvider to make the location provider run
+- (void) setEnabledNotificationHandler: (NSNotification*) notification {
+    NSLog(@"[LocationProvider] setEnabledNotificaiton received!");
+    [self setIsEnabled: YES];
+}
+
 - (void) enableLocationUpdates:(BOOL) enable {
 	
-	NSLog(@"%@ location provider", enable ? @"Enabling":@"Disabling");
+	NSLog(@"[LocationProvider] %@ location provider", enable ? @"Enabling":@"Disabling");
 	
-	if (enable) {
-		@try {
-			locationManager.desiredAccuracy = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy] intValue];
-		} @catch (NSException* e) {
-			NSLog(@"Exception setting position accuracy: %@", e);
-		}
-		
-		//set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
-		locationManager.pausesLocationUpdatesAutomatically = NO;
-
-		if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-			[locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
-		}
-		
-		//NOTE: using only significant location updates doesn't allow the phone to sense while running in the background
-		[locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
-		[locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
+	if (enable && !isEnabled) {
+       @try {
+            locationManager.desiredAccuracy = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy] intValue];
+        } @catch (NSException* e) {
+            NSLog(@"Exception setting position accuracy: %@", e);
+        }
+    
+        //set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
+        locationManager.pausesLocationUpdatesAutomatically = NO;
+        
+        // make sure we have the correct permissions
+        [self requestPermission];
+    
+        //NOTE: using only significant location updates doesn't allow the phone to sense while running in the background
+        [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
+        [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
 	}
-	else {
+	else if (!enable && isEnabled) {
 		[pauseLocationSamplingTimer invalidate];
 		[locationManager performSelectorOnMainThread:@selector(stopUpdatingLocation) withObject:nil waitUntilDone:NO];
 		[locationManager performSelectorOnMainThread:@selector(stopMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
@@ -227,6 +234,21 @@
 		//as this needs to be enabled to run in the background, rather switch to the lowest accuracy
 		//locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
 	}
+}
+
+- (void) requestPermission {
+    // check to make sure we dont do this on iOS < 8
+    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        // check if we haven't already asked permissions
+        if (!([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+            // request the permissions
+            [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
+        }
+    }
+}
+
+- (CLAuthorizationStatus) permissionState {
+    return [CLLocationManager authorizationStatus];
 }
 
 // provided for backwards compatibility

@@ -34,7 +34,7 @@
 }
 
 /**
- *  Stores the battery state from a received notification
+ *  Stores the battery state from a recevied notification
  *
  *  @param notification Notification object that contains the new battery information.
  */

@@ -15,6 +15,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 //Include all header files
 #include "CSVersion.h"
@@ -22,6 +23,7 @@
 #include "CSSensorIds.h"
 #include "CSSensorRequirements.h"
 #include "CSSettings.h"
+#include "CSLocationPermissionProtocol.h"
 
 extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;
@@ -74,37 +76,77 @@ Note that if registration fails, there is no way for the developer or end-user t
 */
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password withEmail:(NSString*) email;
 
-
-
-/** 
-Set the credentials to log in on Common Sense
-
-This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
- 
-Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
- 
-@param user Username used to identify the user (this does not necessarily have to be an email address)
-@param password	The password connected to the user account (not hashed yet)
-@return whether the login succeeded
-**/
+/**
+ *  Set the credentials to log in on Common Sense
+ *
+ * This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ * Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
+ *
+ *  @param user     Username used to identify the user (this does not necessarily have to be an email address)
+ *  @param password The password connected to the user account (not hashed yet)
+ *  @deprecated use loginWithUser:andPassword:andError instead
+ *
+ */
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password;
 
 /**
-Set the credentials to log in on Common Sense
+ *  Set the credentials to log in on Common Sense
+ *
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ *  Returns a descriptive error if the login process fails.
+ *
+ *  @param user     Username used to identify the user (this does not necessarily have to be an email address)
+ *  @param password The password connected to the user account (not hashed yet)
+ *  @param error    error
+ *
+ *  @return whether the login succeeded
+ */
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error;
 
-This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
- 
-Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
-@param user Username used to identify the user (this does not necessarily have to be an email address)
-@param password	The password connected to the user account hashed using an MD5 hash
-**/
+/**
+ *  Set the credentials to log in on Common Sense
+ *
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ *  Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).
+ *
+ *  @param user         username
+ *  @param passwordHash md5 hased password
+ *  @deprecated use loginWIthUser:andPasswordHash:andError instead
+ *
+ *  @return whether the login is succsesful or not
+ */
+
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash;
+
+/**
+ *  Set the credentials to log in on Common Sense
+ *
+ *  This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.
+ *
+ *  Returns a descriptive error if the login process fails.
+ *
+ *  @param user         username
+ *  @param passwordHash md5 hased password
+ *  @param error        error
+ *
+ *  @return whether the login is succsesful or not
+ */
++ (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error;
 
 /** Logout
 This removes credentials from the settings and stops the uploading to CommonSense.
 */
 + (void) logout;
 
+/**
+ *  return if user is loggedin
+ *
+ *  @return state whether user is logged in
+ */
++ (BOOL) isLoggedIn;
 
 /** Get the session cookie for Common Sense
 
@@ -186,6 +228,9 @@ This only looks at remote data, not at locally stored data. You can be sure that
  */
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
 
+
+
+
 /** Retrieve all the sensor data stored locally between a certain time interval.
  
 Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
@@ -201,14 +246,61 @@ These limitations are treated in a first in first out way. Hence, older data is 
 @param name The name of the sensor to get the data from
 @param startDate The date and time at which to start looking for datapoints
 @param endDate The date and time at which to stop looking for datapoints
-@return an arrat of values, each value is a dictonary that descirbes the data point
+@return an array of values, each value is a dictonary that descirbes the data point
 */
 + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
 
 
 
+/** Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.
+ 
+ Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
+ 
+ - It is kept for 30 days. Data older than 30 days is removed.
+ - A maximum of 100 mb is kept. Users are likely to remove the app if there would be more storage space used. This should normally be ample for 30 days of data.
+ - The total amount of storage is limited if the disk space of the device is smaller than what is needed by the.
+ 
+ These limitations are treated in a first in first out way. Hence, older data is removed first.
+ 
+ @warning Sensordata is not stored in a user specific format. Hence, when the user logs out or the app starts to being used by a different user on the same device, the old settings and data remains accessible to the new user.
+ 
+ @param name The name of the sensor to get the data from
+ @param startDate The date and time at which to start looking for datapoints
+ @param endDate The date and time at which to stop looking for datapoints
+ @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
+ @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
+ @return an array of values, each value is a dictonary that descirbes the data point
+ */
++ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
 
-/** @name Miscelaneous */
+
+
+
+/** @name Permissions */
+
+/**
+ 
+ Ask the CSSensePlatform to request location permissions from the user. This will ask the user for kCLAuthorizationStatusAuthorizedAlways permissions, meaning the app can always obtain location updates.
+ The function will present the location permission dialog to the user, asynchronously. After the user responds to this dialog by either granting or denying the permissions, the corresponding callback on the provided delegate will be called. Make sure the delegate implements the protocol!
+ The reason we need a delegate object that implements predefined callback functions is that the permission request dialog is presented asynchronously to the user. That means that we would lose any callback context provided to this function. Using an object implementing a protocol, we can temporarily store a reference to the object and callback later when the user granted or denied the permissions.
+ IMPORTANT: This function will do nothing on iOS < 8.
+ IMPORTANT: If the user denies permission, the app will not run in the background until the user explicitly grants permission to the app in the iOS settings screen.
+ 
+ @param delegate Object implementing the CSLocationPermissionProtocol protocol. A weak reference to this object will be stored, so don't destroy it before the callback is called. Typically this will be a ViewController object.
+ */
++ (void) requestLocationPermissionWithDelegate: (id <CSLocationPermissionProtocol>) delegate;
+
+/**
+ 
+ Request the current location permission status for the app. 
+ This function will return one of three possible values:
+    - kCLAuthorizationStatusNotDetermined: there is no permission status yet. In this case the permission should be asked from the user using requestLocationPermissionWithDelegate, or it will be done automatically once sensing is started.
+    - kCLAuthorizationStatusDenied: the user has denied location permissions. In this case the app will not be able to run in the background, and the only way to remedy this is for the user to explicitly grant permission in the iOS -> settings screen.
+    - kCLAuthorizationStatusAuthorizedAlways: the app has obtained the required permissions, no action needed.
+ */
++ (CLAuthorizationStatus) locationPermissionState;
+
+/** @name Miscellaneous */
 
 /**
  Returns a unique identifier for the device.
@@ -233,6 +325,10 @@ These limitations are treated in a first in first out way. Hence, older data is 
 
 /// Returns a list of available sensors of the device
 + (NSArray*) availableSensors;
+
+/// return true if sensor with specific id is available. list of id available on CSSensorIds.h
++ (BOOL) isAvailableSensor:(NSString*) sensorID;
+
 /// To be called upon termination of the app, allows the platform to flush it's caches to Common Sense
 + (void) willTerminate;
 /// Flush data to Common Sense
