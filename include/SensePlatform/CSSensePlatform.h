@@ -249,10 +249,9 @@ These limitations are treated in a first in first out way. Hence, older data is 
 
 
 /**
-
  Remove all sensor data that are stored locally
 
- Sensor data is not stored in a user spesific format. Application that only stores the data locally, ctrlRA abbvie for instance, has a problem when the user is changed, the value from previous user will be shown for the next user. Therefore, when the user is changed in the app, we need to remove all sensor data so the next user will not have the same values.
+ @warning This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/logout occurs). In that case, the data from previous user will be shown to the next user. 
  */
 + (void) removeLocalData;
 
