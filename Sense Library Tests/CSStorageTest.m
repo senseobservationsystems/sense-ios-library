@@ -47,8 +47,6 @@
     startDate = [NSDate date];
     sensorName = @"testSensor";
     
-    //put one datapoint in the database
-	//[storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
 }
 
 - (void)tearDown {
@@ -62,6 +60,9 @@
  */
 - (void) testGetDataFromSensor {
 
+    //put one datapoint in the database
+    [storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
+    
     NSDate* endDate = [startDate dateByAddingTimeInterval: 2.0];
     
     NSArray* result = [storage getDataFromSensor:sensorName from:startDate to:endDate andOrder:@"ASC" withLimit:1000];
