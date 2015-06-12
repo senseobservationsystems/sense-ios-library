@@ -445,9 +445,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         return NULL;
     }
 }
-
-- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
-    return [self->storage getDataFromSensor:name from:startDate to:endDate];
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
+    return [self->storage getDataFromSensor:name from:startDate to:endDate andOrder:order withLimit: nrOfPoints];
 }
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
