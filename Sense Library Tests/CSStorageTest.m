@@ -48,7 +48,7 @@
     sensorName = @"testSensor";
     
     //put one datapoint in the database
-    [storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
+	//[storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
 }
 
 - (void)tearDown {
@@ -140,6 +140,34 @@
 }
 
 /**
+ * Tests if getting latest or first datapoints limit actually works as it is supposed to.
+ */
+- (void) testLimitOnGetLocalData {
+	
+	//clear the db
+	[storage trimLocalStorageTo:0.0];
+	XCTAssert([storage getNumberOfRowsInTable:@"data"] == 0, @"Data was found in the database were no data was expected.");
+	
+	//Fill up with a 1000 points so we can test selecting the first batch and last batch
+	for( int i = 0; i < 1000; i++) {
+		NSString* value = [NSString stringWithFormat:@"%i",i];
+		[storage storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:value timestamp:[[NSDate date] timeIntervalSince1970]];
+	}
+	XCTAssert([storage getNumberOfRowsInTable:@"data"] == 1000, @"Incorrect number of rows found.");
+	
+	//Check the first 10 rows from the last hour
+	NSArray* firstRows = [storage getDataFromSensor:sensorName from:[NSDate dateWithTimeIntervalSinceNow:-3600.0] to:[NSDate date] andOrder:@"ASC" withLimit:10];
+	XCTAssert(firstRows.count == 10, @"Incorrect number of rows found.");
+	XCTAssert([[firstRows.firstObject valueForKey:@"value"] isEqualToString:@"0"], @"Expected a different value for the first object");
+	
+	//Check the last 10 rows from the last hour
+	NSArray* lastRows = [storage getDataFromSensor:sensorName from:[NSDate dateWithTimeIntervalSinceNow:-3600.0] to:[NSDate date] andOrder:@"DESC" withLimit:10];
+	XCTAssert(lastRows.count == 10, @"Incorrect number of rows found.");
+	XCTAssert([[lastRows.firstObject valueForKey:@"value"] isEqualToString:@"999"], @"Expected a different value for the first object");
+}
+
+
+/**
  * Given the database is not encrypted, enabling the encryption should preserve existing database
  */
 -(void) testChangeDatabaseEncryptionSettings {
@@ -161,7 +189,7 @@
     startDate = [NSDate date];
     sensorName = @"testSensor";
     
-    [storage2 storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
+	[storage2 storeSensor:sensorName description:@"testDescription" deviceType:@"testDeviceType" device:@"testDevice" dataType:@"testDataType" value:@"somevalue" timestamp:[startDate timeIntervalSince1970]];
     [storage2 flush];
     
     long count = [storage2 getNumberOfRowsInTable:@"data"];
