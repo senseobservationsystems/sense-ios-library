@@ -248,6 +248,14 @@ These limitations are treated in a first in first out way. Hence, older data is 
 + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
 
 
+/**
+ Remove all sensor data that are stored locally
+
+ @warning This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/logout occurs). In that case, the data from previous user will be shown to the next user. 
+ */
++ (void) removeLocalData;
+
+
 /** @name Permissions */
 
 /**

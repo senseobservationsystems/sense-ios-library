@@ -525,6 +525,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     });
 }
 
+- (void) removeLocalData {
+    [storage removeDataBeforeTime:[NSDate date]];
+}
+
 - (void) generalSettingChanged: (NSNotification*) notification {
 	if ([notification.object isKindOfClass:[CSSetting class]]) {
 		CSSetting* setting = notification.object;
