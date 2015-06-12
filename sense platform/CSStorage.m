@@ -279,14 +279,17 @@ static const char *SALT = "I3oL@YeQo8!pU3qe";
  * @param name The name of the sensor to get the data from
  * @param startDate The date and time at which to start looking for datapoints
  * @param endDate The date and time at which to stop looking for datapoints
+ * @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
+ * @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
  * @return an array of values, each value is a dictonary that descirbes the data point
  */
-- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate {
+
+- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
     
     NSMutableArray* results = [[NSMutableArray alloc] init];
     
     //make database query (SORT by timestamp) for buffer and main hd db
-    const char* query = [[NSString stringWithFormat:@"SELECT * FROM (SELECT timestamp, value FROM buf.data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f UNION SELECT timestamp, value FROM data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f) ORDER BY timestamp ASC", name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970]] UTF8String];
+    const char* query = [[NSString stringWithFormat:@"SELECT * FROM (SELECT timestamp, value FROM buf.data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f UNION SELECT timestamp, value FROM data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f) ORDER BY timestamp %@ LIMIT %i", name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], order, nrOfPoints] UTF8String];
     
     //NSLog(@"Executing query: %s", query);
     

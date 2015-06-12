@@ -64,12 +64,12 @@
 
     NSDate* endDate = [startDate dateByAddingTimeInterval: 2.0];
     
-    NSArray* result = [storage getDataFromSensor:sensorName from:startDate to:endDate];
+    NSArray* result = [storage getDataFromSensor:sensorName from:startDate to:endDate andOrder:@"ASC" withLimit:1000];
     XCTAssertGreaterThan(result.count, 0, @"No data found in sensordata store!");
     XCTAssertEqual(result.count, 1, @"Not one row found in sensordata store although only one point should have been added!");
     
     //this time we expect no data points because we use a non existing sensor name
-    result = [storage getDataFromSensor:@"nonExistingSensorName" from:startDate to:endDate];
+    result = [storage getDataFromSensor:@"nonExistingSensorName" from:startDate to:endDate andOrder:@"ASC" withLimit:1000];
     XCTAssertEqual(result.count, 0, @"Data found in sensordata store despite using non existing sensor name");
     
     //shifting the interval
@@ -77,7 +77,7 @@
     endDate = [newStartDate dateByAddingTimeInterval: 2.0];
     
     // this time we expect no datapoints because they do not fit in the correct time interval
-    result = [storage getDataFromSensor:sensorName from:newStartDate to:endDate];
+    result = [storage getDataFromSensor:sensorName from:newStartDate to:endDate andOrder:@"ASC" withLimit:1000];
     XCTAssertEqual(result.count, 0, @"Data found in sensordata store despite using incorrect time interval");
 }
 
@@ -105,7 +105,7 @@
     NSDate* endDate = [[NSDate date] dateByAddingTimeInterval: 2.0];
     
     [storage removeDataBeforeTime:endDate];
-    NSArray* result = [storage getDataFromSensor:sensorName from:startDate to:endDate];
+    NSArray* result = [storage getDataFromSensor:sensorName from:startDate to:endDate andOrder:@"ASC" withLimit:1000];
     XCTAssertEqual(result.count, 0, @"Data found in sensordata store despite deleting all data");
 }
 
