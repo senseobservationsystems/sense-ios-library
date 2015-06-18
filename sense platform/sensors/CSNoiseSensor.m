@@ -82,7 +82,13 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 												 selector:@selector(settingChanged:)
 													 name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeAmbience] object:nil];
         
-        
+		
+		//register for audio session route changes
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(configureAudioSession)
+													 name:AVAudioSessionRouteChangeNotification object:nil];
+
+		
         sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
         sampleDuration = 3; // seconds
         
@@ -105,148 +111,23 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *activationError = nil;
     NSError *categoryError = nil;
-
+	NSError *modeError = nil;
+	
     // audio session category
     NSString *appAudioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
     
     // Sets audio session category and mode=default
-    if (![session setCategory:appAudioSessionCategory withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker error:&categoryError]) {
-        NSLog(@"Audio session can't set category and mode. Error: %@", categoryError);
+    if (![session setCategory:appAudioSessionCategory withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:&categoryError]) {
+        NSLog(@"Audio session can't set category. Error: %@", categoryError);
     }
+	
+	if(![session setMode:AVAudioSessionModeMeasurement error:&modeError]) {
+		NSLog(@"Audio session can't set mode. Error: %@", modeError);
+	}
+	
     // activate session
     if (![session setActive:YES error:&activationError]) {
         NSLog(@"Audio session can't be activated. Error: %@", activationError);
-    }
-
-    
-    /* Disabled all this stuff to set the prefered audio input. It caused an occasional crash of the app, reprodocible by disabling the noise sensor.
-     */
-    //Check that AVAudioSession.availableInputs exists, if so we're running ios7 or later and we can set the audio preferences
-    if (NO && [session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
-        AVAudioSessionPortDescription *appPortInput = nil;
-        __autoreleasing NSError * theError = nil;
-        __autoreleasing NSError ** theErrorWrapper = &theError;
-        BOOL result = YES;
-        /* Availabe inputs */
-        NSArray *deviceInputs;
-        //NSArray *deviceInputs = [session availableInputs];
-        @try {
-            SEL selAvailableInputs = NSSelectorFromString(@"availableInputs");
-            NSInvocation* availableInputsInvocation = [NSInvocation invocationWithMethodSignature:[[session class] instanceMethodSignatureForSelector:selAvailableInputs]];
-            [availableInputsInvocation setSelector:selAvailableInputs];
-            [availableInputsInvocation setTarget:session];
-            [availableInputsInvocation invoke];
-            [availableInputsInvocation getReturnValue:&deviceInputs];
-        } @catch (NSException* exception) {
-            //TODO: make exception
-            NSLog(@"Exception trying to invoke ios7 method session.availableInputs: %@", exception);
-            return;
-        }
-        for (AVAudioSessionPortDescription *input in deviceInputs) {
-            // set as an input the build-in microphone
-            if ([input.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
-                appPortInput = input;
-                break;
-            }
-        }
-        
-        if (appPortInput == nil) {
-            NSLog(@"No build-in microphone found.");
-            return;
-        }
-        
-        /* Set preferred input port */
-        theError = nil;
-        //Call ios7 method
-        //result = [session setPreferredInput:appPortInput error:&theError];
-        @try {
-            SEL selSetPreferredInput = NSSelectorFromString(@"setPreferredInput:error:");
-            NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[session class] instanceMethodSignatureForSelector:selSetPreferredInput]];
-            [setPreferredInput setSelector:selSetPreferredInput];
-            [setPreferredInput setTarget:session];
-            [setPreferredInput setArgument:&appPortInput atIndex:2];
-            [setPreferredInput setArgument:&theErrorWrapper atIndex:3];
-            [setPreferredInput invoke];
-            [setPreferredInput getReturnValue:&result];
-        } @catch (NSException* exception) {
-            //TODO: make exception
-            NSLog(@"Exception trying to invoke ios7 method session.setPreferredInput:error: %@", exception);
-            return;
-        }
-        
-        if (!result)
-        {
-            // an error occurred. Handle it!
-            NSLog(@"setPreferredInput failed. Error: %@", theError);
-            return;
-        }
-        
-        // set preferred input data source
-        AVAudioSessionDataSourceDescription *bottomMic = nil;
-        
-        NSArray *dataSources; // = appPortInput.dataSources
-        @try {
-            SEL selDataSources = NSSelectorFromString(@"dataSources");
-            NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[appPortInput class] instanceMethodSignatureForSelector:selDataSources]];
-            [setPreferredInput setSelector:selDataSources];
-            [setPreferredInput setTarget:appPortInput];
-            [setPreferredInput invoke];
-            [setPreferredInput getReturnValue:&dataSources];
-        } @catch (NSException* exception) {
-            //TODO: make exception
-            NSLog(@"Exception trying to invoke ios7 method appPortInput.dataSources%@", exception);
-            return;
-        }
-        
-        
-        for (AVAudioSessionDataSourceDescription *source in dataSources) {
-            NSString* orientation; // = source.orientation
-            @try {
-                SEL selDataSources = NSSelectorFromString(@"orientation");
-                NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[source class] instanceMethodSignatureForSelector:selDataSources]];
-                [setPreferredInput setSelector:selDataSources];
-                [setPreferredInput setTarget:source];
-                [setPreferredInput invoke];
-                [setPreferredInput getReturnValue:&orientation];
-            } @catch (NSException* exception) {
-                //TODO: make exception
-                NSLog(@"Exception trying to invoke ios7 method source.orientation: %@", exception);
-                return;
-            }
-
-            //AVAudioSessionOrientationBottom, can't check whether this exists. Instead use the string...
-            NSString* myAVAudioSessionOrientationBottom = @"Bottom";
-            if ([orientation isEqualToString:myAVAudioSessionOrientationBottom]) {
-                bottomMic = source;
-                break;
-            }
-        }
-        
-        if (bottomMic) {
-            // Set a preference for the bottom data source.
-            theError = nil;
-            //result = [appPortInput setPreferredDataSource:bottomMic error:&theError];
-            @try {
-                SEL selSetPreferredInput = NSSelectorFromString(@"setPreferredDataSource:error:");
-                NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[appPortInput class] instanceMethodSignatureForSelector:selSetPreferredInput]];
-                [setPreferredInput setSelector:selSetPreferredInput];
-                [setPreferredInput setTarget:appPortInput];
-                [setPreferredInput setArgument:&bottomMic atIndex:2];
-                [setPreferredInput setArgument:&theErrorWrapper atIndex:3];
-                [setPreferredInput invoke];
-                [setPreferredInput getReturnValue:&result];
-            } @catch (NSException* exception) {
-                //TODO: make exception
-                NSLog(@"Exception trying to invoke ios7 method appPortInput.setPreferredDataSource:error: %@", exception);
-                return;
-            }
-            
-            if (!result)
-            {
-                // an error occurred. Handle it!
-                NSLog(@"setPreferredDataSource failed. Error: %@", theError);
-            }
-        }
     }
 }
 
