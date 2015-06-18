@@ -11,7 +11,7 @@
 #import "CSSensorStore.h"
 #import "CSSensorIdKey.h"
 
-static const size_t ROW_LIMIT = 500;
+static const size_t ROW_LIMIT = 1000;
 static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
 
 @implementation CSUploader {
