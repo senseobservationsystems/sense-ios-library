@@ -17,6 +17,7 @@
 #import "CSSender.h"
 #import "NSString+MD5Hash.h"
 #import "NSData+GZIP.h"
+#import "CSErrorDomain.h"
 
 static NSString* kUrlBaseURL = @"https://api.sense-os.nl";
 static NSString* kUrlBaseURLLive = @"https://api.sense-os.nl";
@@ -111,7 +112,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return didSucceed;
 }
 
-- (BOOL) login
+- (BOOL) login {
+    NSError* error;
+    return [self loginWithError:&error];
+}
+
+- (BOOL) loginWithError:(NSError **) error
 {
 	//invalidate current session
 	if (sessionCookie != nil)
@@ -129,19 +135,42 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
     NSURL* url = [NSURL URLWithString:kUrlAuthentication];
 	NSData* contents;
-	NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil];
+
+    NSError *httpError; // handle network related error
+    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil error:&httpError];
 
 	BOOL succeeded = YES;
 	//check response code
-	if ([response statusCode] != 200)
-	{
+    
+    if (contents == nil) { // could make the request (possibly network problem)
+        *error = httpError;
+        succeeded = NO;
+    } else if ([response statusCode] != 200) {
 		NSLog(@"Couldn't login.");
-		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];		
-		NSLog(@"Responded: %@", responded);
+		NSString* responseBody = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+        
+        // try to parse json
+        NSError* jsonError = nil;
+        NSDictionary* jsonData = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
+        
+        NSString* errorMsg;
+        
+        if (jsonError != nil) { // response is not json return the content
+            errorMsg = responseBody;
+        } else {
+            errorMsg = [jsonData objectForKey:@"error"];
+        }
+        
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Failure loging in", nil), @"message": errorMsg};
+
+        *error = [NSError errorWithDomain:SensePlatformErrorDomain code:[response statusCode] userInfo:userInfo];
+        
+        
 		succeeded = NO;
 	} else {
 		//interpret JSON
 		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
+        
 		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
 	}
     
@@ -470,8 +499,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     return response;
 }
 
+- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie {
+    NSError* error;
+    return [self doRequestTo:url method:method input:input output:output cookie:cookie error:&error];
+}
 
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie
+- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie error:(NSError **) error
 {
 	NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url
 															  cachePolicy:NSURLRequestReloadIgnoringCacheData
@@ -501,21 +534,21 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	
 	//connect
 	NSHTTPURLResponse* response=nil;
-	NSError* error = nil;
 	NSData* responseData;
 	
 	//Synchronous request
 	responseData = [NSURLConnection sendSynchronousRequest:urlRequest
 										 returningResponse:&response
-													 error:&error];
+													 error:error];
+    
 	//don't handle errors in the request, just log them
-	if (error != nil) {
-		NSLog(@"Error during request \'%@\': %@",	[urlRequest description] ,	error);
-		NSLog(@"Error description: \'%@\'.", [error description] );
-		NSLog(@"Error userInfo: \'%@\'.", [error userInfo] );
-		NSLog(@"Error failure reason: \'%@\'.", [error localizedFailureReason] );
-		NSLog(@"Error recovery options reason: \'%@\'.", [error localizedRecoveryOptions] );
-		NSLog(@"Error recovery suggestion: \'%@\'.", [error localizedRecoverySuggestion] );
+	if (*error != nil) {
+		NSLog(@"Error during request \'%@\': %@",	[urlRequest description] ,	*error);
+		NSLog(@"Error description: \'%@\'.", [*error description] );
+		NSLog(@"Error userInfo: \'%@\'.", [*error userInfo] );
+		NSLog(@"Error failure reason: \'%@\'.", [*error localizedFailureReason] );
+		NSLog(@"Error recovery options reason: \'%@\'.", [*error localizedRecoveryOptions] );
+		NSLog(@"Error recovery suggestion: \'%@\'.", [*error localizedRecoverySuggestion] );
 	}
 	
 	//log response

@@ -101,14 +101,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 + (CSSensorStore*) sharedSensorStore {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-		sharedSensorStoreInstance = [[super allocWithZone:NULL] init];
+		sharedSensorStoreInstance = [[[super class] alloc] init];
     });
 	return sharedSensorStoreInstance;	
-}
-
-//override to ensure singleton
-+ (id)allocWithZone:(NSZone *)zone {
-    return [self sharedSensorStore];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -325,8 +320,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         [self setSyncRate:syncRate];
 	}
         
-    NSString* backgroundHackEnabled = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingBackgroundRestarthack];
-    [self setBackgroundHackEnabled:([backgroundHackEnabled isEqualToString:kCSSettingYES] && enable)];
     waitTime = 0;
     }
 }
@@ -661,5 +654,15 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 							nil];
 	return device;
 }
+
+- (void) requestLocationPermission {
+    [locationProvider requestPermission];
+}
+
+- (CLAuthorizationStatus) locationPermissionState {
+    return [locationProvider permissionState];
+}
+
+
 @end
 

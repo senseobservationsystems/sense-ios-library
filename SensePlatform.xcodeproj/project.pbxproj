@@ -121,6 +121,7 @@
 		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		3EF47FBA19093D3E00104D69 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF47FB919093D3E00104D69 /* NSData+GZIP.m */; };
+		955999EA1B18A1DA0060B20A /* CSLocationPermissionProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */; };
 		A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */; };
 		A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */; };
 		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
@@ -183,6 +184,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				955999EA1B18A1DA0060B20A /* CSLocationPermissionProtocol.h in CopyFiles */,
 				3E743E1F1976E9E7009F571B /* CSVersion.h in CopyFiles */,
 				3E743E1E1976E9E1009F571B /* CSSensorRequirements.h in CopyFiles */,
 				3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */,
@@ -318,6 +320,7 @@
 		3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIdKey.m; sourceTree = "<group>"; };
 		3EF47FB819093D3E00104D69 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
 		3EF47FB919093D3E00104D69 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
+		955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
@@ -328,6 +331,7 @@
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
 		A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
+		DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSErrorDomain.h; sourceTree = "<group>"; };
 		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
 		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -539,22 +543,23 @@
 		3E820DBF15D40B180001A3EC /* sense platform */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
 				3E820DC115D40B180001A3EC /* communication */,
+				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
+				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
+				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
 				3E820DC815D40B180001A3EC /* CSDataStore.h */,
 				3E820DCE15D40B180001A3EC /* CSSensePlatform.m */,
 				3E820DCF15D40B180001A3EC /* CSSensorIds.m */,
-				3E820DD015D40B180001A3EC /* sensors */,
+				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
 				3E820E0315D40B180001A3EC /* CSSensorStore.h */,
 				3E820E0415D40B180001A3EC /* CSSensorStore.m */,
 				3E820E0515D40B180001A3EC /* CSSettings.m */,
-				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
 				3E513F4C18F7D7CF0008415A /* CSStorage.h */,
 				3E513F4D18F7D7CF0008415A /* CSStorage.m */,
-				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
-				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
 				3E513F5B18FC18150008415A /* CSUploader.h */,
 				3E513F5C18FC18150008415A /* CSUploader.m */,
+				DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */,
+				3E820DD015D40B180001A3EC /* sensors */,
 			);
 			path = "sense platform";
 			sourceTree = "<group>";
@@ -573,11 +578,13 @@
 		3E820DD015D40B180001A3EC /* sensors */ = {
 			isa = PBXGroup;
 			children = (
+				3E820DD715D40B180001A3EC /* ant+ */,
 				3E820DD315D40B180001A3EC /* CSAccelerationSensor.h */,
 				3E820DD415D40B180001A3EC /* CSAccelerationSensor.m */,
 				3E820DD515D40B180001A3EC /* CSAccelerometerSensor.h */,
 				3E820DD615D40B180001A3EC /* CSAccelerometerSensor.m */,
-				3E820DD715D40B180001A3EC /* ant+ */,
+				3E74DBA5193C8AF100E471A9 /* CSActivityProcessorSensor.h */,
+				3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */,
 				3E820DDE15D40B180001A3EC /* CSBatterySensor.h */,
 				3E820DDF15D40B180001A3EC /* CSBatterySensor.m */,
 				3E820DE015D40B180001A3EC /* CSCallSensor.h */,
@@ -586,14 +593,14 @@
 				3E820DE315D40B180001A3EC /* CSCompassSensor.m */,
 				3E820DE415D40B180001A3EC /* CSConnectionSensor.h */,
 				3E820DE515D40B180001A3EC /* CSConnectionSensor.m */,
-				FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */,
-				FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */,
 				3E820DE615D40B180001A3EC /* CSDynamicSensor.h */,
 				3E820DE715D40B180001A3EC /* CSDynamicSensor.m */,
 				3E820DE815D40B180001A3EC /* CSJumpSensor.h */,
 				3E820DE915D40B180001A3EC /* CSJumpSensor.m */,
 				3E820DEA15D40B180001A3EC /* CSLocationProvider.h */,
 				3E820DEB15D40B180001A3EC /* CSLocationProvider.m */,
+				A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */,
+				A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */,
 				3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */,
 				3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */,
 				3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */,
@@ -606,27 +613,25 @@
 				3E820DF715D40B180001A3EC /* CSOrientationSensor.m */,
 				3E820DF815D40B180001A3EC /* CSOrientationStateSensor.h */,
 				3E820DF915D40B180001A3EC /* CSOrientationStateSensor.m */,
-				A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */,
-				A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */,
 				3E820DFA15D40B180001A3EC /* CSPreferencesSensor.h */,
 				3E820DFB15D40B180001A3EC /* CSPreferencesSensor.m */,
 				3E820DFC15D40B180001A3EC /* CSRotationSensor.h */,
 				3E820DFD15D40B180001A3EC /* CSRotationSensor.m */,
+				FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */,
+				FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */,
 				3E820DFE15D40B180001A3EC /* CSSensor.m */,
-				3E820DFF15D40B180001A3EC /* CSSpatialProvider.h */,
-				3E820E0015D40B180001A3EC /* CSSpatialProvider.m */,
-				3E820E0115D40B180001A3EC /* CSUserProximity.h */,
-				3E820E0215D40B180001A3EC /* CSUserProximity.m */,
 				3EE091EB18FD597300A04ED4 /* CSSensorIdKey.h */,
 				3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */,
-				3E74DBA5193C8AF100E471A9 /* CSActivityProcessorSensor.h */,
-				3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */,
+				3E820DFF15D40B180001A3EC /* CSSpatialProvider.h */,
+				3E820E0015D40B180001A3EC /* CSSpatialProvider.m */,
 				3E74DBA8193CC9AB00E471A9 /* CSStepCounterProcessorSensor.h */,
 				3E74DBA9193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m */,
-				A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */,
-				A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */,
 				3E7F33A21A13AA9100957AE2 /* CSTimeZoneSensor.h */,
 				3E7F33A31A13AA9100957AE2 /* CSTimeZoneSensor.m */,
+				3E820E0115D40B180001A3EC /* CSUserProximity.h */,
+				3E820E0215D40B180001A3EC /* CSUserProximity.m */,
+				A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */,
+				A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */,
 			);
 			path = sensors;
 			sourceTree = "<group>";
@@ -662,6 +667,7 @@
 				3E9C155715D564E100F520D0 /* CSSensor.h */,
 				3E9C155815D564E100F520D0 /* CSSensorIds.h */,
 				3E9C155915D564E100F520D0 /* CSSettings.h */,
+				955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */,
 			);
 			path = SensePlatform;
 			sourceTree = "<group>";
@@ -865,7 +871,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\nPRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\nPOST=\"#endif\"\necho -e ${PRE} > ${VERSIONFILE}\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\necho ${POST} >> ${VERSIONFILE}";
+			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\n\ncat $VERSIONFILE | grep $version\n\nif [ $? -ne 0 ]; then\n    PRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\n    POST=\"#endif\"\n    echo -e ${PRE} > ${VERSIONFILE}\n    echo \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\n    echo ${POST} >> ${VERSIONFILE}\nfi";
 		};
 		DC097FAA1ABAD3C100BDDD09 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

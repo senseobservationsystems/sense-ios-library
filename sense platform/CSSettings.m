@@ -94,6 +94,12 @@ NSString* const kCSActivitySettingPrivacyFriendsOfFriends = @"friends of friends
 NSString* const kCSActivitySettingPrivacyActivitiesCommunity = @"activities community";
 NSString* const kCSActivitySettingPrivacyPublic = @"public";
 
+// provider identifiers
+NSString* const kCSLOCATION_PROVIDER = @"location_provider";
+NSString* const kCSSPATIAL_PROVIDER = @"spatial_provider";
+NSString* const kCSAMBIENCE_PROVIDER = @"ambience_provider";
+NSString* const kCSEnableLocationProvider = @"location_provider_on";
+
 @implementation CSSetting
 @synthesize name;
 @synthesize value;
@@ -110,15 +116,9 @@ static CSSettings* sharedSettingsInstance = nil;
 + (CSSettings*) sharedSettings {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-		sharedSettingsInstance = [[super allocWithZone:NULL] init];
+		sharedSettingsInstance = [[[self class] alloc] init];
     });
 	return sharedSettingsInstance;	
-}
-
-//override to ensure singleton
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return [self sharedSettings];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -163,7 +163,7 @@ static CSSettings* sharedSettingsInstance = nil;
                              kCSSettingYES, kCSGeneralSettingUploadToCommonSense,
                              kCSSettingYES, kCSGeneralSettingSenseEnabled,
                              kCSSettingNO, kCSGeneralSettingLocalStorageEncryption,
-                             kCSSettingNO, kCSGeneralSettingUseStaging,                             
+                             kCSSettingNO, kCSGeneralSettingUseStaging,
 			     nil];
     NSMutableDictionary* ambience = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                               kCSSettingNO, kCSAmbienceSettingSampleOnlyWhenScreenLocked,
@@ -202,6 +202,14 @@ static CSSettings* sharedSettingsInstance = nil;
 
 + (NSString*) settingChangedNotificationNameForType:(NSString*) type {
 	return [NSString stringWithFormat:@"%@CSSettingChangedNotificationType", type];
+}
+
++ (NSString*) permissionGrantedForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionGrantedNotification", provider];
+}
+
++ (NSString*) permissionDeniedForProvider: (NSString*) provider {
+    return [NSString stringWithFormat:@"%@CSPermissionDeniedNotification", provider];
 }
 
 - (BOOL) isSensorEnabled:(NSString*) sensor {
@@ -272,21 +280,21 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setSettingType: (NSString*) type setting:(NSString*) setting value:(NSString*) value persistent:(BOOL)persistent {   if (persistent) {
-    @synchronized(settings) {
-        //get sensor settings;
-        NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
-        NSMutableDictionary* typeSettings = [settings valueForKey:name];
-        if (typeSettings == nil) {
-            //create if it doesn't already exist
-            typeSettings = [NSMutableDictionary new];
-            [settings setObject:typeSettings forKey:name];
-        }
+        @synchronized(settings) {
+            //get sensor settings;
+            NSString* name = [NSString stringWithFormat:@"SettingsType%@", type];
+            NSMutableDictionary* typeSettings = [settings valueForKey:name];
+            if (typeSettings == nil) {
+                //create if it doesn't already exist
+                typeSettings = [NSMutableDictionary new];
+                [settings setObject:typeSettings forKey:name];
+            }
         
-        //commit setting
-        [typeSettings setObject:value forKey:setting];
+            //commit setting
+            [typeSettings setObject:value forKey:setting];
+        }
+        [self storeSettings];
     }
-    [self storeSettings];
-}
     
     //create notification object
     CSSetting* notificationObject = [[CSSetting alloc] init];

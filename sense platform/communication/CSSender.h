@@ -32,7 +32,22 @@
 - (BOOL) isLoggedIn;
 
 - (BOOL) registerUser:(NSString*) user withPassword:(NSString*) pass withEmail:(NSString*) email error:(NSString**) error;
+/**
+ *  Deprecated use loginWithError instead
+ *
+ *  @deprecated use loginWithError instead
+ *  @return whether user is logged in or not
+ */
 - (BOOL) login;
+
+/**
+ *  Loggedin user to commonsense (username & password are handeled via setUser)
+ *
+ *  @param error error
+ *
+ *  @return wheter the login is successful or not
+ */
+- (BOOL) loginWithError:(NSError **) error;
 - (BOOL) logout;
 - (NSArray*) listSensors;
 - (NSArray*) listSensorsForDevice:(NSDictionary*)device;

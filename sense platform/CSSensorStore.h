@@ -15,6 +15,8 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+
 #import "CSDataStore.h"
 #import "CSSender.h"
 #import "CSSensor.h"
@@ -65,5 +67,9 @@
 - (void) forceDataFlushAndBlock;
 - (void) generalSettingChanged: (NSNotification*) notification;
 
+// passes on the requestLocationPermission function call to the locationProvider
+- (void) requestLocationPermission;
+// passes on the locationPermissionState function to the locationProvider
+- (CLAuthorizationStatus) locationPermissionState;
 
 @end
