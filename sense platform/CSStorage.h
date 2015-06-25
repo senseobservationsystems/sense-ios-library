@@ -31,14 +31,6 @@
 
 - (NSArray*) getSensorDataPointsFromId:(long long) start limit:(size_t) limit;
 
-/** Retrieve all the sensor data stored in the database between a certain time interval.
- * @param name The name of the sensor to get the data from
- * @param startDate The date and time at which to start looking for datapoints
- * @param endDate The date and time at which to stop looking for datapoints
- * @return an array of values, each value is a dictonary that descirbes the data point
- */
-- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate;
-
 /** Retrieve all the sensor data stored in the database between a certain time interval by sensor name and device type.
  * @param sensorName The name of the sensor to get the data from
  * @param deviceType The name of the deviceType to get the data from
