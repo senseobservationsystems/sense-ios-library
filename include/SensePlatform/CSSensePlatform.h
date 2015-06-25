@@ -278,6 +278,14 @@ These limitations are treated in a first in first out way. Hence, older data is 
  */
 + (void) removeLocalData;
 
+/** Retrieve all the sensor data stored locally between a certain time interval.
+ * @param name The name of the sensor to get the data from
+ * @param deviceType The name of the device type to get the sensors and data from
+ * @param startDate The date and time at which to start looking for datapoints
+ * @param endDate The date and time at which to stop looking for datapoints
+ * @return an arrat of values, each value is a dictonary that descirbes the data point
+ */
++ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
 
 
 /** Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.
@@ -298,10 +306,9 @@ These limitations are treated in a first in first out way. Hence, older data is 
  @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
  @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
  @return an array of values, each value is a dictonary that descirbes the data point
- */
-+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
-
-
+*/
+ + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
+ 
 
 /**
  Remove all sensor data that are stored locally
