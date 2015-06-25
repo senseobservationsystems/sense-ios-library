@@ -250,6 +250,33 @@ These limitations are treated in a first in first out way. Hence, older data is 
 */
 + (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
 
+/** Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.
+ 
+ Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
+ 
+ - It is kept for 30 days. Data older than 30 days is removed.
+ - A maximum of 100 mb is kept. Users are likely to remove the app if there would be more storage space used. This should normally be ample for 30 days of data.
+ - The total amount of storage is limited if the disk space of the device is smaller than what is needed by the.
+ 
+ These limitations are treated in a first in first out way. Hence, older data is removed first.
+ 
+ @warning Sensordata is not stored in a user specific format. Hence, when the user logs out or the app starts to being used by a different user on the same device, the old settings and data remains accessible to the new user.
+ 
+ @param name The name of the sensor to get the data from
+ @param startDate The date and time at which to start looking for datapoints
+ @param endDate The date and time at which to stop looking for datapoints
+ @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
+ @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
+ @return an array of values, each value is a dictonary that descirbes the data point
+ */
++ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
+
+/**
+ Remove all sensor data that are stored locally
+
+ @warning This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/logout occurs). In that case, the data from previous user will be shown to the next user. 
+ */
++ (void) removeLocalData;
 
 
 
