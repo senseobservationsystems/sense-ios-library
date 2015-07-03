@@ -229,8 +229,6 @@ This only looks at remote data, not at locally stored data. You can be sure that
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
 
 
-
-
 /** Retrieve all the sensor data stored locally between a certain time interval.
  
 Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
@@ -277,6 +275,16 @@ These limitations are treated in a first in first out way. Hence, older data is 
  @warning This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/logout occurs). In that case, the data from previous user will be shown to the next user. 
  */
 + (void) removeLocalData;
+
+/** Retrieve all the sensor data stored locally between a certain time interval.
+ * @param name The name of the sensor to get the data from
+ * @param deviceType The name of the device type to get the sensors and data from
+ * @param startDate The date and time at which to start looking for datapoints
+ * @param endDate The date and time at which to stop looking for datapoints
+ * @return an arrat of values, each value is a dictonary that descirbes the data point
+ */
++ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
+
 
 /** @name Permissions */
 

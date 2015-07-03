@@ -122,6 +122,9 @@
 		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		3EF47FBA19093D3E00104D69 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF47FB919093D3E00104D69 /* NSData+GZIP.m */; };
 		955999EA1B18A1DA0060B20A /* CSLocationPermissionProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */; };
+		A97744691B468FE20092D5FC /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A97744681B468FE20092D5FC /* CSSensePlatformTest.m */; };
+		A977446A1B46A2C00092D5FC /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
+		A977446B1B46A2C00092D5FC /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
 		A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */; };
 		A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */; };
 		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
@@ -323,6 +326,7 @@
 		955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A97744681B468FE20092D5FC /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
 		A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
 		A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationSensor.m; sourceTree = "<group>"; };
 		A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVisitsSensor.h; sourceTree = "<group>"; };
@@ -683,6 +687,7 @@
 		A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */ = {
 			isa = PBXGroup;
 			children = (
+				A97744681B468FE20092D5FC /* CSSensePlatformTest.m */,
 				A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */,
 				A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */,
 				A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */,
@@ -962,8 +967,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A977446A1B46A2C00092D5FC /* UIDevice+Hardware.m in Sources */,
+				A977446B1B46A2C00092D5FC /* UIDevice+IdentifierAddition.m in Sources */,
 				A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */,
 				A9FA46321A893EBB00D3D0E4 /* CSSpatialProviderTest.m in Sources */,
+				A97744691B468FE20092D5FC /* CSSensePlatformTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1264,8 +1272,14 @@
 				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = mh_bundle;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1292,7 +1306,13 @@
 				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = mh_bundle;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
