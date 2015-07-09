@@ -162,8 +162,18 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 }
 
 + (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
-    return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate];
+	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate andOrder: @"DESC" withLimit: 1000];
 }
+
+
++ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
+	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate andOrder:order withLimit: nrOfPoints];
+}
+
++ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate {
+	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name andDeviceType: deviceType from: startDate to: endDate];
+}
+
 
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
     return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
@@ -366,6 +376,10 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 + (CLAuthorizationStatus) locationPermissionState; {
     // TODO: refactor so we don't need all this indirection
     return [sensorStore locationPermissionState];
+}
+
++ (void) removeLocalData {
+    [[CSSensorStore sharedSensorStore] removeLocalData];
 }
 
 @end

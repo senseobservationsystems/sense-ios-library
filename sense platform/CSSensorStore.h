@@ -51,9 +51,27 @@
  * @param name The name of the sensor as an NSString
  * @param startDate The date and time of the first datapoint to look for (inclusive)
  * @param endDate The data and time of the last datapoint to look for (exclusive)
+ * @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
+ * @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
  * @result An array with dictionaries of time-value pairs
  */
-- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate;
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
+
+
+// remove all sensor data that are stored locally
+- (void) removeLocalData;
+
+/**
+ * Retrieve data from a sensor and device type combination that is stored locally between a certain time interval
+ * @param sensorName The name of the sensor as an NSString
+ * @param deviceType The name of the device type as an NSString
+ * @param startDate The date and time of the first datapoint to look for (inclusive)
+ * @param endDate The data and time of the last datapoint to look for (exclusive)
+ * @result An array with dictionaries of time-value pairs
+ */
+- (NSArray*) getLocalDataForSensor:(NSString *)sensorName andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
+
+
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
 
