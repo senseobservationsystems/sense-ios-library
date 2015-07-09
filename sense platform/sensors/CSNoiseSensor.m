@@ -81,13 +81,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(settingChanged:)
 													 name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeAmbience] object:nil];
-        
-		
-		//register for audio session route changes
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(configureAudioSession)
-													 name:AVAudioSessionRouteChangeNotification object:nil];
-
 		
         sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
         sampleDuration = 3; // seconds
@@ -108,27 +101,22 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
  */
 - (void) configureAudioSession
 {
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSError *activationError = nil;
-    NSError *categoryError = nil;
-	NSError *modeError = nil;
+	AVAudioSession *session = [AVAudioSession sharedInstance];
+	NSError *activationError = nil;
+	NSError *categoryError = nil;
 	
-    // audio session category
-    NSString *appAudioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
-    
-    // Sets audio session category and mode=default
-    if (![session setCategory:appAudioSessionCategory withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth error:&categoryError]) {
-        NSLog(@"Audio session can't set category. Error: %@", categoryError);
-    }
+	// audio session category
+	NSString *appAudioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
 	
-	if(![session setMode:AVAudioSessionModeMeasurement error:&modeError]) {
-		NSLog(@"Audio session can't set mode. Error: %@", modeError);
+	// Sets audio session category and mode=default
+	if (![session setCategory:appAudioSessionCategory withOptions: AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionDefaultToSpeaker error:&categoryError]) {
+		NSLog(@"Audio session can't set category. Error: %@", categoryError);
 	}
 	
-    // activate session
-    if (![session setActive:YES error:&activationError]) {
-        NSLog(@"Audio session can't be activated. Error: %@", activationError);
-    }
+	// activate session
+	if (![session setActive:YES error:&activationError]) {
+		NSLog(@"Audio session can't be activated. Error: %@", activationError);
+	}
 }
 
 /** Initalize and configure the audio recorder
@@ -172,7 +160,8 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 - (void) startRecording {
     
     BOOL started = NO;
-    
+	[self configureAudioSession];
+	
     // sample continuously, independant of the state of the screen
     if (sampleOnlyWhenScreenLocked == NO) {
         NSLog(@"start recording audio");
