@@ -149,7 +149,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                             //[CSJumpSensor class],
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
-                            [CSActivityProcessorSensor class],
+							//[CSActivityProcessorSensor class],
                             [CSTimeZoneSensor class],
                             //[CSStepCounterProcessorSensor class],
 							nil];
