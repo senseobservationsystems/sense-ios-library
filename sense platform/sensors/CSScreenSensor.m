@@ -16,8 +16,13 @@ static NSString* screenKey = @"screen";
 /* refToSelf, displayCompleteFlag, enableFlag need to be global since we use them in the callback function.  NOTE: only works for one instance of CSScreenSensor! */
 // Pointer to it's self to use in the call back function.
 static id refToSelf;
-// flag for seperation of lock/unlock events
-static BOOL displayCompleteFlag;
+
+
+// Indicates timestamp in seconds when the last lock complete event was received
+double timeLockCompleteEvent;
+
+// Timer to wait for a lockcomplete event
+NSTimer *waitForLockCompleteEvent;
 
 @implementation CSScreenSensor {
 
@@ -50,7 +55,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 	self = [super init];
 	if (self) {
         refToSelf = self;
-        displayCompleteFlag = NO;
+		timeLockCompleteEvent = 0.0;
 	}
 	return self;
 }
@@ -98,6 +103,13 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
                                         CFSTR("com.apple.springboard.lockstate"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
+		
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+										(__bridge const void *)(self), // observer
+										displayStatusChanged, // callback
+										CFSTR("com.apple.springboard.hasBlankedScreen"), // event name
+										NULL, // object
+										CFNotificationSuspensionBehaviorDeliverImmediately);
 
         //as this one is only committed when it changes, commit current value
         // if app is in the foreground send that screen is on
@@ -116,29 +128,39 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 	self.isEnabled = NO;
 }
 
+
+// Whenever no lockcomplete event was received, we assume the screen has been turned on
+- (void) lockcompleteNotReceived {
+	[refToSelf commitDisplayState:YES];
+}
+
 @end
 
-//call back for darwin notifications
+
+//Call back for darwin notifications. If there is a lockcomplete event the screen has been turned off. If there is a hasBlankedScreen event and no lockcomplete event 300 ms before or after, we assume the screen has turned on.
 static void displayStatusChanged(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
 {
-    // the "com.apple.springboard.lockcomplete" notification will always come after the "com.apple.springboard.lockstate" notification
-    CFStringRef nameCFString = (CFStringRef)name;
-    NSString *lockState = (__bridge NSString*)nameCFString;
-    BOOL display = NO;
-    
-    if([lockState isEqualToString:@"com.apple.springboard.lockcomplete"] && displayCompleteFlag == NO)
+    NSString *eventIdentifier = (__bridge NSString*)(CFStringRef)name;
+	
+    if([eventIdentifier isEqualToString:@"com.apple.springboard.lockcomplete"])
     {
-        displayCompleteFlag = YES;
-        [refToSelf commitDisplayState:display];
-        display = NO;
+		//set display to off
+		[refToSelf commitDisplayState:NO];
+		
+		//stop any timer that might be running
+		if(waitForLockCompleteEvent) {
+			[waitForLockCompleteEvent invalidate];
+			waitForLockCompleteEvent = nil;
+		}
+		
+		//update timeLockCompleteEvent
+		timeLockCompleteEvent = [[NSDate date] timeIntervalSince1970];
     }
-    else if ([lockState isEqualToString:@"com.apple.springboard.lockstate"] && displayCompleteFlag == YES)
-    {
-        displayCompleteFlag = NO;
-    }
-    else if ([lockState isEqualToString:@"com.apple.springboard.lockstate"] && displayCompleteFlag == NO) {
-        displayCompleteFlag = NO;
-        display = YES;
-        [refToSelf commitDisplayState:display];
-    }
+	else if ([eventIdentifier isEqualToString:@"com.apple.springboard.lockstate"]) {
+		
+		//start a timer to check for incoming lockcomplete events
+		if([[NSDate date] timeIntervalSince1970] - timeLockCompleteEvent > 0.300) {
+			waitForLockCompleteEvent = [NSTimer scheduledTimerWithTimeInterval:0.300 target:refToSelf selector:@selector(lockcompleteNotReceived) userInfo:nil repeats:NO];
+		}
+	}
 }
