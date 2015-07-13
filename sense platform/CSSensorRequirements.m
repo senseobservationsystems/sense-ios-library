@@ -16,6 +16,7 @@ NSString* const kCSREQUIREMENT_FIELD_REASON = @"reason";
 NSString* const kCSREQUIREMENT_FIELD_SAMPLE_INTERVAL = @"sample_interval";
 NSString* const kCSREQUIREMENT_FIELD_SAMPLE_ACCURACY = @"sample_accuracy";
 NSString* const kCSREQUIREMENT_FIELD_AT_TIME = @"at_time";
+NSString* const kCSREQUIREMENT_FIELD_META_DATA = @"meta_data";
 
 @implementation CSSensorRequirements {
     /* Datastructure: requirementsPerConsumer is an dictionary indexed by consumer. The value is an array of requirements. A requirement is a dictionary.
