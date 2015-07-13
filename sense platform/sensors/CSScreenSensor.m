@@ -103,13 +103,6 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
                                         CFSTR("com.apple.springboard.lockstate"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
-		
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
-										(__bridge const void *)(self), // observer
-										displayStatusChanged, // callback
-										CFSTR("com.apple.springboard.hasBlankedScreen"), // event name
-										NULL, // object
-										CFNotificationSuspensionBehaviorDeliverImmediately);
 
         //as this one is only committed when it changes, commit current value
         // if app is in the foreground send that screen is on
