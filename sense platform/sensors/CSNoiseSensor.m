@@ -98,6 +98,8 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 
 /** Configure the audio session of the app
  *
+ * Setting the session mode to the Measurement setting blocks the use of the external speaker of the phone ^JJ 13-07-2015, iOS 8.4
+ * Running this function causes a (very) short pause in music playback, hence it should not be done too often ^JJ 13-07-2015, iOS 8.4
  */
 - (void) configureAudioSession
 {
@@ -160,7 +162,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 - (void) startRecording {
     
     BOOL started = NO;
-	[self configureAudioSession];
 	
     // sample continuously, independant of the state of the screen
     if (sampleOnlyWhenScreenLocked == NO) {
