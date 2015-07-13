@@ -33,6 +33,7 @@
 
 /* Begin PBXBuildFile section */
 		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
+		2763EF011B50246D007AED5B /* CSGeofenceSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2763EF001B50246D007AED5B /* CSGeofenceSensor.m */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		3E148B96160A12010010A0D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B95160A12010010A0D1 /* CoreGraphics.framework */; };
@@ -206,6 +207,8 @@
 		0E801F921A7AA90C00A3F9CC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
 		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
+		2763EEFF1B50246D007AED5B /* CSGeofenceSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSGeofenceSensor.h; sourceTree = "<group>"; };
+		2763EF001B50246D007AED5B /* CSGeofenceSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSGeofenceSensor.m; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7A160A11280010A0D1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -593,6 +596,8 @@
 				3E820DE315D40B180001A3EC /* CSCompassSensor.m */,
 				3E820DE415D40B180001A3EC /* CSConnectionSensor.h */,
 				3E820DE515D40B180001A3EC /* CSConnectionSensor.m */,
+				2763EEFF1B50246D007AED5B /* CSGeofenceSensor.h */,
+				2763EF001B50246D007AED5B /* CSGeofenceSensor.m */,
 				3E820DE615D40B180001A3EC /* CSDynamicSensor.h */,
 				3E820DE715D40B180001A3EC /* CSDynamicSensor.m */,
 				3E820DE815D40B180001A3EC /* CSJumpSensor.h */,
@@ -933,6 +938,7 @@
 				3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */,
 				3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */,
 				3E820E2D15D40B190001A3EC /* CSLocationProvider.m in Sources */,
+				2763EF011B50246D007AED5B /* CSGeofenceSensor.m in Sources */,
 				3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */,
 				3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */,
 				3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */,

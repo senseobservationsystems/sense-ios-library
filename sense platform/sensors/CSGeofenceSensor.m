@@ -15,12 +15,9 @@
 
 static NSString* outOfRangeKey = @"out of range";
 
-NSString* sensorNameSuffix; // e.g. "_AGORAPHOBIA"
+NSString* sensorNameSuffix = @""; // e.g. "_AGORAPHOBIA"
 
 NSMutableArray* activeRegions; //stores currently active regions (as CLRegions wit lat/lon, radius and name, e.g. [5.210230, 12.423857, 100.0, AGORAPHOBIA])
-
-
-
 
 - (NSString*) name {
     return [kCSSENSOR_GEOFENCE stringByAppendingString:sensorNameSuffix];
