@@ -27,6 +27,7 @@
 #import "CSDataStore.h"
 #import "Formatting.h"
 #import "CSSensePlatform.h"
+#import "CSScreenSensor.h"
 
 static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 
@@ -47,8 +48,9 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     NSURL* recording;
     int numberOfPackets;
     BOOL interruptedOnRecording;
-    BOOL sampleOnlyWhenScreenLocked;
-    BOOL screenIsOn;
+	BOOL sampleOnlyWhenScreenLocked;		//Indicates whether to take into account screen state when sampling. When turned ON it will sample only when the screen state is locked.
+	BOOL screenstateBlocksRecording;		//Indicates whether the screen state is currently blocking the recording (because it is unlocked)
+	BOOL nextRecordingCancelled;				//Indicates whether the next recording is cancelled
     
     NSArray* requirements;
 }
@@ -82,16 +84,14 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 												 selector:@selector(settingChanged:)
 													 name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeAmbience] object:nil];
 		
-        sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
-        sampleDuration = 3; // seconds
-        
-        recordQueue = dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
-
-        numberOfPackets = 0;
-        screenIsOn = YES;
-        sampleOnlyWhenScreenLocked = YES;
-        
-        self->requirements = @[@{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_SCREEN_STATE}];
+        sampleInterval				= [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
+        sampleDuration				= 3; // seconds
+        recordQueue					= dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
+        numberOfPackets				= 0;
+        screenstateBlocksRecording	= YES;
+        sampleOnlyWhenScreenLocked	= YES;
+		nextRecordingCancelled		= NO;
+        self->requirements			= @[@{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_SCREEN_STATE}];
 	}
 	return self;
 }
@@ -154,7 +154,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
         @autoreleasepool {
-        [self startRecording];
+			[self startRecording];
         }
     });
 }
@@ -163,22 +163,20 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     
     BOOL started = NO;
 	
-    // sample continuously, independant of the state of the screen
-    if (sampleOnlyWhenScreenLocked == NO) {
-        NSLog(@"start recording audio");
+	//Skip this recording if it was canceled
+	if (nextRecordingCancelled) {
+		nextRecordingCancelled = NO;
+		[self scheduleRecording];
+		return;
+	}
+	
+    // sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
+    if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
         started = [audioRecorder recordForDuration:sampleDuration];
     }
-    // sample only when the screen is locked
-    else {
-        if (screenIsOn == NO) {
-            NSLog(@"start recording audio");
-            started = [audioRecorder recordForDuration:sampleDuration];
-        }
-    }
-    
-	//NSLog(@"recorder %@", started? @"started":@"failed to start");
-	if (NO == started || audioRecorder.isRecording == NO) {
-		//try again later
+	
+	//Schedule a new recording if this one was not started
+	if (started == NO || audioRecorder.isRecording == NO) {
 		[self scheduleRecording];
 		return;
 	}
@@ -369,23 +367,31 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     [NSThread sleepForTimeInterval: 0.1];
 }
 
+/** 
+ When receiving new screen state data, we do the following:
+  - When the screen gets locked we allow new recordings by setting screenstateBlocksRecording to NO
+  - When the screen gets unlocked we stop any running recordings and blocks future recordings by setting screenstateBlocksRecording to YES
+  - When the screen gets an on/off switch event (and we don't know if it is on or off) we take a conservative approach and stop any recording, and cancel the next recording as well (because there is some delay in lock and unlock detections).
+ */
 - (void) onNewData:(NSNotification*)notification {
-    NSString* sensor = notification.object;
-    if ([sensor isEqualToString:kCSSENSOR_SCREEN_STATE]) {
-        // if receive dispaly event and the sampleonly flag is no do nothing otherwise call schedule but
-        // if you record stop
-        NSString* json = [notification.userInfo valueForKey:@"value"];
-        NSString *screenState = [json valueForKey:@"screen"];
-        
-        // keep track of the state of the screen
-        if ([screenState isEqualToString:@"off"])
-            screenIsOn = NO;
-        else {
-            screenIsOn = YES;
+    if ([notification.object isEqualToString:kCSSENSOR_SCREEN_STATE]) {
+           NSString *screenState = [[notification.userInfo valueForKey:@"value"] valueForKey:@"screen"];
+
+        if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED])
+            screenstateBlocksRecording = NO;
+        else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_UNLOCKED]){
+            screenstateBlocksRecording = YES;
             if ([audioRecorder isRecording] == YES) {
                 [audioRecorder stop];
             }
-        }
+		} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH]) {
+			if ([audioRecorder isRecording] == YES) {
+				[audioRecorder stop];
+			}
+			nextRecordingCancelled = YES; //Cancel the next recording
+		} else {
+			NSLog(@"Unknown screen state value: %@", screenState);
+		}
     }
 }
 
