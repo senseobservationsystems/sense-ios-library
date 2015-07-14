@@ -170,10 +170,12 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 		return;
 	}
 	
-    // sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
-    if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
-        started = [audioRecorder recordForDuration:sampleDuration];
-    }
+	@synchronized(self) {
+		// sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
+		if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
+			started = [audioRecorder recordForDuration:sampleDuration];
+		}
+	}
 	
 	//Schedule a new recording if this one was not started
 	if (started == NO || audioRecorder.isRecording == NO) {
@@ -374,23 +376,25 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
  */
 - (void) onNewData:(NSNotification*)notification {
     if ([notification.object isEqualToString:kCSSENSOR_SCREEN_STATE]) {
-           NSString *screenState = [[notification.userInfo valueForKey:@"value"] valueForKey:@"screen"];
+		NSString *screenState = [[notification.userInfo valueForKey:@"value"] valueForKey:@"screen"];
 
-		if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED]) {
-            screenstateBlocksRecording = NO;
-			nextRecordingCancelled = NO;
-		} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_UNLOCKED]){
-            screenstateBlocksRecording = YES;
-            if ([audioRecorder isRecording] == YES) {
-                [audioRecorder stop];
-            }
-		} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH]) {
-			if ([audioRecorder isRecording] == YES) {
-				[audioRecorder stop];
+		@synchronized(self) {
+			if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED]) {
+				screenstateBlocksRecording = NO;
+				nextRecordingCancelled = NO;
+			} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_UNLOCKED]){
+				screenstateBlocksRecording = YES;
+				if ([audioRecorder isRecording] == YES) {
+					[audioRecorder stop];
+				}
+			} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH]) {
+				if ([audioRecorder isRecording] == YES) {
+					[audioRecorder stop];
+				}
+				nextRecordingCancelled = YES; //Cancel the next recording
+			} else {
+				NSLog(@"Unknown screen state value: %@", screenState);
 			}
-			nextRecordingCancelled = YES; //Cancel the next recording
-		} else {
-			NSLog(@"Unknown screen state value: %@", screenState);
 		}
     }
 }
