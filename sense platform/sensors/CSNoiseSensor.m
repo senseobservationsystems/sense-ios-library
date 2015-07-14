@@ -222,10 +222,9 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     if (didSucceed ==TRUE) {
         // calculate the audio recording volume in dBs
         [self computeAudioVolume];
-        NSLog(@"recorder finished succesfully");
     }
     else {
-        NSLog(@"recorder finished unsuccesfully");
+        NSLog(@"Audio recording finished unsuccesfully");
     }
 
 	if (isEnabled) {
@@ -377,9 +376,10 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     if ([notification.object isEqualToString:kCSSENSOR_SCREEN_STATE]) {
            NSString *screenState = [[notification.userInfo valueForKey:@"value"] valueForKey:@"screen"];
 
-        if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED])
+		if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED]) {
             screenstateBlocksRecording = NO;
-        else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_UNLOCKED]){
+			nextRecordingCancelled = NO;
+		} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_UNLOCKED]){
             screenstateBlocksRecording = YES;
             if ([audioRecorder isRecording] == YES) {
                 [audioRecorder stop];
