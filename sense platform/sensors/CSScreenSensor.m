@@ -24,6 +24,10 @@ double timeLockCompleteEvent;
 // Timer to wait for a lockcomplete event
 NSTimer *waitForLockCompleteEvent;
 
+const NSString *kVALUE_IDENTIFIER_SCREEN_LOCKED = @"locked";
+const NSString *kVALUE_IDENTIFIER_SCREEN_UNLOCKED = @"unlocked";
+const NSString *kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH = @"screenOnOffSwitch";
+
 @implementation CSScreenSensor {
 
 }
@@ -60,22 +64,20 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 	return self;
 }
 
+- (void) commitDisplayState:(const NSString *) state {
+	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
+	
+	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									state, screenKey,
+									nil];
+	
+	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+										newItem, @"value",
+										timestamp,@"date",
+										nil];
+	
+	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
 
-- (void) commitDisplayState:(BOOL) isScreenTurnedOn {
-    NSString* value = isScreenTurnedOn ? @"on" : @"off";
-    
-    NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-    
-    NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                    value, screenKey,
-                                    nil];
-    
-    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        newItem, @"value",
-                                        timestamp,@"date",
-                                        nil];
-    
-    [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
 }
 
 - (BOOL) isEnabled {return isEnabled;}
@@ -96,7 +98,12 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
                                         CFSTR("com.apple.springboard.lockcomplete"), // event name
                                         NULL, // object
                                         CFNotificationSuspensionBehaviorDeliverImmediately);
-        
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+										(__bridge const void *)(self), // observer
+										displayStatusChanged, // callback
+										CFSTR("com.apple.springboard.hasBlankedScreen"), // event name
+										NULL, // object
+										CFNotificationSuspensionBehaviorDeliverImmediately);
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
                                         (__bridge const void *)(self), // observer
                                         displayStatusChanged, // callback
@@ -107,7 +114,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
         //as this one is only committed when it changes, commit current value
         // if app is in the foreground send that screen is on
         if (appState == UIApplicationStateActive) {
-            [self commitDisplayState:TRUE];
+            [self commitDisplayState:kVALUE_IDENTIFIER_SCREEN_UNLOCKED];
         }
     } else if (enable == NO && isEnabled == YES){
         // unregister from the darwin notifications
@@ -122,9 +129,9 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 }
 
 
-// Whenever no lockcomplete event was received, we assume the screen has been turned on
+// Whenever no lockcomplete event was received, we assume the screen has been unlocked
 - (void) lockcompleteNotReceived {
-	[refToSelf commitDisplayState:YES];
+	[self commitDisplayState:kVALUE_IDENTIFIER_SCREEN_UNLOCKED];
 }
 
 @end
@@ -138,7 +145,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
     if([eventIdentifier isEqualToString:@"com.apple.springboard.lockcomplete"])
     {
 		//set display to off
-		[refToSelf commitDisplayState:NO];
+		[refToSelf commitDisplayState:kVALUE_IDENTIFIER_SCREEN_LOCKED];
 		
 		//stop any timer that might be running
 		if(waitForLockCompleteEvent) {
@@ -155,5 +162,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 		if([[NSDate date] timeIntervalSince1970] - timeLockCompleteEvent > 0.300) {
 			waitForLockCompleteEvent = [NSTimer scheduledTimerWithTimeInterval:0.300 target:refToSelf selector:@selector(lockcompleteNotReceived) userInfo:nil repeats:NO];
 		}
+	} else if ([eventIdentifier isEqualToString:@"com.apple.springboard.hasBlankedScreen"]) {
+		[refToSelf commitDisplayState:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH];
 	}
 }
