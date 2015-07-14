@@ -8,6 +8,10 @@
 
 #import "CSSensor.h"
 
+extern NSString* const kVALUE_IDENTIFIER_SCREEN_LOCKED;
+extern NSString* const kVALUE_IDENTIFIER_SCREEN_UNLOCKED;
+extern NSString* const kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH;
+
 /**
  Sensor storing screen activity data. Currently stores whether the is turned on or turned off. This sensor is event based and only stores data upon changes.
  
@@ -21,8 +25,8 @@
 @interface CSScreenSensor : CSSensor
 
 /** Stores state of the screen.
- @param isScreenTurnedOn Boolean describing if screen is on/off.
+ @param state Describing state of the screen according to the identifiers specified above. 
  */
-- (void) commitDisplayState:(BOOL) isScreenTurnedOn;
+- (void) commitDisplayState:(const NSString *) state;
 
 @end
