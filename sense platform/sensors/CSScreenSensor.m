@@ -24,9 +24,9 @@ double timeLockCompleteEvent;
 // Timer to wait for a lockcomplete event
 NSTimer *waitForLockCompleteEvent;
 
-const NSString *kVALUE_IDENTIFIER_SCREEN_LOCKED = @"locked";
-const NSString *kVALUE_IDENTIFIER_SCREEN_UNLOCKED = @"unlocked";
-const NSString *kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH = @"screenOnOffSwitch";
+NSString* const kVALUE_IDENTIFIER_SCREEN_LOCKED = @"locked";
+NSString* const kVALUE_IDENTIFIER_SCREEN_UNLOCKED = @"unlocked";
+NSString* const kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH = @"screenOnOffSwitch";
 
 @implementation CSScreenSensor {
 
