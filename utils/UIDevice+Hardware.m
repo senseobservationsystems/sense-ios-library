@@ -19,18 +19,21 @@
  
  iFPGA ->        ??
 
- iPhone1,1 ->    iPhone 1G, M68
- iPhone1,2 ->    iPhone 3G, N82
- iPhone2,1 ->    iPhone 3GS, N88
- iPhone3,1 ->    iPhone 4/AT&T, N89
- iPhone3,2 ->    iPhone 4/Other Carrier?, ??
- iPhone3,3 ->    iPhone 4/Verizon, TBD
- iPhone4,1 ->    (iPhone 4S/GSM), TBD
- iPhone4,2 ->    (iPhone 4S/CDMA), TBD
- iPhone4,3 ->    (iPhone 4S/???)
- iPhone5,1 ->    iPhone Next Gen, TBD
- iPhone5,1 ->    iPhone Next Gen, TBD
- iPhone5,1 ->    iPhone Next Gen, TBD
+ iPhone1,1 : iPhone
+ iPhone1,2 : iPhone 3G
+ iPhone2,1 : iPhone 3GS
+ iPhone3,1 : iPhone 4
+ iPhone3,2 : iPhone 4 GSM Rev A
+ iPhone3,3 : iPhone 4 CDMA
+ iPhone4,1 : iPhone 4S
+ iPhone5,1 : iPhone 5 (GSM)
+ iPhone5,2 : iPhone 5 (GSM+CDMA)
+ iPhone5,3 : iPhone 5C (GSM)
+ iPhone5,4 : iPhone 5C (Global)
+ iPhone6,1 : iPhone 5S (GSM)
+ iPhone6,2 : iPhone 5S (Global)
+ iPhone7,1 : iPhone 6 Plus
+ iPhone7,2 : iPhone 6
 
  iPod1,1   ->    iPod touch 1G, N45
  iPod2,1   ->    iPod touch 2G, N72
@@ -161,7 +164,11 @@
     if ([platform hasPrefix:@"iPhone3"])            return UIDevice4iPhone;
     if ([platform hasPrefix:@"iPhone4"])            return UIDevice4SiPhone;
     if ([platform hasPrefix:@"iPhone5"])            return UIDevice5iPhone;
-    
+    if ([platform hasPrefix:@"iPhone6"])            return UIDevice5SiPhone;
+    if ([platform isEqualToString:@"iPhone7,1"])    return UIDevice6PLUSiPhone;
+    if ([platform isEqualToString:@"iPhone7,2"])    return UIDevice6iPhone;
+
+	
     // iPod
     if ([platform hasPrefix:@"iPod1"])              return UIDevice1GiPod;
     if ([platform hasPrefix:@"iPod2"])              return UIDevice2GiPod;
@@ -197,12 +204,16 @@
 {
     switch ([self platformType])
     {
-        case UIDevice1GiPhone: return IPHONE_1G_NAMESTRING;
-        case UIDevice3GiPhone: return IPHONE_3G_NAMESTRING;
-        case UIDevice3GSiPhone: return IPHONE_3GS_NAMESTRING;
-        case UIDevice4iPhone: return IPHONE_4_NAMESTRING;
-        case UIDevice4SiPhone: return IPHONE_4S_NAMESTRING;
-        case UIDevice5iPhone: return IPHONE_5_NAMESTRING;
+        case UIDevice1GiPhone:		return IPHONE_1G_NAMESTRING;
+        case UIDevice3GiPhone:		return IPHONE_3G_NAMESTRING;
+        case UIDevice3GSiPhone:		return IPHONE_3GS_NAMESTRING;
+        case UIDevice4iPhone:		return IPHONE_4_NAMESTRING;
+        case UIDevice4SiPhone:		return IPHONE_4S_NAMESTRING;
+        case UIDevice5iPhone:		return IPHONE_5_NAMESTRING;
+		case UIDevice5SiPhone:		return IPHONE_5S_NAMESTRING;
+		case UIDevice6iPhone:		return IPHONE_6_NAMESTRING;
+		case UIDevice6PLUSiPhone:	return IPHONE_6PLUS_NAMESTRING;
+			
         case UIDeviceUnknowniPhone: return IPHONE_UNKNOWN_NAMESTRING;
         
         case UIDevice1GiPod: return IPOD_1G_NAMESTRING;
