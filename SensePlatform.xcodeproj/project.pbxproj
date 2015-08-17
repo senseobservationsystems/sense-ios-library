@@ -34,34 +34,6 @@
 /* Begin PBXBuildFile section */
 		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
-		3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
-		3E148B96160A12010010A0D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B95160A12010010A0D1 /* CoreGraphics.framework */; };
-		3E148BA9160A12010010A0D1 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B7A160A11280010A0D1 /* SenTestingKit.framework */; };
-		3E148BAA160A12010010A0D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148B7C160A11280010A0D1 /* UIKit.framework */; };
-		3E148BAB160A12010010A0D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
-		3E148BB3160A12010010A0D1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3E148BB1160A12010010A0D1 /* InfoPlist.strings */; };
-		3E148BB6160A12010010A0D1 /* SensePlatformTestAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E148BB5160A12010010A0D1 /* SensePlatformTestAppTests.m */; };
-		3E148BBF160A123B0010A0D1 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
-		3E148BC0160A12510010A0D1 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
-		3E148BC3160A17A30010A0D1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
-		3E148BC4160A17AD0010A0D1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
-		3E148BC5160A17BD0010A0D1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
-		3E148BC6160A17C60010A0D1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
-		3E148BC9160A180A0010A0D1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
-		3E148BCB160A180F0010A0D1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BCA160A180F0010A0D1 /* CoreMedia.framework */; };
-		3E148BCD160A18130010A0D1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BCC160A18130010A0D1 /* CFNetwork.framework */; };
-		3E148BCF160A18AD0010A0D1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
-		3E148BD1160A18DC0010A0D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
-		3E148BD2160A19340010A0D1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
-		3E148BD3160A19A20010A0D1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
-		3E148BD4160A19A20010A0D1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
-		3E148BD5160A19A20010A0D1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BCC160A18130010A0D1 /* CFNetwork.framework */; };
-		3E148BD6160A19A20010A0D1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
-		3E148BD7160A19A20010A0D1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
-		3E148BD8160A19A20010A0D1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
-		3E148BD9160A19A20010A0D1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
-		3E148BDA160A19A20010A0D1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
-		3E148BDB160A19A20010A0D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
 		3E4F273B17033CD60045588C /* CSSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155715D564E100F520D0 /* CSSensor.h */; };
@@ -122,6 +94,7 @@
 		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
 		3EF47FBA19093D3E00104D69 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF47FB919093D3E00104D69 /* NSData+GZIP.m */; };
 		955999EA1B18A1DA0060B20A /* CSLocationPermissionProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */; };
+		A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */; };
 		A97744691B468FE20092D5FC /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A97744681B468FE20092D5FC /* CSSensePlatformTest.m */; };
 		A977446A1B46A2C00092D5FC /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		A977446B1B46A2C00092D5FC /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
@@ -138,32 +111,13 @@
 		A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
 		A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
 		A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
+		A9CDBB791B81C8C90028CC7D /* DataStorageEngine_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CDBB781B81C8C90028CC7D /* DataStorageEngine_Tests.m */; };
+		A9CDBB7A1B81C8C90028CC7D /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
 		A9FA46321A893EBB00D3D0E4 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */; };
 		FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3E148BAC160A12010010A0D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3E148B90160A12000010A0D1;
-			remoteInfo = SensePlatformTestApp;
-		};
-		3E148BBD160A12310010A0D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
-			remoteInfo = "Sense platform";
-		};
-		3E148BC1160A12560010A0D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
-			remoteInfo = "Sense platform";
-		};
 		3EBEAF551887FBD4009F81C1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
@@ -172,6 +126,13 @@
 			remoteInfo = GenVersion;
 		};
 		A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
+			remoteInfo = SensePlatform;
+		};
+		A9CDBB7B1B81C8C90028CC7D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
 			proxyType = 1;
@@ -199,6 +160,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9CDBB6F1B81C6E90028CC7D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}/DataStorageEngine";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -211,15 +181,8 @@
 		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
-		3E148B7A160A11280010A0D1 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SensePlatformTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		3E148BA8160A12010010A0D1 /* .octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3E148BB0160A12010010A0D1 /* SensePlatformTestAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SensePlatformTestAppTests-Info.plist"; sourceTree = "<group>"; };
-		3E148BB2160A12010010A0D1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		3E148BB4160A12010010A0D1 /* SensePlatformTestAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensePlatformTestAppTests.h; sourceTree = "<group>"; };
-		3E148BB5160A12010010A0D1 /* SensePlatformTestAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SensePlatformTestAppTests.m; sourceTree = "<group>"; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		3E148BCA160A180F0010A0D1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3E148BCC160A18130010A0D1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -234,7 +197,7 @@
 		3E513F5C18FC18150008415A /* CSUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUploader.m; sourceTree = "<group>"; };
 		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
-		3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorRequirements.h; sourceTree = "<group>"; };
+		3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensorRequirements.h; path = ../include/SensePlatform/CSSensorRequirements.h; sourceTree = "<group>"; };
 		3E74DBA5193C8AF100E471A9 /* CSActivityProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSActivityProcessorSensor.h; sourceTree = "<group>"; };
 		3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSActivityProcessorSensor.m; sourceTree = "<group>"; };
 		3E74DBA8193CC9AB00E471A9 /* CSStepCounterProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStepCounterProcessorSensor.h; sourceTree = "<group>"; };
@@ -243,7 +206,6 @@
 		3E7F33A31A13AA9100957AE2 /* CSTimeZoneSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeZoneSensor.m; sourceTree = "<group>"; };
 		3E820D6A15D40AB50001A3EC /* libSensePlatform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSensePlatform.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E820D6D15D40AB50001A3EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SensePlatform-Info.plist"; sourceTree = "<group>"; };
 		3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
 		3E820DC415D40B180001A3EC /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Hash.h"; sourceTree = "<group>"; };
 		3E820DC515D40B180001A3EC /* NSString+MD5Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5Hash.m"; sourceTree = "<group>"; };
@@ -304,13 +266,13 @@
 		3E820E0315D40B180001A3EC /* CSSensorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorStore.h; sourceTree = "<group>"; };
 		3E820E0415D40B180001A3EC /* CSSensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorStore.m; sourceTree = "<group>"; };
 		3E820E0515D40B180001A3EC /* CSSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSettings.m; sourceTree = "<group>"; };
-		3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SensePlatform-Prefix.pch"; sourceTree = "<group>"; };
+		3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SensePlatform-Prefix.pch"; path = "../SensePlatform-Prefix.pch"; sourceTree = "<group>"; };
 		3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorRequirements.m; sourceTree = "<group>"; };
-		3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationStateChange.h; sourceTree = "<group>"; };
-		3E9C155615D564E100F520D0 /* CSSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensePlatform.h; sourceTree = "<group>"; };
-		3E9C155715D564E100F520D0 /* CSSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensor.h; sourceTree = "<group>"; };
-		3E9C155815D564E100F520D0 /* CSSensorIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorIds.h; sourceTree = "<group>"; };
-		3E9C155915D564E100F520D0 /* CSSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSettings.h; sourceTree = "<group>"; };
+		3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSApplicationStateChange.h; path = ../include/SensePlatform/CSApplicationStateChange.h; sourceTree = "<group>"; };
+		3E9C155615D564E100F520D0 /* CSSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensePlatform.h; path = ../include/SensePlatform/CSSensePlatform.h; sourceTree = "<group>"; };
+		3E9C155715D564E100F520D0 /* CSSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensor.h; path = ../include/SensePlatform/CSSensor.h; sourceTree = "<group>"; };
+		3E9C155815D564E100F520D0 /* CSSensorIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensorIds.h; path = ../include/SensePlatform/CSSensorIds.h; sourceTree = "<group>"; };
+		3E9C155915D564E100F520D0 /* CSSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettings.h; path = ../include/SensePlatform/CSSettings.h; sourceTree = "<group>"; };
 		3E9C157615D574B500F520D0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3E9C157915D574BB00F520D0 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3E9C157B15D574C300F520D0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -318,12 +280,14 @@
 		3E9C157F15D574DB00F520D0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		3EBEAF571887FCA9009F81C1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
+		3EBEAF571887FCA9009F81C1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSVersion.h; path = ../include/SensePlatform/CSVersion.h; sourceTree = "<group>"; };
 		3EE091EB18FD597300A04ED4 /* CSSensorIdKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorIdKey.h; sourceTree = "<group>"; };
 		3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIdKey.m; sourceTree = "<group>"; };
 		3EF47FB819093D3E00104D69 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
 		3EF47FB919093D3E00104D69 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
-		955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
+		955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLocationPermissionProtocol.h; path = ../include/SensePlatform/CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
+		A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSECommonSenseProxy.h; path = DataStorageEngine/DSECommonSenseProxy.h; sourceTree = "<group>"; };
+		A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSECommonSenseProxy.m; path = DataStorageEngine/DSECommonSenseProxy.m; sourceTree = "<group>"; };
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A97744681B468FE20092D5FC /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
@@ -333,6 +297,9 @@
 		A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVisitsSensor.m; sourceTree = "<group>"; };
 		A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		A9CDBB741B81C8C90028CC7D /* DataStorageEngine Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DataStorageEngine Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9CDBB771B81C8C90028CC7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9CDBB781B81C8C90028CC7D /* DataStorageEngine_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataStorageEngine_Tests.m; sourceTree = "<group>"; };
 		A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
 		A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
 		DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSErrorDomain.h; sourceTree = "<group>"; };
@@ -341,46 +308,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3E148B8E160A12000010A0D1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3E148BD2160A19340010A0D1 /* AVFoundation.framework in Frameworks */,
-				3E148BD1160A18DC0010A0D1 /* UIKit.framework in Frameworks */,
-				3E148BCF160A18AD0010A0D1 /* CoreTelephony.framework in Frameworks */,
-				3E148BCD160A18130010A0D1 /* CFNetwork.framework in Frameworks */,
-				3E148BCB160A180F0010A0D1 /* CoreMedia.framework in Frameworks */,
-				3E148BC9160A180A0010A0D1 /* CoreLocation.framework in Frameworks */,
-				3E148BC6160A17C60010A0D1 /* AudioToolbox.framework in Frameworks */,
-				3E148BC5160A17BD0010A0D1 /* CoreAudio.framework in Frameworks */,
-				3E148BC4160A17AD0010A0D1 /* SystemConfiguration.framework in Frameworks */,
-				3E148BC3160A17A30010A0D1 /* CoreMotion.framework in Frameworks */,
-				3E148BBF160A123B0010A0D1 /* libSensePlatform.a in Frameworks */,
-				3E148B94160A12010010A0D1 /* Foundation.framework in Frameworks */,
-				3E148B96160A12010010A0D1 /* CoreGraphics.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3E148BA4160A12010010A0D1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3E148BD3160A19A20010A0D1 /* AudioToolbox.framework in Frameworks */,
-				3E148BD4160A19A20010A0D1 /* AVFoundation.framework in Frameworks */,
-				3E148BD5160A19A20010A0D1 /* CFNetwork.framework in Frameworks */,
-				3E148BD6160A19A20010A0D1 /* CoreAudio.framework in Frameworks */,
-				3E148BD7160A19A20010A0D1 /* CoreLocation.framework in Frameworks */,
-				3E148BD8160A19A20010A0D1 /* CoreMotion.framework in Frameworks */,
-				3E148BD9160A19A20010A0D1 /* CoreTelephony.framework in Frameworks */,
-				3E148BDA160A19A20010A0D1 /* SystemConfiguration.framework in Frameworks */,
-				3E148BDB160A19A20010A0D1 /* UIKit.framework in Frameworks */,
-				3E148BC0160A12510010A0D1 /* libSensePlatform.a in Frameworks */,
-				3E148BA9160A12010010A0D1 /* SenTestingKit.framework in Frameworks */,
-				3E148BAA160A12010010A0D1 /* UIKit.framework in Frameworks */,
-				3E148BAB160A12010010A0D1 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3E820D6715D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -411,6 +338,14 @@
 				A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */,
 				A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */,
 				A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9CDBB711B81C8C90028CC7D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9CDBB7A1B81C8C90028CC7D /* libSensePlatform.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,25 +382,6 @@
 			path = include;
 			sourceTree = "<group>";
 		};
-		3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */ = {
-			isa = PBXGroup;
-			children = (
-				3E148BB4160A12010010A0D1 /* SensePlatformTestAppTests.h */,
-				3E148BB5160A12010010A0D1 /* SensePlatformTestAppTests.m */,
-				3E148BAF160A12010010A0D1 /* Supporting Files */,
-			);
-			path = SensePlatformTestAppTests;
-			sourceTree = "<group>";
-		};
-		3E148BAF160A12010010A0D1 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				3E148BB0160A12010010A0D1 /* SensePlatformTestAppTests-Info.plist */,
-				3E148BB1160A12010010A0D1 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		3E59ACB915F4DB1B00C07D59 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -483,13 +399,33 @@
 				3E820DCD15D40B180001A3EC /* CSReachability.m */,
 			);
 			name = Utils;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
 				0E801F8B1A7AA90C00A3F9CC /* libraries */,
-				3EACDD84172E927900975C8D /* plugins */,
+				3E820DBF15D40B180001A3EC /* sense platform */,
+				A91BACB81B8104360012331E /* DataStorageEngine */,
+				3E820D6C15D40AB50001A3EC /* Frameworks */,
+				3E820D6B15D40AB50001A3EC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3E820D6B15D40AB50001A3EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E820D6A15D40AB50001A3EC /* libSensePlatform.a */,
+				A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */,
+				A9CDBB741B81C8C90028CC7D /* DataStorageEngine Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
 				3E148BCA160A180F0010A0D1 /* CoreMedia.framework */,
@@ -501,57 +437,33 @@
 				3E9C157B15D574C300F520D0 /* AudioToolbox.framework */,
 				3E9C157915D574BB00F520D0 /* CoreTelephony.framework */,
 				3E9C157615D574B500F520D0 /* SystemConfiguration.framework */,
-				3E9C154315D564E100F520D0 /* include */,
-				3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */,
-				3E59ACB915F4DB1B00C07D59 /* Utils */,
-				3E820DBF15D40B180001A3EC /* sense platform */,
-				3E820DBB15D40B100001A3EC /* resources */,
-				3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */,
-				A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */,
-				3E820D6C15D40AB50001A3EC /* Frameworks */,
-				3E820D6B15D40AB50001A3EC /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		3E820D6B15D40AB50001A3EC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3E820D6A15D40AB50001A3EC /* libSensePlatform.a */,
-				3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */,
-				3E148BA8160A12010010A0D1 /* .octest */,
-				A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
 				A99F99D71A5D8C1300D6CB76 /* libz.dylib */,
 				3E820D6D15D40AB50001A3EC /* Foundation.framework */,
-				3E148B7A160A11280010A0D1 /* SenTestingKit.framework */,
 				3E148B7C160A11280010A0D1 /* UIKit.framework */,
 				3E148B95160A12010010A0D1 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3E820DBB15D40B100001A3EC /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				3E820DBD15D40B100001A3EC /* SensePlatform-Info.plist */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
 		3E820DBF15D40B180001A3EC /* sense platform */ = {
 			isa = PBXGroup;
 			children = (
+				3E59ACB915F4DB1B00C07D59 /* Utils */,
+				A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */,
 				3E820DC115D40B180001A3EC /* communication */,
 				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
 				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
 				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
 				3E820DC815D40B180001A3EC /* CSDataStore.h */,
+				3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */,
+				3EBEAF571887FCA9009F81C1 /* CSVersion.h */,
+				3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */,
+				3E9C155615D564E100F520D0 /* CSSensePlatform.h */,
+				3E9C155715D564E100F520D0 /* CSSensor.h */,
+				3E9C155815D564E100F520D0 /* CSSensorIds.h */,
+				3E9C155915D564E100F520D0 /* CSSettings.h */,
+				3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */,
+				955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */,
 				3E820DCE15D40B180001A3EC /* CSSensePlatform.m */,
 				3E820DCF15D40B180001A3EC /* CSSensorIds.m */,
 				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
@@ -653,35 +565,14 @@
 			path = "ant+";
 			sourceTree = "<group>";
 		};
-		3E9C154315D564E100F520D0 /* include */ = {
+		A91BACB81B8104360012331E /* DataStorageEngine */ = {
 			isa = PBXGroup;
 			children = (
-				3E9C155415D564E100F520D0 /* SensePlatform */,
+				A9CDBB751B81C8C90028CC7D /* DataStorageEngine Tests */,
+				A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */,
+				A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */,
 			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		3E9C155415D564E100F520D0 /* SensePlatform */ = {
-			isa = PBXGroup;
-			children = (
-				3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */,
-				3EBEAF571887FCA9009F81C1 /* CSVersion.h */,
-				3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */,
-				3E9C155615D564E100F520D0 /* CSSensePlatform.h */,
-				3E9C155715D564E100F520D0 /* CSSensor.h */,
-				3E9C155815D564E100F520D0 /* CSSensorIds.h */,
-				3E9C155915D564E100F520D0 /* CSSettings.h */,
-				955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */,
-			);
-			path = SensePlatform;
-			sourceTree = "<group>";
-		};
-		3EACDD84172E927900975C8D /* plugins */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = plugins;
-			path = "sense platform/plugins";
+			name = DataStorageEngine;
 			sourceTree = "<group>";
 		};
 		A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */ = {
@@ -693,7 +584,8 @@
 				A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */,
 				A96D6ECC1A5C49FF00554BBC /* Supporting Files */,
 			);
-			path = "Sense Library Tests";
+			name = "Sense Library Tests";
+			path = "../Sense Library Tests";
 			sourceTree = "<group>";
 		};
 		A96D6ECC1A5C49FF00554BBC /* Supporting Files */ = {
@@ -704,46 +596,26 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		A9CDBB751B81C8C90028CC7D /* DataStorageEngine Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A9CDBB781B81C8C90028CC7D /* DataStorageEngine_Tests.m */,
+				A9CDBB761B81C8C90028CC7D /* Supporting Files */,
+			);
+			path = "DataStorageEngine Tests";
+			sourceTree = "<group>";
+		};
+		A9CDBB761B81C8C90028CC7D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A9CDBB771B81C8C90028CC7D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3E148B90160A12000010A0D1 /* SensePlatformTestApp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3E148BB7160A12010010A0D1 /* Build configuration list for PBXNativeTarget "SensePlatformTestApp" */;
-			buildPhases = (
-				3E148B8D160A12000010A0D1 /* Sources */,
-				3E148B8E160A12000010A0D1 /* Frameworks */,
-				3E148B8F160A12000010A0D1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3E148BBE160A12310010A0D1 /* PBXTargetDependency */,
-			);
-			name = SensePlatformTestApp;
-			productName = SensePlatformTestApp;
-			productReference = 3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */;
-			productType = "com.apple.product-type.application";
-		};
-		3E148BA7160A12010010A0D1 /* SensePlatformTestAppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3E148BBA160A12010010A0D1 /* Build configuration list for PBXNativeTarget "SensePlatformTestAppTests" */;
-			buildPhases = (
-				3E148BA3160A12010010A0D1 /* Sources */,
-				3E148BA4160A12010010A0D1 /* Frameworks */,
-				3E148BA6160A12010010A0D1 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3E148BC2160A12560010A0D1 /* PBXTargetDependency */,
-				3E148BAD160A12010010A0D1 /* PBXTargetDependency */,
-			);
-			name = SensePlatformTestAppTests;
-			productName = SensePlatformTestAppTests;
-			productReference = 3E148BA8160A12010010A0D1 /* .octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
-		};
 		3E820D6915D40AB50001A3EC /* SensePlatform */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3E820D7715D40AB50001A3EC /* Build configuration list for PBXNativeTarget "SensePlatform" */;
@@ -751,6 +623,7 @@
 				3E820D6615D40AB50001A3EC /* Sources */,
 				3E820D6715D40AB50001A3EC /* Frameworks */,
 				3E4F273817033C7A0045588C /* CopyFiles */,
+				A9CDBB6F1B81C6E90028CC7D /* CopyFiles */,
 				3EBEAF441887ED21009F81C1 /* ShellScript */,
 			);
 			buildRules = (
@@ -781,17 +654,38 @@
 			productReference = A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		A9CDBB731B81C8C90028CC7D /* DataStorageEngine Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9CDBB7D1B81C8C90028CC7D /* Build configuration list for PBXNativeTarget "DataStorageEngine Tests" */;
+			buildPhases = (
+				A9CDBB701B81C8C90028CC7D /* Sources */,
+				A9CDBB711B81C8C90028CC7D /* Frameworks */,
+				A9CDBB721B81C8C90028CC7D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9CDBB7C1B81C8C90028CC7D /* PBXTargetDependency */,
+			);
+			name = "DataStorageEngine Tests";
+			productName = "DataStorageEngine Tests";
+			productReference = A9CDBB741B81C8C90028CC7D /* DataStorageEngine Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		3E820D6115D40AB50001A3EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0610;
+				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0510;
 				TargetAttributes = {
 					A96D6EC91A5C49FF00554BBC = {
 						CreatedOnToolsVersion = 6.1.1;
+					};
+					A9CDBB731B81C8C90028CC7D = {
+						CreatedOnToolsVersion = 6.4;
 					};
 					DC097FA61ABAD37600BDDD09 = {
 						CreatedOnToolsVersion = 6.2;
@@ -811,25 +705,23 @@
 			projectRoot = "";
 			targets = (
 				3E820D6915D40AB50001A3EC /* SensePlatform */,
-				3E148B90160A12000010A0D1 /* SensePlatformTestApp */,
-				3E148BA7160A12010010A0D1 /* SensePlatformTestAppTests */,
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
 				DC097FA61ABAD37600BDDD09 /* GenDocumentation */,
 				A96D6EC91A5C49FF00554BBC /* Sense Library Tests */,
+				A9CDBB731B81C8C90028CC7D /* DataStorageEngine Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3E148B8F160A12000010A0D1 /* Resources */ = {
+		A96D6EC81A5C49FF00554BBC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E148BB3160A12010010A0D1 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A96D6EC81A5C49FF00554BBC /* Resources */ = {
+		A9CDBB721B81C8C90028CC7D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -839,19 +731,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3E148BA6160A12010010A0D1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
 		3EBEAF441887ED21009F81C1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -894,21 +773,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3E148B8D160A12000010A0D1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3E148BA3160A12010010A0D1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3E148BB6160A12010010A0D1 /* SensePlatformTestAppTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3E820D6615D40AB50001A3EC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -950,6 +814,7 @@
 				3E820E3F15D40B190001A3EC /* CSRotationSensor.m in Sources */,
 				3E820E4015D40B190001A3EC /* CSSensor.m in Sources */,
 				3E820E4215D40B190001A3EC /* CSSpatialProvider.m in Sources */,
+				A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */,
 				FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */,
 				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
 				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
@@ -975,24 +840,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9CDBB701B81C8C90028CC7D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9CDBB791B81C8C90028CC7D /* DataStorageEngine_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3E148BAD160A12010010A0D1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3E148B90160A12000010A0D1 /* SensePlatformTestApp */;
-			targetProxy = 3E148BAC160A12010010A0D1 /* PBXContainerItemProxy */;
-		};
-		3E148BBE160A12310010A0D1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
-			targetProxy = 3E148BBD160A12310010A0D1 /* PBXContainerItemProxy */;
-		};
-		3E148BC2160A12560010A0D1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
-			targetProxy = 3E148BC1160A12560010A0D1 /* PBXContainerItemProxy */;
-		};
 		3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3EBEAF4D1887FADE009F81C1 /* GenVersion */;
@@ -1003,105 +861,14 @@
 			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
 			targetProxy = A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */;
 		};
+		A9CDBB7C1B81C8C90028CC7D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
+			targetProxy = A9CDBB7B1B81C8C90028CC7D /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		3E148BB1160A12010010A0D1 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3E148BB2160A12010010A0D1 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		3E148BB8160A12010010A0D1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SensePlatformTestApp/SensePlatformTestApp-Prefix.pch";
-				INFOPLIST_FILE = "SensePlatformTestAppTests/SensePlatformTestAppTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_TEST_FLAGS = "-ObjC -all_load";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_AFTER_BUILD = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		3E148BB9160A12010010A0D1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SensePlatformTestApp/SensePlatformTestApp-Prefix.pch";
-				INFOPLIST_FILE = "SensePlatformTestAppTests/SensePlatformTestAppTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_TEST_FLAGS = "-ObjC -all_load";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_AFTER_BUILD = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		3E148BBB160A12010010A0D1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SensePlatformTestApp.app/SensePlatformTestApp";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = (
-					"-all_load",
-					"-ObjC",
-				);
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		3E148BBC160A12010010A0D1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SensePlatformTestApp.app/SensePlatformTestApp";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = (
-					"-all_load",
-					"-ObjC",
-				);
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 		3E820D7515D40AB50001A3EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1134,7 +901,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/library/sqlcipher",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
 				SDKROOT = iphoneos;
@@ -1166,7 +933,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/library/sqlcipher",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
 				SDKROOT = iphoneos;
@@ -1178,6 +945,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1186,7 +954,8 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yulrizka/Desktop,
@@ -1200,6 +969,8 @@
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "SensePlatform-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
 			};
 			name = Debug;
@@ -1208,6 +979,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1216,7 +988,8 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yulrizka/Desktop,
@@ -1230,6 +1003,7 @@
 				PRODUCT_NAME = SensePlatform;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "SensePlatform-Bridging-Header.h";
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
 			};
 			name = Release;
@@ -1317,6 +1091,66 @@
 			};
 			name = Release;
 		};
+		A9CDBB7E1B81C8C90028CC7D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "DataStorageEngine Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A9CDBB7F1B81C8C90028CC7D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "DataStorageEngine Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		DC097FA71ABAD37600BDDD09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1334,24 +1168,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3E148BB7160A12010010A0D1 /* Build configuration list for PBXNativeTarget "SensePlatformTestApp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3E148BB8160A12010010A0D1 /* Debug */,
-				3E148BB9160A12010010A0D1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3E148BBA160A12010010A0D1 /* Build configuration list for PBXNativeTarget "SensePlatformTestAppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3E148BBB160A12010010A0D1 /* Debug */,
-				3E148BBC160A12010010A0D1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1387,6 +1203,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A9CDBB7D1B81C8C90028CC7D /* Build configuration list for PBXNativeTarget "DataStorageEngine Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9CDBB7E1B81C8C90028CC7D /* Debug */,
+				A9CDBB7F1B81C8C90028CC7D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */ = {
 			isa = XCConfigurationList;
