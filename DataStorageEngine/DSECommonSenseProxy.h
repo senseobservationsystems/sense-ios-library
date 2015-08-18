@@ -11,22 +11,22 @@
 
 
 /**
- *	The DSECommonSenseProxy class consists of static methods that wrap the API.
+ *	The DSECommonSenseProxy class consists of methods that wrap the API.
  
 	Only API calls there are necessary for the DataStorageEngine have been implemented here. All calls are made in a synchronous manner. It is up to the user to either call the API in a synchronous or asynchronous manner.
 	
 	The DSECommonSenseProxy class does not now about DataStorageEngine concepts, it simply wraps the API that is available for CommonSense. Any translations between concepts in the DataStorageEngine and CommonSense should be made by other objects (most notably the difference between Source and Device). 
  
-	The DSECommonSenseProxy uses a Session ID and Application Key to get authorized for API access. These parameters are simply stored on initialization but not managed by the DSECommonSenseProxy. If they should change, simply making a new instance of the proxy would be sufficient. 
+	The DSECommonSenseProxy an Application Key to get authorized for API access. This parameter is simply stored on initialization but not managed by the DSECommonSenseProxy. If they should change, simply making a new instance of the proxy would be sufficient.
  
-	The DSECommonSenseProxy knows about two servers: the CommonSense live server (for production) and the CommonSense staging server (for testing).
+	The DSECommonSenseProxy knows about two servers: the CommonSense live server (for production) and the CommonSense staging server (for testing). Which server to use can be selected on initialization.
  
  */
 @interface DSECommonSenseProxy : NSObject {
 	NSString *appKey;					//The app key
 	NSString *urlBase;					//The base url to use, will differ based on whether to use live or staging server
-	NSString *urlBaseAuth;	//The base url to use for authentication, will differ based on whether to use live or staging server
-	int requestTimeoutInterval;			// Timeout interval in seconds
+	NSString *urlBaseAuth;				//The base url to use for authentication, will differ based on whether to use live or staging server
+	int requestTimeoutInterval;			//Timeout interval in seconds
 }
 
 
@@ -56,7 +56,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @return				Session ID. Will be nil if the call fails.
  */
-+ (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error;
+- (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error;
 
 /**
  Logout the currently logged in user.
@@ -66,7 +66,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @return				Whether or not the logout finished succesfully.
  */
-+ (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 #pragma mark Sensors and Devices
@@ -89,7 +89,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Dictionary with the information of the created sensor.
  */
-+ (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -101,7 +101,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Array of sensors. Each object will be an NSDictionary with the resulting sensor information. Will be nil if an error occurs.
  */
-+ (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -113,7 +113,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Array of devices. Each object will be an NSDictionary with the resulting device information. Will be nil if an error occurs.
  */
-+ (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -127,7 +127,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the sensor was successfully added to the device.
  */
-+ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 /**
  Add sensor to a device.
@@ -143,7 +143,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the sensor was successfully added to the device.
  */
-+ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 
@@ -163,7 +163,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the post of the data was succesfull.
  */
-+ (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -177,5 +177,6 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				NSArray with the resulting data. Each object is an NSDictionary with the data as provided by the backend. Will be nil if an error occured.
  */
-+ (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error;
+
 @end;

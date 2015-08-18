@@ -51,49 +51,49 @@ static const NSString* kUrlJsonSuffix            = @".json";
 
 
 #pragma mark User (Public)
-+ (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error {
+- (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error {
 	
 	
 	
 	return @"";
 }
 
-+ (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	return NO;
 }
 
 #pragma mark Sensors and Devices (Public) 
 
-+ (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	return nil;
 }
 
-+ (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	return nil;
 }
 
-+ (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	return nil;
 }
 
-+ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	return NO;
 }
 
-+ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	return NO;
 }
 
 
-+ (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	return NO;
 }
 
-+ (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	return nil;
 }
