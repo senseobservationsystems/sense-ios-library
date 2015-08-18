@@ -129,11 +129,50 @@ static const NSString* kUrlJsonSuffix               = @".json";
 }
 
 - (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
-	return nil;
+	return [self getListForURLAction:kUrlSensors withSessionID:sessionID andError:error];
 }
 
 - (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error {
-	return nil;
+	return [self getListForURLAction:kUrlDevices withSessionID:sessionID andError:error];
+}
+
+- (NSArray *) getListForURLAction: (const NSString*) urlAction withSessionID: (NSString *) sessionID andError: (NSError **) error {
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
+	if([self isEmptyString: sessionID]) {
+		*error = [self createErrorWithCode:kErrorInvalidInputParameters andMessage:@"Invalid sessionID"];
+		return nil;
+	}
+	
+    NSInteger page              = 0;
+    NSMutableArray* resultsList = [[NSMutableArray alloc] init];
+	NSHTTPURLResponse* httpResponse;
+	NSDictionary* responseDict;
+	
+	do {
+		
+		NSString* params         = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
+		NSURL *url               = [self makeCSRestUrlFor:urlAction append:params];
+		NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andInput:nil withError:nil];
+		NSData* responseData     = [self doRequest:urlRequest andResponse:&httpResponse andError:error];
+		responseDict			 = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
+		
+		if(*error) {
+			break;
+		} else if ([httpResponse statusCode] >= 300) {
+			*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:@"Unknown problem while getting sensors list."];
+			break;
+		} else {
+			[resultsList addObjectsFromArray:[responseDict valueForKey:@"sensors"]];
+			page++;
+		}
+		
+	} while (responseDict.count == 1000);
+	
+	return resultsList;
 }
 
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
