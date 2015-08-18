@@ -80,8 +80,9 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	
 	if(*error) {
 		return nil;
-	} else if (([httpResponse statusCode] != 200) || (!responseData)) {
-		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:@"Unknown problem while logging in"];
+	} else if ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
+		NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
+		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
 		return nil;
 	} else {
 		NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
@@ -113,8 +114,9 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 	if(*error) {
 		return NO;
-	} else if ([httpResponse statusCode] != 200) {
-		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:@"Unknown problem while logging out."];
+	} else if  ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
+		NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
+		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
 		return NO;
 	} else {
 		return YES;
@@ -125,7 +127,61 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	return nil;
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
+	if([self isEmptyString: sessionID] || [self isEmptyString: name] || [self isEmptyString: deviceType] || [self isEmptyString: dataType]) {
+		*error = [self createErrorWithCode:kErrorInvalidInputParameters andMessage:@"Input parameters incomplete"];
+		return nil;
+	}
+	
+	if(! dataStructure) {
+		dataStructure = @"";
+	}
+	
+	if(! displayName) {
+		displayName = @"";
+	}
+	
+	
+	NSMutableDictionary *sensorDescription =  [NSMutableDictionary dictionaryWithObjectsAndKeys:
+													name,			@"name",
+													displayName,	@"display_name",
+													deviceType,		@"device_type",
+													@"",			@"pager_type",
+													dataType,		@"data_type",
+													dataStructure,	@"data_structure",
+													nil];
+
+	
+	NSDictionary* inputDict  = [NSDictionary dictionaryWithObject:sensorDescription forKey:@"sensor"];
+	NSURL *url               = [self makeCSRestUrlFor:kUrlSensors append:nil];
+	NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andInput:inputDict withError:nil];
+	
+	NSHTTPURLResponse* httpResponse;
+	NSData* responseData = [self doRequest:urlRequest andResponse:&httpResponse andError:error];
+	
+	if (*error) {
+		return nil;
+	} else if ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
+		NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
+		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
+		return nil;
+	} else {
+		@try {
+            NSString* location          = [httpResponse.allHeaderFields valueForKey:@"location"];
+            NSArray* locationComponents = [location componentsSeparatedByString:@"/"];
+            NSString* sensorId          = [locationComponents objectAtIndex:[locationComponents count] -1];
+			[sensorDescription setValue:sensorId forKey:@"sensor_id"];
+		}
+		@catch (NSException *exception) {
+			NSLog(@"Exception while creating sensor %@: %@", sensorDescription, exception);
+		}
+		
+		return sensorDescription;
+	}
 }
 
 - (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
@@ -153,7 +209,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	NSDictionary* responseDict;
 	
 	do {
-		
 		NSString* params         = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
 		NSURL *url               = [self makeCSRestUrlFor:urlAction append:params];
 		NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andInput:nil withError:nil];
@@ -162,8 +217,9 @@ static const NSString* kUrlJsonSuffix               = @".json";
 		
 		if(*error) {
 			break;
-		} else if ([httpResponse statusCode] >= 300) {
-			*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:@"Unknown problem while getting sensors list."];
+		} else if ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
+			NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
+			*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
 			break;
 		} else {
 			[resultsList addObjectsFromArray:[responseDict valueForKey:@"sensors"]];
