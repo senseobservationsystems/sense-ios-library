@@ -8,23 +8,23 @@
 
 #import "DSECommonSenseProxy.h"
 #import "NSData+GZIP.h"
+#import "NSString+MD5Hash.h"
+#import "DSEErrors.h"
 
-static const NSString* kUrlBaseURLLive           = @"https://api.sense-os.nl";
-static const NSString* kUrlBaseURLStaging        = @"http://api.staging.sense-os.nl";
-static const NSString* kUrlAuthenticationLive    = @"https://auth-api.sense-os.nl/v1/login";
-static const NSString* kUrlAuthenticationStaging = @"http://auth-api.staging.sense-os.nl/v1/login";
+static const NSString* kUrlBaseURLLive              = @"https://api.sense-os.nl";
+static const NSString* kUrlBaseURLStaging           = @"http://api.staging.sense-os.nl";
+static const NSString* kUrlAuthenticationLive       = @"https://auth-api.sense-os.nl/v1/login";
+static const NSString* kUrlAuthenticationStaging    = @"http://auth-api.staging.sense-os.nl/v1/login";
 
-static const NSString* kUrlLogout                = @"logout";
-static const NSString* kUrlSensorDevice          = @"device";
-static const NSString* kUrlSensors               = @"sensors";
-static const NSString* kUrlUsers                 = @"users";
-static const NSString* kUrlUploadMultipleSensors = @"sensors/data";
-static const NSString* kUrlData                  = @"data";
-static const NSString* kUrlDevices               = @"devices";
+static const NSString* kUrlLogout                   = @"logout";
+static const NSString* kUrlSensorDevice             = @"device";
+static const NSString* kUrlSensors                  = @"sensors";
+static const NSString* kUrlUsers                    = @"users";
+static const NSString* kUrlUploadMultipleSensors    = @"sensors/data";
+static const NSString* kUrlData                     = @"data";
+static const NSString* kUrlDevices                  = @"devices";
 
-static const NSString* kUrlJsonSuffix            = @".json";
-
-
+static const NSString* kUrlJsonSuffix               = @".json";
 
 @implementation DSECommonSenseProxy 
 
@@ -39,10 +39,10 @@ static const NSString* kUrlJsonSuffix            = @".json";
 
 		if(useLiveServer) {
             urlBase     = (NSString *)kUrlBaseURLLive;
-            urlBaseAuth = (NSString *)kUrlAuthenticationLive;
+            urlAuth		= (NSString *)kUrlAuthenticationLive;
 		} else {
             urlBase     = (NSString *)kUrlBaseURLStaging;
-            urlBaseAuth = (NSString *)kUrlAuthenticationStaging;
+            urlAuth		= (NSString *)kUrlAuthenticationStaging;
 		}
 	}
 	
@@ -51,18 +51,64 @@ static const NSString* kUrlJsonSuffix            = @".json";
 
 
 #pragma mark User (Public)
+
 - (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error {
 	
+	//Check error object. If the user does not pass in a valid error object we create one ourselves
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Note that error is of type NSError * __autoreleasing *, since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
+	//Check input data
+	if(!username || [username isEqualToString:@""] || !password || [password isEqualToString:@""]) {
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: @"Invalid username or password.", @"Message", nil];
+		*error = [NSError errorWithDomain:DataStorageEngineErrorDomain code:kErrorCodeInvalidUsernamePassword userInfo:userInfo];
+		return nil;
+	}
+	
+	//Prepare input data into a JSON string
+	NSDictionary* inputDict = [NSDictionary dictionaryWithObjectsAndKeys:
+						  username,							@"username",
+						  [NSString MD5HashOf:password],	@"password",
+						  nil];
+	NSData *inputJsonData = [NSJSONSerialization dataWithJSONObject:inputDict options:0 error:error];
+	if(*error) { return nil; }
+	NSString *inputString = [[NSString alloc] initWithData:inputJsonData encoding:NSUTF8StringEncoding];
 	
 	
-	return @"";
+	//Create url request
+	NSURL *url = [NSURL URLWithString:urlAuth];
+	NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"POST" andSessionID:nil andInput:inputString];
+	
+	//Do request
+	NSHTTPURLResponse* httpResponse;
+	NSData *responseData = [self doRequest:urlRequest andResponse:&httpResponse andError:error];
+	
+	//Process the result
+	if(*error) { return nil; }
+	else if (([httpResponse statusCode] != 200) || (!responseData)){
+		//Uh oh, an error occured but it was not caught in the error object. Let's create our own.
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: @"Unknown problem while logging in.", @"Message", nil];
+		*error = [NSError errorWithDomain:DataStorageEngineErrorDomain code:[httpResponse statusCode] userInfo:userInfo];
+		return nil;
+	} else {
+		//We have success. Let's grab the returned session ID and be done with it.
+		NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
+		
+		if(*error) {
+			return nil;
+		} else {
+			return [NSString stringWithFormat:@"%@",[responseDict valueForKey:@"session_id"]];
+		}
+	}
 }
 
 - (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	return NO;
 }
 
-#pragma mark Sensors and Devices (Public) 
+#pragma mark Sensors and Devices (Public)
 
 - (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
@@ -108,14 +154,14 @@ static const NSString* kUrlJsonSuffix            = @".json";
  @param urlRequest		The url request to make. Cannot be nil. A valid request can be created with the method createURLRequest provided by this class.
  @param response		An NSHTTPURLResponse object that contains the response information from the server, including the response code and message.
  @param error			The error object that will be filled with more information if there was an error during the call. Will be nil if no error occured.
- @return				String with the resulting data from the server. Will be nil if the connection to the server failed or there was an error in the call.
+ @return				Resulting data from the server. Will be nil if the connection to the server failed or there was an error in the call.
 
  */
-- (NSString*) doRequest:(NSURLRequest *) urlRequest andResponse:(NSHTTPURLResponse**)response andError:(NSError **) error
+- (NSData*) doRequest:(NSURLRequest *) urlRequest andResponse:(NSHTTPURLResponse**)response andError:(NSError **) error
 {
 
 	if(! urlRequest) {
-		*error = [NSError errorWithDomain:@"DataStorageEngine" code:kCFURLErrorUnknown userInfo:nil];
+		*error = [NSError errorWithDomain:DataStorageEngineErrorDomain code:kCFURLErrorUnknown userInfo:nil];
 		*response = nil;
 		return nil;
 	}
@@ -128,7 +174,7 @@ static const NSString* kUrlJsonSuffix            = @".json";
 	//Handle the resulting response and potential errors
 	//Note that we don't handle errors and response in the request but it is just passed back directly to the caller.
 	if (responseData && responseData != (id)[NSNull null]) {
-		return [NSString stringWithUTF8String:responseData.bytes];
+		return responseData;
 	} else {
 		return nil;
 	}

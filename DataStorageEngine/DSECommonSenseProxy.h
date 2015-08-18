@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-
 /**
  *	The DSECommonSenseProxy class consists of methods that wrap the API.
  
@@ -21,11 +20,13 @@
  
 	The DSECommonSenseProxy knows about two servers: the CommonSense live server (for production) and the CommonSense staging server (for testing). Which server to use can be selected on initialization.
  
+	Error handling is done through NSError objects. Server side error codes will be directly copied into the error. Client side errors have their own codes specified in DSEErrorCodes.h. The userInfo object will contain an error message if applicable, or will be nil otherwise. All DataStorageEngine will use the error domain "nl.sense.DataStorageEngine.ErrorDomain".
+ 
  */
 @interface DSECommonSenseProxy : NSObject {
 	NSString *appKey;					//The app key
 	NSString *urlBase;					//The base url to use, will differ based on whether to use live or staging server
-	NSString *urlBaseAuth;				//The base url to use for authentication, will differ based on whether to use live or staging server
+	NSString *urlAuth;				//The base url to use for authentication, will differ based on whether to use live or staging server
 	int requestTimeoutInterval;			//Timeout interval in seconds
 }
 
