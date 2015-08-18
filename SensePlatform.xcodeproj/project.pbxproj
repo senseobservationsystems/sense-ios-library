@@ -96,6 +96,8 @@
 		A94F3E491B83281F000CCF7A /* CSSender.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E481B83281F000CCF7A /* CSSender.m */; };
 		A94F3E4E1B832835000CCF7A /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E4B1B832835000CCF7A /* NSData+GZIP.m */; };
 		A94F3E4F1B832835000CCF7A /* NSString+MD5Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E4D1B832835000CCF7A /* NSString+MD5Hash.m */; };
+		A94F3E531B839B18000CCF7A /* DSEHTTPRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */; };
+		A94F3E561B839F17000CCF7A /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E551B839F17000CCF7A /* NSString+Utils.m */; };
 		A97744691B468FE20092D5FC /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A97744681B468FE20092D5FC /* CSSensePlatformTest.m */; };
 		A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */; };
 		A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */; };
@@ -280,6 +282,10 @@
 		A94F3E4B1B832835000CCF7A /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+GZIP.m"; path = "utils/NSData+GZIP.m"; sourceTree = "<group>"; };
 		A94F3E4C1B832835000CCF7A /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MD5Hash.h"; path = "utils/NSString+MD5Hash.h"; sourceTree = "<group>"; };
 		A94F3E4D1B832835000CCF7A /* NSString+MD5Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MD5Hash.m"; path = "utils/NSString+MD5Hash.m"; sourceTree = "<group>"; };
+		A94F3E511B839B18000CCF7A /* DSEHTTPRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSEHTTPRequestHelper.h; path = DataStorageEngine/DSEHTTPRequestHelper.h; sourceTree = "<group>"; };
+		A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSEHTTPRequestHelper.m; path = DataStorageEngine/DSEHTTPRequestHelper.m; sourceTree = "<group>"; };
+		A94F3E541B839F17000CCF7A /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Utils.h"; path = "utils/NSString+Utils.h"; sourceTree = "<group>"; };
+		A94F3E551B839F17000CCF7A /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Utils.m"; path = "utils/NSString+Utils.m"; sourceTree = "<group>"; };
 		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A97744681B468FE20092D5FC /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
@@ -366,6 +372,8 @@
 		3E59ACB915F4DB1B00C07D59 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A94F3E541B839F17000CCF7A /* NSString+Utils.h */,
+				A94F3E551B839F17000CCF7A /* NSString+Utils.m */,
 				3E4F28B9170DB4750045588C /* Formatting.h */,
 				3E4F28BA170DB4750045588C /* Formatting.m */,
 				3E11261816A7086400805102 /* UIDevice+Hardware.h */,
@@ -541,6 +549,8 @@
 			children = (
 				A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */,
 				A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */,
+				A94F3E511B839B18000CCF7A /* DSEHTTPRequestHelper.h */,
+				A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */,
 				A94F3E401B831A41000CCF7A /* DSEErrors.h */,
 			);
 			name = DataStorageEngine;
@@ -730,6 +740,7 @@
 				3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */,
 				3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */,
 				3E820E3715D40B190001A3EC /* CSNoiseSensor.m in Sources */,
+				A94F3E561B839F17000CCF7A /* NSString+Utils.m in Sources */,
 				3E820E3915D40B190001A3EC /* CSOrientationSensor.m in Sources */,
 				3E820E3B15D40B190001A3EC /* CSOrientationStateSensor.m in Sources */,
 				3E820E3D15D40B190001A3EC /* CSPreferencesSensor.m in Sources */,
@@ -743,6 +754,7 @@
 				A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */,
 				FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */,
 				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
+				A94F3E531B839B18000CCF7A /* DSEHTTPRequestHelper.m in Sources */,
 				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
 				3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */,
 				3E820E4715D40B190001A3EC /* CSSettings.m in Sources */,
