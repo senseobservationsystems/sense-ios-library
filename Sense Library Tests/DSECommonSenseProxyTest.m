@@ -36,6 +36,9 @@ static NSString* testPassword = @"darkr";
 	[super tearDown];
 }
 
+#pragma mark *User*
+
+#pragma mark loginUser
 
 - (void)testLoginWithValidUsernameAndPassword {
 	
@@ -86,4 +89,73 @@ static NSString* testPassword = @"darkr";
 	XCTAssert(error.code >= 300, @"Errorcode is not representing an error");
 	XCTAssertNil(sessionID, @"Session ID is not nil; the login must have succeeded");
 }
+
+
+#pragma mark logoutCurrentUserWIthSessionID
+
+- (void) testLogoutWithValidSessionID {
+    
+    //login
+    NSString *sessionID = [proxy loginUser:testUser andPassword:testPassword andError:nil];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
+    
+    //logout with the sessionID
+    NSError *error;
+    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:&error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssert(isSuccessful, @"The logout was unsuccessful.");
+    
+    
+    //Let me login again, so that I can log back out again!
+    sessionID = [proxy loginUser:testUser andPassword:testPassword andError:nil];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
+    
+    //logout with the sessionID
+    isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:nil];
+    XCTAssert(isSuccessful, @"The logout was unsuccessful.");
+}
+
+- (void) testLogoutWithInvalidSessionID {
+    
+    //login
+    NSString *sessionID = [proxy loginUser:testUser andPassword:testPassword andError:nil];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    NSString *invalidSessionID = @"VeryInvalidSessionID";
+    //logout with INVALID sessionID
+    NSError *error;
+    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
+    XCTAssertNotNil(error, @"Error is nil; logout must have succeeded");
+    XCTAssertFalse(isSuccessful, @"The logout was successful with invalid SessionID.");
+  
+    
+    //Let me login again, so that I can log back out again!
+    sessionID = [proxy loginUser:testUser andPassword:testPassword andError:nil];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    //logout with INVALID sessionID
+    isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:nil];
+    XCTAssertFalse(isSuccessful, @"The logout was successful with invalid SessionID");
+    
+}
+
+- (void) testLogoutWithoutLogin {
+    
+    NSString *invalidSessionID = @"VeryInvalidSessionID";
+    //logout with the sessionID
+    NSError *error;
+    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
+    XCTAssertNotNil(error, @"Error is nil; logout must have succeeded");
+    XCTAssertFalse(isSuccessful, @"The logout was successful without logging in.");
+    
+    //logout with the sessionID
+    isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:nil];
+    XCTAssertFalse(isSuccessful, @"The logout was successful without logging in");
+    
+}
+
+#pragma mark *Data*
+
 @end
