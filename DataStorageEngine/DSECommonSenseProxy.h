@@ -144,7 +144,7 @@
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the sensor was successfully added to the device.
  */
-- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error;
+- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithType: (NSString *) deviceType andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 

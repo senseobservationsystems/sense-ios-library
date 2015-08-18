@@ -81,8 +81,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	if(*error) {
 		return nil;
 	} else if ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
-		NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
-		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
+		*error = [self createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
 		return nil;
 	} else {
 		NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
@@ -115,8 +114,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	if(*error) {
 		return NO;
 	} else if  ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
-		NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
-		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
+		*error = [self createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
 		return NO;
 	} else {
 		return YES;
@@ -166,8 +164,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	if (*error) {
 		return nil;
 	} else if ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
-		NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
-		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
+		*error = [self createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
 		return nil;
 	} else {
 		@try {
@@ -218,8 +215,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 		if(*error) {
 			break;
 		} else if ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
-			NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
-			*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:message];
+			*error = [self createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
 			break;
 		} else {
 			[resultsList addObjectsFromArray:[responseDict valueForKey:@"sensors"]];
@@ -233,12 +229,67 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	return NO;
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
+	if([self isEmptyString: sessionID] || [self isEmptyString:csDeviceID]) {
+		*error = [self createErrorWithCode:kErrorInvalidInputParameters andMessage:@"Incomplete input parameters"];
+		return nil;
+	}
+	
+	NSDictionary *deviceDict =  [NSDictionary dictionaryWithObjectsAndKeys:	csDeviceID, @"id",
+																			nil];
+	NSDictionary* inputDict = [NSDictionary dictionaryWithObject:deviceDict forKey:@"device"];
+	
+	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat: @"%@/%@/%@/%@%@", urlBase, kUrlSensors, csSensorID, kUrlSensorDevice,kUrlJsonSuffix]];
+	NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andInput:inputDict withError:nil];
+	
+	NSHTTPURLResponse* httpResponse;
+	NSData* responseData = [self doRequest:urlRequest andResponse:&httpResponse andError:error];
+	
+	if(*error) {
+		return NO;
+	} else if  ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
+		*error = [self createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
+		return NO;
+	} else {
+		return YES;
+	}
 }
 
-- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
+- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithType: (NSString *) deviceType andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	return NO;
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
+	if([self isEmptyString: sessionID] || [self isEmptyString:deviceType] || [self isEmptyString:UUID]) {
+		*error = [self createErrorWithCode:kErrorInvalidInputParameters andMessage:@"Incomplete input parameters"];
+		return nil;
+	}
+	
+	NSDictionary *deviceDict =  [NSDictionary dictionaryWithObjectsAndKeys:	deviceType, @"type",
+								 UUID,		@"uuid",
+								 nil];
+	NSDictionary* inputDict = [NSDictionary dictionaryWithObject:deviceDict forKey:@"device"];
+	
+	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat: @"%@/%@/%@/%@%@", urlBase, kUrlSensors, csSensorID, kUrlSensorDevice,kUrlJsonSuffix]];
+	NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andInput:inputDict withError:nil];
+	
+	NSHTTPURLResponse* httpResponse;
+	NSData* responseData = [self doRequest:urlRequest andResponse:&httpResponse andError:error];
+	
+	if(*error) {
+		return NO;
+	} else if  ([httpResponse statusCode] < 200 || [httpResponse statusCode] > 300) {
+		*error = [self createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
+		return NO;
+	} else {
+		return YES;
+	}
 }
 
 
@@ -372,6 +423,12 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	
 	return [NSError errorWithDomain:DataStorageEngineErrorDomain code:code userInfo:userInfo];
 
+}
+
+//Creates a new NSError object for the DataStorageEngine domain with a given code and message
+- (NSError *) createErrorWithCode: (NSInteger) code andResponseData: (NSData *) responseData {
+	NSString *message = [NSString stringWithFormat:@"Response with data:\n%@", [[NSString alloc] initWithData: responseData encoding:NSUTF8StringEncoding]];
+	return [self createErrorWithCode:code andMessage:message];
 }
 
 //Creates a string with json formatting from a dictionary. Returns nil if an error occurs. Error information can be found in the error object.
