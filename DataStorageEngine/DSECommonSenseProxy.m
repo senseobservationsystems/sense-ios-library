@@ -147,20 +147,26 @@ static const NSString* kUrlJsonSuffix               = @".json";
 }
 
 
-
-
 - (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
-	return [self getListForURLAction:kUrlSensors withSessionID:sessionID andError:error];
+
+	if( (!error) || [NSString isEmptyString:sessionID]) {
+		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+	}
+	
+	NSString *params = @"&per_page=1000&details=full";
+	return [self getListForURLAction:kUrlSensors withParams:params withResultKey:@"sensors" withSessionID:sessionID andError:error];
 }
 
 
 - (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error {
-	return [self getListForURLAction:kUrlDevices withSessionID:sessionID andError:error];
+	
+	if( (!error) || [NSString isEmptyString:sessionID]) {
+		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+	}
+	
+	NSString *params = @"&per_page=1000&details=full";
+	return [self getListForURLAction:kUrlDevices withParams:params withResultKey:@"devices" withSessionID:sessionID andError:error];
 }
-
-
-
-
 
 
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
@@ -205,9 +211,17 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	return [DSEHTTPRequestHelper evaluateResponseWithData:responseData andHttpResponse:httpResponse andError:error];
 }
 
+
 - (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	return nil;
+	if( (!error) || (!startDate) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:csSensorID]) {
+		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+	}
+
+	NSString *params = [NSString stringWithFormat:@"?per_page=1000&start_date=%f&end_date=%f&sort=DESC", [startDate timeIntervalSince1970], [[NSDate date] timeIntervalSince1970]];
+	NSString *urlAction = [NSString stringWithFormat: @"%@/%@/%@", kUrlSensors, csSensorID, kUrlData];
+	
+	return [self getListForURLAction:urlAction withParams:params withResultKey:@"data" withSessionID:sessionID andError:error];
 }
 
 
@@ -237,11 +251,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 /**
  Helper function for getting a list from the cs-rest API
  */
-- (NSArray *) getListForURLAction: (const NSString*) urlAction withSessionID: (NSString *) sessionID andError: (NSError **) error {
-	
-	if((!error) || [NSString isEmptyString:sessionID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
-	}
+- (NSArray *) getListForURLAction: (const NSString*) urlAction withParams: (NSString *) paramsString withResultKey: (NSString *) resultKey withSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	NSInteger page              = 0;
 	NSMutableArray* resultsList = [[NSMutableArray alloc] init];
@@ -249,7 +259,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	NSDictionary* responseDict;
 	
 	do {
-		NSString* params         = [NSString stringWithFormat:@"?per_page=1000&details=full&page=%li", (long)page];
+		NSString *params		 = [NSString stringWithFormat:@"?page=%li%@", (long)page, paramsString];
 		NSURL *url               = [self makeCSRestUrlFor:urlAction append:params];
 		NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:nil withError:nil];
 		NSData* responseData     = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
@@ -261,7 +271,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 			*error = [DSEHTTPRequestHelper createErrorWithCode:[httpResponse statusCode] andResponseData:responseData];
 			break;
 		} else {
-			[resultsList addObjectsFromArray:[responseDict valueForKey:@"sensors"]];
+			[resultsList addObjectsFromArray:[responseDict valueForKey:resultKey]];
 			page++;
 		}
 		
