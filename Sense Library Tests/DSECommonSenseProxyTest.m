@@ -210,6 +210,7 @@ static NSString* testPassword = @"darkr";
                             nil];
     NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
     
+    //--name - mandatory!
     [self createSensorWithInsufficientParams:sessionID dataStructure:dataStructure dataType:dataType deviceType:deviceType displayName:displayName name:name];
 }
 
@@ -233,6 +234,7 @@ static NSString* testPassword = @"darkr";
                             nil];
     NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
     
+    //--diplay name
     [self createSensorWithSufficientParams:sessionID dataStructure:dataStructure dataType:dataType deviceType:deviceType displayName:displayName name:name];
 }
 
@@ -256,8 +258,7 @@ static NSString* testPassword = @"darkr";
                             nil];
     NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
     
-    //-- device type
-    
+    //-- device type - mandatory!
     [self createSensorWithInsufficientParams:sessionID dataStructure:dataStructure dataType:dataType deviceType:deviceType displayName:displayName name:name];
 }
 
@@ -281,7 +282,7 @@ static NSString* testPassword = @"darkr";
                             nil];
     NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
     
-    //-- data type
+    //-- data type - mandatory!
     [self createSensorWithInsufficientParams:sessionID dataStructure:dataStructure dataType:dataType deviceType:deviceType displayName:displayName name:name];
 }
 
@@ -321,14 +322,15 @@ static NSString* testPassword = @"darkr";
     NSString* displayName = @"test"; //empty diplayName
     NSString* deviceType = @"deviceType";
     NSString* dataType = kCSDATA_TYPE_JSON;
-    NSString* dataStructure = @"";
+    NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"string", @"test",
+                            nil];
+    NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
     
     //-- session ID - mandatory!
     
     [self createSensorWithInsufficientParams:@"veryInvalidSessionID" dataStructure:dataStructure dataType:dataType deviceType:deviceType displayName:displayName name:name];
 }
-
-
 
 
 - (void) testCreateMultipleSensorsAndGetMultipleSensors {
@@ -339,14 +341,68 @@ static NSString* testPassword = @"darkr";
     
     NSError* error;
     
-    NSString* name = @"test";
-    NSString* displayName = @"test";
+    NSString* name = @"test0";
+    NSString* displayName = @"test0";
     NSString* deviceType = @"deviceType";
     NSString* dataType = kCSDATA_TYPE_JSON;
-    NSString* dataStructure = @"";
+    NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"string", @"test",
+                            nil];
+    NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
     
     [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    
+    name = @"test1";
+    displayName = @"test1";
+    
+    [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    
+    name = @"test2";
+    displayName = @"test2";
 
+    
+    [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    
+    //get list of sensors and count
+    error = nil;
+    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssertEqual(sensors.count, 3, "The number of sensors is not 3.");
+
+}
+
+- (void) testCreateMultipleSensorsAndGetMultipleDevices {
+    
+    //login
+    NSString *sessionID = [proxy loginUser:testUser andPassword:testPassword andError:nil];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    NSError* error;
+    
+    NSString* name = @"test";
+    NSString* displayName = @"test";
+    NSString* deviceType = @"deviceType0";
+    NSString* dataType = kCSDATA_TYPE_JSON;
+    NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"string", @"test",
+                            nil];
+    NSString* dataStructure = [NSJSONSerialization dataWithJSONObject:format options:0 error:nil];
+    
+    [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    
+    NSString* deviceType = @"deviceType1";
+    
+    [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    
+    NSString* deviceType = @"deviceType2";
+
+    [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    
+    //get list of sensors and count
+    error = nil;
+    NSArray *devices = [proxy getDevicesWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssertEqual(devices.count, 3, "The number of devices is not 3.");
 }
 
 
