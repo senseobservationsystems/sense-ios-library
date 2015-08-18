@@ -9,4 +9,5 @@
 static NSString *DataStorageEngineErrorDomain = @"nl.sense.DataStorageEngine.ErrorDomain";
 
 /* List of error codes used by the DataStorageEngine */
-static const int kErrorCodeInvalidUsernamePassword = 401;
+static const int kErrorCodeInvalidUsernamePassword	= 401;
+static const int kErrorInvalidInputParameters		= 402;
