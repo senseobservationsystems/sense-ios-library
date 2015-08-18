@@ -6,8 +6,7 @@
 //
 //
 
-#ifndef SensePlatform_DSEErrors_h
-#define SensePlatform_DSEErrors_h
+static NSString *DataStorageEngineErrorDomain = @"nl.sense.DataStorageEngine.ErrorDomain";
 
-
-#endif
+/* List of error codes used by the DataStorageEngine */
+static const int kErrorCodeInvalidUsernamePassword = 401;
