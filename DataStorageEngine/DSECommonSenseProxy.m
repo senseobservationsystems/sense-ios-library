@@ -13,9 +13,10 @@
 
 static const NSString* kUrlBaseURLLive              = @"https://api.sense-os.nl";
 static const NSString* kUrlBaseURLStaging           = @"http://api.staging.sense-os.nl";
-static const NSString* kUrlAuthenticationLive       = @"https://auth-api.sense-os.nl/v1/login";
-static const NSString* kUrlAuthenticationStaging    = @"http://auth-api.staging.sense-os.nl/v1/login";
+static const NSString* kUrlAuthenticationLive       = @"https://auth-api.sense-os.nl/v1";
+static const NSString* kUrlAuthenticationStaging    = @"http://auth-api.staging.sense-os.nl/v1";
 
+static const NSString* kUrlLogin					= @"login";
 static const NSString* kUrlLogout                   = @"logout";
 static const NSString* kUrlSensorDevice             = @"device";
 static const NSString* kUrlSensors                  = @"sensors";
@@ -64,7 +65,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 		return nil;
 	}
 	
-    NSURL *url               = [NSURL URLWithString:urlAuth];
+	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", urlAuth, kUrlLogin]];
     NSString *hashedPassword = [NSString MD5HashOf:password];
     NSDictionary* inputDict  = @{@"username": username,
 								 @"password": hashedPassword };
@@ -93,7 +94,31 @@ static const NSString* kUrlJsonSuffix               = @".json";
 }
 
 - (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
-	return NO;
+	
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
+	if([self isEmptyString: sessionID]) {
+		*error = [self createErrorWithCode:kErrorInvalidInputParameters andMessage:@"Invalid sessionID"];
+		return nil;
+	}
+	
+	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", urlAuth, kUrlLogout]];
+	NSURLRequest *urlRequest = [self createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andInput:nil withError:nil];
+	
+	NSHTTPURLResponse* httpResponse;
+	NSData* responseData = [self doRequest:urlRequest andResponse:&httpResponse andError:error];
+
+	if(*error) {
+		return NO;
+	} else if ([httpResponse statusCode] != 200) {
+		*error = [self createErrorWithCode:[httpResponse statusCode] andMessage:@"Unknown problem while logging out."];
+		return NO;
+	} else {
+		return YES;
+	}
 }
 
 #pragma mark Sensors and Devices (Public)
@@ -147,7 +172,11 @@ static const NSString* kUrlJsonSuffix               = @".json";
  */
 - (NSData*) doRequest:(NSURLRequest *) urlRequest andResponse:(NSHTTPURLResponse**)response andError:(NSError **) error
 {
-
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
 	if(! urlRequest) {
 		*error = [NSError errorWithDomain:DataStorageEngineErrorDomain code:kCFURLErrorUnknown userInfo:nil];
 		*response = nil;
@@ -180,6 +209,11 @@ static const NSString* kUrlJsonSuffix               = @".json";
  */
 - (NSURLRequest *) createURLRequestTo:(NSURL *)url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andInput:(NSDictionary *)input withError: (NSError * __autoreleasing *) error {
 	
+	if(! error) {
+		NSError * __autoreleasing errorPointer;
+		error = &errorPointer; //Since arc does not allow __autoreleasing casts we have to do it this way.
+	}
+	
 	if((! url) || (! [self isValidHTTPRequestMethod:method])) {
 		*error = [self createErrorWithCode:kErrorInvalidInputParameters andMessage:@"Invalid input parameters."];
 		return nil;
@@ -191,7 +225,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	[urlRequest setHTTPMethod:method];
 	
 	if (! [self isEmptyString:sessionID]) {
-		[urlRequest setValue:sessionID forHTTPHeaderField:@"cookie"];
+		[urlRequest setValue:sessionID forHTTPHeaderField:@"SESSION-ID"];
 	}
 	
 	if (! [self isEmptyString:appKey]) {
@@ -256,5 +290,40 @@ static const NSString* kUrlJsonSuffix               = @".json";
 		return [[NSString alloc] initWithData:inputJsonData encoding:NSUTF8StringEncoding];
 	}
 }
-				  
+
+//Make a url with the included action
+- (NSURL*) makeCSRestUrlFor:(const NSString *) action append:(NSString *) appendix
+{
+	if([self isEmptyString:(NSString *)action]) {
+		return nil;
+	}
+	
+	if(! appendix) {
+		appendix = @"";
+	}
+	
+	NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
+					 urlBase,
+					 action,
+					 kUrlJsonSuffix,
+					 appendix];
+	
+	return [NSURL URLWithString:url];
+}
+
+//Printing function for debugging
+- (void) logUrlRequest: (NSURLRequest *) urlRequest {
+	NSLog(@"\nRequest headers:\n %@ \nURL: %@\n Method: %@\n Body:\n %@\n",
+		  [urlRequest allHTTPHeaderFields],
+		  [urlRequest URL],
+		  [urlRequest HTTPMethod],
+		  [[NSString alloc] initWithData:[urlRequest HTTPBody] encoding:NSUTF8StringEncoding]);
+	
+}
+
+//Printing function for debugging
+- (void) logJsonData: (NSData *) jsonData {
+	NSLog(@"JSON Data:\n%@\n",
+		  [[NSString alloc] initWithData: jsonData encoding:NSUTF8StringEncoding]);
+}
 @end
