@@ -188,8 +188,21 @@ static const NSString* kUrlJsonSuffix               = @".json";
 #pragma mark Data (Public)
 
 - (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error {
+
+	if( (!error) || (!data) || [NSString isEmptyString:sessionID]) {
+		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+	}
 	
-	return NO;
+	NSDictionary* inputDict = [NSDictionary dictionaryWithObjectsAndKeys:
+								data, @"sensors", nil];
+
+	NSURL *url               = [self makeCSRestUrlFor:kUrlUploadMultipleSensors append:nil];
+	NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:inputDict withError:error];
+	
+	NSHTTPURLResponse* httpResponse;
+	NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
+
+	return [DSEHTTPRequestHelper evaluateResponseWithData:responseData andHttpResponse:httpResponse andError:error];
 }
 
 - (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error {
@@ -197,8 +210,8 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	return nil;
 }
 
-#pragma mark Private methods
 
+#pragma mark Private methods
 
 /**
  Helper function for adding sensor to device based on a device dict instead of the type, UUID, and/or ID. 
