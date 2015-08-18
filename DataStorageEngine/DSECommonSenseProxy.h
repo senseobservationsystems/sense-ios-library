@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 /**
  *	The DSECommonSenseProxy class consists of static methods that wrap the API.
  
@@ -15,12 +17,29 @@
 	
 	The DSECommonSenseProxy class does not now about DataStorageEngine concepts, it simply wraps the API that is available for CommonSense. Any translations between concepts in the DataStorageEngine and CommonSense should be made by other objects (most notably the difference between Source and Device). 
  
-	The DSECommonSenseProxy uses a Session ID and Application Key to get authorized for API access. These parameters are not managed by the DSECommonSenseProxy but should instead by provided as a parameter when calling the method in the proxy. 
+	The DSECommonSenseProxy uses a Session ID and Application Key to get authorized for API access. These parameters are simply stored on initialization but not managed by the DSECommonSenseProxy. If they should change, simply making a new instance of the proxy would be sufficient. 
  
-	There is no need to instantiate the DSECommonSenseProxy. It is simply a collection of static methods and is stateless.
+	The DSECommonSenseProxy knows about two servers: the CommonSense live server (for production) and the CommonSense staging server (for testing).
+ 
  */
-@interface DSECommonSenseProxy : NSObject
+@interface DSECommonSenseProxy : NSObject {
+	NSString *appKey;					//The app key
+	NSString *urlBase;					//The base url to use, will differ based on whether to use live or staging server
+	NSString *urlBaseAuth;	//The base url to use for authentication, will differ based on whether to use live or staging server
+	int requestTimeoutInterval;			// Timeout interval in seconds
+}
 
+
+/**
+ Default initializaler for the DSECommonSenseProxy.
+ 
+ Takes an app key that will be used throughout the proxies lifetime. Needs to know whether to talk to the live server or the staging server. This cannot be changed during the proxies lifetime. If you need to change this you simply init a new commonsense proxy.
+ 
+ @param useLiveServer	If YES, the live server will be used. If NO, the staging server will be used.
+ @param appKey			An application key that identifies the application to the commonsense server. Can be empty.
+ @result				Initialized DSECommonSenseProxy
+*/
+- (id) initAndUseLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey;
 
 #pragma mark User
 /**
@@ -34,21 +53,20 @@
  
  @param username		A user account in commonsense is uniquely identified by a username.
  @param password		A password in commonsense does not have any specific requirements. It will be MD5 hashed before sending to the server so the user does not have to provide a hashed password.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @return				Session ID. Will be nil if the call fails.
  */
-+ (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error;
 
 /**
  Logout the currently logged in user.
  
  @param sessionID		The sessionID of the user to logout. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
+
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @return				Whether or not the logout finished succesfully.
  */
-+ (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 #pragma mark Sensors and Devices
@@ -68,11 +86,10 @@
  @param dataType		Type of data that the sensor stores.
  @param dataStructure	Structure of the data in the data; can be used to specify the JSON structure in the sensor.
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Dictionary with the information of the created sensor.
  */
-+ (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -81,11 +98,10 @@
  This will fetch all the sensors for the current user and pass them on to the success callback as an NSArray. Each element in the array will contain an NSDictionary with data from one sensor.
  
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Array of sensors. Each object will be an NSDictionary with the resulting sensor information. Will be nil if an error occurs.
  */
-+ (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -94,11 +110,10 @@
  This will fetch all the devices for the current user and pass them on to the success callback as an NSArray. Each element in the array will contain an NSDictionary with data from one device.
  
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Array of devices. Each object will be an NSDictionary with the resulting device information. Will be nil if an error occurs.
  */
-+ (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -109,11 +124,10 @@
  @param csSensorID		CommonSense sensor ID for the sensor. Cannot be empty.
  @param	csDeviceID		CommonSense device ID for the device. Cannot be empty. 
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the sensor was successfully added to the device.
  */
-+ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 /**
  Add sensor to a device.
@@ -126,11 +140,10 @@
  @param	name			Unique name for the device. Cannot be empty.
  @param	UUID			UUID for the device. Cannot be empty.
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the sensor was successfully added to the device.
  */
-+ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithName: (NSString *) csDeviceName andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 
@@ -147,11 +160,10 @@
  
  @param data			NSArray of datapoints. Each datapoint should be an NSDictionary with fields called "sensorID" (NSString), "value" (id), and "date" (NSDate *). These fields will be parsed into the correct form for uploading to commonsense.
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				Whether or not the post of the data was succesfull.
  */
-+ (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
 /**
@@ -162,9 +174,8 @@
  @param csSensorID		Identifier of the sensor from CommonSense for which to download the data.
  @param fromDateDate	Date from which to download data. Datapoints after this date will be included in the download. Datapoints from before this date will be ignored.
  @param sessionID		The sessionID of the current user. Cannot be empty.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. If nil, will be ignored.
  @result				NSArray with the resulting data. Each object is an NSDictionary with the data as provided by the backend. Will be nil if an error occured.
  */
-+ (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andAppKey: (NSString *) appKey andError: (NSError **) error;
++ (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error;
 @end;
