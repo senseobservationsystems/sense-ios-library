@@ -69,6 +69,8 @@
 - (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
+//- (BOOL) deleteCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
+
 #pragma mark Sensors and Devices
 /**
  @name Sensors and Devices (DSESource backend equivalent)
