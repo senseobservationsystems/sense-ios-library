@@ -27,7 +27,6 @@
 	NSString *appKey;					//The app key
 	NSString *urlBase;					//The base url to use, will differ based on whether to use live or staging server
 	NSString *urlAuth;				//The base url to use for authentication, will differ based on whether to use live or staging server
-	int requestTimeoutInterval;			//Timeout interval in seconds
 }
 
 

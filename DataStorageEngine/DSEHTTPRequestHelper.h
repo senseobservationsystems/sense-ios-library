@@ -10,6 +10,22 @@
 
 @interface DSEHTTPRequestHelper : NSObject
 
+/** 
+ Method for doing an http request to CommonSense.
+ 
+ The request is done synchronously.
+ 
+ @param url						The complete url of the call. Cannot be nil.
+ @param method					Method of the call (eg POST, GET) as string. Cannot be empty.
+ @param sessionID				The session ID to use. Can be empty.
+ @param appKey					The app key to use. Cannot be empty.
+ @param requestTimeoutInterval	The timeout in seconds to specify for this request
+ @param input					String with input data to the http request. This will be transformed into a JSON data object. Can be empty.
+ @param response		An NSHTTPURLResponse object that contains the response information from the server, including the response code and message.
+ @param error			The error object that will be filled with more information if there was an error during the call. Will be nil if no error occured.
+ @return				Resulting data from the server. Will be nil if the connection to the server failed or there was an error in the call.
+*/
++ (NSData*) doRequestTo:(NSURL *) url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andAppKey: (NSString *) appKey andInput:(NSDictionary *)input andResponse:(NSHTTPURLResponse *__autoreleasing *)response andError:(NSError *__autoreleasing *)error;
 
 /**
  Method for doing an http request to CommonSense.
@@ -22,7 +38,7 @@
  @return				Resulting data from the server. Will be nil if the connection to the server failed or there was an error in the call.
  
  */
-+ (NSData*) doRequest:(NSURLRequest *) urlRequest andResponse:(NSHTTPURLResponse**)response andError:(NSError **) error;
+//+ (NSData*) doRequest:(NSURLRequest *) urlRequest andResponse:(NSHTTPURLResponse**)response andError:(NSError **) error;
 
 
 /**
@@ -39,7 +55,7 @@
  @param error					In case of nil return some more info can be found in this object.
  @result						NSURLRequest based on the input parameters
  */
-+ (NSURLRequest *) createURLRequestTo:(NSURL *)url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andAppKey: (NSString *) appKey andTimeoutInterval: (NSInteger) requestTimeoutInterval andInput:(NSDictionary *)input withError: (NSError * __autoreleasing *) error;
+//+ (NSURLRequest *) createURLRequestTo:(NSURL *)url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andAppKey: (NSString *) appKey  andInput:(NSDictionary *)input withError: (NSError * __autoreleasing *) error;
 
 /**
  Checks whether an HTTP Request method is valid

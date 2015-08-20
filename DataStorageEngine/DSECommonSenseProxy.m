@@ -38,7 +38,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	
 	if(self) {
         appKey                 = theAppKey;
-		requestTimeoutInterval = 10;			//Time out of 10 sec for every request
+
 
 		if(useLiveServer) {
             urlBase     = (NSString *)kUrlBaseURLLive;
@@ -58,35 +58,35 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:username] || [NSString isEmptyString:password]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
-	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", urlAuth, kUrlLogin]];
+	NSURL *url               = [self makeUrlFor:kUrlLogin append:nil];
     NSDictionary* inputDict  = @{@"username": username,
 								 @"password": [NSString MD5HashOf:password] };
-    NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"POST" andSessionID:nil andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:inputDict withError:error];
-	NSHTTPURLResponse* httpResponse;
-	NSData *responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
 	
-	return [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock:
-			  ^{
+	NSHTTPURLResponse* httpResponse;
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:nil andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
+	
+	NSString *sessionID = [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock: ^{
 				NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
 				return [NSString stringWithFormat:@"%@",[responseDict valueForKey:@"session_id"]];
 			  }];
+	
+	return sessionID;
 }
 
 
 - (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:sessionID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 
-	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", urlAuth, kUrlLogout]];
-	NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:nil withError:nil];
+	NSURL *url = [self makeUrlFor:kUrlLogout append:nil];
 	
 	NSHTTPURLResponse* httpResponse;
-	NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey:appKey andInput:nil andResponse:&httpResponse andError:error];
 
 	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
 }
@@ -119,7 +119,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:name] || [NSString isEmptyString:deviceType] || [NSString isEmptyString:dataType]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
 	if(! dataStructure) {
@@ -130,7 +130,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
 		displayName = @"";
 	}
 	
-	
 	NSMutableDictionary *sensorDescription =  [NSMutableDictionary dictionaryWithObjectsAndKeys:
 													name,			@"name",
 													displayName,	@"display_name",
@@ -140,16 +139,13 @@ static const NSString* kUrlJsonSuffix               = @".json";
 													dataStructure,	@"data_structure",
 													nil];
 
-	
 	NSDictionary* inputDict  = [NSDictionary dictionaryWithObject:sensorDescription forKey:@"sensor"];
-	NSURL *url               = [self makeCSRestUrlFor:kUrlSensors append:nil];
-	NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:inputDict withError:error];
-	
-	NSHTTPURLResponse* httpResponse;
-	NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
+	NSURL *url               = [self makeUrlFor:kUrlSensors append:nil];
 
-	NSString *sensorID = [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock:
-	 ^{
+	NSHTTPURLResponse* httpResponse;
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
+
+	NSString *sensorID = [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock:^{
 		@try {
 			NSString* location          = [httpResponse.allHeaderFields valueForKey:@"location"];
 			NSArray* locationComponents = [location componentsSeparatedByString:@"/"];
@@ -159,6 +155,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 			NSLog(@"Exception while creating sensor %@: %@", sensorDescription, exception);
 		}
 	}];
+	
 	
 	if(sensorID) {
 		[sensorDescription setValue:sensorID forKey:@"sensor_id"];
@@ -172,7 +169,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 
 	if( (!error) || [NSString isEmptyString:sessionID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
 	NSString *params = @"&per_page=1000&details=full";
@@ -183,7 +180,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:sessionID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
 	NSString *params = @"&per_page=1000&details=full";
@@ -194,10 +191,10 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:csSensorID] || [NSString isEmptyString:csDeviceID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
-	NSDictionary *deviceDict =  [NSDictionary dictionaryWithObjectsAndKeys:	csDeviceID, @"id", nil];
+	NSDictionary *deviceDict = [NSDictionary dictionaryWithObjectsAndKeys:	csDeviceID, @"id", nil];
 	return [self addSensorWithID:csSensorID toDeviceWithDict:deviceDict andSessionID:sessionID andError:error];
 }
 
@@ -205,10 +202,10 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithType: (NSString *) deviceType andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:deviceType] || [NSString isEmptyString:UUID] || [NSString isEmptyString:csSensorID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
-	NSDictionary *deviceDict =  [NSDictionary dictionaryWithObjectsAndKeys:	deviceType, @"type", UUID, @"uuid", nil];
+	NSDictionary *deviceDict = [NSDictionary dictionaryWithObjectsAndKeys:	deviceType, @"type", UUID, @"uuid", nil];
 	return [self addSensorWithID:csSensorID toDeviceWithDict:deviceDict andSessionID:sessionID andError:error];
 }
 
@@ -217,19 +214,16 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error {
 
-	if( (!error) || (!data) || [NSString isEmptyString:sessionID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+	if( (!error) || (!data) || (data.count == 0) || [NSString isEmptyString:sessionID]) {
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
-	
-	NSDictionary* inputDict = [NSDictionary dictionaryWithObjectsAndKeys:
-								data, @"sensors", nil];
 
-	NSURL *url               = [self makeCSRestUrlFor:kUrlUploadMultipleSensors append:nil];
-	NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:inputDict withError:error];
-	
+	NSDictionary* inputDict  = [NSDictionary dictionaryWithObjectsAndKeys: data, @"sensors", nil];
+	NSURL *url               = [self makeUrlFor:kUrlUploadMultipleSensors append:nil];
+
 	NSHTTPURLResponse* httpResponse;
-	NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
-
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
+	
 	return [DSEHTTPRequestHelper evaluateResponseWithData:responseData andHttpResponse:httpResponse andError:error];
 }
 
@@ -237,7 +231,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || (!startDate) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:csSensorID]) {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 
 	NSString *params = [NSString stringWithFormat:@"?per_page=1000&start_date=%f&end_date=%f&sort=DESC", [startDate timeIntervalSince1970], [[NSDate date] timeIntervalSince1970]];
@@ -255,16 +249,15 @@ static const NSString* kUrlJsonSuffix               = @".json";
 - (BOOL) addSensorWithID:(NSString *)csSensorID toDeviceWithDict:(NSDictionary *)deviceDict andSessionID: (NSString*) sessionID andError:(NSError *__autoreleasing *)error {
 	
 	if(!error)  {
-		[NSException raise:@"InvalidInputParameters" format:@"The input parameters are invalid. Cannot process this request."];
+		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
 	NSDictionary* inputDict	 = [NSDictionary dictionaryWithObject:deviceDict forKey:@"device"];
-	
-	NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat: @"%@/%@/%@/%@%@", urlBase, kUrlSensors, csSensorID, kUrlSensorDevice,kUrlJsonSuffix]];
-	NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:inputDict withError:nil];
+	NSString* urlAction		 = [NSString stringWithFormat: @"%@/%@/%@", kUrlSensors, csSensorID, kUrlSensorDevice];
+	NSURL *url               = [self makeUrlFor:urlAction append:nil];
 	
 	NSHTTPURLResponse* httpResponse;
-	NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
 	
 	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
 }
@@ -282,9 +275,9 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	
 	do {
 		NSString *params		 = [NSString stringWithFormat:@"?page=%li%@", (long)page, paramsString];
-		NSURL *url               = [self makeCSRestUrlFor:urlAction append:params];
-		NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:nil withError:nil];
-		NSData* responseData     = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
+		NSURL *url               = [self makeUrlFor:urlAction append:params];
+		
+		NSData *responseData	 = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey:appKey andInput:nil andResponse:&httpResponse andError:error];
 		responseDict			 = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
 		
 		if(*error) {
@@ -304,7 +297,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 
 //Make a url with the included action
-- (NSURL*) makeCSRestUrlFor:(const NSString *) action append:(NSString *) appendix
+- (NSURL*) makeUrlFor:(const NSString *) action append:(NSString *) appendix
 {
 	if([NSString isEmptyString:(NSString *)action]) {
 		return nil;
@@ -314,17 +307,24 @@ static const NSString* kUrlJsonSuffix               = @".json";
 		appendix = @"";
 	}
 	
-	NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
-					 urlBase,
-					 action,
-					 kUrlJsonSuffix,
-					 appendix];
+	NSString *url;
+	
+	if([action isEqualToString:(NSString *)kUrlLogin] || [action isEqualToString:(NSString *)kUrlLogout]) {
+		url = [NSString stringWithFormat: @"%@/%@%@",
+			   urlAuth,
+			   action,
+			   appendix];
+	} else {
+		url = [NSString stringWithFormat: @"%@/%@%@%@",
+						 urlBase,
+						 action,
+						 kUrlJsonSuffix,
+						 appendix];
+	}
+	
+
 	
 	return [NSURL URLWithString:url];
 }
-
-
-
-
 
 @end

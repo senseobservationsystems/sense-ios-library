@@ -11,8 +11,21 @@
 #import "NSString+Utils.h"
 #import "NSData+GZIP.h"
 
+const int requestTimeoutInterval = 10;			//Time out of 10 sec for every request
+
 @implementation DSEHTTPRequestHelper
 
++ (NSData*) doRequestTo:(NSURL *) url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andAppKey: (NSString *) appKey andInput:(NSDictionary *)input andResponse:(NSHTTPURLResponse *__autoreleasing *)response andError:(NSError *__autoreleasing *)error {
+	
+	NSURLRequest *request = [self createURLRequestTo:url withMethod:method andSessionID:sessionID andAppKey:appKey andInput:input withError:error];
+	
+	if(error && *error) {
+		return nil;
+	}
+	
+	return [self doRequest:request andResponse:response andError:error];
+	
+}
 
 + (NSData*) doRequest:(NSURLRequest *) urlRequest andResponse:(NSHTTPURLResponse**)response andError:(NSError **) error
 {
@@ -31,7 +44,7 @@
 
 
 
-+ (NSURLRequest *) createURLRequestTo:(NSURL *)url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andAppKey: (NSString *) appKey andTimeoutInterval: (NSInteger) requestTimeoutInterval andInput:(NSDictionary *)input withError: (NSError * __autoreleasing *) error {
++ (NSURLRequest *) createURLRequestTo:(NSURL *)url withMethod:(NSString*)method andSessionID:(NSString*) sessionID andAppKey: (NSString *) appKey andInput:(NSDictionary *)input withError: (NSError * __autoreleasing *) error {
 	
 	NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url
 														   cachePolicy:NSURLRequestReloadIgnoringCacheData
