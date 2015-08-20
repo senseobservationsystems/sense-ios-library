@@ -415,18 +415,109 @@ static NSString* testPassword = @"darkr";
     displayName = @"test2";
     [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
     
-    //get list of sensors and count
+    //get list of devices and count
     error = nil;
     NSArray *devices = [proxy getDevicesWithSessionID: sessionID andError: &error];
     XCTAssertNil(error, @"Error is not nil; an error must have occured");
-    XCTAssertEqual(devices.count, expectedNumOfDevices, "Unexpected number of devices.");
+    XCTAssertEqual(devices.count, expectedNumOfDevices, @"Unexpected number of devices.");
+}
+
+#pragma mark addSensorWithID
+-(void) testAddSensorToDeviceWithDeviceId {
+    
+    NSError* error;
+    int expectedNumOfSensors = 1;
+    //login
+    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    //createSensor and get sensorId
+    NSString* name = @"test";
+    NSString* displayName = @"test";
+    NSString* deviceType = @"deviceType";
+    NSString* dataType = kCSDATA_TYPE_JSON;
+    NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"float", @"value1",
+                            @"float", @"value2",
+                            @"float", @"value3",
+                            nil];
+    error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+    NSString* dataStructure = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    error = nil;
+    NSDictionary* sensorInfo = [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    expectedNumOfSensors++;
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    //get list of sensors and count
+    error = nil;
+    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
+    
+    //get list of devices and count
+    error = nil;
+    NSArray *devices = [proxy getDevicesWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    error = nil;
+    BOOL result = [proxy addSensorWithID:sensorInfo[@"sensor_id"] toDeviceWithID:devices[0][@"id"] andSessionID:sessionID andError:&error];
+    XCTAssertEqual(result, YES, @"The result is NO. addSensorWithID must have failed");
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+}
+
+-(void) testAddSensorToDeviceWithDeviceTypeAndUUID {
+    
+    NSError* error;
+    int expectedNumOfSensors = 1;
+    //login
+    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    //createSensor and get sensorId
+    NSString* name = @"test";
+    NSString* displayName = @"test";
+    NSString* deviceType = @"deviceType";
+    NSString* dataType = kCSDATA_TYPE_JSON;
+    NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
+                            @"float", @"value1",
+                            @"float", @"value2",
+                            @"float", @"value3",
+                            nil];
+    error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:format options:0 error:&error];
+    NSString* dataStructure = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    error = nil;
+    NSDictionary* sensorInfo = [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    expectedNumOfSensors++;
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    //get list of sensors and count
+    error = nil;
+    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
+    
+    //get list of devices and count
+    error = nil;
+    NSArray *devices = [proxy getDevicesWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    error = nil;
+    BOOL result = [proxy addSensorWithID:sensorInfo[@"sensor_id"] toDeviceWithType: devices[0][@"type"] andUUID:devices[0][@"uuid"] andSessionID:sessionID andError:&error];
+    XCTAssertEqual(result, YES, @"The result is NO. addSensorWithID must have failed");
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
 }
 
 #pragma mark *Data*
 
-#pragma mark postData
+#pragma mark postData and getData
 
--(void) testPostandGetData {
+-(void) testPostAndGetData {
     NSError* error;
     
     //login
@@ -449,28 +540,31 @@ static NSString* testPassword = @"darkr";
     NSDictionary* sensorInfo = [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
     
     //create datapoints
-    NSMutableArray* data = [[NSMutableArray alloc] init];
+    NSMutableArray* datapoints = [[NSMutableArray alloc] init];
     
-    for (int x = 0 ; x < 100; x++) {
+    for (int x = 0 ; x < 2; x++) {
+        NSDate* now = [NSDate date];
         NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithInt:1], @"value1",
                                    [NSNumber numberWithInt:2], @"value2",
                                    [NSNumber numberWithInt:3], @"value3",
                                    nil];
         NSDictionary* datapoint = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   sensorInfo[@"sensor_id"], @"sensorID",
                                    value, @"value",
-                                   @([[NSDate date] timeIntervalSince1970]), @"date",
+                                   @([now timeIntervalSince1970]), @"date",
                                    nil];
-        [data addObject:datapoint];
+        [datapoints addObject:datapoint];
     }
     
+    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                               sensorInfo[@"sensor_id"], @"sensor_id",
+                               datapoints, @"data",
+                               nil];
     
     error = nil;
-    bool isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
-    XCTAssertTrue(isSuccessful, "postData returned false. PostData must have failed.");
+    BOOL isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
+    XCTAssertEqual(isSuccessful, YES, "postData returned NO. PostData must have failed.");
     XCTAssertNil(error, "The error is not nil. An error must have occured");
-    
     
     error = nil;
     int aWeek = 7*24*60*60;
@@ -479,8 +573,6 @@ static NSString* testPassword = @"darkr";
     XCTAssertEqual(result.count, 1, "Unexpected number of datapoints");
     XCTAssertNil(error, "The error is not nil. An error must have occured");
 }
-
-#pragma mark getDataForSensor
 
 
 
