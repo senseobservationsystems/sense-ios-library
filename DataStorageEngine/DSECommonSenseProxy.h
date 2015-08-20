@@ -39,7 +39,7 @@
  @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
  @result				Initialized DSECommonSenseProxy
 */
-- (id) initAndUseLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey;
+- (id) initForLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey;
 
 #pragma mark User
 /**
@@ -117,18 +117,6 @@
 - (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
-/**
- Add sensor to a device. 
- 
- This will create a device if it doesnt exist yet. This is the only way to create a new device. A device is uniquely identified by a device ID or by a name and UUID. This method will use the device ID as stored in the commonsense server. There is a twin method available that takes a name and UUID instead if the device ID is not available. 
- 
- @param csSensorID		CommonSense sensor ID for the sensor. Cannot be empty.
- @param	csDeviceID		CommonSense device ID for the device. Cannot be empty. 
- @param sessionID		The sessionID of the current user. Cannot be empty.
- @param error			Reference to an NSError object that will contain error information if an error occurs. Cannot be nil.
- @result				Whether or not the sensor was successfully added to the device.
- */
-- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 /**
  Add sensor to a device.
