@@ -24,18 +24,12 @@ static NSString* testPassword = @"darkr";
 
 @implementation DSECommonSenseProxyTest {
 	DSECommonSenseProxy *proxy;
-    NSTimeInterval registrationTimestamp;
-    NSString *newUserEmail;
 }
 
 - (void)setUp {
 	[super setUp];
 
-    registrationTimestamp = [[NSDate date] timeIntervalSince1970];
-    newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
-
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging value:kCSSettingYES];
-    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
     
 	//Setup CommonSenseProxy for staging
 	proxy = [[DSECommonSenseProxy alloc] initAndUseLiveServer:NO withAppKey:testAppKeyStaging];
@@ -52,6 +46,10 @@ static NSString* testPassword = @"darkr";
 #pragma mark loginUser
 
 - (void)testLoginWithValidUsernameAndPassword {
+    
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
     
 	NSError *error;
 	NSString *sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
@@ -94,6 +92,10 @@ static NSString* testPassword = @"darkr";
 #pragma mark logoutCurrentUserWIthSessionID
 
 - (void) testLogoutWithValidSessionID {
+    
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
     
     //login
     NSError *error;
@@ -167,13 +169,16 @@ static NSString* testPassword = @"darkr";
 
 - (void) testCreateSensorAndGetSensor {
 
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
+    
     NSError* error;
     int expectedNumOfSensors = 1;
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
-    
     
     [CSSensePlatform flushDataAndBlock];
     
@@ -340,12 +345,22 @@ static NSString* testPassword = @"darkr";
 
 - (void) testCreateMultipleSensorsAndGetMultipleSensors {
     
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
+    
     NSError* error;
     int expectedNumOfSensors = 1;
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    [CSSensePlatform flushDataAndBlock];
+    
+    //make sure that there is no sensor yet
+    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, "The number of sensors is not 1.");
     
     NSString* name = @"test0";
     NSString* displayName = @"test0";
@@ -374,13 +389,17 @@ static NSString* testPassword = @"darkr";
     
     //get list of sensors and count
     error = nil;
-    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
     XCTAssertNil(error, @"Error is not nil; an error must have occured");
     XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
 
 }
 
 - (void) testCreateMultipleSensorsAndGetDevices {
+    
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
     
     NSError* error;
     int expectedNumOfDevices = 1;
@@ -479,6 +498,10 @@ static NSString* testPassword = @"darkr";
 
 -(void) testAddSensorToDeviceWithDeviceTypeAndUUID {
     
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
+    
     NSError* error;
     int expectedNumOfSensors = 1;
     //login
@@ -532,6 +555,11 @@ static NSString* testPassword = @"darkr";
 #pragma mark postData and getData
 
 -(void) testPostAndGetData {
+    
+    NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
+    NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
+    [CSSensePlatform registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail];
+    
     NSError* error;
     
     //login
