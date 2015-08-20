@@ -32,7 +32,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 @implementation DSECommonSenseProxy 
 
 
-- (id) initAndUseLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey {
+- (id) initForLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey {
 	
 	self = [super init];
 	
@@ -146,21 +146,26 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
 
 	NSString *sensorID = [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock:^{
-		@try {
-			NSString* location          = [httpResponse.allHeaderFields valueForKey:@"location"];
-			NSArray* locationComponents = [location componentsSeparatedByString:@"/"];
-			return [locationComponents objectAtIndex:[locationComponents count] -1];
-		}
-		@catch (NSException *exception) {
-			NSLog(@"Exception while creating sensor %@: %@", sensorDescription, exception);
-		}
-	}];
+		
+									NSString* location = [httpResponse.allHeaderFields valueForKey:@"location"];
+									if(location && location != (id)[NSNull null]) {
+										
+										NSArray* locationComponents = [location componentsSeparatedByString:@"/"];
+										
+										if (locationComponents.count > 0) {
+											return [locationComponents objectAtIndex:[locationComponents count]-1];
+										}
+									}
+									return (id)nil;
+							}];
 	
-	
-	if(sensorID) {
+	if(sensorID && ![NSString isEmptyString:sensorID]) {
 		[sensorDescription setValue:sensorID forKey:@"sensor_id"];
 		return sensorDescription;
 	} else {
+		if(error && !*error) {
+			*error = [DSEHTTPRequestHelper createErrorWithCode:400 andMessage:@"Could not get sensor ID from server response"];
+		}
 		return nil;
 	}
 }
@@ -188,17 +193,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
 }
 
 
-- (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithID: (NSString *) csDeviceID andSessionID: (NSString *) sessionID andError: (NSError **) error {
-	
-	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:csSensorID] || [NSString isEmptyString:csDeviceID]) {
-		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
-	}
-	
-	NSDictionary *deviceDict = [NSDictionary dictionaryWithObjectsAndKeys:	csDeviceID, @"id", nil];
-	return [self addSensorWithID:csSensorID toDeviceWithDict:deviceDict andSessionID:sessionID andError:error];
-}
-
-
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithType: (NSString *) deviceType andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
 	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:deviceType] || [NSString isEmptyString:UUID] || [NSString isEmptyString:csSensorID]) {
@@ -206,7 +200,14 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	}
 	
 	NSDictionary *deviceDict = [NSDictionary dictionaryWithObjectsAndKeys:	deviceType, @"type", UUID, @"uuid", nil];
-	return [self addSensorWithID:csSensorID toDeviceWithDict:deviceDict andSessionID:sessionID andError:error];
+	NSDictionary* inputDict	 = [NSDictionary dictionaryWithObject:deviceDict forKey:@"device"];
+	NSString* urlAction		 = [NSString stringWithFormat: @"%@/%@/%@", kUrlSensors, csSensorID, kUrlSensorDevice];
+	NSURL *url               = [self makeUrlFor:urlAction append:nil];
+	
+	NSHTTPURLResponse* httpResponse;
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
+	
+	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
 }
 
 
@@ -242,25 +243,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 
 #pragma mark Private methods
-
-/**
- Helper function for adding sensor to device based on a device dict instead of the type, UUID, and/or ID. 
- */
-- (BOOL) addSensorWithID:(NSString *)csSensorID toDeviceWithDict:(NSDictionary *)deviceDict andSessionID: (NSString*) sessionID andError:(NSError *__autoreleasing *)error {
-	
-	if(!error)  {
-		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
-	}
-	
-	NSDictionary* inputDict	 = [NSDictionary dictionaryWithObject:deviceDict forKey:@"device"];
-	NSString* urlAction		 = [NSString stringWithFormat: @"%@/%@/%@", kUrlSensors, csSensorID, kUrlSensorDevice];
-	NSURL *url               = [self makeUrlFor:urlAction append:nil];
-	
-	NSHTTPURLResponse* httpResponse;
-	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
-	
-	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
-}
 
 
 /**
