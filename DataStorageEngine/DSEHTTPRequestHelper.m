@@ -64,13 +64,6 @@ const int requestTimeoutInterval = 10;			//Time out of 10 sec for every request
 	if (input) {
 		@try {
 			NSData *body = [NSJSONSerialization dataWithJSONObject:input options:0 error:error];
-            
-            //TODO:
-            //[NSJSONSerialization JSONObjectWithData:body options:0 error:nil];
-            NSString *jsonString = [[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding];
-            NSLog(@"### JSON Output: %@", jsonString);
-
-            
 			[urlRequest setValue:@"application/json" forHTTPHeaderField:@"content-type"];
 			[urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
 			[urlRequest setHTTPBody:[body gzippedData]];

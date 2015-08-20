@@ -556,10 +556,12 @@ static NSString* testPassword = @"darkr";
         [datapoints addObject:datapoint];
     }
     
-    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+    NSDictionary* dataDict = [NSDictionary dictionaryWithObjectsAndKeys:
                                sensorInfo[@"sensor_id"], @"sensor_id",
                                datapoints, @"data",
                                nil];
+    NSMutableArray* data =[[NSMutableArray alloc] init];
+    [data addObject: dataDict];
     
     error = nil;
     BOOL isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
