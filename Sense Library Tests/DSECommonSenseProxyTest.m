@@ -463,9 +463,14 @@ static NSString* testPassword = @"darkr";
     XCTAssertNil(error, "The error is not nil. An error must have occured");
     
     error = nil;
-    BOOL result = [proxy addSensorWithID:sensorInfo[@"sensor_id"] toDeviceWithID:devices[0][@"id"] andSessionID:sessionID andError:&error];
+    BOOL result = [proxy addSensorWithID:sensorInfo[@"sensor_id"] toDeviceWithID:@"9999" andSessionID:sessionID andError:&error];
     XCTAssertEqual(result, YES, @"The result is NO. addSensorWithID must have failed");
     XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    error = nil;
+    devices = [proxy getDevicesWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    XCTAssertEqual(devices.count, 2, @"Unexpected number of devices.");
 }
 
 -(void) testAddSensorToDeviceWithDeviceTypeAndUUID {
@@ -508,9 +513,14 @@ static NSString* testPassword = @"darkr";
     XCTAssertNil(error, "The error is not nil. An error must have occured");
     
     error = nil;
-    BOOL result = [proxy addSensorWithID:sensorInfo[@"sensor_id"] toDeviceWithType: devices[0][@"type"] andUUID:devices[0][@"uuid"] andSessionID:sessionID andError:&error];
+    BOOL result = [proxy addSensorWithID:sensorInfo[@"sensor_id"] toDeviceWithType: @"newType" andUUID:devices[0][@"uuid"] andSessionID:sessionID andError:&error];
     XCTAssertEqual(result, YES, @"The result is NO. addSensorWithID must have failed");
     XCTAssertNil(error, "The error is not nil. An error must have occured");
+    
+    error = nil;
+    devices = [proxy getDevicesWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
+    XCTAssertEqual(devices.count, 2, @"Unexpected number of devices.");
 }
 
 #pragma mark *Data*
