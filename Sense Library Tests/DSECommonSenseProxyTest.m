@@ -422,11 +422,13 @@ static NSString* testPassword = @"darkr";
     XCTAssertEqual(devices.count, expectedNumOfDevices, "Unexpected number of devices.");
 }
 
+#pragma mark addSensorWithID
+
 #pragma mark *Data*
 
-#pragma mark postData
+#pragma mark postData and getData
 
--(void) testPostandGetData {
+-(void) testPostAndGetData {
     NSError* error;
     
     //login
@@ -449,9 +451,11 @@ static NSString* testPassword = @"darkr";
     NSDictionary* sensorInfo = [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
     
     //create datapoints
-    NSMutableArray* data = [[NSMutableArray alloc] init];
+    NSMutableArray* datapoints = [[NSMutableArray alloc] init];
+
     
-    for (int x = 0 ; x < 100; x++) {
+    for (int x = 0 ; x < 2; x++) {
+        NSDate* now = [NSDate date];
         NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithInt:1], @"value1",
                                    [NSNumber numberWithInt:2], @"value2",
@@ -460,11 +464,13 @@ static NSString* testPassword = @"darkr";
         NSDictionary* datapoint = [NSDictionary dictionaryWithObjectsAndKeys:
                                    sensorInfo[@"sensor_id"], @"sensorID",
                                    value, @"value",
-                                   @([[NSDate date] timeIntervalSince1970]), @"date",
+                                   @([now timeIntervalSince1970]), @"date",
                                    nil];
-        [data addObject:datapoint];
+        [datapoints addObject:datapoint];
     }
     
+    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                               datapoints, @"data", nil];
     
     error = nil;
     bool isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
@@ -479,8 +485,6 @@ static NSString* testPassword = @"darkr";
     XCTAssertEqual(result.count, 1, "Unexpected number of datapoints");
     XCTAssertNil(error, "The error is not nil. An error must have occured");
 }
-
-#pragma mark getDataForSensor
 
 
 

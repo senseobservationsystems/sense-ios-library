@@ -227,9 +227,10 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	NSURL *url               = [self makeCSRestUrlFor:kUrlUploadMultipleSensors append:nil];
 	NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:inputDict withError:error];
 	
+    
 	NSHTTPURLResponse* httpResponse;
 	NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
-
+    
 	return [DSEHTTPRequestHelper evaluateResponseWithData:responseData andHttpResponse:httpResponse andError:error];
 }
 
