@@ -380,7 +380,7 @@ static NSString* testPassword = @"darkr";
 
 }
 
-- (void) testCreateMultipleSensorsAndGetMultipleDevices {
+- (void) testCreateMultipleSensorsAndGetDevices {
     
     NSError* error;
     int expectedNumOfDevices = 1;
@@ -460,7 +460,7 @@ static NSString* testPassword = @"darkr";
         NSDictionary* datapoint = [NSDictionary dictionaryWithObjectsAndKeys:
                                    sensorInfo[@"sensor_id"], @"sensorID",
                                    value, @"value",
-                                   [[NSDate date] timeIntervalSince1970], @"date",
+                                   @([[NSDate date] timeIntervalSince1970]), @"date",
                                    nil];
         [data addObject:datapoint];
     }
@@ -469,10 +469,15 @@ static NSString* testPassword = @"darkr";
     error = nil;
     bool isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
     XCTAssertTrue(isSuccessful, "postData returned false. PostData must have failed.");
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
     
     
     error = nil;
-    NSArray* result = [proxy getDataForSensor:sensorInfo[@"sensor_id"] fromDate:[NSDate date] withSessionID:sessionID andError:&error];
+    int aWeek = 7*24*60*60;
+    NSDate* from = [[NSDate date] dateByAddingTimeInterval: -1 * aWeek];
+    NSArray* result = [proxy getDataForSensor:sensorInfo[@"sensor_id"] fromDate:from withSessionID:sessionID andError:&error];
+    XCTAssertEqual(result.count, 1, "Unexpected number of datapoints");
+    XCTAssertNil(error, "The error is not nil. An error must have occured");
 }
 
 #pragma mark getDataForSensor
