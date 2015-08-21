@@ -130,26 +130,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
     XCTAssertNotNil(expectedException, @"Exception is nil;");
 }
 
-- (void)testLoginTwice{
-    
-    NSError* error;
-    NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
-    
-    //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
-    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
-    XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
-    
-    //Login again! should fail
-    sessionID = nil;
-    error = nil;
-    sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
-    XCTAssertNotNil(error, @"Error is nil; login must have succeeded");
-    XCTAssertNil(sessionID, @"Session ID is not nil; login must have suceeded");
-}
-
-
 #pragma mark logoutCurrentUserWIthSessionID
 
 - (void) testLogoutWithValidSessionID {
@@ -195,13 +175,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
     bool isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
     XCTAssertNotNil(error, @"Error is nil; logout must have succeeded");
     XCTAssertFalse(isSuccessful, @"The logout was successful with invalid SessionID.");
-    
-    //Another attempt to login. should fail since the user is loggedin
-    error =nil;
-    sessionID = nil;
-    sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
-    XCTAssertNotNil(error, @"Error is nil; login must have succeeded");
-    XCTAssertNil(sessionID, @"Session ID is not nil; login must have suceeded");
 }
 
 - (void) testLogoutWithEmptySessionID {
@@ -227,12 +200,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
         expectedException = e;
     }
     XCTAssertNotNil(expectedException, @"Exception is nil;");
-    
-    sessionID = nil;
-    //Another attempt to login. should fail since the user is loggedin
-    sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
-    XCTAssertNotNil(error, @"Error is nil; login must have succeeded");
-    XCTAssertNil(sessionID, @"Session ID is not nil; login must have succeeded.");
 }
 
 

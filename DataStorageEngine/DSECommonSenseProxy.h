@@ -49,7 +49,7 @@
 /**
  Login a user
  
- @note If a user is already logged in this call will fail. That user should be logged out first before a new login attempt can be made. The failureCallback will be called in that case.
+ @note When a user is already logged in, this call will still succeed and return a new sessionID.
  
  @param username		A user account in commonsense is uniquely identified by a username. Cannot be empty.
  @param password		A password in commonsense does not have any specific requirements. It will be MD5 hashed before sending to the server so the user does not have to provide a hashed password. Cannot be empty.
