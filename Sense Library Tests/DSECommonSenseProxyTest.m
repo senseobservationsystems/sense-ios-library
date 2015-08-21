@@ -81,8 +81,9 @@ static enum SensorAttributes {
 - (void)testLoginWithValidUsernameAndPassword {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
 	NSString *sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
 
@@ -91,19 +92,45 @@ static enum SensorAttributes {
 	XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
     
 }
-
+/*
 - (void)testLoginWithWrongObjectForError {
     
     //Wrong object
     NSDictionary* error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
+    
+    NSException* expectedException;
+    NSString* sessionID;
+    //try to login with wrong password, so that error will be used in the method
+    @try{
+        sessionID= [proxy loginUser:newUserEmail andPassword:@"veryWrongPassword" andError:&error];
+    }
+    @catch (NSException* e){
+        expectedException = e;
+    }
+    XCTAssertNotNil(expectedException, @"Exception is nil;");
+}
+ */
+
+- (void)testLoginWithWrongObjectForPassword {
+    
+    //Wrong object
+    NSError* error;
+    NSString* registrationError;
+    NSString *newUserEmail;
+    newUserEmail = [self registerANewUserForTest:registrationError];
+    
+    NSDictionary* passwordWithWrongType = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           @"wrong password", @"password",
+                                           nil];
     
     NSString *sessionID;
     NSException* expectedException;
     //try to login with wrong password, so that error will be used in the method
     @try{
-        sessionID= [proxy loginUser:newUserEmail andPassword:@"veryWrongPassword" andError:&error];
+        sessionID= [proxy loginUser:newUserEmail andPassword:passwordWithWrongType andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -114,8 +141,9 @@ static enum SensorAttributes {
 - (void)testLoginWithValidUsernameAndInvalidPassword {
 	
 	NSError *error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     NSString *sessionID;
     NSException* expectedException;
@@ -140,10 +168,14 @@ static enum SensorAttributes {
 - (void)testLoginWithInValidUsernameAndPassword {
 	
 	NSError *error;
+    NSString* registrationError;
+    NSString *newUserEmail;
+    newUserEmail = [self registerANewUserForTest:registrationError];
+    
     NSString *sessionID;
     NSException* expectedException;
     @try {
-	sessionID = [proxy loginUser:@"" andPassword:testPassword andError:&error];
+        sessionID = [proxy loginUser:@"" andPassword:testPassword andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -163,9 +195,10 @@ static enum SensorAttributes {
 
 - (void) testLogoutWithValidSessionID {
     
-    NSError* error;
+    NSError *error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
@@ -188,9 +221,10 @@ static enum SensorAttributes {
 
 - (void) testLogoutWithInvalidSessionID {
     
-    NSError* error;
+    NSError *error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -208,9 +242,10 @@ static enum SensorAttributes {
 
 - (void) testLogoutWithEmptySessionID {
     
-    NSError* error;
+    NSError *error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -234,9 +269,10 @@ static enum SensorAttributes {
 
 - (void) testLogoutTwice {
     
-    NSError* error;
+    NSError *error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
@@ -255,9 +291,10 @@ static enum SensorAttributes {
 
 - (void) testLogoutWithOldSessionID {
     
-    NSError* error;
+    NSError *error;
+    NSString* registrationError;
     NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
@@ -285,7 +322,9 @@ static enum SensorAttributes {
 #pragma mark createSensor, getSensors, getDevices
 
 - (void) testCreateSensorAndGetSensor {
+    
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -293,7 +332,7 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     int expectedNumOfSensors = 0;
     
@@ -328,6 +367,7 @@ static enum SensorAttributes {
 - (void) testCreateSensorWithEmptyName {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -335,7 +375,7 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
 
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
 
     int expectedNumOfSensors = 0;
 
@@ -369,10 +409,10 @@ static enum SensorAttributes {
     XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
 }
 
-
-- (void) testCreateSensorWithEmptyDisplayName {
- 
+- (void) testCreateSensorWithWrongObjectForName {
+    
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -380,7 +420,60 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
+    
+    int expectedNumOfSensors = 0;
+    
+    //login
+    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+    
+    [CSSensePlatform flushDataAndBlock];
+    
+    //make sure that there is no sensor yet
+    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, "The number of sensors is not 1.");
+    
+    [self initializeSensorAttributes:error name_p:&name displayName_p:&displayName deviceType_p:&deviceType dataType_p:&dataType dataStructure_p:&dataStructure andEmptyAttribute:Sensor_Name];
+    
+    NSDictionary* nameWithWrongType = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       @"wrong type", @"name",
+                                       nil];
+    
+    //post data
+    BOOL isSuccessful;
+    NSException* expectedException;
+    NSDictionary* sensorInfo;
+    @try{
+        //create a sensor with wrong object for name
+        sensorInfo = [proxy createSensorWithName:nameWithWrongType andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:sessionID andError:&error];
+    }
+    @catch (NSException* e){
+        expectedException = e;
+    }
+    XCTAssertNotNil(expectedException, @"Exception is nil;");
+    
+    //check number of sensors
+    error = nil;
+    sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
+}
+
+
+
+- (void) testCreateSensorWithEmptyDisplayName {
+ 
+    NSError* error;
+    NSString* registrationError;
+    NSString *newUserEmail;
+    NSString *name;
+    NSString *displayName;
+    NSString *deviceType;
+    NSString *dataType;
+    NSString *dataStructure;
+    
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     int expectedNumOfSensors = 0;
     
@@ -413,6 +506,7 @@ static enum SensorAttributes {
 - (void) testCreateSensorWithEmptyDeviceType {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -420,7 +514,7 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     int expectedNumOfSensors = 0;
     
@@ -458,6 +552,7 @@ static enum SensorAttributes {
 - (void) testCreateSensorWithEmptyDataType {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -465,7 +560,7 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     int expectedNumOfSensors = 0;
     
@@ -502,6 +597,7 @@ static enum SensorAttributes {
 - (void) testCreateSensorWithEmptyDataStructure {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -509,7 +605,7 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     int expectedNumOfSensors = 0;
     
@@ -540,51 +636,52 @@ static enum SensorAttributes {
 }
 
 - (void) testCreateSensorWithEmptySessionID {
-    
- NSError* error;
- NSString *newUserEmail;
- NSString *name;
- NSString *displayName;
- NSString *deviceType;
- NSString *dataType;
- NSString *dataStructure;
- 
- newUserEmail = [self registerANewUserForTest:error];
- 
- int expectedNumOfSensors = 0;
- 
- //login
- NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
- XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
- 
- [CSSensePlatform flushDataAndBlock];
- 
- //make sure that there is no sensor yet
- NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
- XCTAssertEqual(sensors.count, expectedNumOfSensors, "The number of sensors is not 1.");
- 
- [self initializeSensorAttributes:error name_p:&name displayName_p:&displayName deviceType_p:&deviceType dataType_p:&dataType dataStructure_p:&dataStructure andEmptyAttribute:Sensor_DataType];
- 
- //create a sensor
- NSDictionary *sensorInfo;
- NSException* expectedException;
- @try{
- sensorInfo = [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:nil andError:&error];
- }
- @catch (NSException* e){
+    NSError* error;
+    NSString* registrationError;
+    NSString *newUserEmail;
+    NSString *name;
+    NSString *displayName;
+    NSString *deviceType;
+    NSString *dataType;
+    NSString *dataStructure;
+
+    newUserEmail = [self registerANewUserForTest:registrationError];
+
+    int expectedNumOfSensors = 0;
+
+    //login
+    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
+
+    [CSSensePlatform flushDataAndBlock];
+
+    //make sure that there is no sensor yet
+    NSArray *sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, "The number of sensors is not 1.");
+
+    [self initializeSensorAttributes:error name_p:&name displayName_p:&displayName deviceType_p:&deviceType dataType_p:&dataType dataStructure_p:&dataStructure andEmptyAttribute:Sensor_DataType];
+
+    //create a sensor
+    NSDictionary *sensorInfo;
+    NSException* expectedException;
+    @try{
+    sensorInfo = [proxy createSensorWithName:name andDisplayName:displayName andDeviceType:deviceType andDataType:dataType andDataStructure:dataStructure andSessionID:nil andError:&error];
+    }
+    @catch (NSException* e){
     expectedException = e;
- }
- XCTAssertNotNil(expectedException, @"Exception is nil;");
- 
- //check number of sensors
- error = nil;
- sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
- XCTAssertNil(error, @"Error is not nil; an error must have occured");
- XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
+    }
+    XCTAssertNotNil(expectedException, @"Exception is nil;");
+
+    //check number of sensors
+    error = nil;
+    sensors = [proxy getSensorsWithSessionID: sessionID andError: &error];
+    XCTAssertNil(error, @"Error is not nil; an error must have occured");
+    XCTAssertEqual(sensors.count, expectedNumOfSensors, @"Unexpected number of sensors" );
 }
 
 - (void) testCreateSensorAndGetSensorWithEmptySessionID {
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -592,7 +689,7 @@ static enum SensorAttributes {
     NSString *dataType;
     NSString *dataStructure;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     int expectedNumOfSensors = 0;
     
@@ -629,6 +726,7 @@ static enum SensorAttributes {
 - (void) testCreateMultipleSensorsAndGetMultipleSensors {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -637,7 +735,7 @@ static enum SensorAttributes {
     NSString *dataStructure;
     int expectedNumOfSensors = 0;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -687,6 +785,7 @@ static enum SensorAttributes {
 - (void) testCreateMultipleSensorsAndGetDevices {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -696,7 +795,7 @@ static enum SensorAttributes {
     int expectedNumOfDevices = 0;
     int expectedNumOfSensors = 0;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -767,6 +866,7 @@ static enum SensorAttributes {
 -(void) testAddSensorWithID {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -775,7 +875,7 @@ static enum SensorAttributes {
     NSString *dataStructure;
     int expectedNumOfSensors = 0;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -848,6 +948,7 @@ static enum SensorAttributes {
 -(void) testPostAndGetData {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -856,7 +957,7 @@ static enum SensorAttributes {
     NSString *dataStructure;
     int expectedNumOfSensors = 0;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -896,6 +997,7 @@ static enum SensorAttributes {
 -(void) testPostAndGetDataWithWrongFormat {
     
     NSError* error;
+    NSString* registrationError;
     NSString *newUserEmail;
     NSString *name;
     NSString *displayName;
@@ -904,7 +1006,7 @@ static enum SensorAttributes {
     NSString *dataStructure;
     int expectedNumOfSensors = 0;
     
-    newUserEmail = [self registerANewUserForTest:error];
+    newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
     NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
@@ -929,10 +1031,16 @@ static enum SensorAttributes {
                               nil];
     
     //post data
-    error = nil;
-    BOOL isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
-    XCTAssertEqual(isSuccessful, NO, "postData returned YES. PostData must have succeeded, where it should not.");
-    XCTAssertNotNil(error, "The error is nil. postData must have suceeded, where it should not");
+    BOOL isSuccessful;
+    NSException* expectedException;
+    @try{
+        //post data with wrong object as data
+        isSuccessful = [proxy postData:data withSessionID:sessionID andError:&error];
+    }
+    @catch (NSException* e){
+        expectedException = e;
+    }
+    XCTAssertNotNil(expectedException, @"Exception is nil;");
     
     //get data
     error = nil;
@@ -1086,7 +1194,7 @@ static enum SensorAttributes {
     return device;
 }
 
-- (NSString *)registerANewUserForTest:(NSError *)error {
+- (NSString *)registerANewUserForTest:(NSString *)error {
     NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
     NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
     [self registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail error:&error];
