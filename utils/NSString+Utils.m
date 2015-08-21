@@ -11,6 +11,10 @@
 @implementation NSString (Utils)
 
 + (BOOL) isEmptyString:(NSString *)string {
+	if(string && ![string isKindOfClass: [NSString class]]) {
+		return NO;
+	}
+	
 	if([string length] == 0) { //string is empty or nil
 		return YES;
 	}

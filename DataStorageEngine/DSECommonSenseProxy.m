@@ -215,10 +215,10 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error {
 
-	if( (!error) || (!data) || (data.count == 0) || [NSString isEmptyString:sessionID]) {
+	if( (!error) || (!data) || ![data isKindOfClass:[NSArray class]] || (data.count == 0) || [NSString isEmptyString:sessionID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
-
+	
 	NSDictionary* inputDict  = [NSDictionary dictionaryWithObjectsAndKeys: data, @"sensors", nil];
 	NSURL *url               = [self makeUrlFor:kUrlUploadMultipleSensors append:nil];
 
