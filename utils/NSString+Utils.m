@@ -12,7 +12,7 @@
 
 + (BOOL) isEmptyString:(NSString *)string {
 	if(string && ![string isKindOfClass: [NSString class]]) {
-		return NO;
+		return YES;
 	}
 	
 	if([string length] == 0) { //string is empty or nil
