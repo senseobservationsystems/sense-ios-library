@@ -86,7 +86,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	NSURL *url = [self makeUrlFor:kUrlLogout append:nil];
 	
 	NSHTTPURLResponse* httpResponse;
-	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey:appKey andInput:nil andResponse:&httpResponse andError:error];
+	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:nil andResponse:&httpResponse andError:error];
 
 	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
 }
