@@ -70,7 +70,9 @@
 		
 		<option value="//api/name/flush">- flush</option>
 		
-		<option value="//api/name/getDataFromSensor:from:to:">- getDataFromSensor:from:to:</option>
+		<option value="//api/name/getDataFromSensor:andDeviceType:from:to:">- getDataFromSensor:andDeviceType:from:to:</option>
+		
+		<option value="//api/name/getDataFromSensor:from:to:andOrder:withLimit:">- getDataFromSensor:from:to:andOrder:withLimit:</option>
 		
 		<option value="//api/name/getDbSize">- getDbSize</option>
 		
@@ -263,8 +265,81 @@
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/getDataFromSensor:from:to:" title="getDataFromSensor:from:to:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/getDataFromSensor:from:to:">&ndash;&nbsp;getDataFromSensor:from:to:</a></code>
+	<a name="//api/name/getDataFromSensor:andDeviceType:from:to:" title="getDataFromSensor:andDeviceType:from:to:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDataFromSensor:andDeviceType:from:to:">&ndash;&nbsp;getDataFromSensor:andDeviceType:from:to:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve all the sensor data stored in the database between a certain time interval by sensor name and device type.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getDataFromSensor:(NSString *)<em>sensorName</em> andDeviceType:(NSString *)<em>deviceType</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>The name of the sensor to get the data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceType</code></th>
+						<td><p>The name of the deviceType to get the data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>startDate</code></th>
+						<td><p>The date and time at which to start looking for datapoints</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>endDate</code></th>
+						<td><p>The date and time at which to stop looking for datapoints</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>an array of values, each value is a dictonary that descirbes the data point</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSStorage.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getDataFromSensor:from:to:andOrder:withLimit:" title="getDataFromSensor:from:to:andOrder:withLimit:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getDataFromSensor:from:to:andOrder:withLimit:">&ndash;&nbsp;getDataFromSensor:from:to:andOrder:withLimit:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -279,7 +354,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSArray *)getDataFromSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getDataFromSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em> andOrder:(NSString *)<em>order</em> withLimit:(int)<em>nrOfPoints</em></code></div>
 
 		    
 			
@@ -300,6 +375,16 @@
 					<tr>
 						<th scope="row" class="argument-name"><code>endDate</code></th>
 						<td><p>The date and time at which to stop looking for datapoints</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>order</code></th>
+						<td><p>Whether the returning datapoints are ordered in an ascending or descending way. Valid values are &lsquo;ASC&rsquo; and &lsquo;DESC&rsquo;</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>nrOfPoints</code></th>
+						<td><p>Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)</p></td>
 					</tr>
 				
 				</table>
@@ -744,7 +829,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-08-24</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

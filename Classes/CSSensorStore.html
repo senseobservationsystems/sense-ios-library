@@ -90,13 +90,21 @@
 		
 		<option value="//api/name/getDataForSensor:onlyFromDevice:nrLastPoints:">- getDataForSensor:onlyFromDevice:nrLastPoints:</option>
 		
-		<option value="//api/name/getLocalDataForSensor:from:to:">- getLocalDataForSensor:from:to:</option>
+		<option value="//api/name/getLocalDataForSensor:andDeviceType:from:to:">- getLocalDataForSensor:andDeviceType:from:to:</option>
+		
+		<option value="//api/name/getLocalDataForSensor:from:to:andOrder:withLimit:">- getLocalDataForSensor:from:to:andOrder:withLimit:</option>
 		
 		<option value="//api/name/giveFeedbackOnState:from:to:label:">- giveFeedbackOnState:from:to:label:</option>
 		
 		<option value="//api/name/init">- init</option>
 		
+		<option value="//api/name/locationPermissionState">- locationPermissionState</option>
+		
 		<option value="//api/name/loginChanged">- loginChanged</option>
+		
+		<option value="//api/name/removeLocalData">- removeLocalData</option>
+		
+		<option value="//api/name/requestLocationPermission">- requestLocationPermission</option>
 		
 		<option value="//api/name/setEnabled:">- setEnabled:</option>
 		
@@ -349,8 +357,8 @@
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/getLocalDataForSensor:from:to:" title="getLocalDataForSensor:from:to:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:from:to:">&ndash;&nbsp;getLocalDataForSensor:from:to:</a></code>
+	<a name="//api/name/getLocalDataForSensor:from:to:andOrder:withLimit:" title="getLocalDataForSensor:from:to:andOrder:withLimit:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:from:to:andOrder:withLimit:">&ndash;&nbsp;getLocalDataForSensor:from:to:andOrder:withLimit:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -365,7 +373,7 @@
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (NSArray *)getLocalDataForSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getLocalDataForSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em> andOrder:(NSString *)<em>order</em> withLimit:(int)<em>nrOfPoints</em></code></div>
 
 		    
 			
@@ -376,6 +384,105 @@
 					<tr>
 						<th scope="row" class="argument-name"><code>name</code></th>
 						<td><p>The name of the sensor as an NSString</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>startDate</code></th>
+						<td><p>The date and time of the first datapoint to look for (inclusive)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>endDate</code></th>
+						<td><p>The data and time of the last datapoint to look for (exclusive)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>order</code></th>
+						<td><p>Whether the returning datapoints are ordered in an ascending or descending way. Valid values are &lsquo;ASC&rsquo; and &lsquo;DESC&rsquo;</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>nrOfPoints</code></th>
+						<td><p>Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>An array with dictionaries of time-value pairs</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensorStore.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/removeLocalData" title="removeLocalData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/removeLocalData">&ndash;&nbsp;removeLocalData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)removeLocalData</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLocalDataForSensor:andDeviceType:from:to:" title="getLocalDataForSensor:andDeviceType:from:to:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:andDeviceType:from:to:">&ndash;&nbsp;getLocalDataForSensor:andDeviceType:from:to:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve data from a sensor and <a href="#//api/name/device">device</a> type combination that is stored locally between a certain time interval</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getLocalDataForSensor:(NSString *)<em>sensorName</em> andDeviceType:(NSString *)<em>deviceType</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>sensorName</code></th>
+						<td><p>The name of the sensor as an NSString</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceType</code></th>
+						<td><p>The name of the <a href="#//api/name/device">device</a> type as an NSString</p></td>
 					</tr>
 				
 					<tr>
@@ -480,6 +587,38 @@
 		    
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/requestLocationPermission" title="requestLocationPermission"></a>
+	<h3 class="method-title"><code><a href="#//api/name/requestLocationPermission">&ndash;&nbsp;requestLocationPermission</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)requestLocationPermission</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/locationPermissionState" title="locationPermissionState"></a>
+	<h3 class="method-title"><code><a href="#//api/name/locationPermissionState">&ndash;&nbsp;locationPermissionState</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (CLAuthorizationStatus)locationPermissionState</code></div>
+
+		    
+		</div>
+	</div>
 </div>
 						</div>
 						
@@ -493,7 +632,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-08-24</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

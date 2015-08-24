@@ -78,7 +78,11 @@
 		
 		<option value="//api/name/getDeviceId">+ getDeviceId</option>
 		
+		<option value="//api/name/getLocalDataForSensor:andDeviceType:from:to:">+ getLocalDataForSensor:andDeviceType:from:to:</option>
+		
 		<option value="//api/name/getLocalDataForSensor:from:to:">+ getLocalDataForSensor:from:to:</option>
+		
+		<option value="//api/name/getLocalDataForSensor:from:to:andOrder:withLimit:">+ getLocalDataForSensor:from:to:andOrder:withLimit:</option>
 		
 		<option value="//api/name/getSessionCookie">+ getSessionCookie</option>
 		
@@ -88,13 +92,27 @@
 		
 		<option value="//api/name/initializeWithApplicationKey:">+ initializeWithApplicationKey:</option>
 		
+		<option value="//api/name/isAvailableSensor:">+ isAvailableSensor:</option>
+		
+		<option value="//api/name/isLoggedIn">+ isLoggedIn</option>
+		
+		<option value="//api/name/locationPermissionState">+ locationPermissionState</option>
+		
 		<option value="//api/name/loginWithUser:andPassword:">+ loginWithUser:andPassword:</option>
 		
+		<option value="//api/name/loginWithUser:andPassword:andError:">+ loginWithUser:andPassword:andError:</option>
+		
 		<option value="//api/name/loginWithUser:andPasswordHash:">+ loginWithUser:andPasswordHash:</option>
+		
+		<option value="//api/name/loginWithUser:andPasswordHash:andError:">+ loginWithUser:andPasswordHash:andError:</option>
 		
 		<option value="//api/name/logout">+ logout</option>
 		
 		<option value="//api/name/registerUser:withPassword:withEmail:">+ registerUser:withPassword:withEmail:</option>
+		
+		<option value="//api/name/removeLocalData">+ removeLocalData</option>
+		
+		<option value="//api/name/requestLocationPermissionWithDelegate:">+ requestLocationPermissionWithDelegate:</option>
 		
 		<option value="//api/name/synchronizeWithBloodPressureMonitor:">+ synchronizeWithBloodPressureMonitor:</option>
 		
@@ -345,7 +363,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Set the credentials to log in on Common Sense</p>
+				<p>Set the credentials to log in on Common Sense (<b class="deprecated">Deprecated:</b><span class="deprecated"> use loginWithUser:andPassword:andError instead</span>)</p>
 			</div>
 			
 		    
@@ -373,10 +391,79 @@
 			
 
 			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.</p>
+
+<p>Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/loginWithUser:andPassword:andError:" title="loginWithUser:andPassword:andError:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/loginWithUser:andPassword:andError:">+&nbsp;loginWithUser:andPassword:andError:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the credentials to log in on Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)loginWithUser:(NSString *)<em>user</em> andPassword:(NSString *)<em>password</em> andError:(NSError **)<em>error</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>Username used to identify the user (this does not necessarily have to be an email address)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>password</code></th>
+						<td><p>The password connected to the user account (not hashed yet)</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>error</code></th>
+						<td><p>error</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>whether the login succeeded
-*</p>
+				<p>whether the login succeeded</p>
 			</div>
 			
 
@@ -387,7 +474,7 @@
 				<h4 class="method-subtitle">Discussion</h4>
 				<p>This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.</p>
 
-<p>Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).</p>
+<p>Returns a descriptive error if the login process fails.</p>
 			</div>
 			
 
@@ -416,7 +503,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Set the credentials to log in on Common Sense</p>
+				<p>Set the credentials to log in on Common Sense (<b class="deprecated">Deprecated:</b><span class="deprecated"> use loginWIthUser:andPasswordHash:andError instead</span>)</p>
 			</div>
 			
 		    
@@ -431,19 +518,23 @@
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>user</code></th>
-						<td><p>Username used to identify the user (this does not necessarily have to be an email address)</p></td>
+						<td><p>username</p></td>
 					</tr>
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>password</code></th>
-						<td><p>The password connected to the user account hashed using an MD5 hash
-*</p></td>
+						<th scope="row" class="argument-name"><code>passwordHash</code></th>
+						<td><p>md5 hased password</p></td>
 					</tr>
 				
 				</table>
 			</div>
 			
 
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>whether the login is succsesful or not</p>
+			</div>
 			
 
 			
@@ -454,6 +545,81 @@
 				<p>This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.</p>
 
 <p>Note that if login fails, there is no way for the developer or end-user to know why it failed. This could be because of a wrong username / password combination, because of a problem on the cloud side, or because of a missing internet connection (among others).</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/loginWithUser:andPasswordHash:andError:" title="loginWithUser:andPasswordHash:andError:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/loginWithUser:andPasswordHash:andError:">+&nbsp;loginWithUser:andPasswordHash:andError:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set the credentials to log in on Common Sense</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)loginWithUser:(NSString *)<em>user</em> andPasswordHash:(NSString *)<em>passwordHash</em> andError:(NSError **)<em>error</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>user</code></th>
+						<td><p>username</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>passwordHash</code></th>
+						<td><p>md5 hased password</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>error</code></th>
+						<td><p>error</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>whether the login is succsesful or not</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This sets the credentials in the settings and logs in at commonsense cloud. If the login is successfull the kCSGeneralSettingUploadToCommonSense is enabled.</p>
+
+<p>Returns a descriptive error if the login process fails.</p>
 			</div>
 			
 
@@ -493,6 +659,52 @@ This removes credentials from the settings and stops the uploading to CommonSens
 		    
 			
 
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isLoggedIn" title="isLoggedIn"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isLoggedIn">+&nbsp;isLoggedIn</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>return if user is loggedin</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)isLoggedIn</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>state whether user is logged in</p>
+			</div>
 			
 
 			
@@ -1043,7 +1255,7 @@ This removes credentials from the settings and stops the uploading to CommonSens
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>an arrat of values, each value is a dictonary that descirbes the data point</p>
+				<p>an array of values, each value is a dictonary that descirbes the data point</p>
 			</div>
 			
 
@@ -1078,12 +1290,333 @@ This removes credentials from the settings and stops the uploading to CommonSens
 			
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLocalDataForSensor:from:to:andOrder:withLimit:" title="getLocalDataForSensor:from:to:andOrder:withLimit:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:from:to:andOrder:withLimit:">+&nbsp;getLocalDataForSensor:from:to:andOrder:withLimit:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSArray *)getLocalDataForSensor:(NSString *)<em>name</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em> andOrder:(NSString *)<em>order</em> withLimit:(int)<em>nrOfPoints</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The name of the sensor to get the data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>startDate</code></th>
+						<td><p>The date and time at which to start looking for datapoints</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>endDate</code></th>
+						<td><p>The date and time at which to stop looking for datapoints</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>order</code></th>
+						<td><p>Whether the returning datapoints are ordered in an ascending or descending way. Valid values are &lsquo;ASC&rsquo; and &lsquo;DESC&rsquo;</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>nrOfPoints</code></th>
+						<td><p>Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>an array of values, each value is a dictonary that descirbes the data point</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:</p>
+
+<ul>
+<li>It is kept for 30 days. Data older than 30 days is removed.</li>
+<li>A maximum of 100 mb is kept. Users are likely to remove the app if there would be more storage space used. This should normally be ample for 30 days of data.</li>
+<li>The total amount of storage is limited if the disk space of the device is smaller than what is needed by the.</li>
+</ul>
+
+
+<p>These limitations are treated in a first in first out way. Hence, older data is removed first.</p><div class="warning"><p><strong>Warning:</strong> Sensordata is not stored in a user specific format. Hence, when the user logs out or the app starts to being used by a different user on the same device, the old settings and data remains accessible to the new user.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/removeLocalData" title="removeLocalData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/removeLocalData">+&nbsp;removeLocalData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Remove all sensor data that are stored locally</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)removeLocalData</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="warning"><p><strong>Warning:</strong> This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/<a href="#//api/name/logout">logout</a> occurs). In that case, the data from previous user will be shown to the next user.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getLocalDataForSensor:andDeviceType:from:to:" title="getLocalDataForSensor:andDeviceType:from:to:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getLocalDataForSensor:andDeviceType:from:to:">+&nbsp;getLocalDataForSensor:andDeviceType:from:to:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Retrieve all the sensor data stored locally between a certain time interval.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (NSArray *)getLocalDataForSensor:(NSString *)<em>name</em> andDeviceType:(NSString *)<em>deviceType</em> from:(NSDate *)<em>startDate</em> to:(NSDate *)<em>endDate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>name</code></th>
+						<td><p>The name of the sensor to get the data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>deviceType</code></th>
+						<td><p>The name of the device type to get the sensors and data from</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>startDate</code></th>
+						<td><p>The date and time at which to start looking for datapoints</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>endDate</code></th>
+						<td><p>The date and time at which to stop looking for datapoints</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>an arrat of values, each value is a dictonary that descirbes the data point</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div>
 						</div>
 						
 
-						<a title="Miscelaneous" name="task_Miscelaneous"></a>
-						<h2 class="task-title">Miscelaneous</h2>
+						<a title="Permissions" name="task_Permissions"></a>
+						<h2 class="task-title">Permissions</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/requestLocationPermissionWithDelegate:" title="requestLocationPermissionWithDelegate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/requestLocationPermissionWithDelegate:">+&nbsp;requestLocationPermissionWithDelegate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Ask the CSSensePlatform to request location permissions from the user. This will ask the user for kCLAuthorizationStatusAuthorizedAlways permissions, meaning the app can always obtain location updates.
+The function will present the location permission dialog to the user, asynchronously. After the user responds to this dialog by either granting or denying the permissions, the corresponding callback on the provided delegate will be called. Make sure the delegate implements the protocol!
+The reason we need a delegate object that implements predefined callback functions is that the permission request dialog is presented asynchronously to the user. That means that we would lose any callback context provided to this function. Using an object implementing a protocol, we can temporarily store a reference to the object and callback later when the user granted or denied the permissions.
+IMPORTANT: This function will do nothing on iOS &lt; 8.
+IMPORTANT: If the user denies permission, the app will not run in the background until the user explicitly grants permission to the app in the iOS settings screen.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (void)requestLocationPermissionWithDelegate:(id&lt;CSLocationPermissionProtocol&gt;)<em>delegate</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>delegate</code></th>
+						<td><p>Object implementing the <a href="../Protocols/CSLocationPermissionProtocol.html">CSLocationPermissionProtocol</a> protocol. A weak reference to this object will be stored, so don&rsquo;t destroy it before the callback is called. Typically this will be a ViewController object.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/locationPermissionState" title="locationPermissionState"></a>
+	<h3 class="method-title"><code><a href="#//api/name/locationPermissionState">+&nbsp;locationPermissionState</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Request the current location permission status for the app.
+This function will return one of three possible values:
+    - kCLAuthorizationStatusNotDetermined: there is no permission status yet. In this case the permission should be asked from the user using requestLocationPermissionWithDelegate, or it will be done automatically once sensing is started.
+    - kCLAuthorizationStatusDenied: the user has denied location permissions. In this case the app will not be able to run in the background, and the only way to remedy this is for the user to explicitly grant permission in the iOS -> settings screen.
+    - kCLAuthorizationStatusAuthorizedAlways: the app has obtained the required permissions, no action needed.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (CLAuthorizationStatus)locationPermissionState</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Miscellaneous" name="task_Miscellaneous"></a>
+						<h2 class="task-title">Miscellaneous</h2>
 
 						<div class="task-list">
 							<div class="section-method">
@@ -1228,6 +1761,47 @@ This removes credentials from the settings and stops the uploading to CommonSens
 		    
 
 			<div class="method-subsection method-declaration"><code>+ (NSArray *)availableSensors</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">CSSensePlatform.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isAvailableSensor:" title="isAvailableSensor:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isAvailableSensor:">+&nbsp;isAvailableSensor:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>return true if sensor with specific id is available. list of id available on CSSensorIds.h</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>+ (BOOL)isAvailableSensor:(NSString *)<em>sensorID</em></code></div>
 
 		    
 			
@@ -1481,7 +2055,7 @@ This removes credentials from the settings and stops the uploading to CommonSens
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-03-31</p>
+						<p class="copyright">Copyright &copy; 2015 SenseLabs. All rights reserved. Updated: 2015-08-24</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

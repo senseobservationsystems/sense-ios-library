@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>CSSetting Class Reference</title>
+	<title>CSLocationPermissionProtocol Protocol Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
@@ -54,17 +54,17 @@
 
 	
 	
-	<optgroup label="Properties">
+
+	
+
+	
+	<optgroup label="Instance Methods">
 		
-		<option value="//api/name/name">name</option>
+		<option value="//api/name/locationPermissionDenied">- locationPermissionDenied</option>
 		
-		<option value="//api/name/value">value</option>
+		<option value="//api/name/locationPermissionGranted">- locationPermissionGranted</option>
 		
 	</optgroup>
-	
-
-	
-
 	
 	
 </select>
@@ -79,16 +79,16 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title">CSSetting Class Reference</h1>
+					<h1 class="title">CSLocationPermissionProtocol Protocol Reference</h1>
 
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
 						<tr>
-	<th>Inherits from</th>
+	<th>Conforms to</th>
 	<td>NSObject</td>
 </tr><tr>
 	<th>Declared in</th>
-	<td>CSSettings.h</td>
+	<td>CSLocationPermissionProtocol.h</td>
 </tr>
 						</tbody></table></div>
 					
@@ -98,7 +98,47 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Each individual setting is stored in a CSSetting object with a <a href="#//api/name/name">name</a> and a <a href="#//api/name/value">value</a>.</p>
+						<p>Protocol that any object requesting location permissions through the CSSensePlatform should implement.
+After the user grants or denies permissions, one of these functions will be called on your object.</p>
+
+<p>Below an example of how this could be implemented in a view object:</p>
+
+<p>@interface TourViewController : UIViewController <CSLocationPermissionProtocol>
+@end</p>
+
+<p>@implementation TourViewController</p>
+
+<ul>
+<li><p>(IBAction)handlePermissionButtonClick:(id)sender {
+  [CSSensePlatform requestLocationPermissionWithDelegate: self];
+}</p></li>
+<li><p>(void) locationPermissionGranted {
+  [self refreshView];
+}</p></li>
+<li><p>(void) locationPermissionDenied {
+  [self refreshView];
+}</p></li>
+<li><p>(void)viewDidLoad {
+  [super viewDidLoad];
+  [self refreshView];
+}</p></li>
+<li><p>(void) refreshView {
+  CLAuthorizationStatus status = <a href="../Classes/CSSensePlatform.html#//api/name/locationPermissionState">[CSSensePlatform locationPermissionState]</a>;
+  switch (status) {
+      case kCLAuthorizationStatusAuthorizedAlways:
+          break;
+      case kCLAuthorizationStatusDenied:
+          break;
+      case kCLAuthorizationStatusNotDetermined:
+          break;
+      default:
+          break;
+  }
+}</p></li>
+</ul>
+
+
+<p>@end</p>
 					</div>
 					
 					
@@ -114,9 +154,9 @@
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/name" title="name"></a>
-	<h3 class="method-title"><code><a href="#//api/name/name">&nbsp;&nbsp;name</a></code>
-</h3>
+	<a name="//api/name/locationPermissionGranted" title="locationPermissionGranted"></a>
+	<h3 class="method-title"><code><a href="#//api/name/locationPermissionGranted">&ndash;&nbsp;locationPermissionGranted</a></code>
+<span class="task-item-suffix">required method</span></h3>
 
 	<div class="method-info">
 		<div class="pointy-thing"></div>
@@ -125,12 +165,12 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>The name of a certain setting. All names are stored and documented as constants in <a href="../Classes/CSSettings.html">CSSettings</a>.h.</p>
+				<p>Callback that will be called in the event the user grants location updates permission.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>@property (copy) NSString *name</code></div>
+			<div class="method-subsection method-declaration"><code>- (void)locationPermissionGranted</code></div>
 
 		    
 			
@@ -148,16 +188,16 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">CSSettings.h</code></p>
+				<p><code class="declared-in-ref">CSLocationPermissionProtocol.h</code></p>
 			</div>
 			
 			
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/value" title="value"></a>
-	<h3 class="method-title"><code><a href="#//api/name/value">&nbsp;&nbsp;value</a></code>
-</h3>
+	<a name="//api/name/locationPermissionDenied" title="locationPermissionDenied"></a>
+	<h3 class="method-title"><code><a href="#//api/name/locationPermissionDenied">&ndash;&nbsp;locationPermissionDenied</a></code>
+<span class="task-item-suffix">required method</span></h3>
 
 	<div class="method-info">
 		<div class="pointy-thing"></div>
@@ -166,12 +206,12 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>The value of a setting is always stored as a string. It can be used for storing number encoded values as strings. There are two special values</p>
+				<p>Callback that will be called in the event the user denies location updates permission.</p>
 			</div>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>@property (copy) NSString *value</code></div>
+			<div class="method-subsection method-declaration"><code>- (void)locationPermissionDenied</code></div>
 
 		    
 			
@@ -180,14 +220,6 @@
 
 			
 
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<pre><code>kCSSettingYES and kCSSettingNO
-</code></pre>
-
-<p>These are strings that represent boolean values.</p>
-			</div>
 			
 
 			
@@ -197,7 +229,7 @@
 			
 			<div class="method-subsection declared-in-section">
 				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">CSSettings.h</code></p>
+				<p><code class="declared-in-ref">CSLocationPermissionProtocol.h</code></p>
 			</div>
 			
 			
