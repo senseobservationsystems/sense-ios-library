@@ -91,29 +91,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
 	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
 }
 
-/*
-- (BOOL) deleteCurrentUserWithSessionID: (NSString*) sessionID AndError:(NSError **) error{
-    //get user id
-    NSURL *url               = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", urlAuth, kUrlUsers, @"current"]];
-    NSURLRequest *urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"GET" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:nil withError:nil];
-    
-    NSHTTPURLResponse* httpResponse;
-    NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
-    
-    
-    //delete user
-    url               = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", urlAuth, kUrlUsers]];
-    urlRequest = [DSEHTTPRequestHelper createURLRequestTo:url withMethod:@"DELETE" andSessionID:sessionID andAppKey: appKey andTimeoutInterval: requestTimeoutInterval andInput:nil withError:nil];
-    
-    NSHTTPURLResponse* httpResponse;
-    NSData* responseData = [DSEHTTPRequestHelper doRequest:urlRequest andResponse:&httpResponse andError:error];
-    
-    return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
-
-}
-*/
-
-
 #pragma mark Sensors and Devices (Public)
 
 - (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
