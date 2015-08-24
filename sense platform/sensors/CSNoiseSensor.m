@@ -27,6 +27,7 @@
 #import "CSDataStore.h"
 #import "Formatting.h"
 #import "CSSensePlatform.h"
+#import "CSScreenSensor.h"
 
 static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 
@@ -47,8 +48,9 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     NSURL* recording;
     int numberOfPackets;
     BOOL interruptedOnRecording;
-    BOOL sampleOnlyWhenScreenLocked;
-    BOOL screenIsOn;
+	BOOL sampleOnlyWhenScreenLocked;		//Indicates whether to take into account screen state when sampling. When turned ON it will sample only when the screen state is locked.
+	BOOL screenstateBlocksRecording;		//Indicates whether the screen state is currently blocking the recording (because it is unlocked)
+	BOOL nextRecordingCancelled;				//Indicates whether the next recording is cancelled
     
     NSArray* requirements;
 }
@@ -81,173 +83,42 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(settingChanged:)
 													 name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeAmbience] object:nil];
-        
-        
-        sampleInterval = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
-        sampleDuration = 3; // seconds
-        
-        recordQueue = dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
-
-        numberOfPackets = 0;
-        screenIsOn = YES;
-        sampleOnlyWhenScreenLocked = YES;
-        
-        self->requirements = @[@{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_SCREEN_STATE}];
+		
+        sampleInterval				= [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
+        sampleDuration				= 3; // seconds
+        recordQueue					= dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
+        numberOfPackets				= 0;
+        screenstateBlocksRecording	= YES;
+        sampleOnlyWhenScreenLocked	= YES;
+		nextRecordingCancelled		= NO;
+        self->requirements			= @[@{kCSREQUIREMENT_FIELD_SENSOR_NAME:kCSSENSOR_SCREEN_STATE}];
 	}
 	return self;
 }
 
 /** Configure the audio session of the app
  *
+ * Setting the session mode to the Measurement setting blocks the use of the external speaker of the phone ^JJ 13-07-2015, iOS 8.4
+ * Running this function causes a (very) short pause in music playback, hence it should not be done too often ^JJ 13-07-2015, iOS 8.4
  */
 - (void) configureAudioSession
 {
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSError *activationError = nil;
-    NSError *categoryError = nil;
-
-    // audio session category
-    NSString *appAudioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
-    
-    // Sets audio session category and mode=default
-    if (![session setCategory:appAudioSessionCategory withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker error:&categoryError]) {
-        NSLog(@"Audio session can't set category and mode. Error: %@", categoryError);
-    }
-    // activate session
-    if (![session setActive:YES error:&activationError]) {
-        NSLog(@"Audio session can't be activated. Error: %@", activationError);
-    }
-
-    
-    /* Disabled all this stuff to set the prefered audio input. It caused an occasional crash of the app, reprodocible by disabling the noise sensor.
-     */
-    //Check that AVAudioSession.availableInputs exists, if so we're running ios7 or later and we can set the audio preferences
-    if (NO && [session respondsToSelector:NSSelectorFromString(@"availableInputs")]) {
-        AVAudioSessionPortDescription *appPortInput = nil;
-        __autoreleasing NSError * theError = nil;
-        __autoreleasing NSError ** theErrorWrapper = &theError;
-        BOOL result = YES;
-        /* Availabe inputs */
-        NSArray *deviceInputs;
-        //NSArray *deviceInputs = [session availableInputs];
-        @try {
-            SEL selAvailableInputs = NSSelectorFromString(@"availableInputs");
-            NSInvocation* availableInputsInvocation = [NSInvocation invocationWithMethodSignature:[[session class] instanceMethodSignatureForSelector:selAvailableInputs]];
-            [availableInputsInvocation setSelector:selAvailableInputs];
-            [availableInputsInvocation setTarget:session];
-            [availableInputsInvocation invoke];
-            [availableInputsInvocation getReturnValue:&deviceInputs];
-        } @catch (NSException* exception) {
-            //TODO: make exception
-            NSLog(@"Exception trying to invoke ios7 method session.availableInputs: %@", exception);
-            return;
-        }
-        for (AVAudioSessionPortDescription *input in deviceInputs) {
-            // set as an input the build-in microphone
-            if ([input.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
-                appPortInput = input;
-                break;
-            }
-        }
-        
-        if (appPortInput == nil) {
-            NSLog(@"No build-in microphone found.");
-            return;
-        }
-        
-        /* Set preferred input port */
-        theError = nil;
-        //Call ios7 method
-        //result = [session setPreferredInput:appPortInput error:&theError];
-        @try {
-            SEL selSetPreferredInput = NSSelectorFromString(@"setPreferredInput:error:");
-            NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[session class] instanceMethodSignatureForSelector:selSetPreferredInput]];
-            [setPreferredInput setSelector:selSetPreferredInput];
-            [setPreferredInput setTarget:session];
-            [setPreferredInput setArgument:&appPortInput atIndex:2];
-            [setPreferredInput setArgument:&theErrorWrapper atIndex:3];
-            [setPreferredInput invoke];
-            [setPreferredInput getReturnValue:&result];
-        } @catch (NSException* exception) {
-            //TODO: make exception
-            NSLog(@"Exception trying to invoke ios7 method session.setPreferredInput:error: %@", exception);
-            return;
-        }
-        
-        if (!result)
-        {
-            // an error occurred. Handle it!
-            NSLog(@"setPreferredInput failed. Error: %@", theError);
-            return;
-        }
-        
-        // set preferred input data source
-        AVAudioSessionDataSourceDescription *bottomMic = nil;
-        
-        NSArray *dataSources; // = appPortInput.dataSources
-        @try {
-            SEL selDataSources = NSSelectorFromString(@"dataSources");
-            NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[appPortInput class] instanceMethodSignatureForSelector:selDataSources]];
-            [setPreferredInput setSelector:selDataSources];
-            [setPreferredInput setTarget:appPortInput];
-            [setPreferredInput invoke];
-            [setPreferredInput getReturnValue:&dataSources];
-        } @catch (NSException* exception) {
-            //TODO: make exception
-            NSLog(@"Exception trying to invoke ios7 method appPortInput.dataSources%@", exception);
-            return;
-        }
-        
-        
-        for (AVAudioSessionDataSourceDescription *source in dataSources) {
-            NSString* orientation; // = source.orientation
-            @try {
-                SEL selDataSources = NSSelectorFromString(@"orientation");
-                NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[source class] instanceMethodSignatureForSelector:selDataSources]];
-                [setPreferredInput setSelector:selDataSources];
-                [setPreferredInput setTarget:source];
-                [setPreferredInput invoke];
-                [setPreferredInput getReturnValue:&orientation];
-            } @catch (NSException* exception) {
-                //TODO: make exception
-                NSLog(@"Exception trying to invoke ios7 method source.orientation: %@", exception);
-                return;
-            }
-
-            //AVAudioSessionOrientationBottom, can't check whether this exists. Instead use the string...
-            NSString* myAVAudioSessionOrientationBottom = @"Bottom";
-            if ([orientation isEqualToString:myAVAudioSessionOrientationBottom]) {
-                bottomMic = source;
-                break;
-            }
-        }
-        
-        if (bottomMic) {
-            // Set a preference for the bottom data source.
-            theError = nil;
-            //result = [appPortInput setPreferredDataSource:bottomMic error:&theError];
-            @try {
-                SEL selSetPreferredInput = NSSelectorFromString(@"setPreferredDataSource:error:");
-                NSInvocation* setPreferredInput = [NSInvocation invocationWithMethodSignature:[[appPortInput class] instanceMethodSignatureForSelector:selSetPreferredInput]];
-                [setPreferredInput setSelector:selSetPreferredInput];
-                [setPreferredInput setTarget:appPortInput];
-                [setPreferredInput setArgument:&bottomMic atIndex:2];
-                [setPreferredInput setArgument:&theErrorWrapper atIndex:3];
-                [setPreferredInput invoke];
-                [setPreferredInput getReturnValue:&result];
-            } @catch (NSException* exception) {
-                //TODO: make exception
-                NSLog(@"Exception trying to invoke ios7 method appPortInput.setPreferredDataSource:error: %@", exception);
-                return;
-            }
-            
-            if (!result)
-            {
-                // an error occurred. Handle it!
-                NSLog(@"setPreferredDataSource failed. Error: %@", theError);
-            }
-        }
-    }
+	AVAudioSession *session = [AVAudioSession sharedInstance];
+	NSError *activationError = nil;
+	NSError *categoryError = nil;
+	
+	// audio session category
+	NSString *appAudioSessionCategory = AVAudioSessionCategoryPlayAndRecord;
+	
+	// Sets audio session category and mode=default
+	if (![session setCategory:appAudioSessionCategory withOptions: AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionDefaultToSpeaker error:&categoryError]) {
+		NSLog(@"Audio session can't set category. Error: %@", categoryError);
+	}
+	
+	// activate session
+	if (![session setActive:YES error:&activationError]) {
+		NSLog(@"Audio session can't be activated. Error: %@", activationError);
+	}
 }
 
 /** Initalize and configure the audio recorder
@@ -283,7 +154,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
         @autoreleasepool {
-        [self startRecording];
+			[self startRecording];
         }
     });
 }
@@ -291,23 +162,23 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 - (void) startRecording {
     
     BOOL started = NO;
-    
-    // sample continuously, independant of the state of the screen
-    if (sampleOnlyWhenScreenLocked == NO) {
-        NSLog(@"start recording audio");
-        started = [audioRecorder recordForDuration:sampleDuration];
-    }
-    // sample only when the screen is locked
-    else {
-        if (screenIsOn == NO) {
-            NSLog(@"start recording audio");
-            started = [audioRecorder recordForDuration:sampleDuration];
-        }
-    }
-    
-	//NSLog(@"recorder %@", started? @"started":@"failed to start");
-	if (NO == started || audioRecorder.isRecording == NO) {
-		//try again later
+	
+	//Skip this recording if it was canceled
+	if (nextRecordingCancelled) {
+		nextRecordingCancelled = NO;
+		[self scheduleRecording];
+		return;
+	}
+	
+	@synchronized(self) {
+		// sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
+		if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
+			started = [audioRecorder recordForDuration:sampleDuration];
+		}
+	}
+	
+	//Schedule a new recording if this one was not started
+	if (started == NO || audioRecorder.isRecording == NO) {
 		[self scheduleRecording];
 		return;
 	}
@@ -353,10 +224,9 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     if (didSucceed ==TRUE) {
         // calculate the audio recording volume in dBs
         [self computeAudioVolume];
-        NSLog(@"recorder finished succesfully");
     }
     else {
-        NSLog(@"recorder finished unsuccesfully");
+        NSLog(@"Audio recording finished unsuccesfully");
     }
 
 	if (isEnabled) {
@@ -498,23 +368,34 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     [NSThread sleepForTimeInterval: 0.1];
 }
 
+/** 
+ When receiving new screen state data, we do the following:
+  - When the screen gets locked we allow new recordings by setting screenstateBlocksRecording to NO
+  - When the screen gets unlocked we stop any running recordings and blocks future recordings by setting screenstateBlocksRecording to YES
+  - When the screen gets an on/off switch event (and we don't know if it is on or off) we take a conservative approach and stop any recording, and cancel the next recording as well (because there is some delay in lock and unlock detections).
+ */
 - (void) onNewData:(NSNotification*)notification {
-    NSString* sensor = notification.object;
-    if ([sensor isEqualToString:kCSSENSOR_SCREEN_STATE]) {
-        // if receive dispaly event and the sampleonly flag is no do nothing otherwise call schedule but
-        // if you record stop
-        NSString* json = [notification.userInfo valueForKey:@"value"];
-        NSString *screenState = [json valueForKey:@"screen"];
-        
-        // keep track of the state of the screen
-        if ([screenState isEqualToString:@"off"])
-            screenIsOn = NO;
-        else {
-            screenIsOn = YES;
-            if ([audioRecorder isRecording] == YES) {
-                [audioRecorder stop];
-            }
-        }
+    if ([notification.object isEqualToString:kCSSENSOR_SCREEN_STATE]) {
+		NSString *screenState = [[notification.userInfo valueForKey:@"value"] valueForKey:@"screen"];
+
+		@synchronized(self) {
+			if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED]) {
+				screenstateBlocksRecording = NO;
+				nextRecordingCancelled = NO;
+			} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_UNLOCKED]){
+				screenstateBlocksRecording = YES;
+				if ([audioRecorder isRecording] == YES) {
+					[audioRecorder stop];
+				}
+			} else if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH]) {
+				if ([audioRecorder isRecording] == YES) {
+					[audioRecorder stop];
+				}
+				nextRecordingCancelled = YES; //Cancel the next recording
+			} else {
+				NSLog(@"Unknown screen state value: %@", screenState);
+			}
+		}
     }
 }
 

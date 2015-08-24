@@ -279,14 +279,17 @@ static const char *SALT = "I3oL@YeQo8!pU3qe";
  * @param name The name of the sensor to get the data from
  * @param startDate The date and time at which to start looking for datapoints
  * @param endDate The date and time at which to stop looking for datapoints
+ * @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
+ * @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
  * @return an array of values, each value is a dictonary that descirbes the data point
  */
-- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate {
+
+- (NSArray*) getDataFromSensor: (NSString*) name from: (NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
     
     NSMutableArray* results = [[NSMutableArray alloc] init];
     
     //make database query (SORT by timestamp) for buffer and main hd db
-    const char* query = [[NSString stringWithFormat:@"SELECT * FROM (SELECT timestamp, value FROM buf.data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f UNION SELECT timestamp, value FROM data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f) ORDER BY timestamp ASC", name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970]] UTF8String];
+    const char* query = [[NSString stringWithFormat:@"SELECT * FROM (SELECT timestamp, value FROM buf.data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f UNION SELECT timestamp, value FROM data WHERE sensor_name = '%@' AND timestamp >= %f AND timestamp < %f) ORDER BY timestamp %@ LIMIT %i", name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], name, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], order, nrOfPoints] UTF8String];
     
     //NSLog(@"Executing query: %s", query);
     
@@ -313,10 +316,50 @@ static const char *SALT = "I3oL@YeQo8!pU3qe";
     return results;
 }
 
+/** Retrieve all the sensor data stored in the database between a certain time interval by sensor name and device type.
+ * @param sensorName The name of the sensor to get the data from
+ * @param deviceType The name of the deviceType to get the data from
+ * @param startDate The date and time at which to start looking for datapoints
+ * @param endDate The date and time at which to stop looking for datapoints
+ * @return an array of values, each value is a dictonary that descirbes the data point
+ */
+- (NSArray*) getDataFromSensor: (NSString*) sensorName andDeviceType: (NSString *) deviceType from: (NSDate*) startDate to: (NSDate*) endDate {
+	
+	NSMutableArray* results = [[NSMutableArray alloc] init];
+	
+	//make database query (SORT by timestamp) for buffer and main hd db
+	const char* query = [[NSString stringWithFormat:@"SELECT * FROM (SELECT timestamp, value FROM buf.data WHERE sensor_name = '%@' AND device_type = '%@' AND timestamp >= %f AND timestamp < %f UNION SELECT timestamp, value FROM data WHERE sensor_name = '%@' AND device_type = '%@' AND timestamp >= %f AND timestamp < %f) ORDER BY timestamp ASC", sensorName, deviceType, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970], sensorName, deviceType, [startDate timeIntervalSince1970], [endDate timeIntervalSince1970]] UTF8String];
+	
+	//NSLog(@"Executing query: %s", query);
+	
+	sqlite3_stmt* stmt;
+	pthread_mutex_lock(&dbMutex);
+	NSInteger ret = sqlite3_prepare_v2(db, query, -1, &stmt, NULL);
+	if (ret == SQLITE_OK) {
+		while (sqlite3_step(stmt) == SQLITE_ROW) {
+			
+			NSDate* timestamp = [NSDate dateWithTimeIntervalSince1970:sqlite3_column_double(stmt, 0)];
+			NSString* jsonString = decodedString((const char*)sqlite3_column_text(stmt, 1));
+			
+			//for each row, make dictionary with time value pair of timestamp and value
+			[results addObject: [self makeDictionaryFromDate: timestamp andString: jsonString]];
+		}
+	} else if (ret != SQLITE_NOTFOUND) {
+		NSLog(@"database error. getDataFromSensor: %li errmsg: %s.", (long)ret, sqlite3_errmsg(db));
+		;
+	}
+	sqlite3_finalize(stmt);
+	pthread_mutex_unlock(&dbMutex);
+	
+	//return array of dictionaries
+	return results;
+}
+
+
 - (NSDictionary*) makeDictionaryFromDate: (NSDate*) timestamp andString: (NSString*) value {
-    
+	
     NSError* error;
-    
+	
     //try to convert to json data and test if there is a valid result
     NSData* jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
     id json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];

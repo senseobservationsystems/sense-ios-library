@@ -212,19 +212,23 @@
 	if (enable && !isEnabled) {
        @try {
             locationManager.desiredAccuracy = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeLocation setting:kCSLocationSettingAccuracy] intValue];
-        } @catch (NSException* e) {
-            NSLog(@"Exception setting position accuracy: %@", e);
-        }
+		   //set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
+
+		   locationManager.pausesLocationUpdatesAutomatically = NO;
+		   
+		   // make sure we have the correct permissions
+		   [self requestPermission];
+		   
+		   //NOTE: using only significant location updates doesn't allow the phone to sense while running in the background
+		   [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
+		   [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
+		   
+		   
+	   } @catch (NSException* e) {
+		   NSLog(@"Exception in enabling location provider: %@", e);
+	   }
     
-        //set this here instead of when the sensor is enabled as otherwise the cortex testscript won't work
-        locationManager.pausesLocationUpdatesAutomatically = NO;
-        
-        // make sure we have the correct permissions
-        [self requestPermission];
-    
-        //NOTE: using only significant location updates doesn't allow the phone to sense while running in the background
-        [locationManager performSelectorOnMainThread:@selector(startUpdatingLocation) withObject:nil waitUntilDone:YES];
-        [locationManager performSelectorOnMainThread:@selector(startMonitoringSignificantLocationChanges) withObject:nil waitUntilDone:YES];
+
 	}
 	else if (!enable && isEnabled) {
 		[pauseLocationSamplingTimer invalidate];

@@ -149,7 +149,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
                             //[CSJumpSensor class],
 							//[PreferencesSensor class],
 							//[BloodPressureSensor class],
-                            [CSActivityProcessorSensor class],
+							//[CSActivityProcessorSensor class],
                             [CSTimeZoneSensor class],
                             //[CSStepCounterProcessorSensor class],
 							nil];
@@ -445,9 +445,12 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         return NULL;
     }
 }
+- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
+    return [self->storage getDataFromSensor:name from:startDate to:endDate andOrder:order withLimit: nrOfPoints];
+}
 
-- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
-    return [self->storage getDataFromSensor:name from:startDate to:endDate];
+- (NSArray*) getLocalDataForSensor:(NSString *)sensorName andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate {
+	return [self->storage getDataFromSensor:sensorName andDeviceType:deviceType from:startDate to:endDate];
 }
 
 - (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
@@ -523,6 +526,10 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
             }
         }
     });
+}
+
+- (void) removeLocalData {
+    [storage removeDataBeforeTime:[NSDate date]];
 }
 
 - (void) generalSettingChanged: (NSNotification*) notification {
