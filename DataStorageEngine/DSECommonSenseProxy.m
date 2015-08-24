@@ -57,7 +57,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error {
 	
-	if( (!error) || [NSString isEmptyString:username] || [NSString isEmptyString:password]) {
+	if( (!error) || ![NSString isValidString:username] || ![NSString isValidString:password]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
@@ -79,7 +79,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	if( (!error) || [NSString isEmptyString:sessionID]) {
+	if( (!error) || ![NSString isValidString:sessionID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 
@@ -118,7 +118,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:name] || [NSString isEmptyString:deviceType] || [NSString isEmptyString:dataType]) {
+	if( (!error) || ![NSString isValidString:sessionID] || ![NSString isValidString:name] || ![NSString isValidString:deviceType] || ![NSString isValidString:dataType]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
@@ -159,7 +159,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 									return (id)nil;
 							}];
 	
-	if(sensorID && ![NSString isEmptyString:sensorID]) {
+	if(sensorID && [NSString isValidString:sensorID]) {
 		[sensorDescription setValue:sensorID forKey:@"sensor_id"];
 		return sensorDescription;
 	} else {
@@ -173,7 +173,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (NSArray *) getSensorsWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 
-	if( (!error) || [NSString isEmptyString:sessionID]) {
+	if( (!error) || ![NSString isValidString:sessionID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
@@ -184,7 +184,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (NSArray *) getDevicesWithSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	if( (!error) || [NSString isEmptyString:sessionID]) {
+	if( (!error) || ![NSString isValidString:sessionID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
@@ -195,7 +195,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (BOOL) addSensorWithID: (NSString *) csSensorID toDeviceWithType: (NSString *) deviceType andUUID: (NSString *) UUID andSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	if( (!error) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:deviceType] || [NSString isEmptyString:UUID] || [NSString isEmptyString:csSensorID]) {
+	if( (!error) || ![NSString isValidString:sessionID] || ![NSString isValidString:deviceType] || ![NSString isValidString:UUID] || ![NSString isValidString:csSensorID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
@@ -215,7 +215,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (BOOL) postData: (NSArray *) data withSessionID: (NSString *) sessionID andError: (NSError **) error {
 
-	if( (!error) || (!data) || ![data isKindOfClass:[NSArray class]] || (data.count == 0) || [NSString isEmptyString:sessionID]) {
+	if( (!error) || (!data) || ![data isKindOfClass:[NSArray class]] || (data.count == 0) || ![NSString isValidString:sessionID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 	
@@ -231,7 +231,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 - (NSArray *) getDataForSensor: (NSString *) csSensorID fromDate: (NSDate *) startDate withSessionID: (NSString *) sessionID andError: (NSError **) error {
 	
-	if( (!error) || (!startDate) || [NSString isEmptyString:sessionID] || [NSString isEmptyString:csSensorID]) {
+	if( (!error) || (!startDate) || ![NSString isValidString:sessionID] || ![NSString isValidString:csSensorID]) {
 		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
 	}
 
@@ -281,7 +281,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 //Make a url with the included action
 - (NSURL*) makeUrlFor:(const NSString *) action append:(NSString *) appendix
 {
-	if([NSString isEmptyString:(NSString *)action]) {
+	if(![NSString isValidString:(NSString *)action]) {
 		return nil;
 	}
 	

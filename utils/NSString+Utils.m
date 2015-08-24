@@ -10,21 +10,21 @@
 
 @implementation NSString (Utils)
 
-+ (BOOL) isEmptyString:(NSString *)string {
++ (BOOL) isValidString:(NSString *)string {
 	if(string && ![string isKindOfClass: [NSString class]]) {
-		return YES;
+		return NO;
 	}
 	
 	if([string length] == 0) { //string is empty or nil
-		return YES;
+		return NO;
 	}
 	
 	if(![[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
 		//string is all whitespace
-		return YES;
+		return NO;
 	}
 	
-	return NO;
+	return YES;
 }
 
 
