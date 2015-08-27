@@ -51,11 +51,11 @@ const int requestTimeoutInterval = 10;			//Time out of 10 sec for every request
 														   timeoutInterval:requestTimeoutInterval];
 	[urlRequest setHTTPMethod:method];
 	
-	if (! [NSString isEmptyString:sessionID]) {
+	if ([NSString isValidString:sessionID]) {
 		[urlRequest setValue:sessionID forHTTPHeaderField:@"SESSION-ID"];
 	}
 	
-	if (! [NSString isEmptyString:appKey]) {
+	if ([NSString isValidString:appKey]) {
 		[urlRequest setValue:appKey forHTTPHeaderField:@"APPLICATION-KEY"];
 	}
 	

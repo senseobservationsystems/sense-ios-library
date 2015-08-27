@@ -16,7 +16,7 @@
  @param string	The string to check
  @result		If the string has zero length or only whitespace characters
  */
-+ (BOOL)isEmptyString:(NSString *)string;
++ (BOOL)isValidString:(NSString *)string;
 
 
 /**
