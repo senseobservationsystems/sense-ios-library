@@ -14,7 +14,7 @@
  
 	Only API calls there are necessary for the DataStorageEngine have been implemented here. All calls are made in a synchronous manner. It is up to the user to either call the API in a synchronous or asynchronous manner.
 	
-	The DSECommonSenseProxy class does not now about DataStorageEngine concepts, it simply wraps the API that is available for CommonSense. Any translations between concepts in the DataStorageEngine and CommonSense should be made by other objects (most notably the difference between Source and Device). 
+	The DSECommonSenseProxy class does not know about DataStorageEngine concepts, it simply wraps the API that is available for CommonSense. Any translations between concepts in the DataStorageEngine and CommonSense should be made by other objects (most notably the difference between Source and Device).
  
 	The DSECommonSenseProxy an Application Key to get authorized for API access. This parameter is simply stored on initialization but not managed by the DSECommonSenseProxy. If they should change, simply making a new instance of the proxy would be sufficient.
  
@@ -36,7 +36,7 @@
  Takes an app key that will be used throughout the proxies lifetime. Needs to know whether to talk to the live server or the staging server. This cannot be changed during the proxies lifetime. If you need to change this you simply init a new commonsense proxy.
  
  @param useLiveServer	If YES, the live server will be used. If NO, the staging server will be used.
- @param appKey			An application key that identifies the application to the commonsense server. Cannot be empty.
+ @param theAppKey		An application key that identifies the application to the commonsense server. Cannot be empty.
  @result				Initialized DSECommonSenseProxy
 */
 - (id) initForLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey;
@@ -158,10 +158,8 @@
 /**
  Download sensor data from commonsense from a certain date till now.
  
- @note The downloaded data will be passed as an NSArray * to the success callback method from which it can be further processed.
- 
  @param csSensorID		Identifier of the sensor from CommonSense for which to download the data. Cannot be empty.
- @param fromDateDate	Date from which to download data. Datapoints after this date will be included in the download. Datapoints from before this date will be ignored. Cannot be nil.
+ @param fromDate		Date from which to download data. Datapoints after this date will be included in the download. Datapoints from before this date will be ignored. Cannot be nil.
  @param sessionID		The sessionID of the current user. Cannot be empty.
  @param error			Reference to an NSError object that will contain error information if an error occurs. Cannot be nil.
  @result				NSArray with the resulting data. Each object is an NSDictionary with the data as provided by the backend. Will be nil if an error occured.
