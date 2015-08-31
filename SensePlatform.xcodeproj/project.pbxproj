@@ -18,6 +18,17 @@
 			name = GenVersion;
 			productName = GenVersion;
 		};
+		A9DCAB711B949E5A00318E69 /* Test Coverage (Sense Lib) */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A9DCAB721B949E5A00318E69 /* Build configuration list for PBXAggregateTarget "Test Coverage (Sense Lib)" */;
+			buildPhases = (
+				A9DCAB751B949E6200318E69 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Test Coverage (Sense Lib)";
+			productName = "Test Coverage (Sense Lib)";
+		};
 		DC097FA61ABAD37600BDDD09 /* GenDocumentation */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */;
@@ -631,6 +642,9 @@
 					A96D6EC91A5C49FF00554BBC = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
+					A9DCAB711B949E5A00318E69 = {
+						CreatedOnToolsVersion = 6.4;
+					};
 					DC097FA61ABAD37600BDDD09 = {
 						CreatedOnToolsVersion = 6.2;
 					};
@@ -652,6 +666,7 @@
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
 				DC097FA61ABAD37600BDDD09 /* GenDocumentation */,
 				A96D6EC91A5C49FF00554BBC /* Sense Library Tests */,
+				A9DCAB711B949E5A00318E69 /* Test Coverage (Sense Lib) */,
 			);
 		};
 /* End PBXProject section */
@@ -692,6 +707,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\n\ncat $VERSIONFILE | grep $version\n\nif [ $? -ne 0 ]; then\n    PRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\n    POST=\"#endif\"\n    echo -e ${PRE} > ${VERSIONFILE}\n    echo \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\n    echo ${POST} >> ${VERSIONFILE}\nfi";
+		};
+		A9DCAB751B949E6200318E69 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=${PATH}:/usr/local/bin\ngroovy http://frankencover.it/with -source-dir .";
 		};
 		DC097FAA1ABAD3C100BDDD09 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -877,6 +905,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -943,6 +973,8 @@
 		3EBEAF4F1887FADE009F81C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -969,6 +1001,8 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1010,6 +1044,7 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
@@ -1026,6 +1061,20 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+			};
+			name = Release;
+		};
+		A9DCAB731B949E5A00318E69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A9DCAB741B949E5A00318E69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -1081,6 +1130,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		A9DCAB721B949E5A00318E69 /* Build configuration list for PBXAggregateTarget "Test Coverage (Sense Lib)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9DCAB731B949E5A00318E69 /* Debug */,
+				A9DCAB741B949E5A00318E69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */ = {
 			isa = XCConfigurationList;
