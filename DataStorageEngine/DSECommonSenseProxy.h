@@ -68,8 +68,6 @@
 - (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
 
 
-//- (BOOL) deleteCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
-
 #pragma mark Sensors and Devices
 /**
  @name Sensors and Devices (DSESource backend equivalent)
@@ -78,8 +76,6 @@
 
 /**
  Create a new sensor in the commonsense backend
- 
- Each sensor in commonsense is uniquely identified by a name and devicetype combination. If this combination already exists in the commonsense backend this call will fail.
  
  @param name			Name of the sensor to create. This will be used to identify the sensor. Required.
  @param displayName		Extra field to make sensor name more readable if necessary when displaying it. Not required.
