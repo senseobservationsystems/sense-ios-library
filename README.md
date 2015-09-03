@@ -11,3 +11,14 @@ If there is information that you believe is incorrect, or if you are missing inf
 * [joris@sense-os.nl](ahmy@sense-os.nl)
 
 The rest of this documentation is organized as follows. First we explain the goal and requirements of the library in the introduction. We than have a getting started section to setup the library and get started using it. After that, we have a set of specific articles elaborating on different aspects of using the library for more detailed information.
+
+### Test code coverage  
+
+Test code coverage can be automatically generated through the target in the xcode project. It has two dependencies (lcov and groovy) which can be installed through: 
+
+    brew install groovy
+    brew install lcov
+
+Before running the test code coverage target you have to run the tests themselves. Once they have finished running, you run the test code coverage target to generate test code coverage results. These results can be found by opening 
+
+    build/reports/coverage/index.html

@@ -4,3 +4,4 @@ xcuserdata
 project.xcworkspace
 CSVersion.h
 documentation/output/*
+build/
