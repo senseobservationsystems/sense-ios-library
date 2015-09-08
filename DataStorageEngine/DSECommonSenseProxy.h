@@ -41,32 +41,6 @@
 */
 - (id) initForLiveServer: (BOOL) useLiveServer withAppKey: (NSString *) theAppKey;
 
-#pragma mark User
-/**
- @name Users
- */
-
-/**
- Login a user
- 
- @note When a user is already logged in, this call will still succeed and return a new sessionID.
- 
- @param username		A user account in commonsense is uniquely identified by a username. Cannot be empty.
- @param password		A password in commonsense does not have any specific requirements. It will be MD5 hashed before sending to the server so the user does not have to provide a hashed password. Cannot be empty.
- @param error			Reference to an NSError object that will contain error information if an error occurs. Cannot be nil.
- @return				Session ID. Will be nil if the call fails.
- */
-- (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error;
-
-/**
- Logout the currently logged in user.
- 
- @param sessionID		The sessionID of the user to logout. Cannot be empty.
- @param error			Reference to an NSError object that will contain error information if an error occurs. Cannot be nil.
- @return				Whether or not the logout finished succesfully.
- */
-- (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error;
-
 
 #pragma mark Sensors and Devices
 /**
