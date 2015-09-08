@@ -44,6 +44,7 @@
 
 /* Begin PBXBuildFile section */
 		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
+		275DBE7E1B9ED4EA000646C6 /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 275DBE7D1B9ED4EA000646C6 /* AccountUtilsForTest.m */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
@@ -182,6 +183,8 @@
 		0E801F921A7AA90C00A3F9CC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
 		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
+		275DBE7D1B9ED4EA000646C6 /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountUtilsForTest.m; sourceTree = "<group>"; };
+		27977FF61B9EE2FE0081886A /* AccountUtilsForTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccountUtilsForTest.h; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -571,6 +574,8 @@
 			isa = PBXGroup;
 			children = (
 				A94F3E3E1B831457000CCF7A /* DSECommonSenseProxyTest.m */,
+				275DBE7D1B9ED4EA000646C6 /* AccountUtilsForTest.m */,
+				27977FF61B9EE2FE0081886A /* AccountUtilsForTest.h */,
 				A97744681B468FE20092D5FC /* CSSensePlatformTest.m */,
 				A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */,
 				A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */,
@@ -766,6 +771,7 @@
 				3E820E2D15D40B190001A3EC /* CSLocationProvider.m in Sources */,
 				3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */,
 				3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */,
+				275DBE7E1B9ED4EA000646C6 /* AccountUtilsForTest.m in Sources */,
 				3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */,
 				3E820E3715D40B190001A3EC /* CSNoiseSensor.m in Sources */,
 				A94F3E561B839F17000CCF7A /* NSString+Utils.m in Sources */,
@@ -1138,6 +1144,7 @@
 				A9DCAB741B949E5A00318E69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */ = {
 			isa = XCConfigurationList;
