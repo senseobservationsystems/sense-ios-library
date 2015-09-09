@@ -44,6 +44,11 @@
 
 /* Begin PBXBuildFile section */
 		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
+		27C98FE61BA029DB0055EE50 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C98FE51BA029DB0055EE50 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
+		27C98FE81BA0578F0055EE50 /* RealmSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C98FE71BA0578F0055EE50 /* RealmSensor.swift */; settings = {ASSET_TAGS = (); }; };
+		27C98FEA1BA057E40055EE50 /* RealmDatapoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C98FE91BA057E40055EE50 /* RealmDatapoint.swift */; settings = {ASSET_TAGS = (); }; };
+		27C98FEC1BA058130055EE50 /* RealmSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C98FEB1BA058130055EE50 /* RealmSource.swift */; settings = {ASSET_TAGS = (); }; };
+		27C98FEE1BA05A490055EE50 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C98FED1BA05A490055EE50 /* RealmUser.swift */; settings = {ASSET_TAGS = (); }; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
@@ -182,6 +187,11 @@
 		0E801F921A7AA90C00A3F9CC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
 		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
+		27C98FE51BA029DB0055EE50 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHandler.swift; sourceTree = "<group>"; };
+		27C98FE71BA0578F0055EE50 /* RealmSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSensor.swift; sourceTree = "<group>"; };
+		27C98FE91BA057E40055EE50 /* RealmDatapoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmDatapoint.swift; sourceTree = "<group>"; };
+		27C98FEB1BA058130055EE50 /* RealmSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSource.swift; sourceTree = "<group>"; };
+		27C98FED1BA05A490055EE50 /* RealmUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -559,6 +569,11 @@
 			isa = PBXGroup;
 			children = (
 				A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */,
+				27C98FE51BA029DB0055EE50 /* DatabaseHandler.swift */,
+				27C98FE91BA057E40055EE50 /* RealmDatapoint.swift */,
+				27C98FE71BA0578F0055EE50 /* RealmSensor.swift */,
+				27C98FED1BA05A490055EE50 /* RealmUser.swift */,
+				27C98FEB1BA058130055EE50 /* RealmSource.swift */,
 				A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */,
 				A94F3E511B839B18000CCF7A /* DSEHTTPRequestHelper.h */,
 				A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */,
@@ -744,17 +759,21 @@
 				A94F3E4E1B832835000CCF7A /* NSData+GZIP.m in Sources */,
 				3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */,
 				3E513F5D18FC18150008415A /* CSUploader.m in Sources */,
+				27C98FE81BA0578F0055EE50 /* RealmSensor.swift in Sources */,
 				3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */,
 				3E74DBA7193C8AF100E471A9 /* CSActivityProcessorSensor.m in Sources */,
 				3E820E1115D40B190001A3EC /* CSReachability.m in Sources */,
 				3E820E1215D40B190001A3EC /* CSSensePlatform.m in Sources */,
 				3E7F33A41A13AA9100957AE2 /* CSTimeZoneSensor.m in Sources */,
 				3E820E1315D40B190001A3EC /* CSSensorIds.m in Sources */,
+				27C98FE61BA029DB0055EE50 /* DatabaseHandler.swift in Sources */,
 				3E820E1715D40B190001A3EC /* CSAccelerationSensor.m in Sources */,
+				27C98FEA1BA057E40055EE50 /* RealmDatapoint.swift in Sources */,
 				3E820E1915D40B190001A3EC /* CSAccelerometerSensor.m in Sources */,
 				3E820E1B15D40B190001A3EC /* CSAntPlusController.m in Sources */,
 				3E820E1D15D40B190001A3EC /* BloodPressureSensor.m in Sources */,
 				3E820E1F15D40B190001A3EC /* FootpodSensor.m in Sources */,
+				27C98FEE1BA05A490055EE50 /* RealmUser.swift in Sources */,
 				3E820E2115D40B190001A3EC /* CSBatterySensor.m in Sources */,
 				3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */,
 				3E820E2315D40B190001A3EC /* CSCallSensor.m in Sources */,
@@ -780,6 +799,7 @@
 				A94F3E4F1B832835000CCF7A /* NSString+MD5Hash.m in Sources */,
 				3E820E4215D40B190001A3EC /* CSSpatialProvider.m in Sources */,
 				A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */,
+				27C98FEC1BA058130055EE50 /* RealmSource.swift in Sources */,
 				FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */,
 				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
 				A94F3E531B839B18000CCF7A /* DSEHTTPRequestHelper.m in Sources */,
@@ -1138,6 +1158,7 @@
 				A9DCAB741B949E5A00318E69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DC097FA91ABAD37600BDDD09 /* Build configuration list for PBXAggregateTarget "GenDocumentation" */ = {
 			isa = XCConfigurationList;
