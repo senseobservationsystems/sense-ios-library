@@ -16,6 +16,7 @@
 #import "NSString+MD5Hash.h"
 #import "UIDevice+Hardware.h"
 
+#import <DSESwift/DSESwift-Swift.h>
 
 /* Some test values */
 static NSString* testAppKeyStaging = @"wRgE7HZvhDsRKaRm6YwC3ESpIqqtakeg";
@@ -75,6 +76,9 @@ static enum SensorAttributes {
 #pragma mark loginUser
 
 - (void)testLoginWithValidUsernameAndPassword {
+    blaat *swiftClass = [[blaat alloc] init];
+    [swiftClass test];
+    
     
     NSError* error;
     NSString* registrationError;
