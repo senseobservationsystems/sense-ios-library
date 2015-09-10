@@ -9,14 +9,14 @@
 import Foundation
 
 class RealmSensor: Object{
-    var id
-    var name
-    var meta
-    var flag_cs_upload
-    var flag_cs_download
-    var flag_persist_locally
-    var user : RealmUser
-    var source_id : RealmSource
-    var data_type
-    var cs_id
+    dynamic var id
+    dynamic var name
+    dynamic var meta
+    dynamic var flag_cs_upload
+    dynamic var flag_cs_download
+    dynamic var flag_persist_locally
+    dynamic var user = RealmUser()
+    dynamic var source_id = RealmSource()
+    dynamic var data_type
+    dynamic var cs_id
 }

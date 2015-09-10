@@ -44,6 +44,12 @@
 
 /* Begin PBXBuildFile section */
 		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
+		27C9900C1BA0651F0055EE50 /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C990071BA0651F0055EE50 /* Query.swift */; settings = {ASSET_TAGS = (); }; };
+		27C9900D1BA0651F0055EE50 /* RealmDatapoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C990081BA0651F0055EE50 /* RealmDatapoint.swift */; settings = {ASSET_TAGS = (); }; };
+		27C9900E1BA0651F0055EE50 /* RealmSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C990091BA0651F0055EE50 /* RealmSensor.swift */; settings = {ASSET_TAGS = (); }; };
+		27C9900F1BA0651F0055EE50 /* RealmSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C9900A1BA0651F0055EE50 /* RealmSource.swift */; settings = {ASSET_TAGS = (); }; };
+		27C990101BA0651F0055EE50 /* RealmUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C9900B1BA0651F0055EE50 /* RealmUser.swift */; settings = {ASSET_TAGS = (); }; };
+		27C990121BA067860055EE50 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C990111BA067860055EE50 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
@@ -214,6 +220,12 @@
 		0E801F921A7AA90C00A3F9CC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
 		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
+		27C990071BA0651F0055EE50 /* Query.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
+		27C990081BA0651F0055EE50 /* RealmDatapoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmDatapoint.swift; sourceTree = "<group>"; };
+		27C990091BA0651F0055EE50 /* RealmSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSensor.swift; sourceTree = "<group>"; };
+		27C9900A1BA0651F0055EE50 /* RealmSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSource.swift; sourceTree = "<group>"; };
+		27C9900B1BA0651F0055EE50 /* RealmUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmUser.swift; sourceTree = "<group>"; };
+		27C990111BA067860055EE50 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHandler.swift; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -627,6 +639,12 @@
 		A91BACB81B8104360012331E /* DataStorageEngine */ = {
 			isa = PBXGroup;
 			children = (
+				27C990111BA067860055EE50 /* DatabaseHandler.swift */,
+				27C990071BA0651F0055EE50 /* Query.swift */,
+				27C990081BA0651F0055EE50 /* RealmDatapoint.swift */,
+				27C990091BA0651F0055EE50 /* RealmSensor.swift */,
+				27C9900A1BA0651F0055EE50 /* RealmSource.swift */,
+				27C9900B1BA0651F0055EE50 /* RealmUser.swift */,
 				A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */,
 				A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */,
 				A94F3E511B839B18000CCF7A /* DSEHTTPRequestHelper.h */,
@@ -923,6 +941,7 @@
 				3E820E2115D40B190001A3EC /* CSBatterySensor.m in Sources */,
 				3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */,
 				3E820E2315D40B190001A3EC /* CSCallSensor.m in Sources */,
+				27C990101BA0651F0055EE50 /* RealmUser.swift in Sources */,
 				3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */,
 				3E820E2515D40B190001A3EC /* CSCompassSensor.m in Sources */,
 				3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */,
@@ -942,19 +961,24 @@
 				A94F3E491B83281F000CCF7A /* CSSender.m in Sources */,
 				3E820E3F15D40B190001A3EC /* CSRotationSensor.m in Sources */,
 				3E820E4015D40B190001A3EC /* CSSensor.m in Sources */,
+				27C9900D1BA0651F0055EE50 /* RealmDatapoint.swift in Sources */,
 				A94F3E4F1B832835000CCF7A /* NSString+MD5Hash.m in Sources */,
 				3E820E4215D40B190001A3EC /* CSSpatialProvider.m in Sources */,
 				A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */,
 				FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */,
 				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
+				27C990121BA067860055EE50 /* DatabaseHandler.swift in Sources */,
+				27C9900F1BA0651F0055EE50 /* RealmSource.swift in Sources */,
 				A94F3E531B839B18000CCF7A /* DSEHTTPRequestHelper.m in Sources */,
 				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
 				3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */,
 				3E820E4715D40B190001A3EC /* CSSettings.m in Sources */,
 				3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */,
 				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
+				27C9900E1BA0651F0055EE50 /* RealmSensor.swift in Sources */,
 				3E74DBAA193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m in Sources */,
 				3E4F28BB170DB4750045588C /* Formatting.m in Sources */,
+				27C9900C1BA0651F0055EE50 /* Query.swift in Sources */,
 				3E836CD3171C4BB900D7494C /* CSSensorRequirements.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1111,6 +1135,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1149,6 +1174,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
 				HEADER_SEARCH_PATHS = (

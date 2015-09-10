@@ -9,9 +9,9 @@
 import Foundation
 
 class RealmDatapoint: Object{
-    var sensor : RealmSensor
+    dynamic var sensor = RealmSensor()
     var value 
-    var date : Double
+    var date = Double()
     var synced
     
 }
