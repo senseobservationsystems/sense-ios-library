@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RealmDatapoint: Object{
+class RLMDatapoint: Object{
     dynamic var sensor = RealmSensor()
     var value 
     var date = Double()

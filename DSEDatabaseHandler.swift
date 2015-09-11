@@ -12,7 +12,7 @@ import Foundation
 /**
 DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, DSESensor, DSESource.
 */
-class DatabaseHandler{
+class DSEDatabaseHandler{
     
     /**
     * Add a datapoint to the sensor with the given sensorId.

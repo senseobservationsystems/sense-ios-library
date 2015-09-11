@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RealmSource: Object{
+class RLMSource: Object{
     var id;
     var name;
     var meta;

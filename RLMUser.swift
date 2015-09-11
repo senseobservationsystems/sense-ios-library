@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RealmUser: Object{
+class RLMUser: Object{
 
     var id
     var username

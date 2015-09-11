@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RealmSensor: Object{
+class RLMSensor: Object{
     dynamic var id
     dynamic var name
     dynamic var meta
