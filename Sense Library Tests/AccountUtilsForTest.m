@@ -68,19 +68,16 @@
     else
         [userPost setValue:user forKey:@"email"];
     //encapsulate in "user"
-    NSDictionary* post = [NSDictionary dictionaryWithObjectsAndKeys:
+    NSDictionary* input = [NSDictionary dictionaryWithObjectsAndKeys:
                           userPost, @"user",
                           nil];
     
     NSError *jsonError = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:post options:0 error:&jsonError];
-    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
     NSURL* url = [self makeUrlFor:@"users"];
-    //NSHTTPURLResponse* httpResponse;
-    //NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:nil andAppKey:testAppKeyStaging andInput:json andResponse:&httpResponse andError:error];
-    NSData* responseData;
-    NSHTTPURLResponse* httpResponse = [self doRequestTo:url method:@"POST" sessionID:nil input:json output:&responseData cookie:nil];
+    NSHTTPURLResponse* httpResponse;
+    NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:nil andAppKey:testAppKeyStaging andInput:input andResponse:&httpResponse andError:error];
+    
     BOOL didSucceed = YES;
     //check response code
     if ([httpResponse statusCode] != 201)
@@ -144,78 +141,6 @@
     return responseDict[@"user"];
 }
 
-+ (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie {
-    NSError* error;
-    return [self doRequestTo:url method:method sessionID: sessionID input:input output:output cookie:cookie error:&error];
-}
-
-+ (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie error:(NSError **) error
-{
-    NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url
-                                                              cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                                          timeoutInterval:30];
-    //set method method
-    [urlRequest setHTTPMethod:method];
-    
-    if (sessionID != nil) {
-        [urlRequest setValue:sessionID forHTTPHeaderField:@"SESSION-ID"];
-    }
-    //Cookie
-    if (cookie != nil)
-        [urlRequest setValue:cookie forHTTPHeaderField:@"cookie"];
-    if (testAppKeyStaging != nil)
-        [urlRequest setValue:testAppKeyStaging forHTTPHeaderField:@"APPLICATION-KEY"];
-    //Accept compressed response
-    [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    
-    if (input != nil)
-    {
-        //Talking JSON
-        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-        const char* bytes = [input UTF8String];
-        NSData * body = [NSData dataWithBytes:bytes length: strlen(bytes)];
-        //compress the body
-        [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-        [urlRequest setHTTPBody:[body gzippedData]];
-        //[urlRequest setHTTPBody:body];
-    }
-    
-    //connect
-    NSHTTPURLResponse* response=nil;
-    NSData* responseData;
-    
-    //Synchronous request
-    responseData = [NSURLConnection sendSynchronousRequest:urlRequest
-                                         returningResponse:&response
-                                                     error:error];
-    
-    //don't handle errors in the request, just log them
-    if (*error != nil) {
-        NSLog(@"Error during request \'%@\': %@",	[urlRequest description] ,	*error);
-        NSLog(@"Error description: \'%@\'.", [*error description] );
-        NSLog(@"Error userInfo: \'%@\'.", [*error userInfo] );
-        NSLog(@"Error failure reason: \'%@\'.", [*error localizedFailureReason] );
-        NSLog(@"Error recovery options reason: \'%@\'.", [*error localizedRecoveryOptions] );
-        NSLog(@"Error recovery suggestion: \'%@\'.", [*error localizedRecoverySuggestion] );
-    }
-    
-    //log response
-    if (response) {
-        NSLog(@"%@ \"%@\" responded with status code %ld", method, url, (long)[response statusCode]);
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-            NSLog(@"Sent: %@", input);
-            NSLog(@"Received: %@", [[NSString alloc] initWithBytes:responseData.bytes length:responseData.length encoding:NSUTF8StringEncoding]);
-        }
-    }
-    
-    if (output != nil)
-    {
-        *output = responseData;
-    }
-    
-    return response;
-}
-
 ///Creates the url using CommonSense.plist
 + (NSURL*) makeUrlFor:(const NSString*) action
 {
@@ -248,9 +173,7 @@
                kUrlJsonSuffix,
                appendix];
     }
-    
-    
-    
+
     return [NSURL URLWithString:url];
 }
 @end

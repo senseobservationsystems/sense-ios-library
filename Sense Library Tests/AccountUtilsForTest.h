@@ -37,10 +37,6 @@ static const NSString* kUrlJsonSuffix               = @"";
 
 + (NSDictionary*) getCurrentUserWithSessionID:(NSString*) sessionID andError:(NSError**) error;
 
-+ (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie;
-
-+ (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie error:(NSError **) error;
-
 + (NSURL*) makeUrlFor:(const NSString*) action;
 
 + (NSURL*) makeUrlFor:(const NSString *) action append:(NSString *) appendix;
