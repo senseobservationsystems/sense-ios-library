@@ -1,15 +1,14 @@
 //
-//  RealmSource.swift
+//  DSESource.swift
 //  SensePlatform
 //
-//  Created by Tatsuya Kaneko on 09/09/15.
+//  Created by Tatsuya Kaneko on 11/09/15.
 //
 //
 
 import Foundation
-import RealmSwift
 
-class RLMSource: Object{
+class DSESource{
     dynamic var id = ""
     dynamic var name = ""
     dynamic var meta = ""
@@ -17,7 +16,6 @@ class RLMSource: Object{
     dynamic var cs_id = ""
     
     init(id:String, name: String, meta: String, uuid: String, cs_id: String) {
-        super.init()
         self.id = id
         self.name = name
         self.meta = meta
@@ -28,9 +26,5 @@ class RLMSource: Object{
     
     required convenience init() {
         self.init(id: "", name: "", meta: "", uuid: "", cs_id: "")
-    }
-    
-    override static func primaryKey() -> String? {
-        return "id"
     }
 }
