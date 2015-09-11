@@ -6,6 +6,8 @@
 //
 //
 
+import Foundation
+
 class DSESensor{
     dynamic var id = ""
     dynamic var name = ""
@@ -36,8 +38,8 @@ class DSESensor{
         self.cs_upload_enabled = sensor.cs_upload_enabled
         self.cs_download_enabled = sensor.cs_download_enabled
         self.persist_locally = sensor.persist_locally
-        self.user = sensor.user
-        self.source = sensor.source
+        self.user = sensor.user!
+        self.source = sensor.source!
         self.data_type = sensor.data_type
         self.cs_id = sensor.cs_id
         

@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class RLMDatapoint: Object{
-    dynamic var sensor : RLMSensor
+    dynamic var sensor : RLMSensor?
     dynamic var value :AnyObject
     dynamic var date = 0.0
     dynamic var synced = true

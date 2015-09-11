@@ -46,11 +46,19 @@
 		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
 		27431DDD1BA2D38000729FB2 /* DSEDatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDatapoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DDF1BA2D38000729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDA1BA2D38000729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDB1BA2D38000729FB2 /* RLMSource.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE11BA2D38000729FB2 /* RLMUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDC1BA2D38000729FB2 /* RLMUser.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE81BA2D6D700729FB2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
 		27431DE91BA2D6D700729FB2 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
+		27431DEB1BA32F3C00729FB2 /* DSESensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* DSESensor.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DED1BA32F9A00729FB2 /* DSESource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEC1BA32F9A00729FB2 /* DSESource.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DEF1BA32FEF00729FB2 /* DSESensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DF81BA34B8F00729FB2 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
+		27431E031BA351A900729FB2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
+		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		2769CC651BA356E000A76ED8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
+		2769CC661BA356E000A76ED8 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
 		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
 		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
 		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
@@ -132,7 +140,6 @@
 		A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		A9FA46321A893EBB00D3D0E4 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */; };
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FAC4EC901BA086BC00B24CAA /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; settings = {ASSET_TAGS = (); }; };
 		FAC4EC951BA086BC00B24CAA /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
 		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; settings = {ASSET_TAGS = (); }; };
 		FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */; };
@@ -152,27 +159,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
 			remoteInfo = SensePlatform;
-		};
-		FAC4EC911BA086BC00B24CAA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
-			remoteInfo = DSESwift;
-		};
-		FAC4ECAD1BA087D400B24CAA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
-			remoteInfo = DSESwift;
-		};
-		FAC4ECAF1BA0939F00B24CAA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
-			remoteInfo = DSESwift;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -216,11 +202,14 @@
 		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
 		27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEDatabaseHandler.swift; sourceTree = "<group>"; };
 		27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDatapoint.swift; sourceTree = "<group>"; };
-		27431DDA1BA2D38000729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
 		27431DDB1BA2D38000729FB2 /* RLMSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSource.swift; sourceTree = "<group>"; };
 		27431DDC1BA2D38000729FB2 /* RLMUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMUser.swift; sourceTree = "<group>"; };
 		27431DE61BA2D6D700729FB2 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = libraries/Realm.framework; sourceTree = "<group>"; };
 		27431DE71BA2D6D700729FB2 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = libraries/RealmSwift.framework; sourceTree = "<group>"; };
+		27431DEA1BA32F3C00729FB2 /* DSESensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESensor.swift; sourceTree = "<group>"; };
+		27431DEC1BA32F9A00729FB2 /* DSESource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESource.swift; sourceTree = "<group>"; };
+		27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESensorOptions.swift; sourceTree = "<group>"; };
+		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
 		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -364,6 +353,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2769CC651BA356E000A76ED8 /* Realm.framework in Frameworks */,
+				2769CC661BA356E000A76ED8 /* RealmSwift.framework in Frameworks */,
 				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
 				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
 				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
@@ -406,7 +397,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAC4EC901BA086BC00B24CAA /* DSESwift.framework in Frameworks */,
+				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
+				27431E031BA351A900729FB2 /* Realm.framework in Frameworks */,
+				27431DF81BA34B8F00729FB2 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,12 +656,15 @@
 			children = (
 				27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */,
 				27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */,
-				27431DDA1BA2D38000729FB2 /* RLMSensor.swift */,
+				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
 				27431DDB1BA2D38000729FB2 /* RLMSource.swift */,
 				27431DDC1BA2D38000729FB2 /* RLMUser.swift */,
 				FAC4EC881BA086BC00B24CAA /* DSESwift.h */,
 				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				FAC4ECA71BA0873000B24CAA /* communication.swift */,
+				27431DEA1BA32F3C00729FB2 /* DSESensor.swift */,
+				27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */,
+				27431DEC1BA32F9A00729FB2 /* DSESource.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -709,7 +705,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FAC4ECAE1BA087D400B24CAA /* PBXTargetDependency */,
 				3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */,
 			);
 			name = SensePlatform;
@@ -728,7 +723,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FAC4ECB01BA0939F00B24CAA /* PBXTargetDependency */,
 				A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */,
 			);
 			name = "Sense Library Tests";
@@ -765,7 +759,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FAC4EC921BA086BC00B24CAA /* PBXTargetDependency */,
 			);
 			name = DSESwiftTests;
 			productName = DSESwiftTests;
@@ -978,8 +971,11 @@
 				27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */,
 				27431DE11BA2D38000729FB2 /* RLMUser.swift in Sources */,
 				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
+				27431DEB1BA32F3C00729FB2 /* DSESensor.swift in Sources */,
+				27431DEF1BA32FEF00729FB2 /* DSESensorOptions.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDatapoint.swift in Sources */,
-				27431DDF1BA2D38000729FB2 /* RLMSensor.swift in Sources */,
+				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
+				27431DED1BA32F9A00729FB2 /* DSESource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1004,21 +1000,6 @@
 			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
 			targetProxy = A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */;
 		};
-		FAC4EC921BA086BC00B24CAA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
-			targetProxy = FAC4EC911BA086BC00B24CAA /* PBXContainerItemProxy */;
-		};
-		FAC4ECAE1BA087D400B24CAA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
-			targetProxy = FAC4ECAD1BA087D400B24CAA /* PBXContainerItemProxy */;
-		};
-		FAC4ECB01BA0939F00B24CAA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
-			targetProxy = FAC4ECAF1BA0939F00B24CAA /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1038,6 +1019,7 @@
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/libraries";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1082,6 +1064,7 @@
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/libraries";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1114,7 +1097,7 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/libraries",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
@@ -1157,7 +1140,7 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/libraries",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
@@ -1328,11 +1311,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/libraries",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwift/Info.plist;
@@ -1367,11 +1346,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/libraries",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwift/Info.plist;
@@ -1400,11 +1375,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwiftTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/libraries";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1424,11 +1400,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwiftTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/libraries";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

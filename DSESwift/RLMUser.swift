@@ -25,6 +25,6 @@ class RLMUser: Object{
     }
     
     override static func primaryKey() -> String? {
-        return "id"
+        return "username"
     }
 }

@@ -70,7 +70,7 @@ class DSEDatabaseHandler: NSObject{
     func createSensor(sensorName: String, sourceId: String, dataType: String, sensorOptions: DSESensorOptions)->(DSESensor){
         
         let rlmUser = RLMUser()
-        rlmUser.username = ""
+        rlmUser.username = "test"
         
         
         //keychainusername
@@ -99,7 +99,7 @@ class DSEDatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensor: sensor with the given sensor name and sourceID.
     */
-//    func getSensor(sourceID: String, sensorName: String)->(DSESensor){
+//    func getSensor(sourceId: String, sensorName: String)->(DSESensor){
 //    }
     
     /**
@@ -109,8 +109,19 @@ class DSEDatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensors: An array of sensors that belongs to the source with the given sourceID.
     */
-//    func getSensors(sourceID: String)->[DSESensor]{
-//    }
+    func getSensors(sourceId: String)->List<RLMSensor>{
+        let sensors = List<RLMSensor>()
+        do{
+            let realm = try! Realm()
+
+            let predicates = NSPredicate(format: "source.id=%s", sourceId)
+            let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
+            sensors.appendContentsOf(retrievedSensors)
+        }catch{
+            print("error")
+        }
+        return sensors
+    }
     
     //For DataStorageEngine class
     
