@@ -64,30 +64,9 @@ static enum SensorAttributes {
 	XCTAssertNil(error, @"Error is not nil; an error must have occured");
 	XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
 	XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
-    
+          
     [self deleteCurrentUser:sessionID];
 }
-/*
-- (void)testLoginWithWrongObjectForError {
-    
-    //Wrong object
-    NSDictionary* error;
-    NSString* registrationError;
-    NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:registrationError];
-    
-    NSException* expectedException;
-    NSString* sessionID;
-    //try to login with wrong password, so that error will be used in the method
-    @try{
-        sessionID= [AccountUtilsForTest loginUser:newUserEmail andPassword:@"veryWrongPassword" andError:&error];
-    }
-    @catch (NSException* e){
-        expectedException = e;
-    }
-    XCTAssertNotNil(expectedException, @"Exception is nil;");
-}
- */
 
 - (void)testLoginWithWrongObjectForPassword {
     

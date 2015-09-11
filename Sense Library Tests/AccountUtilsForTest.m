@@ -77,20 +77,22 @@
     NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
     NSURL* url = [self makeUrlFor:@"users"];
-    NSData* contents;
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" sessionID:nil input:json output:&contents cookie:nil];
+    //NSHTTPURLResponse* httpResponse;
+    //NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:nil andAppKey:testAppKeyStaging andInput:json andResponse:&httpResponse andError:error];
+    NSData* responseData;
+    NSHTTPURLResponse* httpResponse = [self doRequestTo:url method:@"POST" sessionID:nil input:json output:&responseData cookie:nil];
     BOOL didSucceed = YES;
     //check response code
-    if ([response statusCode] != 201)
+    if ([httpResponse statusCode] != 201)
     {
         didSucceed = NO;
         NSLog(@"Couldn't register user.");
-        NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+        NSString* responded = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         NSLog(@"Responded: %@", responded);
         //interpret json response to set error
         NSError *jsonError = nil;
-        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
-        *error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
+        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
+        NSString* errorString = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
     }
     return didSucceed;
 }
@@ -99,20 +101,21 @@
 {
     NSString* appendix = [NSString stringWithFormat:@"/%@", userId];
     NSURL* url = [self makeUrlFor:@"users" append: appendix];
-    NSData* contents;
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"DELETE" sessionID:sessionID input:nil output:&contents cookie:nil];
+    NSHTTPURLResponse* httpResponse;
+    NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"DELETE" andSessionID:sessionID andAppKey:testAppKeyStaging andInput:nil andResponse:&httpResponse andError:error];
+    //NSHTTPURLResponse* response = [self doRequestTo:url method:@"DELETE" sessionID:sessionID input:nil output:&contents cookie:nil];
     BOOL didSucceed = YES;
     //check response code
-    if ([response statusCode] != 200)
+    if ([httpResponse statusCode] != 200)
     {
         didSucceed = NO;
         NSLog(@"Couldn't delete user.");
-        NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+        NSString* responded = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         NSLog(@"Responded: %@", responded);
         //interpret json response to set error
         NSError *jsonError = nil;
-        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
-        NSString *error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
+        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
+        NSString *errorString = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
     }
     return didSucceed;
 }
@@ -120,26 +123,26 @@
 + (NSDictionary*) getCurrentUserWithSessionID:(NSString*) sessionID andError:(NSError**) error
 {
     NSURL* url = [self makeUrlFor:@"users" append:@"/current"];
-    NSData* contents;
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"GET" sessionID:sessionID input:nil output:&contents cookie:nil];
+    NSHTTPURLResponse* httpResponse;
+    NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"DELETE" andSessionID:sessionID andAppKey:testAppKeyStaging andInput:nil andResponse:&httpResponse andError:error];
+    //NSHTTPURLResponse* response = [self doRequestTo:url method:@"GET" sessionID:sessionID input:nil output:&contents cookie:nil];
     NSDictionary* responseDict;
     
     //check response code
-    if ([response statusCode] != 200)
+    if ([httpResponse statusCode] != 200)
     {
         NSLog(@"Couldn't get current user info.");
-        NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+        NSString* responded = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         NSLog(@"Responded: %@", responded);
         //interpret json response to set error
         NSError *jsonError = nil;
-        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
+        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
         NSString *error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
     } else {
-        responseDict = [NSJSONSerialization JSONObjectWithData:contents options:0 error:error];
+        responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
     }
     return responseDict[@"user"];
 }
-
 
 + (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie {
     NSError* error;
