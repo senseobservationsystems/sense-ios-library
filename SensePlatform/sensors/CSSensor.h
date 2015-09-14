@@ -13,6 +13,7 @@
  *
  * Author: Pim Nijdam (pim@sense-os.nl)
  */
+#pragma once
 #import <Foundation/Foundation.h>
 #import "CSSensorIds.h"
 

@@ -21,6 +21,10 @@
 #import "CSSender.h"
 #import "CSSensor.h"
 
+#import <UIKit/UIKit.h>
+#import "UIDevice+IdentifierAddition.h"
+#import "UIDevice+Hardware.h"
+
 /**
  Handles sensor data storing and uploading. Start all sensors and data providers.
  

@@ -19,10 +19,6 @@
 #import "CSSettings.h"
 #import "CSApplicationStateChange.h"
 
-#import <UIKit/UIKit.h>
-#import "UIDevice+IdentifierAddition.h"
-#import "UIDevice+Hardware.h"
-
 #import "CSLocationSensor.h"
 #import "CSVisitsSensor.h"
 #import "CSBatterySensor.h"

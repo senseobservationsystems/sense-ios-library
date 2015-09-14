@@ -8,6 +8,7 @@
 
 import XCTest
 import RealmSwift
+
 @testable import DSESwift
 
 
@@ -35,6 +36,4 @@ class DSESwiftTests: XCTestCase {
         
         dbHandler.getSensors("1")
     }
-
-    
 }

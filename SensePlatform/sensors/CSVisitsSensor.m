@@ -9,6 +9,7 @@
 #import "CSVisitsSensor.h"
 #import "CSDataStore.h"
 #import "Formatting.h"
+#import "CSSensorStore.h"
 
 
 @implementation CSVisitsSensor

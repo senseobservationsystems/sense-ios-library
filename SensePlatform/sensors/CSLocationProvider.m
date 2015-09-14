@@ -19,6 +19,7 @@
 #import "CSSettings.h"
 #import "math.h"
 #import "CSDataStore.h"
+#import "CSSensorStore.h"
 
 @implementation CSLocationProvider {
     CLLocationManager* locationManager;

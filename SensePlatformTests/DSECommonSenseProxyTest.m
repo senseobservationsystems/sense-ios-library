@@ -77,7 +77,7 @@ static enum SensorAttributes {
 
 - (void)testLoginWithValidUsernameAndPassword {
     blaat *swiftClass = [[blaat alloc] init];
-    [swiftClass test];
+   [swiftClass test];
     
     
     NSError* error;

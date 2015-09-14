@@ -18,6 +18,7 @@
 #import "NSString+MD5Hash.h"
 #import "NSData+GZIP.h"
 #import "CSErrorDomain.h"
+#import "CSSettings.h"
 
 static NSString* kUrlBaseURL = @"https://api.sense-os.nl";
 static NSString* kUrlBaseURLLive = @"https://api.sense-os.nl";

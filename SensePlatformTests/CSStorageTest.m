@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "CSSensePlatform.h"
-#import "CSSensorStore.h"
-#import "CSStorage.h"
+#import <SensePlatform/CSSensePlatform.h>
+#import <SensePlatform/CSSensorStore.h>
+#import <SensePlatform/CSStorage.h>
 #import <sqlite3.h>
 
 

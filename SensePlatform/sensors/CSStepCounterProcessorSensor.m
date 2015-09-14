@@ -10,6 +10,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "CSDataStore.h"
 #import "Formatting.h"
+#import "CSSensePlatform.h"
 
 static NSString* CSCMLastStepCount = @"CSCMLastStepCount";
 static NSString* stepsKey = @"total";
