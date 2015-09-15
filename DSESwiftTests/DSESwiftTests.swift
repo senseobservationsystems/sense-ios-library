@@ -33,7 +33,14 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = DSESensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         dbHandler.createSensor("test", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
         
-        dbHandler.getSensors("1")
+        var sensors = [DSESensor]()
+        sensors = dbHandler.getSensors("1")
+        XCTAssertEqual(sensors.count, 1)
+        
+        dbHandler.createSensor("test2", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
+        
+        sensors = dbHandler.getSensors("1")
+        XCTAssertEqual(sensors.count, 2)
     }
 
     

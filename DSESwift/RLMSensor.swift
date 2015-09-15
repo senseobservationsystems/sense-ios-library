@@ -21,26 +21,13 @@ class RLMSensor: Object{
     dynamic var data_type = ""
     dynamic var cs_id = ""
 
-    init(id:String, name: String, meta: String, cs_upload_enabled: Bool, cs_download_enabled: Bool, persist_locally: Bool, user: RLMUser, source: RLMSource, data_type: String, cs_id: String) {
-        self.id = id
-        self.name = name
-        self.meta = meta
-        self.cs_upload_enabled = cs_upload_enabled
-        self.cs_download_enabled = cs_download_enabled
-        self.persist_locally = persist_locally
-        self.user = user
-        self.source = source
-        self.data_type = data_type
-        self.cs_id = cs_id
-        super.init()
-        
-    }
-    
-    required convenience init() {
-        self.init( id: "", name: "", meta: "",cs_upload_enabled: true, cs_download_enabled: true, persist_locally: true, user: RLMUser(), source: RLMSource(), data_type: "", cs_id: "")
-    }
-    
     override static func primaryKey() -> String? {
         return "id"
+    }
+    
+    func getNextKey() -> String{
+        let realm = try! Realm()
+        let result = realm.objects(RLMSensor)
+        return String(result.count+1)
     }
 }

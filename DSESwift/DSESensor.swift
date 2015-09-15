@@ -9,16 +9,16 @@
 import Foundation
 
 class DSESensor{
-    dynamic var id = ""
-    dynamic var name = ""
-    dynamic var meta = ""
-    dynamic var cs_upload_enabled = true
-    dynamic var cs_download_enabled = true
-    dynamic var persist_locally = true
-    dynamic var user: RLMUser
-    dynamic var source : RLMSource
-    dynamic var data_type = ""
-    dynamic var cs_id = ""
+    var id = ""
+    var name = ""
+    var meta = ""
+    var cs_upload_enabled = true
+    var cs_download_enabled = true
+    var persist_locally = true
+    var user: RLMUser
+    var source : RLMSource
+    var data_type = ""
+    var cs_id = ""
 
     init(id:String, name: String, cs_upload_enabled: Bool, cs_download_enabled: Bool, persist_locally: Bool, user: RLMUser, source: RLMSource, data_type: String, cs_id: String) {
         self.id = id

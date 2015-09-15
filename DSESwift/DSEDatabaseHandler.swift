@@ -9,29 +9,38 @@
 import Foundation
 import RealmSwift
 
+//TODO: let's make this more explicit
+enum RLMError: ErrorType{
+    case ObjectNotFound
+    case InsertFailed
+}
+
 /**
 DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, DSESensor, DSESource.
 */
 class DSEDatabaseHandler: NSObject{
     
     /**
-    * Add a datapoint to the sensor with the given sensorId.
+    * Add a datapoint to the sensor with the given sensorId. Throw exceptions if it fails to add the datapoint.
     
     * @param sensorID: String for the sensorID of the sensor that the datapoint belongs to.
     * @param value: AnyObject for the value.
     * @param date: NSDate for the datetime of the datapoint.
     */
-    func addDatapoint(sensorId : String, value: AnyObject, date: NSDate){
+    func addDatapoint(sensorId : String, value: AnyObject, date: NSDate) throws{
         let rlmSensor = RLMSensor()
         rlmSensor.id = sensorId;
-        let rlmDatapoint = RLMDatapoint(sensor: rlmSensor, value: 0.0, date: NSDate().timeIntervalSince1970, synced: true);
+        let rlmDatapoint = RLMDatapoint()
+        rlmDatapoint.sensor = rlmSensor
+        rlmDatapoint.date = date.timeIntervalSince1970
+        rlmDatapoint.value = value
         do{
             let realm = try! Realm()
             try realm.write {
                 realm.add(rlmDatapoint)
             }
-        }catch{
-            print("error")
+        } catch {
+            throw RLMError.InsertFailed
         }
     }
 
@@ -44,9 +53,11 @@ class DSEDatabaseHandler: NSObject{
     * @param limit: The maximum number of data points.
     * @return datapoints: An array of NSDictionary represents datapoints.
     */
-//    func getDatapoints(sensorID: String, startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: String)-> [NSDictionary]{
-        //Note for Alex: NSDate should be converted to Double in RealmQuery. They will drop milliseconds automatically
-//    }
+    func getDatapoints(sensorID: String, startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: String)-> [NSDictionary]{
+        let datapoints = [NSDictionary]()
+        print("Not implemented yet..")
+        return datapoints
+    }
     
     /**
     * Set the meta data and the options for enabling data upload/download to Common Sense and local data persistence.
@@ -54,8 +65,9 @@ class DSEDatabaseHandler: NSObject{
     * @param sensorID: String for the sensorID of the sensor that the new setting should be applied to.
     * @param sensorOptions: DSESensorOptions object.
     */
-//    func setSensorOptions(sensorID: String, sensorOptions: DSESensorOptions){
-//    }
+    func setSensorOptions(sensorID: String, sensorOptions: DSESensorOptions){
+        print("Not implemented yet..")
+    }
     
     //For source class
     /**
@@ -67,26 +79,36 @@ class DSEDatabaseHandler: NSObject{
     * @param sensorOptions: DSESensorOptions object.
     * @return sensor: the sensor that just created.
     */
-    func createSensor(sensorName: String, sourceId: String, dataType: String, sensorOptions: DSESensorOptions)->(DSESensor){
+    func createSensor(sensorName: String, sourceId: String, dataType: String, sensorOptions: DSESensorOptions)throws ->(DSESensor){
         
-        let rlmUser = RLMUser()
-        rlmUser.username = "test"
+        let realm = try! Realm()
         
-        
-        //keychainusername
-        let rlmSource = RLMSource()
-        rlmSource.id = sourceId
-        
-        //TODO: figure out how to get cs_id at this point
-        let rlmSensor = RLMSensor(id: "", name: sensorName, meta:sensorOptions.meta, cs_upload_enabled: sensorOptions.uploadEnabled, cs_download_enabled: sensorOptions.downloadEnabled, persist_locally: sensorOptions.persist, user: rlmUser, source: rlmSource, data_type: dataType, cs_id: "")
+        let username = "test" // TODO: replace this with the user name stored in keychain
+        let rlmUser = self.getUser(username)
+        let rlmSensor = RLMSensor()
         
         do{
-            let realm = try! Realm()
+            let rlmSource = try self.getSource(sourceId)
+            
+            rlmSensor.id = rlmSensor.getNextKey()
+            rlmSensor.name = sensorName
+            rlmSensor.meta = sensorOptions.meta
+            rlmSensor.cs_upload_enabled = sensorOptions.uploadEnabled
+            rlmSensor.cs_download_enabled = sensorOptions.downloadEnabled
+            rlmSensor.persist_locally = sensorOptions.persist
+            rlmSensor.user = rlmUser
+            rlmSensor.source = rlmSource
+            rlmSensor.data_type = dataType
+            rlmSensor.cs_id = "" //TODO: How should we get Common Sense Sensor id??
+        
             try realm.write {
                 realm.add(rlmSensor)
             }
-        }catch{
-            print("error")
+        } catch RLMError.ObjectNotFound {
+            //TODO: do something proper
+            throw RLMError.InsertFailed
+        } catch {
+            throw RLMError.InsertFailed
         }
         
         return DSESensor(sensor: rlmSensor)
@@ -99,8 +121,14 @@ class DSEDatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensor: sensor with the given sensor name and sourceID.
     */
-//    func getSensor(sourceId: String, sensorName: String)->(DSESensor){
-//    }
+   func getSensor(sourceId: String, sensorName: String)->(DSESensor){
+        let realm = try! Realm()
+        
+        let predicates = NSPredicate(format: "name = %@ AND source.id = %@", sourceId)
+        let result = realm.objects(RLMSensor).filter(predicates)
+        
+        return DSESensor(sensor: result.first!)
+    }
     
     /**
     * Returns all the sensors connected to the source with the given sourceID.
@@ -109,21 +137,51 @@ class DSEDatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensors: An array of sensors that belongs to the source with the given sourceID.
     */
-    func getSensors(sourceId: String)->List<RLMSensor>{
-        let sensors = List<RLMSensor>()
-        do{
-            let realm = try! Realm()
+    func getSensors(sourceId: String)->[DSESensor]{
+        var sensors = [DSESensor]()
+        let realm = try! Realm()
 
-            let predicates = NSPredicate(format: "source.id=%s", sourceId)
-            let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
-            sensors.appendContentsOf(retrievedSensors)
-        }catch{
-            print("error")
+        let predicates = NSPredicate(format: "source.id = %@", sourceId)
+        let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
+        for rlmSensor in retrievedSensors {
+            let dseSensor = DSESensor(sensor: rlmSensor)
+            sensors.append(dseSensor)
         }
+
         return sensors
     }
     
     //For DataStorageEngine class
+    
+    /**
+    * Create a sourceObject and return the created source object
+    *
+    * @param name The name of the source
+    * @param uuid the unique identifier of the source
+    * @return list of source objects that correspond to the specified criteria.
+    */
+    func createSources(sourceName: String, uuid: String)-> DSESource{
+        let realm = try! Realm()
+    
+        //TODO: figure out how to get cs_id at this point
+        let rlmSource = RLMSource()
+        rlmSource.id = rlmSource.getNextKey()
+        rlmSource.name = sourceName
+        rlmSource.meta = "" //TODO: how should we let them set meta
+        rlmSource.uuid = uuid
+        rlmSource.cs_id = ""
+        
+        do{
+            try realm.write {
+                realm.add(rlmSource)
+            }
+        }catch{
+            //TODO: do something proper
+            print("error")
+        }
+        
+        return DSESource(source: rlmSource)
+    }
     
     /**
     * Returns a list of sources based on the specified criteria.
@@ -132,9 +190,46 @@ class DSEDatabaseHandler: NSObject{
     * @param uuid The source uuid of, or null to only select based on the name
     * @return list of source objects that correspond to the specified criteria.
     */
-//    func getSources(sourceName: String, uuid: String)-> [DSESource]{
-//    }
+    func getSources(sourceName: String, uuid: String)-> [DSESource]{
+        let sources  = [DSESource]()
+        print("Not implemented yet..")
+        return sources
+    }
     
     
+    // MARK: Helper functions
+    
+    
+    //TODO: Discuss if we need to have User in the database.
+    /**
+    * Returns the RLMUser object with the given username. Returns the existing object, if RLMUser object with the same username already exists. [To be determined]Creates one, if it does not exist in the local storage.
+    */
+    private func getUser(username: String) -> RLMUser {
+        var user = RLMUser()
+        let predicates = NSPredicate(format: "username = %@", username) //TODO: use username from the keychain
+        let result = try! Realm().objects(RLMUser).filter(predicates)
+        if(result.count==1){
+            user = result.first!
+        }else if (result==0){
+            //TODO: Throw exception?
+            user.username = username
+        }
+        return user
+    }
+    
+    /**
+    * Returns the RLMSource object with the given id. Returns the existing object, if RLMSource object with the same id already exists. Throw an exception, if it does not exist in the local storage.
+    */
+    private func getSource(id: String) throws-> RLMSource {
+        var source = RLMSource()
+        let predicates = NSPredicate(format: "id = %@", id) //TODO: use username from the keychain
+        let result = try! Realm().objects(RLMSource).filter(predicates)
+        if(result.count==1){
+            source = result.first!
+        }else if (result.count==0){
+            throw RLMError.ObjectNotFound
+        }
+        return source
+    }
 }
 

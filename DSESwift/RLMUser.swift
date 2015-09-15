@@ -12,18 +12,8 @@ import RealmSwift
 class RLMUser: Object{
 
     dynamic var id = ""
-    dynamic var username = ""
-    
-    init(id:String, username: String) {
-        self.id = id
-        self.username = username
-        super.init()
-    }
-    
-    required convenience init() {
-        self.init(id: "",username: "")
-    }
-    
+    dynamic var username = "test"
+
     override static func primaryKey() -> String? {
         return "username"
     }

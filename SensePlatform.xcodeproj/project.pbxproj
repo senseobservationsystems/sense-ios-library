@@ -54,8 +54,6 @@
 		27431DED1BA32F9A00729FB2 /* DSESource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEC1BA32F9A00729FB2 /* DSESource.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEF1BA32FEF00729FB2 /* DSESensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DF81BA34B8F00729FB2 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
-		27431E031BA351A900729FB2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		2769CC651BA356E000A76ED8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
 		2769CC661BA356E000A76ED8 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
@@ -398,8 +396,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
-				27431E031BA351A900729FB2 /* Realm.framework in Frameworks */,
-				27431DF81BA34B8F00729FB2 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
