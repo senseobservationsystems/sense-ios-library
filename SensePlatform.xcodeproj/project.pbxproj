@@ -43,261 +43,208 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E801F941A7AA90C00A3F9CC /* libsqlcipher */; };
 		27431DDD1BA2D38000729FB2 /* DSEDatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDatapoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDB1BA2D38000729FB2 /* RLMSource.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE11BA2D38000729FB2 /* RLMUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDC1BA2D38000729FB2 /* RLMUser.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DE81BA2D6D700729FB2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
-		27431DE91BA2D6D700729FB2 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
 		27431DEB1BA32F3C00729FB2 /* DSESensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* DSESensor.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DED1BA32F9A00729FB2 /* DSESource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEC1BA32F9A00729FB2 /* DSESource.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEF1BA32FEF00729FB2 /* DSESensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
-		2769CC651BA356E000A76ED8 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE61BA2D6D700729FB2 /* Realm.framework */; };
-		2769CC661BA356E000A76ED8 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27431DE71BA2D6D700729FB2 /* RealmSwift.framework */; };
-		3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E11261916A7086400805102 /* UIDevice+Hardware.m */; };
-		3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155915D564E100F520D0 /* CSSettings.h */; };
-		3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155815D564E100F520D0 /* CSSensorIds.h */; };
-		3E4F273B17033CD60045588C /* CSSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155715D564E100F520D0 /* CSSensor.h */; };
-		3E4F273C17033CD90045588C /* CSSensePlatform.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155615D564E100F520D0 /* CSSensePlatform.h */; };
-		3E4F274517033D200045588C /* CSApplicationStateChange.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */; };
-		3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E820DE615D40B180001A3EC /* CSDynamicSensor.h */; };
-		3E4F28BB170DB4750045588C /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4F28BA170DB4750045588C /* Formatting.m */; };
-		3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F4D18F7D7CF0008415A /* CSStorage.m */; };
-		3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5218F81D2C0008415A /* CSDataPoint.m */; };
-		3E513F5D18FC18150008415A /* CSUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E513F5C18FC18150008415A /* CSUploader.m */; };
-		3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */; };
-		3E743E1E1976E9E1009F571B /* CSSensorRequirements.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */; };
-		3E743E1F1976E9E7009F571B /* CSVersion.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3EBEAF571887FCA9009F81C1 /* CSVersion.h */; };
-		3E74DBA7193C8AF100E471A9 /* CSActivityProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */; };
-		3E74DBAA193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E74DBA9193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m */; };
-		3E7F33A41A13AA9100957AE2 /* CSTimeZoneSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7F33A31A13AA9100957AE2 /* CSTimeZoneSensor.m */; };
-		3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
-		3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */; };
-		3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */; };
-		3E820E1115D40B190001A3EC /* CSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCD15D40B180001A3EC /* CSReachability.m */; };
-		3E820E1215D40B190001A3EC /* CSSensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCE15D40B180001A3EC /* CSSensePlatform.m */; };
-		3E820E1315D40B190001A3EC /* CSSensorIds.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DCF15D40B180001A3EC /* CSSensorIds.m */; };
-		3E820E1715D40B190001A3EC /* CSAccelerationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD415D40B180001A3EC /* CSAccelerationSensor.m */; };
-		3E820E1915D40B190001A3EC /* CSAccelerometerSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD615D40B180001A3EC /* CSAccelerometerSensor.m */; };
-		3E820E1B15D40B190001A3EC /* CSAntPlusController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DD915D40B180001A3EC /* CSAntPlusController.m */; };
-		3E820E1D15D40B190001A3EC /* BloodPressureSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DDB15D40B180001A3EC /* BloodPressureSensor.m */; };
-		3E820E1F15D40B190001A3EC /* FootpodSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DDD15D40B180001A3EC /* FootpodSensor.m */; };
-		3E820E2115D40B190001A3EC /* CSBatterySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DDF15D40B180001A3EC /* CSBatterySensor.m */; };
-		3E820E2315D40B190001A3EC /* CSCallSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE115D40B180001A3EC /* CSCallSensor.m */; };
-		3E820E2515D40B190001A3EC /* CSCompassSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE315D40B180001A3EC /* CSCompassSensor.m */; };
-		3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE515D40B180001A3EC /* CSConnectionSensor.m */; };
-		3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE715D40B180001A3EC /* CSDynamicSensor.m */; };
-		3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DE915D40B180001A3EC /* CSJumpSensor.m */; };
-		3E820E2D15D40B190001A3EC /* CSLocationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEB15D40B180001A3EC /* CSLocationProvider.m */; };
-		3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */; };
-		3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF115D40B180001A3EC /* CSMotionFeaturesSensor.m */; };
-		3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF315D40B180001A3EC /* CSMovingSensor.m */; };
-		3E820E3715D40B190001A3EC /* CSNoiseSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF515D40B180001A3EC /* CSNoiseSensor.m */; };
-		3E820E3915D40B190001A3EC /* CSOrientationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF715D40B180001A3EC /* CSOrientationSensor.m */; };
-		3E820E3B15D40B190001A3EC /* CSOrientationStateSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DF915D40B180001A3EC /* CSOrientationStateSensor.m */; };
-		3E820E3D15D40B190001A3EC /* CSPreferencesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DFB15D40B180001A3EC /* CSPreferencesSensor.m */; };
-		3E820E3F15D40B190001A3EC /* CSRotationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DFD15D40B180001A3EC /* CSRotationSensor.m */; };
-		3E820E4015D40B190001A3EC /* CSSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820DFE15D40B180001A3EC /* CSSensor.m */; };
-		3E820E4215D40B190001A3EC /* CSSpatialProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0015D40B180001A3EC /* CSSpatialProvider.m */; };
-		3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0215D40B180001A3EC /* CSUserProximity.m */; };
-		3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0415D40B180001A3EC /* CSSensorStore.m */; };
-		3E820E4715D40B190001A3EC /* CSSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E820E0515D40B180001A3EC /* CSSettings.m */; };
-		3E836CD3171C4BB900D7494C /* CSSensorRequirements.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */; };
-		3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
-		3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
-		3E9C157C15D574C300F520D0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
-		3E9C157E15D574D300F520D0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
-		3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
-		3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
-		3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
-		3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */; };
-		955999EA1B18A1DA0060B20A /* CSLocationPermissionProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */; };
-		A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */; };
-		A94F3E3F1B831457000CCF7A /* DSECommonSenseProxyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E3E1B831457000CCF7A /* DSECommonSenseProxyTest.m */; };
-		A94F3E491B83281F000CCF7A /* CSSender.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E481B83281F000CCF7A /* CSSender.m */; };
-		A94F3E4E1B832835000CCF7A /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E4B1B832835000CCF7A /* NSData+GZIP.m */; };
-		A94F3E4F1B832835000CCF7A /* NSString+MD5Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E4D1B832835000CCF7A /* NSString+MD5Hash.m */; };
-		A94F3E531B839B18000CCF7A /* DSEHTTPRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */; };
-		A94F3E561B839F17000CCF7A /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = A94F3E551B839F17000CCF7A /* NSString+Utils.m */; };
-		A97744691B468FE20092D5FC /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A97744681B468FE20092D5FC /* CSSensePlatformTest.m */; };
-		A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */; };
-		A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */; };
-		A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E148BD0160A18DC0010A0D1 /* UIKit.framework */; };
-		A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */; };
-		A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */; };
-		A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
-		A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
-		A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
-		A99F99DC1A5D8C4300D6CB76 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
-		A99F99DD1A5D8C4D00D6CB76 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
-		A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
-		A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
-		A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
-		A9FA46321A893EBB00D3D0E4 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */; };
+		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
+		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
+		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
+		FA4CDBA21BA70E1100DB44B1 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157915D574BB00F520D0 /* CoreTelephony.framework */; };
+		FA4CDBA31BA70E1D00DB44B1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157F15D574DB00F520D0 /* AVFoundation.framework */; };
+		FA4CDBA41BA70E3700DB44B1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157B15D574C300F520D0 /* AudioToolbox.framework */; };
+		FA4CDBA51BA70E8000DB44B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
+		FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
+		FA4CDBA81BA7126400DB44B1 /* CSVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = FA4CDBA71BA7126400DB44B1 /* CSVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA5DF7A31BA716F700FF9544 /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7AD1BA717DA00FF9544 /* DSECommonSenseProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7AE1BA717DA00FF9544 /* DSECommonSenseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7B11BA717DA00FF9544 /* DSEHTTPRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7B41BA71D4C00FF9544 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
+		FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
+		FAA614691BA8227400B05FCD /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FAA6146A1BA8227400B05FCD /* RealmSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FAA6146B1BA8227E00B05FCD /* Realm.framework in Resources */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; };
+		FAA6146C1BA8227E00B05FCD /* RealmSwift.framework in Resources */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; };
+		FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC0961BA7003500EE6DE0 /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; settings = {ASSET_TAGS = (); }; };
+		FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */; };
+		FABCC1191BA7009200EE6DE0 /* CSApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A31BA7009200EE6DE0 /* CSApplicationStateChange.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC11A1BA7009200EE6DE0 /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC11C1BA7009200EE6DE0 /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC11D1BA7009200EE6DE0 /* CSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC11E1BA7009200EE6DE0 /* CSErrorDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC11F1BA7009200EE6DE0 /* CSLocationPermissionProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AA1BA7009200EE6DE0 /* CSSender.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1211BA7009200EE6DE0 /* CSSender.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0AB1BA7009200EE6DE0 /* CSSender.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1221BA7009200EE6DE0 /* CSSensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AC1BA7009200EE6DE0 /* CSSensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC1231BA7009200EE6DE0 /* CSSensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0AD1BA7009200EE6DE0 /* CSSensePlatform.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1241BA7009200EE6DE0 /* CSSensorIds.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AE1BA7009200EE6DE0 /* CSSensorIds.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC1251BA7009200EE6DE0 /* CSSensorIds.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0AF1BA7009200EE6DE0 /* CSSensorIds.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1261BA7009200EE6DE0 /* CSSensorRequirements.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B01BA7009200EE6DE0 /* CSSensorRequirements.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC1271BA7009200EE6DE0 /* CSSensorRequirements.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B11BA7009200EE6DE0 /* CSSensorRequirements.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1281BA7009200EE6DE0 /* CSSensorStore.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B21BA7009200EE6DE0 /* CSSensorStore.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC1291BA7009200EE6DE0 /* CSSensorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B31BA7009200EE6DE0 /* CSSensorStore.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC12A1BA7009200EE6DE0 /* CSSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B41BA7009200EE6DE0 /* CSSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC12B1BA7009200EE6DE0 /* CSSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B51BA7009200EE6DE0 /* CSSettings.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC12C1BA7009200EE6DE0 /* CSStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B61BA7009200EE6DE0 /* CSStorage.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC12D1BA7009200EE6DE0 /* CSStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B71BA7009200EE6DE0 /* CSStorage.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC12E1BA7009200EE6DE0 /* CSUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B81BA7009200EE6DE0 /* CSUploader.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC12F1BA7009200EE6DE0 /* CSUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B91BA7009200EE6DE0 /* CSUploader.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1321BA7009200EE6DE0 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0BF1BA7009200EE6DE0 /* config.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1331BA7009200EE6DE0 /* keywordhash.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C01BA7009200EE6DE0 /* keywordhash.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1341BA7009200EE6DE0 /* opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C11BA7009200EE6DE0 /* opcodes.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1351BA7009200EE6DE0 /* parse.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C21BA7009200EE6DE0 /* parse.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1361BA7009200EE6DE0 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C31BA7009200EE6DE0 /* sqlite3.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1371BA7009200EE6DE0 /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C41BA7009200EE6DE0 /* sqlite3ext.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1381BA7009200EE6DE0 /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC0C51BA7009200EE6DE0 /* libsqlcipher */; settings = {ASSET_TAGS = (); }; };
+		FABCC1391BA7009200EE6DE0 /* CSReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C71BA7009200EE6DE0 /* CSReachability.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC13A1BA7009200EE6DE0 /* CSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0C81BA7009200EE6DE0 /* CSReachability.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC13B1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C91BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC13C1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0CA1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC13F1BA7009200EE6DE0 /* BloodPressureSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D01BA7009200EE6DE0 /* BloodPressureSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1401BA7009200EE6DE0 /* BloodPressureSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D11BA7009200EE6DE0 /* BloodPressureSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1411BA7009200EE6DE0 /* CSAntPlusController.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D21BA7009200EE6DE0 /* CSAntPlusController.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1421BA7009200EE6DE0 /* CSAntPlusController.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D31BA7009200EE6DE0 /* CSAntPlusController.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1431BA7009200EE6DE0 /* FootpodSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D41BA7009200EE6DE0 /* FootpodSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1441BA7009200EE6DE0 /* FootpodSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D51BA7009200EE6DE0 /* FootpodSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1451BA7009200EE6DE0 /* CSAccelerationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D61BA7009200EE6DE0 /* CSAccelerationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1461BA7009200EE6DE0 /* CSAccelerationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D71BA7009200EE6DE0 /* CSAccelerationSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D81BA7009200EE6DE0 /* CSAccelerometerSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1481BA7009200EE6DE0 /* CSAccelerometerSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D91BA7009200EE6DE0 /* CSAccelerometerSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1491BA7009300EE6DE0 /* CSActivityProcessorSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DA1BA7009200EE6DE0 /* CSActivityProcessorSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC14A1BA7009300EE6DE0 /* CSActivityProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0DB1BA7009200EE6DE0 /* CSActivityProcessorSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC14B1BA7009300EE6DE0 /* CSBatterySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DC1BA7009200EE6DE0 /* CSBatterySensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC14C1BA7009300EE6DE0 /* CSBatterySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0DD1BA7009200EE6DE0 /* CSBatterySensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC14D1BA7009300EE6DE0 /* CSCallSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DE1BA7009200EE6DE0 /* CSCallSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC14E1BA7009300EE6DE0 /* CSCallSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0DF1BA7009200EE6DE0 /* CSCallSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC14F1BA7009300EE6DE0 /* CSCompassSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E01BA7009200EE6DE0 /* CSCompassSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1501BA7009300EE6DE0 /* CSCompassSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E11BA7009200EE6DE0 /* CSCompassSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1511BA7009300EE6DE0 /* CSConnectionSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E21BA7009200EE6DE0 /* CSConnectionSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1521BA7009300EE6DE0 /* CSConnectionSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E31BA7009200EE6DE0 /* CSConnectionSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1531BA7009300EE6DE0 /* CSDynamicSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E41BA7009200EE6DE0 /* CSDynamicSensor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC1541BA7009300EE6DE0 /* CSDynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E51BA7009200EE6DE0 /* CSDynamicSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1551BA7009300EE6DE0 /* CSJumpSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E61BA7009200EE6DE0 /* CSJumpSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1561BA7009300EE6DE0 /* CSJumpSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E71BA7009200EE6DE0 /* CSJumpSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1571BA7009300EE6DE0 /* CSLocationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E81BA7009200EE6DE0 /* CSLocationProvider.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1581BA7009300EE6DE0 /* CSLocationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E91BA7009200EE6DE0 /* CSLocationProvider.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1591BA7009300EE6DE0 /* CSLocationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EA1BA7009200EE6DE0 /* CSLocationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC15A1BA7009300EE6DE0 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0EB1BA7009200EE6DE0 /* CSLocationSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC15B1BA7009300EE6DE0 /* CSMotionEnergySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EC1BA7009200EE6DE0 /* CSMotionEnergySensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC15C1BA7009300EE6DE0 /* CSMotionEnergySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0ED1BA7009200EE6DE0 /* CSMotionEnergySensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC15D1BA7009300EE6DE0 /* CSMotionFeaturesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EE1BA7009200EE6DE0 /* CSMotionFeaturesSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC15E1BA7009300EE6DE0 /* CSMotionFeaturesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0EF1BA7009200EE6DE0 /* CSMotionFeaturesSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC15F1BA7009300EE6DE0 /* CSMovingSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F01BA7009200EE6DE0 /* CSMovingSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1601BA7009300EE6DE0 /* CSMovingSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F11BA7009200EE6DE0 /* CSMovingSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F21BA7009200EE6DE0 /* CSNoiseSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1621BA7009300EE6DE0 /* CSNoiseSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F31BA7009200EE6DE0 /* CSNoiseSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1631BA7009300EE6DE0 /* CSOrientationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F41BA7009200EE6DE0 /* CSOrientationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1641BA7009300EE6DE0 /* CSOrientationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F51BA7009200EE6DE0 /* CSOrientationSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1651BA7009300EE6DE0 /* CSOrientationStateSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F61BA7009200EE6DE0 /* CSOrientationStateSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1661BA7009300EE6DE0 /* CSOrientationStateSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F71BA7009200EE6DE0 /* CSOrientationStateSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1671BA7009300EE6DE0 /* CSPreferencesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F81BA7009200EE6DE0 /* CSPreferencesSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1681BA7009300EE6DE0 /* CSPreferencesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F91BA7009200EE6DE0 /* CSPreferencesSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1691BA7009300EE6DE0 /* CSRotationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FA1BA7009200EE6DE0 /* CSRotationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC16A1BA7009300EE6DE0 /* CSRotationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0FB1BA7009200EE6DE0 /* CSRotationSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC16B1BA7009300EE6DE0 /* CSScreenSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FC1BA7009200EE6DE0 /* CSScreenSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC16C1BA7009300EE6DE0 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0FD1BA7009200EE6DE0 /* CSScreenSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC16D1BA7009300EE6DE0 /* CSSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FE1BA7009200EE6DE0 /* CSSensor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FABCC16E1BA7009300EE6DE0 /* CSSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0FF1BA7009200EE6DE0 /* CSSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC16F1BA7009300EE6DE0 /* CSSensorIdKey.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1001BA7009200EE6DE0 /* CSSensorIdKey.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1701BA7009300EE6DE0 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1011BA7009200EE6DE0 /* CSSensorIdKey.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1021BA7009200EE6DE0 /* CSSpatialProvider.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1721BA7009300EE6DE0 /* CSSpatialProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1031BA7009200EE6DE0 /* CSSpatialProvider.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1731BA7009300EE6DE0 /* CSStepCounterProcessorSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1041BA7009200EE6DE0 /* CSStepCounterProcessorSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1741BA7009300EE6DE0 /* CSStepCounterProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1051BA7009200EE6DE0 /* CSStepCounterProcessorSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1751BA7009300EE6DE0 /* CSTimeZoneSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1061BA7009200EE6DE0 /* CSTimeZoneSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1761BA7009400EE6DE0 /* CSTimeZoneSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1071BA7009200EE6DE0 /* CSTimeZoneSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1771BA7009400EE6DE0 /* CSUserProximity.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1081BA7009200EE6DE0 /* CSUserProximity.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1781BA7009400EE6DE0 /* CSUserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1091BA7009200EE6DE0 /* CSUserProximity.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1791BA7009400EE6DE0 /* CSVisitsSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10A1BA7009200EE6DE0 /* CSVisitsSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC17A1BA7009400EE6DE0 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC10B1BA7009200EE6DE0 /* CSVisitsSensor.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC17B1BA7009400EE6DE0 /* Formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10D1BA7009200EE6DE0 /* Formatting.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC17C1BA7009400EE6DE0 /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC10E1BA7009200EE6DE0 /* Formatting.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC17D1BA7009400EE6DE0 /* NSData+GZIP.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10F1BA7009200EE6DE0 /* NSData+GZIP.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC17E1BA7009400EE6DE0 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1101BA7009200EE6DE0 /* NSData+GZIP.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC17F1BA7009400EE6DE0 /* NSString+MD5Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1111BA7009200EE6DE0 /* NSString+MD5Hash.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1801BA7009400EE6DE0 /* NSString+MD5Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1121BA7009200EE6DE0 /* NSString+MD5Hash.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1811BA7009400EE6DE0 /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1131BA7009200EE6DE0 /* NSString+Utils.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1821BA7009400EE6DE0 /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1141BA7009200EE6DE0 /* NSString+Utils.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1831BA7009400EE6DE0 /* UIDevice+Hardware.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1151BA7009200EE6DE0 /* UIDevice+Hardware.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1841BA7009400EE6DE0 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1161BA7009200EE6DE0 /* UIDevice+Hardware.m */; settings = {ASSET_TAGS = (); }; };
+		FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1861BA7009400EE6DE0 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */; settings = {ASSET_TAGS = (); }; };
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAC4EC951BA086BC00B24CAA /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
 		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; settings = {ASSET_TAGS = (); }; };
-		FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3EBEAF551887FBD4009F81C1 /* PBXContainerItemProxy */ = {
+		FA5DF7B21BA71D0E00FF9544 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 3EBEAF4D1887FADE009F81C1;
-			remoteInfo = GenVersion;
+			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
+			remoteInfo = DSESwift;
 		};
-		A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */ = {
+		FAAEA2B61BA81A6D00837502 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 3E820D6915D40AB50001A3EC;
+			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
+			remoteInfo = DSESwift;
+		};
+		FABCC0971BA7003500EE6DE0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FABCC08B1BA7003500EE6DE0;
 			remoteInfo = SensePlatform;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3E4F273817033C7A0045588C /* CopyFiles */ = {
+		FAA6145E1BA81D6900B05FCD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "include/${PRODUCT_NAME}";
-			dstSubfolderSpec = 16;
+			dstPath = "";
+			dstSubfolderSpec = 10;
 			files = (
-				955999EA1B18A1DA0060B20A /* CSLocationPermissionProtocol.h in CopyFiles */,
-				3E743E1F1976E9E7009F571B /* CSVersion.h in CopyFiles */,
-				3E743E1E1976E9E1009F571B /* CSSensorRequirements.h in CopyFiles */,
-				3E4F27941704D3FC0045588C /* CSDynamicSensor.h in CopyFiles */,
-				3E4F273917033CD20045588C /* CSSettings.h in CopyFiles */,
-				3E4F273A17033CD40045588C /* CSSensorIds.h in CopyFiles */,
-				3E4F273B17033CD60045588C /* CSSensor.h in CopyFiles */,
-				3E4F273C17033CD90045588C /* CSSensePlatform.h in CopyFiles */,
-				3E4F274517033D200045588C /* CSApplicationStateChange.h in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9CDBB6F1B81C6E90028CC7D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/${PRODUCT_NAME}/DataStorageEngine";
-			dstSubfolderSpec = 16;
-			files = (
+				FAA614691BA8227400B05FCD /* Realm.framework in CopyFiles */,
+				FAA6146A1BA8227400B05FCD /* RealmSwift.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0E801F8E1A7AA90C00A3F9CC /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		0E801F8F1A7AA90C00A3F9CC /* keywordhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keywordhash.h; sourceTree = "<group>"; };
-		0E801F901A7AA90C00A3F9CC /* opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opcodes.h; sourceTree = "<group>"; };
-		0E801F911A7AA90C00A3F9CC /* parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parse.h; sourceTree = "<group>"; };
-		0E801F921A7AA90C00A3F9CC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
-		0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
-		0E801F941A7AA90C00A3F9CC /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
 		27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEDatabaseHandler.swift; sourceTree = "<group>"; };
 		27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDatapoint.swift; sourceTree = "<group>"; };
 		27431DDB1BA2D38000729FB2 /* RLMSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSource.swift; sourceTree = "<group>"; };
 		27431DDC1BA2D38000729FB2 /* RLMUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMUser.swift; sourceTree = "<group>"; };
-		27431DE61BA2D6D700729FB2 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = libraries/Realm.framework; sourceTree = "<group>"; };
-		27431DE71BA2D6D700729FB2 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = libraries/RealmSwift.framework; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* DSESensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESensor.swift; sourceTree = "<group>"; };
 		27431DEC1BA32F9A00729FB2 /* DSESource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESource.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESensorOptions.swift; sourceTree = "<group>"; };
 		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
-		3E11261816A7086400805102 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "utils/UIDevice+Hardware.h"; sourceTree = "<group>"; };
-		3E11261916A7086400805102 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "utils/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		3E148BCA160A180F0010A0D1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3E148BCC160A18130010A0D1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3E148BD0160A18DC0010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		3E4F28B9170DB4750045588C /* Formatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Formatting.h; path = utils/Formatting.h; sourceTree = "<group>"; };
-		3E4F28BA170DB4750045588C /* Formatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Formatting.m; path = utils/Formatting.m; sourceTree = "<group>"; };
-		3E513F4C18F7D7CF0008415A /* CSStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStorage.h; sourceTree = "<group>"; };
-		3E513F4D18F7D7CF0008415A /* CSStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorage.m; sourceTree = "<group>"; };
-		3E513F5118F81D2C0008415A /* CSDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataPoint.h; sourceTree = "<group>"; };
-		3E513F5218F81D2C0008415A /* CSDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDataPoint.m; sourceTree = "<group>"; };
-		3E513F5B18FC18150008415A /* CSUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUploader.h; sourceTree = "<group>"; };
-		3E513F5C18FC18150008415A /* CSUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUploader.m; sourceTree = "<group>"; };
-		3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+IdentifierAddition.h"; path = "utils/UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
-		3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+IdentifierAddition.m"; path = "utils/UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
-		3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensorRequirements.h; path = ../include/SensePlatform/CSSensorRequirements.h; sourceTree = "<group>"; };
-		3E74DBA5193C8AF100E471A9 /* CSActivityProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSActivityProcessorSensor.h; sourceTree = "<group>"; };
-		3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSActivityProcessorSensor.m; sourceTree = "<group>"; };
-		3E74DBA8193CC9AB00E471A9 /* CSStepCounterProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStepCounterProcessorSensor.h; sourceTree = "<group>"; };
-		3E74DBA9193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStepCounterProcessorSensor.m; sourceTree = "<group>"; };
-		3E7F33A21A13AA9100957AE2 /* CSTimeZoneSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimeZoneSensor.h; sourceTree = "<group>"; };
-		3E7F33A31A13AA9100957AE2 /* CSTimeZoneSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeZoneSensor.m; sourceTree = "<group>"; };
-		3E820D6A15D40AB50001A3EC /* libSensePlatform.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSensePlatform.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E820D6D15D40AB50001A3EC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
-		3E820DC815D40B180001A3EC /* CSDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataStore.h; sourceTree = "<group>"; };
-		3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+MainThread.h"; path = "sense platform/misc/NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
-		3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+MainThread.m"; path = "sense platform/misc/NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
-		3E820DCC15D40B180001A3EC /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSReachability.h; path = "sense platform/misc/CSReachability.h"; sourceTree = "<group>"; };
-		3E820DCD15D40B180001A3EC /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSReachability.m; path = "sense platform/misc/CSReachability.m"; sourceTree = "<group>"; };
-		3E820DCE15D40B180001A3EC /* CSSensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatform.m; sourceTree = "<group>"; };
-		3E820DCF15D40B180001A3EC /* CSSensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIds.m; sourceTree = "<group>"; };
-		3E820DD315D40B180001A3EC /* CSAccelerationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAccelerationSensor.h; sourceTree = "<group>"; };
-		3E820DD415D40B180001A3EC /* CSAccelerationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAccelerationSensor.m; sourceTree = "<group>"; };
-		3E820DD515D40B180001A3EC /* CSAccelerometerSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAccelerometerSensor.h; sourceTree = "<group>"; };
-		3E820DD615D40B180001A3EC /* CSAccelerometerSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAccelerometerSensor.m; sourceTree = "<group>"; };
-		3E820DD815D40B180001A3EC /* CSAntPlusController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAntPlusController.h; sourceTree = "<group>"; };
-		3E820DD915D40B180001A3EC /* CSAntPlusController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAntPlusController.m; sourceTree = "<group>"; };
-		3E820DDA15D40B180001A3EC /* BloodPressureSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloodPressureSensor.h; sourceTree = "<group>"; };
-		3E820DDB15D40B180001A3EC /* BloodPressureSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloodPressureSensor.m; sourceTree = "<group>"; };
-		3E820DDC15D40B180001A3EC /* FootpodSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FootpodSensor.h; sourceTree = "<group>"; };
-		3E820DDD15D40B180001A3EC /* FootpodSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FootpodSensor.m; sourceTree = "<group>"; };
-		3E820DDE15D40B180001A3EC /* CSBatterySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBatterySensor.h; sourceTree = "<group>"; };
-		3E820DDF15D40B180001A3EC /* CSBatterySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSBatterySensor.m; sourceTree = "<group>"; };
-		3E820DE015D40B180001A3EC /* CSCallSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCallSensor.h; sourceTree = "<group>"; };
-		3E820DE115D40B180001A3EC /* CSCallSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCallSensor.m; sourceTree = "<group>"; };
-		3E820DE215D40B180001A3EC /* CSCompassSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCompassSensor.h; sourceTree = "<group>"; };
-		3E820DE315D40B180001A3EC /* CSCompassSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCompassSensor.m; sourceTree = "<group>"; };
-		3E820DE415D40B180001A3EC /* CSConnectionSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSConnectionSensor.h; sourceTree = "<group>"; };
-		3E820DE515D40B180001A3EC /* CSConnectionSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSConnectionSensor.m; sourceTree = "<group>"; };
-		3E820DE615D40B180001A3EC /* CSDynamicSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDynamicSensor.h; sourceTree = "<group>"; };
-		3E820DE715D40B180001A3EC /* CSDynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDynamicSensor.m; sourceTree = "<group>"; };
-		3E820DE815D40B180001A3EC /* CSJumpSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJumpSensor.h; sourceTree = "<group>"; };
-		3E820DE915D40B180001A3EC /* CSJumpSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSJumpSensor.m; sourceTree = "<group>"; };
-		3E820DEA15D40B180001A3EC /* CSLocationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationProvider.h; sourceTree = "<group>"; };
-		3E820DEB15D40B180001A3EC /* CSLocationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationProvider.m; sourceTree = "<group>"; };
-		3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionEnergySensor.h; sourceTree = "<group>"; };
-		3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMotionEnergySensor.m; sourceTree = "<group>"; };
-		3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionFeaturesSensor.h; sourceTree = "<group>"; };
-		3E820DF115D40B180001A3EC /* CSMotionFeaturesSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMotionFeaturesSensor.m; sourceTree = "<group>"; };
-		3E820DF215D40B180001A3EC /* CSMovingSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMovingSensor.h; sourceTree = "<group>"; };
-		3E820DF315D40B180001A3EC /* CSMovingSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMovingSensor.m; sourceTree = "<group>"; };
-		3E820DF415D40B180001A3EC /* CSNoiseSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSNoiseSensor.h; sourceTree = "<group>"; };
-		3E820DF515D40B180001A3EC /* CSNoiseSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSNoiseSensor.m; sourceTree = "<group>"; };
-		3E820DF615D40B180001A3EC /* CSOrientationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOrientationSensor.h; sourceTree = "<group>"; };
-		3E820DF715D40B180001A3EC /* CSOrientationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOrientationSensor.m; sourceTree = "<group>"; };
-		3E820DF815D40B180001A3EC /* CSOrientationStateSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOrientationStateSensor.h; sourceTree = "<group>"; };
-		3E820DF915D40B180001A3EC /* CSOrientationStateSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOrientationStateSensor.m; sourceTree = "<group>"; };
-		3E820DFA15D40B180001A3EC /* CSPreferencesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreferencesSensor.h; sourceTree = "<group>"; };
-		3E820DFB15D40B180001A3EC /* CSPreferencesSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreferencesSensor.m; sourceTree = "<group>"; };
-		3E820DFC15D40B180001A3EC /* CSRotationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSRotationSensor.h; sourceTree = "<group>"; };
-		3E820DFD15D40B180001A3EC /* CSRotationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSRotationSensor.m; sourceTree = "<group>"; };
-		3E820DFE15D40B180001A3EC /* CSSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensor.m; sourceTree = "<group>"; };
-		3E820DFF15D40B180001A3EC /* CSSpatialProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProvider.h; sourceTree = "<group>"; };
-		3E820E0015D40B180001A3EC /* CSSpatialProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProvider.m; sourceTree = "<group>"; };
-		3E820E0115D40B180001A3EC /* CSUserProximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserProximity.h; sourceTree = "<group>"; };
-		3E820E0215D40B180001A3EC /* CSUserProximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserProximity.m; sourceTree = "<group>"; };
-		3E820E0315D40B180001A3EC /* CSSensorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorStore.h; sourceTree = "<group>"; };
-		3E820E0415D40B180001A3EC /* CSSensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorStore.m; sourceTree = "<group>"; };
-		3E820E0515D40B180001A3EC /* CSSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSettings.m; sourceTree = "<group>"; };
-		3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SensePlatform-Prefix.pch"; path = "../SensePlatform-Prefix.pch"; sourceTree = "<group>"; };
-		3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorRequirements.m; sourceTree = "<group>"; };
-		3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSApplicationStateChange.h; path = ../include/SensePlatform/CSApplicationStateChange.h; sourceTree = "<group>"; };
-		3E9C155615D564E100F520D0 /* CSSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensePlatform.h; path = ../include/SensePlatform/CSSensePlatform.h; sourceTree = "<group>"; };
-		3E9C155715D564E100F520D0 /* CSSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensor.h; path = ../../include/SensePlatform/CSSensor.h; sourceTree = "<group>"; };
-		3E9C155815D564E100F520D0 /* CSSensorIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSensorIds.h; path = ../include/SensePlatform/CSSensorIds.h; sourceTree = "<group>"; };
-		3E9C155915D564E100F520D0 /* CSSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSettings.h; path = ../include/SensePlatform/CSSettings.h; sourceTree = "<group>"; };
 		3E9C157615D574B500F520D0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3E9C157915D574BB00F520D0 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3E9C157B15D574C300F520D0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -305,36 +252,132 @@
 		3E9C157F15D574DB00F520D0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		3EBEAF571887FCA9009F81C1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSVersion.h; path = ../include/SensePlatform/CSVersion.h; sourceTree = "<group>"; };
-		3EE091EB18FD597300A04ED4 /* CSSensorIdKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorIdKey.h; sourceTree = "<group>"; };
-		3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIdKey.m; sourceTree = "<group>"; };
-		955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLocationPermissionProtocol.h; path = ../include/SensePlatform/CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
-		A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSECommonSenseProxy.h; path = DataStorageEngine/DSECommonSenseProxy.h; sourceTree = "<group>"; };
-		A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSECommonSenseProxy.m; path = DataStorageEngine/DSECommonSenseProxy.m; sourceTree = "<group>"; };
-		A94F3E3E1B831457000CCF7A /* DSECommonSenseProxyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSECommonSenseProxyTest.m; sourceTree = "<group>"; };
-		A94F3E401B831A41000CCF7A /* DSEErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSEErrors.h; path = DataStorageEngine/DSEErrors.h; sourceTree = "<group>"; };
-		A94F3E471B83281F000CCF7A /* CSSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSender.h; sourceTree = "<group>"; };
-		A94F3E481B83281F000CCF7A /* CSSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSender.m; sourceTree = "<group>"; };
-		A94F3E4A1B832835000CCF7A /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+GZIP.h"; path = "utils/NSData+GZIP.h"; sourceTree = "<group>"; };
-		A94F3E4B1B832835000CCF7A /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+GZIP.m"; path = "utils/NSData+GZIP.m"; sourceTree = "<group>"; };
-		A94F3E4C1B832835000CCF7A /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MD5Hash.h"; path = "utils/NSString+MD5Hash.h"; sourceTree = "<group>"; };
-		A94F3E4D1B832835000CCF7A /* NSString+MD5Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+MD5Hash.m"; path = "utils/NSString+MD5Hash.m"; sourceTree = "<group>"; };
-		A94F3E511B839B18000CCF7A /* DSEHTTPRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DSEHTTPRequestHelper.h; path = DataStorageEngine/DSEHTTPRequestHelper.h; sourceTree = "<group>"; };
-		A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DSEHTTPRequestHelper.m; path = DataStorageEngine/DSEHTTPRequestHelper.m; sourceTree = "<group>"; };
-		A94F3E541B839F17000CCF7A /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Utils.h"; path = "utils/NSString+Utils.h"; sourceTree = "<group>"; };
-		A94F3E551B839F17000CCF7A /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Utils.m"; path = "utils/NSString+Utils.m"; sourceTree = "<group>"; };
-		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A97744681B468FE20092D5FC /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
-		A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
-		A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationSensor.m; sourceTree = "<group>"; };
-		A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVisitsSensor.h; sourceTree = "<group>"; };
-		A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVisitsSensor.m; sourceTree = "<group>"; };
-		A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
-		A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
-		DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSErrorDomain.h; sourceTree = "<group>"; };
+		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
+		FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
+		FA5DF79F1BA716F700FF9544 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
+		FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
+		FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
+		FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSECommonSenseProxyTest.m; sourceTree = "<group>"; };
+		FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSECommonSenseProxy.h; sourceTree = "<group>"; };
+		FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSECommonSenseProxy.m; sourceTree = "<group>"; };
+		FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSEErrors.h; sourceTree = "<group>"; };
+		FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSEHTTPRequestHelper.h; sourceTree = "<group>"; };
+		FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSEHTTPRequestHelper.m; sourceTree = "<group>"; };
+		FAA614651BA8225E00B05FCD /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = DSESwift/libraries/Realm.framework; sourceTree = "<group>"; };
+		FAA614661BA8225E00B05FCD /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = DSESwift/libraries/RealmSwift.framework; sourceTree = "<group>"; };
+		FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SensePlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensePlatform.h; sourceTree = "<group>"; };
+		FABCC0901BA7003500EE6DE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FABCC0951BA7003500EE6DE0 /* SensePlatformTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SensePlatformTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SensePlatformTests.m; sourceTree = "<group>"; };
+		FABCC09C1BA7003500EE6DE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FABCC0A31BA7009200EE6DE0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationStateChange.h; sourceTree = "<group>"; };
+		FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
+		FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataPoint.h; sourceTree = "<group>"; };
+		FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDataPoint.m; sourceTree = "<group>"; };
+		FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataStore.h; sourceTree = "<group>"; };
+		FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSErrorDomain.h; sourceTree = "<group>"; };
+		FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
+		FABCC0AA1BA7009200EE6DE0 /* CSSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSender.h; sourceTree = "<group>"; };
+		FABCC0AB1BA7009200EE6DE0 /* CSSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSender.m; sourceTree = "<group>"; };
+		FABCC0AC1BA7009200EE6DE0 /* CSSensePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensePlatform.h; sourceTree = "<group>"; };
+		FABCC0AD1BA7009200EE6DE0 /* CSSensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatform.m; sourceTree = "<group>"; };
+		FABCC0AE1BA7009200EE6DE0 /* CSSensorIds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorIds.h; sourceTree = "<group>"; };
+		FABCC0AF1BA7009200EE6DE0 /* CSSensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIds.m; sourceTree = "<group>"; };
+		FABCC0B01BA7009200EE6DE0 /* CSSensorRequirements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorRequirements.h; sourceTree = "<group>"; };
+		FABCC0B11BA7009200EE6DE0 /* CSSensorRequirements.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorRequirements.m; sourceTree = "<group>"; };
+		FABCC0B21BA7009200EE6DE0 /* CSSensorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorStore.h; sourceTree = "<group>"; };
+		FABCC0B31BA7009200EE6DE0 /* CSSensorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorStore.m; sourceTree = "<group>"; };
+		FABCC0B41BA7009200EE6DE0 /* CSSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSettings.h; sourceTree = "<group>"; };
+		FABCC0B51BA7009200EE6DE0 /* CSSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSettings.m; sourceTree = "<group>"; };
+		FABCC0B61BA7009200EE6DE0 /* CSStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStorage.h; sourceTree = "<group>"; };
+		FABCC0B71BA7009200EE6DE0 /* CSStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorage.m; sourceTree = "<group>"; };
+		FABCC0B81BA7009200EE6DE0 /* CSUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUploader.h; sourceTree = "<group>"; };
+		FABCC0B91BA7009200EE6DE0 /* CSUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUploader.m; sourceTree = "<group>"; };
+		FABCC0BF1BA7009200EE6DE0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		FABCC0C01BA7009200EE6DE0 /* keywordhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keywordhash.h; sourceTree = "<group>"; };
+		FABCC0C11BA7009200EE6DE0 /* opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opcodes.h; sourceTree = "<group>"; };
+		FABCC0C21BA7009200EE6DE0 /* parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parse.h; sourceTree = "<group>"; };
+		FABCC0C31BA7009200EE6DE0 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		FABCC0C41BA7009200EE6DE0 /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		FABCC0C51BA7009200EE6DE0 /* libsqlcipher */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher; sourceTree = "<group>"; };
+		FABCC0C71BA7009200EE6DE0 /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSReachability.h; sourceTree = "<group>"; };
+		FABCC0C81BA7009200EE6DE0 /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSReachability.m; sourceTree = "<group>"; };
+		FABCC0C91BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
+		FABCC0CA1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
+		FABCC0D01BA7009200EE6DE0 /* BloodPressureSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloodPressureSensor.h; sourceTree = "<group>"; };
+		FABCC0D11BA7009200EE6DE0 /* BloodPressureSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloodPressureSensor.m; sourceTree = "<group>"; };
+		FABCC0D21BA7009200EE6DE0 /* CSAntPlusController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAntPlusController.h; sourceTree = "<group>"; };
+		FABCC0D31BA7009200EE6DE0 /* CSAntPlusController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAntPlusController.m; sourceTree = "<group>"; };
+		FABCC0D41BA7009200EE6DE0 /* FootpodSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FootpodSensor.h; sourceTree = "<group>"; };
+		FABCC0D51BA7009200EE6DE0 /* FootpodSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FootpodSensor.m; sourceTree = "<group>"; };
+		FABCC0D61BA7009200EE6DE0 /* CSAccelerationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAccelerationSensor.h; sourceTree = "<group>"; };
+		FABCC0D71BA7009200EE6DE0 /* CSAccelerationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAccelerationSensor.m; sourceTree = "<group>"; };
+		FABCC0D81BA7009200EE6DE0 /* CSAccelerometerSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAccelerometerSensor.h; sourceTree = "<group>"; };
+		FABCC0D91BA7009200EE6DE0 /* CSAccelerometerSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAccelerometerSensor.m; sourceTree = "<group>"; };
+		FABCC0DA1BA7009200EE6DE0 /* CSActivityProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSActivityProcessorSensor.h; sourceTree = "<group>"; };
+		FABCC0DB1BA7009200EE6DE0 /* CSActivityProcessorSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSActivityProcessorSensor.m; sourceTree = "<group>"; };
+		FABCC0DC1BA7009200EE6DE0 /* CSBatterySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBatterySensor.h; sourceTree = "<group>"; };
+		FABCC0DD1BA7009200EE6DE0 /* CSBatterySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSBatterySensor.m; sourceTree = "<group>"; };
+		FABCC0DE1BA7009200EE6DE0 /* CSCallSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCallSensor.h; sourceTree = "<group>"; };
+		FABCC0DF1BA7009200EE6DE0 /* CSCallSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCallSensor.m; sourceTree = "<group>"; };
+		FABCC0E01BA7009200EE6DE0 /* CSCompassSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCompassSensor.h; sourceTree = "<group>"; };
+		FABCC0E11BA7009200EE6DE0 /* CSCompassSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCompassSensor.m; sourceTree = "<group>"; };
+		FABCC0E21BA7009200EE6DE0 /* CSConnectionSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSConnectionSensor.h; sourceTree = "<group>"; };
+		FABCC0E31BA7009200EE6DE0 /* CSConnectionSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSConnectionSensor.m; sourceTree = "<group>"; };
+		FABCC0E41BA7009200EE6DE0 /* CSDynamicSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDynamicSensor.h; sourceTree = "<group>"; };
+		FABCC0E51BA7009200EE6DE0 /* CSDynamicSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDynamicSensor.m; sourceTree = "<group>"; };
+		FABCC0E61BA7009200EE6DE0 /* CSJumpSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJumpSensor.h; sourceTree = "<group>"; };
+		FABCC0E71BA7009200EE6DE0 /* CSJumpSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSJumpSensor.m; sourceTree = "<group>"; };
+		FABCC0E81BA7009200EE6DE0 /* CSLocationProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationProvider.h; sourceTree = "<group>"; };
+		FABCC0E91BA7009200EE6DE0 /* CSLocationProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationProvider.m; sourceTree = "<group>"; };
+		FABCC0EA1BA7009200EE6DE0 /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
+		FABCC0EB1BA7009200EE6DE0 /* CSLocationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLocationSensor.m; sourceTree = "<group>"; };
+		FABCC0EC1BA7009200EE6DE0 /* CSMotionEnergySensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionEnergySensor.h; sourceTree = "<group>"; };
+		FABCC0ED1BA7009200EE6DE0 /* CSMotionEnergySensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMotionEnergySensor.m; sourceTree = "<group>"; };
+		FABCC0EE1BA7009200EE6DE0 /* CSMotionFeaturesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMotionFeaturesSensor.h; sourceTree = "<group>"; };
+		FABCC0EF1BA7009200EE6DE0 /* CSMotionFeaturesSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMotionFeaturesSensor.m; sourceTree = "<group>"; };
+		FABCC0F01BA7009200EE6DE0 /* CSMovingSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMovingSensor.h; sourceTree = "<group>"; };
+		FABCC0F11BA7009200EE6DE0 /* CSMovingSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMovingSensor.m; sourceTree = "<group>"; };
+		FABCC0F21BA7009200EE6DE0 /* CSNoiseSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSNoiseSensor.h; sourceTree = "<group>"; };
+		FABCC0F31BA7009200EE6DE0 /* CSNoiseSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSNoiseSensor.m; sourceTree = "<group>"; };
+		FABCC0F41BA7009200EE6DE0 /* CSOrientationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOrientationSensor.h; sourceTree = "<group>"; };
+		FABCC0F51BA7009200EE6DE0 /* CSOrientationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOrientationSensor.m; sourceTree = "<group>"; };
+		FABCC0F61BA7009200EE6DE0 /* CSOrientationStateSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOrientationStateSensor.h; sourceTree = "<group>"; };
+		FABCC0F71BA7009200EE6DE0 /* CSOrientationStateSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOrientationStateSensor.m; sourceTree = "<group>"; };
+		FABCC0F81BA7009200EE6DE0 /* CSPreferencesSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreferencesSensor.h; sourceTree = "<group>"; };
+		FABCC0F91BA7009200EE6DE0 /* CSPreferencesSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreferencesSensor.m; sourceTree = "<group>"; };
+		FABCC0FA1BA7009200EE6DE0 /* CSRotationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSRotationSensor.h; sourceTree = "<group>"; };
+		FABCC0FB1BA7009200EE6DE0 /* CSRotationSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSRotationSensor.m; sourceTree = "<group>"; };
+		FABCC0FC1BA7009200EE6DE0 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
+		FABCC0FD1BA7009200EE6DE0 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
+		FABCC0FE1BA7009200EE6DE0 /* CSSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensor.h; sourceTree = "<group>"; };
+		FABCC0FF1BA7009200EE6DE0 /* CSSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensor.m; sourceTree = "<group>"; };
+		FABCC1001BA7009200EE6DE0 /* CSSensorIdKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSensorIdKey.h; sourceTree = "<group>"; };
+		FABCC1011BA7009200EE6DE0 /* CSSensorIdKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIdKey.m; sourceTree = "<group>"; };
+		FABCC1021BA7009200EE6DE0 /* CSSpatialProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProvider.h; sourceTree = "<group>"; };
+		FABCC1031BA7009200EE6DE0 /* CSSpatialProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProvider.m; sourceTree = "<group>"; };
+		FABCC1041BA7009200EE6DE0 /* CSStepCounterProcessorSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStepCounterProcessorSensor.h; sourceTree = "<group>"; };
+		FABCC1051BA7009200EE6DE0 /* CSStepCounterProcessorSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStepCounterProcessorSensor.m; sourceTree = "<group>"; };
+		FABCC1061BA7009200EE6DE0 /* CSTimeZoneSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimeZoneSensor.h; sourceTree = "<group>"; };
+		FABCC1071BA7009200EE6DE0 /* CSTimeZoneSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeZoneSensor.m; sourceTree = "<group>"; };
+		FABCC1081BA7009200EE6DE0 /* CSUserProximity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUserProximity.h; sourceTree = "<group>"; };
+		FABCC1091BA7009200EE6DE0 /* CSUserProximity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUserProximity.m; sourceTree = "<group>"; };
+		FABCC10A1BA7009200EE6DE0 /* CSVisitsSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVisitsSensor.h; sourceTree = "<group>"; };
+		FABCC10B1BA7009200EE6DE0 /* CSVisitsSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVisitsSensor.m; sourceTree = "<group>"; };
+		FABCC10D1BA7009200EE6DE0 /* Formatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Formatting.h; sourceTree = "<group>"; };
+		FABCC10E1BA7009200EE6DE0 /* Formatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Formatting.m; sourceTree = "<group>"; };
+		FABCC10F1BA7009200EE6DE0 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
+		FABCC1101BA7009200EE6DE0 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
+		FABCC1111BA7009200EE6DE0 /* NSString+MD5Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Hash.h"; sourceTree = "<group>"; };
+		FABCC1121BA7009200EE6DE0 /* NSString+MD5Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5Hash.m"; sourceTree = "<group>"; };
+		FABCC1131BA7009200EE6DE0 /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
+		FABCC1141BA7009200EE6DE0 /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
+		FABCC1151BA7009200EE6DE0 /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Hardware.h"; sourceTree = "<group>"; };
+		FABCC1161BA7009200EE6DE0 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hardware.m"; sourceTree = "<group>"; };
+		FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
+		FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		FAC4EC861BA086BC00B24CAA /* DSESwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DSESwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC4EC881BA086BC00B24CAA /* DSESwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSESwift.h; sourceTree = "<group>"; };
 		FAC4EC8A1BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -342,43 +385,31 @@
 		FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftTests.swift; sourceTree = "<group>"; };
 		FAC4EC961BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAC4ECA71BA0873000B24CAA /* communication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = communication.swift; sourceTree = "<group>"; };
-		FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScreenSensor.h; sourceTree = "<group>"; };
-		FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScreenSensor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3E820D6715D40AB50001A3EC /* Frameworks */ = {
+		FABCC0881BA7003500EE6DE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2769CC651BA356E000A76ED8 /* Realm.framework in Frameworks */,
-				2769CC661BA356E000A76ED8 /* RealmSwift.framework in Frameworks */,
-				3E9C158415D574E700F520D0 /* CoreLocation.framework in Frameworks */,
-				3E9C158215D574E100F520D0 /* CoreMotion.framework in Frameworks */,
-				3E9C158015D574DB00F520D0 /* AVFoundation.framework in Frameworks */,
-				3E9C157E15D574D300F520D0 /* CoreAudio.framework in Frameworks */,
-				3E9C157C15D574C300F520D0 /* AudioToolbox.framework in Frameworks */,
-				3E9C157A15D574BB00F520D0 /* CoreTelephony.framework in Frameworks */,
-				3E9C157715D574B500F520D0 /* SystemConfiguration.framework in Frameworks */,
-				3E820D6E15D40AB50001A3EC /* Foundation.framework in Frameworks */,
-				0E801F951A7AA90C00A3F9CC /* libsqlcipher in Frameworks */,
+				FA5DF7B41BA71D4C00FF9544 /* DSESwift.framework in Frameworks */,
+				FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */,
+				FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */,
+				FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */,
+				FA4CDBA31BA70E1D00DB44B1 /* AVFoundation.framework in Frameworks */,
+				FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */,
+				FA4CDBA41BA70E3700DB44B1 /* AudioToolbox.framework in Frameworks */,
+				FA4CDBA21BA70E1100DB44B1 /* CoreTelephony.framework in Frameworks */,
+				FA4CDBA51BA70E8000DB44B1 /* Foundation.framework in Frameworks */,
+				FABCC1381BA7009200EE6DE0 /* libsqlcipher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A96D6EC71A5C49FF00554BBC /* Frameworks */ = {
+		FABCC0921BA7003500EE6DE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A99F99E01A5D8C6B00D6CB76 /* Foundation.framework in Frameworks */,
-				A99F99DF1A5D8C6100D6CB76 /* SystemConfiguration.framework in Frameworks */,
-				A99F99DE1A5D8C5700D6CB76 /* CoreTelephony.framework in Frameworks */,
-				A99F99DD1A5D8C4D00D6CB76 /* AudioToolbox.framework in Frameworks */,
-				A99F99DC1A5D8C4300D6CB76 /* AVFoundation.framework in Frameworks */,
-				A99F99DB1A5D8C3600D6CB76 /* CoreMotion.framework in Frameworks */,
-				A99F99DA1A5D8C2D00D6CB76 /* CoreLocation.framework in Frameworks */,
-				A99F99D91A5D8C2400D6CB76 /* CoreAudio.framework in Frameworks */,
-				A99F99D51A5D8A5D00D6CB76 /* libSensePlatform.a in Frameworks */,
-				A99F99CF1A5D16D300D6CB76 /* UIKit.framework in Frameworks */,
+				FABCC0961BA7003500EE6DE0 /* SensePlatform.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,8 +417,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27431DE81BA2D6D700729FB2 /* Realm.framework in Frameworks */,
-				27431DE91BA2D6D700729FB2 /* RealmSwift.framework in Frameworks */,
+				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
+				FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,68 +433,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E801F8B1A7AA90C00A3F9CC /* libraries */ = {
-			isa = PBXGroup;
-			children = (
-				0E801F8C1A7AA90C00A3F9CC /* sqlcipher */,
-			);
-			path = libraries;
-			sourceTree = "<group>";
-		};
-		0E801F8C1A7AA90C00A3F9CC /* sqlcipher */ = {
-			isa = PBXGroup;
-			children = (
-				0E801F8D1A7AA90C00A3F9CC /* include */,
-				0E801F941A7AA90C00A3F9CC /* libsqlcipher */,
-			);
-			path = sqlcipher;
-			sourceTree = "<group>";
-		};
-		0E801F8D1A7AA90C00A3F9CC /* include */ = {
-			isa = PBXGroup;
-			children = (
-				0E801F8E1A7AA90C00A3F9CC /* config.h */,
-				0E801F8F1A7AA90C00A3F9CC /* keywordhash.h */,
-				0E801F901A7AA90C00A3F9CC /* opcodes.h */,
-				0E801F911A7AA90C00A3F9CC /* parse.h */,
-				0E801F921A7AA90C00A3F9CC /* sqlite3.h */,
-				0E801F931A7AA90C00A3F9CC /* sqlite3ext.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		3E59ACB915F4DB1B00C07D59 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				A94F3E541B839F17000CCF7A /* NSString+Utils.h */,
-				A94F3E551B839F17000CCF7A /* NSString+Utils.m */,
-				3E4F28B9170DB4750045588C /* Formatting.h */,
-				3E4F28BA170DB4750045588C /* Formatting.m */,
-				3E11261816A7086400805102 /* UIDevice+Hardware.h */,
-				3E11261916A7086400805102 /* UIDevice+Hardware.m */,
-				3E59ACBB15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.h */,
-				3E59ACBC15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m */,
-				3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */,
-				3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */,
-				3E820DCC15D40B180001A3EC /* CSReachability.h */,
-				3E820DCD15D40B180001A3EC /* CSReachability.m */,
-				A94F3E4A1B832835000CCF7A /* NSData+GZIP.h */,
-				A94F3E4B1B832835000CCF7A /* NSData+GZIP.m */,
-				A94F3E4C1B832835000CCF7A /* NSString+MD5Hash.h */,
-				A94F3E4D1B832835000CCF7A /* NSString+MD5Hash.m */,
-			);
-			name = Utils;
-			sourceTree = "<group>";
-		};
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
-				3E59ACB915F4DB1B00C07D59 /* Utils */,
-				0E801F8B1A7AA90C00A3F9CC /* libraries */,
-				3E820DBF15D40B180001A3EC /* sense platform */,
-				A91BACB81B8104360012331E /* DataStorageEngine */,
 				FAC4EC871BA086BC00B24CAA /* DSESwift */,
 				FAC4EC931BA086BC00B24CAA /* DSESwiftTests */,
+				FABCC08D1BA7003500EE6DE0 /* SensePlatform */,
+				FABCC0991BA7003500EE6DE0 /* SensePlatformTests */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
 				3E820D6B15D40AB50001A3EC /* Products */,
 			);
@@ -472,10 +448,10 @@
 		3E820D6B15D40AB50001A3EC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3E820D6A15D40AB50001A3EC /* libSensePlatform.a */,
-				A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */,
 				FAC4EC861BA086BC00B24CAA /* DSESwift.framework */,
 				FAC4EC8F1BA086BC00B24CAA /* DSESwiftTests.xctest */,
+				FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */,
+				FABCC0951BA7003500EE6DE0 /* SensePlatformTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -483,8 +459,8 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				27431DE61BA2D6D700729FB2 /* Realm.framework */,
-				27431DE71BA2D6D700729FB2 /* RealmSwift.framework */,
+				FAA614651BA8225E00B05FCD /* Realm.framework */,
+				FAA614661BA8225E00B05FCD /* RealmSwift.framework */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
 				3E148BCA160A180F0010A0D1 /* CoreMedia.framework */,
@@ -504,147 +480,203 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3E820DBF15D40B180001A3EC /* sense platform */ = {
+		FA5DF7A71BA717DA00FF9544 /* DataStorageEngine */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DD015D40B180001A3EC /* sensors */,
-				A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */,
-				3E513F5118F81D2C0008415A /* CSDataPoint.h */,
-				3E513F5218F81D2C0008415A /* CSDataPoint.m */,
-				3E820DC815D40B180001A3EC /* CSDataStore.h */,
-				3E743E1D1976E9BE009F571B /* CSSensorRequirements.h */,
-				3E836CD2171C4BB900D7494C /* CSSensorRequirements.m */,
-				3EBEAF571887FCA9009F81C1 /* CSVersion.h */,
-				3E9C155515D564E100F520D0 /* CSApplicationStateChange.h */,
-				3E820DC015D40B180001A3EC /* CSApplicationStateChange.m */,
-				3E9C155615D564E100F520D0 /* CSSensePlatform.h */,
-				A94F3E471B83281F000CCF7A /* CSSender.h */,
-				A94F3E481B83281F000CCF7A /* CSSender.m */,
-				3E820DCE15D40B180001A3EC /* CSSensePlatform.m */,
-				3E9C155815D564E100F520D0 /* CSSensorIds.h */,
-				3E820DCF15D40B180001A3EC /* CSSensorIds.m */,
-				3E9C155915D564E100F520D0 /* CSSettings.h */,
-				3E820E0515D40B180001A3EC /* CSSettings.m */,
-				3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */,
-				955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */,
-				3E820E0315D40B180001A3EC /* CSSensorStore.h */,
-				3E820E0415D40B180001A3EC /* CSSensorStore.m */,
-				3E513F4C18F7D7CF0008415A /* CSStorage.h */,
-				3E513F4D18F7D7CF0008415A /* CSStorage.m */,
-				3E513F5B18FC18150008415A /* CSUploader.h */,
-				3E513F5C18FC18150008415A /* CSUploader.m */,
-				DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */,
+				FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */,
+				FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */,
+				FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */,
+				FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */,
+				FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */,
 			);
-			path = "sense platform";
+			path = DataStorageEngine;
 			sourceTree = "<group>";
 		};
-		3E820DD015D40B180001A3EC /* sensors */ = {
+		FABCC08D1BA7003500EE6DE0 /* SensePlatform */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DD715D40B180001A3EC /* ant+ */,
-				3E820DD315D40B180001A3EC /* CSAccelerationSensor.h */,
-				3E820DD415D40B180001A3EC /* CSAccelerationSensor.m */,
-				3E820DD515D40B180001A3EC /* CSAccelerometerSensor.h */,
-				3E820DD615D40B180001A3EC /* CSAccelerometerSensor.m */,
-				3E74DBA5193C8AF100E471A9 /* CSActivityProcessorSensor.h */,
-				3E74DBA6193C8AF100E471A9 /* CSActivityProcessorSensor.m */,
-				3E820DDE15D40B180001A3EC /* CSBatterySensor.h */,
-				3E820DDF15D40B180001A3EC /* CSBatterySensor.m */,
-				3E820DE015D40B180001A3EC /* CSCallSensor.h */,
-				3E820DE115D40B180001A3EC /* CSCallSensor.m */,
-				3E820DE215D40B180001A3EC /* CSCompassSensor.h */,
-				3E820DE315D40B180001A3EC /* CSCompassSensor.m */,
-				3E820DE415D40B180001A3EC /* CSConnectionSensor.h */,
-				3E820DE515D40B180001A3EC /* CSConnectionSensor.m */,
-				3E820DE615D40B180001A3EC /* CSDynamicSensor.h */,
-				3E820DE715D40B180001A3EC /* CSDynamicSensor.m */,
-				3E820DE815D40B180001A3EC /* CSJumpSensor.h */,
-				3E820DE915D40B180001A3EC /* CSJumpSensor.m */,
-				3E820DEA15D40B180001A3EC /* CSLocationProvider.h */,
-				3E820DEB15D40B180001A3EC /* CSLocationProvider.m */,
-				A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */,
-				A9902AB31A9F591A00FCB951 /* CSLocationSensor.m */,
-				3E820DEE15D40B180001A3EC /* CSMotionEnergySensor.h */,
-				3E820DEF15D40B180001A3EC /* CSMotionEnergySensor.m */,
-				3E820DF015D40B180001A3EC /* CSMotionFeaturesSensor.h */,
-				3E820DF115D40B180001A3EC /* CSMotionFeaturesSensor.m */,
-				3E820DF215D40B180001A3EC /* CSMovingSensor.h */,
-				3E820DF315D40B180001A3EC /* CSMovingSensor.m */,
-				3E820DF415D40B180001A3EC /* CSNoiseSensor.h */,
-				3E820DF515D40B180001A3EC /* CSNoiseSensor.m */,
-				3E820DF615D40B180001A3EC /* CSOrientationSensor.h */,
-				3E820DF715D40B180001A3EC /* CSOrientationSensor.m */,
-				3E820DF815D40B180001A3EC /* CSOrientationStateSensor.h */,
-				3E820DF915D40B180001A3EC /* CSOrientationStateSensor.m */,
-				3E820DFA15D40B180001A3EC /* CSPreferencesSensor.h */,
-				3E820DFB15D40B180001A3EC /* CSPreferencesSensor.m */,
-				3E820DFC15D40B180001A3EC /* CSRotationSensor.h */,
-				3E820DFD15D40B180001A3EC /* CSRotationSensor.m */,
-				FFC80BE4183CCF5900E3EF27 /* CSScreenSensor.h */,
-				FFC80BE5183CCF5900E3EF27 /* CSScreenSensor.m */,
-				3E9C155715D564E100F520D0 /* CSSensor.h */,
-				3E820DFE15D40B180001A3EC /* CSSensor.m */,
-				3EE091EB18FD597300A04ED4 /* CSSensorIdKey.h */,
-				3EE091EC18FD597300A04ED4 /* CSSensorIdKey.m */,
-				3E820DFF15D40B180001A3EC /* CSSpatialProvider.h */,
-				3E820E0015D40B180001A3EC /* CSSpatialProvider.m */,
-				3E74DBA8193CC9AB00E471A9 /* CSStepCounterProcessorSensor.h */,
-				3E74DBA9193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m */,
-				3E7F33A21A13AA9100957AE2 /* CSTimeZoneSensor.h */,
-				3E7F33A31A13AA9100957AE2 /* CSTimeZoneSensor.m */,
-				3E820E0115D40B180001A3EC /* CSUserProximity.h */,
-				3E820E0215D40B180001A3EC /* CSUserProximity.m */,
-				A9902AB51A9F594500FCB951 /* CSVisitsSensor.h */,
-				A9902AB61A9F594500FCB951 /* CSVisitsSensor.m */,
+				FA5DF7A71BA717DA00FF9544 /* DataStorageEngine */,
+				FABCC0BA1BA7009200EE6DE0 /* libraries */,
+				FABCC0C61BA7009200EE6DE0 /* misc */,
+				FABCC0CE1BA7009200EE6DE0 /* sensors */,
+				FABCC10C1BA7009200EE6DE0 /* utils */,
+				FABCC0A31BA7009200EE6DE0 /* CSApplicationStateChange.h */,
+				FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */,
+				FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */,
+				FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */,
+				FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */,
+				FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */,
+				FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */,
+				FABCC0AA1BA7009200EE6DE0 /* CSSender.h */,
+				FABCC0AB1BA7009200EE6DE0 /* CSSender.m */,
+				FABCC0AC1BA7009200EE6DE0 /* CSSensePlatform.h */,
+				FABCC0AD1BA7009200EE6DE0 /* CSSensePlatform.m */,
+				FABCC0AE1BA7009200EE6DE0 /* CSSensorIds.h */,
+				FABCC0AF1BA7009200EE6DE0 /* CSSensorIds.m */,
+				FABCC0B01BA7009200EE6DE0 /* CSSensorRequirements.h */,
+				FABCC0B11BA7009200EE6DE0 /* CSSensorRequirements.m */,
+				FABCC0B21BA7009200EE6DE0 /* CSSensorStore.h */,
+				FABCC0B31BA7009200EE6DE0 /* CSSensorStore.m */,
+				FABCC0B41BA7009200EE6DE0 /* CSSettings.h */,
+				FABCC0B51BA7009200EE6DE0 /* CSSettings.m */,
+				FABCC0B61BA7009200EE6DE0 /* CSStorage.h */,
+				FABCC0B71BA7009200EE6DE0 /* CSStorage.m */,
+				FABCC0B81BA7009200EE6DE0 /* CSUploader.h */,
+				FABCC0B91BA7009200EE6DE0 /* CSUploader.m */,
+				FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */,
+				FA4CDBA71BA7126400DB44B1 /* CSVersion.h */,
+				FABCC0901BA7003500EE6DE0 /* Info.plist */,
+			);
+			path = SensePlatform;
+			sourceTree = "<group>";
+		};
+		FABCC0991BA7003500EE6DE0 /* SensePlatformTests */ = {
+			isa = PBXGroup;
+			children = (
+				FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */,
+				FA5DF79F1BA716F700FF9544 /* CSSpatialProviderTest.h */,
+				FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */,
+				FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */,
+				FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */,
+				FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */,
+				FABCC09C1BA7003500EE6DE0 /* Info.plist */,
+			);
+			path = SensePlatformTests;
+			sourceTree = "<group>";
+		};
+		FABCC0BA1BA7009200EE6DE0 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				FABCC0BD1BA7009200EE6DE0 /* sqlcipher */,
+			);
+			path = libraries;
+			sourceTree = "<group>";
+		};
+		FABCC0BD1BA7009200EE6DE0 /* sqlcipher */ = {
+			isa = PBXGroup;
+			children = (
+				FABCC0BE1BA7009200EE6DE0 /* include */,
+				FABCC0C51BA7009200EE6DE0 /* libsqlcipher */,
+			);
+			path = sqlcipher;
+			sourceTree = "<group>";
+		};
+		FABCC0BE1BA7009200EE6DE0 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				FABCC0BF1BA7009200EE6DE0 /* config.h */,
+				FABCC0C01BA7009200EE6DE0 /* keywordhash.h */,
+				FABCC0C11BA7009200EE6DE0 /* opcodes.h */,
+				FABCC0C21BA7009200EE6DE0 /* parse.h */,
+				FABCC0C31BA7009200EE6DE0 /* sqlite3.h */,
+				FABCC0C41BA7009200EE6DE0 /* sqlite3ext.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		FABCC0C61BA7009200EE6DE0 /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				FABCC0C71BA7009200EE6DE0 /* CSReachability.h */,
+				FABCC0C81BA7009200EE6DE0 /* CSReachability.m */,
+				FABCC0C91BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h */,
+				FABCC0CA1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m */,
+			);
+			path = misc;
+			sourceTree = "<group>";
+		};
+		FABCC0CE1BA7009200EE6DE0 /* sensors */ = {
+			isa = PBXGroup;
+			children = (
+				FABCC0CF1BA7009200EE6DE0 /* ant+ */,
+				FABCC0D61BA7009200EE6DE0 /* CSAccelerationSensor.h */,
+				FABCC0D71BA7009200EE6DE0 /* CSAccelerationSensor.m */,
+				FABCC0D81BA7009200EE6DE0 /* CSAccelerometerSensor.h */,
+				FABCC0D91BA7009200EE6DE0 /* CSAccelerometerSensor.m */,
+				FABCC0DA1BA7009200EE6DE0 /* CSActivityProcessorSensor.h */,
+				FABCC0DB1BA7009200EE6DE0 /* CSActivityProcessorSensor.m */,
+				FABCC0DC1BA7009200EE6DE0 /* CSBatterySensor.h */,
+				FABCC0DD1BA7009200EE6DE0 /* CSBatterySensor.m */,
+				FABCC0DE1BA7009200EE6DE0 /* CSCallSensor.h */,
+				FABCC0DF1BA7009200EE6DE0 /* CSCallSensor.m */,
+				FABCC0E01BA7009200EE6DE0 /* CSCompassSensor.h */,
+				FABCC0E11BA7009200EE6DE0 /* CSCompassSensor.m */,
+				FABCC0E21BA7009200EE6DE0 /* CSConnectionSensor.h */,
+				FABCC0E31BA7009200EE6DE0 /* CSConnectionSensor.m */,
+				FABCC0E41BA7009200EE6DE0 /* CSDynamicSensor.h */,
+				FABCC0E51BA7009200EE6DE0 /* CSDynamicSensor.m */,
+				FABCC0E61BA7009200EE6DE0 /* CSJumpSensor.h */,
+				FABCC0E71BA7009200EE6DE0 /* CSJumpSensor.m */,
+				FABCC0E81BA7009200EE6DE0 /* CSLocationProvider.h */,
+				FABCC0E91BA7009200EE6DE0 /* CSLocationProvider.m */,
+				FABCC0EA1BA7009200EE6DE0 /* CSLocationSensor.h */,
+				FABCC0EB1BA7009200EE6DE0 /* CSLocationSensor.m */,
+				FABCC0EC1BA7009200EE6DE0 /* CSMotionEnergySensor.h */,
+				FABCC0ED1BA7009200EE6DE0 /* CSMotionEnergySensor.m */,
+				FABCC0EE1BA7009200EE6DE0 /* CSMotionFeaturesSensor.h */,
+				FABCC0EF1BA7009200EE6DE0 /* CSMotionFeaturesSensor.m */,
+				FABCC0F01BA7009200EE6DE0 /* CSMovingSensor.h */,
+				FABCC0F11BA7009200EE6DE0 /* CSMovingSensor.m */,
+				FABCC0F21BA7009200EE6DE0 /* CSNoiseSensor.h */,
+				FABCC0F31BA7009200EE6DE0 /* CSNoiseSensor.m */,
+				FABCC0F41BA7009200EE6DE0 /* CSOrientationSensor.h */,
+				FABCC0F51BA7009200EE6DE0 /* CSOrientationSensor.m */,
+				FABCC0F61BA7009200EE6DE0 /* CSOrientationStateSensor.h */,
+				FABCC0F71BA7009200EE6DE0 /* CSOrientationStateSensor.m */,
+				FABCC0F81BA7009200EE6DE0 /* CSPreferencesSensor.h */,
+				FABCC0F91BA7009200EE6DE0 /* CSPreferencesSensor.m */,
+				FABCC0FA1BA7009200EE6DE0 /* CSRotationSensor.h */,
+				FABCC0FB1BA7009200EE6DE0 /* CSRotationSensor.m */,
+				FABCC0FC1BA7009200EE6DE0 /* CSScreenSensor.h */,
+				FABCC0FD1BA7009200EE6DE0 /* CSScreenSensor.m */,
+				FABCC0FE1BA7009200EE6DE0 /* CSSensor.h */,
+				FABCC0FF1BA7009200EE6DE0 /* CSSensor.m */,
+				FABCC1001BA7009200EE6DE0 /* CSSensorIdKey.h */,
+				FABCC1011BA7009200EE6DE0 /* CSSensorIdKey.m */,
+				FABCC1021BA7009200EE6DE0 /* CSSpatialProvider.h */,
+				FABCC1031BA7009200EE6DE0 /* CSSpatialProvider.m */,
+				FABCC1041BA7009200EE6DE0 /* CSStepCounterProcessorSensor.h */,
+				FABCC1051BA7009200EE6DE0 /* CSStepCounterProcessorSensor.m */,
+				FABCC1061BA7009200EE6DE0 /* CSTimeZoneSensor.h */,
+				FABCC1071BA7009200EE6DE0 /* CSTimeZoneSensor.m */,
+				FABCC1081BA7009200EE6DE0 /* CSUserProximity.h */,
+				FABCC1091BA7009200EE6DE0 /* CSUserProximity.m */,
+				FABCC10A1BA7009200EE6DE0 /* CSVisitsSensor.h */,
+				FABCC10B1BA7009200EE6DE0 /* CSVisitsSensor.m */,
 			);
 			path = sensors;
 			sourceTree = "<group>";
 		};
-		3E820DD715D40B180001A3EC /* ant+ */ = {
+		FABCC0CF1BA7009200EE6DE0 /* ant+ */ = {
 			isa = PBXGroup;
 			children = (
-				3E820DD815D40B180001A3EC /* CSAntPlusController.h */,
-				3E820DD915D40B180001A3EC /* CSAntPlusController.m */,
-				3E820DDA15D40B180001A3EC /* BloodPressureSensor.h */,
-				3E820DDB15D40B180001A3EC /* BloodPressureSensor.m */,
-				3E820DDC15D40B180001A3EC /* FootpodSensor.h */,
-				3E820DDD15D40B180001A3EC /* FootpodSensor.m */,
+				FABCC0D01BA7009200EE6DE0 /* BloodPressureSensor.h */,
+				FABCC0D11BA7009200EE6DE0 /* BloodPressureSensor.m */,
+				FABCC0D21BA7009200EE6DE0 /* CSAntPlusController.h */,
+				FABCC0D31BA7009200EE6DE0 /* CSAntPlusController.m */,
+				FABCC0D41BA7009200EE6DE0 /* FootpodSensor.h */,
+				FABCC0D51BA7009200EE6DE0 /* FootpodSensor.m */,
 			);
 			path = "ant+";
 			sourceTree = "<group>";
 		};
-		A91BACB81B8104360012331E /* DataStorageEngine */ = {
+		FABCC10C1BA7009200EE6DE0 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				A91BACB91B8107B50012331E /* DSECommonSenseProxy.h */,
-				A91BACBA1B8107B50012331E /* DSECommonSenseProxy.m */,
-				A94F3E511B839B18000CCF7A /* DSEHTTPRequestHelper.h */,
-				A94F3E521B839B18000CCF7A /* DSEHTTPRequestHelper.m */,
-				A94F3E401B831A41000CCF7A /* DSEErrors.h */,
+				FABCC10D1BA7009200EE6DE0 /* Formatting.h */,
+				FABCC10E1BA7009200EE6DE0 /* Formatting.m */,
+				FABCC10F1BA7009200EE6DE0 /* NSData+GZIP.h */,
+				FABCC1101BA7009200EE6DE0 /* NSData+GZIP.m */,
+				FABCC1111BA7009200EE6DE0 /* NSString+MD5Hash.h */,
+				FABCC1121BA7009200EE6DE0 /* NSString+MD5Hash.m */,
+				FABCC1131BA7009200EE6DE0 /* NSString+Utils.h */,
+				FABCC1141BA7009200EE6DE0 /* NSString+Utils.m */,
+				FABCC1151BA7009200EE6DE0 /* UIDevice+Hardware.h */,
+				FABCC1161BA7009200EE6DE0 /* UIDevice+Hardware.m */,
+				FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */,
+				FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */,
 			);
-			name = DataStorageEngine;
-			sourceTree = "<group>";
-		};
-		A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */ = {
-			isa = PBXGroup;
-			children = (
-				A94F3E3E1B831457000CCF7A /* DSECommonSenseProxyTest.m */,
-				A97744681B468FE20092D5FC /* CSSensePlatformTest.m */,
-				A99F99D31A5D18B100D6CB76 /* CSStorageTest.m */,
-				A9FA46301A893EBB00D3D0E4 /* CSSpatialProviderTest.h */,
-				A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */,
-				A96D6ECC1A5C49FF00554BBC /* Supporting Files */,
-			);
-			name = "Sense Library Tests";
-			path = "../Sense Library Tests";
-			sourceTree = "<group>";
-		};
-		A96D6ECC1A5C49FF00554BBC /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				A96D6ECD1A5C49FF00554BBC /* Info.plist */,
-			);
-			name = "Supporting Files";
+			path = utils;
 			sourceTree = "<group>";
 		};
 		FAC4EC871BA086BC00B24CAA /* DSESwift */ = {
@@ -677,6 +709,75 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		FABCC0891BA7003500EE6DE0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */,
+				FABCC1221BA7009200EE6DE0 /* CSSensePlatform.h in Headers */,
+				FABCC12A1BA7009200EE6DE0 /* CSSettings.h in Headers */,
+				FABCC11F1BA7009200EE6DE0 /* CSLocationPermissionProtocol.h in Headers */,
+				FABCC1261BA7009200EE6DE0 /* CSSensorRequirements.h in Headers */,
+				FABCC16D1BA7009300EE6DE0 /* CSSensor.h in Headers */,
+				FABCC1191BA7009200EE6DE0 /* CSApplicationStateChange.h in Headers */,
+				FABCC1531BA7009300EE6DE0 /* CSDynamicSensor.h in Headers */,
+				FABCC1241BA7009200EE6DE0 /* CSSensorIds.h in Headers */,
+				FA4CDBA81BA7126400DB44B1 /* CSVersion.h in Headers */,
+				FABCC1281BA7009200EE6DE0 /* CSSensorStore.h in Headers */,
+				FABCC12C1BA7009200EE6DE0 /* CSStorage.h in Headers */,
+				FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */,
+				FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */,
+				FABCC12E1BA7009200EE6DE0 /* CSUploader.h in Headers */,
+				FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */,
+				FABCC1671BA7009300EE6DE0 /* CSPreferencesSensor.h in Headers */,
+				FABCC1511BA7009300EE6DE0 /* CSConnectionSensor.h in Headers */,
+				FABCC1431BA7009200EE6DE0 /* FootpodSensor.h in Headers */,
+				FABCC14D1BA7009300EE6DE0 /* CSCallSensor.h in Headers */,
+				FABCC15D1BA7009300EE6DE0 /* CSMotionFeaturesSensor.h in Headers */,
+				FABCC16F1BA7009300EE6DE0 /* CSSensorIdKey.h in Headers */,
+				FABCC1771BA7009400EE6DE0 /* CSUserProximity.h in Headers */,
+				FABCC1551BA7009300EE6DE0 /* CSJumpSensor.h in Headers */,
+				FABCC1371BA7009200EE6DE0 /* sqlite3ext.h in Headers */,
+				FABCC1491BA7009300EE6DE0 /* CSActivityProcessorSensor.h in Headers */,
+				FABCC15F1BA7009300EE6DE0 /* CSMovingSensor.h in Headers */,
+				FABCC11D1BA7009200EE6DE0 /* CSDataStore.h in Headers */,
+				FABCC1361BA7009200EE6DE0 /* sqlite3.h in Headers */,
+				FABCC17B1BA7009400EE6DE0 /* Formatting.h in Headers */,
+				FABCC1631BA7009300EE6DE0 /* CSOrientationSensor.h in Headers */,
+				FA5DF7AD1BA717DA00FF9544 /* DSECommonSenseProxy.h in Headers */,
+				FABCC14F1BA7009300EE6DE0 /* CSCompassSensor.h in Headers */,
+				FABCC1411BA7009200EE6DE0 /* CSAntPlusController.h in Headers */,
+				FABCC13B1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h in Headers */,
+				FABCC16B1BA7009300EE6DE0 /* CSScreenSensor.h in Headers */,
+				FABCC1351BA7009200EE6DE0 /* parse.h in Headers */,
+				FABCC1341BA7009200EE6DE0 /* opcodes.h in Headers */,
+				FABCC11E1BA7009200EE6DE0 /* CSErrorDomain.h in Headers */,
+				FABCC17D1BA7009400EE6DE0 /* NSData+GZIP.h in Headers */,
+				FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */,
+				FABCC1591BA7009300EE6DE0 /* CSLocationSensor.h in Headers */,
+				FABCC13F1BA7009200EE6DE0 /* BloodPressureSensor.h in Headers */,
+				FABCC17F1BA7009400EE6DE0 /* NSString+MD5Hash.h in Headers */,
+				FABCC1791BA7009400EE6DE0 /* CSVisitsSensor.h in Headers */,
+				FABCC1731BA7009300EE6DE0 /* CSStepCounterProcessorSensor.h in Headers */,
+				FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */,
+				FABCC1451BA7009200EE6DE0 /* CSAccelerationSensor.h in Headers */,
+				FABCC1651BA7009300EE6DE0 /* CSOrientationStateSensor.h in Headers */,
+				FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */,
+				FABCC14B1BA7009300EE6DE0 /* CSBatterySensor.h in Headers */,
+				FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */,
+				FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */,
+				FABCC1331BA7009200EE6DE0 /* keywordhash.h in Headers */,
+				FABCC1831BA7009400EE6DE0 /* UIDevice+Hardware.h in Headers */,
+				FABCC1751BA7009300EE6DE0 /* CSTimeZoneSensor.h in Headers */,
+				FABCC1571BA7009300EE6DE0 /* CSLocationProvider.h in Headers */,
+				FABCC1811BA7009400EE6DE0 /* NSString+Utils.h in Headers */,
+				FABCC1691BA7009300EE6DE0 /* CSRotationSensor.h in Headers */,
+				FABCC1321BA7009200EE6DE0 /* config.h in Headers */,
+				FABCC15B1BA7009300EE6DE0 /* CSMotionEnergySensor.h in Headers */,
+				FABCC1391BA7009200EE6DE0 /* CSReachability.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FAC4EC831BA086BC00B24CAA /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -688,42 +789,41 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		3E820D6915D40AB50001A3EC /* SensePlatform */ = {
+		FABCC08B1BA7003500EE6DE0 /* SensePlatform */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3E820D7715D40AB50001A3EC /* Build configuration list for PBXNativeTarget "SensePlatform" */;
+			buildConfigurationList = FABCC09D1BA7003500EE6DE0 /* Build configuration list for PBXNativeTarget "SensePlatform" */;
 			buildPhases = (
-				3E820D6615D40AB50001A3EC /* Sources */,
-				3E820D6715D40AB50001A3EC /* Frameworks */,
-				3E4F273817033C7A0045588C /* CopyFiles */,
-				A9CDBB6F1B81C6E90028CC7D /* CopyFiles */,
-				3EBEAF441887ED21009F81C1 /* ShellScript */,
+				FABCC0871BA7003500EE6DE0 /* Sources */,
+				FABCC0881BA7003500EE6DE0 /* Frameworks */,
+				FABCC0891BA7003500EE6DE0 /* Headers */,
+				FABCC08A1BA7003500EE6DE0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */,
+				FA5DF7B31BA71D0E00FF9544 /* PBXTargetDependency */,
 			);
 			name = SensePlatform;
-			productName = "Sense platform iOS";
-			productReference = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */;
-			productType = "com.apple.product-type.library.static";
+			productName = SensePlatform;
+			productReference = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */;
+			productType = "com.apple.product-type.framework";
 		};
-		A96D6EC91A5C49FF00554BBC /* Sense Library Tests */ = {
+		FABCC0941BA7003500EE6DE0 /* SensePlatformTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "Sense Library Tests" */;
+			buildConfigurationList = FABCC0A01BA7003500EE6DE0 /* Build configuration list for PBXNativeTarget "SensePlatformTests" */;
 			buildPhases = (
-				A96D6EC61A5C49FF00554BBC /* Sources */,
-				A96D6EC71A5C49FF00554BBC /* Frameworks */,
-				A96D6EC81A5C49FF00554BBC /* Resources */,
+				FABCC0911BA7003500EE6DE0 /* Sources */,
+				FABCC0921BA7003500EE6DE0 /* Frameworks */,
+				FABCC0931BA7003500EE6DE0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */,
+				FABCC0981BA7003500EE6DE0 /* PBXTargetDependency */,
 			);
-			name = "Sense Library Tests";
-			productName = "Sense Library Tests";
-			productReference = A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */;
+			name = SensePlatformTests;
+			productName = SensePlatformTests;
+			productReference = FABCC0951BA7003500EE6DE0 /* SensePlatformTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		FAC4EC851BA086BC00B24CAA /* DSESwift */ = {
@@ -734,6 +834,7 @@
 				FAC4EC821BA086BC00B24CAA /* Frameworks */,
 				FAC4EC831BA086BC00B24CAA /* Headers */,
 				FAC4EC841BA086BC00B24CAA /* Resources */,
+				FAA6145E1BA81D6900B05FCD /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -755,6 +856,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FAAEA2B71BA81A6D00837502 /* PBXTargetDependency */,
 			);
 			name = DSESwiftTests;
 			productName = DSESwiftTests;
@@ -771,14 +873,17 @@
 				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0640;
 				TargetAttributes = {
-					A96D6EC91A5C49FF00554BBC = {
-						CreatedOnToolsVersion = 6.1.1;
-					};
 					A9DCAB711B949E5A00318E69 = {
 						CreatedOnToolsVersion = 6.4;
 					};
 					DC097FA61ABAD37600BDDD09 = {
 						CreatedOnToolsVersion = 6.2;
+					};
+					FABCC08B1BA7003500EE6DE0 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					FABCC0941BA7003500EE6DE0 = {
+						CreatedOnToolsVersion = 7.0;
 					};
 					FAC4EC851BA086BC00B24CAA = {
 						CreatedOnToolsVersion = 7.0;
@@ -800,19 +905,26 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3E820D6915D40AB50001A3EC /* SensePlatform */,
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
 				DC097FA61ABAD37600BDDD09 /* GenDocumentation */,
-				A96D6EC91A5C49FF00554BBC /* Sense Library Tests */,
 				A9DCAB711B949E5A00318E69 /* Test Coverage (Sense Lib) */,
 				FAC4EC851BA086BC00B24CAA /* DSESwift */,
 				FAC4EC8E1BA086BC00B24CAA /* DSESwiftTests */,
+				FABCC08B1BA7003500EE6DE0 /* SensePlatform */,
+				FABCC0941BA7003500EE6DE0 /* SensePlatformTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A96D6EC81A5C49FF00554BBC /* Resources */ = {
+		FABCC08A1BA7003500EE6DE0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FABCC0931BA7003500EE6DE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -823,6 +935,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAA6146B1BA8227E00B05FCD /* Realm.framework in Resources */,
+				FAA6146C1BA8227E00B05FCD /* RealmSwift.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,19 +950,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3EBEAF441887ED21009F81C1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "git=/usr/local/git/bin/git\nversion=`git describe --tags --dirty`\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" > CSVersion.h";
-		};
 		3EBEAF511887FAE9009F81C1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -891,71 +992,72 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3E820D6615D40AB50001A3EC /* Sources */ = {
+		FABCC0871BA7003500EE6DE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A94F3E4E1B832835000CCF7A /* NSData+GZIP.m in Sources */,
-				3E820E0615D40B190001A3EC /* CSApplicationStateChange.m in Sources */,
-				3E513F5D18FC18150008415A /* CSUploader.m in Sources */,
-				3E820E0F15D40B190001A3EC /* NSNotificationCenter+MainThread.m in Sources */,
-				3E74DBA7193C8AF100E471A9 /* CSActivityProcessorSensor.m in Sources */,
-				3E820E1115D40B190001A3EC /* CSReachability.m in Sources */,
-				3E820E1215D40B190001A3EC /* CSSensePlatform.m in Sources */,
-				3E7F33A41A13AA9100957AE2 /* CSTimeZoneSensor.m in Sources */,
-				3E820E1315D40B190001A3EC /* CSSensorIds.m in Sources */,
-				3E820E1715D40B190001A3EC /* CSAccelerationSensor.m in Sources */,
-				3E820E1915D40B190001A3EC /* CSAccelerometerSensor.m in Sources */,
-				3E820E1B15D40B190001A3EC /* CSAntPlusController.m in Sources */,
-				3E820E1D15D40B190001A3EC /* BloodPressureSensor.m in Sources */,
-				3E820E1F15D40B190001A3EC /* FootpodSensor.m in Sources */,
-				3E820E2115D40B190001A3EC /* CSBatterySensor.m in Sources */,
-				3E513F4E18F7D7CF0008415A /* CSStorage.m in Sources */,
-				3E820E2315D40B190001A3EC /* CSCallSensor.m in Sources */,
-				3EE091ED18FD597300A04ED4 /* CSSensorIdKey.m in Sources */,
-				3E820E2515D40B190001A3EC /* CSCompassSensor.m in Sources */,
-				3E820E2715D40B190001A3EC /* CSConnectionSensor.m in Sources */,
-				3E820E2915D40B190001A3EC /* CSDynamicSensor.m in Sources */,
-				3E820E2B15D40B190001A3EC /* CSJumpSensor.m in Sources */,
-				3E820E2D15D40B190001A3EC /* CSLocationProvider.m in Sources */,
-				3E820E3115D40B190001A3EC /* CSMotionEnergySensor.m in Sources */,
-				3E820E3315D40B190001A3EC /* CSMotionFeaturesSensor.m in Sources */,
-				3E820E3515D40B190001A3EC /* CSMovingSensor.m in Sources */,
-				3E820E3715D40B190001A3EC /* CSNoiseSensor.m in Sources */,
-				A94F3E561B839F17000CCF7A /* NSString+Utils.m in Sources */,
-				3E820E3915D40B190001A3EC /* CSOrientationSensor.m in Sources */,
-				3E820E3B15D40B190001A3EC /* CSOrientationStateSensor.m in Sources */,
-				3E820E3D15D40B190001A3EC /* CSPreferencesSensor.m in Sources */,
-				A9902AB71A9F594500FCB951 /* CSVisitsSensor.m in Sources */,
-				A9902AB41A9F591A00FCB951 /* CSLocationSensor.m in Sources */,
-				A94F3E491B83281F000CCF7A /* CSSender.m in Sources */,
-				3E820E3F15D40B190001A3EC /* CSRotationSensor.m in Sources */,
-				3E820E4015D40B190001A3EC /* CSSensor.m in Sources */,
-				A94F3E4F1B832835000CCF7A /* NSString+MD5Hash.m in Sources */,
-				3E820E4215D40B190001A3EC /* CSSpatialProvider.m in Sources */,
-				A91BACBB1B8107B50012331E /* DSECommonSenseProxy.m in Sources */,
-				FFC80BE6183CCF5900E3EF27 /* CSScreenSensor.m in Sources */,
-				3E820E4415D40B190001A3EC /* CSUserProximity.m in Sources */,
-				A94F3E531B839B18000CCF7A /* DSEHTTPRequestHelper.m in Sources */,
-				3E820E4615D40B190001A3EC /* CSSensorStore.m in Sources */,
-				3E513F5318F81D2C0008415A /* CSDataPoint.m in Sources */,
-				3E820E4715D40B190001A3EC /* CSSettings.m in Sources */,
-				3E59ACBE15F4DB9D00C07D59 /* UIDevice+IdentifierAddition.m in Sources */,
-				3E11261B16A7086400805102 /* UIDevice+Hardware.m in Sources */,
-				3E74DBAA193CC9AB00E471A9 /* CSStepCounterProcessorSensor.m in Sources */,
-				3E4F28BB170DB4750045588C /* Formatting.m in Sources */,
-				3E836CD3171C4BB900D7494C /* CSSensorRequirements.m in Sources */,
+				FABCC11A1BA7009200EE6DE0 /* CSApplicationStateChange.m in Sources */,
+				FABCC12F1BA7009200EE6DE0 /* CSUploader.m in Sources */,
+				FABCC1801BA7009400EE6DE0 /* NSString+MD5Hash.m in Sources */,
+				FABCC13C1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m in Sources */,
+				FABCC1211BA7009200EE6DE0 /* CSSender.m in Sources */,
+				FABCC1291BA7009200EE6DE0 /* CSSensorStore.m in Sources */,
+				FABCC1701BA7009300EE6DE0 /* CSSensorIdKey.m in Sources */,
+				FABCC1231BA7009200EE6DE0 /* CSSensePlatform.m in Sources */,
+				FABCC11C1BA7009200EE6DE0 /* CSDataPoint.m in Sources */,
+				FABCC1761BA7009400EE6DE0 /* CSTimeZoneSensor.m in Sources */,
+				FABCC13A1BA7009200EE6DE0 /* CSReachability.m in Sources */,
+				FABCC17E1BA7009400EE6DE0 /* NSData+GZIP.m in Sources */,
+				FABCC16E1BA7009300EE6DE0 /* CSSensor.m in Sources */,
+				FABCC16A1BA7009300EE6DE0 /* CSRotationSensor.m in Sources */,
+				FABCC17C1BA7009400EE6DE0 /* Formatting.m in Sources */,
+				FABCC14E1BA7009300EE6DE0 /* CSCallSensor.m in Sources */,
+				FABCC1661BA7009300EE6DE0 /* CSOrientationStateSensor.m in Sources */,
+				FABCC1781BA7009400EE6DE0 /* CSUserProximity.m in Sources */,
+				FABCC1461BA7009200EE6DE0 /* CSAccelerationSensor.m in Sources */,
+				FABCC15A1BA7009300EE6DE0 /* CSLocationSensor.m in Sources */,
+				FABCC1721BA7009300EE6DE0 /* CSSpatialProvider.m in Sources */,
+				FABCC16C1BA7009300EE6DE0 /* CSScreenSensor.m in Sources */,
+				FABCC15C1BA7009300EE6DE0 /* CSMotionEnergySensor.m in Sources */,
+				FABCC14C1BA7009300EE6DE0 /* CSBatterySensor.m in Sources */,
+				FA5DF7B11BA717DA00FF9544 /* DSEHTTPRequestHelper.m in Sources */,
+				FABCC1841BA7009400EE6DE0 /* UIDevice+Hardware.m in Sources */,
+				FABCC14A1BA7009300EE6DE0 /* CSActivityProcessorSensor.m in Sources */,
+				FABCC1641BA7009300EE6DE0 /* CSOrientationSensor.m in Sources */,
+				FA5DF7AE1BA717DA00FF9544 /* DSECommonSenseProxy.m in Sources */,
+				FABCC1821BA7009400EE6DE0 /* NSString+Utils.m in Sources */,
+				FABCC1581BA7009300EE6DE0 /* CSLocationProvider.m in Sources */,
+				FABCC1621BA7009300EE6DE0 /* CSNoiseSensor.m in Sources */,
+				FABCC1401BA7009200EE6DE0 /* BloodPressureSensor.m in Sources */,
+				FABCC1561BA7009300EE6DE0 /* CSJumpSensor.m in Sources */,
+				FABCC12B1BA7009200EE6DE0 /* CSSettings.m in Sources */,
+				FABCC1601BA7009300EE6DE0 /* CSMovingSensor.m in Sources */,
+				FABCC15E1BA7009300EE6DE0 /* CSMotionFeaturesSensor.m in Sources */,
+				FABCC1741BA7009300EE6DE0 /* CSStepCounterProcessorSensor.m in Sources */,
+				FABCC12D1BA7009200EE6DE0 /* CSStorage.m in Sources */,
+				FABCC1251BA7009200EE6DE0 /* CSSensorIds.m in Sources */,
+				FABCC1681BA7009300EE6DE0 /* CSPreferencesSensor.m in Sources */,
+				FABCC1541BA7009300EE6DE0 /* CSDynamicSensor.m in Sources */,
+				FABCC1481BA7009200EE6DE0 /* CSAccelerometerSensor.m in Sources */,
+				FABCC17A1BA7009400EE6DE0 /* CSVisitsSensor.m in Sources */,
+				FABCC1421BA7009200EE6DE0 /* CSAntPlusController.m in Sources */,
+				FABCC1501BA7009300EE6DE0 /* CSCompassSensor.m in Sources */,
+				FABCC1441BA7009200EE6DE0 /* FootpodSensor.m in Sources */,
+				FABCC1861BA7009400EE6DE0 /* UIDevice+IdentifierAddition.m in Sources */,
+				FABCC1521BA7009300EE6DE0 /* CSConnectionSensor.m in Sources */,
+				FABCC1271BA7009200EE6DE0 /* CSSensorRequirements.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A96D6EC61A5C49FF00554BBC /* Sources */ = {
+		FABCC0911BA7003500EE6DE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A99F99D41A5D18B100D6CB76 /* CSStorageTest.m in Sources */,
-				A9FA46321A893EBB00D3D0E4 /* CSSpatialProviderTest.m in Sources */,
-				A97744691B468FE20092D5FC /* CSSensePlatformTest.m in Sources */,
-				A94F3E3F1B831457000CCF7A /* DSECommonSenseProxyTest.m in Sources */,
+				FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */,
+				FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */,
+				FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */,
+				FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */,
+				FA5DF7A31BA716F700FF9544 /* CSSensePlatformTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -986,15 +1088,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3EBEAF561887FBD4009F81C1 /* PBXTargetDependency */ = {
+		FA5DF7B31BA71D0E00FF9544 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3EBEAF4D1887FADE009F81C1 /* GenVersion */;
-			targetProxy = 3EBEAF551887FBD4009F81C1 /* PBXContainerItemProxy */;
+			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
+			targetProxy = FA5DF7B21BA71D0E00FF9544 /* PBXContainerItemProxy */;
 		};
-		A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */ = {
+		FAAEA2B71BA81A6D00837502 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3E820D6915D40AB50001A3EC /* SensePlatform */;
-			targetProxy = A96D6ED11A5C49FF00554BBC /* PBXContainerItemProxy */;
+			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
+			targetProxy = FAAEA2B61BA81A6D00837502 /* PBXContainerItemProxy */;
+		};
+		FABCC0981BA7003500EE6DE0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FABCC08B1BA7003500EE6DE0 /* SensePlatform */;
+			targetProxy = FABCC0971BA7003500EE6DE0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1083,89 +1190,6 @@
 			};
 			name = Release;
 		};
-		3E820D7815D40AB50001A3EC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
-				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libraries",
-				);
-				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/yulrizka/Desktop,
-					"$(PROJECT_DIR)/libraries/sqlcipher",
-				);
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-ObjC",
-					"-DSQLITE_HAS_CODEC",
-					"-force_load",
-				);
-				PRODUCT_NAME = SensePlatform;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "SensePlatform-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
-			};
-			name = Debug;
-		};
-		3E820D7915D40AB50001A3EC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
-				DEFINES_MODULE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libraries",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SensePlatform-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/yulrizka/Desktop,
-					"$(PROJECT_DIR)/libraries/sqlcipher",
-				);
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-ObjC",
-					"-DSQLITE_HAS_CODEC",
-					"-force_load",
-				);
-				PRODUCT_NAME = SensePlatform;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "SensePlatform-Bridging-Header.h";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
-			};
-			name = Release;
-		};
 		3EBEAF4F1887FADE009F81C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1179,86 +1203,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		A96D6ED41A5C49FF00554BBC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = mh_bundle;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-					"$(inherited)",
-					"-framework",
-					XCTest,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-			};
-			name = Debug;
-		};
-		A96D6ED51A5C49FF00554BBC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				COPY_PHASE_STRIP = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = mh_bundle;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-					"$(inherited)",
-					"-framework",
-					XCTest,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 			};
 			name = Release;
 		};
@@ -1290,7 +1234,7 @@
 			};
 			name = Release;
 		};
-		FAC4EC981BA086BC00B24CAA /* Debug */ = {
+		FABCC09E1BA7003500EE6DE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1307,13 +1251,146 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SensePlatform/libraries",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = SensePlatform/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SensePlatform/libraries/sqlcipher",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatform;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FABCC09F1BA7003500EE6DE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SensePlatform/libraries",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = SensePlatform/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SensePlatform/libraries/sqlcipher",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatform;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FABCC0A11BA7003500EE6DE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = SensePlatformTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatformTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FABCC0A21BA7003500EE6DE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = SensePlatformTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatformTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		FAC4EC981BA086BC00B24CAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DSESwift/libraries",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1334,6 +1411,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1341,14 +1419,18 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DSESwift/libraries",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1371,12 +1453,15 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DSESwift/libraries",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwiftTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/libraries";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1396,12 +1481,15 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DSESwift/libraries",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwiftTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/libraries";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1420,29 +1508,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3E820D7715D40AB50001A3EC /* Build configuration list for PBXNativeTarget "SensePlatform" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3E820D7815D40AB50001A3EC /* Debug */,
-				3E820D7915D40AB50001A3EC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		3EBEAF4E1887FADE009F81C1 /* Build configuration list for PBXAggregateTarget "GenVersion" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3EBEAF4F1887FADE009F81C1 /* Debug */,
 				3EBEAF501887FADE009F81C1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "Sense Library Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A96D6ED41A5C49FF00554BBC /* Debug */,
-				A96D6ED51A5C49FF00554BBC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1461,6 +1531,24 @@
 			buildConfigurations = (
 				DC097FA71ABAD37600BDDD09 /* Debug */,
 				DC097FA81ABAD37600BDDD09 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FABCC09D1BA7003500EE6DE0 /* Build configuration list for PBXNativeTarget "SensePlatform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FABCC09E1BA7003500EE6DE0 /* Debug */,
+				FABCC09F1BA7003500EE6DE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FABCC0A01BA7003500EE6DE0 /* Build configuration list for PBXNativeTarget "SensePlatformTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FABCC0A11BA7003500EE6DE0 /* Debug */,
+				FABCC0A21BA7003500EE6DE0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
