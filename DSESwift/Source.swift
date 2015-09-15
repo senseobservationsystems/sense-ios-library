@@ -1,5 +1,5 @@
 //
-//  DSESource.swift
+//  Source.swift
 //  SensePlatform
 //
 //  Created by Tatsuya Kaneko on 11/09/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DSESource{
+class Source{
     dynamic var id = ""
     dynamic var name = ""
     dynamic var meta = ""

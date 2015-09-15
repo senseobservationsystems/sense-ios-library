@@ -16,10 +16,11 @@ class RLMSensor: Object{
     dynamic var cs_upload_enabled = true
     dynamic var cs_download_enabled = true
     dynamic var persist_locally = true
-    dynamic var user : RLMUser!
-    dynamic var source : RLMSource!
+    dynamic var userId = ""
+    dynamic var sourceId = ""
     dynamic var data_type = ""
     dynamic var cs_id = ""
+    dynamic var synced = false
 
     override static func primaryKey() -> String? {
         return "id"

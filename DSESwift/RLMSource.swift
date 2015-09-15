@@ -15,6 +15,7 @@ class RLMSource: Object{
     dynamic var meta = ""
     dynamic var uuid = ""
     dynamic var cs_id = ""
+    dynamic var synced = false
 
     override static func primaryKey() -> String? {
         return "id"
