@@ -71,8 +71,12 @@
 		FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */; settings = {ASSET_TAGS = (); }; };
 		FA5DF7B11BA717DA00FF9544 /* DSEHTTPRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */; settings = {ASSET_TAGS = (); }; };
 		FA5DF7B41BA71D4C00FF9544 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
-		FA5DF7BB1BA71F7A00FF9544 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5DF7B71BA71F4800FF9544 /* Realm.framework */; };
-		FA5DF7BC1BA71F7A00FF9544 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5DF7B81BA71F4800FF9544 /* RealmSwift.framework */; };
+		FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
+		FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
+		FAA614691BA8227400B05FCD /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FAA6146A1BA8227400B05FCD /* RealmSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FAA6146B1BA8227E00B05FCD /* Realm.framework in Resources */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; };
+		FAA6146C1BA8227E00B05FCD /* RealmSwift.framework in Resources */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; };
 		FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC0961BA7003500EE6DE0 /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; settings = {ASSET_TAGS = (); }; };
 		FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */; };
@@ -185,12 +189,17 @@
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAC4EC951BA086BC00B24CAA /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
 		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; settings = {ASSET_TAGS = (); }; };
-		FAF4831A1BA724DE0080FB04 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF483181BA724D40080FB04 /* Realm.framework */; };
-		FAF4831B1BA724DE0080FB04 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF483191BA724D40080FB04 /* RealmSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		FA5DF7B21BA71D0E00FF9544 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
+			remoteInfo = DSESwift;
+		};
+		FAAEA2B61BA81A6D00837502 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
 			proxyType = 1;
@@ -205,6 +214,20 @@
 			remoteInfo = SensePlatform;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FAA6145E1BA81D6900B05FCD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				FAA614691BA8227400B05FCD /* Realm.framework in CopyFiles */,
+				FAA6146A1BA8227400B05FCD /* RealmSwift.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEDatabaseHandler.swift; sourceTree = "<group>"; };
@@ -241,8 +264,8 @@
 		FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSEErrors.h; sourceTree = "<group>"; };
 		FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSEHTTPRequestHelper.h; sourceTree = "<group>"; };
 		FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSEHTTPRequestHelper.m; sourceTree = "<group>"; };
-		FA5DF7B71BA71F4800FF9544 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = DSESwift/libraries/Realm.framework; sourceTree = "<group>"; };
-		FA5DF7B81BA71F4800FF9544 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = DSESwift/libraries/RealmSwift.framework; sourceTree = "<group>"; };
+		FAA614651BA8225E00B05FCD /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = DSESwift/libraries/Realm.framework; sourceTree = "<group>"; };
+		FAA614661BA8225E00B05FCD /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = DSESwift/libraries/RealmSwift.framework; sourceTree = "<group>"; };
 		FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SensePlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensePlatform.h; sourceTree = "<group>"; };
 		FABCC0901BA7003500EE6DE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -355,8 +378,6 @@
 		FABCC1161BA7009200EE6DE0 /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
-		FABCC1881BA700DF00EE6DE0 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
-		FABCC1891BA700DF00EE6DE0 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
 		FAC4EC861BA086BC00B24CAA /* DSESwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DSESwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC4EC881BA086BC00B24CAA /* DSESwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSESwift.h; sourceTree = "<group>"; };
 		FAC4EC8A1BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -364,8 +385,6 @@
 		FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftTests.swift; sourceTree = "<group>"; };
 		FAC4EC961BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAC4ECA71BA0873000B24CAA /* communication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = communication.swift; sourceTree = "<group>"; };
-		FAF483181BA724D40080FB04 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
-		FAF483191BA724D40080FB04 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,8 +417,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA5DF7BB1BA71F7A00FF9544 /* Realm.framework in Frameworks */,
-				FA5DF7BC1BA71F7A00FF9544 /* RealmSwift.framework in Frameworks */,
+				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
+				FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,8 +426,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAF4831A1BA724DE0080FB04 /* Realm.framework in Frameworks */,
-				FAF4831B1BA724DE0080FB04 /* RealmSwift.framework in Frameworks */,
 				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,9 +459,8 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FAF483171BA724D40080FB04 /* libraries */,
-				FA5DF7B71BA71F4800FF9544 /* Realm.framework */,
-				FA5DF7B81BA71F4800FF9544 /* RealmSwift.framework */,
+				FAA614651BA8225E00B05FCD /* Realm.framework */,
+				FAA614661BA8225E00B05FCD /* RealmSwift.framework */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,
 				3E148BCC160A18130010A0D1 /* CFNetwork.framework */,
 				3E148BCA160A180F0010A0D1 /* CoreMedia.framework */,
@@ -663,19 +679,9 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
-		FABCC1871BA700DF00EE6DE0 /* libraries */ = {
-			isa = PBXGroup;
-			children = (
-				FABCC1881BA700DF00EE6DE0 /* Realm.framework */,
-				FABCC1891BA700DF00EE6DE0 /* RealmSwift.framework */,
-			);
-			path = libraries;
-			sourceTree = "<group>";
-		};
 		FAC4EC871BA086BC00B24CAA /* DSESwift */ = {
 			isa = PBXGroup;
 			children = (
-				FABCC1871BA700DF00EE6DE0 /* libraries */,
 				27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */,
 				27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
@@ -698,16 +704,6 @@
 				FAC4EC961BA086BC00B24CAA /* Info.plist */,
 			);
 			path = DSESwiftTests;
-			sourceTree = "<group>";
-		};
-		FAF483171BA724D40080FB04 /* libraries */ = {
-			isa = PBXGroup;
-			children = (
-				FAF483181BA724D40080FB04 /* Realm.framework */,
-				FAF483191BA724D40080FB04 /* RealmSwift.framework */,
-			);
-			name = libraries;
-			path = DSESwift/libraries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -838,6 +834,7 @@
 				FAC4EC821BA086BC00B24CAA /* Frameworks */,
 				FAC4EC831BA086BC00B24CAA /* Headers */,
 				FAC4EC841BA086BC00B24CAA /* Resources */,
+				FAA6145E1BA81D6900B05FCD /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -859,6 +856,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FAAEA2B71BA81A6D00837502 /* PBXTargetDependency */,
 			);
 			name = DSESwiftTests;
 			productName = DSESwiftTests;
@@ -937,6 +935,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAA6146B1BA8227E00B05FCD /* Realm.framework in Resources */,
+				FAA6146C1BA8227E00B05FCD /* RealmSwift.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1092,6 +1092,11 @@
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
 			targetProxy = FA5DF7B21BA71D0E00FF9544 /* PBXContainerItemProxy */;
+		};
+		FAAEA2B71BA81A6D00837502 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
+			targetProxy = FAAEA2B61BA81A6D00837502 /* PBXContainerItemProxy */;
 		};
 		FABCC0981BA7003500EE6DE0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1366,6 +1371,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1384,7 +1390,7 @@
 				INFOPLIST_FILE = DSESwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1405,6 +1411,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1423,7 +1430,7 @@
 				INFOPLIST_FILE = DSESwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1454,7 +1461,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwiftTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1482,7 +1489,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = DSESwiftTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
