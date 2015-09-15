@@ -31,16 +31,22 @@ class DSESwiftTests: XCTestCase {
     func testCreateSensor() {
         let dbHandler = DSEDatabaseHandler()
         let sensorOptions = DSESensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
-        dbHandler.createSensor("test", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
-        
-        var sensors = [DSESensor]()
-        sensors = dbHandler.getSensors("1")
-        XCTAssertEqual(sensors.count, 1)
-        
-        dbHandler.createSensor("test2", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
-        
-        sensors = dbHandler.getSensors("1")
-        XCTAssertEqual(sensors.count, 2)
+        do{
+            dbHandler.createSources("unitTestDevice", uuid: "uuiduuid")
+            
+            try dbHandler.createSensor("test", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
+            
+            var sensors = [DSESensor]()
+            sensors = dbHandler.getSensors("1")
+            XCTAssertEqual(sensors.count, 1)
+            
+            try dbHandler.createSensor("test2", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
+            
+            sensors = dbHandler.getSensors("1")
+            XCTAssertEqual(sensors.count, 2)
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
     }
 
     

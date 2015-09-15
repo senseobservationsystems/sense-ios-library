@@ -16,8 +16,8 @@ class RLMSensor: Object{
     dynamic var cs_upload_enabled = true
     dynamic var cs_download_enabled = true
     dynamic var persist_locally = true
-    dynamic var user : RLMUser?
-    dynamic var source : RLMSource?
+    dynamic var user : RLMUser!
+    dynamic var source : RLMSource!
     dynamic var data_type = ""
     dynamic var cs_id = ""
 
