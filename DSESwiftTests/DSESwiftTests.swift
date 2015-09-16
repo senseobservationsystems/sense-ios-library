@@ -26,6 +26,8 @@ class DSESwiftTests: XCTestCase {
     }
     
     func testExample() {
+        var a = blaat();
+        a.useSense();
         XCTAssert(true, "Pass")
     }
     

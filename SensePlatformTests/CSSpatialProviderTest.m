@@ -7,7 +7,7 @@
 //
 
 #import "CSSpatialProviderTest.h"
-#import "CSSpatialProvider.h"
+#import <SensePlatform/CSSpatialProvider.h>
 
 @implementation CSSpatialProviderTest
 

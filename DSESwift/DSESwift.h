@@ -15,5 +15,3 @@ FOUNDATION_EXPORT double DSESwiftVersionNumber;
 FOUNDATION_EXPORT const unsigned char DSESwiftVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <DSESwift/PublicHeader.h>
-
-

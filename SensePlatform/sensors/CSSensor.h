@@ -14,6 +14,10 @@
  * Author: Pim Nijdam (pim@sense-os.nl)
  */
 #pragma once
+#ifndef CSSENSOR_H_IMPORTED
+#define CSSENSOR_H_IMPORTED
+
+
 #import <Foundation/Foundation.h>
 #import "CSSensorIds.h"
 
@@ -63,3 +67,5 @@
 ///extract sensor device uuid from the sensor id
 + (NSString*) sensorDeviceUUIDFromSensorId:(NSString*) sensorId;
 @end
+
+#endif /* CSSENSOR_H_IMPORTED */

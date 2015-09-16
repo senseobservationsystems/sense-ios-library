@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "DSEHTTPRequestHelper.h"
-#import "DSECommonSenseProxy.h"
-#import "CSSensePlatform.h"
-#import "CSSensorStore.h"
-#import "NSData+GZIP.h"
-#import "NSString+MD5Hash.h"
-#import "UIDevice+Hardware.h"
+#import <SensePlatform/DSEHTTPRequestHelper.h>
+#import <SensePlatform/DSEHTTPRequestHelper.h>
+#import <SensePlatform/DSECommonSenseProxy.h>
+#import <SensePlatform/CSSensePlatform.h>
+#import <SensePlatform/CSSensorStore.h>
+#import <SensePlatform/NSData+GZIP.h>
+#import <SensePlatform/NSString+MD5Hash.h>
+#import <SensePlatform/UIDevice+Hardware.h>
 
 #import <DSESwift/DSESwift-Swift.h>
 

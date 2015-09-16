@@ -65,12 +65,13 @@
 		FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */; settings = {ASSET_TAGS = (); }; };
 		FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */; settings = {ASSET_TAGS = (); }; };
 		FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */; settings = {ASSET_TAGS = (); }; };
-		FA5DF7AD1BA717DA00FF9544 /* DSECommonSenseProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7AD1BA717DA00FF9544 /* DSECommonSenseProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FA5DF7AE1BA717DA00FF9544 /* DSECommonSenseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */; settings = {ASSET_TAGS = (); }; };
-		FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */; settings = {ASSET_TAGS = (); }; };
-		FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */; settings = {ASSET_TAGS = (); }; };
+		FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FA5DF7B11BA717DA00FF9544 /* DSEHTTPRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */; settings = {ASSET_TAGS = (); }; };
-		FA5DF7B41BA71D4C00FF9544 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		FA66C29F1BA86E1500281B6F /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		FA66C2A21BA86E9E00281B6F /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; };
 		FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
 		FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
 		FAA614691BA8227400B05FCD /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -78,16 +79,15 @@
 		FAA6146B1BA8227E00B05FCD /* Realm.framework in Resources */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; };
 		FAA6146C1BA8227E00B05FCD /* RealmSwift.framework in Resources */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; };
 		FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FABCC0961BA7003500EE6DE0 /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; settings = {ASSET_TAGS = (); }; };
 		FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */; };
 		FABCC1191BA7009200EE6DE0 /* CSApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A31BA7009200EE6DE0 /* CSApplicationStateChange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC11A1BA7009200EE6DE0 /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC11C1BA7009200EE6DE0 /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC11D1BA7009200EE6DE0 /* CSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */; settings = {ASSET_TAGS = (); }; };
-		FABCC11E1BA7009200EE6DE0 /* CSErrorDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC11D1BA7009200EE6DE0 /* CSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC11E1BA7009200EE6DE0 /* CSErrorDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC11F1BA7009200EE6DE0 /* CSLocationPermissionProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AA1BA7009200EE6DE0 /* CSSender.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AA1BA7009200EE6DE0 /* CSSender.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1211BA7009200EE6DE0 /* CSSender.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0AB1BA7009200EE6DE0 /* CSSender.m */; settings = {ASSET_TAGS = (); }; };
 		FABCC1221BA7009200EE6DE0 /* CSSensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AC1BA7009200EE6DE0 /* CSSensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC1231BA7009200EE6DE0 /* CSSensePlatform.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0AD1BA7009200EE6DE0 /* CSSensePlatform.m */; settings = {ASSET_TAGS = (); }; };
@@ -101,98 +101,100 @@
 		FABCC12B1BA7009200EE6DE0 /* CSSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B51BA7009200EE6DE0 /* CSSettings.m */; settings = {ASSET_TAGS = (); }; };
 		FABCC12C1BA7009200EE6DE0 /* CSStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B61BA7009200EE6DE0 /* CSStorage.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC12D1BA7009200EE6DE0 /* CSStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B71BA7009200EE6DE0 /* CSStorage.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC12E1BA7009200EE6DE0 /* CSUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B81BA7009200EE6DE0 /* CSUploader.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC12E1BA7009200EE6DE0 /* CSUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0B81BA7009200EE6DE0 /* CSUploader.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC12F1BA7009200EE6DE0 /* CSUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0B91BA7009200EE6DE0 /* CSUploader.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1321BA7009200EE6DE0 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0BF1BA7009200EE6DE0 /* config.h */; settings = {ASSET_TAGS = (); }; };
-		FABCC1331BA7009200EE6DE0 /* keywordhash.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C01BA7009200EE6DE0 /* keywordhash.h */; settings = {ASSET_TAGS = (); }; };
-		FABCC1341BA7009200EE6DE0 /* opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C11BA7009200EE6DE0 /* opcodes.h */; settings = {ASSET_TAGS = (); }; };
-		FABCC1351BA7009200EE6DE0 /* parse.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C21BA7009200EE6DE0 /* parse.h */; settings = {ASSET_TAGS = (); }; };
-		FABCC1361BA7009200EE6DE0 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C31BA7009200EE6DE0 /* sqlite3.h */; settings = {ASSET_TAGS = (); }; };
-		FABCC1371BA7009200EE6DE0 /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C41BA7009200EE6DE0 /* sqlite3ext.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1321BA7009200EE6DE0 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0BF1BA7009200EE6DE0 /* config.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC1331BA7009200EE6DE0 /* keywordhash.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C01BA7009200EE6DE0 /* keywordhash.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC1341BA7009200EE6DE0 /* opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C11BA7009200EE6DE0 /* opcodes.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC1351BA7009200EE6DE0 /* parse.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C21BA7009200EE6DE0 /* parse.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC1361BA7009200EE6DE0 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C31BA7009200EE6DE0 /* sqlite3.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		FABCC1371BA7009200EE6DE0 /* sqlite3ext.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C41BA7009200EE6DE0 /* sqlite3ext.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1381BA7009200EE6DE0 /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC0C51BA7009200EE6DE0 /* libsqlcipher */; settings = {ASSET_TAGS = (); }; };
-		FABCC1391BA7009200EE6DE0 /* CSReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C71BA7009200EE6DE0 /* CSReachability.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1391BA7009200EE6DE0 /* CSReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C71BA7009200EE6DE0 /* CSReachability.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC13A1BA7009200EE6DE0 /* CSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0C81BA7009200EE6DE0 /* CSReachability.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC13B1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C91BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC13B1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0C91BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC13C1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0CA1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC13F1BA7009200EE6DE0 /* BloodPressureSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D01BA7009200EE6DE0 /* BloodPressureSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC13F1BA7009200EE6DE0 /* BloodPressureSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D01BA7009200EE6DE0 /* BloodPressureSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1401BA7009200EE6DE0 /* BloodPressureSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D11BA7009200EE6DE0 /* BloodPressureSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1411BA7009200EE6DE0 /* CSAntPlusController.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D21BA7009200EE6DE0 /* CSAntPlusController.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1411BA7009200EE6DE0 /* CSAntPlusController.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D21BA7009200EE6DE0 /* CSAntPlusController.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1421BA7009200EE6DE0 /* CSAntPlusController.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D31BA7009200EE6DE0 /* CSAntPlusController.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1431BA7009200EE6DE0 /* FootpodSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D41BA7009200EE6DE0 /* FootpodSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1431BA7009200EE6DE0 /* FootpodSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D41BA7009200EE6DE0 /* FootpodSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1441BA7009200EE6DE0 /* FootpodSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D51BA7009200EE6DE0 /* FootpodSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1451BA7009200EE6DE0 /* CSAccelerationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D61BA7009200EE6DE0 /* CSAccelerationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1451BA7009200EE6DE0 /* CSAccelerationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D61BA7009200EE6DE0 /* CSAccelerationSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1461BA7009200EE6DE0 /* CSAccelerationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D71BA7009200EE6DE0 /* CSAccelerationSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D81BA7009200EE6DE0 /* CSAccelerometerSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0D81BA7009200EE6DE0 /* CSAccelerometerSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1481BA7009200EE6DE0 /* CSAccelerometerSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0D91BA7009200EE6DE0 /* CSAccelerometerSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1491BA7009300EE6DE0 /* CSActivityProcessorSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DA1BA7009200EE6DE0 /* CSActivityProcessorSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1491BA7009300EE6DE0 /* CSActivityProcessorSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DA1BA7009200EE6DE0 /* CSActivityProcessorSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC14A1BA7009300EE6DE0 /* CSActivityProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0DB1BA7009200EE6DE0 /* CSActivityProcessorSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC14B1BA7009300EE6DE0 /* CSBatterySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DC1BA7009200EE6DE0 /* CSBatterySensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC14B1BA7009300EE6DE0 /* CSBatterySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DC1BA7009200EE6DE0 /* CSBatterySensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC14C1BA7009300EE6DE0 /* CSBatterySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0DD1BA7009200EE6DE0 /* CSBatterySensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC14D1BA7009300EE6DE0 /* CSCallSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DE1BA7009200EE6DE0 /* CSCallSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC14D1BA7009300EE6DE0 /* CSCallSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0DE1BA7009200EE6DE0 /* CSCallSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC14E1BA7009300EE6DE0 /* CSCallSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0DF1BA7009200EE6DE0 /* CSCallSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC14F1BA7009300EE6DE0 /* CSCompassSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E01BA7009200EE6DE0 /* CSCompassSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC14F1BA7009300EE6DE0 /* CSCompassSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E01BA7009200EE6DE0 /* CSCompassSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1501BA7009300EE6DE0 /* CSCompassSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E11BA7009200EE6DE0 /* CSCompassSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1511BA7009300EE6DE0 /* CSConnectionSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E21BA7009200EE6DE0 /* CSConnectionSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1511BA7009300EE6DE0 /* CSConnectionSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E21BA7009200EE6DE0 /* CSConnectionSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1521BA7009300EE6DE0 /* CSConnectionSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E31BA7009200EE6DE0 /* CSConnectionSensor.m */; settings = {ASSET_TAGS = (); }; };
 		FABCC1531BA7009300EE6DE0 /* CSDynamicSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E41BA7009200EE6DE0 /* CSDynamicSensor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC1541BA7009300EE6DE0 /* CSDynamicSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E51BA7009200EE6DE0 /* CSDynamicSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1551BA7009300EE6DE0 /* CSJumpSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E61BA7009200EE6DE0 /* CSJumpSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1551BA7009300EE6DE0 /* CSJumpSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E61BA7009200EE6DE0 /* CSJumpSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1561BA7009300EE6DE0 /* CSJumpSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E71BA7009200EE6DE0 /* CSJumpSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1571BA7009300EE6DE0 /* CSLocationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E81BA7009200EE6DE0 /* CSLocationProvider.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1571BA7009300EE6DE0 /* CSLocationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0E81BA7009200EE6DE0 /* CSLocationProvider.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1581BA7009300EE6DE0 /* CSLocationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0E91BA7009200EE6DE0 /* CSLocationProvider.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1591BA7009300EE6DE0 /* CSLocationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EA1BA7009200EE6DE0 /* CSLocationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1591BA7009300EE6DE0 /* CSLocationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EA1BA7009200EE6DE0 /* CSLocationSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC15A1BA7009300EE6DE0 /* CSLocationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0EB1BA7009200EE6DE0 /* CSLocationSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC15B1BA7009300EE6DE0 /* CSMotionEnergySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EC1BA7009200EE6DE0 /* CSMotionEnergySensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC15B1BA7009300EE6DE0 /* CSMotionEnergySensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EC1BA7009200EE6DE0 /* CSMotionEnergySensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC15C1BA7009300EE6DE0 /* CSMotionEnergySensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0ED1BA7009200EE6DE0 /* CSMotionEnergySensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC15D1BA7009300EE6DE0 /* CSMotionFeaturesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EE1BA7009200EE6DE0 /* CSMotionFeaturesSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC15D1BA7009300EE6DE0 /* CSMotionFeaturesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0EE1BA7009200EE6DE0 /* CSMotionFeaturesSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC15E1BA7009300EE6DE0 /* CSMotionFeaturesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0EF1BA7009200EE6DE0 /* CSMotionFeaturesSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC15F1BA7009300EE6DE0 /* CSMovingSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F01BA7009200EE6DE0 /* CSMovingSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC15F1BA7009300EE6DE0 /* CSMovingSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F01BA7009200EE6DE0 /* CSMovingSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1601BA7009300EE6DE0 /* CSMovingSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F11BA7009200EE6DE0 /* CSMovingSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F21BA7009200EE6DE0 /* CSNoiseSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F21BA7009200EE6DE0 /* CSNoiseSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1621BA7009300EE6DE0 /* CSNoiseSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F31BA7009200EE6DE0 /* CSNoiseSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1631BA7009300EE6DE0 /* CSOrientationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F41BA7009200EE6DE0 /* CSOrientationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1631BA7009300EE6DE0 /* CSOrientationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F41BA7009200EE6DE0 /* CSOrientationSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1641BA7009300EE6DE0 /* CSOrientationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F51BA7009200EE6DE0 /* CSOrientationSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1651BA7009300EE6DE0 /* CSOrientationStateSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F61BA7009200EE6DE0 /* CSOrientationStateSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1651BA7009300EE6DE0 /* CSOrientationStateSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F61BA7009200EE6DE0 /* CSOrientationStateSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1661BA7009300EE6DE0 /* CSOrientationStateSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F71BA7009200EE6DE0 /* CSOrientationStateSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1671BA7009300EE6DE0 /* CSPreferencesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F81BA7009200EE6DE0 /* CSPreferencesSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1671BA7009300EE6DE0 /* CSPreferencesSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0F81BA7009200EE6DE0 /* CSPreferencesSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1681BA7009300EE6DE0 /* CSPreferencesSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0F91BA7009200EE6DE0 /* CSPreferencesSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1691BA7009300EE6DE0 /* CSRotationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FA1BA7009200EE6DE0 /* CSRotationSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1691BA7009300EE6DE0 /* CSRotationSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FA1BA7009200EE6DE0 /* CSRotationSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC16A1BA7009300EE6DE0 /* CSRotationSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0FB1BA7009200EE6DE0 /* CSRotationSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC16B1BA7009300EE6DE0 /* CSScreenSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FC1BA7009200EE6DE0 /* CSScreenSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC16B1BA7009300EE6DE0 /* CSScreenSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FC1BA7009200EE6DE0 /* CSScreenSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC16C1BA7009300EE6DE0 /* CSScreenSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0FD1BA7009200EE6DE0 /* CSScreenSensor.m */; settings = {ASSET_TAGS = (); }; };
 		FABCC16D1BA7009300EE6DE0 /* CSSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0FE1BA7009200EE6DE0 /* CSSensor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC16E1BA7009300EE6DE0 /* CSSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0FF1BA7009200EE6DE0 /* CSSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC16F1BA7009300EE6DE0 /* CSSensorIdKey.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1001BA7009200EE6DE0 /* CSSensorIdKey.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC16F1BA7009300EE6DE0 /* CSSensorIdKey.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1001BA7009200EE6DE0 /* CSSensorIdKey.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1701BA7009300EE6DE0 /* CSSensorIdKey.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1011BA7009200EE6DE0 /* CSSensorIdKey.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1021BA7009200EE6DE0 /* CSSpatialProvider.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1021BA7009200EE6DE0 /* CSSpatialProvider.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1721BA7009300EE6DE0 /* CSSpatialProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1031BA7009200EE6DE0 /* CSSpatialProvider.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1731BA7009300EE6DE0 /* CSStepCounterProcessorSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1041BA7009200EE6DE0 /* CSStepCounterProcessorSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1731BA7009300EE6DE0 /* CSStepCounterProcessorSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1041BA7009200EE6DE0 /* CSStepCounterProcessorSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1741BA7009300EE6DE0 /* CSStepCounterProcessorSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1051BA7009200EE6DE0 /* CSStepCounterProcessorSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1751BA7009300EE6DE0 /* CSTimeZoneSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1061BA7009200EE6DE0 /* CSTimeZoneSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1751BA7009300EE6DE0 /* CSTimeZoneSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1061BA7009200EE6DE0 /* CSTimeZoneSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1761BA7009400EE6DE0 /* CSTimeZoneSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1071BA7009200EE6DE0 /* CSTimeZoneSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1771BA7009400EE6DE0 /* CSUserProximity.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1081BA7009200EE6DE0 /* CSUserProximity.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1771BA7009400EE6DE0 /* CSUserProximity.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1081BA7009200EE6DE0 /* CSUserProximity.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1781BA7009400EE6DE0 /* CSUserProximity.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1091BA7009200EE6DE0 /* CSUserProximity.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1791BA7009400EE6DE0 /* CSVisitsSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10A1BA7009200EE6DE0 /* CSVisitsSensor.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1791BA7009400EE6DE0 /* CSVisitsSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10A1BA7009200EE6DE0 /* CSVisitsSensor.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC17A1BA7009400EE6DE0 /* CSVisitsSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC10B1BA7009200EE6DE0 /* CSVisitsSensor.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC17B1BA7009400EE6DE0 /* Formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10D1BA7009200EE6DE0 /* Formatting.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC17B1BA7009400EE6DE0 /* Formatting.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10D1BA7009200EE6DE0 /* Formatting.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC17C1BA7009400EE6DE0 /* Formatting.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC10E1BA7009200EE6DE0 /* Formatting.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC17D1BA7009400EE6DE0 /* NSData+GZIP.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10F1BA7009200EE6DE0 /* NSData+GZIP.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC17D1BA7009400EE6DE0 /* NSData+GZIP.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC10F1BA7009200EE6DE0 /* NSData+GZIP.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC17E1BA7009400EE6DE0 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1101BA7009200EE6DE0 /* NSData+GZIP.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC17F1BA7009400EE6DE0 /* NSString+MD5Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1111BA7009200EE6DE0 /* NSString+MD5Hash.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC17F1BA7009400EE6DE0 /* NSString+MD5Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1111BA7009200EE6DE0 /* NSString+MD5Hash.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1801BA7009400EE6DE0 /* NSString+MD5Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1121BA7009200EE6DE0 /* NSString+MD5Hash.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1811BA7009400EE6DE0 /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1131BA7009200EE6DE0 /* NSString+Utils.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1811BA7009400EE6DE0 /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1131BA7009200EE6DE0 /* NSString+Utils.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1821BA7009400EE6DE0 /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1141BA7009200EE6DE0 /* NSString+Utils.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1831BA7009400EE6DE0 /* UIDevice+Hardware.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1151BA7009200EE6DE0 /* UIDevice+Hardware.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1831BA7009400EE6DE0 /* UIDevice+Hardware.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1151BA7009200EE6DE0 /* UIDevice+Hardware.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1841BA7009400EE6DE0 /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1161BA7009200EE6DE0 /* UIDevice+Hardware.m */; settings = {ASSET_TAGS = (); }; };
-		FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */; settings = {ASSET_TAGS = (); }; };
+		FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1861BA7009400EE6DE0 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */; settings = {ASSET_TAGS = (); }; };
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAC4EC951BA086BC00B24CAA /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
 		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; settings = {ASSET_TAGS = (); }; };
+		FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD720B21BA977A0002EE7C3 /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
+		FAD720B51BA977A0002EE7C3 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FA5DF7B21BA71D0E00FF9544 /* PBXContainerItemProxy */ = {
+		FA66C2A01BA86E1B00281B6F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
 			proxyType = 1;
@@ -205,13 +207,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
 			remoteInfo = DSESwift;
-		};
-		FABCC0971BA7003500EE6DE0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FABCC08B1BA7003500EE6DE0;
-			remoteInfo = SensePlatform;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -385,6 +380,8 @@
 		FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftTests.swift; sourceTree = "<group>"; };
 		FAC4EC961BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAC4ECA71BA0873000B24CAA /* communication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = communication.swift; sourceTree = "<group>"; };
+		FAD720B21BA977A0002EE7C3 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
+		FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,7 +389,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA5DF7B41BA71D4C00FF9544 /* DSESwift.framework in Frameworks */,
+				FA66C29F1BA86E1500281B6F /* DSESwift.framework in Frameworks */,
 				FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */,
 				FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */,
 				FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */,
@@ -409,7 +406,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FABCC0961BA7003500EE6DE0 /* SensePlatform.framework in Frameworks */,
+				FA66C2A21BA86E9E00281B6F /* SensePlatform.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,7 +414,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */,
 				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
+				FAD720B51BA977A0002EE7C3 /* RealmSwift.framework in Frameworks */,
 				FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -682,6 +681,7 @@
 		FAC4EC871BA086BC00B24CAA /* DSESwift */ = {
 			isa = PBXGroup;
 			children = (
+				FAD720B11BA977A0002EE7C3 /* libraries */,
 				27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */,
 				27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
@@ -706,6 +706,15 @@
 			path = DSESwiftTests;
 			sourceTree = "<group>";
 		};
+		FAD720B11BA977A0002EE7C3 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				FAD720B21BA977A0002EE7C3 /* Realm.framework */,
+				FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */,
+			);
+			path = libraries;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -713,7 +722,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */,
 				FABCC1221BA7009200EE6DE0 /* CSSensePlatform.h in Headers */,
 				FABCC12A1BA7009200EE6DE0 /* CSSettings.h in Headers */,
 				FABCC11F1BA7009200EE6DE0 /* CSLocationPermissionProtocol.h in Headers */,
@@ -724,11 +732,13 @@
 				FABCC1241BA7009200EE6DE0 /* CSSensorIds.h in Headers */,
 				FA4CDBA81BA7126400DB44B1 /* CSVersion.h in Headers */,
 				FABCC1281BA7009200EE6DE0 /* CSSensorStore.h in Headers */,
+				FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */,
 				FABCC12C1BA7009200EE6DE0 /* CSStorage.h in Headers */,
+				FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */,
+				FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */,
 				FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */,
 				FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */,
 				FABCC12E1BA7009200EE6DE0 /* CSUploader.h in Headers */,
-				FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */,
 				FABCC1671BA7009300EE6DE0 /* CSPreferencesSensor.h in Headers */,
 				FABCC1511BA7009300EE6DE0 /* CSConnectionSensor.h in Headers */,
 				FABCC1431BA7009200EE6DE0 /* FootpodSensor.h in Headers */,
@@ -753,7 +763,6 @@
 				FABCC1341BA7009200EE6DE0 /* opcodes.h in Headers */,
 				FABCC11E1BA7009200EE6DE0 /* CSErrorDomain.h in Headers */,
 				FABCC17D1BA7009400EE6DE0 /* NSData+GZIP.h in Headers */,
-				FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */,
 				FABCC1591BA7009300EE6DE0 /* CSLocationSensor.h in Headers */,
 				FABCC13F1BA7009200EE6DE0 /* BloodPressureSensor.h in Headers */,
 				FABCC17F1BA7009400EE6DE0 /* NSString+MD5Hash.h in Headers */,
@@ -762,7 +771,6 @@
 				FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */,
 				FABCC1451BA7009200EE6DE0 /* CSAccelerationSensor.h in Headers */,
 				FABCC1651BA7009300EE6DE0 /* CSOrientationStateSensor.h in Headers */,
-				FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */,
 				FABCC14B1BA7009300EE6DE0 /* CSBatterySensor.h in Headers */,
 				FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */,
 				FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */,
@@ -775,6 +783,7 @@
 				FABCC1321BA7009200EE6DE0 /* config.h in Headers */,
 				FABCC15B1BA7009300EE6DE0 /* CSMotionEnergySensor.h in Headers */,
 				FABCC1391BA7009200EE6DE0 /* CSReachability.h in Headers */,
+				FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -801,7 +810,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				FA5DF7B31BA71D0E00FF9544 /* PBXTargetDependency */,
+				FA66C2A11BA86E1B00281B6F /* PBXTargetDependency */,
 			);
 			name = SensePlatform;
 			productName = SensePlatform;
@@ -819,7 +828,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				FABCC0981BA7003500EE6DE0 /* PBXTargetDependency */,
 			);
 			name = SensePlatformTests;
 			productName = SensePlatformTests;
@@ -871,7 +879,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
 				LastTestingUpgradeCheck = 0700;
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					A9DCAB711B949E5A00318E69 = {
 						CreatedOnToolsVersion = 6.4;
@@ -1088,20 +1096,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FA5DF7B31BA71D0E00FF9544 /* PBXTargetDependency */ = {
+		FA66C2A11BA86E1B00281B6F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
-			targetProxy = FA5DF7B21BA71D0E00FF9544 /* PBXContainerItemProxy */;
+			targetProxy = FA66C2A01BA86E1B00281B6F /* PBXContainerItemProxy */;
 		};
 		FAAEA2B71BA81A6D00837502 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
 			targetProxy = FAAEA2B61BA81A6D00837502 /* PBXContainerItemProxy */;
-		};
-		FABCC0981BA7003500EE6DE0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FABCC08B1BA7003500EE6DE0 /* SensePlatform */;
-			targetProxy = FABCC0971BA7003500EE6DE0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1122,7 +1125,8 @@
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/libraries";
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1167,7 +1171,7 @@
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/libraries";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1366,6 +1370,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1390,7 +1395,7 @@
 				INFOPLIST_FILE = DSESwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(MODULE_DIR)/libraries";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1406,6 +1411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1430,7 +1436,7 @@
 				INFOPLIST_FILE = DSESwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(MODULE_PATH)/libraries @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(MODULE_DIR)/libraries";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";

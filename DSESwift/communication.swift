@@ -13,4 +13,10 @@ public class blaat : NSObject {
         print("---------------------  testing  ----------------------");
      
     }
+    
+    func useSense() {
+//        let a = CSSensor();
+//        print(a.description);
+    }
 }
+
