@@ -13,6 +13,7 @@ import RealmSwift
 enum RLMError: ErrorType{
     case ObjectNotFound
     case InsertFailed
+    case UpdateFailed
     case DuplicatedObjects
 }
 
@@ -35,7 +36,7 @@ class DatabaseHandler: NSObject{
     * @param value: AnyObject for the value.
     * @param date: NSDate for the datetime of the data point.
     */
-    func addDataPoint(sensorId sensorId : String, value: AnyObject, date: NSDate) throws {
+    func insertDataPoint(sensorId : String, dataPoint:DataPoint) throws {
         //Validate the sensorId
         if (!self.isValidSensorId(sensorId)){
             throw RLMError.ObjectNotFound
@@ -44,8 +45,8 @@ class DatabaseHandler: NSObject{
         // create data point
         let rlmDataPoint = RLMDataPoint()
         rlmDataPoint.sensorId = sensorId
-        rlmDataPoint.date = date.timeIntervalSince1970
-        rlmDataPoint.value = value
+        rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
+        rlmDataPoint.value = dataPoint.value
         do{
             let realm = try! Realm()
             try realm.write {
@@ -79,38 +80,60 @@ class DatabaseHandler: NSObject{
         return dataPoints
     }
     
-    func updateSensor(sensor: Sensor) {
-        
-    }
-    
     /**
-    * Set the meta data and the options for enabling data upload/download to Common Sense and local data persistence.
-    *
-    * @param sensorId: String for the sensorId of the sensor that the new setting should be applied to.
-    * @param sensorOptions: DSESensorOptions object.
+    * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated.
+    * @param sensor: Sensor object containing the updated info.
     */
-    /*
-    func setSensorOptions(sensorId: String, _ sensorOptions: SensorOptions) {
-        do{
-            let realm = try! Realm()
-            let sensor = try self.getSensor(sensorId)
-            sensor.cs_download_enabled = sensorOptions.downloadEnabled
-            sensor.cs_upload_enabled = sensorOptions.uploadEnabled
-            sensor.persist_locally = sensorOptions.persist
-            sensor.meta = sensorOptions.meta
-            try realm.write{
-                realm.add(sensor, update: true)
+    func update(sensor: Sensor) throws {
+        //validate the source Id
+        if (!self.isValidSourceId(sensor.sourceId)){
+            throw RLMError.ObjectNotFound
+        }
+        
+        let realm = try! Realm()
+        do {
+            let rlmSensor = try getSensor(sensor.id)
+            rlmSensor.name = sensor.name
+            rlmSensor.meta = sensor.meta
+            rlmSensor.cs_upload_enabled = sensor.cs_upload_enabled
+            rlmSensor.cs_download_enabled = sensor.cs_upload_enabled
+            rlmSensor.persist_locally = sensor.persist_locally
+            rlmSensor.userId = sensor.userId
+            rlmSensor.sourceId = sensor.sourceId
+            rlmSensor.data_type = sensor.data_type
+            rlmSensor.cs_id = sensor.cs_id //TODO: How should we get Common Sense Sensor id??
+            rlmSensor.synced = sensor.synced
+            try realm.write {
+                realm.add(rlmSensor, update: true)
             }
         } catch {
-            print("failed to set options for the sensor")
+            throw RLMError.UpdateFailed
         }
     }
-    */
     
     //For Datapoint class
-    
-    func updateDataPoint(dataPoint: DataPoint) {
+    /**
+    * Update RLMDatapoint in database with the info of the given DataPoint object. Throws an exception if it fails to updated.
+    * @param dataPoint: DataPoint object containing the updated info.
+    */
+    func update(dataPoint: DataPoint) throws {
+        //validate the source Id
+        if (!self.isValidSensorId(dataPoint.sensorId)){
+            throw RLMError.ObjectNotFound
+        }
         
+        let realm = try! Realm()
+        do {
+            let rlmDataPoint = RLMDataPoint()
+            rlmDataPoint.sensorId = dataPoint.sensorId
+            rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
+            rlmDataPoint.value = dataPoint.value
+            try realm.write {
+                realm.add(rlmDataPoint, update: true)
+            }
+        } catch {
+            throw RLMError.UpdateFailed
+        }
     }
     
     //For source class
@@ -130,19 +153,19 @@ class DatabaseHandler: NSObject{
         
         let realm = try! Realm()
         let rlmSensor = RLMSensor()
-        do {
-            rlmSensor.id = rlmSensor.getNextKey()
-            rlmSensor.name = sensor.name
-            rlmSensor.meta = sensor.meta
-            rlmSensor.cs_upload_enabled = sensor.cs_upload_enabled
-            rlmSensor.cs_download_enabled = sensor.cs_upload_enabled
-            rlmSensor.persist_locally = sensor.persist_locally
-            rlmSensor.userId = sensor.userId
-            rlmSensor.sourceId = sensor.sourceId
-            rlmSensor.data_type = sensor.data_type
-            rlmSensor.cs_id = sensor.cs_id //TODO: How should we get Common Sense Sensor id??
-            rlmSensor.synced = sensor.synced
+        rlmSensor.id = sensor.id
+        rlmSensor.name = sensor.name
+        rlmSensor.meta = sensor.meta
+        rlmSensor.cs_upload_enabled = sensor.cs_upload_enabled
+        rlmSensor.cs_download_enabled = sensor.cs_upload_enabled
+        rlmSensor.persist_locally = sensor.persist_locally
+        rlmSensor.userId = sensor.userId
+        rlmSensor.sourceId = sensor.sourceId
+        rlmSensor.data_type = sensor.data_type
+        rlmSensor.cs_id = sensor.cs_id //TODO: How should we get Common Sense Sensor id??
+        rlmSensor.synced = sensor.synced
         
+        do {
             try realm.write {
                 realm.add(rlmSensor)
             }
@@ -151,8 +174,32 @@ class DatabaseHandler: NSObject{
         }
     }
     
-    func updateSource(source: Source) {
+    /**
+    * Update RLMSource in database with the info of the given Source object. Throws an exception if it fails to updated.
+    * @param source: Source object containing the updated info.
+    */
+    func update(source: Source) throws {
+        //validate the source Id
+        if (!self.isValidSourceId(source.id)) {
+            throw RLMError.ObjectNotFound
+        }
         
+        let realm = try! Realm()
+        
+        do {
+            let rlmSource = RLMSource()
+            rlmSource.id = source.id
+            rlmSource.name = source.name
+            rlmSource.meta = source.meta
+            rlmSource.uuid = source.uuid
+            rlmSource.cs_id = source.cs_id
+            
+            try realm.write {
+                realm.add(rlmSource, update:true)
+            }
+        } catch {
+            throw RLMError.UpdateFailed
+        }
     }
     
     /**
@@ -203,7 +250,6 @@ class DatabaseHandler: NSObject{
     func insertSource(source: Source) throws {
         let realm = try! Realm()
     
-        //TODO: figure out how to get cs_id at this point
         let rlmSource = RLMSource()
         rlmSource.id = source.id
         rlmSource.name = source.name
@@ -240,6 +286,7 @@ class DatabaseHandler: NSObject{
 
         return sources
     }
+    
     
     // MARK: Helper functions
     
