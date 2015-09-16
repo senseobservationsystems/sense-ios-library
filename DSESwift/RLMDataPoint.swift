@@ -9,14 +9,14 @@
 import Foundation
 import RealmSwift
 
-class RLMDatapoint: Object{
-    dynamic var sensor : RLMSensor?
+class RLMDataPoint: Object{
+    dynamic var sensorId = ""
     dynamic var value :AnyObject
     dynamic var date = 0.0
     dynamic var synced = true
     
-    init(sensor:RLMSensor, value: AnyObject, date: Double, synced: Bool) {
-        self.sensor = sensor
+    init(sensorId:String, value: AnyObject, date: Double, synced: Bool) {
+        self.sensorId = sensorId
         self.value = value
         self.date = date
         self.synced = synced
@@ -24,7 +24,7 @@ class RLMDatapoint: Object{
     }
     
     required convenience init() {
-        self.init(sensor: RLMSensor(), value: 0.0, date: 0.0, synced: true)
+        self.init(sensorId: "", value: 0.0, date: 0.0, synced: true)
     }
     
 }

@@ -44,14 +44,14 @@
 
 /* Begin PBXBuildFile section */
 		27431DDD1BA2D38000729FB2 /* DSEDatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DDE1BA2D38000729FB2 /* RLMDatapoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDB1BA2D38000729FB2 /* RLMSource.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DE11BA2D38000729FB2 /* RLMUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDC1BA2D38000729FB2 /* RLMUser.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DEB1BA32F3C00729FB2 /* DSESensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* DSESensor.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DED1BA32F9A00729FB2 /* DSESource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEC1BA32F9A00729FB2 /* DSESource.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DEF1BA32FEF00729FB2 /* DSESensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DED1BA32F9A00729FB2 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEC1BA32F9A00729FB2 /* Source.swift */; settings = {ASSET_TAGS = (); }; };
+		27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -226,13 +226,13 @@
 
 /* Begin PBXFileReference section */
 		27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEDatabaseHandler.swift; sourceTree = "<group>"; };
-		27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDatapoint.swift; sourceTree = "<group>"; };
+		27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDataPoint.swift; sourceTree = "<group>"; };
 		27431DDB1BA2D38000729FB2 /* RLMSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSource.swift; sourceTree = "<group>"; };
-		27431DDC1BA2D38000729FB2 /* RLMUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMUser.swift; sourceTree = "<group>"; };
-		27431DEA1BA32F3C00729FB2 /* DSESensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESensor.swift; sourceTree = "<group>"; };
-		27431DEC1BA32F9A00729FB2 /* DSESource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESource.swift; sourceTree = "<group>"; };
-		27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSESensorOptions.swift; sourceTree = "<group>"; };
+		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
+		27431DEC1BA32F9A00729FB2 /* Source.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
+		27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorOptions.swift; sourceTree = "<group>"; };
 		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
+		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -683,16 +683,16 @@
 			children = (
 				FAD720B11BA977A0002EE7C3 /* libraries */,
 				27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */,
-				27431DD91BA2D38000729FB2 /* RLMDatapoint.swift */,
+				27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
 				27431DDB1BA2D38000729FB2 /* RLMSource.swift */,
-				27431DDC1BA2D38000729FB2 /* RLMUser.swift */,
 				FAC4EC881BA086BC00B24CAA /* DSESwift.h */,
 				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				FAC4ECA71BA0873000B24CAA /* communication.swift */,
-				27431DEA1BA32F3C00729FB2 /* DSESensor.swift */,
-				27431DEE1BA32FEF00729FB2 /* DSESensorOptions.swift */,
-				27431DEC1BA32F9A00729FB2 /* DSESource.swift */,
+				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
+				27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */,
+				27431DEC1BA32F9A00729FB2 /* Source.swift */,
+				27E4281B1BA960600067E149 /* DataPoint.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -1073,15 +1073,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
 				27431DDD1BA2D38000729FB2 /* DSEDatabaseHandler.swift in Sources */,
 				27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */,
-				27431DE11BA2D38000729FB2 /* RLMUser.swift in Sources */,
 				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
-				27431DEB1BA32F3C00729FB2 /* DSESensor.swift in Sources */,
-				27431DEF1BA32FEF00729FB2 /* DSESensorOptions.swift in Sources */,
-				27431DDE1BA2D38000729FB2 /* RLMDatapoint.swift in Sources */,
+				27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */,
+				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
+				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
-				27431DED1BA32F9A00729FB2 /* DSESource.swift in Sources */,
+				27431DED1BA32F9A00729FB2 /* Source.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

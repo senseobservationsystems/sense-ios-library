@@ -33,17 +33,19 @@ class DSESwiftTests: XCTestCase {
     
     func testCreateSensor() {
         let dbHandler = DSEDatabaseHandler()
-        let sensorOptions = DSESensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            dbHandler.createSources("unitTestDevice", uuid: "uuiduuid")
+            let source = dbHandler.createSources("unitTestDevice", uuid: "uuiduuid")
             
-            try dbHandler.createSensor("test", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             
-            var sensors = [DSESensor]()
+            try dbHandler.createSensor(sensor)
+            
+            var sensors = [Sensor]()
             sensors = dbHandler.getSensors("1")
             XCTAssertEqual(sensors.count, 1)
             
-            try dbHandler.createSensor("test2", sourceId: "1", dataType: "Double", sensorOptions: sensorOptions)
+            try dbHandler.createSensor(sensor)
             
             sensors = dbHandler.getSensors("1")
             XCTAssertEqual(sensors.count, 2)

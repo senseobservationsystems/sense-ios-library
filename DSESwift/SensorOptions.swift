@@ -1,5 +1,5 @@
 //
-//  DSESensorOptions.swift
+//  SensorOptions.swift
 //  SensePlatform
 //
 //  Created by Tatsuya Kaneko on 11/09/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DSESensorOptions{
+class SensorOptions{
     var meta = "" // null by default, if not null, change from default
     var uploadEnabled: Bool // null by default, if not null, change from default
     var downloadEnabled: Bool // null by default, if not null, change from default
