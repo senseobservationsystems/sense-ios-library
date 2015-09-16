@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class RLMSource: Object{
-    dynamic var id = "1"
+    dynamic var id = ""
     dynamic var name = ""
     dynamic var meta = ""
     dynamic var uuid = ""
@@ -24,6 +24,6 @@ class RLMSource: Object{
     func getNextKey() -> String{
         let realm = try! Realm()
         let result = realm.objects(RLMSource)
-        return String(result.count+1)
+        return String(result.count + 1)
     }
 }
