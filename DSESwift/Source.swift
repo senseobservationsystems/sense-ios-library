@@ -23,6 +23,9 @@ class Source{
         self.cs_id = cs_id
     }
     
+    convenience init(name: String, meta: String, uuid: String) {
+        self.init(id: NSUUID().UUIDString, name: name, meta: meta, uuid: uuid, cs_id: "")
+    }
     
     convenience init(source: RLMSource) {
         self.init(id: source.id, name: source.name, meta: source.meta, uuid: source.uuid, cs_id: source.cs_id)
