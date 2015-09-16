@@ -26,26 +26,24 @@ class DSESwiftTests: XCTestCase {
     }
     
     func testExample() {
-        var a = blaat();
-        a.useSense();
         XCTAssert(true, "Pass")
     }
     
     func testCreateSensor() {
-        let dbHandler = DSEDatabaseHandler()
+        let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            let source = dbHandler.createSources("unitTestDevice", uuid: "uuiduuid")
+            let source = Source(id: <#T##String#>, name: "testSource", meta: "", uuid: "uuid", cs_id: "")
             
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             
-            try dbHandler.createSensor(sensor)
+            try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
             sensors = dbHandler.getSensors("1")
             XCTAssertEqual(sensors.count, 1)
             
-            try dbHandler.createSensor(sensor)
+            try dbHandler.insertSensor(sensor)
             
             sensors = dbHandler.getSensors("1")
             XCTAssertEqual(sensors.count, 2)
