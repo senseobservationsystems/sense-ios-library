@@ -43,7 +43,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		27431DDD1BA2D38000729FB2 /* DSEDatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
+		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDB1BA2D38000729FB2 /* RLMSource.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; settings = {ASSET_TAGS = (); }; };
@@ -225,7 +225,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEDatabaseHandler.swift; sourceTree = "<group>"; };
+		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDataPoint.swift; sourceTree = "<group>"; };
 		27431DDB1BA2D38000729FB2 /* RLMSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSource.swift; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
@@ -682,7 +682,6 @@
 			isa = PBXGroup;
 			children = (
 				FAD720B11BA977A0002EE7C3 /* libraries */,
-				27431DD81BA2D38000729FB2 /* DSEDatabaseHandler.swift */,
 				27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
 				27431DDB1BA2D38000729FB2 /* RLMSource.swift */,
@@ -709,6 +708,7 @@
 		FAD720B11BA977A0002EE7C3 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
+				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				FAD720B21BA977A0002EE7C3 /* Realm.framework */,
 				FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */,
 			);
@@ -1074,9 +1074,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
-				27431DDD1BA2D38000729FB2 /* DSEDatabaseHandler.swift in Sources */,
 				27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */,
 				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
+				272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */,
 				27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
@@ -1130,7 +1130,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1174,6 +1174,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
