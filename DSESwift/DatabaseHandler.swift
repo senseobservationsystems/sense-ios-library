@@ -17,7 +17,7 @@ enum RLMError: ErrorType{
     case DuplicatedObjects
 }
 
-enum RLMSortOrder: ErrorType{
+enum SortOrder: ErrorType{
     case Asc
     case Desc
 }
@@ -36,15 +36,15 @@ class DatabaseHandler: NSObject{
     * @param value: AnyObject for the value.
     * @param date: NSDate for the datetime of the data point.
     */
-    func insertDataPoint(sensorId : String, dataPoint:DataPoint) throws {
+    func insertDataPoint(dataPoint:DataPoint) throws {
         //Validate the sensorId
-        if (!self.isValidSensorId(sensorId)){
+        if (!self.isValidSensorId(dataPoint.sensorId)){
             throw RLMError.ObjectNotFound
         }
         
         // create data point
         let rlmDataPoint = RLMDataPoint()
-        rlmDataPoint.sensorId = sensorId
+        rlmDataPoint.sensorId = dataPoint.sensorId
         rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
         rlmDataPoint.value = dataPoint.value
         do{
@@ -66,11 +66,15 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    func getDataPoints(sensorId sensorId: String, startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: RLMSortOrder)-> [DataPoint]{
+    func getDataPoints(sensorId sensorId: String, startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
+        if (!self.isValidSensorId(sensorId)){
+            throw RLMError.ObjectNotFound
+        }
+        
         var dataPoints = [DataPoint]()
         let realm = try! Realm()
-        let isAscending = (sortOrder == RLMSortOrder.Asc) ? true : false;
-        let predicates = NSPredicate(format: "sensorId = %@ AND date >= %@ AND date < %@ ", sensorId, startDate.timeIntervalSince1970, endDate.timeIntervalSince1970)
+        let isAscending = (sortOrder == SortOrder.Asc) ? true : false;
+        let predicates = NSPredicate(format: "sensorId = %@ AND date >= %f AND date < %f", sensorId, startDate.timeIntervalSince1970, endDate.timeIntervalSince1970) //
         //query
         let results = realm.objects(RLMDataPoint).filter(predicates).sorted("date", ascending: isAscending)
         for rlmDataPoint in results {
@@ -85,8 +89,8 @@ class DatabaseHandler: NSObject{
     * @param sensor: Sensor object containing the updated info.
     */
     func update(sensor: Sensor) throws {
-        //validate the source Id
-        if (!self.isValidSourceId(sensor.sourceId)){
+        //validate the sourceId and sensorId
+        if (!self.isValidSourceId(sensor.sourceId) || !self.isValidSensorId(sensor.id)){
             throw RLMError.ObjectNotFound
         }
         
@@ -209,10 +213,11 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensor: sensor with the given sensor name and sourceId.
     */
-    func getSensor(sourceId sourceId: String, _ sensorName: String)->(Sensor){
+    func getSensor(sourceId: String, _ sensorName: String)->(Sensor){
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "name = %@ AND sourceId = %@", sourceId)
+        let predicates = NSPredicate(format: "name = %@ AND sourceId = %@", sensorName,
+            sourceId)
         let result = realm.objects(RLMSensor).filter(predicates)
         
         return Sensor(sensor: result.first!)
@@ -289,12 +294,10 @@ class DatabaseHandler: NSObject{
     
     
     // MARK: Helper functions
+
     
-    private func getSensor(id: String) throws -> RLMSensor {
-        if(!self.isValidSensorId(id)){
-            throw RLMError.ObjectNotFound
-        }
-        
+    private func getSensor(id: String) -> RLMSensor {
+
         var sensor = RLMSensor()
         let predicates = NSPredicate(format: "id = %@", id)
         let result = try! Realm().objects(RLMSensor).filter(predicates)

@@ -10,11 +10,11 @@ import Foundation
 
 class DataPoint{
     var sensorId = ""
-    var value: AnyObject
+    private(set) var value = ""
     var date = NSDate()
-    var synced = true
+    var synced = false
 
-    init(sensorId: String, value: AnyObject, date: NSDate, synced: Bool) {
+    init(sensorId: String, value: String, date: NSDate, synced: Bool) {
         self.sensorId = sensorId
         self.value = value
         self.date = date
@@ -28,7 +28,55 @@ class DataPoint{
 
     required convenience init() {
         let now = NSDate()
-        self.init(sensorId: "", value: 0.0, date: now, synced: true)
+        self.init(sensorId: "", value: "", date: now, synced: false)
+    }
+    
+    func setValue(value: Int) {
+        self.value = String(value)
+    }
+    
+    func setValue(value: Double) {
+        self.value = String(value)
+    }
+    
+    func setValue(value: Bool){
+        self.value = String(Int(value))
+    }
+    
+    func setValue(value: [String: AnyObject]){
+        self.value = value.description
+    }
+    
+    func getValue(value: String){
+        self.value = value
+    }
+    
+    func getValueInInt() -> Int {
+        return Int(self.value)!
+    }
+    
+    func getValueInDouble() -> Double {
+        return Double(self.value)!
+    }
+    
+    func getValueInBool() -> Bool {
+        return ( Int(self.value)  == 1 )
+    }
+    
+    func getValueInDictionary() -> [String: AnyObject]{
+        if let data = self.value.dataUsingEncoding(NSUTF8StringEncoding){
+            do{
+                if let dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [String: AnyObject]{
+                    return dictionary
+                }
+            }catch {
+                print("error")
+            }
+        }
+        return [String: AnyObject]()
     }
 
+    func getValueInString() -> String{
+        return self.value
+    }
 }

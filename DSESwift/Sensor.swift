@@ -43,4 +43,5 @@ class Sensor{
     convenience init(sensor: RLMSensor) {
         self.init(id: NSUUID().UUIDString, name: sensor.name, meta: sensor.meta, cs_upload_enabled: sensor.cs_upload_enabled, cs_download_enabled: sensor.cs_download_enabled, persist_locally: sensor.persist_locally, userId: sensor.userId, sourceId: sensor.sourceId, data_type: sensor.data_type, cs_id: sensor.cs_id, synced: sensor.synced)
     }
+    
 }
