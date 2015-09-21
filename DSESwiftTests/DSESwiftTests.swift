@@ -8,7 +8,6 @@
 
 import XCTest
 import RealmSwift
-import Security
 
 @testable import DSESwift
 
@@ -20,6 +19,7 @@ class DSESwiftTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
+        KeychainWrapper.setString("user1", forKey: "userid")
     }
     
     override func tearDown() {
@@ -103,7 +103,6 @@ class DSESwiftTests: XCTestCase {
         }
     }
     
-    /*
     func testGetSources() {
 
         let dbHandler = DatabaseHandler()
@@ -120,10 +119,10 @@ class DSESwiftTests: XCTestCase {
             try dbHandler.insertSource(source3)
             
             //add 2 sensors with the current userid and source 1 and source 2
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source1.id, data_type: "JSON", cs_id: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey("userid")!, sourceId: source1.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: "user1", sourceId: source2.id, data_type: "JSON", cs_id: "", synced: false)
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey("userid")!, sourceId: source2.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             //add 1 sensor with another userId and source3
@@ -133,18 +132,15 @@ class DSESwiftTests: XCTestCase {
             //call getSources
             let sources = dbHandler.getSources()
             
-            XCTAssertEqual(souces.count, 2)
-            XCTAssertEqual(souces[0].name, source1.name)
-            XCTAssertEqual(souces[1].name, source2.name)
-            
-            
+            XCTAssertEqual(sources.count, 2)
+            XCTAssertEqual(sources[0].name, source1.name)
+            XCTAssertEqual(sources[1].name, source2.name)
             
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
-        */
-        
-        
+    }
+    
         //add 1 sensor with another userId
         
         //call getSources

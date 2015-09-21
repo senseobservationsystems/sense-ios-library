@@ -256,10 +256,15 @@ class DatabaseHandler: NSObject{
         let realm = try! Realm()
         
         //get all the sensors with the user id
-        //query all the sensors
+        let sensors = getSensors()
+        // creat an array of sourceIds from the sensors
+        var sourceIds = [String]()
+        for s in sensors{
+            sourceIds.append(s.sourceId)
+        }
         
-        //let predicates = NSPredicate(format: "id in %@", sensors)
-        let results = realm.objects(RLMSource)//.filter(predicates)
+        let predicates = NSPredicate(format: "id in %@", sourceIds)
+        let results = realm.objects(RLMSource).filter(predicates)
         for rlmSource in results {
             let source = Source(source: rlmSource)
             sources.append(source)
@@ -291,14 +296,15 @@ class DatabaseHandler: NSObject{
     // MARK: Helper functions
 
     /*
+    * Returns all the sensor which belong to the current user.
+    */
     private func getSensors() -> [RLMSensor] {
-        
-        var sensors = [RLMSensor]()
-        let predicates = NSPredicate(format: "userId = %@", userId)
-        let result = try! Realm().objects(RLMSensor).filter(predicates)
-        return result
+
+        let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey("userid")!)
+        let results = try! Realm().objects(RLMSensor).filter(predicates)
+        return Array(results)
     }
-*/
+
     
     private func getSensor(id: String) -> RLMSensor {
 
