@@ -8,11 +8,13 @@
 
 import XCTest
 import RealmSwift
+import Security
 
 @testable import DSESwift
 
 
 class DSESwiftTests: XCTestCase {
+    
     
     override func setUp() {
         super.setUp()
@@ -69,7 +71,7 @@ class DSESwiftTests: XCTestCase {
             XCTAssertEqual(sensors.count, 1)
             
             let dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
-            try dbHandler.insertDataPoint(dataPoint)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
             
             let dataPoints = try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
             XCTAssertEqual(dataPoints.count, 1)
@@ -100,8 +102,55 @@ class DSESwiftTests: XCTestCase {
             XCTFail("Exception was captured. Abort the test.")
         }
     }
-    
+    /*
     func testGetSources() {
+
+        let dbHandler = DatabaseHandler()
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            //add 3 sources
+            let source1 = Source(name: "testSource1", meta: "", uuid: NSUUID().UUIDString)
+            try dbHandler.insertSource(source1)
+            
+            let source2 = Source(name: "testSource2", meta: "", uuid: NSUUID().UUIDString)
+            try dbHandler.insertSource(source2)
+            
+            let source3 = Source(name: "testSource3", meta: "", uuid: NSUUID().UUIDString)
+            try dbHandler.insertSource(source3)
+            
+            //add 2 sensors with the current userid and source 1 and source 2
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source1.id, data_type: "JSON", cs_id: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: "user1", sourceId: source2.id, data_type: "JSON", cs_id: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            //add 1 sensor with another userId and source3
+            sensor = Sensor(name: "sensor3", sensorOptions: sensorOptions, userId: "user2", sourceId: source3.id, data_type: "JSON", cs_id: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            //call getSources
+            let sources = dbHandler.getSources()
+            
+            XCTAssertEqual(souces.count, 2)
+            XCTAssertEqual(souces[0].name, source1.name )
+            XCTAssertEqual(souces[1].name, source2.name)
+            
+            
+            
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+        */
+        
+        
+        //add 1 sensor with another userId
+        
+        //call getSources
+        
+        //check if the number of the sources are indeed 2 
+        
+        /*
         let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
@@ -122,17 +171,49 @@ class DSESwiftTests: XCTestCase {
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
+        */
     }
     
     func testUpdateSource() {
-        
+        let dbHandler = DatabaseHandler()
+        do{
+            let uuid = NSUUID().UUIDString
+            
+            let source = Source(name: "testSource", meta: "", uuid: uuid)
+            try dbHandler.insertSource(source)
+            
+            let newSourceName = "testSourceUpdated"
+            source.name = newSourceName
+            try dbHandler.update(source)
+            
+            let retrievedSource = try dbHandler.getSource(newSourceName, uuid)
+            XCTAssertEqual(retrievedSource.name, newSourceName )
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
     }
     
     func testUpdateSensor() {
-        
-    }
-    
-    func testUpdateDataPoint() {
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let dbHandler = DatabaseHandler()
+        do{
+            let uuid = NSUUID().UUIDString
+            
+            let source = Source(name: "testSource", meta: "", uuid: uuid)
+            try dbHandler.insertSource(source)
+            
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            let newSensorName = "sensor1Updated"
+            sensor.name = newSensorName
+            try dbHandler.update(sensor)
+            
+            let retrievedSensor = dbHandler.getSensor(source.id, newSensorName)
+            XCTAssertEqual(retrievedSensor.name, newSensorName)
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
         
     }
 }

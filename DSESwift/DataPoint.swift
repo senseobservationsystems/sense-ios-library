@@ -31,6 +31,10 @@ class DataPoint{
         self.init(sensorId: "", value: "", date: now, synced: false)
     }
     
+    func getCompoundKey() -> String {
+        return "\(self.sensorId)-\(String(self.date))"
+    }
+    
     func setValue(value: Int) {
         self.value = String(value)
     }

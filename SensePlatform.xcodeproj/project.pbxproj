@@ -43,6 +43,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
+		2709FF7F1BAF0EC10051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
+		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDB1BA2D38000729FB2 /* RLMSource.swift */; settings = {ASSET_TAGS = (); }; };
@@ -225,6 +228,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2709FF7D1BAF0E800051E8B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDataPoint.swift; sourceTree = "<group>"; };
 		27431DDB1BA2D38000729FB2 /* RLMSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSource.swift; sourceTree = "<group>"; };
@@ -389,6 +393,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */,
 				FA66C29F1BA86E1500281B6F /* DSESwift.framework in Frameworks */,
 				FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */,
 				FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */,
@@ -414,6 +419,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */,
 				FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */,
 				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
 				FAD720B51BA977A0002EE7C3 /* RealmSwift.framework in Frameworks */,
@@ -425,6 +431,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2709FF7F1BAF0EC10051E8B2 /* Security.framework in Frameworks */,
 				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,6 +465,7 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2709FF7D1BAF0E800051E8B2 /* Security.framework */,
 				FAA614651BA8225E00B05FCD /* Realm.framework */,
 				FAA614661BA8225E00B05FCD /* RealmSwift.framework */,
 				3E148BD0160A18DC0010A0D1 /* UIKit.framework */,

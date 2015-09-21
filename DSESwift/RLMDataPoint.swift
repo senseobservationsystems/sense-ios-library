@@ -10,9 +10,26 @@ import Foundation
 import RealmSwift
 
 class RLMDataPoint: Object{
-    dynamic var sensorId = ""
-    dynamic var value = ""
-    dynamic var date = 0.0
+
     dynamic var synced = true
+    dynamic var value = ""
+    dynamic var sensorId = ""
+    func setCompoundSensorID(sensorId: String) {
+        self.sensorId = sensorId
+        compoundKey = compoundKeyValue()
+    }
+    dynamic var date = 0.0
+    func setCompoundDate(date: Double) {
+        self.date = date
+        compoundKey = compoundKeyValue()
+    }
+    dynamic lazy var compoundKey: String = self.compoundKeyValue()
+    override static func primaryKey() -> String? {
+        return "compoundKey"
+    }
+    
+    private func compoundKeyValue() -> String {
+        return "\(self.sensorId)-\(String(self.date))"
+    }
     
 }
