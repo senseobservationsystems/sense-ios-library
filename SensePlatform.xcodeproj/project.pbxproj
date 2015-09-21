@@ -55,6 +55,10 @@
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
+		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; settings = {ASSET_TAGS = (); }; };
+		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; settings = {ASSET_TAGS = (); }; };
+		27F752751BB02793000FC400 /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
+		27F752771BB0285B000FC400 /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752761BB0285B000FC400 /* testObject.swift */; settings = {ASSET_TAGS = (); }; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -190,7 +194,6 @@
 		FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1861BA7009400EE6DE0 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */; settings = {ASSET_TAGS = (); }; };
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FAC4EC951BA086BC00B24CAA /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
 		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; settings = {ASSET_TAGS = (); }; };
 		FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD720B21BA977A0002EE7C3 /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
 		FAD720B51BA977A0002EE7C3 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
@@ -237,6 +240,9 @@
 		27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorOptions.swift; sourceTree = "<group>"; };
 		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
+		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
+		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
+		27F752761BB0285B000FC400 /* testObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testObject.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -700,6 +706,8 @@
 				27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */,
 				27431DEC1BA32F9A00729FB2 /* Source.swift */,
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
+				27F752701BB0212C000FC400 /* KeychainWrapper.swift */,
+				27F752761BB0285B000FC400 /* testObject.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -708,6 +716,7 @@
 			isa = PBXGroup;
 			children = (
 				FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */,
+				27F752721BB02512000FC400 /* KeychainWrapperTests.swift */,
 				FAC4EC961BA086BC00B24CAA /* Info.plist */,
 			);
 			path = DSESwiftTests;
@@ -1084,6 +1093,8 @@
 				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
 				27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */,
 				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
+				27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */,
+				27F752771BB0285B000FC400 /* testObject.swift in Sources */,
 				272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */,
 				27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
@@ -1097,7 +1108,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAC4EC951BA086BC00B24CAA /* DSESwiftTests.swift in Sources */,
+				27F752751BB02793000FC400 /* DSESwiftTests.swift in Sources */,
+				27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

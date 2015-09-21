@@ -102,6 +102,7 @@ class DSESwiftTests: XCTestCase {
             XCTFail("Exception was captured. Abort the test.")
         }
     }
+    
     /*
     func testGetSources() {
 
@@ -133,7 +134,7 @@ class DSESwiftTests: XCTestCase {
             let sources = dbHandler.getSources()
             
             XCTAssertEqual(souces.count, 2)
-            XCTAssertEqual(souces[0].name, source1.name )
+            XCTAssertEqual(souces[0].name, source1.name)
             XCTAssertEqual(souces[1].name, source2.name)
             
             
@@ -171,9 +172,9 @@ class DSESwiftTests: XCTestCase {
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
-        */
+
     }
-    
+    */
     func testUpdateSource() {
         let dbHandler = DatabaseHandler()
         do{
