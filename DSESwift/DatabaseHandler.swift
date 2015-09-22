@@ -23,6 +23,8 @@ enum SortOrder: ErrorType{
 }
 
 /**
+TODO: Make Static!
+
 DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, Sensor, Source.
 */
 class DatabaseHandler: NSObject{
@@ -189,14 +191,17 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensor: sensor with the given sensor name and sourceId.
     */
-    func getSensor(sourceId: String, _ sensorName: String)->(Sensor){
+    func getSensor(sourceId: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
         
         let predicates = NSPredicate(format: "name = %@ AND sourceId = %@", sensorName,
             sourceId)
-        let result = realm.objects(RLMSensor).filter(predicates)
+        let results = realm.objects(RLMSensor).filter(predicates)
+        if (results.count != 1){
+            throw RLMError.ObjectNotFound
+        }
         
-        return Sensor(sensor: result.first!)
+        return Sensor(results.first!)
     }
     
     /**
@@ -213,7 +218,7 @@ class DatabaseHandler: NSObject{
         let predicates = NSPredicate(format: "sourceId = %@", sourceId)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
-            let sensor = Sensor(sensor: rlmSensor)
+            let sensor = Sensor(rlmSensor)
             sensors.append(sensor)
         }
 

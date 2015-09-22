@@ -72,7 +72,7 @@ class DSESwiftTests: XCTestCase {
             let dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
             try dbHandler.insertOrUpdateDataPoint(dataPoint)
             
-            let dataPoints = try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
+            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
             XCTAssertEqual(dataPoints.count, 1)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -89,13 +89,13 @@ class DSESwiftTests: XCTestCase {
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, dataType: "JSON", csId: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
-            var retrievedSensor = dbHandler.getSensor(source.id, sensor.name)
+            var retrievedSensor = try! dbHandler.getSensor(source.id, sensor.name)
             XCTAssertEqual(retrievedSensor.name, sensor.name)
             
             sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, dataType: "JSON", csId: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
-            retrievedSensor = dbHandler.getSensor(source.id, sensor.name)
+            retrievedSensor = try! dbHandler.getSensor(source.id, sensor.name)
             XCTAssertEqual(retrievedSensor.name, sensor.name)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -175,7 +175,7 @@ class DSESwiftTests: XCTestCase {
             sensor.name = newSensorName
             try dbHandler.update(sensor)
             
-            let retrievedSensor = dbHandler.getSensor(source.id, newSensorName)
+            let retrievedSensor = try! dbHandler.getSensor(source.id, newSensorName)
             XCTAssertEqual(retrievedSensor.name, newSensorName)
         }catch{
             XCTFail("Exception was captured. Abort the test.")

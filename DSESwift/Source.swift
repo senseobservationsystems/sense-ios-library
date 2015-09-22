@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum SourceError: ErrorType {
+    case SensorAlreadyExists
+}
+
 public class Source{
     var id = ""
     var name = ""
@@ -35,15 +39,32 @@ public class Source{
         self.init(id: source.id, name: source.name, meta: source.meta, deviceId: source.deviceId, userId: source.userId, csId: source.csId)
     }
     
-//    public func createSensor(name name: String, dataType: String, options: SensorOptions) throws -> Sensor {
-////        var sensor = Sensor(name, options, source.userId
-//    }
-//    
-//    public func getSensor(sensorName: String) -> Sensor {
-//        
-//    }
-//    
-//    func getSensors() -> [Sensor] {
-//        
-//    }
+    public func createSensor(name name: String, dataType: String, options: SensorOptions) throws -> Sensor {
+        let dbHandler = DatabaseHandler()
+        
+        // first check if the sensor already exists
+        do {
+            // if the sensor does not exist, this method will throw an error. We want this to throw an error here.
+            let _ = try dbHandler.getSensor(self.id, name)
+        }
+        catch {
+            // if we're here the sensor does not yet exist
+            let sensor = Sensor(name: name, sensorOptions: options, userId: self.userId, sourceId: self.id, dataType: dataType, csId: self.csId, synced:false)
+            try dbHandler.insertSensor(sensor);
+            return sensor;
+        }
+        
+        // if the sensor was returned in the catch, we will not be here.
+        throw SourceError.SensorAlreadyExists
+    }
+    
+    public func getSensor(sensorName: String) throws -> Sensor {
+        let dbHandler = DatabaseHandler()
+        return try dbHandler.getSensor(self.id, name)
+    }
+
+    public func getSensors() -> [Sensor] {
+        let dbHandler = DatabaseHandler()
+        return dbHandler.getSensors(self.id);
+    }
 }
