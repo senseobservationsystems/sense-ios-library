@@ -8,30 +8,42 @@
 
 import Foundation
 
-class Source{
+public class Source{
     var id = ""
     var name = ""
     var meta = ""
-    var uuid = ""
-    var user_id = ""
-    var cs_id = ""
+    var deviceId = ""
+    var userId = ""
+    var csId = ""
     var synced = false
     
     
-    init(id: String, name: String, meta: String, uuid: String, user_id:String, cs_id: String) {
+    init(id: String, name: String, meta: String, deviceId: String, userId:String, csId: String) {
         self.id = id
         self.name = name
         self.meta = meta
-        self.uuid = uuid
-        self.user_id = user_id
-        self.cs_id = cs_id
+        self.deviceId = deviceId
+        self.userId = userId
+        self.csId = csId
     }
     
-    convenience init(name: String, meta: String, uuid: String, user_id: String) {
-        self.init(id: NSUUID().UUIDString, name: name, meta: meta, uuid: uuid, user_id: user_id, cs_id: "")
+    convenience init(name: String, meta: String, deviceId: String, userId: String) {
+        self.init(id: NSUUID().UUIDString, name: name, meta: meta, deviceId: deviceId, userId: userId, csId: "")
     }
     
     convenience init(source: RLMSource) {
-        self.init(id: source.id, name: source.name, meta: source.meta, uuid: source.uuid, user_id: source.user_id, cs_id: source.cs_id)
+        self.init(id: source.id, name: source.name, meta: source.meta, deviceId: source.deviceId, userId: source.userId, csId: source.csId)
     }
+    
+//    public func createSensor(name name: String, dataType: String, options: SensorOptions) throws -> Sensor {
+////        var sensor = Sensor(name, options, source.userId
+//    }
+//    
+//    public func getSensor(sensorName: String) -> Sensor {
+//        
+//    }
+//    
+//    func getSensors() -> [Sensor] {
+//        
+//    }
 }

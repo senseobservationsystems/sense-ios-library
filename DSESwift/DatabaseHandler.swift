@@ -38,7 +38,7 @@ class DatabaseHandler: NSObject{
     */
     func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
         //Validate the sensorId
-        if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensor_id)){
+        if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
             throw RLMError.ObjectNotFound
         }
         
@@ -47,7 +47,7 @@ class DatabaseHandler: NSObject{
         do {
             let realm = try! Realm()
             realm.beginWrite()
-            rlmDataPoint.setCompoundSensorID(dataPoint.sensor_id)
+            rlmDataPoint.setCompoundSensorID(dataPoint.sensorId)
             rlmDataPoint.setCompoundDate(dataPoint.date.timeIntervalSince1970)
             rlmDataPoint.value = dataPoint.value
             realm.add(rlmDataPoint, update:true)
@@ -74,7 +74,7 @@ class DatabaseHandler: NSObject{
         var dataPoints = [DataPoint]()
         let realm = try! Realm()
         let isAscending = (sortOrder == SortOrder.Asc) ? true : false;
-        let predicates = NSPredicate(format: "sensor_id = %@ AND date >= %f AND date < %f", sensorId, startDate.timeIntervalSince1970, endDate.timeIntervalSince1970) //
+        let predicates = NSPredicate(format: "sensorId = %@ AND date >= %f AND date < %f", sensorId, startDate.timeIntervalSince1970, endDate.timeIntervalSince1970) //
         //query
         let results = realm.objects(RLMDataPoint).filter(predicates).sorted("date", ascending: isAscending)
         for rlmDataPoint in results {
@@ -90,7 +90,7 @@ class DatabaseHandler: NSObject{
     */
     func update(sensor: Sensor) throws {
         //validate the sourceId and sensorId
-        if (!self.isExistingPrimaryKeyForSource(sensor.source_id) || !self.isExistingPrimaryKeyForSensor(sensor.id)){
+        if (!self.isExistingPrimaryKeyForSource(sensor.sourceId) || !self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw RLMError.ObjectNotFound
         }
         
@@ -100,13 +100,13 @@ class DatabaseHandler: NSObject{
             realm.beginWrite()
             rlmSensor.name = sensor.name
             rlmSensor.meta = sensor.meta
-            rlmSensor.cs_upload_enabled = sensor.cs_upload_enabled
-            rlmSensor.cs_download_enabled = sensor.cs_upload_enabled
-            rlmSensor.persist_locally = sensor.persist_locally
-            rlmSensor.user_id = sensor.user_id
-            rlmSensor.source_id = sensor.source_id
-            rlmSensor.data_type = sensor.data_type
-            rlmSensor.cs_id = sensor.cs_id //TODO: How should we get Common Sense Sensor id??
+            rlmSensor.csUploadEnabled = sensor.csUploadEnabled
+            rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
+            rlmSensor.persistLocally = sensor.persistLocally
+            rlmSensor.userId = sensor.userId
+            rlmSensor.sourceId = sensor.sourceId
+            rlmSensor.dataType = sensor.dataType
+            rlmSensor.csId = sensor.csId //TODO: How should we get Common Sense Sensor id??
             rlmSensor.synced = sensor.synced
     
             realm.add(rlmSensor, update: true)
@@ -128,7 +128,7 @@ class DatabaseHandler: NSObject{
     */
     func insertSensor(sensor:Sensor) throws {
         //validate the source Id
-        if (!self.isExistingPrimaryKeyForSource(sensor.source_id)){
+        if (!self.isExistingPrimaryKeyForSource(sensor.sourceId)){
             throw RLMError.ObjectNotFound
         }
         
@@ -140,13 +140,13 @@ class DatabaseHandler: NSObject{
             rlmSensor.id = sensor.id
             rlmSensor.name = sensor.name
             rlmSensor.meta = sensor.meta
-            rlmSensor.cs_upload_enabled = sensor.cs_upload_enabled
-            rlmSensor.cs_download_enabled = sensor.cs_upload_enabled
-            rlmSensor.persist_locally = sensor.persist_locally
-            rlmSensor.user_id = sensor.user_id
-            rlmSensor.source_id = sensor.source_id
-            rlmSensor.data_type = sensor.data_type
-            rlmSensor.cs_id = sensor.cs_id //TODO: How should we get Common Sense Sensor id??
+            rlmSensor.csUploadEnabled = sensor.csUploadEnabled
+            rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
+            rlmSensor.persistLocally = sensor.persistLocally
+            rlmSensor.userId = sensor.userId
+            rlmSensor.sourceId = sensor.sourceId
+            rlmSensor.dataType = sensor.dataType
+            rlmSensor.csId = sensor.csId //TODO: How should we get Common Sense Sensor id??
             rlmSensor.synced = sensor.synced
                 
             realm.add(rlmSensor)
@@ -173,8 +173,8 @@ class DatabaseHandler: NSObject{
             realm.beginWrite()
             rlmSource.name = source.name
             rlmSource.meta = source.meta
-            rlmSource.uuid = source.uuid
-            rlmSource.cs_id = source.cs_id
+            rlmSource.deviceId = source.deviceId
+            rlmSource.csId = source.csId
             realm.add(rlmSource, update:true)
             try realm.commitWrite()
         } catch {
@@ -192,7 +192,7 @@ class DatabaseHandler: NSObject{
     func getSensor(sourceId: String, _ sensorName: String)->(Sensor){
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "name = %@ AND source_id = %@", sensorName,
+        let predicates = NSPredicate(format: "name = %@ AND sourceId = %@", sensorName,
             sourceId)
         let result = realm.objects(RLMSensor).filter(predicates)
         
@@ -210,7 +210,7 @@ class DatabaseHandler: NSObject{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "source_id = %@", sourceId)
+        let predicates = NSPredicate(format: "sourceId = %@", sourceId)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             let sensor = Sensor(sensor: rlmSensor)
@@ -226,7 +226,7 @@ class DatabaseHandler: NSObject{
     * Insert a Source Object
     *
     * @param name The name of the source
-    * @param uuid the unique identifier of the source
+    * @param deviceId the unique identifier of the source
     */
     func insertSource(source: Source) throws {
         let realm = try! Realm()
@@ -237,9 +237,9 @@ class DatabaseHandler: NSObject{
             rlmSource.id = source.id
             rlmSource.name = source.name
             rlmSource.meta = source.meta
-            rlmSource.uuid = source.uuid
-            rlmSource.user_id = source.user_id
-            rlmSource.cs_id = source.cs_id
+            rlmSource.deviceId = source.deviceId
+            rlmSource.userId = source.userId
+            rlmSource.csId = source.csId
             realm.add(rlmSource)
             try realm.commitWrite()
         }catch{
@@ -256,7 +256,7 @@ class DatabaseHandler: NSObject{
         var sources  = [Source]()
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "user_id = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(RLMSource).filter(predicates)
         for rlmSource in results {
             let source = Source(source: rlmSource)
@@ -267,16 +267,16 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Returns a source based on the source name and source uuid.
+    * Returns a source based on the source name and source deviceId.
     *
-    * @param name The source name, or null to only select based on the uuid
-    * @param uuid The source uuid of, or null to only select based on the name
+    * @param name The source name, or null to only select based on the deviceId
+    * @param deviceId The source deviceId of, or null to only select based on the name
     * @return list of source objects that correspond to the specified criteria.
     */
-    func getSource(sourceName: String, _ uuid: String) throws -> RLMSource{
+    func getSource(sourceName: String, _ deviceId: String) throws -> RLMSource{
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "name = %@ AND uuid = %@ AND user_id =%@", sourceName, uuid, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicates = NSPredicate(format: "name = %@ AND deviceId = %@ AND userId =%@", sourceName, deviceId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(RLMSource).filter(predicates)
         
         if (results.count != 1){
@@ -293,7 +293,7 @@ class DatabaseHandler: NSObject{
     */
     private func getSensors() -> [RLMSensor] {
 
-        let predicates = NSPredicate(format: "user_id = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = try! Realm().objects(RLMSensor).filter(predicates)
         return Array(results)
     }

@@ -13,9 +13,9 @@ class RLMSource: Object{
     dynamic var id = ""
     dynamic var name = ""
     dynamic var meta = ""
-    dynamic var uuid = ""
-    dynamic var user_id = ""
-    dynamic var cs_id = ""
+    dynamic var deviceId = ""
+    dynamic var userId = ""
+    dynamic var csId = ""
     dynamic var synced = false
 
     override static func primaryKey() -> String? {

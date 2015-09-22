@@ -13,23 +13,26 @@ class RLMDataPoint: Object{
 
     dynamic var synced = true
     dynamic var value = ""
-    dynamic var sensor_id = ""
+    dynamic var sensorId = ""
+    dynamic var date = 0.0
+    dynamic lazy var compoundKey: String = self.compoundKeyValue()
+    
     func setCompoundSensorID(sensorId: String) {
-        self.sensor_id = sensorId
+        self.sensorId = sensorId
         compoundKey = compoundKeyValue()
     }
-    dynamic var date = 0.0
+
     func setCompoundDate(date: Double) {
         self.date = date
         compoundKey = compoundKeyValue()
     }
-    dynamic lazy var compoundKey: String = self.compoundKeyValue()
+
     override static func primaryKey() -> String? {
         return "compoundKey"
     }
     
     private func compoundKeyValue() -> String {
-        return "\(self.sensor_id)-\(String(self.date))"
+        return "\(self.sensorId)-\(String(self.date))"
     }
     
 }

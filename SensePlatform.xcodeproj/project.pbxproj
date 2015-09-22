@@ -695,13 +695,14 @@
 		FAC4EC871BA086BC00B24CAA /* DSESwift */ = {
 			isa = PBXGroup;
 			children = (
+				FAC4EC881BA086BC00B24CAA /* DSESwift.h */,
+				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				FAD720B11BA977A0002EE7C3 /* libraries */,
 				27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
 				27431DDB1BA2D38000729FB2 /* RLMSource.swift */,
-				FAC4EC881BA086BC00B24CAA /* DSESwift.h */,
-				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				FAC4ECA71BA0873000B24CAA /* communication.swift */,
+				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
 				27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */,
 				27431DEC1BA32F9A00729FB2 /* Source.swift */,
@@ -725,7 +726,6 @@
 		FAD720B11BA977A0002EE7C3 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
-				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				FAD720B21BA977A0002EE7C3 /* Realm.framework */,
 				FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */,
 			);

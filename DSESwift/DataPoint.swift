@@ -9,13 +9,13 @@
 import Foundation
 
 class DataPoint{
-    var sensor_id = ""
+    var sensorId = ""
     private(set) var value = ""
     var date = NSDate()
     var synced = false
 
     init(sensorId: String, value: String, date: NSDate, synced: Bool) {
-        self.sensor_id = sensorId
+        self.sensorId = sensorId
         self.value = value
         self.date = date
         self.synced = synced
@@ -23,7 +23,7 @@ class DataPoint{
 
     convenience init(rlmDataPoint: RLMDataPoint) {
         let date = NSDate(timeIntervalSince1970: rlmDataPoint.date)
-        self.init(sensorId: rlmDataPoint.sensor_id, value: rlmDataPoint.value, date: date, synced: rlmDataPoint.synced)
+        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, synced: rlmDataPoint.synced)
     }
 
     required convenience init() {
@@ -32,7 +32,7 @@ class DataPoint{
     }
     
     func getCompoundKey() -> String {
-        return "\(self.sensor_id)-\(String(self.date))"
+        return "\(self.sensorId)-\(String(self.date))"
     }
     
     func setValue(value: Int) {
