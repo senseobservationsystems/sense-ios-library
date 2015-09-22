@@ -15,8 +15,8 @@ class Sensor{
     var cs_upload_enabled = true
     var cs_download_enabled = true
     var persist_locally = true
-    var userId = ""
-    var sourceId = ""
+    var user_id = ""
+    var source_id = ""
     var data_type = ""
     var cs_id = ""
     var synced = false
@@ -28,8 +28,8 @@ class Sensor{
         self.cs_upload_enabled = cs_upload_enabled
         self.cs_download_enabled = cs_download_enabled
         self.persist_locally = persist_locally
-        self.userId = userId
-        self.sourceId = sourceId
+        self.user_id = userId
+        self.source_id = sourceId
         self.data_type = data_type
         self.cs_id = cs_id
         self.synced = synced
@@ -41,7 +41,7 @@ class Sensor{
     }
     
     convenience init(sensor: RLMSensor) {
-        self.init(id: NSUUID().UUIDString, name: sensor.name, meta: sensor.meta, cs_upload_enabled: sensor.cs_upload_enabled, cs_download_enabled: sensor.cs_download_enabled, persist_locally: sensor.persist_locally, userId: sensor.userId, sourceId: sensor.sourceId, data_type: sensor.data_type, cs_id: sensor.cs_id, synced: sensor.synced)
+        self.init(id: NSUUID().UUIDString, name: sensor.name, meta: sensor.meta, cs_upload_enabled: sensor.cs_upload_enabled, cs_download_enabled: sensor.cs_download_enabled, persist_locally: sensor.persist_locally, userId: sensor.user_id, sourceId: sensor.source_id, data_type: sensor.data_type, cs_id: sensor.cs_id, synced: sensor.synced)
     }
     
 }

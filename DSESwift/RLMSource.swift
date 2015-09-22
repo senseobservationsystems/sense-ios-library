@@ -14,16 +14,11 @@ class RLMSource: Object{
     dynamic var name = ""
     dynamic var meta = ""
     dynamic var uuid = ""
+    dynamic var user_id = ""
     dynamic var cs_id = ""
     dynamic var synced = false
 
     override static func primaryKey() -> String? {
         return "id"
-    }
-    
-    func getNextKey() -> String{
-        let realm = try! Realm()
-        let result = realm.objects(RLMSource)
-        return String(result.count + 1)
     }
 }

@@ -27,6 +27,7 @@
 
 import Foundation
 
+let KEYCHAIN_USERID = "userId"
 
 let SecMatchLimit: String! = kSecMatchLimit as String
 let SecReturnData: String! = kSecReturnData as String

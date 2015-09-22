@@ -14,12 +14,11 @@ import RealmSwift
 
 class DSESwiftTests: XCTestCase {
     
-    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
-        KeychainWrapper.setString("user1", forKey: "userid")
+        KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
     }
     
     override func tearDown() {
@@ -35,10 +34,10 @@ class DSESwiftTests: XCTestCase {
         let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            let source = Source(name: "testSource", meta: "", uuid: NSUUID().UUIDString)
+            let source = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source)
             
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -60,10 +59,10 @@ class DSESwiftTests: XCTestCase {
         let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            let source = Source(name: "testSource", meta: "", uuid: NSUUID().UUIDString)
+            let source = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source)
             
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -84,16 +83,16 @@ class DSESwiftTests: XCTestCase {
         let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            let source = Source(name: "testSource", meta: "", uuid: NSUUID().UUIDString)
+            let source = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source)
             
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var retrievedSensor = dbHandler.getSensor(source.id, sensor.name)
             XCTAssertEqual(retrievedSensor.name, sensor.name)
             
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             retrievedSensor = dbHandler.getSensor(source.id, sensor.name)
@@ -109,20 +108,20 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             //add 3 sources
-            let source1 = Source(name: "testSource1", meta: "", uuid: NSUUID().UUIDString)
+            let source1 = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source1)
             
-            let source2 = Source(name: "testSource2", meta: "", uuid: NSUUID().UUIDString)
+            let source2 = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source2)
             
-            let source3 = Source(name: "testSource3", meta: "", uuid: NSUUID().UUIDString)
+            let source3 = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source3)
             
             //add 2 sensors with the current userid and source 1 and source 2
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey("userid")!, sourceId: source1.id, data_type: "JSON", cs_id: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source1.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey("userid")!, sourceId: source2.id, data_type: "JSON", cs_id: "", synced: false)
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source2.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             //add 1 sensor with another userId and source3
@@ -176,7 +175,7 @@ class DSESwiftTests: XCTestCase {
         do{
             let uuid = NSUUID().UUIDString
             
-            let source = Source(name: "testSource", meta: "", uuid: uuid)
+            let source = Source(name: "testSource", meta: "",uuid: uuid, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source)
             
             let newSourceName = "testSourceUpdated"
@@ -196,10 +195,10 @@ class DSESwiftTests: XCTestCase {
         do{
             let uuid = NSUUID().UUIDString
             
-            let source = Source(name: "testSource", meta: "", uuid: uuid)
+            let source = Source(name: "testSource", meta: "",uuid: uuid, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source)
             
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
             let newSensorName = "sensor1Updated"
