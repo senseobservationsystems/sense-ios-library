@@ -140,36 +140,6 @@ class DSESwiftTests: XCTestCase {
         }
     }
     
-        //add 1 sensor with another userId
-        
-        //call getSources
-        
-        //check if the number of the sources are indeed 2 
-        
-        /*
-        let dbHandler = DatabaseHandler()
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
-        do{
-            var source = Source(name: "testSource", meta: "", uuid: NSUUID().UUIDString)
-            try dbHandler.insertSource(source)
-            
-            source = Source(name: "testSource2", meta: "", uuid: NSUUID().UUIDString)
-            try dbHandler.insertSource(source)
-            
-            var sources = dbHandler.getSources(<#T##sourceName: String##String#>, <#T##uuid: String##String#>)
-            XCTAssertEqual(retrievedSensor.name, sensor.name)
-            
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: "user1", sourceId: source.id, data_type: "JSON", cs_id: "", synced: false)
-            try dbHandler.insertSensor(sensor)
-            
-            retrievedSensor = dbHandler.getSensor(source.id, sensor.name)
-            XCTAssertEqual(retrievedSensor.name, sensor.name)
-        }catch{
-            XCTFail("Exception was captured. Abort the test.")
-        }
-
-    }
-    */
     func testUpdateSource() {
         let dbHandler = DatabaseHandler()
         do{

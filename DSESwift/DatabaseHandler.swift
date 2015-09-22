@@ -276,7 +276,7 @@ class DatabaseHandler: NSObject{
     func getSource(sourceName: String, _ uuid: String) throws -> RLMSource{
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "name = %@ AND uuid = %@", sourceName, uuid)
+        let predicates = NSPredicate(format: "name = %@ AND uuid = %@ AND user_id =%@", sourceName, uuid, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(RLMSource).filter(predicates)
         
         if (results.count != 1){
