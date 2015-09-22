@@ -238,6 +238,7 @@ class DatabaseHandler: NSObject{
             rlmSource.name = source.name
             rlmSource.meta = source.meta
             rlmSource.uuid = source.uuid
+            rlmSource.user_id = source.user_id
             rlmSource.cs_id = source.cs_id
             realm.add(rlmSource)
             try realm.commitWrite()
@@ -255,17 +256,7 @@ class DatabaseHandler: NSObject{
         var sources  = [Source]()
         let realm = try! Realm()
         
-        //TODO: change this method to use user_id on source
-        
-        //get all the sensors with the user id
-        let sensors = getSensors()
-        // creat an array of sourceIds from the sensors
-        var sourceIds = [String]()
-        for sensor in sensors{
-            sourceIds.append(sensor.source_id)
-        }
-        
-        let predicates = NSPredicate(format: "id in %@", sourceIds)
+        let predicates = NSPredicate(format: "user_id = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(RLMSource).filter(predicates)
         for rlmSource in results {
             let source = Source(source: rlmSource)

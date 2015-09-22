@@ -114,7 +114,7 @@ class DSESwiftTests: XCTestCase {
             let source2 = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
             try dbHandler.insertSource(source2)
             
-            let source3 = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+            let source3 = Source(name: "testSource", meta: "",uuid: NSUUID().UUIDString, user_id: "user2")
             try dbHandler.insertSource(source3)
             
             //add 2 sensors with the current userid and source 1 and source 2
