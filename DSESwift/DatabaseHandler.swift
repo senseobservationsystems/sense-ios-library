@@ -50,8 +50,9 @@ class DatabaseHandler: NSObject{
         do {
             let realm = try! Realm()
             realm.beginWrite()
-            rlmDataPoint.setCompoundSensorID(dataPoint.sensorId)
-            rlmDataPoint.setCompoundDate(dataPoint.date.timeIntervalSince1970)
+            rlmDataPoint.sensorId = dataPoint.sensorId
+            rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
+            rlmDataPoint.updateId();
             rlmDataPoint.value = dataPoint.value
             realm.add(rlmDataPoint, update:true)
             try realm.commitWrite()
@@ -69,7 +70,7 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    func getDataPoints(sensorId sensorId: String, startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
+    func getDataPoints(sensorId sensorId: Int, startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
         if (!self.isExistingPrimaryKeyForSensor(sensorId)){
             throw RLMError.ObjectNotFound
         }
@@ -98,8 +99,8 @@ class DatabaseHandler: NSObject{
     * @param sensor: Sensor object containing the updated info.
     */
     func update(sensor: Sensor) throws {
-        //validate the sourceId and sensorId
-        if (!self.isExistingPrimaryKeyForSource(sensor.sourceId) || !self.isExistingPrimaryKeyForSensor(sensor.id)){
+        //validate the source and sensorId
+        if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw RLMError.ObjectNotFound
         }
         
@@ -113,7 +114,7 @@ class DatabaseHandler: NSObject{
             rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
             rlmSensor.persistLocally = sensor.persistLocally
             rlmSensor.userId = sensor.userId
-            rlmSensor.sourceId = sensor.sourceId
+            rlmSensor.source = sensor.source
             rlmSensor.dataType = sensor.dataType
             rlmSensor.csId = sensor.csId //TODO: How should we get Common Sense Sensor id??
             rlmSensor.synced = sensor.synced
@@ -130,16 +131,11 @@ class DatabaseHandler: NSObject{
     * Insert a new sensor into database if it does not exist yet. Throw exception if it already exists. If it has been created, return the object.
     *
     * @param sensorName: String for sensor name.
-    * @param sourceId: String for sourceId.
+    * @param source: String for source.
     * @param dataType: String for dataType.
     * @param sensorOptions: DSESensorOptions object.
     */
     func insertSensor(sensor:Sensor) throws {
-        //validate the source Id
-        if (!self.isExistingPrimaryKeyForSource(sensor.sourceId)){
-            throw RLMError.ObjectNotFound
-        }
-        
         let realm = try! Realm()
         let rlmSensor = RLMSensor()
         
@@ -152,7 +148,7 @@ class DatabaseHandler: NSObject{
             rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
             rlmSensor.persistLocally = sensor.persistLocally
             rlmSensor.userId = sensor.userId
-            rlmSensor.sourceId = sensor.sourceId
+            rlmSensor.source = sensor.source
             rlmSensor.dataType = sensor.dataType
             rlmSensor.csId = sensor.csId //TODO: How should we get Common Sense Sensor id??
             rlmSensor.synced = sensor.synced
@@ -165,43 +161,16 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Update RLMSource in database with the info of the given Source object. Throws an exception if it fails to updated.
-    * @param source: Source object containing the updated info.
-    */
-    func update(source: Source) throws {
-        //validate the source Id
-        if (!self.isExistingPrimaryKeyForSource(source.id)) {
-            throw RLMError.ObjectNotFound
-        }
-        
-        let realm = try! Realm()
-        
-        do {
-            let rlmSource = self.getSource(source.id)
-            realm.beginWrite()
-            rlmSource.name = source.name
-            rlmSource.meta = source.meta
-            rlmSource.deviceId = source.deviceId
-            rlmSource.csId = source.csId
-            realm.add(rlmSource, update:true)
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.UpdateFailed
-        }
-    }
-    
-    /**
-    * Returns a specific sensor by name connected to the source with the given sourceId.
+    * Returns a specific sensor by name connected to the source with the given source.
     *
-    * @param sourceId: String for sourceId.
+    * @param source: String for source.
     * @param sensorName: String for sensor name.
-    * @return sensor: sensor with the given sensor name and sourceId.
+    * @return sensor: sensor with the given sensor name and source.
     */
-    func getSensor(sourceId: String, _ sensorName: String) throws -> Sensor {
+    func getSensor(source: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "name = %@ AND sourceId = %@", sensorName,
-            sourceId)
+        let predicates = NSPredicate(format: "name = %@ AND source = %@", sensorName, source)
         let results = realm.objects(RLMSensor).filter(predicates)
         if (results.count != 1){
             throw RLMError.ObjectNotFound
@@ -211,17 +180,17 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Returns all the sensors connected to the source with the given sourceId.
+    * Returns all the sensors connected to the source with the given source.
     *
-    * @param sourceId: String for sensorId.
+    * @param source: String for sensorId.
     * @param sensorName: String for sensor name.
-    * @return sensors: An array of sensors that belongs to the source with the given sourceId.
+    * @return sensors: An array of sensors that belongs to the source with the given source.
     */
-    func getSensors(sourceId: String)->[Sensor]{
+    func getSensors(source: String)->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "sourceId = %@", sourceId)
+        let predicates = NSPredicate(format: "source = %@ AND userId = %@", source, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             let sensor = Sensor(rlmSensor)
@@ -232,86 +201,19 @@ class DatabaseHandler: NSObject{
     }
     
     // MARK: For DataStorageEngine class
-    
-    /**
-    * Insert a Source Object
-    *
-    * @param name The name of the source
-    * @param deviceId the unique identifier of the source
-    */
-    func insertSource(source: Source) throws {
-        let realm = try! Realm()
-    
-        let rlmSource = RLMSource()
-        do{
-            realm.beginWrite()
-            rlmSource.id = source.id
-            rlmSource.name = source.name
-            rlmSource.meta = source.meta
-            rlmSource.deviceId = source.deviceId
-            rlmSource.userId = source.userId
-            rlmSource.csId = source.csId
-            realm.add(rlmSource)
-            try realm.commitWrite()
-        }catch{
-            throw RLMError.InsertFailed
-        }
-    }
-    
-    /**
-    * Returns a list of sources based on the specified criteria.
-    *
-    * @return list of source objects that correspond to the specified criteria.
-    */
-    func getSources()-> [Source]{
-        var sources  = [Source]()
-        let realm = try! Realm()
-        
-        let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
-        let results = realm.objects(RLMSource).filter(predicates)
-        for rlmSource in results {
-            let source = Source(source: rlmSource)
-            sources.append(source)
-        }
-        
-        return sources
-    }
-    
-    /**
-    * Returns a source based on the source name and source deviceId.
-    *
-    * @param name The source name, or null to only select based on the deviceId
-    * @param deviceId The source deviceId of, or null to only select based on the name
-    * @return list of source objects that correspond to the specified criteria.
-    */
-    func getSource(sourceName: String, _ deviceId: String) throws -> RLMSource{
-        let realm = try! Realm()
-        
-        let predicates = NSPredicate(format: "name = %@ AND deviceId = %@ AND userId =%@", sourceName, deviceId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
-        let results = realm.objects(RLMSource).filter(predicates)
-        
-        if (results.count != 1){
-            throw RLMError.ObjectNotFound
-        }
-        return results.first!
-    }
-    
-    
     // MARK: Helper functions
 
     /*
     * Returns all the sensor which belong to the current user.
     */
-    private func getSensors() -> [RLMSensor] {
-
+    func getSensors() -> [RLMSensor] {
         let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = try! Realm().objects(RLMSensor).filter(predicates)
         return Array(results)
     }
 
     
-    private func getSensor(id: String) -> RLMSensor {
-
+    private func getSensor(id: Int) -> RLMSensor {
         var sensor = RLMSensor()
         let predicates = NSPredicate(format: "id = %@", id)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
@@ -321,23 +223,12 @@ class DatabaseHandler: NSObject{
         return sensor
     }
     
-    private func getSource(id: String) -> RLMSource {
-        
-        var source = RLMSource()
-        let predicates = NSPredicate(format: "id = %@", id)
-        let result = try! Realm().objects(RLMSource).filter(predicates)
-        if(result.count == 1){
-            source = result.first!
-        }
-        return source
-    }
-    
     /**
     * Returns true if sensor with the given sensorId exists.
     */
-    private func isExistingPrimaryKeyForSensor(sensorId: String) -> Bool {
+    private func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
         var exists = false
-        let predicates = NSPredicate(format: "id = %@", sensorId)
+        let predicates = NSPredicate(format: "id = %@ AND userId = %@", sensorId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
         if(result.count == 1){
             exists = true
@@ -346,24 +237,11 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Returns true if source with the given sourceId exists.
+    * Returns true if source with the given source exists.
     */
-    private func isExistingPrimaryKeyForSource(sourceId: String) -> Bool {
+    private func isExistingPrimaryKeyForDataPoint(id: String) -> Bool {
         var exists = false
-        let predicates = NSPredicate(format: "id = %@", sourceId) //TODO: use username from the keychain
-        let result = try! Realm().objects(RLMSource).filter(predicates)
-        if(result.count == 1){
-            exists = true
-        }
-        return exists
-    }
-    
-    /**
-    * Returns true if source with the given sourceId exists.
-    */
-    private func isExistingPrimaryKeyForDataPoint(primaryKey: String) -> Bool {
-        var exists = false
-        let predicates = NSPredicate(format: "compoundKey = %@", primaryKey) //TODO: use username from the keychain
+        let predicates = NSPredicate(format: "id = %@", id)
         let result = try! Realm().objects(RLMDataPoint).filter(predicates)
         if(result.count == 1){
             exists = true

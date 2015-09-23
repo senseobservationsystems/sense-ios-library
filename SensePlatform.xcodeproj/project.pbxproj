@@ -48,9 +48,7 @@
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DDB1BA2D38000729FB2 /* RLMSource.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; settings = {ASSET_TAGS = (); }; };
-		27431DED1BA32F9A00729FB2 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEC1BA32F9A00729FB2 /* Source.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
@@ -234,9 +232,7 @@
 		2709FF7D1BAF0E800051E8B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDataPoint.swift; sourceTree = "<group>"; };
-		27431DDB1BA2D38000729FB2 /* RLMSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSource.swift; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
-		27431DEC1BA32F9A00729FB2 /* Source.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorOptions.swift; sourceTree = "<group>"; };
 		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
@@ -700,12 +696,10 @@
 				FAD720B11BA977A0002EE7C3 /* libraries */,
 				27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
-				27431DDB1BA2D38000729FB2 /* RLMSource.swift */,
 				FAC4ECA71BA0873000B24CAA /* communication.swift */,
 				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
 				27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */,
-				27431DEC1BA32F9A00729FB2 /* Source.swift */,
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
 				27F752701BB0212C000FC400 /* KeychainWrapper.swift */,
 				27F752761BB0285B000FC400 /* testObject.swift */,
@@ -1091,7 +1085,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
-				27431DE01BA2D38000729FB2 /* RLMSource.swift in Sources */,
 				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
 				27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */,
 				27F752771BB0285B000FC400 /* testObject.swift in Sources */,
@@ -1100,7 +1093,6 @@
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
-				27431DED1BA32F9A00729FB2 /* Source.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

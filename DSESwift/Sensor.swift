@@ -9,20 +9,20 @@
 import Foundation
 
 public class Sensor{
-    var id = ""
+    var id = -1
     var name = ""
     var meta = ""
     var csUploadEnabled = true
     var csDownloadEnabled = true
     var persistLocally = true
     var userId = ""
-    var sourceId = ""
+    var source = ""
     var dataType = ""
     var csId = ""
     var synced = false
 
-    init(id:String,           name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, sourceId: String, dataType: String,      csId: String,
+    init(id:Int,              name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
+        persistLocally: Bool, userId: String, source: String,   dataType: String,      csId: String,
         synced: Bool) {
             
         self.id = id
@@ -32,23 +32,23 @@ public class Sensor{
         self.csDownloadEnabled = csDownloadEnabled
         self.persistLocally = persistLocally
         self.userId = userId
-        self.sourceId = sourceId
+        self.source = source
         self.dataType = dataType
         self.csId = csId
         self.synced = synced
     }
     
-    public convenience init(name: String,  sensorOptions: SensorOptions, userId: String, sourceId: String,
-                        dataType: String,  csId: String,                 synced: Bool) {
+    public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
+                            source: String, dataType: String, csId: String, synced: Bool) {
         self.init(
-            id: NSUUID().UUIDString,
+            id: RLMSensor.getNextKey(),
             name: name,
             meta: sensorOptions.meta,
             csUploadEnabled: sensorOptions.uploadEnabled,
             csDownloadEnabled: sensorOptions.downloadEnabled,
             persistLocally: sensorOptions.persist,
             userId: userId,
-            sourceId: sourceId,
+            source: source,
             dataType: dataType,
             csId: csId,
             synced: synced
@@ -64,7 +64,7 @@ public class Sensor{
             csDownloadEnabled: sensor.csDownloadEnabled,
             persistLocally: sensor.persistLocally,
             userId: sensor.userId,
-            sourceId: sensor.sourceId,
+            source: sensor.source,
             dataType: sensor.dataType,
             csId: sensor.csId,
             synced: sensor.synced

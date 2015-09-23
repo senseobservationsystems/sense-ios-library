@@ -10,14 +10,14 @@ import Foundation
 import RealmSwift
 
 class RLMSensor: Object{
-    dynamic var id = ""
+    dynamic var id = -1
     dynamic var name = ""
     dynamic var meta = ""
     dynamic var csUploadEnabled = true
     dynamic var csDownloadEnabled = true
     dynamic var persistLocally = true
     dynamic var userId = ""
-    dynamic var sourceId = ""
+    dynamic var source = ""
     dynamic var dataType = ""
     dynamic var csId = ""
     dynamic var synced = false
@@ -26,9 +26,9 @@ class RLMSensor: Object{
         return "id"
     }
     
-    func getNextKey() -> String{
+    static func getNextKey() -> Int{
         let realm = try! Realm()
         let result = realm.objects(RLMSensor)
-        return String(result.count+1)
+        return Int(result.count+1)
     }
 }

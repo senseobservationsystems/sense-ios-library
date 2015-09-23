@@ -9,12 +9,12 @@
 import Foundation
 
 class DataPoint{
-    var sensorId = ""
+    var sensorId = -1
     private(set) var value = ""
     var date = NSDate()
     var synced = false
 
-    init(sensorId: String, value: String, date: NSDate, synced: Bool) {
+    init(sensorId: Int, value: String, date: NSDate, synced: Bool) {
         self.sensorId = sensorId
         self.value = value
         self.date = date
@@ -28,10 +28,10 @@ class DataPoint{
 
     required convenience init() {
         let now = NSDate()
-        self.init(sensorId: "", value: "", date: now, synced: false)
+        self.init(sensorId: -1, value: "", date: now, synced: false)
     }
     
-    func getCompoundKey() -> String {
+    func getId() -> String {
         return "\(self.sensorId)-\(String(self.date))"
     }
     
