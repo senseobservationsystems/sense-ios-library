@@ -51,7 +51,7 @@ class DataPoint{
         self.value = value.description
     }
     
-    func getValue(value: String){
+    func setValue(value: String){
         self.value = value
     }
     

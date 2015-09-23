@@ -15,6 +15,7 @@ enum RLMError: ErrorType{
     case InsertFailed
     case UpdateFailed
     case DuplicatedObjects
+    case InvalidLimit
 }
 
 enum SortOrder: ErrorType{
@@ -30,7 +31,7 @@ DatabaseHandler is a class to wrap around Realm database operation and provide m
 class DatabaseHandler: NSObject{
     
     
-    //For sensor class
+    // MARK: For sensor class
     /**
     * Add a data point to the sensor with the given sensorId. Throw exceptions if it fails to add the data point.
     
@@ -72,6 +73,9 @@ class DatabaseHandler: NSObject{
         if (!self.isExistingPrimaryKeyForSensor(sensorId)){
             throw RLMError.ObjectNotFound
         }
+        if (limit < 1){
+            throw RLMError.InvalidLimit
+        }
         
         var dataPoints = [DataPoint]()
         let realm = try! Realm()
@@ -85,6 +89,9 @@ class DatabaseHandler: NSObject{
         }
         return dataPoints
     }
+    
+    
+    // MARK: For source class
     
     /**
     * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated.
@@ -118,8 +125,7 @@ class DatabaseHandler: NSObject{
         }
         
     }
-    
-    //For source class
+
     /**
     * Insert a new sensor into database if it does not exist yet. Throw exception if it already exists. If it has been created, return the object.
     *
@@ -225,7 +231,7 @@ class DatabaseHandler: NSObject{
         return sensors
     }
     
-    //For DataStorageEngine class
+    // MARK: For DataStorageEngine class
     
     /**
     * Insert a Source Object

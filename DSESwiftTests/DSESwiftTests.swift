@@ -26,11 +26,111 @@ class DSESwiftTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        XCTAssert(true, "Pass")
+    func testInsertDataPoint() {
+        let dbHandler = DatabaseHandler()
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            let source = Source(name: "testSource", meta: "",deviceId: NSUUID().UUIDString, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+            try dbHandler.insertSource(source)
+            
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, dataType: "JSON", csId: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            var sensors = [Sensor]()
+            sensors = dbHandler.getSensors(source.id)
+            XCTAssertEqual(sensors.count, 1)
+            
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+            
+            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+            
+            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(1000), limit: 100, sortOrder: SortOrder.Asc)
+            XCTAssertEqual(dataPoints.count, 2)
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
     }
     
-    func testInsertSensor() {
+    func testInsertDataPointWithInvalidSensorId() {
+        let dbHandler = DatabaseHandler()
+        do{
+            let dataPoint = DataPoint(sensorId: "invalidId", value: "String value", date: NSDate(), synced: false)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+        }catch{
+            XCTAssertNotNil(error)
+        }
+    }
+    
+    func testGetDataPointsWithInvalidLimit() {
+        let dbHandler = DatabaseHandler()
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            let source = Source(name: "testSource", meta: "",deviceId: NSUUID().UUIDString, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+            try dbHandler.insertSource(source)
+            
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, dataType: "JSON", csId: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            var sensors = [Sensor]()
+            sensors = dbHandler.getSensors(source.id)
+            XCTAssertEqual(sensors.count, 1)
+            
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+            
+            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+            
+            let dataPoints = try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: -1, sortOrder: SortOrder.Asc)
+        }catch{
+            XCTAssertNotNil(error)
+        }
+    }
+    
+    func testGetDataPointsWithInvalidSensorId() {
+        let dbHandler = DatabaseHandler()
+        do{
+            let dataPoints = try dbHandler.getDataPoints(sensorId: "invalid Sensor Id", startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
+        }catch{
+            XCTAssertNotNil(error)
+        }
+    }
+    
+    func testUpdateDataPoint() {
+        let dbHandler = DatabaseHandler()
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            let source = Source(name: "testSource", meta: "",deviceId: NSUUID().UUIDString, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+            try dbHandler.insertSource(source)
+            
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, dataType: "JSON", csId: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            var sensors = [Sensor]()
+            sensors = dbHandler.getSensors(source.id)
+            XCTAssertEqual(sensors.count, 1)
+            
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(1), limit: 100, sortOrder: SortOrder.Asc)
+            XCTAssertEqual(dataPoints.count, 1)
+            XCTAssertEqual(dataPoints[0].getValueInString(), "String value")
+            
+            dataPoint = dataPoints[0]
+            dataPoint.setValue("String value updated")
+            try dbHandler.insertOrUpdateDataPoint(dataPoint)
+            let updatedDataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
+            XCTAssertEqual(updatedDataPoints.count, 1)
+            XCTAssertEqual(updatedDataPoints[0].getValueInString(), "String value updated")
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+
+    
+    func testInsertSensorWithValidSetup() {
         let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
@@ -54,30 +154,20 @@ class DSESwiftTests: XCTestCase {
         }
     }
     
-    
-    func testInsertDataPoint() {
+    func testInsertSensorWithInvalidSourceId() {
         let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            let source = Source(name: "testSource", meta: "",deviceId: NSUUID().UUIDString, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
-            try dbHandler.insertSource(source)
             
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: source.id, dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, sourceId: NSUUID().UUIDString, dataType: "JSON", csId: "", synced: false)
             try dbHandler.insertSensor(sensor)
             
-            var sensors = [Sensor]()
-            sensors = dbHandler.getSensors(source.id)
-            XCTAssertEqual(sensors.count, 1)
-            
-            let dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
-            try dbHandler.insertOrUpdateDataPoint(dataPoint)
-            
-            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
-            XCTAssertEqual(dataPoints.count, 1)
-        }catch{
-            XCTFail("Exception was captured. Abort the test.")
+        } catch {
+            XCTAssertNotNil(error)
         }
     }
+    
+    
     
     func testGetSensorWithSourceIdAndSensorName() {
         let dbHandler = DatabaseHandler()
