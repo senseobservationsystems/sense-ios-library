@@ -81,7 +81,7 @@ class DatabaseHandler: NSObject{
         var dataPoints = [DataPoint]()
         let realm = try! Realm()
         let isAscending = (sortOrder == SortOrder.Asc) ? true : false;
-        let predicates = NSPredicate(format: "sensorId = %@ AND date >= %f AND date < %f", sensorId, startDate.timeIntervalSince1970, endDate.timeIntervalSince1970) //
+        let predicates = NSPredicate(format: "sensorId = %d AND date >= %f AND date < %f", sensorId, startDate.timeIntervalSince1970, endDate.timeIntervalSince1970) //
         //query
         let results = realm.objects(RLMDataPoint).filter(predicates).sorted("date", ascending: isAscending)
         for rlmDataPoint in results {
@@ -206,7 +206,7 @@ class DatabaseHandler: NSObject{
     
     private func getSensor(id: Int) -> RLMSensor {
         var sensor = RLMSensor()
-        let predicates = NSPredicate(format: "id = %@", id)
+        let predicates = NSPredicate(format: "id = %d", id)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
         if(result.count == 1){
             sensor = result.first!
@@ -219,7 +219,7 @@ class DatabaseHandler: NSObject{
     */
     private func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
         var exists = false
-        let predicates = NSPredicate(format: "id = %@ AND userId = %@", sensorId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicates = NSPredicate(format: "id = %d AND userId = %@", sensorId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
         if(result.count == 1){
             exists = true
