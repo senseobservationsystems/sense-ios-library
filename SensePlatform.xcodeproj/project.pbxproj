@@ -44,7 +44,6 @@
 
 /* Begin PBXBuildFile section */
 		2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
-		2709FF7F1BAF0EC10051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
@@ -52,6 +51,8 @@
 		27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; settings = {ASSET_TAGS = (); }; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		276CBB781BB45234001C287D /* DSESwiftPerforamanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */; };
+		276CBB7A1BB45234001C287D /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; settings = {ASSET_TAGS = (); }; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; settings = {ASSET_TAGS = (); }; };
@@ -198,6 +199,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		276CBB7B1BB45234001C287D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
+			remoteInfo = DSESwift;
+		};
 		FA66C2A01BA86E1B00281B6F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
@@ -235,6 +243,9 @@
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorOptions.swift; sourceTree = "<group>"; };
 		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
+		276CBB751BB45234001C287D /* DSESwiftPerforamanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSESwiftPerforamanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftPerforamanceTests.swift; sourceTree = "<group>"; };
+		276CBB791BB45234001C287D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
@@ -391,6 +402,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		276CBB721BB45234001C287D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				276CBB7A1BB45234001C287D /* DSESwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FABCC0881BA7003500EE6DE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -433,7 +452,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2709FF7F1BAF0EC10051E8B2 /* Security.framework in Frameworks */,
 				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +459,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		276CBB761BB45234001C287D /* DSESwiftPerforamanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */,
+				276CBB791BB45234001C287D /* Info.plist */,
+			);
+			path = DSESwiftPerforamanceTests;
+			sourceTree = "<group>";
+		};
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
@@ -448,6 +475,7 @@
 				FAC4EC931BA086BC00B24CAA /* DSESwiftTests */,
 				FABCC08D1BA7003500EE6DE0 /* SensePlatform */,
 				FABCC0991BA7003500EE6DE0 /* SensePlatformTests */,
+				276CBB761BB45234001C287D /* DSESwiftPerforamanceTests */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
 				3E820D6B15D40AB50001A3EC /* Products */,
 			);
@@ -460,6 +488,7 @@
 				FAC4EC8F1BA086BC00B24CAA /* DSESwiftTests.xctest */,
 				FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */,
 				FABCC0951BA7003500EE6DE0 /* SensePlatformTests.xctest */,
+				276CBB751BB45234001C287D /* DSESwiftPerforamanceTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -809,6 +838,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		276CBB741BB45234001C287D /* DSESwiftPerforamanceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 276CBB7D1BB45234001C287D /* Build configuration list for PBXNativeTarget "DSESwiftPerforamanceTests" */;
+			buildPhases = (
+				276CBB711BB45234001C287D /* Sources */,
+				276CBB721BB45234001C287D /* Frameworks */,
+				276CBB731BB45234001C287D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				276CBB7C1BB45234001C287D /* PBXTargetDependency */,
+			);
+			name = DSESwiftPerforamanceTests;
+			productName = DSESwiftPerforamanceTests;
+			productReference = 276CBB751BB45234001C287D /* DSESwiftPerforamanceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FABCC08B1BA7003500EE6DE0 /* SensePlatform */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FABCC09D1BA7003500EE6DE0 /* Build configuration list for PBXNativeTarget "SensePlatform" */;
@@ -892,6 +939,9 @@
 				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0700;
 				TargetAttributes = {
+					276CBB741BB45234001C287D = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					A9DCAB711B949E5A00318E69 = {
 						CreatedOnToolsVersion = 6.4;
 					};
@@ -931,11 +981,19 @@
 				FAC4EC8E1BA086BC00B24CAA /* DSESwiftTests */,
 				FABCC08B1BA7003500EE6DE0 /* SensePlatform */,
 				FABCC0941BA7003500EE6DE0 /* SensePlatformTests */,
+				276CBB741BB45234001C287D /* DSESwiftPerforamanceTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		276CBB731BB45234001C287D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FABCC08A1BA7003500EE6DE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1011,6 +1069,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		276CBB711BB45234001C287D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				276CBB781BB45234001C287D /* DSESwiftPerforamanceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FABCC0871BA7003500EE6DE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1108,6 +1174,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		276CBB7C1BB45234001C287D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
+			targetProxy = 276CBB7B1BB45234001C287D /* PBXContainerItemProxy */;
+		};
 		FA66C2A11BA86E1B00281B6F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
@@ -1121,6 +1192,59 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		276CBB7E1BB45234001C287D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DSESwift/libraries",
+				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = DSESwiftPerforamanceTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks import XCTest\nimport RealmSwift\n\n@testable import DSESwift\n\n\nclass DSESwiftTests: XCTestCase {\n    \n    override func setUp() {\n        super.setUp()\n        // Put setup code here. This method is called before the invocation of each test method in the class.\n        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = \"test\"\n        KeychainWrapper.setString(\"user1\", forKey: KEYCHAIN_USERID)\n    }\n    \n    override func tearDown() {\n        // Put teardown code here. This method is called after the invocation of each test method in the class.\n        super.tearDown()\n    }\n    \n    func testInsertDataPoint() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 100, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 2)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointWithValidLimit() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 101; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 80)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointsPerformanceWith100000() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 100000; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            self.measureBlock(){\n                do{\n                    try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n                } catch{\n                }\n            }\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\nimport XCTest\nimport RealmSwift\n\n@testable import DSESwift\n\n\nclass DSESwiftTests: XCTestCase {\n    \n    override func setUp() {\n        super.setUp()\n        // Put setup code here. This method is called before the invocation of each test method in the class.\n        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = \"test\"\n        KeychainWrapper.setString(\"user1\", forKey: KEYCHAIN_USERID)\n    }\n    \n    override func tearDown() {\n        // Put teardown code here. This method is called after the invocation of each test method in the class.\n        super.tearDown()\n    }\n    \n    func testInsertDataPoint() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 100, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 2)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointWithValidLimit() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 101; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 80)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointsPerformanceWith100000() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 100000; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            self.measureBlock(){\n                do{\n                    try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n                } catch{\n                }\n            }\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n $(PROJECT_DIR)/DSESwift/libraries";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftPerforamanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		276CBB7F1BB45234001C287D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DSESwift/libraries",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = DSESwiftPerforamanceTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks import XCTest\nimport RealmSwift\n\n@testable import DSESwift\n\n\nclass DSESwiftTests: XCTestCase {\n    \n    override func setUp() {\n        super.setUp()\n        // Put setup code here. This method is called before the invocation of each test method in the class.\n        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = \"test\"\n        KeychainWrapper.setString(\"user1\", forKey: KEYCHAIN_USERID)\n    }\n    \n    override func tearDown() {\n        // Put teardown code here. This method is called after the invocation of each test method in the class.\n        super.tearDown()\n    }\n    \n    func testInsertDataPoint() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 100, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 2)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointWithValidLimit() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 101; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 80)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointsPerformanceWith100000() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 100000; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            self.measureBlock(){\n                do{\n                    try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n                } catch{\n                }\n            }\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\nimport XCTest\nimport RealmSwift\n\n@testable import DSESwift\n\n\nclass DSESwiftTests: XCTestCase {\n    \n    override func setUp() {\n        super.setUp()\n        // Put setup code here. This method is called before the invocation of each test method in the class.\n        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = \"test\"\n        KeychainWrapper.setString(\"user1\", forKey: KEYCHAIN_USERID)\n    }\n    \n    override func tearDown() {\n        // Put teardown code here. This method is called after the invocation of each test method in the class.\n        super.tearDown()\n    }\n    \n    func testInsertDataPoint() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n            try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 100, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 2)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointWithValidLimit() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 101; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            \n            let dataPoints = try! dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n            XCTAssertEqual(dataPoints.count, 80)\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n    \n    func testGetDataPointsPerformanceWith100000() {\n        let dbHandler = DatabaseHandler()\n        let sensorOptions = SensorOptions(meta: \"\", uploadEnabled: true, downloadEnabled: true, persist: true)\n        do{\n            let sourceName = \"testSource\"\n            let sensor = Sensor(name: \"sensor1\", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: \"testSource\", dataType: \"JSON\", csId: \"\", synced: false)\n            try dbHandler.insertSensor(sensor)\n            \n            var sensors = [Sensor]()\n            sensors = dbHandler.getSensors(sourceName)\n            XCTAssertEqual(sensors.count, 1)\n            \n            var dataPoint: DataPoint!\n            for (var i=0; i < 100000; i++){\n                dataPoint = DataPoint(sensorId: sensor.id, value: \"String value\", date: NSDate(), synced: false)\n                try dbHandler.insertOrUpdateDataPoint(dataPoint)\n            }\n            \n            self.measureBlock(){\n                do{\n                    try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)\n                } catch{\n                }\n            }\n        }catch{\n            XCTFail(\"Exception was captured. Abort the test.\")\n        }\n    }\n $(PROJECT_DIR)/DSESwift/libraries";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwiftPerforamanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		3E820D7515D40AB50001A3EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1518,6 +1642,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		276CBB7D1BB45234001C287D /* Build configuration list for PBXNativeTarget "DSESwiftPerforamanceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				276CBB7E1BB45234001C287D /* Debug */,
+				276CBB7F1BB45234001C287D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
