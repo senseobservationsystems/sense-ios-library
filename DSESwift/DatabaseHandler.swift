@@ -92,7 +92,7 @@ class DatabaseHandler: NSObject{
     }
     
     
-    // MARK: For source class
+    // MARK: For DataStorageEngine class
     
     /**
     * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated.
@@ -116,7 +116,7 @@ class DatabaseHandler: NSObject{
             rlmSensor.userId = sensor.userId
             rlmSensor.source = sensor.source
             rlmSensor.dataType = sensor.dataType
-            rlmSensor.csId = sensor.csId //TODO: How should we get Common Sense Sensor id??
+            rlmSensor.csId = sensor.csId 
             rlmSensor.synced = sensor.synced
     
             realm.add(rlmSensor, update: true)
@@ -167,10 +167,10 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensor: sensor with the given sensor name and source.
     */
-    func getSensor(source: String, _ sensorName: String) throws -> Sensor {
+    func getSensor(sensorName: String) throws -> Sensor {
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "name = %@ AND source = %@", sensorName, source)
+        let predicates = NSPredicate(format: "name = %@", sensorName)
         let results = realm.objects(RLMSensor).filter(predicates)
         if (results.count != 1){
             throw RLMError.ObjectNotFound
@@ -186,11 +186,11 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensors: An array of sensors that belongs to the source with the given source.
     */
-    func getSensors(source: String)->[Sensor]{
+    func getSensors()->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "source = %@ AND userId = %@", source, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             let sensor = Sensor(rlmSensor)
@@ -200,17 +200,8 @@ class DatabaseHandler: NSObject{
         return sensors
     }
     
-    // MARK: For DataStorageEngine class
-    // MARK: Helper functions
 
-    /*
-    * Returns all the sensor which belong to the current user.
-    */
-    func getSensors() -> [RLMSensor] {
-        let predicates = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
-        let results = try! Realm().objects(RLMSensor).filter(predicates)
-        return Array(results)
-    }
+    // MARK: Helper functions
 
     
     private func getSensor(id: Int) -> RLMSensor {
