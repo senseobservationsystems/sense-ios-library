@@ -55,6 +55,7 @@
 		276CBB7A1BB45234001C287D /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; settings = {ASSET_TAGS = (); }; };
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; settings = {ASSET_TAGS = (); }; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; settings = {ASSET_TAGS = (); }; };
+		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; settings = {ASSET_TAGS = (); }; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; settings = {ASSET_TAGS = (); }; };
@@ -249,6 +250,8 @@
 		276CBB791BB45234001C287D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		276CBB801BB52B9D001C287D /* testObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testObject.swift; sourceTree = "<group>"; };
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
+		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
+		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
@@ -573,6 +576,8 @@
 		FABCC0991BA7003500EE6DE0 /* SensePlatformTests */ = {
 			isa = PBXGroup;
 			children = (
+				276CBB841BB57838001C287D /* AccountUtilsForTest.h */,
+				276CBB851BB57838001C287D /* AccountUtilsForTest.m */,
 				FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */,
 				FA5DF79F1BA716F700FF9544 /* CSSpatialProviderTest.h */,
 				FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */,
@@ -1142,6 +1147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */,
+				276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */,
 				FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */,
 				FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */,
 				FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */,
@@ -1653,6 +1659,7 @@
 				276CBB7F1BB45234001C287D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */ = {
 			isa = XCConfigurationList;

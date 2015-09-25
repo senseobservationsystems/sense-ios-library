@@ -8,35 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import <SensePlatform/DSEHTTPRequestHelper.h>
-#import <SensePlatform/DSEHTTPRequestHelper.h>
-#import <SensePlatform/DSECommonSenseProxy.h>
-#import <SensePlatform/CSSensePlatform.h>
-#import <SensePlatform/CSSensorStore.h>
-#import <SensePlatform/NSData+GZIP.h>
-#import <SensePlatform/NSString+MD5Hash.h>
-#import <SensePlatform/UIDevice+Hardware.h>
+#import "DSECommonSenseProxy.h"
+#import "CSSensePlatform.h"
+#import "CSSensorStore.h"
+#import "AccountUtilsForTest.h"
+#import "UIDevice+Hardware.h"
 
-#import <DSESwift/DSESwift-Swift.h>
-
-/* Some test values */
-static NSString* testAppKeyStaging = @"wRgE7HZvhDsRKaRm6YwC3ESpIqqtakeg";
-static NSString* newUserEmail_format = @"spam+%f@sense-os.nl";
-static NSString* testPassword = @"darkr";
-
-static NSString* kUrlBaseURLStaging = @"http://api.staging.sense-os.nl";
-static NSString* kUrlAuthenticationStaging= @"http://auth-api.staging.sense-os.nl/v1/login";
-
-static const NSString* kUrlLogin					= @"login";
-static const NSString* kUrlLogout                   = @"logout";
-static const NSString* kUrlSensorDevice             = @"device";
-static const NSString* kUrlSensors                  = @"sensors";
-static const NSString* kUrlUsers                    = @"users";
-static const NSString* kUrlUploadMultipleSensors    = @"sensors/data";
-static const NSString* kUrlData                     = @"data";
-static const NSString* kUrlDevices                  = @"devices";
-
-static const NSString* kUrlJsonSuffix               = @"";
 
 static enum SensorAttributes {
     None = 0,
@@ -77,9 +54,6 @@ static enum SensorAttributes {
 #pragma mark loginUser
 
 - (void)testLoginWithValidUsernameAndPassword {
-    blaat *swiftClass = [[blaat alloc] init];
-   [swiftClass test];
-    
     
     NSError* error;
     NSString* registrationError;
@@ -87,34 +61,13 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
 	XCTAssertNil(error, @"Error is not nil; an error must have occured");
 	XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
 	XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
-    
+          
     [self deleteCurrentUser:sessionID];
 }
-/*
-- (void)testLoginWithWrongObjectForError {
-    
-    //Wrong object
-    NSDictionary* error;
-    NSString* registrationError;
-    NSString *newUserEmail;
-    newUserEmail = [self registerANewUserForTest:registrationError];
-    
-    NSException* expectedException;
-    NSString* sessionID;
-    //try to login with wrong password, so that error will be used in the method
-    @try{
-        sessionID= [proxy loginUser:newUserEmail andPassword:@"veryWrongPassword" andError:&error];
-    }
-    @catch (NSException* e){
-        expectedException = e;
-    }
-    XCTAssertNotNil(expectedException, @"Exception is nil;");
-}
- */
 
 - (void)testLoginWithWrongObjectForPassword {
     
@@ -132,7 +85,7 @@ static enum SensorAttributes {
     NSException* expectedException;
     //try to login with wrong password, so that error will be used in the method
     @try{
-        sessionID= [proxy loginUser:newUserEmail andPassword:passwordWithWrongType andError:&error];
+        sessionID= [AccountUtilsForTest loginUser:newUserEmail andPassword:passwordWithWrongType andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -140,7 +93,7 @@ static enum SensorAttributes {
     XCTAssertNotNil(expectedException, @"Exception is nil;");
     
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail	andPassword:testPassword andError:&error];
     [self deleteCurrentUser:sessionID];
 }
 
@@ -154,7 +107,7 @@ static enum SensorAttributes {
     NSString *sessionID;
     NSException* expectedException;
     @try {
-        sessionID = [proxy loginUser:newUserEmail	andPassword:@"" andError:&error];
+        sessionID = [AccountUtilsForTest loginUser:newUserEmail	andPassword:@"" andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -163,7 +116,7 @@ static enum SensorAttributes {
 
     error = nil;
     @try {
-        sessionID = [proxy loginUser:newUserEmail	andPassword:nil andError:&error];
+        sessionID = [AccountUtilsForTest loginUser:newUserEmail	andPassword:nil andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -171,7 +124,7 @@ static enum SensorAttributes {
 	XCTAssertNotNil(expectedException, @"Exception is nil;");
     
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail	andPassword:testPassword andError:&error];
     [self deleteCurrentUser:sessionID];
 }
 
@@ -186,7 +139,7 @@ static enum SensorAttributes {
     NSString *sessionID;
     NSException* expectedException;
     @try {
-        sessionID = [proxy loginUser:@"" andPassword:testPassword andError:&error];
+        sessionID = [AccountUtilsForTest loginUser:@"" andPassword:testPassword andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -195,7 +148,7 @@ static enum SensorAttributes {
     
     error = nil;
     @try {
-        sessionID = [proxy loginUser:nil andPassword:testPassword andError:&error];
+        sessionID = [AccountUtilsForTest loginUser:nil andPassword:testPassword andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -203,7 +156,7 @@ static enum SensorAttributes {
     XCTAssertNotNil(expectedException, @"Exception is nil;");
     
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail	andPassword:testPassword andError:&error];
     [self deleteCurrentUser:sessionID];
 }
 
@@ -216,29 +169,29 @@ static enum SensorAttributes {
     NSString *newUserEmail;
     newUserEmail = [self registerANewUserForTest:registrationError];
     
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
     
     //logout with the sessionID
     error = nil;
-    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:&error];
+    bool isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:sessionID andError:&error];
     XCTAssertNil(error, @"Error is not nil; an error must have occured");
     XCTAssert(isSuccessful, @"The logout was unsuccessful.");
     
     //Let me login again, so that I can log back out again!
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
     
     //logout with the sessionID
     error = nil;
-    isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:&error];
+    isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:sessionID andError:&error];
     XCTAssert(isSuccessful, @"The logout was unsuccessful.");
     
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail	andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail	andPassword:testPassword andError:&error];
     [self deleteCurrentUser:sessionID];
 }
 
@@ -251,7 +204,7 @@ static enum SensorAttributes {
     
     //login
     error = nil;
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNil(error, @"Error is not nil; login must have failed");
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
@@ -259,7 +212,7 @@ static enum SensorAttributes {
     //logout with INVALID sessionID
     NSString *invalidSessionID = @"VeryInvalidSessionID";
     error =nil;
-    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
+    bool isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
     XCTAssertNotNil(error, @"Error is nil; logout must have succeeded");
     XCTAssertFalse(isSuccessful, @"The logout was successful with invalid SessionID.");
 
@@ -274,7 +227,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNil(error, @"Error is not nil; login must have failed");
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
@@ -285,7 +238,7 @@ static enum SensorAttributes {
     NSString *invalidSessionID = @"";
     NSException* expectedException;
     @try {
-        isSuccessful = [proxy logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
+        isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:invalidSessionID andError:&error];
     }
     @catch (NSException* e){
         expectedException = e;
@@ -303,24 +256,24 @@ static enum SensorAttributes {
     NSString *newUserEmail;
     newUserEmail = [self registerANewUserForTest:registrationError];
     
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
     
     //logout with the sessionID
     error = nil;
-    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:&error];
+    bool isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:sessionID andError:&error];
     XCTAssertNil(error, @"Error is not nil; an error must have occured");
     XCTAssert(isSuccessful, @"The logout was unsuccessful.");
     
     //logout with the sessionID
     error = nil;
-    isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:&error];
+    isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:sessionID andError:&error];
     XCTAssertNotNil(error, @"Error is nil; logout must have suceeded, where it should not.");
     XCTAssertFalse(isSuccessful, @"The logout was successful, where it should not.");
     
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     [self deleteCurrentUser:sessionID];
 }
 
@@ -331,26 +284,26 @@ static enum SensorAttributes {
     NSString *newUserEmail;
     newUserEmail = [self registerANewUserForTest:registrationError];
     
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
     
     //logout with the sessionID
     error = nil;
-    bool isSuccessful = [proxy logoutCurrentUserWithSessionID:sessionID andError:&error];
+    bool isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:sessionID andError:&error];
     XCTAssertNil(error, @"Error is not nil; an error must have occured");
     XCTAssert(isSuccessful, @"The logout was unsuccessful.");
     
     NSString* oldSessionID = sessionID;
     //Let me login again, so that I can log back out again!
     error = nil;
-    sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     XCTAssertGreaterThan(sessionID.length, 0, @"Invalid session ID");
     
     //logout with the sessionID
     error = nil;
-    isSuccessful = [proxy logoutCurrentUserWithSessionID:oldSessionID andError:&error];
+    isSuccessful = [AccountUtilsForTest logoutCurrentUserWithSessionID:oldSessionID andError:&error];
     XCTAssertNotNil(error, @"Error is nil; logout must have suceeded, where it should not.");
     XCTAssertFalse(isSuccessful, @"The logout was successful, where it should not.");
     
@@ -377,7 +330,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -424,7 +377,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
 
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
 
     [CSSensePlatform flushDataAndBlock];
@@ -473,7 +426,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -527,7 +480,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -571,7 +524,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -621,7 +574,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -670,7 +623,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -713,7 +666,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
 
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
 
     [CSSensePlatform flushDataAndBlock];
@@ -761,7 +714,7 @@ static enum SensorAttributes {
     int expectedNumOfSensors = 0;
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [CSSensePlatform flushDataAndBlock];
@@ -809,7 +762,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [self flushDataAndBlock];
@@ -875,7 +828,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
 
     [self flushDataAndBlock];
@@ -959,7 +912,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [self flushDataAndBlock];
@@ -1045,7 +998,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [self initializeSensorAttributes:error name_p:&name displayName_p:&displayName deviceType_p:&deviceType dataType_p:&dataType dataStructure_p:&dataStructure andEmptyAttribute:None];
@@ -1097,7 +1050,7 @@ static enum SensorAttributes {
     newUserEmail = [self registerANewUserForTest:registrationError];
     
     //login
-    NSString *sessionID = [proxy loginUser:newUserEmail andPassword:testPassword andError:&error];
+    NSString *sessionID = [AccountUtilsForTest loginUser:newUserEmail andPassword:testPassword andError:&error];
     XCTAssertNotNil(sessionID, @"Session ID is nil; an error must have occured while logging in.");
     
     [self initializeSensorAttributes:error name_p:&name displayName_p:&displayName deviceType_p:&deviceType dataType_p:&dataType dataStructure_p:&dataStructure andEmptyAttribute:None];
@@ -1145,193 +1098,27 @@ static enum SensorAttributes {
 
 #pragma mark helper functions
 
-- (BOOL) registerUser:(NSString*) user withPassword:(NSString*) pass withEmail:(NSString*) email error:(NSError**) error
-{
-    //prepare post
-    NSMutableDictionary* userPost = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                     user, @"username",
-                                     [pass MD5Hash], @"password",
-                                     nil];
-    if (email)
-        [userPost setValue:email forKey:@"email"];
-    else
-        [userPost setValue:user forKey:@"email"];
-    //encapsulate in "user"
-    NSDictionary* post = [NSDictionary dictionaryWithObjectsAndKeys:
-                          userPost, @"user",
-                          nil];
-    
-    NSError *jsonError = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:post options:0 error:&jsonError];
-    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-    NSURL* url = [self makeUrlFor:@"users"];
-    NSData* contents;
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" sessionID:nil input:json output:&contents cookie:nil];
-    BOOL didSucceed = YES;
-    //check response code
-    if ([response statusCode] != 201)
-    {
-        didSucceed = NO;
-        NSLog(@"Couldn't register user.");
-        NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
-        NSLog(@"Responded: %@", responded);
-        //interpret json response to set error
-        NSError *jsonError = nil;
-        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
-        *error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
-    }
-    return didSucceed;
-}
+
 
 - (void)deleteCurrentUser:(NSString *)sessionID {
     //get user id of the current user
     NSError *error;
     error = nil;
-    NSDictionary* currentUser = [self getCurrentUserWithSessionID:sessionID andError:&error];
+    NSDictionary* currentUser = [AccountUtilsForTest getCurrentUserWithSessionID:sessionID andError:&error];
     NSString* userId = currentUser[@"id"];
     //delete
     error =nil;
-    [self deleteUserWithId:userId andSessionID:sessionID error:&error];
+    [AccountUtilsForTest deleteUserWithId:userId andSessionID:sessionID error:&error];
 }
 
-- (BOOL) deleteUserWithId:(NSString*) userId andSessionID: sessionID error:(NSError**) error
-{
-    NSString* appendix = [NSString stringWithFormat:@"/%@", userId];
-    NSURL* url = [self makeUrlFor:@"users" append: appendix];
-    NSData* contents;
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"DELETE" sessionID:sessionID input:nil output:&contents cookie:nil];
-    BOOL didSucceed = YES;
-    //check response code
-    if ([response statusCode] != 200)
-    {
-        didSucceed = NO;
-        NSLog(@"Couldn't delete user.");
-        NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
-        NSLog(@"Responded: %@", responded);
-        //interpret json response to set error
-        NSError *jsonError = nil;
-        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
-        *error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
-    }
-    return didSucceed;
-}
 
-- (NSDictionary*) getCurrentUserWithSessionID:(NSString*) sessionID andError:(NSError**) error
-{
-    NSURL* url = [self makeUrlFor:@"users" append:@"/current"];
-    NSData* contents;
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"GET" sessionID:sessionID input:nil output:&contents cookie:nil];
-    NSDictionary* responseDict;
-    
-    //check response code
-    if ([response statusCode] != 200)
-    {
-        NSLog(@"Couldn't get current user info.");
-        NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
-        NSLog(@"Responded: %@", responded);
-        //interpret json response to set error
-        NSError *jsonError = nil;
-        NSDictionary* jsonContents = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
-        *error = [NSString stringWithFormat:@"%@", [jsonContents valueForKey:@"error"]];
-    } else {
-        responseDict = [NSJSONSerialization JSONObjectWithData:contents options:0 error:error];
-    }
-    return responseDict[@"user"];
-}
 
 - (void) flushDataAndBlock {
     [[CSSensorStore sharedSensorStore] forceDataFlushAndBlock];
 }
 
-///Creates the url using CommonSense.plist
-- (NSURL*) makeUrlFor:(const NSString*) action
-{
-    return [self makeUrlFor:action append:@""];
-}
 
-- (NSURL*) makeUrlFor:(const NSString*) action append:(NSString*) appendix
-{
-    NSString* url = [NSString stringWithFormat: @"%@/%@%@%@",
-                     kUrlBaseURLStaging,
-                     action,
-                     kUrlJsonSuffix,
-                     appendix];
-    
-    return [NSURL URLWithString:url];
-}
 
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie {
-    NSError* error;
-    return [self doRequestTo:url method:method sessionID: sessionID input:input output:output cookie:cookie error:&error];
-}
-
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method sessionID: (NSString*) sessionID input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie error:(NSError **) error
-{
-    NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url
-                                                              cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                                          timeoutInterval:30];
-    //set method method
-    [urlRequest setHTTPMethod:method];
-    
-    if (sessionID != nil) {
-        [urlRequest setValue:sessionID forHTTPHeaderField:@"SESSION-ID"];
-    }
-    //Cookie
-    if (cookie != nil)
-        [urlRequest setValue:cookie forHTTPHeaderField:@"cookie"];
-    if (self.applicationKey != nil)
-        [urlRequest setValue:self.applicationKey forHTTPHeaderField:@"APPLICATION-KEY"];
-    //Accept compressed response
-    [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    
-    if (input != nil)
-    {
-        //Talking JSON
-        [urlRequest setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-        const char* bytes = [input UTF8String];
-        NSData * body = [NSData dataWithBytes:bytes length: strlen(bytes)];
-        //compress the body
-        [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-        [urlRequest setHTTPBody:[body gzippedData]];
-        //[urlRequest setHTTPBody:body];
-    }
-    
-    //connect
-    NSHTTPURLResponse* response=nil;
-    NSData* responseData;
-    
-    //Synchronous request
-    responseData = [NSURLConnection sendSynchronousRequest:urlRequest
-                                         returningResponse:&response
-                                                     error:error];
-    
-    //don't handle errors in the request, just log them
-    if (*error != nil) {
-        NSLog(@"Error during request \'%@\': %@",	[urlRequest description] ,	*error);
-        NSLog(@"Error description: \'%@\'.", [*error description] );
-        NSLog(@"Error userInfo: \'%@\'.", [*error userInfo] );
-        NSLog(@"Error failure reason: \'%@\'.", [*error localizedFailureReason] );
-        NSLog(@"Error recovery options reason: \'%@\'.", [*error localizedRecoveryOptions] );
-        NSLog(@"Error recovery suggestion: \'%@\'.", [*error localizedRecoverySuggestion] );
-    }
-    
-    //log response
-    if (response) {
-        NSLog(@"%@ \"%@\" responded with status code %ld", method, url, (long)[response statusCode]);
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-            NSLog(@"Sent: %@", input);
-            NSLog(@"Received: %@", [[NSString alloc] initWithBytes:responseData.bytes length:responseData.length encoding:NSUTF8StringEncoding]);
-        }
-    }
-    
-    if (output != nil)
-    {
-        *output = responseData;
-    }
-    
-    return response;
-}
 
 + (NSDictionary*) device {
     NSString* type = [[UIDevice currentDevice] platformString];
@@ -1348,7 +1135,7 @@ static enum SensorAttributes {
 - (NSString *)registerANewUserForTest:(NSString *)error {
     NSTimeInterval registrationTimestamp = [[NSDate date] timeIntervalSince1970];
     NSString* newUserEmail = [NSString stringWithFormat: newUserEmail_format, registrationTimestamp];
-    [self registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail error:&error];
+    [AccountUtilsForTest registerUser:newUserEmail withPassword:testPassword withEmail:newUserEmail error:&error];
     return newUserEmail;
 }
 
