@@ -22,12 +22,12 @@ public class DataStorageEngine{
     * @param options The sensor options
     * @return sensor object
     **/
-    public func createSensor(source: String, name: String, dataType: String, sensorOptions: SensorOptions) throws -> (Sensor)
+    public func createSensor(source: String, name: String, dataType: String, sensorOptions: SensorOptions) throws -> Sensor?
     {
-        var sensor: Sensor!
+        var sensor: Sensor?
         do{
             sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, synced: false)
-            try DatabaseHandler.insertSensor(sensor)
+            try DatabaseHandler.insertSensor(sensor!)
             
         }catch RLMError.DuplicatedObjects{
             throw DatabaseError.SensorAlreadyExists
@@ -42,23 +42,33 @@ public class DataStorageEngine{
     * @param source The name of the source
     * @param sensorName The name of the sensor
     **/
-//    func getSensor(sourceName: String, sensorName : String) -> (Sensor){
-//        print("to be implemented")
-//    }
-//    
-//    /**
-//    * Returns all the sensors connected to the given source
-//    * @return [Sensor] The sensors connected to the given source
-//    **/
-//    func getSensors(source: String) -> [Sensor]{
-//        print("to be implemented")
-//    }
-//    
-//    /**
-//    * Returns all the sources attached to the current user
-//    * @return [String] The sources attached to the current user
-//    **/
-//    func getSources() -> [String]{
-//        print("to be implemented")
-//    }
+    public func getSensor(source: String, sensorName : String) -> Sensor?{
+        var sensor : Sensor?
+        do{
+            sensor = try DatabaseHandler.getSensor(source, sensorName)
+        } catch RLMError.ObjectNotFound{
+            NSLog("Sensor does not exist in DB")
+        } catch RLMError.DuplicatedObjects{
+            NSLog("Sensor is duplicated in DB")
+        } catch {
+            NSLog("Unknown error")
+        }
+        return sensor
+    }
+    
+    /**
+    * Returns all the sensors connected to the given source
+    * @return [Sensor] The sensors connected to the given source
+    **/
+    public func getSensors(source: String) -> [Sensor]{
+        return DatabaseHandler.getSensors(source)
+    }
+    
+    /**
+    * Returns all the sources attached to the current user
+    * @return [String] The sources attached to the current user
+    **/
+    public func getSources() -> [String]{
+        return DatabaseHandler.getSources()
+    }
 }

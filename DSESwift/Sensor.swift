@@ -8,6 +8,17 @@
 
 import Foundation
 
+let kCSDATA_TYPE_STRING = "string"
+let kCSDATA_TYPE_JSON = "json"
+let kCSDATA_TYPE_INTEGER = "integer"
+let kCSDATA_TYPE_FLOAT = "float"
+let kCSDATA_TYPE_BOOL = "bool"
+
+public enum SortOrder: ErrorType{
+    case Asc
+    case Desc
+}
+
 public class Sensor{
     var id = -1
     var name = ""
@@ -66,16 +77,65 @@ public class Sensor{
             synced: sensor.synced
         )
     }
-    /*
-    public func insertDataPoint(value: AnyObject, _date: NSDate) -> Bool {
     
-        //Conversion from value to string
-        
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: , date: date, synced: false)
+    public func insertDataPoint(value: String, _ date: NSDate) -> Bool {
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: value, date: date, synced: false)
+        do{
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            return true
+        } catch {
+            NSLog("Failed to insert DataPoint")
+            return false
+        }
     }
-    */
     
-    func getDataPoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) -> [DataPoint]{
+    public func insertDataPoint(value: NSDictionary, _ date: NSDate) -> Bool {
+        do{
+            let data = try NSJSONSerialization.dataWithJSONObject(value, options: NSJSONWritingOptions.PrettyPrinted)
+            let json = String(data: data, encoding: NSUTF8StringEncoding)
+            let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: json!, date: date, synced: false)
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            return true
+        }catch{
+            NSLog("Failed to insert DataPoint")
+            return false
+        }
+    }
+    
+    public func insertDataPoint(value: Int, _ date: NSDate) -> Bool {
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: String(value), date: date, synced: false)
+        do{
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            return true
+        } catch {
+            NSLog("Failed to insert DataPoint")
+            return false
+        }
+    }
+    
+    public func insertDataPoint(value: Float, _ date: NSDate) -> Bool {
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: String(value), date: date, synced: false)
+        do{
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            return true
+        } catch {
+            NSLog("Failed to insert DataPoint")
+            return false
+        }
+    }
+    
+    public func insertDataPoint(value: Bool, _ date: NSDate) -> Bool {
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: String(Int(value)), date: date, synced: false)
+        do{
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            return true
+        } catch {
+            NSLog("Failed to insert DataPoint")
+            return false
+        }
+    }
+    
+    public func getDataPoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) -> [DataPoint]{
         var dataPoints = [DataPoint]()
         do{
             dataPoints = try DatabaseHandler.getDataPoints(sensorId: self.id, startDate: startDate, endDate: endDate, limit: limit, sortOrder: sortOrder)
@@ -87,7 +147,7 @@ public class Sensor{
         return dataPoints
     }
     
-    func setSensorOptions(sensorOptions: SensorOptions) {
+    public func setSensorOptions(sensorOptions: SensorOptions) {
         do{
             let sensor = try DatabaseHandler.getSensor(self.source, self.name)
             sensor.csDownloadEnabled = sensorOptions.downloadEnabled
@@ -105,5 +165,4 @@ public class Sensor{
             NSLog("Unknown error")
         }
     }
-    
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DataPoint{
+public class DataPoint{
     var sensorId = -1
     private(set) var value = ""
     var date = NSDate()
