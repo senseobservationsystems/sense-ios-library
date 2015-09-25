@@ -16,16 +16,45 @@ class DSESwiftPerformanceTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
+    func testInsertDataPointsPerformanceWith100000() {
+        let dbHandler = DatabaseHandler()
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            let sourceName = "testSource"
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            try dbHandler.insertSensor(sensor)
+            
+            var sensors = [Sensor]()
+            sensors = dbHandler.getSensors(sourceName)
+            XCTAssertEqual(sensors.count, 1)
+            
+            var dataPoint: DataPoint!
+            
+            
+            self.measureBlock(){
+                do{
+                    for (var i=0; i < 1000; i++){
+                        dataPoint = DataPoint(sensorId: sensor.id, value: "{'date':1111111111.111, 'value':{x: 3.34 , y: 5.54, z: 8.78}}", date: NSDate(), synced: false)
+                        try dbHandler.insertOrUpdateDataPoint(dataPoint)
+                    }
+                } catch{
+                    print(error)
+                    XCTFail("Exception was captured. Abort test")
+                }
+            }
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+        
+        
+    }
     
     func testGetDataPointsPerformanceWith100000() {
         let dbHandler = DatabaseHandler()
@@ -55,5 +84,6 @@ class DSESwiftPerformanceTests: XCTestCase {
             XCTFail("Exception was captured. Abort the test.")
         }
     }
+
 }
 

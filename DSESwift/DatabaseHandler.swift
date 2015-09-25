@@ -31,7 +31,6 @@ DatabaseHandler is a class to wrap around Realm database operation and provide m
 */
 class DatabaseHandler: NSObject{
     
-    
     // MARK: For sensor class
     /**
     * Add a data point to the sensor with the given sensorId. Throw exceptions if it fails to add the data point.
@@ -120,7 +119,6 @@ class DatabaseHandler: NSObject{
             rlmSensor.userId = sensor.userId
             rlmSensor.source = sensor.source
             rlmSensor.dataType = sensor.dataType
-            rlmSensor.csId = sensor.csId 
             rlmSensor.synced = sensor.synced
     
             realm.add(rlmSensor, update: true)
@@ -162,7 +160,6 @@ class DatabaseHandler: NSObject{
             rlmSensor.userId = sensor.userId
             rlmSensor.source = sensor.source
             rlmSensor.dataType = sensor.dataType
-            rlmSensor.csId = sensor.csId //TODO: How should we get Common Sense Sensor id??
             rlmSensor.synced = sensor.synced
                 
             realm.add(rlmSensor)
@@ -227,6 +224,19 @@ class DatabaseHandler: NSObject{
         return Array(sources)
     }
     
+    
+    static func getNextKeyForSensor() -> Int{
+        let lockQueue = dispatch_queue_create("com.sense.lockQueue", nil)
+        var newId = 0
+        dispatch_sync(lockQueue) {
+            let realm = try! Realm()
+            let results = realm.objects(RLMSensor).sorted("id")
+            if (results.count > 0){
+                newId = results.max("id")! + 1
+            }
+        }
+        return newId
+    }
 
     // MARK: Helper functions
     private func getPredicateForDataPoint(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?)-> NSPredicate{

@@ -31,7 +31,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -56,7 +56,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -82,7 +82,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -155,7 +155,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -190,7 +190,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -220,7 +220,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -242,7 +242,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             try dbHandler.insertSensor(sensor)
             
@@ -268,7 +268,7 @@ class DSESwiftTests: XCTestCase {
         let dbHandler = DatabaseHandler()
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             let newSensorName = "sensor1Updated"
@@ -286,7 +286,7 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         let dbHandler = DatabaseHandler()
         do{
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             let newSensorName = "sensor1Updated"
@@ -303,13 +303,13 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var retrievedSensor = try! dbHandler.getSensor(sourceName, sensor.name)
             XCTAssertEqual(retrievedSensor!.name, sensor.name)
             
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             retrievedSensor = try! dbHandler.getSensor(sourceName, sensor.name)
@@ -324,13 +324,13 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var retrievedSensor = try! dbHandler.getSensor(sourceName, sensor.name)
             XCTAssertEqual(retrievedSensor!.name, sensor.name)
             
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             retrievedSensor = try! dbHandler.getSensor("nonExistingSorce", sensor.name)
@@ -345,13 +345,13 @@ class DSESwiftTests: XCTestCase {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             var retrievedSensor = try! dbHandler.getSensor(sourceName, sensor.name)
             XCTAssertEqual(retrievedSensor!.name, sensor.name)
             
-            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csId: "", synced: false)
+            sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
             try dbHandler.insertSensor(sensor)
             
             retrievedSensor = try! dbHandler.getSensor(sourceName, "NonExsistingSensorName")

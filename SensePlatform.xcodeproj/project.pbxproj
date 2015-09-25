@@ -53,11 +53,11 @@
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		276CBB781BB45234001C287D /* DSESwiftPerforamanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */; };
 		276CBB7A1BB45234001C287D /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; settings = {ASSET_TAGS = (); }; };
+		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; settings = {ASSET_TAGS = (); }; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752751BB02793000FC400 /* DSESwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */; };
-		27F752771BB0285B000FC400 /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752761BB0285B000FC400 /* testObject.swift */; settings = {ASSET_TAGS = (); }; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -246,10 +246,10 @@
 		276CBB751BB45234001C287D /* DSESwiftPerforamanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSESwiftPerforamanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftPerforamanceTests.swift; sourceTree = "<group>"; };
 		276CBB791BB45234001C287D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		276CBB801BB52B9D001C287D /* testObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testObject.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
-		27F752761BB0285B000FC400 /* testObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testObject.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -731,7 +731,6 @@
 				27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */,
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
 				27F752701BB0212C000FC400 /* KeychainWrapper.swift */,
-				27F752761BB0285B000FC400 /* testObject.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -739,6 +738,7 @@
 		FAC4EC931BA086BC00B24CAA /* DSESwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				276CBB801BB52B9D001C287D /* testObject.swift */,
 				FAC4EC941BA086BC00B24CAA /* DSESwiftTests.swift */,
 				27F752721BB02512000FC400 /* KeychainWrapperTests.swift */,
 				FAC4EC961BA086BC00B24CAA /* Info.plist */,
@@ -1153,7 +1153,6 @@
 				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
 				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
 				27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */,
-				27F752771BB0285B000FC400 /* testObject.swift in Sources */,
 				272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */,
 				27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
@@ -1168,6 +1167,7 @@
 			files = (
 				27F752751BB02793000FC400 /* DSESwiftTests.swift in Sources */,
 				27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */,
+				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

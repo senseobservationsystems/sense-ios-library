@@ -18,11 +18,10 @@ public class Sensor{
     var userId = ""
     var source = ""
     var dataType = ""
-    var csId = ""
     var synced = false
 
     init(id:Int,              name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, source: String,   dataType: String,      csId: String,
+        persistLocally: Bool, userId: String, source: String,   dataType: String,  
         synced: Bool) {
             
         self.id = id
@@ -34,14 +33,13 @@ public class Sensor{
         self.userId = userId
         self.source = source
         self.dataType = dataType
-        self.csId = csId
         self.synced = synced
     }
     
     public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, dataType: String, csId: String, synced: Bool) {
+                            source: String, dataType: String, synced: Bool) {
         self.init(
-            id: RLMSensor.getNextKey(),
+            id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
             meta: sensorOptions.meta,
             csUploadEnabled: sensorOptions.uploadEnabled,
@@ -50,7 +48,6 @@ public class Sensor{
             userId: userId,
             source: source,
             dataType: dataType,
-            csId: csId,
             synced: synced
         )
     }
@@ -66,9 +63,19 @@ public class Sensor{
             userId: sensor.userId,
             source: sensor.source,
             dataType: sensor.dataType,
-            csId: sensor.csId,
             synced: sensor.synced
         )
     }
+    /*
+    public func insertDataPoint(value: AnyObject, _date: NSDate) -> Bool {
     
+        //Conversion from value to string
+        
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: , date: date, synced: false)
+    }
+    
+    func getDatapoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) -> [Datapoint]{
+        
+    }
+    */
 }

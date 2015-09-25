@@ -19,16 +19,10 @@ class RLMSensor: Object{
     dynamic var userId = ""
     dynamic var source = ""
     dynamic var dataType = ""
-    dynamic var csId = ""
     dynamic var synced = false
 
     override static func primaryKey() -> String? {
         return "id"
     }
-    
-    static func getNextKey() -> Int{
-        let realm = try! Realm()
-        let result = realm.objects(RLMSensor)
-        return Int(result.count+1)
-    }
+
 }
