@@ -9,7 +9,6 @@
 import Foundation
 import RealmSwift
 
-//TODO: let's make this more explicit
 enum RLMError: ErrorType{
     case ObjectNotFound
     case InsertFailed
@@ -25,7 +24,6 @@ enum SortOrder: ErrorType{
 }
 
 /**
-TODO: Make Static!
 
 DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, Sensor, Source.
 */
