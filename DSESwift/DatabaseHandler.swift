@@ -39,7 +39,7 @@ class DatabaseHandler: NSObject{
     * @param value: AnyObject for the value.
     * @param date: NSDate for the datetime of the data point.
     */
-    func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
+    class func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
         //Validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
             throw RLMError.ObjectNotFound
@@ -70,7 +70,7 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
+    class func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
         if (limit < -1 || limit == 0){
             throw RLMError.InvalidLimit
         }
@@ -97,7 +97,7 @@ class DatabaseHandler: NSObject{
     * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated.
     * @param sensor: Sensor object containing the updated info.
     */
-    func update(sensor: Sensor) throws {
+    class func update(sensor: Sensor) throws {
         //validate the source and sensorId
         if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw RLMError.ObjectNotFound
@@ -137,7 +137,7 @@ class DatabaseHandler: NSObject{
     * @param dataType: String for dataType.
     * @param sensorOptions: DSESensorOptions object.
     */
-    func insertSensor(sensor:Sensor) throws {
+    class func insertSensor(sensor:Sensor) throws {
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
             throw RLMError.UnauthenticatedAccess
         }
@@ -176,13 +176,18 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return sensor: sensor with the given sensor name and source.
     */
-    func getSensor(source: String, _ sensorName: String) throws -> Sensor? {
+    class func getSensor(source: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
         
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(RLMSensor).filter(predicates)
+        if (results.count < 1){
+            throw RLMError.ObjectNotFound
+        } else if(results.count > 1){
+            throw RLMError.DuplicatedObjects
+        }
         
-        return (results.count<1) ? nil : Sensor(results.first!)
+        return Sensor(results.first!)
     }
     
     /**
@@ -191,7 +196,7 @@ class DatabaseHandler: NSObject{
     * @param source: String for sensorId.
     * @return sensors: An array of sensors that belongs to the source with the given source.
     */
-    func getSensors(source: String)->[Sensor]{
+    class func getSensors(source: String)->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
@@ -211,7 +216,7 @@ class DatabaseHandler: NSObject{
     * @param source: String for sensorId.
     * @return sensors: An array of sensors that belongs to the source with the given source.
     */
-    func getSources()->[String]{
+    class func getSources()->[String]{
         var sources = Set<String>()
         let realm = try! Realm()
         
@@ -225,7 +230,7 @@ class DatabaseHandler: NSObject{
     }
     
     
-    static func getNextKeyForSensor() -> Int{
+    class func getNextKeyForSensor() -> Int{
         let lockQueue = dispatch_queue_create("com.sense.lockQueue", nil)
         var newId = 0
         dispatch_sync(lockQueue) {
@@ -239,7 +244,7 @@ class DatabaseHandler: NSObject{
     }
 
     // MARK: Helper functions
-    private func getPredicateForDataPoint(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?)-> NSPredicate{
+    private class func getPredicateForDataPoint(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "sensorId = %d", sensorId))
         if(startDate != nil){
@@ -252,7 +257,7 @@ class DatabaseHandler: NSObject{
     }
 
     
-    private func getSensor(id: Int) -> RLMSensor {
+    private class func getSensor(id: Int) -> RLMSensor {
         var sensor = RLMSensor()
         let predicates = NSPredicate(format: "id = %d AND userId = %@", id, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
@@ -265,7 +270,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if sensor with the given sensorId exists.
     */
-    private func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
+    private class func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
         var exists = false
         let predicates = NSPredicate(format: "id = %d AND userId = %@", sensorId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
@@ -278,7 +283,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if source with the combination of the given source and sensor exists.
     */
-    private func isExistingCombinationOfSourceAndSensorName(source:String, _ sensorName: String) -> Bool {
+    private class func isExistingCombinationOfSourceAndSensorName(source:String, _ sensorName: String) -> Bool {
         var exists = false
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)

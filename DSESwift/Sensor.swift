@@ -73,9 +73,37 @@ public class Sensor{
         
         let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: , date: date, synced: false)
     }
-    
-    func getDatapoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) -> [Datapoint]{
-        
-    }
     */
+    
+    func getDataPoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) -> [DataPoint]{
+        var dataPoints = [DataPoint]()
+        do{
+            dataPoints = try DatabaseHandler.getDataPoints(sensorId: self.id, startDate: startDate, endDate: endDate, limit: limit, sortOrder: sortOrder)
+        } catch RLMError.InvalidLimit {
+            NSLog("Invalid limit was given.")
+        } catch {
+            NSLog("Unkown error")
+        }
+        return dataPoints
+    }
+    
+    func setSensorOptions(sensorOptions: SensorOptions) {
+        do{
+            let sensor = try DatabaseHandler.getSensor(self.source, self.name)
+            sensor.csDownloadEnabled = sensorOptions.downloadEnabled
+            sensor.csUploadEnabled = sensorOptions.uploadEnabled
+            sensor.meta = sensorOptions.meta
+            sensor.persistLocally = sensorOptions.persist
+            try DatabaseHandler.update(sensor)
+        } catch RLMError.ObjectNotFound {
+            NSLog("Sensor does not exist in DB")
+        } catch RLMError.DuplicatedObjects{
+            NSLog("Sensor is duplicated in DB")
+        } catch RLMError.UnauthenticatedAccess {
+            NSLog("Sensor does not belong to the current user")
+        } catch {
+            NSLog("Unknown error")
+        }
+    }
+    
 }
