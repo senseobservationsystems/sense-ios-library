@@ -53,44 +53,6 @@ static const NSString* kUrlJsonSuffix               = @".json";
 }
 
 
-#pragma mark User (Public)
-
-- (NSString *) loginUser: (NSString *) username andPassword: (NSString *) password andError: (NSError **) error {
-	
-	if( (!error) || ![NSString isValidString:username] || ![NSString isValidString:password]) {
-		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
-	}
-	
-	NSURL *url               = [self makeUrlFor:kUrlLogin append:nil];
-    NSDictionary* inputDict  = @{@"username": username,
-								 @"password": [NSString MD5HashOf:password] };
-	
-	NSHTTPURLResponse* httpResponse;
-	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:nil andAppKey:appKey andInput:inputDict andResponse:&httpResponse andError:error];
-	
-	NSString *sessionID = [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock: ^{
-				NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:error];
-				return [NSString stringWithFormat:@"%@",[responseDict valueForKey:@"session_id"]];
-			  }];
-	
-	return sessionID;
-}
-
-
-- (BOOL) logoutCurrentUserWithSessionID: (NSString *) sessionID andError: (NSError **) error {
-	
-	if( (!error) || ![NSString isValidString:sessionID]) {
-		[NSException raise:kExceptionInvalidInput format:@"The input parameters are invalid. Cannot process this request."];
-	}
-
-	NSURL *url = [self makeUrlFor:kUrlLogout append:nil];
-	
-	NSHTTPURLResponse* httpResponse;
-	NSData *responseData = [DSEHTTPRequestHelper doRequestTo:url withMethod:@"POST" andSessionID:sessionID andAppKey:appKey andInput:nil andResponse:&httpResponse andError:error];
-
-	return [DSEHTTPRequestHelper evaluateResponseWithData: responseData andHttpResponse: httpResponse andError:error];
-}
-
 #pragma mark Sensors and Devices (Public)
 
 - (NSDictionary *) createSensorWithName: (NSString *) name andDisplayName: (NSString *) displayName andDeviceType: (NSString *) deviceType andDataType: (NSString *) dataType andDataStructure: (NSString *) dataStructure andSessionID: (NSString *) sessionID andError: (NSError **) error {
