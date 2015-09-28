@@ -192,7 +192,8 @@ class DSESwiftTests: XCTestCase {
             
             var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            let dataPoints = try! DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 100, sortOrder: SortOrder.Asc)
+            
+            let dataPoints = try! DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(100), limit: 100, sortOrder: SortOrder.Asc)
             XCTAssertEqual(dataPoints.count, 1)
             XCTAssertEqual(dataPoints[0].getValueInString(), "String value")
             
@@ -260,14 +261,29 @@ class DSESwiftTests: XCTestCase {
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
             try DatabaseHandler.insertSensor(sensor)
             
-            let newSensorName = "sensor1Updated"
-            sensor.name = newSensorName
+            let newSensorMeta = "meta data updated"
+            sensor.meta = newSensorMeta
             try DatabaseHandler.update(sensor)
             
-            let retrievedSensor = try! DatabaseHandler.getSensor(sourceName, newSensorName)
-            XCTAssertEqual(retrievedSensor.name, newSensorName)
+            let retrievedSensor = try! DatabaseHandler.getSensor(sourceName, sensor.name)
+            XCTAssertEqual(retrievedSensor.meta, newSensorMeta)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testUpdateInvalidUpdateOfSensorName() {
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
+            try DatabaseHandler.insertSensor(sensor)
+            
+            let newSensorName = "new SensorName"
+            sensor.name = newSensorName
+            try DatabaseHandler.update(sensor)
+        }catch{
+            print(error)
+            XCTAssertNotNil(error)
         }
     }
     

@@ -18,7 +18,7 @@ class RLMDataPoint: Object{
     dynamic lazy var id: String = self.getId()
     
     /*
-     * This method can be called if the sensorId or the date have changed after the id has been used.
+     * This method has to be called when the sensorId or the date is set.
      */
     func updateId() {
         self.id = self.getId()

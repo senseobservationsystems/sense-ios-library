@@ -74,7 +74,7 @@ public class DataPoint{
                     return dictionary
                 }
             }catch {
-                print("error")
+                print("Error while parsing string into dictionary")
             }
         }
         return [String: AnyObject]()

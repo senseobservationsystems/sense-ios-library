@@ -11,6 +11,7 @@ import RealmSwift
 
 class RLMSensor: Object{
     dynamic var id = -1
+    dynamic var compoundKey = ""
     dynamic var name = ""
     dynamic var meta = ""
     dynamic var csUploadEnabled = true
@@ -21,8 +22,19 @@ class RLMSensor: Object{
     dynamic var dataType = ""
     dynamic var synced = false
 
-    override static func primaryKey() -> String? {
-        return "id"
+    /*
+    * This method has to be called when the sensorId or the date is set.
+    */
+    func updateId() {
+        self.compoundKey = self.getCompoundKey()
     }
-
+    
+    override static func primaryKey() -> String? {
+        return "compoundKey"
+    }
+    
+    private func getCompoundKey() -> String {
+        return "\(self.name)-\(String(self.source))"
+    }
+    
 }

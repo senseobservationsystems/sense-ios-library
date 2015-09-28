@@ -135,7 +135,7 @@ public class Sensor{
         }
     }
     
-    public func getDataPoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
+    public func getDataPoints(startDate: NSDate?, endDate: NSDate?, limit: Int?, sortOrder: SortOrder) throws -> [DataPoint]{
         var dataPoints = [DataPoint]()
         do{
             dataPoints = try DatabaseHandler.getDataPoints(sensorId: self.id, startDate: startDate, endDate: endDate, limit: limit, sortOrder: sortOrder)

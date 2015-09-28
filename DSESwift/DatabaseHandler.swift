@@ -16,6 +16,7 @@ enum RLMError: ErrorType{
     case DuplicatedObjects
     case InvalidLimit
     case UnauthenticatedAccess
+    case CanNotChangePrimaryKey
 }
 
 /**
@@ -40,14 +41,16 @@ class DatabaseHandler: NSObject{
         
         // create data point
         let rlmDataPoint = RLMDataPoint()
+        
+        let realm = try! Realm()
+        realm.beginWrite()
+        rlmDataPoint.sensorId = dataPoint.sensorId
+        rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
+        rlmDataPoint.updateId();
+        rlmDataPoint.value = dataPoint.value
+        realm.add(rlmDataPoint, update:true)
+        
         do {
-            let realm = try! Realm()
-            realm.beginWrite()
-            rlmDataPoint.sensorId = dataPoint.sensorId
-            rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
-            rlmDataPoint.updateId();
-            rlmDataPoint.value = dataPoint.value
-            realm.add(rlmDataPoint, update:true)
             try realm.commitWrite()
         } catch {
             throw RLMError.InsertFailed
@@ -63,8 +66,8 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    class func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
-        if (limit < -1 || limit == 0){
+    class func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int?, sortOrder: SortOrder) throws -> [DataPoint]{
+        if (limit < 0){
             throw RLMError.InvalidLimit
         }
         
@@ -74,7 +77,7 @@ class DatabaseHandler: NSObject{
         let predicates = self.getPredicateForDataPoint(sensorId: sensorId, startDate: startDate, endDate: endDate)
         //query
         let results = realm.objects(RLMDataPoint).filter(predicates).sorted("date", ascending: isAscending)
-        let end = (limit == -1) ? results.count : min(limit,results.count)
+        let end = (limit == nil) ? results.count : min(limit!, results.count)
         for rlmDataPoint in results[Range(start:0, end: end)] {
             let dataPoint = DataPoint(rlmDataPoint: rlmDataPoint)
             dataPoints.append(dataPoint)
@@ -87,11 +90,11 @@ class DatabaseHandler: NSObject{
     // MARK: For DataStorageEngine class
     
     /**
-    * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated.
+    * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated. The updatable attributes are only meta, csUploadEnabled, csDownloadEnabled, persistLocally and synced.
     * @param sensor: Sensor object containing the updated info.
     */
     class func update(sensor: Sensor) throws {
-        //validate the source and sensorId
+        //validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw RLMError.ObjectNotFound
         }
@@ -100,26 +103,27 @@ class DatabaseHandler: NSObject{
             throw RLMError.UnauthenticatedAccess
         }
         
+        let rlmSensor = getSensor(sensor.id)
+        //check if the sensorName and source is not changed
+        if (self.isPrimaryKeysChangedForSensor(sensor, rlmSensor)){
+            throw RLMError.CanNotChangePrimaryKey
+        }
+        
+        // Changes to dataType, userId, sensorName, source will be ignored.
         let realm = try! Realm()
+        realm.beginWrite()
+        rlmSensor.meta = sensor.meta
+        rlmSensor.csUploadEnabled = sensor.csUploadEnabled
+        rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
+        rlmSensor.persistLocally = sensor.persistLocally
+        rlmSensor.synced = sensor.synced
+        realm.add(rlmSensor, update: true)
+
         do {
-            let rlmSensor = getSensor(sensor.id)
-            realm.beginWrite()
-            rlmSensor.name = sensor.name
-            rlmSensor.meta = sensor.meta
-            rlmSensor.csUploadEnabled = sensor.csUploadEnabled
-            rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
-            rlmSensor.persistLocally = sensor.persistLocally
-            rlmSensor.userId = sensor.userId
-            rlmSensor.source = sensor.source
-            rlmSensor.dataType = sensor.dataType
-            rlmSensor.synced = sensor.synced
-    
-            realm.add(rlmSensor, update: true)
             try realm.commitWrite()
         } catch {
             throw RLMError.UpdateFailed
         }
-        
     }
 
     /**
@@ -141,21 +145,21 @@ class DatabaseHandler: NSObject{
         
         let realm = try! Realm()
         let rlmSensor = RLMSensor()
+        realm.beginWrite()
+        rlmSensor.id = sensor.id
+        rlmSensor.name = sensor.name
+        rlmSensor.meta = sensor.meta
+        rlmSensor.csUploadEnabled = sensor.csUploadEnabled
+        rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
+        rlmSensor.persistLocally = sensor.persistLocally
+        rlmSensor.userId = sensor.userId
+        rlmSensor.source = sensor.source
+        rlmSensor.dataType = sensor.dataType
+        rlmSensor.synced = sensor.synced
+        rlmSensor.updateId()
+        realm.add(rlmSensor)
         
         do {
-            realm.beginWrite()
-            rlmSensor.id = sensor.id
-            rlmSensor.name = sensor.name
-            rlmSensor.meta = sensor.meta
-            rlmSensor.csUploadEnabled = sensor.csUploadEnabled
-            rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
-            rlmSensor.persistLocally = sensor.persistLocally
-            rlmSensor.userId = sensor.userId
-            rlmSensor.source = sensor.source
-            rlmSensor.dataType = sensor.dataType
-            rlmSensor.synced = sensor.synced
-                
-            realm.add(rlmSensor)
             try realm.commitWrite()
         } catch {
             throw RLMError.InsertFailed
@@ -284,6 +288,15 @@ class DatabaseHandler: NSObject{
             exists = true
         }
         return exists
+    }
+    
+    /**
+    * Returns true if either of sensor name or source is changed.(Compound primary key)
+    */
+    private class func isPrimaryKeysChangedForSensor(new: Sensor, _ original:RLMSensor) -> Bool{
+        let isNameChanged = (new.name != original.name)
+        let isSourceChanged = (new.source != original.source)
+        return isNameChanged || isSourceChanged
     }
 }
 
