@@ -14,7 +14,7 @@ let kCSDATA_TYPE_INTEGER = "integer"
 let kCSDATA_TYPE_FLOAT = "float"
 let kCSDATA_TYPE_BOOL = "bool"
 
-public enum SortOrder: ErrorType{
+public enum SortOrder{
     case Asc
     case Desc
 }
@@ -52,10 +52,10 @@ public class Sensor{
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
-            meta: sensorOptions.meta,
-            csUploadEnabled: sensorOptions.uploadEnabled,
-            csDownloadEnabled: sensorOptions.downloadEnabled,
-            persistLocally: sensorOptions.persist,
+            meta: sensorOptions.meta!,
+            csUploadEnabled: sensorOptions.uploadEnabled!,
+            csDownloadEnabled: sensorOptions.downloadEnabled!,
+            persistLocally: sensorOptions.persist!,
             userId: userId,
             source: source,
             dataType: dataType,
@@ -135,34 +135,55 @@ public class Sensor{
         }
     }
     
-    public func getDataPoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) -> [DataPoint]{
+    public func getDataPoints(startDate: NSDate, endDate: NSDate, limit: Int, sortOrder: SortOrder) throws -> [DataPoint]{
         var dataPoints = [DataPoint]()
         do{
             dataPoints = try DatabaseHandler.getDataPoints(sensorId: self.id, startDate: startDate, endDate: endDate, limit: limit, sortOrder: sortOrder)
         } catch RLMError.InvalidLimit {
-            NSLog("Invalid limit was given.")
+            throw DatabaseError.InvalidLimit
         } catch {
-            NSLog("Unkown error")
+            throw DatabaseError.UnknownError
         }
         return dataPoints
     }
     
-    public func setSensorOptions(sensorOptions: SensorOptions) {
+    /**
+    * Apply options for the sensor.
+    * fields in `options` which are `null` will be ignored.
+    * @param options
+    * @return Returns the applied options.
+    */
+    public func setSensorOptions(sensorOptions: SensorOptions) throws {
         do{
             let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-            sensor.csDownloadEnabled = sensorOptions.downloadEnabled
-            sensor.csUploadEnabled = sensorOptions.uploadEnabled
-            sensor.meta = sensorOptions.meta
-            sensor.persistLocally = sensorOptions.persist
-            try DatabaseHandler.update(sensor)
+            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
+            try DatabaseHandler.update(updatedSensor)
         } catch RLMError.ObjectNotFound {
-            NSLog("Sensor does not exist in DB")
+            throw DatabaseError.ObjectNotFound
         } catch RLMError.DuplicatedObjects{
-            NSLog("Sensor is duplicated in DB")
+            throw DatabaseError.DuplicatedObjects
         } catch RLMError.UnauthenticatedAccess {
-            NSLog("Sensor does not belong to the current user")
+            throw DatabaseError.UnauthenticatedAccess
         } catch {
-            NSLog("Unknown error")
+            throw DatabaseError.UnknownError
         }
     }
+    
+    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
+        if (sensorOptions.downloadEnabled != nil){
+            sensor.csDownloadEnabled = sensorOptions.downloadEnabled!
+        }
+        if (sensorOptions.uploadEnabled != nil){
+            sensor.csUploadEnabled = sensorOptions.uploadEnabled!
+        }
+        if (sensorOptions.meta != nil){
+            sensor.meta = sensorOptions.meta!
+        }
+        if (sensorOptions.persist != nil){
+            sensor.persistLocally = sensorOptions.persist!
+        }
+        return sensor
+    }
+    
+    
 }

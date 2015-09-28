@@ -26,7 +26,7 @@ public class DataPoint{
         self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, synced: rlmDataPoint.synced)
     }
 
-    required convenience init() {
+    required convenience public init() {
         let now = NSDate()
         self.init(sensorId: -1, value: "", date: now, synced: false)
     }
@@ -47,7 +47,7 @@ public class DataPoint{
         self.value = String(Int(value))
     }
     
-    func setValue(value: [String: AnyObject]){
+    func setValue(value: Dictionary<String, AnyObject>){
         self.value = value.description
     }
     

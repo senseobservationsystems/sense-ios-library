@@ -9,7 +9,13 @@
 import Foundation
 
 enum DatabaseError: ErrorType{
-    case SensorAlreadyExists
+    case ObjectNotFound
+    case InsertFailed
+    case UpdateFailed
+    case DuplicatedObjects
+    case InvalidLimit
+    case UnauthenticatedAccess
+    case UnknownError
 }
 
 public class DataStorageEngine{
@@ -30,9 +36,9 @@ public class DataStorageEngine{
             try DatabaseHandler.insertSensor(sensor!)
             
         }catch RLMError.DuplicatedObjects{
-            throw DatabaseError.SensorAlreadyExists
+            throw DatabaseError.ObjectNotFound
         }catch {
-            NSLog("inserting sensor has failed")
+            throw DatabaseError.InsertFailed
         }
         return sensor
     }
@@ -42,16 +48,16 @@ public class DataStorageEngine{
     * @param source The name of the source
     * @param sensorName The name of the sensor
     **/
-    public func getSensor(source: String, sensorName : String) -> Sensor?{
+    public func getSensor(source: String, sensorName : String) throws -> Sensor?{
         var sensor : Sensor?
         do{
             sensor = try DatabaseHandler.getSensor(source, sensorName)
         } catch RLMError.ObjectNotFound{
-            NSLog("Sensor does not exist in DB")
+            throw DatabaseError.ObjectNotFound
         } catch RLMError.DuplicatedObjects{
-            NSLog("Sensor is duplicated in DB")
+            throw DatabaseError.ObjectNotFound
         } catch {
-            NSLog("Unknown error")
+            throw DatabaseError.UnknownError
         }
         return sensor
     }
