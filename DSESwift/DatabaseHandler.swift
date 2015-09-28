@@ -296,7 +296,8 @@ class DatabaseHandler: NSObject{
     private class func isPrimaryKeysChangedForSensor(new: Sensor, _ original:RLMSensor) -> Bool{
         let isNameChanged = (new.name != original.name)
         let isSourceChanged = (new.source != original.source)
-        return isNameChanged || isSourceChanged
+        let isUserIdChanged = (new.userId != original.userId)
+        return isNameChanged || isSourceChanged || isUserIdChanged
     }
 }
 

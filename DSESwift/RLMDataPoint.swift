@@ -29,7 +29,7 @@ class RLMDataPoint: Object{
     }
     
     private func getId() -> String {
-        return "\(self.sensorId)-\(String(self.date))"
+        return "\(self.sensorId):\(String(self.date))"
     }
     
 }

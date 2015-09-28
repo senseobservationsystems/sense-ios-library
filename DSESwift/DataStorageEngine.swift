@@ -18,6 +18,11 @@ enum DatabaseError: ErrorType{
     case UnknownError
 }
 
+
+/**
+* //TODO: Add documentation
+*
+*/
 public class DataStorageEngine{
 
     /**

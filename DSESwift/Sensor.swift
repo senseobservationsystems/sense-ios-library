@@ -19,6 +19,11 @@ public enum SortOrder{
     case Desc
 }
 
+
+/**
+* //TODO: Add documentation
+*
+*/
 public class Sensor{
     var id = -1
     var name = ""

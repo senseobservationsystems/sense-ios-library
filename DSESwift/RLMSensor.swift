@@ -34,7 +34,7 @@ class RLMSensor: Object{
     }
     
     private func getCompoundKey() -> String {
-        return "\(self.name)-\(String(self.source))"
+        return "\(self.name):\(self.source):\(self.userId)"
     }
     
 }
