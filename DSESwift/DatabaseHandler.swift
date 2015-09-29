@@ -15,6 +15,7 @@ enum RLMError: ErrorType{
     case UpdateFailed
     case DuplicatedObjects
     case InvalidLimit
+    case StartDateLaterThanEndDate
     case UnauthenticatedAccess
     case CanNotChangePrimaryKey
 }
@@ -67,8 +68,11 @@ class DatabaseHandler: NSObject{
     * @return dataPoints: An array of NSDictionary represents data points.
     */
     class func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int?, sortOrder: SortOrder) throws -> [DataPoint]{
-        if (limit < 0){
+        if (limit != nil && limit < 0){
             throw RLMError.InvalidLimit
+        }
+        if(isStartDateLaterThanEndDate(startDate, endDate)){
+            throw RLMError.StartDateLaterThanEndDate
         }
         
         var dataPoints = [DataPoint]()
@@ -298,6 +302,10 @@ class DatabaseHandler: NSObject{
         let isSourceChanged = (new.source != original.source)
         let isUserIdChanged = (new.userId != original.userId)
         return isNameChanged || isSourceChanged || isUserIdChanged
+    }
+    
+    private class func isStartDateLaterThanEndDate(startDate: NSDate?, _ endDate: NSDate?) -> Bool {
+        return (startDate != nil) && (endDate != nil) && (startDate?.timeIntervalSince1970 >= endDate?.timeIntervalSince1970)
     }
 }
 

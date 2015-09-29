@@ -55,6 +55,9 @@ class DataStorageEngineTests: XCTestCase {
     func testSetDictionaryValue() {
         let dataPoint = DataPoint()
         var valueDictionary = Dictionary<String, AnyObject>()
+        let valueFloat = 2.34
+        let valueBool = true
+        let valueString = "valueString"
         valueDictionary["float"] = String(valueFloat)
         valueDictionary["bool"] = String(valueBool)
         valueDictionary["string"] = "\""+valueString+"\""

@@ -99,42 +99,13 @@ class DatabaseHandlerTests: XCTestCase {
             }
             
             
-            let dataPoints = try! DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: nil, endDate: nil, limit: 101, sortOrder: SortOrder.Asc)
+            let dataPoints = try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: nil, endDate: nil, limit: nil, sortOrder: SortOrder.Asc)
             XCTAssertEqual(dataPoints.count, 100)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
     }
-    //This is a performance test. should be placed somewhere else
-    /*
-    func testGetDataPointsPerformanceWith100000() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
-        do{
-            let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
-            try DatabaseHandler.insertSensor(sensor)
-            
-            var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName)
-            XCTAssertEqual(sensors.count, 1)
-            
-            var dataPoint: DataPoint!
-            for (var i=0; i < 100000; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
-                try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            }
-            
-            self.measureBlock(){
-                do{
-                    try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)
-                } catch{
-                }
-            }
-        }catch{
-            XCTFail("Exception was captured. Abort the test.")
-        }
-    }
-*/
+
     
     func testInsertDataPointWithInvalidSensorId() {
         do{
@@ -162,7 +133,31 @@ class DatabaseHandlerTests: XCTestCase {
             dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
-            try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: -2, sortOrder: SortOrder.Asc)
+            try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: -1, sortOrder: SortOrder.Asc)
+        }catch{
+            print(error)
+            XCTAssertNotNil(error)
+        }
+    }
+    
+    func testGetDataPointsWithStartDateLaterThanEndDate() {
+        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        do{
+            let sourceName = "testSource"
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", synced: false)
+            try DatabaseHandler.insertSensor(sensor)
+            
+            var sensors = [Sensor]()
+            sensors = DatabaseHandler.getSensors(sourceName)
+            XCTAssertEqual(sensors.count, 1)
+            
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            
+            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+            
+            try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
         }catch{
             print(error)
             XCTAssertNotNil(error)
@@ -172,7 +167,7 @@ class DatabaseHandlerTests: XCTestCase {
     func testGetDataPointsWithInvalidSensorId() {
 
         do{
-            let dataPoints = try DatabaseHandler.getDataPoints(sensorId: 1, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate(), limit: 100, sortOrder: SortOrder.Asc)
+            let dataPoints = try DatabaseHandler.getDataPoints(sensorId: 1, startDate: NSDate(), endDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), limit: 100, sortOrder: SortOrder.Asc)
             XCTAssertEqual(dataPoints.count, 0)
         }catch{
             print(error)
