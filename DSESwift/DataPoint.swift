@@ -36,35 +36,45 @@ public class DataPoint{
     }
     
     func setValue(value: Int) {
-        self.value = String(value)
+        self.value = String(format:"%d", value)
     }
     
     func setValue(value: Double) {
-        self.value = String(value)
+        self.value = String(format:"%f", value)
     }
     
     func setValue(value: Bool){
-        self.value = String(Int(value))
+        self.value = String(format:"%b", value)
     }
     
     func setValue(value: Dictionary<String, AnyObject>){
-        self.value = value.description
+        do{
+            let jsonData = try NSJSONSerialization.dataWithJSONObject(value, options: NSJSONWritingOptions.PrettyPrinted)
+            let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
+            self.value = jsonString
+        }catch{
+            print("Error while parsing string into dictionary")
+        }
     }
     
     func setValue(value: String){
-        self.value = value
+        self.value = self.quote(value)
     }
     
     func getValueInInt() -> Int {
-        return Int(self.value)!
+        return NSString(string: self.value).integerValue
     }
     
     func getValueInDouble() -> Double {
-        return Double(self.value)!
+        return NSString(string: self.value).doubleValue
     }
     
     func getValueInBool() -> Bool {
-        return ( Int(self.value)  == 1 )
+        return NSString(string: self.value).boolValue
+    }
+    
+    func getValueInString() -> String{
+        return self.unquote(self.value)
     }
     
     func getValueInDictionary() -> [String: AnyObject]{
@@ -80,7 +90,13 @@ public class DataPoint{
         return [String: AnyObject]()
     }
 
-    func getValueInString() -> String{
-        return self.value
+
+    
+    private func quote(string: String) -> String {
+        return String(format: "\"%@\"", string)
+    }
+    
+    private func unquote(string: String) -> String {
+        return string.stringByReplacingOccurrencesOfString("\"", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
     }
 }

@@ -25,6 +25,7 @@ enum DatabaseError: ErrorType{
 */
 public class DataStorageEngine{
 
+    
     /**
     * Create a new sensor in database and backend if it does not already exist. Throw exception if it already exists. If it has been created, return the object.
     * an object.
