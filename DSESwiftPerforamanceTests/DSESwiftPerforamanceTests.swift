@@ -16,6 +16,7 @@ class DSESwiftPerformanceTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
     }
     
@@ -23,33 +24,41 @@ class DSESwiftPerformanceTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInsertDataPointsPerformanceWith100000() {
-        let dbHandler = DatabaseHandler()
+    func testInsertDataPointsPerformanceWith1000() {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
-            try dbHandler.insertSensor(sensor)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
+            try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = dbHandler.getSensors(sourceName)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint: DataPoint!
+            var dataPoints = [DataPoint]()
+            var date = NSDate()
             
+            for (var i=0; i < 1000; i++){
+                let dataPoint = DataPoint(sensorId: sensor.id, value: "{'date':1111111111.111, 'value':{'x': 3.34 , 'y': 5.54, 'z': 8.78}}", date: date, synced: false)
+                dataPoints.append(dataPoint)
+                date = date.dateByAddingTimeInterval(1)
+            }
             
             self.measureBlock(){
                 do{
-                    for (var i=0; i < 1000; i++){
-                        dataPoint = DataPoint(sensorId: sensor.id, value: "{'date':1111111111.111, 'value':{x: 3.34 , y: 5.54, z: 8.78}}", date: NSDate(), synced: false)
-                        try dbHandler.insertOrUpdateDataPoint(dataPoint)
+                    for dataPoint in dataPoints {
+                        try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
                     }
                 } catch{
                     print(error)
                     XCTFail("Exception was captured. Abort test")
                 }
             }
+            
+            let results = try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: date.dateByAddingTimeInterval(-10000), endDate: date, limit: nil, sortOrder: SortOrder.Asc)
+            XCTAssertEqual(results.count, 1000)
         }catch{
+            print(error)
             XCTFail("Exception was captured. Abort the test.")
         }
         
@@ -57,26 +66,25 @@ class DSESwiftPerformanceTests: XCTestCase {
     }
     
     func testGetDataPointsPerformanceWith100000() {
-        let dbHandler = DatabaseHandler()
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csId: "", synced: false)
-            try dbHandler.insertSensor(sensor)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", synced: false)
+            try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = dbHandler.getSensors(sourceName)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint: DataPoint!
-            for (var i=0; i < 100000; i++){
+            for (var i=0; i < 1000; i++){
                 dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate(), synced: false)
-                try dbHandler.insertOrUpdateDataPoint(dataPoint)
+                try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             
             self.measureBlock(){
                 do{
-                    try dbHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)
+                    try DatabaseHandler.getDataPoints(sensorId: sensor.id, startDate: NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60), endDate: NSDate().dateByAddingTimeInterval(10), limit: 80, sortOrder: SortOrder.Asc)
                 } catch{
                 }
             }

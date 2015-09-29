@@ -243,6 +243,8 @@ class DatabaseHandler: NSObject{
         }
         return newId
     }
+    
+    
 
     // MARK: Helper functions
     /**
