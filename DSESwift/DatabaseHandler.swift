@@ -28,11 +28,9 @@ class DatabaseHandler: NSObject{
     
     // MARK: For sensor class
     /**
-    * Add a data point to the sensor with the given sensorId. Throw exceptions if it fails to add the data point.
-    
-    * @param sensorId: String for the sensorId of the sensor that the data point belongs to.
-    * @param value: AnyObject for the value.
-    * @param date: NSDate for the datetime of the data point.
+    * Add a data point. Throw exceptions if it fails to add the data point.
+    *
+    * @param dataPoint: dataPoint to be added
     */
     class func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
         //Validate the sensorId
@@ -59,16 +57,16 @@ class DatabaseHandler: NSObject{
     }
 
     /**
-    * Get data points from the sensor with the given sensorId.
+    * Get data points from the sensor with the given sensorId. throws exception when invalid setups are given. eg)startDate>=endDate, limit <= 0
     
     * @param sensorId: String for the sensorId of the sensor that the data point belongs to.
-    * @param startDate: NSDate for the startDate of the query.
-    * @param endDate: NSDate for the endDate of the query.
-    * @param limit: The maximum number of data points.
+    * @param startDate: NSDate for the startDate of the query. nil for no startDate.
+    * @param endDate: NSDate for the endDate of the query. nil for no endDate.
+    * @param limit: The maximum number of data points. nil for no limit.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
     class func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int?, sortOrder: SortOrder) throws -> [DataPoint]{
-        if (limit != nil && limit < 0){
+        if (limit != nil && limit <= 0){
             throw RLMError.InvalidLimit
         }
         if(isStartDateLaterThanEndDate(startDate, endDate)){
@@ -94,7 +92,9 @@ class DatabaseHandler: NSObject{
     // MARK: For DataStorageEngine class
     
     /**
-    * Update RLMSensor in database with the info of the given Sensor object. Throws an exception if it fails to updated. The updatable attributes are only meta, csUploadEnabled, csDownloadEnabled, persistLocally and synced.
+    * Update Sensor in database with the info of the given Sensor object. 
+    * Throws an exception if it fails to updated. The updatable attributes are only meta, csUploadEnabled, csDownloadEnabled, persistLocally and synced.
+    *
     * @param sensor: Sensor object containing the updated info.
     */
     class func update(sensor: Sensor) throws {
@@ -131,12 +131,9 @@ class DatabaseHandler: NSObject{
     }
 
     /**
-    * Insert a new sensor into database if it does not exist yet. Throw exception if it already exists. If it has been created, return the object.
+    * Insert a new sensor into database if it does not exist yet. Throw exception if it already exists.
     *
-    * @param sensorName: String for sensor name.
-    * @param source: String for source.
-    * @param dataType: String for dataType.
-    * @param sensorOptions: DSESensorOptions object.
+    * @param sensor: Sensor object to be added
     */
     class func insertSensor(sensor:Sensor) throws {
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
@@ -171,11 +168,11 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Returns a specific sensor by name connected to the source with the given sensorName.
+    * Returns a specific sensor with the given name and source.
     *
     * @param source: String for source.
     * @param sensorName: String for sensor name.
-    * @return sensor: sensor with the given sensor name and source.
+    * @return A sensor with the given sensor name and source.
     */
     class func getSensor(source: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
@@ -194,8 +191,8 @@ class DatabaseHandler: NSObject{
     /**
     * Returns all the sensors connected to the given source.
     *
-    * @param source: String for sensorId.
-    * @return sensors: An array of sensors that belongs to the source with the given source.
+    * @param source: String for source.
+    * @return An array of sensors that belongs to the given source.
     */
     class func getSensors(source: String)->[Sensor]{
         var sensors = [Sensor]()
@@ -212,10 +209,9 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Returns all the sensors connected to the given source.
+    * Returns all the sources belongs to the current user
     *
-    * @param source: String for sensorId.
-    * @return sensors: An array of sensors that belongs to the source with the given source.
+    * @return An array of sources that belongs to the current user.
     */
     class func getSources()->[String]{
         var sources = Set<String>()
@@ -230,7 +226,11 @@ class DatabaseHandler: NSObject{
         return Array(sources)
     }
     
-    
+    /**
+    * Returns an available id for Sensor.
+    *
+    * @return An available Id
+    */
     class func getNextKeyForSensor() -> Int{
         let lockQueue = dispatch_queue_create("com.sense.lockQueue", nil)
         var newId = 0
@@ -245,6 +245,14 @@ class DatabaseHandler: NSObject{
     }
 
     // MARK: Helper functions
+    /**
+    * Returns a compound predicate constructed based on the arguments
+    *
+    * @param sensorId: Int for sensorId
+    * @param startDate: NSDate for startDate
+    * @param endDate: NSDate for endDate
+    * @return A compound predicate constructed from the arguments.
+    */
     private class func getPredicateForDataPoint(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "sensorId = %d", sensorId))
@@ -257,7 +265,9 @@ class DatabaseHandler: NSObject{
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }
 
-    
+    /**
+    * Returns a sensor with the given id.
+    */
     private class func getSensor(id: Int) -> RLMSensor {
         var sensor = RLMSensor()
         let predicates = NSPredicate(format: "id = %d AND userId = %@", id, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -304,6 +314,9 @@ class DatabaseHandler: NSObject{
         return isNameChanged || isSourceChanged || isUserIdChanged
     }
     
+    /**
+    * Returns true if startDate is later or euqal to endDate.
+    */
     private class func isStartDateLaterThanEndDate(startDate: NSDate?, _ endDate: NSDate?) -> Bool {
         return (startDate != nil) && (endDate != nil) && (startDate?.timeIntervalSince1970 >= endDate?.timeIntervalSince1970)
     }
