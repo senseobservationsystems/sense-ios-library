@@ -34,12 +34,12 @@ class DatabaseHandler: NSObject{
     * @param dataPoint: dataPoint to be added
     */
     class func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
-        //Validate the sensorId
+        // Validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
             throw RLMError.ObjectNotFound
         }
         
-        // create data point
+        // Create data point
         let rlmDataPoint = RLMDataPoint()
         
         let realm = try! Realm()
@@ -48,6 +48,7 @@ class DatabaseHandler: NSObject{
         rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
         rlmDataPoint.updateId();
         rlmDataPoint.value = dataPoint.value
+        rlmDataPoint.synced = dataPoint.synced
         realm.add(rlmDataPoint, update:true)
         
         do {
@@ -95,12 +96,22 @@ class DatabaseHandler: NSObject{
     * @param startDate: NSDate for startDate
     * @param endDate: NSDate for endDate
     */
-    class func deleteDataPoints(sensorId: Int, startDate: NSDate, endDate: NSDate) {
+    class func deleteDataPoints(sensorId: Int, startDate: NSDate?, endDate: NSDate?) throws {
+        if(isStartDateLaterThanEndDate(startDate, endDate)){
+            throw RLMError.StartDateLaterThanEndDate
+        }
+        
         let realm = try! Realm()
         let predicates = self.getPredicateForDataPoint(sensorId: sensorId, startDate: startDate, endDate: endDate)
         let results = realm.objects(RLMDataPoint).filter(predicates)
+        realm.beginWrite()
         for dataPoint in results {
             realm.delete(dataPoint)
+        }
+        do {
+            try realm.commitWrite()
+        } catch {
+            throw RLMError.DeleteFailed
         }
     }
     

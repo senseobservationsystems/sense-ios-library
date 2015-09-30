@@ -9,9 +9,9 @@
 import Foundation
 
 public class DataPoint{
-    var sensorId = -1
+    private(set) var sensorId = -1
     private(set) var value = ""
-    var date = NSDate()
+    private(set) var date = NSDate()
     var synced = false
 
     init(sensorId: Int, value: String, date: NSDate, synced: Bool) {
