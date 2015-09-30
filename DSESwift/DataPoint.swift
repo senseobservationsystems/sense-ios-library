@@ -35,68 +35,27 @@ public class DataPoint{
         return "\(self.sensorId)-\(String(self.date))"
     }
     
-    func setValue(value: Int) {
-        self.value = String(format:"%d", value)
-    }
-    
-    func setValue(value: Double) {
-        self.value = String(format:"%f", value)
-    }
-    
-    func setValue(value: Bool){
-        self.value = String(format:"%b", value)
-    }
-    
-    func setValue(value: Dictionary<String, AnyObject>){
-        do{
-            let jsonData = try NSJSONSerialization.dataWithJSONObject(value, options: NSJSONWritingOptions.PrettyPrinted)
-            let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
-            self.value = jsonString
-        }catch{
-            print("Error while parsing string into dictionary")
-        }
-    }
-    
-    func setValue(value: String){
-        self.value = self.quote(value)
+    func setValue(value: AnyObject){
+        self.value = JSONUtils.stringify(value)
     }
     
     func getValueInInt() -> Int {
-        return NSString(string: self.value).integerValue
+        return JSONUtils.getIntValue(self.value)
     }
     
     func getValueInDouble() -> Double {
-        return NSString(string: self.value).doubleValue
+        return JSONUtils.getDoubleValue(self.value)
     }
     
     func getValueInBool() -> Bool {
-        return NSString(string: self.value).boolValue
+        return JSONUtils.getBoolValue(self.value)
     }
     
     func getValueInString() -> String{
-        return self.unquote(self.value)
+        return JSONUtils.getStringValue(self.value)
     }
     
     func getValueInDictionary() -> [String: AnyObject]{
-        if let data = self.value.dataUsingEncoding(NSUTF8StringEncoding){
-            do{
-                if let dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [String: AnyObject]{
-                    return dictionary
-                }
-            }catch {
-                print("Error while parsing string into dictionary")
-            }
-        }
-        return [String: AnyObject]()
-    }
-
-
-    
-    private func quote(string: String) -> String {
-        return String(format: "\"%@\"", string)
-    }
-    
-    private func unquote(string: String) -> String {
-        return string.stringByReplacingOccurrencesOfString("\"", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        return JSONUtils.getDictionaryValue(self.value)
     }
 }

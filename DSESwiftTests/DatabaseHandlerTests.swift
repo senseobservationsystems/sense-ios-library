@@ -173,6 +173,8 @@ class DatabaseHandlerTests: XCTestCase {
             print(error)
         }
     }
+    
+    
 
     func testUpdateDataPoint() {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)

@@ -36,11 +36,17 @@ class DataPointTests: XCTestCase {
     
     func testSetDouble() {
         let dataPoint = DataPoint()
+        let valueFloat = 2.01234
+        dataPoint.setValue(valueFloat)
+        XCTAssertEqual(dataPoint.value, "2.012340")
+        XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
+    }
+    
+    func testSetDoubleWithoutPrecision() {
+        let dataPoint = DataPoint()
         let valueFloat = 2.0
         dataPoint.setValue(valueFloat)
-        XCTAssertEqual(dataPoint.value, "2.000000")
         XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
-
     }
     
     func testSetStringValue() {

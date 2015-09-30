@@ -61,6 +61,7 @@
 		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */; };
 		27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* DataPointTests.swift */; settings = {ASSET_TAGS = (); }; };
+		27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E201BBAF07A0006C15A /* JSONUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -257,6 +258,7 @@
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
 		27F89E1C1BB9966B0006C15A /* DataPointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPointTests.swift; sourceTree = "<group>"; };
+		27F89E201BBAF07A0006C15A /* JSONUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONUtils.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -741,6 +743,7 @@
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
 				27F752701BB0212C000FC400 /* KeychainWrapper.swift */,
 				276CBB821BB56E12001C287D /* DataStorageEngine.swift */,
+				27F89E201BBAF07A0006C15A /* JSONUtils.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -1169,6 +1172,7 @@
 				272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */,
 				27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
+				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
 			);

@@ -11,13 +11,14 @@ import RealmSwift
 
 enum RLMError: ErrorType{
     case ObjectNotFound
-    case InsertFailed
-    case UpdateFailed
     case DuplicatedObjects
     case InvalidLimit
     case StartDateLaterThanEndDate
     case UnauthenticatedAccess
     case CanNotChangePrimaryKey
+    case InsertFailed
+    case UpdateFailed
+    case DeleteFailed
 }
 
 /**
@@ -85,6 +86,22 @@ class DatabaseHandler: NSObject{
             dataPoints.append(dataPoint)
         }
         return dataPoints
+    }
+    
+    /**
+    * Delete data points based on the arguments. 
+    *
+    * @param sensorId: String for sensorId
+    * @param startDate: NSDate for startDate
+    * @param endDate: NSDate for endDate
+    */
+    class func deleteDataPoints(sensorId: Int, startDate: NSDate, endDate: NSDate) {
+        let realm = try! Realm()
+        let predicates = self.getPredicateForDataPoint(sensorId: sensorId, startDate: startDate, endDate: endDate)
+        let results = realm.objects(RLMDataPoint).filter(predicates)
+        for dataPoint in results {
+            realm.delete(dataPoint)
+        }
     }
     
 
@@ -244,7 +261,7 @@ class DatabaseHandler: NSObject{
         return newId
     }
     
-    
+
 
     // MARK: Helper functions
     /**
