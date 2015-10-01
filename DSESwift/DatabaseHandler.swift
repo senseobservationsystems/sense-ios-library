@@ -48,7 +48,8 @@ class DatabaseHandler: NSObject{
         rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
         rlmDataPoint.updateId();
         rlmDataPoint.value = dataPoint.value
-        rlmDataPoint.synced = dataPoint.synced
+        rlmDataPoint.existsInCS = dataPoint.existsInCS
+        rlmDataPoint.requiresDeletionInCS = dataPoint.requiresDeletionInCS
         realm.add(rlmDataPoint, update:true)
         
         do {
@@ -67,21 +68,21 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points. nil for no limit.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    class func getDataPoints(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?, limit: Int?, sortOrder: SortOrder) throws -> [DataPoint]{
-        if (limit != nil && limit <= 0){
+    class func getDataPoints(sensorId sensorId: Int, queryOptions: QueryOptions) throws -> [DataPoint]{
+        if (queryOptions.limit != nil && queryOptions.limit <= 0){
             throw RLMError.InvalidLimit
         }
-        if(isStartDateLaterThanEndDate(startDate, endDate)){
+        if(isStartDateLaterThanEndDate(queryOptions.startDate, queryOptions.endDate)){
             throw RLMError.StartDateLaterThanEndDate
         }
         
         var dataPoints = [DataPoint]()
         let realm = try! Realm()
-        let isAscending = (sortOrder == SortOrder.Asc) ? true : false;
-        let predicates = self.getPredicateForDataPoint(sensorId: sensorId, startDate: startDate, endDate: endDate)
+        let isAscending = (queryOptions.sortOrder == SortOrder.Asc) ? true : false;
+        let predicates = self.getPredicateForDataPoint(sensorId, queryOptions)
         //query
         let results = realm.objects(RLMDataPoint).filter(predicates).sorted("date", ascending: isAscending)
-        let end = (limit == nil) ? results.count : min(limit!, results.count)
+        let end = (queryOptions.limit == nil) ? results.count : min(queryOptions.limit!, results.count)
         for rlmDataPoint in results[Range(start:0, end: end)] {
             let dataPoint = DataPoint(rlmDataPoint: rlmDataPoint)
             dataPoints.append(dataPoint)
@@ -101,8 +102,12 @@ class DatabaseHandler: NSObject{
             throw RLMError.StartDateLaterThanEndDate
         }
         
+        var queryOptions = QueryOptions()
+        queryOptions.startDate = startDate
+        queryOptions.endDate = endDate
+        
         let realm = try! Realm()
-        let predicates = self.getPredicateForDataPoint(sensorId: sensorId, startDate: startDate, endDate: endDate)
+        let predicates = self.getPredicateForDataPoint(sensorId, queryOptions)
         let results = realm.objects(RLMDataPoint).filter(predicates)
         realm.beginWrite()
         for dataPoint in results {
@@ -148,7 +153,7 @@ class DatabaseHandler: NSObject{
         rlmSensor.csUploadEnabled = sensor.csUploadEnabled
         rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
-        rlmSensor.synced = sensor.synced
+        rlmSensor.csDataPointsDownloaded = sensor.csDataPointsDownloaded
         realm.add(rlmSensor, update: true)
 
         do {
@@ -184,7 +189,7 @@ class DatabaseHandler: NSObject{
         rlmSensor.userId = sensor.userId
         rlmSensor.source = sensor.source
         rlmSensor.dataType = sensor.dataType
-        rlmSensor.synced = sensor.synced
+        rlmSensor.csDataPointsDownloaded = sensor.csDataPointsDownloaded
         rlmSensor.updateId()
         realm.add(rlmSensor)
         
@@ -222,11 +227,11 @@ class DatabaseHandler: NSObject{
     * @param source: String for source.
     * @return An array of sensors that belongs to the given source.
     */
-    class func getSensors(source: String)->[Sensor]{
+    class func getSensors(source: String, _ csDataPointDownloaded: Bool?)->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
-        let predicates = NSPredicate(format: "source = %@ AND userId = %@", source, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicates = self.getPredicateForSensors(source, csDataPointsDownloaded: csDataPointDownloaded)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             let sensor = Sensor(rlmSensor)
@@ -276,21 +281,43 @@ class DatabaseHandler: NSObject{
 
     // MARK: Helper functions
     /**
-    * Returns a compound predicate constructed based on the arguments
+    * Returns a compound predicate for querying DataPoints based on the arguments
     *
     * @param sensorId: Int for sensorId
     * @param startDate: NSDate for startDate
     * @param endDate: NSDate for endDate
-    * @return A compound predicate constructed from the arguments.
+    * @return A compound predicate for querying Sensors based on the arguments
     */
-    private class func getPredicateForDataPoint(sensorId sensorId: Int, startDate: NSDate?, endDate: NSDate?)-> NSPredicate{
+    private class func getPredicateForDataPoint(sensorId: Int, _ queryOptions: QueryOptions)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "sensorId = %d", sensorId))
-        if(startDate != nil){
-            predicates.append(NSPredicate(format: "date >= %f", startDate!.timeIntervalSince1970))
+        if(queryOptions.startDate != nil){
+            predicates.append(NSPredicate(format: "date >= %f", queryOptions.startDate!.timeIntervalSince1970))
         }
-        if(endDate != nil){
-            predicates.append(NSPredicate(format: "date < %f" , endDate!.timeIntervalSince1970))
+        if(queryOptions.endDate != nil){
+            predicates.append(NSPredicate(format: "date < %f" , queryOptions.endDate!.timeIntervalSince1970))
+        }
+        if(queryOptions.existsInCS != nil){
+            predicates.append(NSPredicate(format: "date < %b" , queryOptions.existsInCS!))
+        }
+        if(queryOptions.requiresDeletionInCS != nil){
+            predicates.append(NSPredicate(format: "date < %b" , queryOptions.requiresDeletionInCS!))
+        }
+        return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
+    }
+    
+    /**
+    * Returns a compound predicate for querying Sensors based on the arguments
+    *
+    * @param source: String for source
+    * @param csDataPointsDownloaded: Bool for whether a sensor has completed the initial download of data points
+    * @return A compound predicate for querying Sensors based on the arguments
+    */
+    private class func getPredicateForSensors(source: String, csDataPointsDownloaded: Bool?)-> NSPredicate{
+        var predicates = [NSPredicate]()
+        predicates.append(NSPredicate(format: "source = %@ AND userId = %@", source, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!))
+        if(csDataPointsDownloaded != nil){
+            predicates.append(NSPredicate(format: "csDataPointsDownloaded >= %b", csDataPointsDownloaded!))
         }
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }

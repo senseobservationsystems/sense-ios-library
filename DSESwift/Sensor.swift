@@ -34,11 +34,11 @@ public class Sensor{
     var userId = ""
     var source = ""
     var dataType = ""
-    var synced = false
+    var csDataPointsDownloaded = false
 
     init(id:Int,              name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
         persistLocally: Bool, userId: String, source: String,   dataType: String,  
-        synced: Bool) {
+        csDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
@@ -49,11 +49,11 @@ public class Sensor{
         self.userId = userId
         self.source = source
         self.dataType = dataType
-        self.synced = synced
+        self.csDataPointsDownloaded = csDataPointsDownloaded
     }
     
     public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, dataType: String, synced: Bool) {
+                            source: String, dataType: String, csDataPointsDownloaded: Bool) {
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
@@ -64,7 +64,7 @@ public class Sensor{
             userId: userId,
             source: source,
             dataType: dataType,
-            synced: synced
+            csDataPointsDownloaded: csDataPointsDownloaded
         )
     }
     
@@ -79,12 +79,12 @@ public class Sensor{
             userId: sensor.userId,
             source: sensor.source,
             dataType: sensor.dataType,
-            synced: sensor.synced
+            csDataPointsDownloaded: sensor.csDataPointsDownloaded
         )
     }
     
-    public func insertDataPoint(value: String, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: value, date: date, synced: false)
+    public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), date: date)
         do{
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             return true
@@ -93,52 +93,7 @@ public class Sensor{
             return false
         }
     }
-    
-    public func insertDataPoint(value: NSDictionary, _ date: NSDate) -> Bool {
-        do{
-            let data = try NSJSONSerialization.dataWithJSONObject(value, options: NSJSONWritingOptions.PrettyPrinted)
-            let json = String(data: data, encoding: NSUTF8StringEncoding)
-            let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: json!, date: date, synced: false)
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        }catch{
-            NSLog("Failed to insert DataPoint")
-            return false
-        }
-    }
-    
-    public func insertDataPoint(value: Int, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: String(value), date: date, synced: false)
-        do{
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        } catch {
-            NSLog("Failed to insert DataPoint")
-            return false
-        }
-    }
-    
-    public func insertDataPoint(value: Float, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: String(value), date: date, synced: false)
-        do{
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        } catch {
-            NSLog("Failed to insert DataPoint")
-            return false
-        }
-    }
-    
-    public func insertDataPoint(value: Bool, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: String(Int(value)), date: date, synced: false)
-        do{
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        } catch {
-            NSLog("Failed to insert DataPoint")
-            return false
-        }
-    }
+
     
     public func getDataPoints(startDate: NSDate?, endDate: NSDate?, limit: Int?, sortOrder: SortOrder) throws -> [DataPoint]{
         var dataPoints = [DataPoint]()

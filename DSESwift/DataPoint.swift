@@ -12,23 +12,29 @@ public class DataPoint{
     private(set) var sensorId = -1
     private(set) var value = ""
     private(set) var date = NSDate()
-    var synced = false
+    var existsInCS = false
+    var requiresDeletionInCS = false
 
-    init(sensorId: Int, value: String, date: NSDate, synced: Bool) {
+    init(sensorId: Int, value: String, date: NSDate, existsInCS: Bool, requiresDeletionInCS: Bool) {
         self.sensorId = sensorId
         self.value = value
         self.date = date
-        self.synced = synced
+        self.existsInCS = existsInCS
+        self.requiresDeletionInCS = requiresDeletionInCS
+    }
+    
+    convenience init(sensorId: Int, value: String, date: NSDate) {
+        self.init(sensorId: sensorId, value: value, date: date, existsInCS:false, requiresDeletionInCS: false)
     }
 
     convenience init(rlmDataPoint: RLMDataPoint) {
         let date = NSDate(timeIntervalSince1970: rlmDataPoint.date)
-        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, synced: rlmDataPoint.synced)
+        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, existsInCS: rlmDataPoint.existsInCS, requiresDeletionInCS: rlmDataPoint.requiresDeletionInCS)
     }
 
     required convenience public init() {
         let now = NSDate()
-        self.init(sensorId: -1, value: "", date: now, synced: false)
+        self.init(sensorId: -1, value: "", date: now, existsInCS: false, requiresDeletionInCS: false)
     }
     
     func getId() -> String {

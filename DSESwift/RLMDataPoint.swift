@@ -11,11 +11,12 @@ import RealmSwift
 
 class RLMDataPoint: Object{
 
-    dynamic var synced = true
     dynamic var value = ""
     dynamic var sensorId: Int = -1
     dynamic var date = 0.0
     dynamic lazy var id: String = self.getId()
+    dynamic var existsInCS = false
+    dynamic var requiresDeletionInCS = false
     
     /*
      * This method has to be called when the sensorId or the date is set.

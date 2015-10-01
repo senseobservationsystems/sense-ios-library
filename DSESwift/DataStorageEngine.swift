@@ -38,7 +38,8 @@ public class DataStorageEngine{
     {
         var sensor: Sensor?
         do{
-            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, synced: false)
+            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, csDataPointsDownloaded
+                : false)
             try DatabaseHandler.insertSensor(sensor!)
             
         }catch RLMError.DuplicatedObjects{
@@ -73,7 +74,7 @@ public class DataStorageEngine{
     * @return [Sensor] The sensors connected to the given source
     **/
     public func getSensors(source: String) -> [Sensor]{
-        return DatabaseHandler.getSensors(source)
+        return DatabaseHandler.getSensors(source, nil)
     }
     
     /**

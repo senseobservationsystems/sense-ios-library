@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class SensorOptions{
+public struct SensorOptions{
     var meta : String?  // null by default, if not null, change from default
     var uploadEnabled: Bool? // null by default, if not null, change from default
     var downloadEnabled: Bool? // null by default, if not null, change from default
@@ -21,7 +21,7 @@ public class SensorOptions{
         self.persist = persist
     }
     
-    public convenience init() {
+    public init() {
         self.init(meta: nil, uploadEnabled: nil, downloadEnabled: nil, persist: nil)
     }
 }

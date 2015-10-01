@@ -86,15 +86,7 @@ static const NSString* kUrlJsonSuffix               = @".json";
 
 	NSString *sensorID = [DSEHTTPRequestHelper processResponseWithData:responseData andHTTPResponse:httpResponse andError:error andBlock:^{
 		
-									NSString* location = [httpResponse.allHeaderFields valueForKey:@"location"];
-									if(location && location != (id)[NSNull null]) {
-										
-										NSArray* locationComponents = [location componentsSeparatedByString:@"/"];
-										
-										if (locationComponents.count > 0) {
-											return [locationComponents objectAtIndex:[locationComponents count]-1];
-										}
-									}
+									 O									}
 									return (id)nil;
 							}];
 	

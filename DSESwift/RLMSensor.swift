@@ -20,7 +20,7 @@ class RLMSensor: Object{
     dynamic var userId = ""
     dynamic var source = ""
     dynamic var dataType = ""
-    dynamic var synced = false
+    dynamic var csDataPointsDownloaded = false
 
     /*
     * This method has to be called when the sensorId or the date is set.
