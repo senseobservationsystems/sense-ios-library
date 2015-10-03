@@ -82,69 +82,69 @@ public class Sensor{
             csDataPointsDownloaded: sensor.csDataPointsDownloaded
         )
     }
-    
-    public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), date: date)
-        do{
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        } catch {
-            NSLog("Failed to insert DataPoint")
-            return false
-        }
-    }
-
-    
-    public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
-        var dataPoints = [DataPoint]()
-        
-        do{
-            dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
-        } catch RLMError.InvalidLimit {
-            throw DatabaseError.InvalidLimit
-        } catch {
-            throw DatabaseError.UnknownError
-        }
-        return dataPoints
-    }
-    
-    /**
-    * Apply options for the sensor.
-    * fields in `options` which are `null` will be ignored.
-    * @param options
-    * @return Returns the applied options.
-    */
-    public func setSensorOptions(sensorOptions: SensorOptions) throws {
-        do{
-            let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
-            try DatabaseHandler.update(updatedSensor)
-        } catch RLMError.ObjectNotFound {
-            throw DatabaseError.ObjectNotFound
-        } catch RLMError.DuplicatedObjects{
-            throw DatabaseError.DuplicatedObjects
-        } catch RLMError.UnauthenticatedAccess {
-            throw DatabaseError.UnauthenticatedAccess
-        } catch {
-            throw DatabaseError.UnknownError
-        }
-    }
-    
-    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
-        if (sensorOptions.downloadEnabled != nil){
-            sensor.csDownloadEnabled = sensorOptions.downloadEnabled!
-        }
-        if (sensorOptions.uploadEnabled != nil){
-            sensor.csUploadEnabled = sensorOptions.uploadEnabled!
-        }
-        if (sensorOptions.meta != nil){
-            sensor.meta = sensorOptions.meta!
-        }
-        if (sensorOptions.persist != nil){
-            sensor.persistLocally = sensorOptions.persist!
-        }
-        return sensor
-    }
-    
-    
+//
+//    public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
+//        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), date: date)
+//        do{
+//            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
+//            return true
+//        } catch {
+//            NSLog("Failed to insert DataPoint")
+//            return false
+//        }
+//    }
+//
+//    
+//    public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
+//        var dataPoints = [DataPoint]()
+//        
+//        do{
+//            dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
+//        } catch RLMError.InvalidLimit {
+//            throw DatabaseError.InvalidLimit
+//        } catch {
+//            throw DatabaseError.UnknownError
+//        }
+//        return dataPoints
+//    }
+//    
+//    /**
+//    * Apply options for the sensor.
+//    * fields in `options` which are `null` will be ignored.
+//    * @param options
+//    * @return Returns the applied options.
+//    */
+//    public func setSensorOptions(sensorOptions: SensorOptions) throws {
+//        do{
+//            let sensor = try DatabaseHandler.getSensor(self.source, self.name)
+//            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
+//            try DatabaseHandler.update(updatedSensor)
+//        } catch RLMError.ObjectNotFound {
+//            throw DatabaseError.ObjectNotFound
+//        } catch RLMError.DuplicatedObjects{
+//            throw DatabaseError.DuplicatedObjects
+//        } catch RLMError.UnauthenticatedAccess {
+//            throw DatabaseError.UnauthenticatedAccess
+//        } catch {
+//            throw DatabaseError.UnknownError
+//        }
+//    }
+//    
+//    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
+//        if (sensorOptions.downloadEnabled != nil){
+//            sensor.csDownloadEnabled = sensorOptions.downloadEnabled!
+//        }
+//        if (sensorOptions.uploadEnabled != nil){
+//            sensor.csUploadEnabled = sensorOptions.uploadEnabled!
+//        }
+//        if (sensorOptions.meta != nil){
+//            sensor.meta = sensorOptions.meta!
+//        }
+//        if (sensorOptions.persist != nil){
+//            sensor.persistLocally = sensorOptions.persist!
+//        }
+//        return sensor
+//    }
+//    
+//    
 }

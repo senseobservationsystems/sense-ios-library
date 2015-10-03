@@ -11,7 +11,7 @@ import RealmSwift
 
 class RLMDataPoint: Object{
 
-    dynamic var value = ""
+    dynamic var value : BaseValue!
     dynamic var sensorId: Int = -1
     dynamic var date = 0.0
     dynamic lazy var id: String = self.getId()

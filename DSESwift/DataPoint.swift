@@ -10,12 +10,12 @@ import Foundation
 
 public class DataPoint{
     private(set) var sensorId = -1
-    private(set) var value = ""
+    private(set) var value : BaseValue?
     private(set) var date = NSDate()
     var existsInCS = false
     var requiresDeletionInCS = false
 
-    init(sensorId: Int, value: String, date: NSDate, existsInCS: Bool, requiresDeletionInCS: Bool) {
+    init(sensorId: Int, value: BaseValue?, date: NSDate, existsInCS: Bool, requiresDeletionInCS: Bool) {
         self.sensorId = sensorId
         self.value = value
         self.date = date
@@ -23,7 +23,7 @@ public class DataPoint{
         self.requiresDeletionInCS = requiresDeletionInCS
     }
     
-    convenience init(sensorId: Int, value: String, date: NSDate) {
+    convenience init(sensorId: Int, value: BaseValue, date: NSDate) {
         self.init(sensorId: sensorId, value: value, date: date, existsInCS:false, requiresDeletionInCS: false)
     }
 
@@ -34,34 +34,44 @@ public class DataPoint{
 
     required convenience public init() {
         let now = NSDate()
-        self.init(sensorId: -1, value: "", date: now, existsInCS: false, requiresDeletionInCS: false)
+        self.init(sensorId: -1, value: nil, date: now, existsInCS: false, requiresDeletionInCS: false)
     }
     
     func getId() -> String {
         return "\(self.sensorId)-\(String(self.date))"
     }
     
-    func setValue(value: AnyObject){
-        self.value = JSONUtils.stringify(value)
+    func setValue(value: BaseValue){
+        self.value = value //JSONUtils.stringify(value)
     }
     
     func getValueInInt() -> Int {
-        return JSONUtils.getIntValue(self.value)
+        let value = self.value as? RLMIntValue
+        return value!.value
+        //JSONUtils.getIntValue(self.value)
     }
     
     func getValueInDouble() -> Double {
-        return JSONUtils.getDoubleValue(self.value)
+        let value = self.value as? RLMDoubleValue
+        return value!.value
+        //JSONUtils.getDoubleValue(self.value)
     }
     
     func getValueInBool() -> Bool {
-        return JSONUtils.getBoolValue(self.value)
+        let value = self.value as? RLMBoolValue
+        return value!.value
+        //return JSONUtils.getBoolValue(self.value)
     }
     
     func getValueInString() -> String{
-        return JSONUtils.getStringValue(self.value)
+        let value = self.value as? RLMStringValue
+        return value!.value
+        //return JSONUtils.getStringValue(self.value)
     }
     
-    func getValueInDictionary() -> [String: AnyObject]{
-        return JSONUtils.getDictionaryValue(self.value)
-    }
+//    func getValueInDictionary() -> [String: AnyObject]{
+//        let value = self.value as! RLMDictionaryValue
+//        return value.value
+//        //return JSONUtils.getDictionaryValue(self.value)
+//    }
 }

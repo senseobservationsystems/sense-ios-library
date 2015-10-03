@@ -227,11 +227,11 @@ class DatabaseHandler: NSObject{
     * @param source: String for source.
     * @return An array of sensors that belongs to the given source.
     */
-    class func getSensors(source: String, _ csDataPointDownloaded: Bool?)->[Sensor]{
+    class func getSensors(source: String)->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
-        let predicates = self.getPredicateForSensors(source, csDataPointsDownloaded: csDataPointDownloaded)
+        let predicates = self.getPredicateForSensors(source)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             let sensor = Sensor(rlmSensor)
@@ -313,12 +313,9 @@ class DatabaseHandler: NSObject{
     * @param csDataPointsDownloaded: Bool for whether a sensor has completed the initial download of data points
     * @return A compound predicate for querying Sensors based on the arguments
     */
-    private class func getPredicateForSensors(source: String, csDataPointsDownloaded: Bool?)-> NSPredicate{
+    private class func getPredicateForSensors(source: String)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "source = %@ AND userId = %@", source, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!))
-        if(csDataPointsDownloaded != nil){
-            predicates.append(NSPredicate(format: "csDataPointsDownloaded >= %b", csDataPointsDownloaded!))
-        }
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }
 
