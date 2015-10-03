@@ -34,7 +34,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
