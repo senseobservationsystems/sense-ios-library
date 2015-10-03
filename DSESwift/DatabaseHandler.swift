@@ -68,7 +68,7 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points. nil for no limit.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    class func getDataPoints(sensorId sensorId: Int, queryOptions: QueryOptions) throws -> [DataPoint]{
+    class func getDataPoints(sensorId: Int,_ queryOptions: QueryOptions) throws -> [DataPoint]{
         if (queryOptions.limit != nil && queryOptions.limit <= 0){
             throw RLMError.InvalidLimit
         }
