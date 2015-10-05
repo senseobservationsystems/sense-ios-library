@@ -74,7 +74,7 @@ public class DataStorageEngine{
     * @return [Sensor] The sensors connected to the given source
     **/
     public func getSensors(source: String) -> [Sensor]{
-        return DatabaseHandler.getSensors(source, nil)
+        return DatabaseHandler.getSensors(source)
     }
     
     /**

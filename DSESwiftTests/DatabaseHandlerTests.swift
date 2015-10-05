@@ -62,7 +62,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint: DataPoint!
@@ -91,7 +91,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint: DataPoint!
@@ -123,7 +123,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint: DataPoint!
@@ -143,7 +143,9 @@ class DatabaseHandlerTests: XCTestCase {
             var dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, 100)
             
-            try DatabaseHandler.deleteDataPoints(sensor.id, startDate: nil, endDate: nil)
+            let deleteOptions = QueryOptions()
+            
+            try DatabaseHandler.deleteDataPoints(sensor.id, deleteOptions)
             
             dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, 0)
@@ -160,7 +162,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint: DataPoint!
@@ -180,8 +182,11 @@ class DatabaseHandlerTests: XCTestCase {
             var dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, 100)
             
+            var deleteOptions = QueryOptions()
+            deleteOptions.endDate = NSDate().dateByAddingTimeInterval(-1*365*24*60*60)
+            
             //delete Data when it is old
-            try DatabaseHandler.deleteDataPoints(sensor.id, startDate: nil, endDate: NSDate().dateByAddingTimeInterval(-1*365*24*60*60))
+            try DatabaseHandler.deleteDataPoints(sensor.id, deleteOptions)
             
             dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, 50)
@@ -207,7 +212,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
@@ -236,7 +241,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
@@ -282,7 +287,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
@@ -316,7 +321,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
@@ -351,13 +356,13 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
             sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: "user1", source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
-            sensors = DatabaseHandler.getSensors(sourceName, nil)
+            sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 2)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -505,7 +510,7 @@ class DatabaseHandlerTests: XCTestCase {
             sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
-            let retrievedSensors = DatabaseHandler.getSensors(sourceName, nil)
+            let retrievedSensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(retrievedSensors.count, 2)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -522,7 +527,7 @@ class DatabaseHandlerTests: XCTestCase {
             sensor = Sensor(name: "sensor2", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
-            let retrievedSensors = DatabaseHandler.getSensors("NonExistingSourceName", nil)
+            let retrievedSensors = DatabaseHandler.getSensors("NonExistingSourceName")
             XCTAssertEqual(retrievedSensors.count, 0)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -530,7 +535,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorsWithValidSorceNameWithoutSensors() {
-        let retrievedSensors = DatabaseHandler.getSensors("NonExistingSourceName", nil)
+        let retrievedSensors = DatabaseHandler.getSensors("NonExistingSourceName")
         XCTAssertEqual(retrievedSensors.count, 0)
     }
     
