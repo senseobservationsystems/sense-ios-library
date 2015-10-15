@@ -27,6 +27,7 @@ class DataSyncer: NSObject {
     
     func downloadSensorProfile() {
         MockProxy.getSensorProfile()
+        
 //closure 语法
 //        (parameters) -> returnType in
 //        
