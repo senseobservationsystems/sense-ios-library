@@ -56,6 +56,9 @@
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; settings = {ASSET_TAGS = (); }; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; settings = {ASSET_TAGS = (); }; };
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; settings = {ASSET_TAGS = (); }; };
+		278AA6E01BCFE1A6007B821E /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 278AA6DF1BCFE1A6007B821E /* Alamofire.framework */; };
+		278AA6E21BCFE1B8007B821E /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 278AA6E11BCFE1B8007B821E /* SwiftyJSON.framework */; };
+		278AA6E41BCFE1C6007B821E /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 278AA6E31BCFE1C6007B821E /* OMGHTTPURLRQ.framework */; };
 		27C2F3AC1BBD955000832A7F /* queryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* queryOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; settings = {ASSET_TAGS = (); }; };
@@ -255,6 +258,9 @@
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
 		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
+		278AA6DF1BCFE1A6007B821E /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		278AA6E11BCFE1B8007B821E /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		278AA6E31BCFE1C6007B821E /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		27C2F3AB1BBD955000832A7F /* queryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = queryOptions.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
@@ -451,6 +457,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				278AA6E41BCFE1C6007B821E /* OMGHTTPURLRQ.framework in Frameworks */,
+				278AA6E21BCFE1B8007B821E /* SwiftyJSON.framework in Frameworks */,
+				278AA6E01BCFE1A6007B821E /* Alamofire.framework in Frameworks */,
 				2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */,
 				FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */,
 				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
@@ -507,6 +516,9 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				278AA6E31BCFE1C6007B821E /* OMGHTTPURLRQ.framework */,
+				278AA6E11BCFE1B8007B821E /* SwiftyJSON.framework */,
+				278AA6DF1BCFE1A6007B821E /* Alamofire.framework */,
 				2709FF7D1BAF0E800051E8B2 /* Security.framework */,
 				FAA614651BA8225E00B05FCD /* Realm.framework */,
 				FAA614661BA8225E00B05FCD /* RealmSwift.framework */,
@@ -918,6 +930,7 @@
 				FAC4EC831BA086BC00B24CAA /* Headers */,
 				FAC4EC841BA086BC00B24CAA /* Resources */,
 				FAA6145E1BA81D6900B05FCD /* CopyFiles */,
+				278AA6E91BCFE2F4007B821E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1044,6 +1057,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		278AA6E91BCFE2F4007B821E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/OMGHTTPURLRQ.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
 		3EBEAF511887FAE9009F81C1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1279,6 +1308,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -1306,7 +1336,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/library/sqlcipher",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
 				SDKROOT = iphoneos;
@@ -1325,6 +1355,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -1345,7 +1376,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/library/sqlcipher",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
 				SDKROOT = iphoneos;
@@ -1490,6 +1521,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1513,6 +1545,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1548,6 +1581,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DSESwift/libraries",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1589,6 +1624,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DSESwift/libraries",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;

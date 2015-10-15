@@ -12,6 +12,17 @@ If there is information that you believe is incorrect, or if you are missing inf
 
 The rest of this documentation is organized as follows. First we explain the goal and requirements of the library in the introduction. We than have a getting started section to setup the library and get started using it. After that, we have a set of specific articles elaborating on different aspects of using the library for more detailed information.
 
+### Dependencies
+Sense iOS Library make use of third party libraries. Libraries are fetched and built using [Carthage](https://github.com/Carthage/Carthage).
+To install the libraries in your xcode project, you can simply do:
+    
+    carthage update --configuration Debug
+
+
+When you want to add/modify a new library in the dependency, you can edit Cartfile. For details, you can refer to the instruction at [Carthage](https://github.com/Carthage/Carthage)
+
+[Note] At this moment, Cartage can not handle Realm and PromiseKit. So those libraries have to be installed manually. It should be fixed as soon as the issue is resolved. 
+
 ### Test code coverage  
 
 Test code coverage can be automatically generated through the target in the xcode project. It has two dependencies (lcov and groovy) which can be installed through: 
