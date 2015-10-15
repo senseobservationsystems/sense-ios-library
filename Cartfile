@@ -1,0 +1,8 @@
+# The better way to deal with JSON data in Swift. [https://github.com/SwiftyJSON/SwiftyJSON]
+github "SwiftyJSON/SwiftyJSON"
+
+# Elegant HTTP Networking in Swift [https://github.com/Alamofire/Alamofire]
+github "Alamofire/Alamofire" ~> 3.0
+
+# We code in Asynchronous world. We promise. [http://promisekit.org/]
+#github "mxcl/PromiseKit" ~> 2.0
