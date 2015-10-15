@@ -60,7 +60,6 @@ class DatabaseHandler: NSObject{
 
     /**
     * Get data points from the sensor with the given sensorId. throws exception when invalid setups are given. eg)startDate>=endDate, limit <= 0
-    
     * @param sensorId: String for the sensorId of the sensor that the data point belongs to.
     * @param startDate: NSDate for the startDate of the query. nil for no startDate.
     * @param endDate: NSDate for the endDate of the query. nil for no endDate.
