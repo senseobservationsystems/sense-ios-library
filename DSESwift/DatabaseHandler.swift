@@ -114,6 +114,63 @@ class DatabaseHandler: NSObject{
         }
     }
 
+    /**
+    * Store the content of deletion request for data points in the local storage
+    * @param sensorName the name of the sensor
+    * @param source the source name of the sensor
+    * @param startDate the start date to delete the data points
+    * @param endDate the end date to delete the data points
+    */
+    class func createDataDeletionRequest(sensorName: String, sourceName: String, startDate: NSDate?, endDate:  NSDate?) throws{        
+        // Create data deletionrequest
+        let rlmDataDeletionRequest = DataDeletionRequest()
+        rlmDataDeletionRequest.uuid = NSUUID().UUIDString
+        rlmDataDeletionRequest.userId = KeychainWrapper.stringForKey(KEYCHAIN_USERID)!
+        rlmDataDeletionRequest.sensorName = sensorName
+        rlmDataDeletionRequest.sourceName = sourceName
+        rlmDataDeletionRequest.startDate = startDate
+        rlmDataDeletionRequest.endDate = endDate
+        
+        let realm = try! Realm()
+        realm.beginWrite()
+        realm.add(rlmDataDeletionRequest, update:true)
+        
+        do {
+            try realm.commitWrite()
+        } catch {
+            throw RLMError.InsertFailed
+        }
+    }
+    
+    /**
+    * Get the list of data deletion requests from local storage
+    * @return An array of NSDictionary represents data deletion requests
+    */
+    class func getDataDeletionRequest()  ->  [DataDeletionRequest] {
+        var dataDeletionRequest = [DataDeletionRequest]()
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        //query
+        let results = realm.objects(DataDeletionRequest).filter(predicate)
+        for request in results {
+            dataDeletionRequest.append(request)
+        }
+        return dataDeletionRequest
+    }
+    
+    /**
+    * Delete the DataDeletionRequest from local storage by querying uuid.
+    * @param uuid
+    */
+    class func deleteDataDeletionRequest(uuid: String) {
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "uuid = %@ AND userId = %@", uuid, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let results = realm.objects(DataDeletionRequest).filter(predicate)
+        try! realm.write {
+            realm.delete(results)
+        }
+    }
+    
     
     // MARK: For DataStorageEngine class
     
