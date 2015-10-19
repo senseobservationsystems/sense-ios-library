@@ -18,7 +18,12 @@ public class SensorDataProxy {
     }
     
     enum ProxyError: ErrorType{
-        case SomethingWentWrong
+        case SessionIdNotSet
+        case InvalidSessionId
+        case InvalidSensorOrSource //thrown when invalid sensorName/sourceName is given
+        case InvalidDataFormat
+        case SensorDoesNotExist
+        case UnknownError
     }
     
     let BASE_URL_LIVE = "https://sensor-api.sense-os.nl";
@@ -52,13 +57,16 @@ public class SensorDataProxy {
     *         [{sensor_name: string, data_type: JSON}, ...]
     */
     func getSensorProfiles() throws -> Array<AnyObject>?{
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         let result = Just.get(self.baseUrl! + "/sensor_profiles", headers: getHeaders())
-        if (result.error != nil){
-            print(result.error)
-            throw ProxyError.SomethingWentWrong
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+            throw error
         }
         return result.json as? Array<AnyObject>
     }
+    
+
     
     /**
      * Get all sensors of the currently logged in user
@@ -66,10 +74,11 @@ public class SensorDataProxy {
      * @return Returns a json containing sensors
     */
     func getSensors() throws -> Array<AnyObject>?{
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         let result = Just.get(getSensorUrl(), headers: getHeaders())
-        if (result.error != nil){
-            print(result.error)
-            throw ProxyError.SomethingWentWrong
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+            throw error
         }
         return result.json as? Array<AnyObject>
     }
@@ -82,10 +91,11 @@ public class SensorDataProxy {
     * @return Returns a json containing sensors
     */
     func getSensors(sourceName: String) throws -> Array<AnyObject>?{
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         let result = Just.get(getSensorUrl(sourceName), headers: getHeaders())
-        if (result.error != nil){
-            print(result.error)
-            throw ProxyError.SomethingWentWrong
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+            throw error
         }
         return result.json as? Array<AnyObject>
     }
@@ -101,10 +111,11 @@ public class SensorDataProxy {
     * @return Returns a json containing the sensor
     */
     func getSensor(sourceName: String, _ sensorName: String) throws -> Dictionary<String, AnyObject>?{
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         let result = Just.get(getSensorUrl(sourceName, sensorName), headers: getHeaders())
-        if (result.error != nil){
-            print(result.error)
-            throw ProxyError.SomethingWentWrong
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+            throw error
         }
         return result.json as? Dictionary<String, AnyObject>
     }
@@ -120,8 +131,13 @@ public class SensorDataProxy {
     * @return               Returns the sensor object
     */
     func updateSensor(sourceName sourceName: String, sensorName: String, meta: Dictionary<String, AnyObject>) throws -> Dictionary<String, AnyObject>? {
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         let body = ["meta": meta]
         let result = Just.put(getSensorUrl(sourceName, sensorName), headers: getHeaders(), json: body);
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+            throw error
+        }
         return result.json as? Dictionary<String, AnyObject>
     }
     
@@ -136,8 +152,13 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     */
-    func deleteSensor(sourceName: String, _ sensorName: String){
-        Just.delete(getSensorUrl(sourceName, sensorName), headers: getHeaders())
+    func deleteSensor(sourceName: String, _ sensorName: String) throws {
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
+        let result = Just.delete(getSensorUrl(sourceName, sensorName), headers: getHeaders())
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+            throw error
+        }
     }
     
     /**
@@ -150,18 +171,17 @@ public class SensorDataProxy {
     * @param queryOptions   Query options to set start and end time, and to sort and limit the data
     * @return Returns an Array containing the sensor data, structured as `[{date: long, value: JSON}, ...]`
     */
-    func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) -> Dictionary<String, AnyObject>?{
+    func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> Dictionary<String, AnyObject>?{
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
-        var dict : Dictionary<String, AnyObject>?
-        if (queryOptions == nil) { queryOptions = QueryOptions()}
-        do{
-            let result = Just.get(getSensorDataUrl(sourceName, sensorName), headers: getHeaders())
-            let json = try NSJSONSerialization.JSONObjectWithData(result.content!, options: NSJSONReadingOptions(rawValue: 0))
-            dict = json as? Dictionary<String, AnyObject>
-        }catch{
-            print(error)
+        if (queryOptions == nil) {
+            queryOptions = QueryOptions()
+        }  
+        let result = Just.get(getSensorDataUrl(sourceName, sensorName), headers: getHeaders())
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+            throw error
         }
-        return dict!
+        return result.json as? Dictionary<String, AnyObject>
     }
     
     /**
@@ -174,17 +194,21 @@ public class SensorDataProxy {
     * @param data           Array with data points, structured as `[{date: long, value: JSON}, ...]`
     * @param meta           Dictionary for optional field to store meta information. Can be left null
     */
-    func putSensorData(sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) {
-        // create one sensor data object
+    func putSensorData(sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) throws {
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
+        // create one sensor data object and create an array
         let sensorDataObject = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
         let jsonArray = [sensorDataObject]
         do{
             let body = try NSJSONSerialization.dataWithJSONObject(jsonArray, options: NSJSONWritingOptions(rawValue: 0))
-            var header = getHeaders()
-            header["CONTENT-TYPE"] = "application/json"
-            Just.put(getSensorDataUrl(), headers: header, requestBody: body)
+            let headers = getHeadersWithContentType()
+            let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
+            if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+                throw error
+            }
         }catch{
-            NSLog("error")
+            throw ProxyError.InvalidDataFormat
         }
     }
     
@@ -211,15 +235,19 @@ public class SensorDataProxy {
     *                        // ...
     *                      ]
     */
-    func putSensorData(sensorsData: Array<AnyObject>) {
+    func putSensorData(sensorsData: Array<AnyObject>) throws {
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         // create one sensor data object
         do{
             let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
-            var header = getHeaders()
-            header["CONTENT-TYPE"] = "application/json"
-            Just.put(getSensorDataUrl(), headers: header, requestBody: body)
+            let headers = getHeadersWithContentType()
+            let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
+            if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+                throw error
+            }
         }catch{
-            NSLog("error")
+            throw ProxyError.InvalidDataFormat
         }
     }
     
@@ -239,11 +267,16 @@ public class SensorDataProxy {
     *                       When endTime is null, all data from startTime till now will be removed.
     *                       When both startTime and endTime are null, all data will be removed.
     */
-    func deleteSensorData(sourceName: String, sensorName: String, startDate: NSDate?, endDate: NSDate?){
+    func deleteSensorData(sourceName: String, sensorName: String, startDate: NSDate?, endDate: NSDate?) throws {
+        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        
         var params = Dictionary<String, AnyObject>()
         if startDate != nil { params["start_time"] = JSONUtils.stringify(startDate!.timeIntervalSince1970)}
         if endDate != nil { params["end_time"] = JSONUtils.stringify(endDate!.timeIntervalSince1970)}
-        Just.delete(getSensorDataUrl(sourceName, sensorName), params: params, headers: getHeaders())
+        let result = Just.delete(getSensorDataUrl(sourceName, sensorName), params: params, headers: getHeaders())
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+            throw error
+        }
     }
     
  
@@ -296,10 +329,36 @@ public class SensorDataProxy {
         return url
     }
     
+    private func getHeadersWithContentType() -> [String: String]{
+        var headers = getHeaders()
+        headers["CONTENT-TYPE"] = "application/json"
+        return headers
+    }
+    
     private func getHeaders() -> [String: String]{
         let headers = ["APPLICATION-KEY": self.appKey!,
             "SESSION-ID": self.sessionId!]
         return headers
+    }
+    
+    private func isSessionIdSet() -> Bool{
+        return (self.sessionId != nil)
+    }
+    
+    private func checkStatusCode(statusCode: Int, successfulCode: Int) -> ProxyError?{
+        var error : ProxyError?
+        if (statusCode == 401){
+            error = ProxyError.InvalidSessionId
+        } else if (statusCode == 400){
+            error = ProxyError.SensorDoesNotExist
+        } else if (statusCode == 404){
+            error = ProxyError.SensorDoesNotExist
+        } else if (statusCode == 204){ //No content on delete. No error
+            error = nil
+        } else if (statusCode != successfulCode){
+            error = ProxyError.UnknownError
+        }
+        return error
     }
     
 }

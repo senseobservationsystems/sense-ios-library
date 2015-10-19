@@ -44,7 +44,7 @@ public struct QueryOptions{
         if (self.startDate != nil){ queryParams["start_date"] = JSONUtils.stringify(Int(self.startDate!.timeIntervalSince1970))}
         if (self.endDate != nil){ queryParams["end_date"] = JSONUtils.stringify(Int(self.endDate!.timeIntervalSince1970))}
         if (self.limit != nil){ queryParams["limit"] = JSONUtils.stringify(self.limit!)}
-        //queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? JSONUtils.stringify("asc") : JSONUtils.stringify("desc")
+        queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? JSONUtils.stringify("asc") : JSONUtils.stringify("desc")
         return queryParams
     }
 }
