@@ -314,6 +314,88 @@ class DatabaseHandlerTests: XCTestCase {
         }
     }
     
+    func testCreateDataDeletionRequest(){
+        var numberOfRequest = 0;
+        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
+        let endDate = NSDate()
+        do{
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: startDate, endDate: endDate)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: endDate)
+            numberOfRequest++
+            let realm = try! Realm()
+            let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+            let results = realm.objects(DataDeletionRequest).filter(predicate)
+            XCTAssertEqual(numberOfRequest, results.count)
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testCreateDataDeletionRequestWithNilDate(){
+        var numberOfRequest = 0;
+        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
+        let endDate = NSDate()
+        do{
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: nil, endDate: endDate)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: nil)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: nil, endDate: nil)
+            numberOfRequest++
+            let realm = try! Realm()
+            let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+            let results = realm.objects(DataDeletionRequest).filter(predicate)
+            XCTAssertEqual(numberOfRequest, results.count)
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+
+    }
+    
+    func testGetDataDeletionRequest() {
+        var numberOfRequest = 0;
+        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
+        let endDate = NSDate()
+        do{
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: nil, endDate: endDate)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: nil)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: nil, endDate: nil)
+            numberOfRequest++
+            let results = DatabaseHandler.getDataDeletionRequest()
+            XCTAssertEqual(numberOfRequest, results.count)
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+
+    }
+    
+    func testDeleteDataDeletionRequest() {
+        var numberOfRequest = 0;
+        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
+        let endDate = NSDate()
+        do{
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: nil, endDate: endDate)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: nil)
+            numberOfRequest++
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: nil, endDate: nil)
+            numberOfRequest++
+            let results = DatabaseHandler.getDataDeletionRequest()
+        
+            for result in results {
+                try DatabaseHandler.deleteDataDeletionRequest(result.uuid)
+                numberOfRequest--
+                let newResult = DatabaseHandler.getDataDeletionRequest()
+                XCTAssertEqual(numberOfRequest, newResult.count)
+            }
+        }catch{
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
     func testUpdateSyncedStatusOfDataPoint() {
         let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
