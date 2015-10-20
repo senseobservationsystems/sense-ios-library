@@ -357,9 +357,6 @@ class DatabaseHandler: NSObject{
         if(queryOptions.existsInCS != nil){
             predicates.append(NSPredicate(format: "date < %b" , queryOptions.existsInCS!))
         }
-        if(queryOptions.requiresDeletionInCS != nil){
-            predicates.append(NSPredicate(format: "date < %b" , queryOptions.requiresDeletionInCS!))
-        }
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }
     

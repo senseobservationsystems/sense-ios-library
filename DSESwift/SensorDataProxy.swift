@@ -17,12 +17,13 @@ public class SensorDataProxy {
         case STAGING
     }
     
-    enum ProxyError: ErrorType{
+    public enum ProxyError: ErrorType, Equatable{
         case SessionIdNotSet
         case InvalidSessionId
         case InvalidSensorOrSource //thrown when invalid sensorName/sourceName is given
         case InvalidDataFormat
-        case SensorDoesNotExist
+        case InvalidQuery
+        case SensorDoesNotExistOrBadStructure
         case UnknownError
     }
     
@@ -69,28 +70,12 @@ public class SensorDataProxy {
 
     
     /**
-     * Get all sensors of the currently logged in user
-     * Throws an exception when no sessionId is set or when the sessionId is not valid.
-     * @return Returns a json containing sensors
-    */
-    func getSensors() throws -> Array<AnyObject>?{
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
-        let result = Just.get(getSensorUrl(), headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
-            throw error
-        }
-        return result.json as? Array<AnyObject>
-    }
-    
-    /**
     * Get all sensors of the current source of logged in user
     * Throws an exception when no sessionId is set or when the sessionId is not valid.
-    * @param sourceName     The source name, for example "sense-ios",
-    *                       "sense-android", "fitbit", ...
+    * @param sourceName     The source name. When no sourceName parameter is given, it returns all the sensors of the currrent logged in user. for example "sense-ios", "sense-android", "fitbit", ...
     * @return Returns a json containing sensors
     */
-    func getSensors(sourceName: String) throws -> Array<AnyObject>?{
+    func getSensors(sourceName: String? = nil) throws -> Array<AnyObject>?{
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(getSensorUrl(sourceName), headers: getHeaders())
@@ -108,7 +93,7 @@ public class SensorDataProxy {
     * @param sourceName     The source name, for example "sense-ios",
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
-    * @return Returns a json containing the sensor
+    * @return Returns a Dictionary containing the sensor info
     */
     func getSensor(sourceName: String, _ sensorName: String) throws -> Dictionary<String, AnyObject>?{
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
@@ -128,14 +113,14 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     * @param meta           JSON object with meta data
-    * @return               Returns the sensor object
+    * @return               Returns a Dictionary containing the sensor info
     */
     func updateSensor(sourceName sourceName: String, sensorName: String, meta: Dictionary<String, AnyObject>) throws -> Dictionary<String, AnyObject>? {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let body = ["meta": meta]
         let result = Just.put(getSensorUrl(sourceName, sensorName), headers: getHeaders(), json: body);
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){ 
             throw error
         }
         return result.json as? Dictionary<String, AnyObject>
@@ -169,10 +154,11 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     * @param queryOptions   Query options to set start and end time, and to sort and limit the data
-    * @return Returns an Array containing the sensor data, structured as `[{date: long, value: JSON}, ...]`
+    * @return Returns an Dictionary containing the sensor data, where the data is structured as `[{date: long, value: JSON}, ...]`
     */
     func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> Dictionary<String, AnyObject>?{
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        if (!isValidQueryOptions(queryOptions)){ throw ProxyError.InvalidQuery }
         
         if (queryOptions == nil) {
             queryOptions = QueryOptions()
@@ -199,16 +185,17 @@ public class SensorDataProxy {
         
         // create one sensor data object and create an array
         let sensorDataObject = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
-        let jsonArray = [sensorDataObject]
-        do{
-            let body = try NSJSONSerialization.dataWithJSONObject(jsonArray, options: NSJSONWritingOptions(rawValue: 0))
-            let headers = getHeadersWithContentType()
-            let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
-            if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
-                throw error
-            }
-        }catch{
-            throw ProxyError.InvalidDataFormat
+        let sensorDataArray = [sensorDataObject]
+        
+        // construct body in JSONArray format
+        if (!NSJSONSerialization.isValidJSONObject(sensorDataArray)){ throw ProxyError.InvalidDataFormat }
+        let body = serializeArrayToJSONArray(sensorDataArray)
+        
+        // send put request
+        let headers = getHeadersWithContentType()
+        let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+            throw error
         }
     }
     
@@ -235,19 +222,18 @@ public class SensorDataProxy {
     *                        // ...
     *                      ]
     */
-    func putSensorData(sensorsData: Array<AnyObject>) throws {
+    func putSensorData(sensorDataArray: Array<AnyObject>) throws {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
-        // create one sensor data object
-        do{
-            let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
-            let headers = getHeadersWithContentType()
-            let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
-            if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
-                throw error
-            }
-        }catch{
-            throw ProxyError.InvalidDataFormat
+        // construct body in JSONArray format
+        if (!NSJSONSerialization.isValidJSONObject(sensorDataArray)){ throw ProxyError.InvalidDataFormat }
+        let body = serializeArrayToJSONArray(sensorDataArray)
+        
+        // send put request
+        let headers = getHeadersWithContentType()
+        let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+            throw error
         }
     }
     
@@ -267,8 +253,9 @@ public class SensorDataProxy {
     *                       When endTime is null, all data from startTime till now will be removed.
     *                       When both startTime and endTime are null, all data will be removed.
     */
-    func deleteSensorData(sourceName: String, sensorName: String, startDate: NSDate?, endDate: NSDate?) throws {
+    func deleteSensorData(sourceName sourceName: String, sensorName: String, startDate: NSDate? = nil, endDate: NSDate? = nil) throws {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
+        if (!isStartDateEarlierThanEndDate(startDate, endDate)){ throw ProxyError.InvalidQuery }
         
         var params = Dictionary<String, AnyObject>()
         if startDate != nil { params["start_time"] = JSONUtils.stringify(startDate!.timeIntervalSince1970)}
@@ -313,6 +300,20 @@ public class SensorDataProxy {
         return sensorData;
     }
     
+    /**
+    * Returns NSData containing JSONArray. It perform JSONSerizlization on the give Array.
+    * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
+    */
+    private func serializeArrayToJSONArray(sensorsData: Array<AnyObject>) -> NSData?{
+        var body: NSData?
+        do{
+            body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
+        }catch{
+            debugPrint("Wrong format on JsonSerialization process.")
+        }
+        return body
+    }
+    
     private func getSensorUrl(sourceName: String? = nil, _ sensorName: String? = nil) -> String{
         let url = self.baseUrl! + "/sensors"
         return addAppendixToURL(url, sourceName: sourceName, sensorName: sensorName)
@@ -345,14 +346,38 @@ public class SensorDataProxy {
         return (self.sessionId != nil)
     }
     
+    private func isValidQueryOptions(queryOptions: QueryOptions?) -> Bool{
+        if (queryOptions == nil){
+            return true
+        }
+        
+        let isValidStartEndDates = isStartDateEarlierThanEndDate(queryOptions!.startDate, queryOptions!.endDate)
+        let isValidLimit = (queryOptions!.limit != nil) ? queryOptions!.limit > 0 : true
+        
+        return isValidStartEndDates && isValidLimit
+    }
+    
+    private func isStartDateEarlierThanEndDate(startDate: NSDate?, _ endDate: NSDate?) -> Bool{
+        // check if both of start and end is pupulated
+        if startDate == nil || endDate == nil {
+            return true
+        }
+        // compare them
+        if startDate!.timeIntervalSinceReferenceDate >= endDate!.timeIntervalSinceReferenceDate {
+            return false
+        } else {
+            return false
+        }
+    }
+    
     private func checkStatusCode(statusCode: Int, successfulCode: Int) -> ProxyError?{
         var error : ProxyError?
         if (statusCode == 401){
             error = ProxyError.InvalidSessionId
         } else if (statusCode == 400){
-            error = ProxyError.SensorDoesNotExist
+            error = ProxyError.InvalidSensorOrSource //Bad structure too
         } else if (statusCode == 404){
-            error = ProxyError.SensorDoesNotExist
+            error = ProxyError.SensorDoesNotExistOrBadStructure
         } else if (statusCode == 204){ //No content on delete. No error
             error = nil
         } else if (statusCode != successfulCode){

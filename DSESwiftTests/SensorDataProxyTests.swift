@@ -40,20 +40,11 @@ class SensorDataProxyTests: XCTestCase {
     func testGetSensorProfiles(){
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do {
-            let json = try proxy.getSensorProfiles()
-            debugPrint(json)
+            //let json = try proxy.getSensorProfiles()
+            //TODO: check the content
         }catch{
+            print( error )
             XCTFail("Exception was captured. Abort the test.")
-        }
-    }
-    
-    func testGetSensorProfilesWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
-        do {
-            let json = try proxy.getSensorProfiles()
-            print(json)
-        }catch{
-            XCTAssertNotNil(error)
         }
     }
 
@@ -63,11 +54,11 @@ class SensorDataProxyTests: XCTestCase {
             let resultArray = try proxy.getSensors()
             XCTAssertEqual(resultArray!.count, 0)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
-
     func testGetSensors() {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
@@ -89,7 +80,8 @@ class SensorDataProxyTests: XCTestCase {
             let resultArray = try proxy.getSensors()
             XCTAssertEqual(resultArray!.count, 3)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -114,7 +106,8 @@ class SensorDataProxyTests: XCTestCase {
             let resultArray = try proxy.getSensors(sourceName1)
             XCTAssertEqual(resultArray!.count, 2)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -139,7 +132,8 @@ class SensorDataProxyTests: XCTestCase {
             let result = try proxy.getSensor(sourceName1, sensorName1)
             XCTAssertEqual(result!["sensor_name"] as? String, sensorName1)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -164,7 +158,8 @@ class SensorDataProxyTests: XCTestCase {
             XCTAssertEqual(retrievedMeta!["Doge"], "Wow, MUCH ACCELERATION! VERY HORSEPOWER!")
             
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -197,7 +192,8 @@ class SensorDataProxyTests: XCTestCase {
             // Puff... aand it's gone
             XCTAssertEqual(resultArray!.count, 0)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -215,7 +211,8 @@ class SensorDataProxyTests: XCTestCase {
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result!["data"]!.count, 5)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -248,7 +245,8 @@ class SensorDataProxyTests: XCTestCase {
             result = try proxy.getSensorData(sourceName: sourceName2, sensorName: sensorName2)
             XCTAssertEqual(result!["data"]!.count, 5)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
         }
     }
     
@@ -270,29 +268,539 @@ class SensorDataProxyTests: XCTestCase {
             //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
             NSThread.sleepForTimeInterval(5)
             
-            // Check that the sensors are added properly
+            // == Check that the sensors are added properly
+            // Sensors
             var resultArray: Array<AnyObject>?
             resultArray = try proxy.getSensors(sourceName)
             XCTAssertEqual(resultArray!.count, 2)
+            // SensorData
+            var result : Dictionary<String, AnyObject>?
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
+            XCTAssertEqual(result!["data"]!.count, 5)
             
             // delete a sensor
-            try proxy.deleteSensor(sourceName, sensorName1)
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName1, startDate: nil, endDate: nil)
             resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray!.count, 2)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
+            XCTAssertEqual(result!["data"]!.count, 0)
+            
+            // delete the other sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName2, startDate: nil, endDate: nil)
+            resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray!.count, 2)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
+            XCTAssertEqual(result!["data"]!.count, 0)
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    // MARK: == Unsuccessful case 
+    
+    // MARK: Sensor does not exist yet
+    
+    func testGetSensorsWithNonExistingSensors() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            let resultArray = try proxy.getSensor(sourceName, sensorName)
+            debugPrint(resultArray)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    //TODO: revive when the backend can return an error when update is called on the sensor which does not exist yet
+//    func testUpdateSensorsWithNonExistingSensors() {
+//        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+//        do{
+//            let sourceName = "aim-ios-sdk"
+//            let sensorName = "accelerometer"
+//            let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
+//            let result = try proxy.updateSensor(sourceName: sourceName, sensorName: sensorName, meta: meta)
+//            debugPrint(result)
+//        } catch let e as SensorDataProxy.ProxyError {
+//            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+//        } catch {
+//            XCTFail("Wrong error")
+//        }
+//    }
+    
+    func testDeleteSensorsWithNonExistingSensors() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            try proxy.deleteSensor(sourceName, sensorName)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testGetSensorDataWithNonExistingSensors() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testDeleteSensorDataWithNonExistingSensors() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    // MARK: Others
+
+    // ## bad structure
+    
+    // putSensorData
+    func testPutSensorWithBadStructure() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            let data = getDummyDataWithBadStructure()
+            try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure)
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testPutSensorDataForMultipleSensorsWithBadStructure() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyDataWithBadStructure()
+            let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
+            
+            let sourceName2 = "aim-ios-sdk"
+            let sensorName2 = "gyroscope"
+            let data2 = getDummyData()
+            let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
+            
+            let sensorsData = [sensorData1, sensorData2]
+            try proxy.putSensorData(sensorsData)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure)
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    // ## invalidSensorName or source
+    
+    func testPutSensorWithInvalidSourceName() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "invalidSourceName"
+            let sensorName = "accelerometer"
+            let data = getDummyData()
+            try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testPutSensorWithInvalidSensorName() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "invalidSensorName"
+            let data = getDummyData()
+            try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testPutSensorForMultipleSensorsWithInvalidSourceName() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "invalidSourceName"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData()
+            let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
+            
+            let sourceName2 = "aim-ios-sdk"
+            let sensorName2 = "gyroscope"
+            let data2 = getDummyData()
+            let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
+            
+            let sensorsData = [sensorData1, sensorData2]
+            try proxy.putSensorData(sensorsData)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testPutSensorForMultipleSensorsWithInvalidSensorName() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "invalidSensorName"
+            let data1 = getDummyData()
+            let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
+            
+            let sourceName2 = "aim-ios-sdk"
+            let sensorName2 = "gyroscope"
+            let data2 = getDummyData()
+            let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
+            
+            let sensorsData = [sensorData1, sensorData2]
+            try proxy.putSensorData(sensorsData)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    // ## invalid limit
+    
+    func testGetSensorDataWithInvalidLimit(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData()
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.limit = 0
+            
+            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            debugPrint(result)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidQuery )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    // ## invalid start and end date
+    func testGetSensorDataWithInvalidStartEndDate(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData()
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+    
+            var queryOptions = QueryOptions()
+            let now = NSDate()
+            queryOptions.startDate = now
+            queryOptions.endDate = now
+            
+            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            debugPrint(result)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidQuery )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testDeleteSensorDataWithInvalidStartEndDate(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData()
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+        
+            let now = NSDate()
+            try proxy.deleteSensorData(sourceName: sourceName1, sensorName: sensorName1, startDate: now, endDate: now)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidQuery)
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+
+    
+    // MARK: Invalid sessionId
+    
+    func testGetSensorProfilesWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            //let json = try proxy.getSensorProfiles()
+            //TODO: check the content
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testPutSensorsWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData()
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testGetSensorsWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            let json = try proxy.getSensors()
+            print(json)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testGetSensorWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let json = try proxy.getSensor(sourceName1, sensorName1)
+            print(json)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testGetSensorsWithSourceNameWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            let json = try proxy.getSensors()
+            print(json)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testUpdateSensorsWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        let sourceName1 = "aim-ios-sdk"
+        let sensorName1 = "accelerometer"
+        let data1 = getDummyData()
+        do{
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            // check the sensor is added.
+            let resultArray = try proxy.getSensors()
             XCTAssertEqual(resultArray!.count, 1)
             
-            // delete a sensor
-            try proxy.deleteSensor(sourceName, sensorName2)
-            resultArray = try proxy.getSensors(sourceName)
-            XCTAssertEqual(resultArray!.count, 0)
         }catch{
-            print(error)
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+        let invalidProxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            // update meta
+            let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
+            try invalidProxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testDeleteSensorsWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        let sourceName1 = "aim-ios-sdk"
+        let sensorName1 = "accelerometer"
+        let data1 = getDummyData()
+        do{
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            // check the sensor is added.
+            let resultArray = try proxy.getSensors()
+            XCTAssertEqual(resultArray!.count, 1)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+        let invalidProxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            // delete a sensor
+            try invalidProxy.deleteSensor(sourceName1, sensorName1)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testGetSensorDataWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            
+            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testDeleteSensorDataWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            try proxy.deleteSensorData(sourceName: "sourcename", sensorName: "sensorName", startDate: nil, endDate: nil)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
+        }
+    }
+    
+    func testPutSensorDataForMultipleSensorsWithInvalidSessionId(){
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        do {
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData()
+            let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
+            
+            let sourceName2 = "aim-ios-sdk"
+            let sensorName2 = "gyroscope"
+            let data2 = getDummyData()
+            let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
+            
+            let sensorsData = [sensorData1, sensorData2]
+            try proxy.putSensorData(sensorsData)
+            
+            XCTFail("No error")
+            
+        } catch let e as SensorDataProxy.ProxyError {
+            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
+        } catch {
+            XCTFail("Wrong error")
         }
     }
     
     
-    // MARK: helper function
+    // MARK: == helper functions
     
     func getDummyData() -> Array<AnyObject>{
+        let date = NSDate()
+        let value = ["x": 4, "y": 5, "z": 6]
+        var data = Array<AnyObject>()
+        //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
+        for (var i = 0 ; i < 5 ; i++) {
+            let dataPoint = ["time": (Int(date.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            data.append(dataPoint)
+        }
+        return data
+    }
+    
+    func getDummyDataWithBadStructure() -> Array<AnyObject>{
         let date = NSDate()
         let value = ["x": 4, "y": 5, "z": 6]
         var data = Array<AnyObject>()
