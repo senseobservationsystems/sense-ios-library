@@ -1,6 +1,3 @@
-# The better way to deal with JSON data in Swift. [https://github.com/SwiftyJSON/SwiftyJSON]
-github "SwiftyJSON/SwiftyJSON"
-
 #Swift HTTP for Humans
 github "JustHTTP/Just" 
 

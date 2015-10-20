@@ -8,7 +8,6 @@
 
 import Foundation
 import Just
-import SwiftyJSON
 
 public class SensorDataProxy {
     
@@ -120,7 +119,7 @@ public class SensorDataProxy {
         
         let body = ["meta": meta]
         let result = Just.put(getSensorUrl(sourceName, sensorName), headers: getHeaders(), json: body);
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){ 
+        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
             throw error
         }
         return result.json as? Dictionary<String, AnyObject>

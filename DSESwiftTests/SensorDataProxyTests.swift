@@ -8,7 +8,6 @@
 
 import XCTest
 @testable import DSESwift
-@testable import SwiftyJSON
 
 class SensorDataProxyTests: XCTestCase {
     

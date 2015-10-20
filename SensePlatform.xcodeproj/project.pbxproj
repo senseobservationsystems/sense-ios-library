@@ -45,7 +45,6 @@
 /* Begin PBXBuildFile section */
 		2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
-		2713063A1BD0216F0044490E /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 271306381BD0216F0044490E /* SwiftyJSON.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; settings = {ASSET_TAGS = (); }; };
@@ -468,7 +467,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				27D441641BD128B400950ADC /* CryptoSwift.framework in Frameworks */,
-				2713063A1BD0216F0044490E /* SwiftyJSON.framework in Frameworks */,
 				2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */,
 				FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */,
 				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
@@ -1077,7 +1075,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Just.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
 			);

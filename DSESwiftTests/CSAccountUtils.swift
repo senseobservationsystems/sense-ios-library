@@ -8,7 +8,6 @@
 
 import Foundation
 import Just
-import SwiftyJSON
 import DSESwift
 import CryptoSwift
 
@@ -30,11 +29,6 @@ public class CSAccountUtils{
     init (appKey: String) {
         self.baseUrl = BASE_URL_CS_STAGING;
         self.appKey = appKey;
-    }
-    
-    func testPOST(){
-        let r = Just.post("http://httpbin.org/post")
-        debugPrint(r)
     }
     
     func registerUser(username: String, password: String) -> Bool{
@@ -59,9 +53,8 @@ public class CSAccountUtils{
         let body = ["username": username, "password": password.md5()]
         // send request
         let r = Just.post(registrationUrl, headers: headers, json: body)
-        // evaluate the response
-        let responseJson = JSON(r.json!)
-        self.sessionId = responseJson["session_id"].string!
+        let resultDict = r.json as? Dictionary<String, AnyObject>
+        self.sessionId = resultDict!["session_id"] as? String
     }
     
     func deleteUser() -> Bool{
