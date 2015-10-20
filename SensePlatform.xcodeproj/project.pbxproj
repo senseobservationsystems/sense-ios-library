@@ -56,7 +56,7 @@
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; settings = {ASSET_TAGS = (); }; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; settings = {ASSET_TAGS = (); }; };
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; settings = {ASSET_TAGS = (); }; };
-		27C2F3AC1BBD955000832A7F /* queryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* queryOptions.swift */; settings = {ASSET_TAGS = (); }; };
+		27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* QueryOptions.swift */; settings = {ASSET_TAGS = (); }; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; settings = {ASSET_TAGS = (); }; };
 		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; settings = {ASSET_TAGS = (); }; };
@@ -66,6 +66,8 @@
 		A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */; settings = {ASSET_TAGS = (); }; };
 		A5702C881BCF969C004FFFA1 /* MockProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C871BCF969C004FFFA1 /* MockProxy.swift */; settings = {ASSET_TAGS = (); }; };
 		A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */; settings = {ASSET_TAGS = (); }; };
+		A5F506FD1BD0F32600DB69D5 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F506EC1BD0F2DD00DB69D5 /* PromiseKit.framework */; };
+		A5F506FE1BD0F59000DB69D5 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F506EC1BD0F2DD00DB69D5 /* PromiseKit.framework */; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -79,14 +81,8 @@
 		FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */; settings = {ASSET_TAGS = (); }; };
 		FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */; settings = {ASSET_TAGS = (); }; };
 		FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */; settings = {ASSET_TAGS = (); }; };
-		FA5DF7AD1BA717DA00FF9544 /* DSECommonSenseProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		FA5DF7AE1BA717DA00FF9544 /* DSECommonSenseProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */; settings = {ASSET_TAGS = (); }; };
-		FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		FA5DF7B11BA717DA00FF9544 /* DSEHTTPRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */; settings = {ASSET_TAGS = (); }; };
 		FA66C29F1BA86E1500281B6F /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		FA66C2A21BA86E9E00281B6F /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; };
-		FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
 		FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
 		FAA614691BA8227400B05FCD /* Realm.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614651BA8225E00B05FCD /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAA6146A1BA8227400B05FCD /* RealmSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAA614661BA8225E00B05FCD /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -203,7 +199,6 @@
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; settings = {ASSET_TAGS = (); }; };
 		FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD720B21BA977A0002EE7C3 /* Realm.framework */; settings = {ASSET_TAGS = (); }; };
-		FAD720B51BA977A0002EE7C3 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD720B31BA977A0002EE7C3 /* RealmSwift.framework */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -213,6 +208,69 @@
 			proxyType = 1;
 			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
 			remoteInfo = DSESwift;
+		};
+		A5F506EB1BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63F803A31AB87A8200E4DEE1;
+			remoteInfo = PMKiOS;
+		};
+		A5F506ED1BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63F803CC1AB89A0F00E4DEE1;
+			remoteInfo = PMKOSX;
+		};
+		A5F506EF1BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6388E1A21AD315F90074D85B;
+			remoteInfo = PMKTests;
+		};
+		A5F506F11BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63533B331AE57A9300C10972;
+			remoteInfo = PMKAPlusTests;
+		};
+		A5F506F31BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 638E0ED51AEF16530052E28F;
+			remoteInfo = PMKiOSCategoryTests;
+		};
+		A5F506F51BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63CA14931AEA9CBE00223904;
+			remoteInfo = PMKiOSCategoryHostedTests;
+		};
+		A5F506F71BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63CA14571AE9FBD000223904;
+			remoteInfo = PMKOSXCategoryTests;
+		};
+		A5F506F91BD0F2DD00DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 638CDF031AEE734B0023A543;
+			remoteInfo = PMKTestHost;
+		};
+		A5F506FB1BD0F2F300DB69D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 63F803A21AB87A8200E4DEE1;
+			remoteInfo = PMKiOS;
 		};
 		FA66C2A01BA86E1B00281B6F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -258,7 +316,7 @@
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
 		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
-		27C2F3AB1BBD955000832A7F /* queryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = queryOptions.swift; sourceTree = "<group>"; };
+		27C2F3AB1BBD955000832A7F /* QueryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOptions.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
@@ -281,6 +339,7 @@
 		A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncer.swift; sourceTree = "<group>"; };
 		A5702C871BCF969C004FFFA1 /* MockProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockProxy.swift; sourceTree = "<group>"; };
 		A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDeletionRequest.swift; sourceTree = "<group>"; };
+		A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PromiseKit.xcodeproj; path = ../../../PromiseKit/PromiseKit.xcodeproj; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
 		FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
@@ -288,11 +347,6 @@
 		FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
 		FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorageTest.m; sourceTree = "<group>"; };
 		FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSECommonSenseProxyTest.m; sourceTree = "<group>"; };
-		FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSECommonSenseProxy.h; sourceTree = "<group>"; };
-		FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSECommonSenseProxy.m; sourceTree = "<group>"; };
-		FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSEErrors.h; sourceTree = "<group>"; };
-		FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSEHTTPRequestHelper.h; sourceTree = "<group>"; };
-		FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSEHTTPRequestHelper.m; sourceTree = "<group>"; };
 		FAA614651BA8225E00B05FCD /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = DSESwift/libraries/Realm.framework; sourceTree = "<group>"; };
 		FAA614661BA8225E00B05FCD /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = DSESwift/libraries/RealmSwift.framework; sourceTree = "<group>"; };
 		FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SensePlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -457,11 +511,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5F506FE1BD0F59000DB69D5 /* PromiseKit.framework in Frameworks */,
 				2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */,
 				FAD720B41BA977A0002EE7C3 /* Realm.framework in Frameworks */,
 				FAA614681BA8225E00B05FCD /* RealmSwift.framework in Frameworks */,
-				FAD720B51BA977A0002EE7C3 /* RealmSwift.framework in Frameworks */,
-				FAA614671BA8225E00B05FCD /* Realm.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +522,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5F506FD1BD0F32600DB69D5 /* PromiseKit.framework in Frameworks */,
 				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,6 +542,7 @@
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
+				A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */,
 				FAC4EC871BA086BC00B24CAA /* DSESwift */,
 				FAC4EC931BA086BC00B24CAA /* DSESwiftTests */,
 				FABCC08D1BA7003500EE6DE0 /* SensePlatform */,
@@ -535,22 +590,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		FA5DF7A71BA717DA00FF9544 /* DataStorageEngine */ = {
+		A5F506E11BD0F2DD00DB69D5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FA5DF7A81BA717DA00FF9544 /* DSECommonSenseProxy.h */,
-				FA5DF7A91BA717DA00FF9544 /* DSECommonSenseProxy.m */,
-				FA5DF7AA1BA717DA00FF9544 /* DSEErrors.h */,
-				FA5DF7AB1BA717DA00FF9544 /* DSEHTTPRequestHelper.h */,
-				FA5DF7AC1BA717DA00FF9544 /* DSEHTTPRequestHelper.m */,
+				A5F506EC1BD0F2DD00DB69D5 /* PromiseKit.framework */,
+				A5F506EE1BD0F2DD00DB69D5 /* PromiseKit.framework */,
+				A5F506F01BD0F2DD00DB69D5 /* PMKTests.xctest */,
+				A5F506F21BD0F2DD00DB69D5 /* PMKAPlusTests.xctest */,
+				A5F506F41BD0F2DD00DB69D5 /* PMKiOSCategoryTests.xctest */,
+				A5F506F61BD0F2DD00DB69D5 /* PMKiOSCategoryHostedTests.xctest */,
+				A5F506F81BD0F2DD00DB69D5 /* PMKOSXCategoryTests.xctest */,
+				A5F506FA1BD0F2DD00DB69D5 /* PMKTestHost.app */,
 			);
-			path = DataStorageEngine;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		FABCC08D1BA7003500EE6DE0 /* SensePlatform */ = {
 			isa = PBXGroup;
 			children = (
-				FA5DF7A71BA717DA00FF9544 /* DataStorageEngine */,
 				FABCC0BA1BA7009200EE6DE0 /* libraries */,
 				FABCC0C61BA7009200EE6DE0 /* misc */,
 				FABCC0CE1BA7009200EE6DE0 /* sensors */,
@@ -752,7 +809,7 @@
 				27F752701BB0212C000FC400 /* KeychainWrapper.swift */,
 				276CBB821BB56E12001C287D /* DataStorageEngine.swift */,
 				27F89E201BBAF07A0006C15A /* JSONUtils.swift */,
-				27C2F3AB1BBD955000832A7F /* queryOptions.swift */,
+				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
 				A5702C871BCF969C004FFFA1 /* MockProxy.swift */,
 				A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */,
@@ -800,7 +857,6 @@
 				FABCC1281BA7009200EE6DE0 /* CSSensorStore.h in Headers */,
 				FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */,
 				FABCC12C1BA7009200EE6DE0 /* CSStorage.h in Headers */,
-				FA5DF7B01BA717DA00FF9544 /* DSEHTTPRequestHelper.h in Headers */,
 				FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */,
 				FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */,
 				FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */,
@@ -820,7 +876,6 @@
 				FABCC1361BA7009200EE6DE0 /* sqlite3.h in Headers */,
 				FABCC17B1BA7009400EE6DE0 /* Formatting.h in Headers */,
 				FABCC1631BA7009300EE6DE0 /* CSOrientationSensor.h in Headers */,
-				FA5DF7AD1BA717DA00FF9544 /* DSECommonSenseProxy.h in Headers */,
 				FABCC14F1BA7009300EE6DE0 /* CSCompassSensor.h in Headers */,
 				FABCC1411BA7009200EE6DE0 /* CSAntPlusController.h in Headers */,
 				FABCC13B1BA7009200EE6DE0 /* NSNotificationCenter+MainThread.h in Headers */,
@@ -838,7 +893,6 @@
 				FABCC1451BA7009200EE6DE0 /* CSAccelerationSensor.h in Headers */,
 				FABCC1651BA7009300EE6DE0 /* CSOrientationStateSensor.h in Headers */,
 				FABCC14B1BA7009300EE6DE0 /* CSBatterySensor.h in Headers */,
-				FA5DF7AF1BA717DA00FF9544 /* DSEErrors.h in Headers */,
 				FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */,
 				FABCC1331BA7009200EE6DE0 /* keywordhash.h in Headers */,
 				FABCC1831BA7009400EE6DE0 /* UIDevice+Hardware.h in Headers */,
@@ -948,6 +1002,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A5F506FC1BD0F2F300DB69D5 /* PBXTargetDependency */,
 				FAAEA2B71BA81A6D00837502 /* PBXTargetDependency */,
 			);
 			name = DSESwiftTests;
@@ -998,6 +1053,12 @@
 			mainGroup = 3E820D5F15D40AB50001A3EC;
 			productRefGroup = 3E820D6B15D40AB50001A3EC /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A5F506E11BD0F2DD00DB69D5 /* Products */;
+					ProjectRef = A5F506E01BD0F2DD00DB69D5 /* PromiseKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
@@ -1011,6 +1072,65 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A5F506EC1BD0F2DD00DB69D5 /* PromiseKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PromiseKit.framework;
+			remoteRef = A5F506EB1BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506EE1BD0F2DD00DB69D5 /* PromiseKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PromiseKit.framework;
+			remoteRef = A5F506ED1BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506F01BD0F2DD00DB69D5 /* PMKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKTests.xctest;
+			remoteRef = A5F506EF1BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506F21BD0F2DD00DB69D5 /* PMKAPlusTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKAPlusTests.xctest;
+			remoteRef = A5F506F11BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506F41BD0F2DD00DB69D5 /* PMKiOSCategoryTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKiOSCategoryTests.xctest;
+			remoteRef = A5F506F31BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506F61BD0F2DD00DB69D5 /* PMKiOSCategoryHostedTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKiOSCategoryHostedTests.xctest;
+			remoteRef = A5F506F51BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506F81BD0F2DD00DB69D5 /* PMKOSXCategoryTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKOSXCategoryTests.xctest;
+			remoteRef = A5F506F71BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A5F506FA1BD0F2DD00DB69D5 /* PMKTestHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = PMKTestHost.app;
+			remoteRef = A5F506F91BD0F2DD00DB69D5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		276CBB731BB45234001C287D /* Resources */ = {
@@ -1131,11 +1251,9 @@
 				FABCC16C1BA7009300EE6DE0 /* CSScreenSensor.m in Sources */,
 				FABCC15C1BA7009300EE6DE0 /* CSMotionEnergySensor.m in Sources */,
 				FABCC14C1BA7009300EE6DE0 /* CSBatterySensor.m in Sources */,
-				FA5DF7B11BA717DA00FF9544 /* DSEHTTPRequestHelper.m in Sources */,
 				FABCC1841BA7009400EE6DE0 /* UIDevice+Hardware.m in Sources */,
 				FABCC14A1BA7009300EE6DE0 /* CSActivityProcessorSensor.m in Sources */,
 				FABCC1641BA7009300EE6DE0 /* CSOrientationSensor.m in Sources */,
-				FA5DF7AE1BA717DA00FF9544 /* DSECommonSenseProxy.m in Sources */,
 				FABCC1821BA7009400EE6DE0 /* NSString+Utils.m in Sources */,
 				FABCC1581BA7009300EE6DE0 /* CSLocationProvider.m in Sources */,
 				FABCC1621BA7009300EE6DE0 /* CSNoiseSensor.m in Sources */,
@@ -1188,7 +1306,7 @@
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
 				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
 				A5702C881BCF969C004FFFA1 /* MockProxy.swift in Sources */,
-				27C2F3AC1BBD955000832A7F /* queryOptions.swift in Sources */,
+				27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
 			);
@@ -1212,6 +1330,11 @@
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
 			targetProxy = 276CBB7B1BB45234001C287D /* PBXContainerItemProxy */;
+		};
+		A5F506FC1BD0F2F300DB69D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PMKiOS;
+			targetProxy = A5F506FB1BD0F2F300DB69D5 /* PBXContainerItemProxy */;
 		};
 		FA66C2A11BA86E1B00281B6F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1322,6 +1445,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "../**";
 			};
 			name = Debug;
 		};
@@ -1361,6 +1485,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DSQLITE_HAS_CODEC";
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "../**";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

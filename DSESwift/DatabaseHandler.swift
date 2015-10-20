@@ -8,7 +8,6 @@
 
 import Foundation
 import RealmSwift
-
 enum RLMError: ErrorType{
     case ObjectNotFound
     case DuplicatedObjects
@@ -255,6 +254,22 @@ class DatabaseHandler: NSObject{
         } catch {
             throw RLMError.InsertFailed
         }
+    }
+    
+    /**
+    * Check if a sensor is already created in local storage
+    * @param source  Name of the source
+    * @param sensorName	  The name of the sensor
+    * @return boolean: true if the sensor exists in local storage, and vice versa.
+    **/
+    class func hasSensor(source: String, sensorName: String) -> Bool {
+        let realm = try! Realm()
+        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let results = realm.objects(RLMSensor).filter(predicates)
+        if !results.isEmpty {
+            return true
+        }
+        return false
     }
     
     /**
