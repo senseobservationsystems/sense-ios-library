@@ -35,9 +35,9 @@ class DataSyncer: NSObject {
             DataSyncer().uploadToRemote()
         }.then{
             DataSyncer().cleanUpLocalStorage()
-        }.catch_ { error in
+        }.error{ error in
+            print( error )
         }
-    
     }
 
     func downloadSensorProfile() {
