@@ -320,15 +320,11 @@
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
 		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
-<<<<<<< HEAD
-		27C2F3AB1BBD955000832A7F /* QueryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOptions.swift; sourceTree = "<group>"; };
-=======
 		278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSAccountUtils.swift; sourceTree = "<group>"; };
 		27C2F3AB1BBD955000832A7F /* QueryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOptions.swift; sourceTree = "<group>"; };
 		27D441631BD128B400950ADC /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
 		27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorDataProxy.swift; sourceTree = "<group>"; };
 		27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorDataProxyTests.swift; sourceTree = "<group>"; };
->>>>>>> origin/feature/dse_t07_proxy
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
@@ -824,10 +820,7 @@
 				276CBB821BB56E12001C287D /* DataStorageEngine.swift */,
 				27F89E201BBAF07A0006C15A /* JSONUtils.swift */,
 				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
-<<<<<<< HEAD
-=======
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
->>>>>>> origin/feature/dse_t07_proxy
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
 				A5702C871BCF969C004FFFA1 /* MockProxy.swift */,
 				A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */,
@@ -1344,10 +1337,6 @@
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
 				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
 				A5702C881BCF969C004FFFA1 /* MockProxy.swift in Sources */,
-<<<<<<< HEAD
-				27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */,
-=======
->>>>>>> origin/feature/dse_t07_proxy
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
 			);

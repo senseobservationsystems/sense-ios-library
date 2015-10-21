@@ -95,7 +95,7 @@ class DataSyncer: NSObject {
         let rawSensorList = DatabaseHandler.getSensors(SOURCE)
         for sensor in rawSensorList {
             if sensor.csUploadEnabled {
-                let queryOption = QueryOptions(startDate: nil, endDate: nil, existsInCS: false, requiresDeletionInCS: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+                let queryOption = QueryOptions(startDate: nil, endDate: nil, existsInCS: false, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
                 do{
                     let dataPoints = try sensor.getDataPoints(queryOption)
                     // FIXME: using the JSONArray to add datapoint ?
@@ -123,14 +123,14 @@ class DataSyncer: NSObject {
             if sensor.csUploadEnabled {
                 if sensor.persistLocally {
                     // FIXME: do not need to have requiresDeletionInCS, QueryOptions use NSDate
-                    let queryOptions = QueryOptions(startDate: nil, endDate: persistenceBoundary, existsInCS: true, requiresDeletionInCS: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+                    let queryOptions = QueryOptions(startDate: nil, endDate: persistenceBoundary, existsInCS: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
                     do{
                         try DatabaseHandler.deleteDataPoints(sensor.id, queryOptions)
                     }catch{
                         print("need to fix it")
                     }
                 }else {
-                    let queryOptions = QueryOptions(startDate: nil, endDate: nil, existsInCS: true, requiresDeletionInCS: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+                    let queryOptions = QueryOptions(startDate: nil, endDate: nil, existsInCS: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
                     do{
                         try DatabaseHandler.deleteDataPoints(sensor.id, queryOptions)
                     }catch{
