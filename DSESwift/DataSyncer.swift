@@ -14,10 +14,21 @@ import CoreLocation
 
 class DataSyncer: NSObject {
     let SOURCE: String = "sense-ios"
-    var persistPeriod: Double = -2678400000.0
+    static var timer:NSTimer?
+    //verify the value and unit
+    static var SYNC_RATE = 18000.0
+    static var persistPeriod: Double = 2678400000.0
 
-    //    func enablePeriodicSync() {}
-    //    func disablePeriodicSync(){}
+    class func enablePeriodicSync() {
+        if timer == nil {
+            timer = NSTimer.scheduledTimerWithTimeInterval(SYNC_RATE, target: self, selector: Selector("synchronize"), userInfo: nil, repeats: true);
+        }
+        timer!.fire()
+    }
+
+    class func disablePeriodicSync(){
+        timer!.invalidate()
+    }
     
     class func initializeSensorProfile(){
         dispatch_promise{
@@ -28,15 +39,15 @@ class DataSyncer: NSObject {
     class func synchronize() throws {
         
         dispatch_promise{
-            DataSyncer().deletionInRemote()
-        }.then{
-            DataSyncer().downloadFromRemote()
-        }.then{
-            DataSyncer().uploadToRemote()
-        }.then{
-            DataSyncer().cleanUpLocalStorage()
-        }.error{ error in
-            print( error )
+            return DataSyncer().deletionInRemote()
+        }.then{ e in
+            return DataSyncer().downloadFromRemote()
+        }.then{ e in
+            return DataSyncer().uploadToRemote()
+        }.then{ e in
+            return DataSyncer().cleanUpLocalStorage()
+        }.catch_ { error in
+            //FIXME:what should be included here ?
         }
     }
 
@@ -44,21 +55,26 @@ class DataSyncer: NSObject {
         MockProxy.getSensorProfile()
     }
     
-    func deletionInRemote() {
+    func deletionInRemote() -> RLMError {
+        var error:RLMError?
         let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
         if !dataDeletionRequests.isEmpty {
             for request in dataDeletionRequests {
                 MockProxy.deleteSensorData(request.sourceName, sensorName: request.sensorName, startTime: request.startDate, endTime: request.endDate)
                 do{
                     try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
-                }catch{
-                print("need to fix it")
+                }catch let e as RLMError {
+                    error = e
+                }
+                catch{
                 }
             }
         }
+         return error!
     }
     
-    func downloadFromRemote() {
+    func downloadFromRemote() -> RLMError {
+        var error:RLMError?
         let sensorList = MockProxy.getSensors(SOURCE)
         if !sensorList.isEmpty {
             for sensor in sensorList {
@@ -70,11 +86,12 @@ class DataSyncer: NSObject {
                     let sensor = Sensor(name: "light", sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: SOURCE, dataType: "JSON", csDataPointsDownloaded: false )
                     do{
                         try DatabaseHandler.insertSensor(sensor)
-                    }catch{
-                        print("need to fix it")
+                    }catch let e as RLMError {
+                        error = e
+                    }
+                    catch{
                     }
                 }
-                
             }
         }
         let sensorListInLocal = DatabaseHandler.getSensors(SOURCE)
@@ -89,9 +106,12 @@ class DataSyncer: NSObject {
                 sensor.csDataPointsDownloaded = true
             }
         }
+        return error!
     }
     
-    func uploadToRemote() {
+        
+    func uploadToRemote() -> RLMError {
+        var error:RLMError?
         let rawSensorList = DatabaseHandler.getSensors(SOURCE)
         for sensor in rawSensorList {
             if sensor.csUploadEnabled {
@@ -108,37 +128,45 @@ class DataSyncer: NSObject {
                     for datapoint in dataPoints {
                         // FIXME: need to update to Realm
                         datapoint.existsInCS = true
-                }
+                    }
+                }catch let e as RLMError {
+                    error = e
                 }catch{
-                    print("need to fix it")
                 }
             }
         }
+        return error!
     }
     
-    func cleanUpLocalStorage() {
+    func cleanUpLocalStorage() -> RLMError {
+        var error:RLMError?
         let rawSensorList = DatabaseHandler.getSensors(SOURCE)
         for sensor in rawSensorList {
-            let persistenceBoundary = NSDate().dateByAddingTimeInterval (persistPeriod)
+            let persistenceBoundary = NSDate().dateByAddingTimeInterval (0 - DataSyncer.persistPeriod)
             if sensor.csUploadEnabled {
                 if sensor.persistLocally {
-                    // FIXME: do not need to have requiresDeletionInCS, QueryOptions use NSDate
+                    // FIXME:  QueryOptions use NSDate
                     let queryOptions = QueryOptions(startDate: nil, endDate: persistenceBoundary, existsInCS: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
                     do{
                         try DatabaseHandler.deleteDataPoints(sensor.id, queryOptions)
-                    }catch{
-                        print("need to fix it")
+                    }catch let e as RLMError {
+                        error = e
+                    }
+                    catch{
                     }
                 }else {
                     let queryOptions = QueryOptions(startDate: nil, endDate: nil, existsInCS: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
                     do{
                         try DatabaseHandler.deleteDataPoints(sensor.id, queryOptions)
-                    }catch{
-                        print("need to fix it")
+                    }catch let e as RLMError {
+                        error = e
+                    }
+                    catch{
                     }
                 }
             }
         }
+        return error!
     }
     
     
