@@ -1,0 +1,8 @@
+#Swift HTTP for Humans
+github "JustHTTP/Just" 
+
+#Crypto related functions and helpers for Swift
+github "krzyzanowskim/CryptoSwift"
+
+# We code in Asynchronous world. We promise. [http://promisekit.org/]
+#github "mxcl/PromiseKit" ~> 2.0
