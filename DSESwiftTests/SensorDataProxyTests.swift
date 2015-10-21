@@ -310,7 +310,7 @@ class SensorDataProxyTests: XCTestCase {
             let resultArray = try proxy.getSensor(sourceName, sensorName)
             debugPrint(resultArray)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
@@ -342,7 +342,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorName = "accelerometer"
             try proxy.deleteSensor(sourceName, sensorName)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
@@ -358,7 +358,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorName = "accelerometer"
             try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
@@ -374,7 +374,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorName = "accelerometer"
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
@@ -396,7 +396,7 @@ class SensorDataProxyTests: XCTestCase {
             let data = getDummyDataWithBadStructure()
             try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure)
@@ -421,7 +421,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorsData = [sensorData1, sensorData2]
             try proxy.putSensorData(sensorsData)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure)
@@ -440,7 +440,7 @@ class SensorDataProxyTests: XCTestCase {
             let data = getDummyData()
             try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
@@ -457,7 +457,7 @@ class SensorDataProxyTests: XCTestCase {
             let data = getDummyData()
             try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
@@ -482,7 +482,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorsData = [sensorData1, sensorData2]
             try proxy.putSensorData(sensorsData)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
@@ -507,7 +507,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorsData = [sensorData1, sensorData2]
             try proxy.putSensorData(sensorsData)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
@@ -532,7 +532,7 @@ class SensorDataProxyTests: XCTestCase {
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             debugPrint(result)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidQuery )
@@ -558,7 +558,7 @@ class SensorDataProxyTests: XCTestCase {
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             debugPrint(result)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidQuery )
@@ -578,7 +578,7 @@ class SensorDataProxyTests: XCTestCase {
             let now = NSDate()
             try proxy.deleteSensorData(sourceName: sourceName1, sensorName: sensorName1, startDate: now, endDate: now)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidQuery)
@@ -610,7 +610,7 @@ class SensorDataProxyTests: XCTestCase {
             let data1 = getDummyData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -625,7 +625,7 @@ class SensorDataProxyTests: XCTestCase {
             let json = try proxy.getSensors()
             print(json)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -642,7 +642,7 @@ class SensorDataProxyTests: XCTestCase {
             let json = try proxy.getSensor(sourceName1, sensorName1)
             print(json)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -657,7 +657,7 @@ class SensorDataProxyTests: XCTestCase {
             let json = try proxy.getSensors()
             print(json)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -688,7 +688,7 @@ class SensorDataProxyTests: XCTestCase {
             let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
             try invalidProxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -718,7 +718,7 @@ class SensorDataProxyTests: XCTestCase {
             // delete a sensor
             try invalidProxy.deleteSensor(sourceName1, sensorName1)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -736,7 +736,7 @@ class SensorDataProxyTests: XCTestCase {
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result!["data"]!.count, 5)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -750,7 +750,7 @@ class SensorDataProxyTests: XCTestCase {
         do {
             try proxy.deleteSensorData(sourceName: "sourcename", sensorName: "sensorName", startDate: nil, endDate: nil)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
@@ -775,7 +775,7 @@ class SensorDataProxyTests: XCTestCase {
             let sensorsData = [sensorData1, sensorData2]
             try proxy.putSensorData(sensorsData)
             
-            XCTFail("No error")
+            XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )

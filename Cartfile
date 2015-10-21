@@ -5,4 +5,4 @@ github "JustHTTP/Just"
 github "krzyzanowskim/CryptoSwift"
 
 # We code in Asynchronous world. We promise. [http://promisekit.org/]
-#github "mxcl/PromiseKit" ~> 2.0
+github "mxcl/PromiseKit"
