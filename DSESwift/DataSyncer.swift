@@ -39,34 +39,40 @@ class DataSyncer: NSObject {
         timer!.invalidate()
     }
     
-    func initializeSensorProfile(){
+    func initializeSensorProfile() throws{
         dispatch_promise{
-            // FIXME: don't need to return ?
             self.downloadSensorProfile
         }
     }
     
     func synchronize() throws {
         dispatch_promise{
-            return self.deletionInRemote
+             self.deletionInRemote
         }.then{ e in
-            return self.downloadFromRemote
+             self.downloadFromRemote
         }.then{ e in
-            return self.uploadToRemote
+             self.uploadToRemote
         }.then{ e in
-            return self.cleanUpLocalStorage
-        }.catch_ { error in
-            //FIXME:what should be included here ?
+             self.cleanUpLocalStorage
         }
+        
+        //FIXME: figure out the difference
+//        dispatch_promise{
+//            return self.deletionInRemote
+//        }.then{ e in
+//            return self.downloadFromRemote
+//        }.then{ e in
+//            return self.uploadToRemote
+//        }.then{ e in
+//            return self.cleanUpLocalStorage
+//        }
     }
 
-    func downloadSensorProfile() -> ErrorType? {
-        do{
-            try proxy.getSensorProfiles()
-        }catch{
-            return error
-        }
-        return nil
+    func downloadSensorProfile() throws {
+        //Array<AnyObject>
+        let sensorProfiles = try proxy.getSensorProfiles()
+        print(sensorProfiles)
+        // FIXME:not implemented yet
     }
     
     func deletionInRemote() -> ErrorType? {
@@ -135,14 +141,18 @@ class DataSyncer: NSObject {
             let sensorNameInString = sensorDict["sensor_name"] as! String
             let sensorOptions = SensorOptions(meta: metaDict, uploadEnabled: false, downloadEnabled: true, persist: false)
             if !DatabaseHandler.hasSensor(sourceNameInString, sensorName: sensorNameInString) {
-                // FIXME sensor now still has data type
-                let sensor = Sensor(name: "light", sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: DataSyncer.SOURCE, csDataPointsDownloaded: false )
-                do{
-                    try DatabaseHandler.insertSensor(sensor)
-                }catch{
-                    return error
-                }
+                let sensor = Sensor(name: sensorNameInString, sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceNameInString, csDataPointsDownloaded: false )
+                insertSensorLocally(sensor)
             }
+        }
+        return nil
+    }
+    
+    func insertSensorLocally(sensor: Sensor) -> ErrorType? {
+        do{
+            try DatabaseHandler.insertSensor(sensor)
+        }catch{
+            return error
         }
         return nil
     }
@@ -151,7 +161,7 @@ class DataSyncer: NSObject {
         for sensor in sensorListInLocal {
             do{
                 let dataList = try proxy.getSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, queryOptions: QueryOptions())
-                insertDataPoints(sensor, dataList: dataList)
+                insertDataPointsLocally(sensor, dataList: dataList)
                 sensor.csDataPointsDownloaded = true
                 try DatabaseHandler.update(sensor)
             }catch{
@@ -161,7 +171,7 @@ class DataSyncer: NSObject {
         return nil
     }
     
-    func insertDataPoints(sensor: Sensor, dataList: Dictionary<String, AnyObject>?) {
+    func insertDataPointsLocally(sensor: Sensor, dataList: Dictionary<String, AnyObject>?) {
         if dataList != nil{
             for (value, date) in dataList!{
                 sensor.insertDataPoint(value, date as! NSDate)
@@ -202,7 +212,7 @@ class DataSyncer: NSObject {
             let dataPoints = try sensor.getDataPoints(queryOptions)
             var dataArray: Array<AnyObject> = []
             for datapoint in dataPoints {
-                let dataObject:Dictionary<String, AnyObject> = ["date": datapoint.date, "value": datapoint.value]
+                let dataObject:Dictionary<String, AnyObject> = ["time": datapoint.date, "value": datapoint.value]
                 dataArray.append(dataObject)
             }
             try proxy.putSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
