@@ -46,6 +46,7 @@
 		2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; settings = {ASSET_TAGS = (); }; };
+		2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */; };
 		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; settings = {ASSET_TAGS = (); }; };
 		27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */; settings = {ASSET_TAGS = (); }; };
@@ -244,8 +245,8 @@
 
 /* Begin PBXFileReference section */
 		2709FF7D1BAF0E800051E8B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		271306381BD0216F0044490E /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
+		2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVJSONSchemaValidation.framework; path = Carthage/Build/iOS/VVJSONSchemaValidation.framework; sourceTree = "<group>"; };
 		27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDataPoint.swift; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorOptions.swift; sourceTree = "<group>"; };
@@ -456,6 +457,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */,
 				27F1D1AA1BD7A4A000ACE232 /* PromiseKit.framework in Frameworks */,
 				27D441641BD128B400950ADC /* CryptoSwift.framework in Frameworks */,
 				2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */,
@@ -512,9 +514,9 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */,
 				27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */,
 				27D441631BD128B400950ADC /* CryptoSwift.framework */,
-				271306381BD0216F0044490E /* SwiftyJSON.framework */,
 				2709FF7D1BAF0E800051E8B2 /* Security.framework */,
 				FAA614651BA8225E00B05FCD /* Realm.framework */,
 				FAA614661BA8225E00B05FCD /* RealmSwift.framework */,
@@ -1052,6 +1054,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Just.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/VVJSONSchemaValidation.framework",
 			);
 			outputPaths = (
 			);

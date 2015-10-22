@@ -21,13 +21,18 @@ public class DataPoint{
         self.existsInCS = existsInCS
     }
     
-    convenience init(sensorId: Int, value: String, date: NSDate) {
+    private convenience init(sensorId: Int, value: String, date: NSDate) {
         self.init(sensorId: sensorId, value: value, date: date, existsInCS:false)
     }
 
     convenience init(rlmDataPoint: RLMDataPoint) {
         let date = NSDate(timeIntervalSince1970: rlmDataPoint.date)
         self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, existsInCS: rlmDataPoint.existsInCS)
+    }
+    
+    convenience init(sensorId: Int) {
+        let now = NSDate()
+        self.init(sensorId: sensorId, value: "", date: now, existsInCS: false)
     }
 
     required convenience public init() {
@@ -39,8 +44,12 @@ public class DataPoint{
         return "\(self.sensorId)-\(String(self.date))"
     }
     
-    func setValue(value: AnyObject){
-        self.value = JSONUtils.stringify(value)
+    func setDate(date: NSDate){
+        self.date = date
+    }
+    
+    func setValue(value: String){
+        self.value = value
     }
     
     func getValueInInt() -> Int {

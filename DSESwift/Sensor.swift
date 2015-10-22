@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import VVJSONSchemaValidation
+
 
 let kCSDATA_TYPE_STRING = "string"
 let kCSDATA_TYPE_JSON = "json"
@@ -84,12 +86,43 @@ public class Sensor{
     }
     
     public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), date: date)
+        // Validate the format of value
+        
+        let dataPoint = DataPoint(sensorId: self.id)
+        
+        let stringifiedValue = JSONUtils.stringify(value)
+        dataPoint.setValue(stringifiedValue)
+        dataPoint.setDate(date)
         do{
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             return true
         } catch {
             NSLog("Failed to insert DataPoint")
+            return false
+        }
+    }
+    
+    private func validateValue(value: AnyObject, schema: String) -> Bool{
+        let schemaData: NSData = schema.dataUsingEncoding(NSUTF8StringEncoding)!
+        var schemaJSON = Dictionary<String, AnyObject>()
+        do{
+            schemaJSON = try NSJSONSerialization.JSONObjectWithData(schemaData, options: NSJSONReadingOptions(rawValue: 0)) as! Dictionary<String, AnyObject>
+        }catch{
+            NSLog("Wrong format in sensor profile. It can not be parsed")
+            return false
+        }
+        
+        
+        //VVJSONSchemaValication library is written in Objective-C and not completely upto date with Framework. In the original Objective-C it allows us to pass nil for baseURI and reference Storage, but not in swift. It seems like automatic generation of framework is doing something wrong. Thus, we need to pass meaning less empty stuff here.
+        let schemaStorage = VVJSONSchemaStorage.init()
+        let baseUri = NSURL.init(fileURLWithPath: "")
+        do{
+            let schema = try VVJSONSchema.init(dictionary: schemaJSON, baseURI: baseUri, referenceStorage: schemaStorage)
+            try schema.validateObject(value)
+            return true
+            
+        }catch{
+            NSLog("Invalid value format")
             return false
         }
     }
@@ -119,6 +152,7 @@ public class Sensor{
             let sensor = try DatabaseHandler.getSensor(self.source, self.name)
             let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
             try DatabaseHandler.update(updatedSensor)
+            
         } catch RLMError.ObjectNotFound {
             throw DatabaseError.ObjectNotFound
         } catch RLMError.DuplicatedObjects{

@@ -8,6 +8,9 @@
 
 import Foundation
 import RealmSwift
+
+
+
 enum RLMError: ErrorType{
     case ObjectNotFound
     case DuplicatedObjects
