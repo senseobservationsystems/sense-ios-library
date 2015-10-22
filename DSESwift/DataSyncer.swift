@@ -94,8 +94,6 @@ class DataSyncer: NSObject {
         return nil
     }
 
-
-    
     func uploadToRemote() -> ErrorType? {
         let rawSensorList = DatabaseHandler.getSensors(DataSyncer.SOURCE)
         for sensor in rawSensorList {
@@ -129,13 +127,14 @@ class DataSyncer: NSObject {
         return nil
     }
     
-    
     func  downloadSensorFromRemote( sensorList: Array<AnyObject>) -> ErrorType? {
         for sensor in sensorList {
-            // FIXME: change the way to pass meta data to the func
-            let sensorOptions = SensorOptions(meta: JSONUtils.getDictionaryValue(sensor["meta"]), uploadEnabled: false, downloadEnabled: true, persist: false)
-            // FIXME: change the way to pass sensor name to the func
-            if !DatabaseHandler.hasSensor(DataSyncer.SOURCE, sensorName: sensor.description) {
+            let sensorDict = sensor as! Dictionary<String, AnyObject>
+            let metaDict = sensorDict["meta"] as! Dictionary<String, AnyObject>
+            let sourceNameInString = sensorDict["source_name"] as! String
+            let sensorNameInString = sensorDict["sensor_name"] as! String
+            let sensorOptions = SensorOptions(meta: metaDict, uploadEnabled: false, downloadEnabled: true, persist: false)
+            if !DatabaseHandler.hasSensor(sourceNameInString, sensorName: sensorNameInString) {
                 // FIXME sensor now still has data type
                 let sensor = Sensor(name: "light", sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: DataSyncer.SOURCE, dataType: "JSON",csDataPointsDownloaded: false )
                 do{
@@ -152,13 +151,7 @@ class DataSyncer: NSObject {
         for sensor in sensorListInLocal {
             do{
                 let dataList = try proxy.getSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, queryOptions: QueryOptions())
-                if dataList != nil{
-                    for dataFromRemote in dataList! {
-                        //insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool
-                        // FIXME: how exactly is the structure
-                        sensor.insertDataPoint(dataFromRemote, NSDate())
-                    }
-                }
+                insertDataPoints(sensor, dataList: dataList)
                 sensor.csDataPointsDownloaded = true
                 try DatabaseHandler.update(sensor)
             }catch{
@@ -166,6 +159,14 @@ class DataSyncer: NSObject {
             }
         }
         return nil
+    }
+    
+    func insertDataPoints(sensor: Sensor, dataList: Dictionary<String, AnyObject>?) {
+        if dataList != nil{
+            for (value, date) in dataList!{
+                sensor.insertDataPoint(value, date as! NSDate)
+            }
+        }
     }
     
     func deleteDataPointsLocally (id:Int, persistLocally: Bool, boundary:NSDate?)  -> ErrorType?{
