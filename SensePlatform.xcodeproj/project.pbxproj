@@ -69,7 +69,6 @@
 		27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* DataPointTests.swift */; settings = {ASSET_TAGS = (); }; };
 		27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E201BBAF07A0006C15A /* JSONUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */; settings = {ASSET_TAGS = (); }; };
-		A5702C881BCF969C004FFFA1 /* MockProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C871BCF969C004FFFA1 /* MockProxy.swift */; settings = {ASSET_TAGS = (); }; };
 		A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */; settings = {ASSET_TAGS = (); }; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
@@ -283,7 +282,6 @@
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncer.swift; sourceTree = "<group>"; };
-		A5702C871BCF969C004FFFA1 /* MockProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockProxy.swift; sourceTree = "<group>"; };
 		A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDeletionRequest.swift; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
@@ -744,7 +742,6 @@
 				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
-				A5702C871BCF969C004FFFA1 /* MockProxy.swift */,
 				A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */,
 			);
 			path = DSESwift;
@@ -1193,7 +1190,6 @@
 				A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */,
 				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
-				A5702C881BCF969C004FFFA1 /* MockProxy.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
 			);

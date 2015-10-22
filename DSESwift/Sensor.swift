@@ -27,7 +27,7 @@ public enum SortOrder{
 public class Sensor{
     var id = -1
     var name = ""
-    var meta = ""
+    var meta: Dictionary<String, AnyObject>?
     var csUploadEnabled = true
     var csDownloadEnabled = true
     var persistLocally = true
@@ -36,9 +36,8 @@ public class Sensor{
     var dataType = ""
     var csDataPointsDownloaded = false
 
-    init(id:Int,              name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, source: String,   dataType: String,  
-        csDataPointsDownloaded: Bool) {
+    init(id:Int,              name: String,   meta:Dictionary<String, AnyObject>?, csUploadEnabled: Bool, csDownloadEnabled: Bool,
+        persistLocally: Bool, userId: String, source: String, dataType: String, csDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
@@ -57,7 +56,7 @@ public class Sensor{
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
-            meta: sensorOptions.meta!,
+            meta: sensorOptions.meta,
             csUploadEnabled: sensorOptions.uploadEnabled!,
             csDownloadEnabled: sensorOptions.downloadEnabled!,
             persistLocally: sensorOptions.persist!,
@@ -72,7 +71,7 @@ public class Sensor{
         self.init(
             id: sensor.id,
             name: sensor.name,
-            meta: sensor.meta,
+            meta: JSONUtils.getDictionaryValue(sensor.meta),
             csUploadEnabled: sensor.csUploadEnabled,
             csDownloadEnabled: sensor.csDownloadEnabled,
             persistLocally: sensor.persistLocally,

@@ -34,11 +34,11 @@ public class DataStorageEngine{
     * @param options The sensor options
     * @return sensor object
     **/
-    public func createSensor(source: String, name: String, dataType: String, sensorOptions: SensorOptions) throws -> Sensor?
+    public func createSensor(source: String, name: String, sensorOptions: SensorOptions) throws -> Sensor?
     {
         var sensor: Sensor?
         do{
-            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, csDataPointsDownloaded
+            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: "JSON", csDataPointsDownloaded
                 : false)
             try DatabaseHandler.insertSensor(sensor!)
             

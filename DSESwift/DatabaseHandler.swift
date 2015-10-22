@@ -127,11 +127,10 @@ class DatabaseHandler: NSObject{
         rlmDataDeletionRequest.sensorName = sensorName
         rlmDataDeletionRequest.sourceName = sourceName
         if startDate != nil{
-            rlmDataDeletionRequest.startDate = startDate!.timeIntervalSince1970
+            rlmDataDeletionRequest.startDate = startDate!
         }
         if endDate != nil{
-            rlmDataDeletionRequest.endDate = endDate!.timeIntervalSince1970
-        }
+            rlmDataDeletionRequest.endDate = endDate!        }
         let realm = try! Realm()
         realm.beginWrite()
         realm.add(rlmDataDeletionRequest, update:true)
@@ -205,7 +204,7 @@ class DatabaseHandler: NSObject{
         // Changes to dataType, userId, sensorName, source will be ignored.
         let realm = try! Realm()
         realm.beginWrite()
-        rlmSensor.meta = sensor.meta
+        rlmSensor.meta = JSONUtils.stringify(sensor.meta!)
         rlmSensor.csUploadEnabled = sensor.csUploadEnabled
         rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
@@ -238,13 +237,12 @@ class DatabaseHandler: NSObject{
         realm.beginWrite()
         rlmSensor.id = sensor.id
         rlmSensor.name = sensor.name
-        rlmSensor.meta = sensor.meta
+        rlmSensor.meta =  JSONUtils.stringify(sensor.meta!)
         rlmSensor.csUploadEnabled = sensor.csUploadEnabled
         rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
         rlmSensor.userId = sensor.userId
         rlmSensor.source = sensor.source
-        rlmSensor.dataType = sensor.dataType
         rlmSensor.csDataPointsDownloaded = sensor.csDataPointsDownloaded
         rlmSensor.updateId()
         realm.add(rlmSensor)

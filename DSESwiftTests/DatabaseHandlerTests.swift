@@ -28,7 +28,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testInsertDataPoint() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -56,7 +56,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointWithValidLimit() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -85,7 +85,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointWithEmptyStartAndEnd() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -117,7 +117,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testDeleteDataPointWithEmptyStartAndEnd() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -156,7 +156,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testDeleteDataPointWithEnd() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -206,7 +206,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
 
     func testGetDataPointsWithInvalidLimit() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -235,7 +235,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointsWithStartDateLaterThanEndDate() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -281,7 +281,7 @@ class DatabaseHandlerTests: XCTestCase {
     
 
     func testUpdateValueOfDataPoint() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -397,7 +397,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testUpdateSyncedStatusOfDataPoint() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -432,7 +432,7 @@ class DatabaseHandlerTests: XCTestCase {
 
 
     func testInsertSensorWithValidSetup() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -453,7 +453,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testInsertSameSensorTwice() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -467,7 +467,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testInsertSensorWithInvalidUserId() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "anotheruser", source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
@@ -477,25 +477,25 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testUpdateSensor() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
-            let newSensorMeta = "meta data updated"
+            let newSensorMeta: Dictionary<String, AnyObject>? = ["sensor":"meta data updated"]
             sensor.meta = newSensorMeta
             try DatabaseHandler.update(sensor)
             
             let retrievedSensor = try! DatabaseHandler.getSensor(sourceName, sensor.name)
-            XCTAssertEqual(retrievedSensor.meta, newSensorMeta)
+            XCTAssertEqual(JSONUtils.stringify(retrievedSensor.meta!), JSONUtils.stringify(newSensorMeta!))
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
     }
     
     func testUpdateInvalidUpdateOfSensorName() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
@@ -510,7 +510,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testUpdateSensorWithInvalidUsername() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
@@ -525,7 +525,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorWithSourceNameAndSensorName() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -545,7 +545,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorWithNonExistingSource() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -565,7 +565,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorWithNonExistingSensorName() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceName, dataType: "JSON", csDataPointsDownloaded: false)
@@ -584,7 +584,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensors() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -601,7 +601,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorsWithInvalidSorceName() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
@@ -623,7 +623,7 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSources() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             //add 2 sensors with source 1 and add 1 sensor with source 2
             var sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource1", dataType: "JSON", csDataPointsDownloaded: false)
