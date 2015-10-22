@@ -19,10 +19,10 @@ public struct QueryOptions{
         var description : String {
             switch self {
                 // Use Internationalization, as appropriate.
-                case .Minute: return "Minute";
-                case .Hour: return "Hour";
-                case .Day: return "Day";
-                case .Week: return "Week";
+                case .Minute: return "minute";
+                case .Hour: return "hour";
+                case .Day: return "day";
+                case .Week: return "week";
             }
         }
     }
@@ -47,7 +47,7 @@ public struct QueryOptions{
         self.init(startDate: nil, endDate: nil, existsInCS: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
     }
     
-    public func toQueryParams() -> Dictionary<String, AnyObject>{
+    public func toQueryParams() throws -> Dictionary<String, AnyObject>{
         var queryParams = Dictionary<String, AnyObject>()
         if (self.startDate != nil){ queryParams["start_date"] = JSONUtils.stringify(Int(self.startDate!.timeIntervalSince1970))}
         if (self.endDate != nil){ queryParams["end_date"] = JSONUtils.stringify(Int(self.endDate!.timeIntervalSince1970))}

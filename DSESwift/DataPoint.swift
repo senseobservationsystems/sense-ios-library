@@ -39,7 +39,7 @@ public class DataPoint{
         return "\(self.sensorId)-\(String(self.date))"
     }
     
-    func setValue(value: AnyObject){
+    func setValue(value: AnyObject) {
         self.value = JSONUtils.stringify(value)
     }
     

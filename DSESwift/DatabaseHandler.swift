@@ -51,11 +51,7 @@ class DatabaseHandler: NSObject{
         rlmDataPoint.existsInCS = dataPoint.existsInCS
         realm.add(rlmDataPoint, update:true)
         
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.InsertFailed
-        }
+        try realm.commitWrite()
     }
 
     /**
@@ -106,11 +102,8 @@ class DatabaseHandler: NSObject{
         for dataPoint in results {
             realm.delete(dataPoint)
         }
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.DeleteFailed
-        }
+        
+        try realm.commitWrite()
     }
 
     /**
@@ -120,7 +113,7 @@ class DatabaseHandler: NSObject{
     * @param startDate the start date to delete the data points
     * @param endDate the end date to delete the data points
     */
-    class func createDataDeletionRequest(sensorName: String, sourceName: String, startDate: NSDate?, endDate:  NSDate?) throws{
+    class func createDataDeletionRequest(sensorName: String, sourceName: String, startDate: NSDate?, endDate:  NSDate?) throws {
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
         rlmDataDeletionRequest.uuid = NSUUID().UUIDString
@@ -137,21 +130,17 @@ class DatabaseHandler: NSObject{
         realm.beginWrite()
         realm.add(rlmDataDeletionRequest, update:true)
         
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.InsertFailed
-        }
+        try realm.commitWrite()
     }
     
     /**
     * Get the list of data deletion requests from local storage
     * @return An array of NSDictionary represents data deletion requests
     */
-    class func getDataDeletionRequest()  ->  [DataDeletionRequest] {
+    class func getDataDeletionRequest() -> [DataDeletionRequest] {
         var dataDeletionRequest = [DataDeletionRequest]()
         let realm = try! Realm()
-        let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
+        let predicate = NSPredicate(format: "userId = %s", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         //query
         let results = realm.objects(DataDeletionRequest).filter(predicate)
         for request in results {
@@ -170,12 +159,8 @@ class DatabaseHandler: NSObject{
         let results = realm.objects(DataDeletionRequest).filter(predicate)
         realm.beginWrite()
         realm.delete(results)
-
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.DeleteFailed
-        }
+        
+        try realm.commitWrite()
     }
     
     
@@ -213,11 +198,7 @@ class DatabaseHandler: NSObject{
         rlmSensor.csDataPointsDownloaded = sensor.csDataPointsDownloaded
         realm.add(rlmSensor, update: true)
 
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.UpdateFailed
-        }
+        try realm.commitWrite()
     }
 
     /**
@@ -250,11 +231,7 @@ class DatabaseHandler: NSObject{
         rlmSensor.updateId()
         realm.add(rlmSensor)
         
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.InsertFailed
-        }
+        try realm.commitWrite()
     }
     
     /**

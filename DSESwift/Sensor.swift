@@ -98,13 +98,8 @@ public class Sensor{
     public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
         var dataPoints = [DataPoint]()
         
-        do{
-            dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
-        } catch RLMError.InvalidLimit {
-            throw DatabaseError.InvalidLimit
-        } catch {
-            throw DatabaseError.UnknownError
-        }
+        dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
+
         return dataPoints
     }
     
@@ -115,19 +110,9 @@ public class Sensor{
     * @return Returns the applied options.
     */
     public func setSensorOptions(sensorOptions: SensorOptions) throws {
-        do{
-            let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
-            try DatabaseHandler.update(updatedSensor)
-        } catch RLMError.ObjectNotFound {
-            throw DatabaseError.ObjectNotFound
-        } catch RLMError.DuplicatedObjects{
-            throw DatabaseError.DuplicatedObjects
-        } catch RLMError.UnauthenticatedAccess {
-            throw DatabaseError.UnauthenticatedAccess
-        } catch {
-            throw DatabaseError.UnknownError
-        }
+        let sensor = try DatabaseHandler.getSensor(self.source, self.name)
+        let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
+        try DatabaseHandler.update(updatedSensor)
     }
     
     private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
