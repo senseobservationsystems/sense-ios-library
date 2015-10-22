@@ -38,34 +38,32 @@ public class Sensor{
     var dataType = ""
     var csDataPointsDownloaded = false
 
-    init(id:Int,              name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, source: String,   dataType: String,  
+    init(id:Int,              name: String,   meta:String? = "",      csUploadEnabled: Bool? = true, csDownloadEnabled: Bool? = false,
+        persistLocally: Bool? = false, userId: String, source: String,
         csDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
-        self.meta = meta
-        self.csUploadEnabled = csUploadEnabled
-        self.csDownloadEnabled = csDownloadEnabled
-        self.persistLocally = persistLocally
+        self.meta = meta!
+        self.csUploadEnabled = csUploadEnabled!
+        self.csDownloadEnabled = csDownloadEnabled!
+        self.persistLocally = persistLocally!
         self.userId = userId
         self.source = source
-        self.dataType = dataType
         self.csDataPointsDownloaded = csDataPointsDownloaded
     }
     
     public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, dataType: String, csDataPointsDownloaded: Bool) {
+                            source: String, csDataPointsDownloaded: Bool) {
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
-            meta: sensorOptions.meta!,
-            csUploadEnabled: sensorOptions.uploadEnabled!,
-            csDownloadEnabled: sensorOptions.downloadEnabled!,
-            persistLocally: sensorOptions.persist!,
+            meta: sensorOptions.meta,
+            csUploadEnabled: sensorOptions.uploadEnabled,
+            csDownloadEnabled: sensorOptions.downloadEnabled,
+            persistLocally: sensorOptions.persist,
             userId: userId,
             source: source,
-            dataType: dataType,
             csDataPointsDownloaded: csDataPointsDownloaded
         )
     }
@@ -80,13 +78,16 @@ public class Sensor{
             persistLocally: sensor.persistLocally,
             userId: sensor.userId,
             source: sensor.source,
-            dataType: sensor.dataType,
             csDataPointsDownloaded: sensor.csDataPointsDownloaded
         )
     }
     
     public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
         // Validate the format of value
+        let schemaString = "{\"$schema\": \"http://json-schema.org/draft-04/schema#\",\"description\": \"The proximity to an object in cm\",\"type\": \"number\",}"
+        if !JSONUtils.validateValue(value, schema: schemaString){
+            return false
+        }
         
         let dataPoint = DataPoint(sensorId: self.id)
         
@@ -101,31 +102,7 @@ public class Sensor{
             return false
         }
     }
-    
-    private func validateValue(value: AnyObject, schema: String) -> Bool{
-        let schemaData: NSData = schema.dataUsingEncoding(NSUTF8StringEncoding)!
-        var schemaJSON = Dictionary<String, AnyObject>()
-        do{
-            schemaJSON = try NSJSONSerialization.JSONObjectWithData(schemaData, options: NSJSONReadingOptions(rawValue: 0)) as! Dictionary<String, AnyObject>
-        }catch{
-            NSLog("Wrong format in sensor profile. It can not be parsed")
-            return false
-        }
-        
-        
-        //VVJSONSchemaValication library is written in Objective-C and not completely upto date with Framework. In the original Objective-C it allows us to pass nil for baseURI and reference Storage, but not in swift. It seems like automatic generation of framework is doing something wrong. Thus, we need to pass meaning less empty stuff here.
-        let schemaStorage = VVJSONSchemaStorage.init()
-        let baseUri = NSURL.init(fileURLWithPath: "")
-        do{
-            let schema = try VVJSONSchema.init(dictionary: schemaJSON, baseURI: baseUri, referenceStorage: schemaStorage)
-            try schema.validateObject(value)
-            return true
-            
-        }catch{
-            NSLog("Invalid value format")
-            return false
-        }
-    }
+
 
     
     public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
@@ -164,21 +141,19 @@ public class Sensor{
         }
     }
     
+    
+    // MARK: helper functions
+    
     private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
-        if (sensorOptions.downloadEnabled != nil){
-            sensor.csDownloadEnabled = sensorOptions.downloadEnabled!
-        }
-        if (sensorOptions.uploadEnabled != nil){
-            sensor.csUploadEnabled = sensorOptions.uploadEnabled!
-        }
-        if (sensorOptions.meta != nil){
-            sensor.meta = sensorOptions.meta!
-        }
-        if (sensorOptions.persist != nil){
-            sensor.persistLocally = sensorOptions.persist!
-        }
+        sensor.csDownloadEnabled = sensorOptions.downloadEnabled
+        sensor.csUploadEnabled = sensorOptions.uploadEnabled
+        sensor.meta = sensorOptions.meta
+        sensor.persistLocally = sensorOptions.persist
         return sensor
     }
+    
+    
+
     
     
 }

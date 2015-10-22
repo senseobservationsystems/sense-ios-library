@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import VVJSONSchemaValidation
 
 public class JSONUtils{
 
@@ -67,6 +68,30 @@ public class JSONUtils{
             }
         }
         return [String: AnyObject]()
+    }
+    
+    public class func validateValue(value: AnyObject, schema: String) -> Bool{
+        do{
+            let jsonSchamaValidator = try getJSONSchemaValidator(schema)
+            try jsonSchamaValidator.validateObject(value)
+            return true
+            
+        }catch{
+            return false
+        }
+    }
+    
+    private class func getJSONSchemaValidator(schema: String) throws -> VVJSONSchema{
+        let schemaInDict = try getSchemaInDictionary(schema)
+        //VVJSONSchemaValication library is written in Objective-C and not completely upto date with Framework. In the original Objective-C it allows us to pass nil for baseURI and reference Storage, but not in swift. It seems like automatic generation of framework is doing something wrong. Thus, we need to pass meaning less empty stuff here.
+        let schemaStorage = VVJSONSchemaStorage.init()
+        let baseUri = NSURL.init(fileURLWithPath: "")
+        return try VVJSONSchema.init(dictionary: schemaInDict, baseURI: baseUri, referenceStorage: schemaStorage)
+    }
+    
+    private class func getSchemaInDictionary(schema: String) throws -> Dictionary<String, AnyObject>? {
+        let schemaData: NSData = schema.dataUsingEncoding(NSUTF8StringEncoding)!
+        return try NSJSONSerialization.JSONObjectWithData(schemaData, options: NSJSONReadingOptions(rawValue: 0)) as? Dictionary<String, AnyObject>
     }
 
     private class func isDouble(number: Double) -> Bool {

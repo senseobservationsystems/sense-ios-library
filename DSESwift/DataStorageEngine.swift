@@ -38,7 +38,7 @@ public class DataStorageEngine{
     {
         var sensor: Sensor?
         do{
-            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, csDataPointsDownloaded
+            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, csDataPointsDownloaded
                 : false)
             try DatabaseHandler.insertSensor(sensor!)
             

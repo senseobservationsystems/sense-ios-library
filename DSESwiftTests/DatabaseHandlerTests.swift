@@ -12,7 +12,7 @@ import RealmSwift
 
 @testable import DSESwift
 
-
+/*
 class DatabaseHandlerTests: XCTestCase {
     
     override func setUp() {
@@ -648,3 +648,4 @@ class DatabaseHandlerTests: XCTestCase {
     }
 
 }
+*/

@@ -29,7 +29,7 @@ class DataPointTests: XCTestCase {
     func testSetIntValue() {
         let dataPoint = DataPoint()
         let valueInt = 1
-        dataPoint.setValue(valueInt)
+        dataPoint.setValue(JSONUtils.stringify(valueInt))
         XCTAssertEqual(dataPoint.value, "1")
         XCTAssertEqual(dataPoint.getValueInInt(), valueInt)
     }
@@ -37,7 +37,7 @@ class DataPointTests: XCTestCase {
     func testSetDouble() {
         let dataPoint = DataPoint()
         let valueFloat = 2.01234
-        dataPoint.setValue(valueFloat)
+        dataPoint.setValue(JSONUtils.stringify(valueFloat))
         XCTAssertEqual(dataPoint.value, "2.012340")
         XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
     }
@@ -45,14 +45,14 @@ class DataPointTests: XCTestCase {
     func testSetDoubleWithoutPrecision() {
         let dataPoint = DataPoint()
         let valueFloat = 2.0
-        dataPoint.setValue(valueFloat)
+        dataPoint.setValue(JSONUtils.stringify(valueFloat))
         XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
     }
     
     func testSetStringValue() {
         let dataPoint = DataPoint()
         let valueString = "valueString"
-        dataPoint.setValue(valueString)
+        dataPoint.setValue(JSONUtils.stringify(valueString))
         XCTAssertEqual(dataPoint.value, "\"valueString\"")
         XCTAssertEqual(dataPoint.getValueInString(), valueString)
 
@@ -69,7 +69,7 @@ class DataPointTests: XCTestCase {
         valueDictionary["string"] = "\""+valueString+"\""
         valueDictionary["dict"] = ["subdictkey1": "subvalue1", "subdictkey2": "subvalue2"]
         
-        dataPoint.setValue(valueDictionary)
+        dataPoint.setValue(JSONUtils.stringify(valueDictionary))
         let retrievedDictionary = dataPoint.getValueInDictionary()
         XCTAssertEqual(valueDictionary["float"]?.floatValue, retrievedDictionary["float"]?.floatValue)
         XCTAssertEqual(valueDictionary["bool"]?.boolValue, retrievedDictionary["bool"]?.boolValue)
