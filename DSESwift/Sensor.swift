@@ -33,11 +33,10 @@ public class Sensor{
     var persistLocally = true
     var userId = ""
     var source = ""
-    var dataType = ""
     var csDataPointsDownloaded = false
 
     init(id:Int,              name: String,   meta:Dictionary<String, AnyObject>?, csUploadEnabled: Bool, csDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, source: String, dataType: String, csDataPointsDownloaded: Bool) {
+        persistLocally: Bool, userId: String, source: String, csDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
@@ -47,12 +46,11 @@ public class Sensor{
         self.persistLocally = persistLocally
         self.userId = userId
         self.source = source
-        self.dataType = dataType
         self.csDataPointsDownloaded = csDataPointsDownloaded
     }
     
     public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, dataType: String, csDataPointsDownloaded: Bool) {
+                            source: String, csDataPointsDownloaded: Bool) {
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
@@ -62,7 +60,6 @@ public class Sensor{
             persistLocally: sensorOptions.persist!,
             userId: userId,
             source: source,
-            dataType: dataType,
             csDataPointsDownloaded: csDataPointsDownloaded
         )
     }
@@ -77,7 +74,6 @@ public class Sensor{
             persistLocally: sensor.persistLocally,
             userId: sensor.userId,
             source: sensor.source,
-            dataType: sensor.dataType,
             csDataPointsDownloaded: sensor.csDataPointsDownloaded
         )
     }

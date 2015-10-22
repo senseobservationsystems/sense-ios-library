@@ -19,7 +19,6 @@ class RLMSensor: Object{
     dynamic var persistLocally = true
     dynamic var userId = ""
     dynamic var source = ""
-    dynamic var dataType = ""
     dynamic var csDataPointsDownloaded = false
 
     /*

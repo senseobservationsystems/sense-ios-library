@@ -136,7 +136,7 @@ class DataSyncer: NSObject {
             let sensorOptions = SensorOptions(meta: metaDict, uploadEnabled: false, downloadEnabled: true, persist: false)
             if !DatabaseHandler.hasSensor(sourceNameInString, sensorName: sensorNameInString) {
                 // FIXME sensor now still has data type
-                let sensor = Sensor(name: "light", sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: DataSyncer.SOURCE, dataType: "JSON",csDataPointsDownloaded: false )
+                let sensor = Sensor(name: "light", sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: DataSyncer.SOURCE, csDataPointsDownloaded: false )
                 do{
                     try DatabaseHandler.insertSensor(sensor)
                 }catch{
