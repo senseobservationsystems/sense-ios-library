@@ -114,7 +114,7 @@ class DataSyncer: NSObject {
         for request in dataDeletionRequests {
             do{
                 //fixme after
-                try proxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startDate: NSDate(), endDate: NSDate())
+                try proxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: NSDate(), endTime: NSDate())
                 try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
             }catch {
                 return error
@@ -163,18 +163,18 @@ class DataSyncer: NSObject {
     
     func insertDataPointsLocally(sensor: Sensor, dataList: Dictionary<String, AnyObject>?) {
         if dataList != nil{
-            for (value, date) in dataList!{
-                sensor.insertDataPoint(value, date as! NSDate)
+            for (value, time) in dataList!{
+                sensor.insertDataPoint(value, time as! NSDate)
             }
         }
     }
     
     func deleteDataPointsLocally (id:Int, persistLocally: Bool, boundary:NSDate?)  -> ErrorType?{
         if persistLocally {
-            let queryOptions = QueryOptions(startDate: nil, endDate: boundary!, existsInRemote: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+            let queryOptions = QueryOptions(startTime: nil, endTime: boundary!, existsInRemote: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
             deleteDataPointsInRLM(id, queryOptions: queryOptions)
         }else{
-            let queryOptions = QueryOptions(startDate: nil, endDate: nil, existsInRemote: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+            let queryOptions = QueryOptions(startTime: nil, endTime: nil, existsInRemote: true, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
             deleteDataPointsInRLM(id, queryOptions: queryOptions)
         }
         return nil
@@ -191,7 +191,7 @@ class DataSyncer: NSObject {
     
     func uploadSensorDataToRemote(sensor: Sensor) -> ErrorType? {
         if sensor.remoteUploadEnabled {
-            let queryOptions = QueryOptions(startDate: nil, endDate: nil, existsInRemote: false, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+            let queryOptions = QueryOptions(startTime: nil, endTime: nil, existsInRemote: false, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
             return putSensorDataToRemote(sensor, queryOptions: queryOptions)
         }
         return nil
@@ -202,7 +202,7 @@ class DataSyncer: NSObject {
             let dataPoints = try sensor.getDataPoints(queryOptions)
             var dataArray: Array<AnyObject> = []
             for datapoint in dataPoints {
-                let dataObject:Dictionary<String, AnyObject> = ["time": datapoint.date, "value": datapoint.value]
+                let dataObject:Dictionary<String, AnyObject> = ["time": datapoint.time, "value": datapoint.value]
                 dataArray.append(dataObject)
             }
             try proxy.putSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, data: dataArray, meta: sensor.meta)

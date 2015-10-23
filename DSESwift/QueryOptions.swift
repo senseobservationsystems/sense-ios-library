@@ -27,16 +27,16 @@ public struct QueryOptions{
         }
     }
 
-    var startDate : NSDate?  // null by default, if not null, change from default
-    var endDate: NSDate? // null by default, if not null, change from default
+    var startTime : NSDate?  // null by default, if not null, change from default
+    var endTime: NSDate? // null by default, if not null, change from default
     var existsInRemote: Bool? // null by default, if not null, change from default
     var limit: Int?
     var sortOrder: SortOrder
     var interval:Interval?
     
-    public init(startDate: NSDate?, endDate: NSDate?, existsInRemote: Bool?, limit: Int?, sortOrder: SortOrder, interval: Interval?) {
-        self.startDate = startDate
-        self.endDate = endDate
+    public init(startTime: NSDate?, endTime: NSDate?, existsInRemote: Bool?, limit: Int?, sortOrder: SortOrder, interval: Interval?) {
+        self.startTime = startTime
+        self.endTime = endTime
         self.existsInRemote = existsInRemote
         self.limit = limit
         self.sortOrder = sortOrder
@@ -44,13 +44,13 @@ public struct QueryOptions{
     }
     
     public init(){
-        self.init(startDate: nil, endDate: nil, existsInRemote: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+        self.init(startTime: nil, endTime: nil, existsInRemote: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
     }
     
     public func toQueryParams() -> Dictionary<String, AnyObject>{
         var queryParams = Dictionary<String, AnyObject>()
-        if (self.startDate != nil){ queryParams["start_date"] = JSONUtils.stringify(Int(self.startDate!.timeIntervalSince1970))}
-        if (self.endDate != nil){ queryParams["end_date"] = JSONUtils.stringify(Int(self.endDate!.timeIntervalSince1970))}
+        if (self.startTime != nil){ queryParams["start_time"] = JSONUtils.stringify(Int(self.startTime!.timeIntervalSince1970))}
+        if (self.endTime != nil){ queryParams["end_time"] = JSONUtils.stringify(Int(self.endTime!.timeIntervalSince1970))}
         if (self.limit != nil){ queryParams["limit"] = JSONUtils.stringify(self.limit!)}
         if (self.interval != nil){ queryParams["interval"] = JSONUtils.stringify(self.interval!.description)}
         queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? JSONUtils.stringify("asc") : JSONUtils.stringify("desc")

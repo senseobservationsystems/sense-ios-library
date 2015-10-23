@@ -12,7 +12,7 @@ enum RLMError: ErrorType{
     case ObjectNotFound
     case DuplicatedObjects
     case InvalidLimit
-    case StartDateLaterThanEndDate
+    case StartTimeLaterThanEndTime
     case UnauthenticatedAccess
     case CanNotChangePrimaryKey
     case InsertFailed
@@ -44,7 +44,7 @@ class DatabaseHandler: NSObject{
         let realm = try! Realm()
         realm.beginWrite()
         rlmDataPoint.sensorId = dataPoint.sensorId
-        rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
+        rlmDataPoint.time = dataPoint.time.timeIntervalSince1970
         rlmDataPoint.updateId();
         rlmDataPoint.value = dataPoint.value
         rlmDataPoint.existsInRemote = dataPoint.existsInRemote
@@ -58,10 +58,10 @@ class DatabaseHandler: NSObject{
     }
 
     /**
-    * Get data points from the sensor with the given sensorId. throws exception when invalid setups are given. eg)startDate>=endDate, limit <= 0
+    * Get data points from the sensor with the given sensorId. throws exception when invalid setups are given. eg)startTime>=endTime, limit <= 0
     * @param sensorId: String for the sensorId of the sensor that the data point belongs to.
-    * @param startDate: NSDate for the startDate of the query. nil for no startDate.
-    * @param endDate: NSDate for the endDate of the query. nil for no endDate.
+    * @param startTime: NSDate for the startTime of the query. nil for no startTime.
+    * @param endTime: NSDate for the endTime of the query. nil for no endTime.
     * @param limit: The maximum number of data points. nil for no limit.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
@@ -69,8 +69,8 @@ class DatabaseHandler: NSObject{
         if (queryOptions.limit != nil && queryOptions.limit <= 0){
             throw RLMError.InvalidLimit
         }
-        if(isStartDateLaterThanEndDate(queryOptions.startDate, queryOptions.endDate)){
-            throw RLMError.StartDateLaterThanEndDate
+        if(isStartTimeLaterThanEndTime(queryOptions.startTime, queryOptions.endTime)){
+            throw RLMError.StartTimeLaterThanEndTime
         }
         
         var dataPoints = [DataPoint]()
@@ -78,7 +78,7 @@ class DatabaseHandler: NSObject{
         let isAscending = (queryOptions.sortOrder == SortOrder.Asc) ? true : false;
         let predicates = self.getPredicateForDataPoint(sensorId, queryOptions)
         //query
-        let results = realm.objects(RLMDataPoint).filter(predicates).sorted("date", ascending: isAscending)
+        let results = realm.objects(RLMDataPoint).filter(predicates).sorted("time", ascending: isAscending)
         let end = (queryOptions.limit == nil) ? results.count : min(queryOptions.limit!, results.count)
         for rlmDataPoint in results[Range(start:0, end: end)] {
             let dataPoint = DataPoint(rlmDataPoint: rlmDataPoint)
@@ -94,8 +94,8 @@ class DatabaseHandler: NSObject{
     * @param queryOptions: queryOptions for deleting criteria
     */
     class func deleteDataPoints(sensorId: Int, _ queryOptions: QueryOptions) throws {
-        if(isStartDateLaterThanEndDate(queryOptions.startDate, queryOptions.endDate)){
-            throw RLMError.StartDateLaterThanEndDate
+        if(isStartTimeLaterThanEndTime(queryOptions.startTime, queryOptions.endTime)){
+            throw RLMError.StartTimeLaterThanEndTime
         }
         
         let realm = try! Realm()
@@ -116,18 +116,18 @@ class DatabaseHandler: NSObject{
     * Store the content of deletion request for data points in the local storage
     * @param sensorName the name of the sensor
     * @param sourceName the source name of the sensor
-    * @param startDate the start date to delete the data points
-    * @param endDate the end date to delete the data points
+    * @param startTime the start Time to delete the data points
+    * @param endTime the end Time to delete the data points
     */
-    class func createDataDeletionRequest(sensorName: String, sourceName: String, startDate: Double, endDate: Double) throws{
+    class func createDataDeletionRequest(sensorName: String, sourceName: String, startTime: Double, endTime: Double) throws{
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
         rlmDataDeletionRequest.uuid = NSUUID().UUIDString
         rlmDataDeletionRequest.userId = KeychainWrapper.stringForKey(KEYCHAIN_USERID)!
         rlmDataDeletionRequest.sensorName = sensorName
         rlmDataDeletionRequest.sourceName = sourceName
-        rlmDataDeletionRequest.startDate = startDate
-        rlmDataDeletionRequest.endDate = endDate
+        rlmDataDeletionRequest.startTime = startTime
+        rlmDataDeletionRequest.endTime = endTime
         let realm = try! Realm()
         realm.beginWrite()
         realm.add(rlmDataDeletionRequest, update:true)
@@ -234,7 +234,7 @@ class DatabaseHandler: NSObject{
         realm.beginWrite()
         rlmSensor.id = sensor.id
         rlmSensor.name = sensor.name
-        rlmSensor.meta =  JSONUtils.stringify(sensor.meta!)
+        rlmSensor.meta =  JSONUtils.stringify(sensor.meta)
         rlmSensor.remoteUploadEnabled = sensor.remoteUploadEnabled
         rlmSensor.remoteDownloadEnabled = sensor.remoteUploadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
@@ -351,21 +351,21 @@ class DatabaseHandler: NSObject{
     * Returns a compound predicate for querying DataPoints based on the arguments
     *
     * @param sensorId: Int for sensorId
-    * @param startDate: NSDate for startDate
-    * @param endDate: NSDate for endDate
+    * @param startTime: NSDate for startTime
+    * @param endTime: NSDate for endTime
     * @return A compound predicate for querying Sensors based on the arguments
     */
     private class func getPredicateForDataPoint(sensorId: Int, _ queryOptions: QueryOptions)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "sensorId = %d", sensorId))
-        if(queryOptions.startDate != nil){
-            predicates.append(NSPredicate(format: "date >= %f", queryOptions.startDate!.timeIntervalSince1970))
+        if(queryOptions.startTime != nil){
+            predicates.append(NSPredicate(format: "time >= %f", queryOptions.startTime!.timeIntervalSince1970))
         }
-        if(queryOptions.endDate != nil){
-            predicates.append(NSPredicate(format: "date < %f" , queryOptions.endDate!.timeIntervalSince1970))
+        if(queryOptions.endTime != nil){
+            predicates.append(NSPredicate(format: "time < %f" , queryOptions.endTime!.timeIntervalSince1970))
         }
         if(queryOptions.existsInRemote != nil){
-            predicates.append(NSPredicate(format: "date < %b" , queryOptions.existsInRemote!))
+            predicates.append(NSPredicate(format: "time < %b" , queryOptions.existsInRemote!))
         }
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }
@@ -433,10 +433,10 @@ class DatabaseHandler: NSObject{
     }
     
     /**
-    * Returns true if startDate is later or euqal to endDate.
+    * Returns true if startTime is later or euqal to endTime.
     */
-    private class func isStartDateLaterThanEndDate(startDate: NSDate?, _ endDate: NSDate?) -> Bool {
-        return (startDate != nil) && (endDate != nil) && (startDate?.timeIntervalSince1970 >= endDate?.timeIntervalSince1970)
+    private class func isStartTimeLaterThanEndTime(startTime: NSDate?, _ endTime: NSDate?) -> Bool {
+        return (startTime != nil) && (endTime != nil) && (startTime?.timeIntervalSince1970 >= endTime?.timeIntervalSince1970)
     }
 }
 

@@ -11,32 +11,32 @@ import Foundation
 public class DataPoint{
     private(set) var sensorId = -1
     private(set) var value = ""
-    private(set) var date = NSDate()
+    private(set) var time = NSDate()
     var existsInRemote = false
 
-    init(sensorId: Int, value: String, date: NSDate, existsInRemote: Bool) {
+    init(sensorId: Int, value: String, time: NSDate, existsInRemote: Bool) {
         self.sensorId = sensorId
         self.value = value
-        self.date = date
+        self.time = time
         self.existsInRemote = existsInRemote
     }
     
-    convenience init(sensorId: Int, value: String, date: NSDate) {
-        self.init(sensorId: sensorId, value: value, date: date, existsInRemote:false)
+    convenience init(sensorId: Int, value: String, time: NSDate) {
+        self.init(sensorId: sensorId, value: value, time: time, existsInRemote:false)
     }
 
     convenience init(rlmDataPoint: RLMDataPoint) {
-        let date = NSDate(timeIntervalSince1970: rlmDataPoint.date)
-        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, existsInRemote: rlmDataPoint.existsInRemote)
+        let time = NSDate(timeIntervalSince1970: rlmDataPoint.time)
+        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, time: time, existsInRemote: rlmDataPoint.existsInRemote)
     }
 
     required convenience public init() {
         let now = NSDate()
-        self.init(sensorId: -1, value: "", date: now, existsInRemote: false)
+        self.init(sensorId: -1, value: "", time: now, existsInRemote: false)
     }
     
     func getId() -> String {
-        return "\(self.sensorId)-\(String(self.date))"
+        return "\(self.sensorId)-\(String(self.time))"
     }
     
     func setValue(value: AnyObject){

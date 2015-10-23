@@ -78,8 +78,8 @@ public class Sensor{
         )
     }
     
-    public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), date: date)
+    public func insertDataPoint(value: AnyObject, _ time: NSDate) -> Bool {
+        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), time: time)
         do{
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             return true

@@ -13,7 +13,7 @@ class RLMDataPoint: Object{
 
     dynamic var value = ""
     dynamic var sensorId: Int = -1
-    dynamic var date = 0.0
+    dynamic var time = 0.0
     dynamic lazy var id: String = self.getId()
     dynamic var existsInRemote = false
     
@@ -29,7 +29,7 @@ class RLMDataPoint: Object{
     }
     
     private func getId() -> String {
-        return "\(self.sensorId):\(String(self.date))"
+        return "\(self.sensorId):\(String(self.time))"
     }
     
 }

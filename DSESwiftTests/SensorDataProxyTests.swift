@@ -280,14 +280,14 @@ class SensorDataProxyTests: XCTestCase {
             XCTAssertEqual(result!["data"]!.count, 5)
             
             // delete a sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName1, startDate: nil, endDate: nil)
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName1, startTime: nil, endTime: nil)
             resultArray = try proxy.getSensors(sourceName)
             XCTAssertEqual(resultArray!.count, 2)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
             XCTAssertEqual(result!["data"]!.count, 0)
             
             // delete the other sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName2, startDate: nil, endDate: nil)
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName2, startTime: nil, endTime: nil)
             resultArray = try proxy.getSensors(sourceName)
             XCTAssertEqual(resultArray!.count, 2)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
@@ -541,8 +541,8 @@ class SensorDataProxyTests: XCTestCase {
         }
     }
     
-    // ## invalid start and end date
-    func testGetSensorDataWithInvalidStartEndDate(){
+    // ## invalid start and end time
+    func testGetSensorDataWithInvalidStartEndTime(){
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
@@ -552,8 +552,8 @@ class SensorDataProxyTests: XCTestCase {
     
             var queryOptions = QueryOptions()
             let now = NSDate()
-            queryOptions.startDate = now
-            queryOptions.endDate = now
+            queryOptions.startTime = now
+            queryOptions.endTime = now
             
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             debugPrint(result)
@@ -567,7 +567,7 @@ class SensorDataProxyTests: XCTestCase {
         }
     }
     
-    func testDeleteSensorDataWithInvalidStartEndDate(){
+    func testDeleteSensorDataWithInvalidStartEndTime(){
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
@@ -576,7 +576,7 @@ class SensorDataProxyTests: XCTestCase {
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
         
             let now = NSDate()
-            try proxy.deleteSensorData(sourceName: sourceName1, sensorName: sensorName1, startDate: now, endDate: now)
+            try proxy.deleteSensorData(sourceName: sourceName1, sensorName: sensorName1, startTime: now, endTime: now)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -748,7 +748,7 @@ class SensorDataProxyTests: XCTestCase {
     func testDeleteSensorDataWithInvalidSessionId(){
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
         do {
-            try proxy.deleteSensorData(sourceName: "sourcename", sensorName: "sensorName", startDate: nil, endDate: nil)
+            try proxy.deleteSensorData(sourceName: "sourcename", sensorName: "sensorName", startTime: nil, endTime: nil)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -788,24 +788,24 @@ class SensorDataProxyTests: XCTestCase {
     // MARK: == helper functions
     
     func getDummyData() -> Array<AnyObject>{
-        let date = NSDate()
+        let time = NSDate()
         let value = ["x": 4, "y": 5, "z": 6]
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(date.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            let dataPoint = ["time": (Double(time.timeIntervalSince1970 * 1000.0) + Double((i * 1000))), "value": value]
             data.append(dataPoint)
         }
         return data
     }
     
     func getDummyDataWithBadStructure() -> Array<AnyObject>{
-        let date = NSDate()
+        let time = NSDate()
         let value = ["x": 4, "y": 5, "z": 6]
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(date.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            let dataPoint = ["time": (Double(time.timeIntervalSince1970 * 1000.0) + Double((i * 1000))), "value": value]
             data.append(dataPoint)
         }
         return data

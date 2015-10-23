@@ -153,7 +153,7 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     * @param queryOptions   Query options to set start and end time, and to sort and limit the data
-    * @return Returns an Dictionary containing the sensor data, where the data is structured as `[{date: long, value: JSON}, ...]`
+    * @return Returns an Dictionary containing the sensor data, where the data is structured as `[{time: long, value: JSON}, ...]`
     */
     func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> Dictionary<String, AnyObject>?{
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
@@ -176,7 +176,7 @@ public class SensorDataProxy {
     * @param sourceName     The source name, for example "sense-ios",
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
-    * @param data           Array with data points, structured as `[{date: long, value: JSON}, ...]`
+    * @param data           Array with data points, structured as `[{time: long, value: JSON}, ...]`
     * @param meta           Dictionary for optional field to store meta information. Can be left null
     */
     func putSensorData(sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) throws {
@@ -214,7 +214,7 @@ public class SensorDataProxy {
     *                          sensor_name, string,
     *                          meta: JSON,   // optional
     *                          data: [
-    *                            {date: number, value: JSON},
+    *                            {time: number, value: JSON},
     *                            // ...
     *                          ]
     *                        },
@@ -252,13 +252,13 @@ public class SensorDataProxy {
     *                       When endTime is null, all data from startTime till now will be removed.
     *                       When both startTime and endTime are null, all data will be removed.
     */
-    func deleteSensorData(sourceName sourceName: String, sensorName: String, startDate: NSDate? = nil, endDate: NSDate? = nil) throws {
+    func deleteSensorData(sourceName sourceName: String, sensorName: String, startTime: NSDate? = nil, endTime: NSDate? = nil) throws {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        if (!isStartDateEarlierThanEndDate(startDate, endDate)){ throw ProxyError.InvalidQuery }
+        if (!isStartTimeEarlierThanEndTime(startTime, endTime)){ throw ProxyError.InvalidQuery }
         
         var params = Dictionary<String, AnyObject>()
-        if startDate != nil { params["start_time"] = JSONUtils.stringify(startDate!.timeIntervalSince1970)}
-        if endDate != nil { params["end_time"] = JSONUtils.stringify(endDate!.timeIntervalSince1970)}
+        if startTime != nil { params["start_time"] = JSONUtils.stringify(startTime!.timeIntervalSince1970)}
+        if endTime != nil { params["end_time"] = JSONUtils.stringify(endTime!.timeIntervalSince1970)}
         let result = Just.delete(getSensorDataUrl(sourceName, sensorName), params: params, headers: getHeaders())
         if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
             throw error
@@ -275,7 +275,7 @@ public class SensorDataProxy {
     *       source_name: string,
     *       sensor_name, string,
     *       data: [
-    *         {date: number, value: JSON},
+    *         {time: number, value: JSON},
     *         ...
     *       ]
     *     }
@@ -284,7 +284,7 @@ public class SensorDataProxy {
     * @param sourceName     The source name, for example "sense-ios",
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
-    * @param data           Array with data points, structured as `[{date: long, value: JSON}, ...]`
+    * @param data           Array with data points, structured as `[{time: long, value: JSON}, ...]`
     * @param meta           Optional field to store meta information. Can be left null
     */
     static func createSensorDataObject (sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) -> Dictionary<String, AnyObject> {
@@ -350,19 +350,19 @@ public class SensorDataProxy {
             return true
         }
         
-        let isValidStartEndDates = isStartDateEarlierThanEndDate(queryOptions!.startDate, queryOptions!.endDate)
+        let isValidStartEndTimes = isStartTimeEarlierThanEndTime(queryOptions!.startTime, queryOptions!.endTime)
         let isValidLimit = (queryOptions!.limit != nil) ? queryOptions!.limit > 0 : true
         
-        return isValidStartEndDates && isValidLimit
+        return isValidStartEndTimes && isValidLimit
     }
     
-    private func isStartDateEarlierThanEndDate(startDate: NSDate?, _ endDate: NSDate?) -> Bool{
+    private func isStartTimeEarlierThanEndTime(startTime: NSDate?, _ endTime: NSDate?) -> Bool{
         // check if both of start and end is pupulated
-        if startDate == nil || endDate == nil {
+        if startTime == nil || endTime == nil {
             return true
         }
         // compare them
-        if startDate!.timeIntervalSinceReferenceDate >= endDate!.timeIntervalSinceReferenceDate {
+        if startTime!.timeIntervalSinceReferenceDate >= endTime!.timeIntervalSinceReferenceDate {
             return false
         } else {
             return false

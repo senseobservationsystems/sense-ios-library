@@ -38,15 +38,15 @@ class DatabaseHandlerTests: XCTestCase {
             sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
-            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
             var queryOptions = QueryOptions()
-            queryOptions.startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
-            queryOptions.endDate = NSDate().dateByAddingTimeInterval(100)
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(100)
             
             let dataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, 2)
@@ -68,13 +68,13 @@ class DatabaseHandlerTests: XCTestCase {
             
             var dataPoint: DataPoint!
             for (var i=0; i < 101; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             
             var queryOptions = QueryOptions()
-            queryOptions.startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
-            queryOptions.endDate = NSDate().dateByAddingTimeInterval(100)
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(100)
             queryOptions.limit = 80
             
             let dataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
@@ -98,12 +98,12 @@ class DatabaseHandlerTests: XCTestCase {
             var dataPoint: DataPoint!
             // add 50 datapoints with date of 3 years ago
             for (var i=0; i < 50; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate().dateByAddingTimeInterval(-3*365*24*60*60))
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate().dateByAddingTimeInterval(-3*365*24*60*60))
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             // add 50 datapoints with date of recent time
             for (var i=0; i < 50; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             
@@ -130,12 +130,12 @@ class DatabaseHandlerTests: XCTestCase {
             var dataPoint: DataPoint!
             // add 50 datapoints with date of 3 years ago
             for (var i=0; i < 50; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate().dateByAddingTimeInterval(-3*365*24*60*60))
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate().dateByAddingTimeInterval(-3*365*24*60*60))
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             // add 50 datapoints with date of recent time
             for (var i=0; i < 50; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             
@@ -169,12 +169,12 @@ class DatabaseHandlerTests: XCTestCase {
             var dataPoint: DataPoint!
             // add 50 datapoints with date of 3 years ago
             for (var i=0; i < 50; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate().dateByAddingTimeInterval(-3*365*24*60*60))
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate().dateByAddingTimeInterval(-3*365*24*60*60))
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             // add 50 datapoints with date of recent time
             for (var i=0; i < 50; i++){
-                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+                dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
                 try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             }
             
@@ -184,7 +184,7 @@ class DatabaseHandlerTests: XCTestCase {
             XCTAssertEqual(dataPoints.count, 100)
             
             var deleteOptions = QueryOptions()
-            deleteOptions.endDate = NSDate().dateByAddingTimeInterval(-1*365*24*60*60)
+            deleteOptions.endTime = NSDate().dateByAddingTimeInterval(-1*365*24*60*60)
             
             //delete Data when it is old
             try DatabaseHandler.deleteDataPoints(sensor.id, deleteOptions)
@@ -198,7 +198,7 @@ class DatabaseHandlerTests: XCTestCase {
     
     func testInsertDataPointWithInvalidSensorId() {
         do{
-            let dataPoint = DataPoint(sensorId: 1, value: "String value", date: NSDate())
+            let dataPoint = DataPoint(sensorId: 1, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
         }catch{
             XCTAssertNotNil(error)
@@ -216,15 +216,15 @@ class DatabaseHandlerTests: XCTestCase {
             sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
-            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
             var queryOptions = QueryOptions()
-            queryOptions.startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
-            queryOptions.endDate = NSDate()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+            queryOptions.endTime = NSDate()
             queryOptions.limit = -1
             
             try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
@@ -234,7 +234,7 @@ class DatabaseHandlerTests: XCTestCase {
         }
     }
     
-    func testGetDataPointsWithStartDateLaterThanEndDate() {
+    func testGetDataPointsWithStartTimeLaterThanEndTime() {
         let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
@@ -245,15 +245,15 @@ class DatabaseHandlerTests: XCTestCase {
             sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
-            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
             var queryOptions = QueryOptions()
-            queryOptions.startDate = NSDate()
-            queryOptions.endDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+            queryOptions.startTime = NSDate()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
             queryOptions.limit = 100
             
             try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
@@ -267,8 +267,8 @@ class DatabaseHandlerTests: XCTestCase {
     func testGetDataPointsWithInvalidSensorId() {
 
         var queryOptions = QueryOptions()
-        queryOptions.startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
-        queryOptions.endDate = NSDate()
+        queryOptions.startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+        queryOptions.endTime = NSDate()
         
         do{
             let dataPoints = try DatabaseHandler.getDataPoints(1, queryOptions)
@@ -291,12 +291,12 @@ class DatabaseHandlerTests: XCTestCase {
             sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
             var queryOptions = QueryOptions()
-            queryOptions.startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
-            queryOptions.endDate = NSDate().dateByAddingTimeInterval(100)
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(100)
             queryOptions.limit = 100
             
             let dataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
@@ -316,12 +316,12 @@ class DatabaseHandlerTests: XCTestCase {
     
     func testCreateDataDeletionRequest(){
         var numberOfRequest = 0;
-        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
-        let endDate = NSDate().timeIntervalSince1970
+        let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
+        let endTime = NSDate().timeIntervalSince1970
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: startDate, endDate: endDate)
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: startTime, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: endDate)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: endTime)
             numberOfRequest++
             let realm = try! Realm()
             let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -332,16 +332,16 @@ class DatabaseHandlerTests: XCTestCase {
         }
     }
     
-    func testCreateDataDeletionRequestWithNilDate(){
+    func testCreateDataDeletionRequestWithNilTime(){
         var numberOfRequest = 0;
-        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
-        let endDate = NSDate().timeIntervalSince1970
+        let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
+        let endTime = NSDate().timeIntervalSince1970
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: -1.0, endDate: endDate)
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: -1.0, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: -1.0)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: -1.0)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: -1.0, endDate: -1.0)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: -1.0, endTime: -1.0)
             numberOfRequest++
             let realm = try! Realm()
             let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -355,14 +355,14 @@ class DatabaseHandlerTests: XCTestCase {
     
     func testGetDataDeletionRequest() {
         var numberOfRequest = 0;
-        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
-        let endDate = NSDate().timeIntervalSince1970
+        let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
+        let endTime = NSDate().timeIntervalSince1970
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: -1.0, endDate: endDate)
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: -1.0, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: -1.0)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: -1.0)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: -1.0, endDate: -1.0)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: -1.0, endTime: -1.0)
             numberOfRequest++
             let results = DatabaseHandler.getDataDeletionRequest()
             XCTAssertEqual(numberOfRequest, results.count)
@@ -374,14 +374,14 @@ class DatabaseHandlerTests: XCTestCase {
     
     func testDeleteDataDeletionRequest() {
         var numberOfRequest = 0;
-        let startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
-        let endDate = NSDate().timeIntervalSince1970
+        let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 ).timeIntervalSince1970
+        let endTime = NSDate().timeIntervalSince1970
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startDate: -1.0, endDate: endDate)
+            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: -1.0, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: startDate, endDate: -1.0)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: -1.0)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startDate: -1.0, endDate: -1.0)
+            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: -1.0, endTime: -1.0)
             numberOfRequest++
             let results = DatabaseHandler.getDataDeletionRequest()
         
@@ -407,12 +407,12 @@ class DatabaseHandlerTests: XCTestCase {
             sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", date: NSDate())
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
             var queryOptions = QueryOptions()
-            queryOptions.startDate = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
-            queryOptions.endDate = NSDate().dateByAddingTimeInterval(100)
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60)
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(100)
             queryOptions.limit = 100
             
             let dataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
