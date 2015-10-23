@@ -34,12 +34,12 @@ public struct QueryOptions{
     var sortOrder: SortOrder
     var interval:Interval?
     
-    public init(startDate: NSDate?, endDate: NSDate?, existsInCS: Bool?, limit: Int?, sortOrder: SortOrder, interval: Interval?) {
+    public init(startDate: NSDate?, endDate: NSDate? = nil, existsInCS: Bool? = nil, limit: Int? = nil, sortOrder: SortOrder? = SortOrder.Asc, interval: Interval? = nil) {
         self.startDate = startDate
         self.endDate = endDate
         self.existsInCS = existsInCS
         self.limit = limit
-        self.sortOrder = sortOrder
+        self.sortOrder = sortOrder!
         self.interval = interval
     }
     
@@ -49,11 +49,11 @@ public struct QueryOptions{
     
     public func toQueryParams() throws -> Dictionary<String, AnyObject>{
         var queryParams = Dictionary<String, AnyObject>()
-        if (self.startDate != nil){ queryParams["start_date"] = JSONUtils.stringify(Int(self.startDate!.timeIntervalSince1970))}
-        if (self.endDate != nil){ queryParams["end_date"] = JSONUtils.stringify(Int(self.endDate!.timeIntervalSince1970))}
-        if (self.limit != nil){ queryParams["limit"] = JSONUtils.stringify(self.limit!)}
-        if (self.interval != nil){ queryParams["interval"] = JSONUtils.stringify(self.interval!.description)}
-        queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? JSONUtils.stringify("asc") : JSONUtils.stringify("desc")
+        if (self.startDate != nil){ queryParams["start_time"] = Int(self.startDate!.timeIntervalSince1970*1000)}
+        if (self.endDate != nil){ queryParams["end_time"] = Int(self.endDate!.timeIntervalSince1970*1000)}
+        if (self.limit != nil){ queryParams["limit"] = self.limit!}
+        if (self.interval != nil){ queryParams["interval"] = self.interval!.description}
+        queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? "asc" : "desc"
         return queryParams
     }
 }

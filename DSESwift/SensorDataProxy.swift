@@ -253,8 +253,8 @@ public class SensorDataProxy {
         if (!isStartDateEarlierThanEndDate(startDate, endDate)){ throw ProxyError.InvalidQuery }
         
         var params = Dictionary<String, AnyObject>()
-        if startDate != nil { params["start_time"] = JSONUtils.stringify(startDate!.timeIntervalSince1970)}
-        if endDate != nil { params["end_time"] = JSONUtils.stringify(endDate!.timeIntervalSince1970)}
+        if startDate != nil { params["start_time"] = Int(startDate!.timeIntervalSince1970*1000)}
+        if endDate != nil { params["end_time"] = Int(endDate!.timeIntervalSince1970)*1000}
         let result = Just.delete(getSensorDataUrl(sourceName, sensorName), params: params, headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 204){
             throw error

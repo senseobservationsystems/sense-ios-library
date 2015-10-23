@@ -215,6 +215,89 @@ class SensorDataProxyTests: XCTestCase {
         }
     }
     
+    func testGetSensorDataWithStartDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData(NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.startDate = NSDate().dateByAddingTimeInterval(-4*24*60*60)
+            
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            queryOptions.startDate = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            
+            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 0)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testGetSensorDataWithEndDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData(NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.endDate = NSDate()
+            
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            queryOptions.endDate = NSDate().dateByAddingTimeInterval(-2*24*60*60)
+            
+            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 0)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testGetSensorDataWithLimit() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyData(NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.limit = 3
+            
+            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 3)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    
     func testPutSensorDataForMultipleSensors() {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
@@ -291,6 +374,88 @@ class SensorDataProxyTests: XCTestCase {
             resultArray = try proxy.getSensors(sourceName)
             XCTAssertEqual(resultArray!.count, 2)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
+            XCTAssertEqual(result!["data"]!.count, 0)
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testDeleteSensorDataWithStartDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            let data = getDummyData(NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
+            
+            let sensorsData = [sensorData]
+            try proxy.putSensorData(sensorsData)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            // == Check that the sensors are added properly
+            // Sensors
+            var resultArray: Array<AnyObject>?
+            resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray!.count, 1)
+            // SensorData
+            var result : Dictionary<String, AnyObject>?
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete a sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startDate: NSDate().dateByAddingTimeInterval(-1*24*60*60), endDate: nil)
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete the other sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startDate: NSDate().dateByAddingTimeInterval(-3*24*60*60 - 60), endDate: nil)
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 0)
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testDeleteSensorDataWithEndDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            let data = getDummyData(NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
+            
+            let sensorsData = [sensorData]
+            try proxy.putSensorData(sensorsData)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            // == Check that the sensors are added properly
+            // Sensors
+            var resultArray: Array<AnyObject>?
+            resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray!.count, 1)
+            // SensorData
+            var result : Dictionary<String, AnyObject>?
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete a sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endDate: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete the other sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endDate: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result!["data"]!.count, 0)
         }catch{
             print( error )
@@ -787,13 +952,12 @@ class SensorDataProxyTests: XCTestCase {
     
     // MARK: == helper functions
     
-    func getDummyData() -> Array<AnyObject>{
-        let date = NSDate()
+    func getDummyData(date date: NSDate? = NSDate()) -> Array<AnyObject>{
         let value = ["x": 4, "y": 5, "z": 6]
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(date.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            let dataPoint = ["time": (Int(date!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
             data.append(dataPoint)
         }
         return data
