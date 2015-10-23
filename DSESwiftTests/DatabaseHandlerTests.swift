@@ -469,7 +469,7 @@ class DatabaseHandlerTests: XCTestCase {
     func testInsertSensorWithInvalidUserId() {
         let sensorOptions = SensorOptions(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "anotheruser", source: "testSource",  , csDataPointsDownloaded: false)
+            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: "anotheruser", source: "testSource",  csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
         }catch{
             XCTAssertNotNil(error)

@@ -45,27 +45,16 @@ class DataSyncer: NSObject {
         }
     }
     
-    func synchronize() throws {
+    func synchronize() throws {        
         dispatch_promise{
-             self.deletionInRemote
+            return self.deletionInRemote
         }.then{ e in
-             self.downloadFromRemote
+            return self.downloadFromRemote
         }.then{ e in
-             self.uploadToRemote
+            return self.uploadToRemote
         }.then{ e in
-             self.cleanUpLocalStorage
+            return self.cleanUpLocalStorage
         }
-        
-        //FIXME: figure out the difference
-//        dispatch_promise{
-//            return self.deletionInRemote
-//        }.then{ e in
-//            return self.downloadFromRemote
-//        }.then{ e in
-//            return self.uploadToRemote
-//        }.then{ e in
-//            return self.cleanUpLocalStorage
-//        }
     }
 
     func downloadSensorProfile() throws {

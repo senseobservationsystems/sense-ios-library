@@ -70,6 +70,7 @@
 		27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E201BBAF07A0006C15A /* JSONUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */; settings = {ASSET_TAGS = (); }; };
 		A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */; settings = {ASSET_TAGS = (); }; };
+		A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */; settings = {ASSET_TAGS = (); }; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -283,6 +284,7 @@
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncer.swift; sourceTree = "<group>"; };
 		A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDeletionRequest.swift; sourceTree = "<group>"; };
+		A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncerTests.swift; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
 		FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
@@ -750,6 +752,7 @@
 		FAC4EC931BA086BC00B24CAA /* DSESwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */,
 				27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */,
 				27F89E1C1BB9966B0006C15A /* DataPointTests.swift */,
 				276CBB801BB52B9D001C287D /* testObject.swift */,
@@ -1200,6 +1203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27DF117B1BD0027200C4E79F /* SensorDataProxyTests.swift in Sources */,
+				A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */,
 				27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */,
 				27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */,
 				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
