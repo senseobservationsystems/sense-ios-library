@@ -19,10 +19,10 @@ public class SensorDataProxy {
     public enum ProxyError: ErrorType, Equatable{
         case SessionIdNotSet
         case InvalidSessionId
-        case InvalidSensorOrSource //thrown when invalid sensorName/sourceName is given
+        case InvalidSensorOrSourceOrBadStructure //thrown when invalid sensorName/sourceName/structure is given
         case InvalidDataFormat
         case InvalidQuery
-        case SensorDoesNotExistOrBadStructure
+        case SensorDoesNotExist
         case UnknownError
     }
     
@@ -364,9 +364,9 @@ public class SensorDataProxy {
         if (statusCode == 401){
             return ProxyError.InvalidSessionId
         } else if (statusCode == 400){
-            return ProxyError.InvalidSensorOrSource //Bad structure too
+            return ProxyError.InvalidSensorOrSourceOrBadStructure //Bad structure too
         } else if (statusCode == 404){
-            return ProxyError.SensorDoesNotExistOrBadStructure
+            return ProxyError.SensorDoesNotExist
         } else if (statusCode != successfulCode) || (statusCode == nil){
             return ProxyError.UnknownError
         }
