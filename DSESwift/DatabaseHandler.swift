@@ -47,7 +47,7 @@ class DatabaseHandler: NSObject{
         rlmDataPoint.date = dataPoint.date.timeIntervalSince1970
         rlmDataPoint.updateId();
         rlmDataPoint.value = dataPoint.value
-        rlmDataPoint.existsInCS = dataPoint.existsInCS
+        rlmDataPoint.existsInRemote = dataPoint.existsInRemote
         realm.add(rlmDataPoint, update:true)
         
         do {
@@ -119,18 +119,15 @@ class DatabaseHandler: NSObject{
     * @param startDate the start date to delete the data points
     * @param endDate the end date to delete the data points
     */
-    class func createDataDeletionRequest(sensorName: String, sourceName: String, startDate: NSDate?, endDate:  NSDate?) throws{
+    class func createDataDeletionRequest(sensorName: String, sourceName: String, startDate: Double, endDate: Double) throws{
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
         rlmDataDeletionRequest.uuid = NSUUID().UUIDString
         rlmDataDeletionRequest.userId = KeychainWrapper.stringForKey(KEYCHAIN_USERID)!
         rlmDataDeletionRequest.sensorName = sensorName
         rlmDataDeletionRequest.sourceName = sourceName
-        if startDate != nil{
-            rlmDataDeletionRequest.startDate = startDate!
-        }
-        if endDate != nil{
-            rlmDataDeletionRequest.endDate = endDate!        }
+        rlmDataDeletionRequest.startDate = startDate
+        rlmDataDeletionRequest.endDate = endDate
         let realm = try! Realm()
         realm.beginWrite()
         realm.add(rlmDataDeletionRequest, update:true)
@@ -181,7 +178,7 @@ class DatabaseHandler: NSObject{
     
     /**
     * Update Sensor in database with the info of the given Sensor object. 
-    * Throws an exception if it fails to updated. The updatable attributes are only meta, csUploadEnabled, csDownloadEnabled, persistLocally and synced.
+    * Throws an exception if it fails to updated. The updatable attributes are only meta, remoteUploadEnabled, remoteDownloadEnabled, persistLocally and synced.
     *
     * @param sensor: Sensor object containing the updated info.
     */
@@ -205,10 +202,10 @@ class DatabaseHandler: NSObject{
         let realm = try! Realm()
         realm.beginWrite()
         rlmSensor.meta = JSONUtils.stringify(sensor.meta!)
-        rlmSensor.csUploadEnabled = sensor.csUploadEnabled
-        rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
+        rlmSensor.remoteUploadEnabled = sensor.remoteUploadEnabled
+        rlmSensor.remoteDownloadEnabled = sensor.remoteUploadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
-        rlmSensor.csDataPointsDownloaded = sensor.csDataPointsDownloaded
+        rlmSensor.remoteDataPointsDownloaded = sensor.remoteDataPointsDownloaded
         realm.add(rlmSensor, update: true)
 
         do {
@@ -238,12 +235,12 @@ class DatabaseHandler: NSObject{
         rlmSensor.id = sensor.id
         rlmSensor.name = sensor.name
         rlmSensor.meta =  JSONUtils.stringify(sensor.meta!)
-        rlmSensor.csUploadEnabled = sensor.csUploadEnabled
-        rlmSensor.csDownloadEnabled = sensor.csUploadEnabled
+        rlmSensor.remoteUploadEnabled = sensor.remoteUploadEnabled
+        rlmSensor.remoteDownloadEnabled = sensor.remoteUploadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
         rlmSensor.userId = sensor.userId
         rlmSensor.source = sensor.source
-        rlmSensor.csDataPointsDownloaded = sensor.csDataPointsDownloaded
+        rlmSensor.remoteDataPointsDownloaded = sensor.remoteDataPointsDownloaded
         rlmSensor.updateId()
         realm.add(rlmSensor)
         
@@ -367,8 +364,8 @@ class DatabaseHandler: NSObject{
         if(queryOptions.endDate != nil){
             predicates.append(NSPredicate(format: "date < %f" , queryOptions.endDate!.timeIntervalSince1970))
         }
-        if(queryOptions.existsInCS != nil){
-            predicates.append(NSPredicate(format: "date < %b" , queryOptions.existsInCS!))
+        if(queryOptions.existsInRemote != nil){
+            predicates.append(NSPredicate(format: "date < %b" , queryOptions.existsInRemote!))
         }
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }
@@ -377,7 +374,7 @@ class DatabaseHandler: NSObject{
     * Returns a compound predicate for querying Sensors based on the arguments
     *
     * @param source: String for source
-    * @param csDataPointsDownloaded: Bool for whether a sensor has completed the initial download of data points
+    * @param remoteDataPointsDownloaded: Bool for whether a sensor has completed the initial download of data points
     * @return A compound predicate for querying Sensors based on the arguments
     */
     private class func getPredicateForSensors(source: String)-> NSPredicate{

@@ -15,7 +15,7 @@ class RLMDataPoint: Object{
     dynamic var sensorId: Int = -1
     dynamic var date = 0.0
     dynamic lazy var id: String = self.getId()
-    dynamic var existsInCS = false
+    dynamic var existsInRemote = false
     
     /*
      * This method has to be called when the sensorId or the date is set.

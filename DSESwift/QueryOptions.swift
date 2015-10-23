@@ -29,22 +29,22 @@ public struct QueryOptions{
 
     var startDate : NSDate?  // null by default, if not null, change from default
     var endDate: NSDate? // null by default, if not null, change from default
-    var existsInCS: Bool? // null by default, if not null, change from default
+    var existsInRemote: Bool? // null by default, if not null, change from default
     var limit: Int?
     var sortOrder: SortOrder
     var interval:Interval?
     
-    public init(startDate: NSDate?, endDate: NSDate?, existsInCS: Bool?, limit: Int?, sortOrder: SortOrder, interval: Interval?) {
+    public init(startDate: NSDate?, endDate: NSDate?, existsInRemote: Bool?, limit: Int?, sortOrder: SortOrder, interval: Interval?) {
         self.startDate = startDate
         self.endDate = endDate
-        self.existsInCS = existsInCS
+        self.existsInRemote = existsInRemote
         self.limit = limit
         self.sortOrder = sortOrder
         self.interval = interval
     }
     
     public init(){
-        self.init(startDate: nil, endDate: nil, existsInCS: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
+        self.init(startDate: nil, endDate: nil, existsInRemote: nil, limit: nil, sortOrder: SortOrder.Asc, interval: nil)
     }
     
     public func toQueryParams() -> Dictionary<String, AnyObject>{

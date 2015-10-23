@@ -14,8 +14,8 @@ class DataDeletionRequest: Object {
     dynamic var userId = ""
     dynamic var sensorName = ""
     dynamic var sourceName = ""
-    dynamic var startDate: NSDate?
-    dynamic var endDate: NSDate?
+    dynamic var startDate = -1.0
+    dynamic var endDate = -1.0
     
     override static func primaryKey() -> String? {
         return "uuid"
