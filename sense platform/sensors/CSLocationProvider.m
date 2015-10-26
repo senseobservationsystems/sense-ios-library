@@ -250,8 +250,12 @@
         }
     }
     // for iOS versions where LocationManagre has the property allowsBackgroundLocationUpdates(iOS9 or higher)
-    if ([locationManager respondsToSelector:@selector(allowsBackgroundLocationUpdates)]){
-        locationManager.allowsBackgroundLocationUpdates = YES;
+    NSArray* backgroundModes  = [[NSBundle mainBundle].infoDictionary objectForKey:@"UIBackgroundModes"];
+    
+    if(backgroundModes && [backgroundModes containsObject:@"location"]) {
+        if ([locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]){
+            [locationManager setAllowsBackgroundLocationUpdates:YES];
+        }
     }
 }
 
