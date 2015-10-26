@@ -11,41 +11,41 @@ import Foundation
 public class DataPoint{
     private(set) var sensorId = -1
     private(set) var value = ""
-    private(set) var date = NSDate()
-    var existsInCS = false
+    private(set) var time = NSDate()
+    var existsInRemote = false
 
-    init(sensorId: Int, value: String, date: NSDate, existsInCS: Bool) {
+    init(sensorId: Int, value: String, time: NSDate, existsInRemote: Bool) {
         self.sensorId = sensorId
         self.value = value
-        self.date = date
-        self.existsInCS = existsInCS
+        self.time = time
+        self.existsInRemote = existsInRemote
     }
     
-    private convenience init(sensorId: Int, value: String, date: NSDate) {
-        self.init(sensorId: sensorId, value: value, date: date, existsInCS:false)
+    convenience init(sensorId: Int, value: String, time: NSDate) {
+        self.init(sensorId: sensorId, value: value, time: time, existsInRemote:false)
     }
 
     convenience init(rlmDataPoint: RLMDataPoint) {
-        let date = NSDate(timeIntervalSince1970: rlmDataPoint.date)
-        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, date: date, existsInCS: rlmDataPoint.existsInCS)
+        let time = NSDate(timeIntervalSince1970: rlmDataPoint.time)
+        self.init(sensorId: rlmDataPoint.sensorId, value: rlmDataPoint.value, time: time, existsInRemote: rlmDataPoint.existsInRemote)
     }
     
     convenience init(sensorId: Int) {
         let now = NSDate()
-        self.init(sensorId: sensorId, value: "", date: now, existsInCS: false)
+        self.init(sensorId: sensorId, value: "", time: now, existsInRemote: false)
     }
 
     required convenience public init() {
         let now = NSDate()
-        self.init(sensorId: -1, value: "", date: now, existsInCS: false)
+        self.init(sensorId: -1, value: "", time: now, existsInRemote: false)
     }
     
     func getId() -> String {
-        return "\(self.sensorId)-\(String(self.date))"
+        return "\(self.sensorId)-\(String(self.time))"
     }
     
-    func setDate(date: NSDate){
-        self.date = date
+    func setTime(time: NSDate){
+        self.time = time
     }
     
     func setValue(value: String){

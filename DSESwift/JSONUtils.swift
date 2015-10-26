@@ -11,32 +11,33 @@ import VVJSONSchemaValidation
 
 public class JSONUtils{
 
-    public class func stringify(value: AnyObject)-> String {
+    public class func stringify(value: AnyObject?)-> String {
         
         var stringifiedValue = ""
-        
-        switch value {
-            case _ as Double:
-                if isDouble(value as! Double){
-                    stringifiedValue = String(format:"%f", value.doubleValue)
-                } else {
-                    stringifiedValue = String(format:"%d", value.intValue)
-                }
+        if value != nil {
+            switch value! {
+                case _ as Double:
+                    if isDouble(value as! Double){
+                        stringifiedValue = String(format:"%f", value!.doubleValue)
+                    } else {
+                        stringifiedValue = String(format:"%d", value!.intValue)
+                    }
 
-            case _ as Bool:
-                stringifiedValue = String(format:"%b", value.boolValue)
-            case _ as String:
-                stringifiedValue = self.quote(value.description)
-            case _ as Dictionary<String, AnyObject> :
-                do{
-                    let jsonData = try NSJSONSerialization.dataWithJSONObject(value, options: NSJSONWritingOptions.PrettyPrinted)
-                    let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
-                    stringifiedValue = jsonString
-                } catch {
-                    print("Error while parsing string into dictionary")
-                }
-            default:
-                stringifiedValue=""
+                case _ as Bool:
+                    stringifiedValue = String(format:"%b", value!.boolValue)
+                case _ as String:
+                    stringifiedValue = self.quote(value!.description)
+                case _ as Dictionary<String, AnyObject> :
+                    do{
+                        let jsonData = try NSJSONSerialization.dataWithJSONObject(value!, options: NSJSONWritingOptions.PrettyPrinted)
+                        let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
+                        stringifiedValue = jsonString
+                    } catch {
+                        print("Error while parsing string into dictionary")
+                    }
+                default:
+                    stringifiedValue=""
+            }
         }
         return stringifiedValue
     }

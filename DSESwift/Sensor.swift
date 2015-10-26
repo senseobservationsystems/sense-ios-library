@@ -29,42 +29,40 @@ public enum SortOrder{
 public class Sensor{
     var id = -1
     var name = ""
-    var meta = ""
-    var csUploadEnabled = true
-    var csDownloadEnabled = true
+    var meta: Dictionary<String, AnyObject>?
+    var remoteUploadEnabled = true
+    var remoteDownloadEnabled = true
     var persistLocally = true
     var userId = ""
     var source = ""
-    var dataType = ""
-    var csDataPointsDownloaded = false
+    var remoteDataPointsDownloaded = false
 
-    init(id:Int,              name: String,   meta:String? = "",      csUploadEnabled: Bool? = true, csDownloadEnabled: Bool? = false,
-        persistLocally: Bool? = false, userId: String, source: String,
-        csDataPointsDownloaded: Bool) {
+    init(id:Int,              name: String,   meta:Dictionary<String, AnyObject>?, remoteUploadEnabled: Bool, remoteDownloadEnabled: Bool,
+        persistLocally: Bool, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
-        self.meta = meta!
-        self.csUploadEnabled = csUploadEnabled!
-        self.csDownloadEnabled = csDownloadEnabled!
-        self.persistLocally = persistLocally!
+        self.meta = meta
+        self.remoteUploadEnabled = remoteUploadEnabled
+        self.remoteDownloadEnabled = remoteDownloadEnabled
+        self.persistLocally = persistLocally
         self.userId = userId
         self.source = source
-        self.csDataPointsDownloaded = csDataPointsDownloaded
+        self.remoteDataPointsDownloaded = remoteDataPointsDownloaded
     }
     
     public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, csDataPointsDownloaded: Bool) {
+                            source: String, remoteDataPointsDownloaded: Bool) {
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
             meta: sensorOptions.meta,
-            csUploadEnabled: sensorOptions.uploadEnabled,
-            csDownloadEnabled: sensorOptions.downloadEnabled,
-            persistLocally: sensorOptions.persist,
+            remoteUploadEnabled: sensorOptions.uploadEnabled!,
+            remoteDownloadEnabled: sensorOptions.downloadEnabled!,
+            persistLocally: sensorOptions.persist!,
             userId: userId,
             source: source,
-            csDataPointsDownloaded: csDataPointsDownloaded
+            remoteDataPointsDownloaded: remoteDataPointsDownloaded
         )
     }
     
@@ -72,28 +70,26 @@ public class Sensor{
         self.init(
             id: sensor.id,
             name: sensor.name,
-            meta: sensor.meta,
-            csUploadEnabled: sensor.csUploadEnabled,
-            csDownloadEnabled: sensor.csDownloadEnabled,
+            meta: JSONUtils.getDictionaryValue(sensor.meta),
+            remoteUploadEnabled: sensor.remoteUploadEnabled,
+            remoteDownloadEnabled: sensor.remoteDownloadEnabled,
             persistLocally: sensor.persistLocally,
             userId: sensor.userId,
             source: sensor.source,
-            csDataPointsDownloaded: sensor.csDataPointsDownloaded
+            remoteDataPointsDownloaded: sensor.remoteDataPointsDownloaded
         )
     }
     
-    public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
-        // Validate the format of value
-        let schemaString = "{\"$schema\": \"http://json-schema.org/draft-04/schema#\",\"description\": \"The proximity to an object in cm\",\"type\": \"number\",}"
-        if !JSONUtils.validateValue(value, schema: schemaString){
-            return false
-        }
+    public func insertDataPoint(value: AnyObject, _ time: NSDate) -> Bool {
+        //if !JSONUtils.validateValue(value, schema: schemaString){
+        //    return false
+        //}
         
         let dataPoint = DataPoint(sensorId: self.id)
         
         let stringifiedValue = JSONUtils.stringify(value)
         dataPoint.setValue(stringifiedValue)
-        dataPoint.setDate(date)
+        dataPoint.setTime(time)
         do{
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             return true
@@ -145,10 +141,18 @@ public class Sensor{
     // MARK: helper functions
     
     private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
-        sensor.csDownloadEnabled = sensorOptions.downloadEnabled
-        sensor.csUploadEnabled = sensorOptions.uploadEnabled
-        sensor.meta = sensorOptions.meta
-        sensor.persistLocally = sensorOptions.persist
+        if (sensorOptions.downloadEnabled != nil){
+            sensor.remoteDownloadEnabled = sensorOptions.downloadEnabled!
+        }
+        if (sensorOptions.uploadEnabled != nil){
+            sensor.remoteUploadEnabled = sensorOptions.uploadEnabled!
+        }
+        if (sensorOptions.meta != nil){
+            sensor.meta = sensorOptions.meta!
+        }
+        if (sensorOptions.persist != nil){
+            sensor.persistLocally = sensorOptions.persist!
+        }
         return sensor
     }
     
