@@ -21,6 +21,10 @@ public enum SortOrder{
     case Desc
 }
 
+public enum DSEError: ErrorType{
+    case IncorrectDataStructure
+}
+
 
 /**
 * //TODO: Add documentation
@@ -80,23 +84,19 @@ public class Sensor{
         )
     }
     
-    public func insertDataPoint(value: AnyObject, _ time: NSDate) -> Bool {
-        //if !JSONUtils.validateValue(value, schema: schemaString){
-        //    return false
-        //}
+    public func insertDataPoint(value: AnyObject, _ time: NSDate) throws {
+        let dataStructure = try DatabaseHandler.getSensorProfile(self.name)?.dataStructure
+        if !JSONUtils.validateValue(value, schema: dataStructure!){
+            throw DSEError.IncorrectDataStructure
+        }
         
         let dataPoint = DataPoint(sensorId: self.id)
         
         let stringifiedValue = JSONUtils.stringify(value)
         dataPoint.setValue(stringifiedValue)
         dataPoint.setTime(time)
-        do{
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        } catch {
-            NSLog("Failed to insert DataPoint")
-            return false
-        }
+        
+        try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
     }
 
 

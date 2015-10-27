@@ -11,7 +11,7 @@ import RealmSwift
 
 
 
-enum RLMError: ErrorType{
+public enum RLMError: ErrorType{
     case ObjectNotFound
     case DuplicatedObjects
     case InvalidLimit
@@ -247,11 +247,52 @@ class DatabaseHandler: NSObject{
         rlmSensor.updateId()
         realm.add(rlmSensor)
         
-        do {
-            try realm.commitWrite()
-        } catch {
-            throw RLMError.InsertFailed
+        try realm.commitWrite()
+    }
+    
+    /**
+    * Store the given sensor profile in database.
+    * @param sensorName: String for the name of the sensor which the data structure belongs to.
+    * @param dataStructure: String for the structure of the sensor.
+    **/
+    class func createOrUpdateSensorProfile(sensorName: String, dataStructure: String) throws {
+        let realm = try! Realm()
+        realm.beginWrite()
+        let rlmSensorProfile = SensorProfile()
+        rlmSensorProfile.sensorName = sensorName
+        rlmSensorProfile.dataStructure = dataStructure
+        realm.add(rlmSensorProfile, update: true)
+  
+        try realm.commitWrite()
+    }
+    
+    /**
+     * Returns the data structure of the requested sensor.
+     * @param sensorName: String for the sensor name to specify data.
+     **/
+    class func getSensorProfile(sensorName: String) throws -> SensorProfile? {
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "sensorName = %@", sensorName)
+        //query
+        let results = realm.objects(SensorProfile).filter(predicate)
+        return results.first
+    }
+    
+    /**
+    * Remove SensorProfile of the sensor with the given name.
+    * @param sensorName: The name of sensor whose profile should be deleted.
+    *
+    **/
+    class func deleteSensorProfile(sensorName: String) throws {
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "sensorName = %@", sensorName)
+        let results = realm.objects(SensorProfile).filter(predicate)
+        realm.beginWrite()
+        for sensorProfile in results {
+            realm.delete(sensorProfile)
         }
+
+        try realm.commitWrite()
     }
     
     /**

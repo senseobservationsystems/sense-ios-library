@@ -13,6 +13,11 @@ import CoreLocation
 
 class DataSyncer: NSObject {
     static let SOURCE: String = "sense-ios"
+    
+    let SENSOR_PROFILE_KEY_NAME = "sensor_name"
+    let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
+    
+    
     var proxy:SensorDataProxy
     var timer:NSTimer?
     // 30 mins in secs
@@ -57,10 +62,12 @@ class DataSyncer: NSObject {
     }
 
     func downloadSensorProfile() throws {
-        //Array<AnyObject>
         let sensorProfiles = try proxy.getSensorProfiles()
-        print(sensorProfiles)
-        // FIXME:not implemented yet
+        
+        for sensorProfile in sensorProfiles!{
+            let profileDict = sensorProfile as! Dictionary<String, String>
+            try DatabaseHandler.createOrUpdateSensorProfile(profileDict[SENSOR_PROFILE_KEY_NAME]!, dataStructure: profileDict[SENSOR_PROFILE_KEY_STRUCTURE]!)
+        }
     }
     
     func deletionInRemote() -> ErrorType? {
@@ -163,7 +170,7 @@ class DataSyncer: NSObject {
     func insertDataPointsLocally(sensor: Sensor, dataList: Dictionary<String, AnyObject>?) {
         if dataList != nil{
             for (value, time) in dataList!{
-                sensor.insertDataPoint(value, time as! NSDate)
+                try sensor.insertDataPoint(value, time as! NSDate)
             }
         }
     }

@@ -51,7 +51,7 @@
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
 		27431DEF1BA32FEF00729FB2 /* SensorOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */; };
 		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; };
-		275C80541BDFB38F00450AE4 /* RLMSensorProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C80531BDFB38F00450AE4 /* RLMSensorProfile.swift */; };
+		275C80541BDFB38F00450AE4 /* SensorProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C80531BDFB38F00450AE4 /* SensorProfile.swift */; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		276CBB781BB45234001C287D /* DSESwiftPerforamanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */; };
 		276CBB7A1BB45234001C287D /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
@@ -246,7 +246,7 @@
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* SensorOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorOptions.swift; sourceTree = "<group>"; };
 		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
-		275C80531BDFB38F00450AE4 /* RLMSensorProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensorProfile.swift; sourceTree = "<group>"; };
+		275C80531BDFB38F00450AE4 /* SensorProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorProfile.swift; sourceTree = "<group>"; };
 		276CBB751BB45234001C287D /* DSESwiftPerforamanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSESwiftPerforamanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftPerforamanceTests.swift; sourceTree = "<group>"; };
 		276CBB791BB45234001C287D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -728,7 +728,8 @@
 				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */,
 				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
-				275C80531BDFB38F00450AE4 /* RLMSensorProfile.swift */,
+				275C80531BDFB38F00450AE4 /* SensorProfile.swift */,
+				A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */,
 				FAC4ECA71BA0873000B24CAA /* communication.swift */,
 				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
@@ -740,7 +741,6 @@
 				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
-				A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -1183,7 +1183,7 @@
 				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
-				275C80541BDFB38F00450AE4 /* RLMSensorProfile.swift in Sources */,
+				275C80541BDFB38F00450AE4 /* SensorProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
