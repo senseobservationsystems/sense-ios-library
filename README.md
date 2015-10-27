@@ -14,9 +14,10 @@ The rest of this documentation is organized as follows. First we explain the goa
 
 ## Getting started
 ##### 1.Install Carthage
-Sense iOS Library makes use of third party libraries and the libraries are managed using [Carthage](https://github.com/Carthage/Carthage). `carthage` is a simple dependency manager for iOS and OSX development enviroment. You can install `carthage` by running:
-	
-	brew install carthage
+Sense iOS Library makes use of third party libraries and the libraries are managed using [Carthage](https://github.com/Carthage/Carthage). `carthage` is a simple dependency manager for iOS and OSX development enviroment. You can install `carthage` from their [release page](https://github.com/Carthage/Carthage/releases).
+
+....Why not via homebrew? Well, because we need to install Realm with carthage and it is possible only with carthage v9.2 or higher, which is not yet indexed on homebrew.... too bad indeed. - 27th October 2015
+
 	
 ##### 2.Install libraries into your enviroment
 	

@@ -14,7 +14,7 @@ class RLMDataPoint: Object{
     dynamic var value = ""
     dynamic var sensorId: Int = -1
     dynamic var time = 0.0
-    dynamic lazy var id: String = self.getId()
+    dynamic var id: String = ""
     dynamic var existsInRemote = false
     
     /*

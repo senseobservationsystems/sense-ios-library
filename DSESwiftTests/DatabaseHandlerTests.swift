@@ -216,10 +216,10 @@ class DatabaseHandlerTests: XCTestCase {
             sensors = DatabaseHandler.getSensors(sourceName)
             XCTAssertEqual(sensors.count, 1)
             
-            var dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
+            var dataPoint = DataPoint(sensorId: sensor.id, value: "StringValue", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
-            dataPoint = DataPoint(sensorId: sensor.id, value: "String value", time: NSDate())
+            dataPoint = DataPoint(sensorId: sensor.id, value: "StringValue", time: NSDate())
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             
             var queryOptions = QueryOptions()

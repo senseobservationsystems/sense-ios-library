@@ -1,3 +1,6 @@
+# A mobile database.
+github "realm/realm-cocoa"
+
 # Swift HTTP for Humans
 github "JustHTTP/Just" 
 
