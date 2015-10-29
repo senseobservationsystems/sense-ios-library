@@ -1,2 +1,4 @@
-github "Alamofire/Alamofire" "3.0.0"
-github "SwiftyJSON/SwiftyJSON" "2.3.0"
+github "krzyzanowskim/CryptoSwift" "0.1.1"
+github "JustHTTP/Just" "v0.3"
+github "mxcl/OMGHTTPURLRQ" "3.0.2"
+github "mxcl/PromiseKit" "3.0.0"

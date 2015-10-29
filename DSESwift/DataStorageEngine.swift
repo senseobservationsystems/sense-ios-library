@@ -37,16 +37,10 @@ public class DataStorageEngine{
     public func createSensor(source: String, name: String, dataType: String, sensorOptions: SensorOptions) throws -> Sensor?
     {
         var sensor: Sensor?
-        do{
-            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, csDataPointsDownloaded
+        sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, dataType: dataType, csDataPointsDownloaded
                 : false)
-            try DatabaseHandler.insertSensor(sensor!)
-            
-        }catch RLMError.DuplicatedObjects{
-            throw DatabaseError.ObjectNotFound
-        }catch {
-            throw DatabaseError.InsertFailed
-        }
+        try DatabaseHandler.insertSensor(sensor!)
+
         return sensor
     }
 
@@ -57,15 +51,7 @@ public class DataStorageEngine{
     **/
     public func getSensor(source: String, sensorName : String) throws -> Sensor?{
         var sensor : Sensor?
-        do{
-            sensor = try DatabaseHandler.getSensor(source, sensorName)
-        } catch RLMError.ObjectNotFound{
-            throw DatabaseError.ObjectNotFound
-        } catch RLMError.DuplicatedObjects{
-            throw DatabaseError.ObjectNotFound
-        } catch {
-            throw DatabaseError.UnknownError
-        }
+        sensor = try DatabaseHandler.getSensor(source, sensorName)
         return sensor
     }
     
