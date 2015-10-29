@@ -34,36 +34,35 @@ public class Sensor{
     var id = -1
     var name = ""
     var meta: Dictionary<String, AnyObject>?
-    var remoteUploadEnabled = true
-    var remoteDownloadEnabled = true
+    var remoteUploadEnabled = false
+    var remoteDownloadEnabled = false
     var persistLocally = true
     var userId = ""
     var source = ""
     var remoteDataPointsDownloaded = false
 
-    init(id:Int,              name: String,   meta:Dictionary<String, AnyObject>?, remoteUploadEnabled: Bool, remoteDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
+    init(id:Int, name: String,   meta:Dictionary<String, AnyObject>?, remoteUploadEnabled: Bool? = false, remoteDownloadEnabled: Bool? = false,
+        persistLocally: Bool? = true, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
         self.meta = meta
-        self.remoteUploadEnabled = remoteUploadEnabled
-        self.remoteDownloadEnabled = remoteDownloadEnabled
-        self.persistLocally = persistLocally
+        self.remoteUploadEnabled = remoteUploadEnabled!
+        self.remoteDownloadEnabled = remoteDownloadEnabled!
+        self.persistLocally = persistLocally!
         self.userId = userId
         self.source = source
         self.remoteDataPointsDownloaded = remoteDataPointsDownloaded
     }
     
-    public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, remoteDataPointsDownloaded: Bool) {
+    convenience init(name: String, source: String, sensorConfig: SensorConfig? = nil, userId: String, remoteDataPointsDownloaded: Bool) {
         self.init(
             id: DatabaseHandler.getNextKeyForSensor(),
             name: name,
-            meta: sensorOptions.meta,
-            remoteUploadEnabled: sensorOptions.uploadEnabled!,
-            remoteDownloadEnabled: sensorOptions.downloadEnabled!,
-            persistLocally: sensorOptions.persist!,
+            meta: sensorConfig?.meta,
+            remoteUploadEnabled: sensorConfig?.uploadEnabled,
+            remoteDownloadEnabled: sensorConfig?.downloadEnabled,
+            persistLocally: sensorConfig?.persist,
             userId: userId,
             source: source,
             remoteDataPointsDownloaded: remoteDataPointsDownloaded
@@ -115,16 +114,16 @@ public class Sensor{
     }
     
     /**
-    * Apply options for the sensor.
+    * Apply configs for the sensor.
     * fields in `options` which are `null` will be ignored.
     * @param options
     * @return Returns the applied options.
     */
-    public func setSensorOptions(sensorOptions: SensorOptions) throws {
+    public func setSensorConfig(sensorConfig: SensorConfig) throws {
         do{
             let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
-            try DatabaseHandler.update(updatedSensor)
+            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorConfig)
+            try DatabaseHandler.updateSensor(updatedSensor)
             
         } catch RLMError.ObjectNotFound {
             throw DatabaseError.ObjectNotFound
@@ -140,18 +139,18 @@ public class Sensor{
     
     // MARK: helper functions
     
-    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
-        if (sensorOptions.downloadEnabled != nil){
-            sensor.remoteDownloadEnabled = sensorOptions.downloadEnabled!
+    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorConfig: SensorConfig) -> Sensor{
+        if (sensorConfig.downloadEnabled != nil){
+            sensor.remoteDownloadEnabled = sensorConfig.downloadEnabled!
         }
-        if (sensorOptions.uploadEnabled != nil){
-            sensor.remoteUploadEnabled = sensorOptions.uploadEnabled!
+        if (sensorConfig.uploadEnabled != nil){
+            sensor.remoteUploadEnabled = sensorConfig.uploadEnabled!
         }
-        if (sensorOptions.meta != nil){
-            sensor.meta = sensorOptions.meta!
+        if (sensorConfig.meta != nil){
+            sensor.meta = sensorConfig.meta!
         }
-        if (sensorOptions.persist != nil){
-            sensor.persistLocally = sensorOptions.persist!
+        if (sensorConfig.persist != nil){
+            sensor.persistLocally = sensorConfig.persist!
         }
         return sensor
     }

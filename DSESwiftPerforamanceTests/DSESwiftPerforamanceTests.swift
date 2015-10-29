@@ -25,10 +25,10 @@ class DSESwiftPerformanceTests: XCTestCase {
     }
  
     func testCreate1000datapoints() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorConfig = SensorConfig(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
+            let sensor = Sensor(name: "sensor1", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -54,10 +54,10 @@ class DSESwiftPerformanceTests: XCTestCase {
     }
     
     func testInsertDataPointsPerformanceWith1000() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorConfig = SensorConfig(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
+            let sensor = Sensor(name: "sensor1", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -97,10 +97,10 @@ class DSESwiftPerformanceTests: XCTestCase {
     }
     
     func testGetDataPointsPerformanceWith1000() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorConfig = SensorConfig(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded:false)
+            let sensor = Sensor(name: "sensor1", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded:false)
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -139,10 +139,10 @@ class DSESwiftPerformanceTests: XCTestCase {
     
     
     func testInsertDataPointsPerformanceWith100000() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorConfig = SensorConfig(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
+            let sensor = Sensor(name: "sensor1", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()
@@ -184,10 +184,10 @@ class DSESwiftPerformanceTests: XCTestCase {
     }
     
     func testGetDataPointsPerformanceWith100000() {
-        let sensorOptions = SensorOptions(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
+        let sensorConfig = SensorConfig(meta: "", uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
-            let sensor = Sensor(name: "sensor1", sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded:false)
+            let sensor = Sensor(name: "sensor1", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: "testSource", dataType: "JSON", csDataPointsDownloaded:false)
             try DatabaseHandler.insertSensor(sensor)
             
             var sensors = [Sensor]()

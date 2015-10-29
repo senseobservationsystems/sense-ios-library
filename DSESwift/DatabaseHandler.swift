@@ -122,7 +122,7 @@ class DatabaseHandler: NSObject{
     * @param startTime the start Time to delete the data points
     * @param endTime the end Time to delete the data points
     */
-    class func createDataDeletionRequest(sensorName: String, sourceName: String, startTime: Double, endTime: Double) throws{
+    class func createDataDeletionRequest(sensorName: String, sourceName: String, startTime: NSDate?, endTime: NSDate?) throws{
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
         rlmDataDeletionRequest.uuid = NSUUID().UUIDString
@@ -185,7 +185,7 @@ class DatabaseHandler: NSObject{
     *
     * @param sensor: Sensor object containing the updated info.
     */
-    class func update(sensor: Sensor) throws {
+    class func updateSensor(sensor: Sensor) throws {
         //validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw RLMError.ObjectNotFound

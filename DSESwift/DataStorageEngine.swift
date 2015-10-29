@@ -20,11 +20,18 @@ enum DatabaseError: ErrorType{
 
 
 /**
-* //TODO: Add documentation
-*
+ * This class provides the main interface for creating sensors and sources and setting storage engine specific properties.
+ 
+ * All the Data Storage Engine updates are delivered to the associated delegate object, which is a custom object that you provide.
+ * For information about the delegate methods you use to receive events, see DataStorageEngineDelegate protocol.
 */
 public class DataStorageEngine{
 
+    //let dataSyncer: DataSyncer
+    
+    init() {
+        //DataSyncer()
+    }
     
     /**
     * Create a new sensor in database and backend if it does not already exist. Throw exception if it already exists. If it has been created, return the object.
@@ -34,11 +41,11 @@ public class DataStorageEngine{
     * @param options The sensor options
     * @return sensor object
     **/
-    public func createSensor(source: String, name: String, sensorOptions: SensorOptions) throws -> Sensor?
+    public func createSensor(source: String, name: String, sensorConfig: SensorConfig) throws -> Sensor?
     {
         var sensor: Sensor?
         do{
-            sensor = Sensor( name: name, sensorOptions: sensorOptions, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: source, remoteDataPointsDownloaded
+            sensor = Sensor(name: name, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded
                 : false)
             try DatabaseHandler.insertSensor(sensor!)
             

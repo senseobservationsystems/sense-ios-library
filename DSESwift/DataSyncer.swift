@@ -12,29 +12,34 @@ import PromiseKit
 import CoreLocation
 
 class DataSyncer: NSObject {
-    static let SOURCE: String = "sense-ios"
+    static let SOURCE: String = "aim-ios-sdk"
     
     let SENSOR_PROFILE_KEY_NAME = "sensor_name"
     let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
     
+    // 30 mins in secs
+    let DEFAULT_SYNC_RATE: Double = 30 * 60
+    // 30 days in secs
+    let DEFAULT_PERSISTENT_PERIOD: Double = 30 * 24 * 60 * 60
     
     var proxy:SensorDataProxy
     var timer:NSTimer?
-    // 30 mins in secs
-    static var SYNC_RATE = 18000.0
-    // 31 days in secs
-    var persistPeriod: Double = 2678400.0
+    var delegates = [DataStorageEngineDelegate]()
 
-    init (proxy:SensorDataProxy, persistPeriod:Double?) {
+    var syncRate: Double!
+    var persistentPeriod: Double!
+    var sensorConfigDict: Dictionary<String, SensorConfig>!
+
+    // the key for the string should be <source>:<sensor>
+    init (proxy:SensorDataProxy, persistPeriod:Double?, syncRate: Double?) {
         self.proxy = proxy
-        if persistPeriod != nil {
-            self.persistPeriod = persistPeriod!
-        }
+        self.persistentPeriod = (persistPeriod != nil) ? persistPeriod! : DEFAULT_PERSISTENT_PERIOD
+        self.syncRate = (syncRate != nil) ? syncRate! : DEFAULT_SYNC_RATE
     }
     
     func enablePeriodicSync() {
         if timer == nil {
-            timer = NSTimer.scheduledTimerWithTimeInterval(DataSyncer.SYNC_RATE, target: self, selector: Selector("synchronize"), userInfo: nil, repeats: true);
+            timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: Selector("synchronize"), userInfo: nil, repeats: true);
         }
         timer!.fire()
     }
@@ -53,7 +58,7 @@ class DataSyncer: NSObject {
         dispatch_promise{
             return self.deletionInRemote
         }.then{ e in
-            return self.downloadFromRemote
+            return self.downloadSensorsFromRemote()
         }.then{ e in
             return self.uploadToRemote
         }.then{ e in
@@ -71,28 +76,44 @@ class DataSyncer: NSObject {
     }
     
     func deletionInRemote() -> ErrorType? {
-        let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
-        if !dataDeletionRequests.isEmpty {
-            deleteSensorDataInRemote(dataDeletionRequests)
+        do{
+            let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
+            try processDeletionRequests(dataDeletionRequests)
+            return nil
+        }catch{
+            return error
         }
-        return nil
     }
     
-    func downloadFromRemote() -> ErrorType?  {
-        var sensorList: Array<AnyObject>?
+    func downloadSensorsFromRemote() -> ErrorType?  {
+        var sensors: Array<AnyObject>?
+        //get Sensors From Remote and store them in the local storage
         do{
-            sensorList = try proxy.getSensors(DataSyncer.SOURCE)
+            sensors = try proxy.getSensors()
+            try processDownloadedSensors(sensors)
+            return nil
         }catch{
-          return error
+            return error
         }
-        if sensorList != nil {
-            downloadSensorFromRemote(sensorList!)
+    }
+    
+    func downloadSensorDataFromRemote() -> ErrorType?  {
+        do{
+            //get Sensors from Local storage
+            let sensors = getSensorsInLocal()
+            //download sensor data from remote
+            for sensor in sensors{
+                if sensor.remoteDownloadEnabled {
+                    let sensorData = try proxy.getSensorData(sourceName: sensor.source, sensorName: sensor.name)
+                    try insertSensorDataIntoLocalDB(sensorData!, sensorId: sensor.id)
+                    sensor.remoteDataPointsDownloaded = true
+                    try DatabaseHandler.updateSensor(sensor)
+                }
+            }
+            return nil
+        } catch {
+            return error
         }
-        let sensorListInLocal = DatabaseHandler.getSensors(DataSyncer.SOURCE)
-        if !sensorListInLocal.isEmpty {
-            insertSensorDataLocally(sensorListInLocal)
-        }
-        return nil
     }
 
     func uploadToRemote() -> ErrorType? {
@@ -106,7 +127,7 @@ class DataSyncer: NSObject {
     func cleanUpLocalStorage() -> ErrorType? {
         let rawSensorList = DatabaseHandler.getSensors(DataSyncer.SOURCE)
         for sensor in rawSensorList {
-            let persistenceBoundary = NSDate().dateByAddingTimeInterval (0 - persistPeriod)
+            let persistenceBoundary = NSDate().dateByAddingTimeInterval (0 - persistentPeriod)
             if sensor.remoteUploadEnabled {
                 deleteDataPointsLocally(sensor.id, persistLocally: sensor.persistLocally, boundary: persistenceBoundary)
             }
@@ -116,62 +137,74 @@ class DataSyncer: NSObject {
     
     // MARK: Helper functions
     
-    func deleteSensorDataInRemote(dataDeletionRequests: [DataDeletionRequest]) -> ErrorType? {
+    private func getSensorsInLocal() -> Array<Sensor>{
+        var allSensorsInLocal = Array<Sensor>()
+        let sources = DatabaseHandler.getSources()
+        for source in sources{
+            allSensorsInLocal.appendContentsOf(DatabaseHandler.getSensors(source))
+        }
+        return allSensorsInLocal
+    }
+    
+    private func processDeletionRequests(dataDeletionRequests: [DataDeletionRequest]) throws {
         for request in dataDeletionRequests {
-            do{
-                //fixme after
-                try proxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: NSDate(), endTime: NSDate())
-                try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
-            }catch {
-                return error
-            }
+            try proxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
+            try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
         }
-        return nil
     }
     
-    func  downloadSensorFromRemote( sensorList: Array<AnyObject>) -> ErrorType? {
-        for sensor in sensorList {
-            let sensorDict = sensor as! Dictionary<String, AnyObject>
-            let metaDict = sensorDict["meta"] as! Dictionary<String, AnyObject>
-            let sourceNameInString = sensorDict["source_name"] as! String
-            let sensorNameInString = sensorDict["sensor_name"] as! String
-            let sensorOptions = SensorOptions(meta: metaDict, uploadEnabled: false, downloadEnabled: true, persist: false)
-            if !DatabaseHandler.hasSensor(sourceNameInString, sensorName: sensorNameInString) {
-                let sensor = Sensor(name: sensorNameInString, sensorOptions: sensorOptions, userId:KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, source: sourceNameInString, remoteDataPointsDownloaded: false )
-                insertSensorLocally(sensor)
+    private func  processDownloadedSensors(sensors: Array<AnyObject>?) throws {
+        if sensors != nil {
+            let sensors = convertAnyObjArrayToSensorArray(sensors)
+            try insertSensorsIntoLocalDB(sensors)
+            
+            // invoke delegates
+            for delegate in delegates{
+                delegate.onSensorsDownloaded(sensors)
             }
         }
-        return nil
     }
     
-    func insertSensorLocally(sensor: Sensor) -> ErrorType? {
-        do{
-            try DatabaseHandler.insertSensor(sensor)
-        }catch{
-            return error
+    private func convertAnyObjArrayToSensorArray(inputArray: Array<AnyObject>?) -> Array<Sensor>{
+        var sensors = Array<Sensor>()
+        for anyObj in inputArray! {
+            sensors.append(getSensorFromAnyObj(anyObj))
         }
-        return nil
+        return sensors
     }
     
-    func insertSensorDataLocally(sensorListInLocal:[Sensor]) -> ErrorType? {
-        for sensor in sensorListInLocal {
-            do{
-                let dataList = try proxy.getSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, queryOptions: QueryOptions())
-                insertDataPointsLocally(sensor, dataList: dataList)
-                sensor.remoteDataPointsDownloaded = true
-                try DatabaseHandler.update(sensor)
-            }catch{
-                return error
+    private func insertSensorsIntoLocalDB(sensors: Array<Sensor>) throws {
+        for sensor in sensors {
+            if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
+                try DatabaseHandler.insertSensor(sensor)
+            } else {
+                try DatabaseHandler.updateSensor(sensor)
             }
         }
-        return nil
     }
     
-    func insertDataPointsLocally(sensor: Sensor, dataList: Dictionary<String, AnyObject>?) {
-        if dataList != nil{
-            for (value, time) in dataList!{
-                try sensor.insertDataPoint(value, time as! NSDate)
-            }
+    private func getSensorFromAnyObj(anyObj: AnyObject) -> Sensor{
+        let sensorDict = anyObj as! Dictionary<String, AnyObject>
+        let sourceName = sensorDict["source_name"] as! String
+        let sensorName = sensorDict["sensor_name"] as! String
+        let metaDict = sensorDict["meta"] as! Dictionary<String, AnyObject>
+        var sensorConfig = SensorConfig()
+        sensorConfig.meta = metaDict
+        
+        return Sensor(name: sensorName, source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+    }
+
+    
+    func insertSensorDataIntoLocalDB(sensorData: Dictionary<String, AnyObject>, sensorId: Int) throws {
+        let dataArray = sensorData["data"] as! Array<AnyObject>
+        for data in dataArray{
+            // convert AnyObject to DataPoint
+            let dataDict = data as! Dictionary<String, AnyObject>
+            let value = dataDict["value"] as! String
+            let time = NSDate(timeIntervalSince1970: dataDict["time"] as! Double / 1000)
+            let dataPoint = DataPoint(sensorId: sensorId, value: value, time: time)
+            //
+            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
         }
     }
     
