@@ -103,13 +103,8 @@ public class Sensor{
     public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
         var dataPoints = [DataPoint]()
         
-        do{
-            dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
-        } catch RLMError.InvalidLimit {
-            throw DatabaseError.InvalidLimit
-        } catch {
-            throw DatabaseError.UnknownError
-        }
+        dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
+
         return dataPoints
     }
     
@@ -122,24 +117,15 @@ public class Sensor{
     public func setSensorConfig(sensorConfig: SensorConfig) throws {
         do{
             let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-            let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorConfig)
+            let updatedSensor = getSensorWithUpdatedConfig(sensor, sensorConfig)
             try DatabaseHandler.updateSensor(updatedSensor)
-            
-        } catch RLMError.ObjectNotFound {
-            throw DatabaseError.ObjectNotFound
-        } catch RLMError.DuplicatedObjects{
-            throw DatabaseError.DuplicatedObjects
-        } catch RLMError.UnauthenticatedAccess {
-            throw DatabaseError.UnauthenticatedAccess
-        } catch {
-            throw DatabaseError.UnknownError
         }
     }
     
     
     // MARK: helper functions
     
-    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorConfig: SensorConfig) -> Sensor{
+    func getSensorWithUpdatedConfig(sensor: Sensor, _ sensorConfig: SensorConfig) -> Sensor{
         if (sensorConfig.downloadEnabled != nil){
             sensor.remoteDownloadEnabled = sensorConfig.downloadEnabled!
         }
@@ -154,9 +140,4 @@ public class Sensor{
         }
         return sensor
     }
-    
-    
-
-    
-    
 }

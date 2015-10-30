@@ -35,12 +35,11 @@ class SensorDataProxyTests: XCTestCase {
     }
     
     
-    //TODO: This is not working yet
     func testGetSensorProfiles(){
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do {
-            //let json = try proxy.getSensorProfiles()
-            //TODO: check the content
+            let json = try proxy.getSensorProfiles()
+            print(json)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -63,17 +62,17 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             let sourceName3 = "fitbit"
             let sensorName3 = "accelerometer"
-            let data3 = getDummyData()
+            let data3 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
             let resultArray = try proxy.getSensors()
@@ -89,17 +88,17 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             let sourceName3 = "fitbit"
             let sensorName3 = "accelerometer"
-            let data3 = getDummyData()
+            let data3 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
             let resultArray = try proxy.getSensors(sourceName1)
@@ -115,17 +114,17 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             let sourceName3 = "fitbit"
             let sensorName3 = "accelerometer"
-            let data3 = getDummyData()
+            let data3 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
             let result = try proxy.getSensor(sourceName1, sensorName1)
@@ -141,7 +140,7 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             // check the sensor is added.
@@ -167,12 +166,12 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             // check the sensor is added.
@@ -201,7 +200,7 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
@@ -215,17 +214,100 @@ class SensorDataProxyTests: XCTestCase {
         }
     }
     
+    func testGetSensorDataWithStartDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-4*24*60*60)
+            
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            
+            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 0)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testGetSensorDataWithEndDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate()
+            
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-2*24*60*60)
+            
+            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 0)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testGetSensorDataWithLimit() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName1 = "aim-ios-sdk"
+            let sensorName1 = "accelerometer"
+            let data1 = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            var queryOptions = QueryOptions()
+            queryOptions.limit = 3
+            
+            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            XCTAssertEqual(result!["data"]!.count, 3)
+            
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    
     func testPutSensorDataForMultipleSensors() {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
@@ -254,11 +336,11 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName1, data: data1);
             
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
@@ -298,6 +380,88 @@ class SensorDataProxyTests: XCTestCase {
         }
     }
     
+    func testDeleteSensorDataWithStartDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            let data = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
+            
+            let sensorsData = [sensorData]
+            try proxy.putSensorData(sensorsData)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            // == Check that the sensors are added properly
+            // Sensors
+            var resultArray: Array<AnyObject>?
+            resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray!.count, 1)
+            // SensorData
+            var result : Dictionary<String, AnyObject>?
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete a sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-1*24*60*60), endTime: nil)
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete the other sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-3*24*60*60 - 60), endTime: nil)
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 0)
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
+    func testDeleteSensorDataWithEndDate() {
+        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
+        do{
+            let sourceName = "aim-ios-sdk"
+            let sensorName = "accelerometer"
+            let data = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
+            
+            let sensorsData = [sensorData]
+            try proxy.putSensorData(sensorsData)
+            
+            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
+            NSThread.sleepForTimeInterval(5)
+            
+            // == Check that the sensors are added properly
+            // Sensors
+            var resultArray: Array<AnyObject>?
+            resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray!.count, 1)
+            // SensorData
+            var result : Dictionary<String, AnyObject>?
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete a sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 5)
+            
+            // delete the other sensor
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            resultArray = try proxy.getSensors(sourceName)
+            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result!["data"]!.count, 0)
+        }catch{
+            print( error )
+            XCTFail("Exception was captured. Abort the test.")
+        }
+    }
+    
     // MARK: == Unsuccessful case 
     
     // MARK: Sensor does not exist yet
@@ -313,7 +477,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist)
         } catch {
             XCTFail("Wrong error")
         }
@@ -345,7 +509,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist )
         } catch {
             XCTFail("Wrong error")
         }
@@ -361,7 +525,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist )
         } catch {
             XCTFail("Wrong error")
         }
@@ -377,7 +541,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist )
         } catch {
             XCTFail("Wrong error")
         }
@@ -399,7 +563,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure)
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure)
         } catch {
             XCTFail("Wrong error")
         }
@@ -414,8 +578,8 @@ class SensorDataProxyTests: XCTestCase {
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
@@ -424,7 +588,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure)
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure)
         } catch {
             XCTFail("Wrong error")
         }
@@ -437,13 +601,13 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName = "invalidSourceName"
             let sensorName = "accelerometer"
-            let data = getDummyData()
+            let data = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -454,13 +618,13 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "invalidSensorName"
-            let data = getDummyData()
+            let data = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -471,12 +635,12 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "invalidSourceName"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
@@ -485,7 +649,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -496,12 +660,12 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "invalidSensorName"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
@@ -510,7 +674,7 @@ class SensorDataProxyTests: XCTestCase {
             XCTFail("An error should have thrown, but no error was thrown")
             
         } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSource )
+            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -523,7 +687,7 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             var queryOptions = QueryOptions()
@@ -547,7 +711,7 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
     
             var queryOptions = QueryOptions()
@@ -572,7 +736,7 @@ class SensorDataProxyTests: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
         
             let now = NSDate()
@@ -593,8 +757,8 @@ class SensorDataProxyTests: XCTestCase {
     func testGetSensorProfilesWithInvalidSessionId(){
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
         do {
-            //let json = try proxy.getSensorProfiles()
-            //TODO: check the content
+            let json = try proxy.getSensorProfiles()
+            debugPrint(json)
         } catch let e as SensorDataProxy.ProxyError {
             assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
         } catch {
@@ -607,7 +771,7 @@ class SensorDataProxyTests: XCTestCase {
         do {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             XCTFail("An error should have thrown, but no error was thrown")
@@ -670,7 +834,7 @@ class SensorDataProxyTests: XCTestCase {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         let sourceName1 = "aim-ios-sdk"
         let sensorName1 = "accelerometer"
-        let data1 = getDummyData()
+        let data1 = getDummyAccelerometerData()
         do{
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
@@ -701,7 +865,7 @@ class SensorDataProxyTests: XCTestCase {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         let sourceName1 = "aim-ios-sdk"
         let sensorName1 = "accelerometer"
-        let data1 = getDummyData()
+        let data1 = getDummyAccelerometerData()
         do{
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
@@ -764,12 +928,12 @@ class SensorDataProxyTests: XCTestCase {
         do {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyData()
+            let data1 = getDummyAccelerometerData()
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
             
             let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "gyroscope"
-            let data2 = getDummyData()
+            let sensorName2 = "time_active"
+            let data2 = getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
@@ -786,14 +950,23 @@ class SensorDataProxyTests: XCTestCase {
     
     
     // MARK: == helper functions
-    
-    func getDummyData() -> Array<AnyObject>{
-        let time = NSDate()
-        let value = ["x": 4, "y": 5, "z": 6]
+    func getDummyAccelerometerData(date date: NSDate? = NSDate()) -> Array<AnyObject>{
+        let value = ["x-axis": 4, "y-axis": 5, "z-axis": 6]
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Double(time.timeIntervalSince1970 * 1000.0) + Double((i * 1000))), "value": value]
+            let dataPoint = ["time": (Int(date!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            data.append(dataPoint)
+        }
+        return data
+    }
+    
+    func getDummyTimeActiveData(date date: NSDate? = NSDate()) -> Array<AnyObject>{
+        let value = 3
+        var data = Array<AnyObject>()
+        //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
+        for (var i = 0 ; i < 5 ; i++) {
+            let dataPoint = ["time": (Int(date!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
             data.append(dataPoint)
         }
         return data
@@ -801,7 +974,7 @@ class SensorDataProxyTests: XCTestCase {
     
     func getDummyDataWithBadStructure() -> Array<AnyObject>{
         let time = NSDate()
-        let value = ["x": 4, "y": 5, "z": 6]
+        let value = ["invalidx": 4, "invalidy": 5, "invalidz": 6]
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {

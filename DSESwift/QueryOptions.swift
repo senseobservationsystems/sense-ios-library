@@ -19,13 +19,14 @@ public struct QueryOptions{
         var description : String {
             switch self {
                 // Use Internationalization, as appropriate.
-                case .Minute: return "Minute";
-                case .Hour: return "Hour";
-                case .Day: return "Day";
-                case .Week: return "Week";
+                case .Minute: return "minute";
+                case .Hour: return "hour";
+                case .Day: return "day";
+                case .Week: return "week";
             }
         }
     }
+
 
     var startTime : NSDate? = nil // null by default, if not null, change from default
     var endTime: NSDate? = nil// null by default, if not null, change from default
@@ -34,14 +35,13 @@ public struct QueryOptions{
     var sortOrder: SortOrder = SortOrder.Asc
     var interval:Interval? = nil
     
-    
-    public func toQueryParams() -> Dictionary<String, AnyObject>{
+    public func toQueryParams() throws -> Dictionary<String, AnyObject>{
         var queryParams = Dictionary<String, AnyObject>()
-        if (self.startTime != nil){ queryParams["start_time"] = JSONUtils.stringify(Int(self.startTime!.timeIntervalSince1970))}
-        if (self.endTime != nil){ queryParams["end_time"] = JSONUtils.stringify(Int(self.endTime!.timeIntervalSince1970))}
-        if (self.limit != nil){ queryParams["limit"] = JSONUtils.stringify(self.limit!)}
-        if (self.interval != nil){ queryParams["interval"] = JSONUtils.stringify(self.interval!.description)}
-        queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? JSONUtils.stringify("asc") : JSONUtils.stringify("desc")
+        if (self.startTime != nil){ queryParams["start_time"] = Int(self.startTime!.timeIntervalSince1970*1000)}
+        if (self.endTime != nil){ queryParams["end_time"] = Int(self.endTime!.timeIntervalSince1970*1000)}
+        if (self.limit != nil){ queryParams["limit"] = self.limit!}
+        if (self.interval != nil){ queryParams["interval"] = self.interval!.description}
+        queryParams["sort"] = (self.sortOrder == SortOrder.Asc) ? "asc" : "desc"
         return queryParams
     }
 }

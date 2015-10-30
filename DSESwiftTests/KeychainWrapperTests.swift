@@ -189,7 +189,7 @@ class KeychainWrapperTests: XCTestCase {
     }
     
     func testNSCodingObjectRetrieval() {
-        var testInt: Int = 9
+        let testInt: Int = 9
         var myTestObject = testObject()
         myTestObject.objectName = testString
         myTestObject.objectRating = testInt

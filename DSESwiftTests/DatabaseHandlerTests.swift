@@ -223,7 +223,7 @@ class DatabaseHandlerTests: XCTestCase {
             XCTAssertEqual(dataPoints[0].getValueInString(), "String value")
             
             dataPoint = dataPoints[0]
-            dataPoint.setValue("String value updated")
+            try dataPoint.setValue("String value updated")
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             let updatedDataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(updatedDataPoints.count, 1)
@@ -277,11 +277,11 @@ class DatabaseHandlerTests: XCTestCase {
         let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
         let endTime = NSDate()
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: nil, endTime: endTime)
+            try DatabaseHandler.createDataDeletionRequest("accelerometer", sourceName: "sony", startTime: nil, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest("time_active", sourceName: "htc", startTime: startTime, endTime: nil)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: nil, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest("time_active", sourceName: "htc", startTime: nil, endTime: nil)
             numberOfRequest++
             let results = DatabaseHandler.getDataDeletionRequest()
             XCTAssertEqual(numberOfRequest, results.count)
@@ -303,6 +303,7 @@ class DatabaseHandlerTests: XCTestCase {
             try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: nil, endTime: nil)
             numberOfRequest++
             let results = DatabaseHandler.getDataDeletionRequest()
+            //XCTAssertEqual(numberOfRequest, results.count)
         
             for result in results {
                 try DatabaseHandler.deleteDataDeletionRequest(result.uuid)

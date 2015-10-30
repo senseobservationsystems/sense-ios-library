@@ -19,10 +19,10 @@ public class SensorDataProxy {
     public enum ProxyError: ErrorType, Equatable{
         case SessionIdNotSet
         case InvalidSessionId
-        case InvalidSensorOrSource //thrown when invalid sensorName/sourceName is given
+        case InvalidSensorOrSourceOrBadStructure //thrown when invalid sensorName/sourceName/structure is given
         case InvalidDataFormat
         case InvalidQuery
-        case SensorDoesNotExistOrBadStructure
+        case SensorDoesNotExist
         case UnknownError
     }
     
@@ -60,7 +60,7 @@ public class SensorDataProxy {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(self.baseUrl! + "/sensor_profiles", headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+        if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
         return result.json as? Array<AnyObject>
@@ -78,7 +78,7 @@ public class SensorDataProxy {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(getSensorUrl(sourceName), headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+        if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
         return result.json as? Array<AnyObject>
@@ -98,7 +98,7 @@ public class SensorDataProxy {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(getSensorUrl(sourceName, sensorName), headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+        if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
         return result.json as? Dictionary<String, AnyObject>
@@ -119,7 +119,7 @@ public class SensorDataProxy {
         
         let body = ["meta": meta]
         let result = Just.put(getSensorUrl(sourceName, sensorName), headers: getHeaders(), json: body);
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+        if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
         return result.json as? Dictionary<String, AnyObject>
@@ -140,7 +140,7 @@ public class SensorDataProxy {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.delete(getSensorUrl(sourceName, sensorName), headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+        if let error = checkStatusCode(result.statusCode, successfulCode: 204){
             throw error
         }
     }
@@ -162,8 +162,8 @@ public class SensorDataProxy {
         if (queryOptions == nil) {
             queryOptions = QueryOptions()
         }  
-        let result = Just.get(getSensorDataUrl(sourceName, sensorName), headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 200){
+        let result = Just.get(getSensorDataUrl(sourceName, sensorName), params: try queryOptions!.toQueryParams(), headers: getHeaders())
+        if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
         return result.json as? Dictionary<String, AnyObject>
@@ -187,13 +187,11 @@ public class SensorDataProxy {
         let sensorDataArray = [sensorDataObject]
         
         // construct body in JSONArray format
-        if (!NSJSONSerialization.isValidJSONObject(sensorDataArray)){ throw ProxyError.InvalidDataFormat }
-        let body = serializeArrayToJSONArray(sensorDataArray)
+        let body = try serializeArrayToJSONArray(sensorDataArray)
         
         // send put request
-        let headers = getHeadersWithContentType()
-        let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+        let result = Just.put(getSensorDataUrl(), headers: getHeadersWithContentType(), requestBody: body)
+        if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
     }
@@ -225,13 +223,11 @@ public class SensorDataProxy {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         // construct body in JSONArray format
-        if (!NSJSONSerialization.isValidJSONObject(sensorDataArray)){ throw ProxyError.InvalidDataFormat }
-        let body = serializeArrayToJSONArray(sensorDataArray)
+        let body = try serializeArrayToJSONArray(sensorDataArray)
         
         // send put request
-        let headers = getHeadersWithContentType()
-        let result = Just.put(getSensorDataUrl(), headers: headers, requestBody: body)
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+        let result = Just.put(getSensorDataUrl(), headers: getHeadersWithContentType(), requestBody: body)
+        if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
     }
@@ -257,10 +253,10 @@ public class SensorDataProxy {
         if (!isStartTimeEarlierThanEndTime(startTime, endTime)){ throw ProxyError.InvalidQuery }
         
         var params = Dictionary<String, AnyObject>()
-        if startTime != nil { params["start_time"] = JSONUtils.stringify(startTime!.timeIntervalSince1970)}
-        if endTime != nil { params["end_time"] = JSONUtils.stringify(endTime!.timeIntervalSince1970)}
+        if startTime != nil { params["start_time"] = Int(startTime!.timeIntervalSince1970*1000)}
+        if endTime != nil { params["end_time"] = Int(endTime!.timeIntervalSince1970)*1000}
         let result = Just.delete(getSensorDataUrl(sourceName, sensorName), params: params, headers: getHeaders())
-        if let error = checkStatusCode(result.statusCode!, successfulCode: 201){
+        if let error = checkStatusCode(result.statusCode, successfulCode: 204){
             throw error
         }
     }
@@ -303,13 +299,8 @@ public class SensorDataProxy {
     * Returns NSData containing JSONArray. It perform JSONSerizlization on the give Array.
     * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
     */
-    private func serializeArrayToJSONArray(sensorsData: Array<AnyObject>) -> NSData?{
-        var body: NSData?
-        do{
-            body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
-        }catch{
-            debugPrint("Wrong format on JsonSerialization process.")
-        }
+    private func serializeArrayToJSONArray(sensorsData: Array<AnyObject>) throws -> NSData?{
+        let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
         return body
     }
     
@@ -361,28 +352,25 @@ public class SensorDataProxy {
         if startTime == nil || endTime == nil {
             return true
         }
-        // compare them
-        if startTime!.timeIntervalSinceReferenceDate >= endTime!.timeIntervalSinceReferenceDate {
-            return false
+        // is startDate ealier
+        if startTime!.timeIntervalSinceReferenceDate < endTime!.timeIntervalSinceReferenceDate {
+            return true
         } else {
             return false
         }
     }
     
-    private func checkStatusCode(statusCode: Int, successfulCode: Int) -> ProxyError?{
-        var error : ProxyError?
+    private func checkStatusCode(statusCode: Int?, successfulCode: Int) -> ProxyError?{
         if (statusCode == 401){
-            error = ProxyError.InvalidSessionId
+            return ProxyError.InvalidSessionId
         } else if (statusCode == 400){
-            error = ProxyError.InvalidSensorOrSource //Bad structure too
+            return ProxyError.InvalidSensorOrSourceOrBadStructure //Bad structure too
         } else if (statusCode == 404){
-            error = ProxyError.SensorDoesNotExistOrBadStructure
-        } else if (statusCode == 204){ //No content on delete. No error
-            error = nil
-        } else if (statusCode != successfulCode){
-            error = ProxyError.UnknownError
+            return ProxyError.SensorDoesNotExist
+        } else if (statusCode != successfulCode) || (statusCode == nil){
+            return ProxyError.UnknownError
         }
-        return error
+        return nil
     }
     
 }

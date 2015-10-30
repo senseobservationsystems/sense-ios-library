@@ -48,7 +48,7 @@ public class DataPoint{
         self.time = time
     }
     
-    func setValue(value: String){
+    func setValue(value: String) {
         self.value = value
     }
     
