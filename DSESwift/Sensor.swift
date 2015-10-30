@@ -23,6 +23,7 @@ public enum SortOrder{
 
 public enum DSEError: ErrorType{
     case IncorrectDataStructure
+    case UnknownDataType
 }
 
 
@@ -101,11 +102,7 @@ public class Sensor{
 
     
     public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
-        var dataPoints = [DataPoint]()
-        
-        dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
-
-        return dataPoints
+        return try DatabaseHandler.getDataPoints(self.id, queryOptions)
     }
     
     /**

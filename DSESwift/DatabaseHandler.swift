@@ -117,7 +117,6 @@ class DatabaseHandler: NSObject{
     */
     class func createDataDeletionRequest(sensorName: String, sourceName: String, startTime: NSDate?, endTime: NSDate?) throws{
         let realm = try! Realm()
-        realm.beginWrite()
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
         rlmDataDeletionRequest.uuid = NSUUID().UUIDString
@@ -127,6 +126,7 @@ class DatabaseHandler: NSObject{
         rlmDataDeletionRequest.startTime = startTime
         rlmDataDeletionRequest.endTime = endTime
 
+        realm.beginWrite()
         realm.add(rlmDataDeletionRequest)
         
         try realm.commitWrite()

@@ -60,6 +60,7 @@
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; };
 		278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */; };
 		27A77CEA1BE28027004FAC3A /* DataStorageEngineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */; };
+		27A77CED1BE3B66E004FAC3A /* ValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A77CEC1BE3B66E004FAC3A /* ValueParser.swift */; };
 		27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* QueryOptions.swift */; };
 		27CE749C1BDFC52D0095E735 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74981BDFC4F00095E735 /* Realm.framework */; };
 		27CE749D1BDFC52D0095E735 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74991BDFC4F00095E735 /* RealmSwift.framework */; };
@@ -257,6 +258,7 @@
 		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
 		278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSAccountUtils.swift; sourceTree = "<group>"; };
 		27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngineDelegate.swift; sourceTree = "<group>"; };
+		27A77CEC1BE3B66E004FAC3A /* ValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueParser.swift; sourceTree = "<group>"; };
 		27C2F3AB1BBD955000832A7F /* QueryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOptions.swift; sourceTree = "<group>"; };
 		27CE74981BDFC4F00095E735 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		27CE74991BDFC4F00095E735 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -744,6 +746,7 @@
 				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
+				27A77CEC1BE3B66E004FAC3A /* ValueParser.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -1184,6 +1187,7 @@
 				A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */,
 				27A77CEA1BE28027004FAC3A /* DataStorageEngineDelegate.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorConfig.swift in Sources */,
+				27A77CED1BE3B66E004FAC3A /* ValueParser.swift in Sources */,
 				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
 				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
 				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,

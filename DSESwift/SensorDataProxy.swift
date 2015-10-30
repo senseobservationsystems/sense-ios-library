@@ -72,7 +72,7 @@ public class SensorDataProxy {
     * Get all sensors of the current source of logged in user
     * Throws an exception when no sessionId is set or when the sessionId is not valid.
     * @param sourceName     The source name. When no sourceName parameter is given, it returns all the sensors of the currrent logged in user. for example "sense-ios", "sense-android", "fitbit", ...
-    * @return Returns a json containing sensors
+    * @return Returns an array containing sensors
     */
     func getSensors(sourceName: String? = nil) throws -> Array<AnyObject>?{
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
