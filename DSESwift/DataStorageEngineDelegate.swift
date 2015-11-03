@@ -14,14 +14,19 @@ import Foundation
 public protocol DataStorageEngineDelegate{
 
     /**
-     * Callback method called on the completion of downloading sensor profiles.
+     * Callback method called on the completion of DSE initialization.
      **/
-    func onSensorProfilesDownloaded()
+    func onDSEReady()
     
     /**
      * Callback method on the completion of downloading Sensors from Remote.
-     *
      * @param: An array of sensors that are downloaded from Remote.
      **/
-    func onSensorsDownloaded(sensors: Array<Sensor>)
+    func onSensorsDownloaded(sensors: NSArray)
+    
+    /**
+    * Callback method called when the flush of local data to the back-end is completed
+    * @param: Bool for wheter flusing Data was successful or not.
+    **/
+    func onFlushDataCompleted(successful: Bool)
 }

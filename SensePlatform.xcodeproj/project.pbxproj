@@ -47,36 +47,37 @@
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; };
 		2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */; };
-		27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
 		27431DEF1BA32FEF00729FB2 /* SensorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */; };
-		27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DF01BA3354300729FB2 /* RLMSensor.swift */; };
-		275C80541BDFB38F00450AE4 /* SensorProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C80531BDFB38F00450AE4 /* SensorProfile.swift */; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		276CBB781BB45234001C287D /* DSESwiftPerforamanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */; };
 		276CBB7A1BB45234001C287D /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; };
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; };
+		27858B821BE764BA004FC01E /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7D1BE764BA004FC01E /* DataDeletionRequest.swift */; };
+		27858B831BE764BA004FC01E /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7E1BE764BA004FC01E /* RLMDataPoint.swift */; };
+		27858B841BE764BA004FC01E /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7F1BE764BA004FC01E /* RLMSensor.swift */; };
+		27858B851BE764BA004FC01E /* RLMUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B801BE764BA004FC01E /* RLMUser.swift */; };
+		27858B861BE764BA004FC01E /* SensorProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B811BE764BA004FC01E /* SensorProfile.swift */; };
+		27858B8B1BE7656F004FC01E /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B881BE7656F004FC01E /* JSONUtils.swift */; };
+		27858B8C1BE7656F004FC01E /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B891BE7656F004FC01E /* KeychainWrapper.swift */; };
+		27858B8D1BE7656F004FC01E /* ValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B8A1BE7656F004FC01E /* ValueParser.swift */; };
 		278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */; };
 		27A77CEA1BE28027004FAC3A /* DataStorageEngineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */; };
-		27A77CED1BE3B66E004FAC3A /* ValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A77CEC1BE3B66E004FAC3A /* ValueParser.swift */; };
 		27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* QueryOptions.swift */; };
 		27CE749C1BDFC52D0095E735 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74981BDFC4F00095E735 /* Realm.framework */; };
 		27CE749D1BDFC52D0095E735 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74991BDFC4F00095E735 /* RealmSwift.framework */; };
 		27D441641BD128B400950ADC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D441631BD128B400950ADC /* CryptoSwift.framework */; };
 		27DF11771BCFF10A00C4E79F /* SensorDataProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */; };
-		27DF117B1BD0027200C4E79F /* SensorDataProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */; };
+		27DF117B1BD0027200C4E79F /* TestSensorDataProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF117A1BD0027200C4E79F /* TestSensorDataProxy.swift */; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; };
 		27F1D1AA1BD7A4A000ACE232 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */; };
-		27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752701BB0212C000FC400 /* KeychainWrapper.swift */; };
-		27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* KeychainWrapperTests.swift */; };
-		27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */; };
-		27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* DataPointTests.swift */; };
-		27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E201BBAF07A0006C15A /* JSONUtils.swift */; };
+		27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* TestKeychainWrapper.swift */; };
+		27F752751BB02793000FC400 /* TestDatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* TestDatabaseHandler.swift */; };
+		27F89E1D1BB9966B0006C15A /* TestDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* TestDataPoint.swift */; };
 		A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */; };
-		A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */; };
-		A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */; };
+		A5C1FE391BDA1F1200196C51 /* TestDataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1FE381BDA1F1200196C51 /* TestDataSyncer.swift */; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
 		FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158115D574E100F520D0 /* CoreMotion.framework */; };
@@ -201,7 +202,6 @@
 		FABCC1851BA7009400EE6DE0 /* UIDevice+IdentifierAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC1171BA7009200EE6DE0 /* UIDevice+IdentifierAddition.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC1861BA7009400EE6DE0 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC1181BA7009200EE6DE0 /* UIDevice+IdentifierAddition.m */; };
 		FAC4EC891BA086BC00B24CAA /* DSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = FAC4EC881BA086BC00B24CAA /* DSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4ECA71BA0873000B24CAA /* communication.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -244,11 +244,8 @@
 		2709FF7D1BAF0E800051E8B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVJSONSchemaValidation.framework; path = Carthage/Build/iOS/VVJSONSchemaValidation.framework; sourceTree = "<group>"; };
-		27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMDataPoint.swift; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorConfig.swift; sourceTree = "<group>"; };
-		27431DF01BA3354300729FB2 /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMSensor.swift; sourceTree = "<group>"; };
-		275C80531BDFB38F00450AE4 /* SensorProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorProfile.swift; sourceTree = "<group>"; };
 		276CBB751BB45234001C287D /* DSESwiftPerforamanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSESwiftPerforamanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		276CBB771BB45234001C287D /* DSESwiftPerforamanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSESwiftPerforamanceTests.swift; sourceTree = "<group>"; };
 		276CBB791BB45234001C287D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -256,21 +253,26 @@
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
 		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
+		27858B7D1BE764BA004FC01E /* DataDeletionRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataDeletionRequest.swift; path = RealmObjects/DataDeletionRequest.swift; sourceTree = "<group>"; };
+		27858B7E1BE764BA004FC01E /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RLMDataPoint.swift; path = RealmObjects/RLMDataPoint.swift; sourceTree = "<group>"; };
+		27858B7F1BE764BA004FC01E /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RLMSensor.swift; path = RealmObjects/RLMSensor.swift; sourceTree = "<group>"; };
+		27858B801BE764BA004FC01E /* RLMUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RLMUser.swift; path = RealmObjects/RLMUser.swift; sourceTree = "<group>"; };
+		27858B811BE764BA004FC01E /* SensorProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SensorProfile.swift; path = RealmObjects/SensorProfile.swift; sourceTree = "<group>"; };
+		27858B881BE7656F004FC01E /* JSONUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONUtils.swift; path = Utils/JSONUtils.swift; sourceTree = "<group>"; };
+		27858B891BE7656F004FC01E /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeychainWrapper.swift; path = Utils/KeychainWrapper.swift; sourceTree = "<group>"; };
+		27858B8A1BE7656F004FC01E /* ValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ValueParser.swift; path = Utils/ValueParser.swift; sourceTree = "<group>"; };
 		278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSAccountUtils.swift; sourceTree = "<group>"; };
 		27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngineDelegate.swift; sourceTree = "<group>"; };
-		27A77CEC1BE3B66E004FAC3A /* ValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueParser.swift; sourceTree = "<group>"; };
 		27C2F3AB1BBD955000832A7F /* QueryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOptions.swift; sourceTree = "<group>"; };
 		27CE74981BDFC4F00095E735 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		27CE74991BDFC4F00095E735 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		27D441631BD128B400950ADC /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
 		27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorDataProxy.swift; sourceTree = "<group>"; };
-		27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorDataProxyTests.swift; sourceTree = "<group>"; };
+		27DF117A1BD0027200C4E79F /* TestSensorDataProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSensorDataProxy.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
-		27F752701BB0212C000FC400 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
-		27F752721BB02512000FC400 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
-		27F89E1C1BB9966B0006C15A /* DataPointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPointTests.swift; sourceTree = "<group>"; };
-		27F89E201BBAF07A0006C15A /* JSONUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONUtils.swift; sourceTree = "<group>"; };
+		27F752721BB02512000FC400 /* TestKeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeychainWrapper.swift; sourceTree = "<group>"; };
+		27F89E1C1BB9966B0006C15A /* TestDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDataPoint.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -286,8 +288,7 @@
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncer.swift; sourceTree = "<group>"; };
-		A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDeletionRequest.swift; sourceTree = "<group>"; };
-		A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncerTests.swift; sourceTree = "<group>"; };
+		A5C1FE381BDA1F1200196C51 /* TestDataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDataSyncer.swift; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
 		FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
@@ -411,9 +412,8 @@
 		FAC4EC881BA086BC00B24CAA /* DSESwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSESwift.h; sourceTree = "<group>"; };
 		FAC4EC8A1BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAC4EC8F1BA086BC00B24CAA /* DSESwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSESwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseHandlerTests.swift; sourceTree = "<group>"; };
+		FAC4EC941BA086BC00B24CAA /* TestDatabaseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabaseHandler.swift; sourceTree = "<group>"; };
 		FAC4EC961BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FAC4ECA71BA0873000B24CAA /* communication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = communication.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -482,6 +482,28 @@
 				276CBB791BB45234001C287D /* Info.plist */,
 			);
 			path = DSESwiftPerforamanceTests;
+			sourceTree = "<group>";
+		};
+		27858B871BE764E2004FC01E /* RealmObjects */ = {
+			isa = PBXGroup;
+			children = (
+				27858B7D1BE764BA004FC01E /* DataDeletionRequest.swift */,
+				27858B7E1BE764BA004FC01E /* RLMDataPoint.swift */,
+				27858B7F1BE764BA004FC01E /* RLMSensor.swift */,
+				27858B801BE764BA004FC01E /* RLMUser.swift */,
+				27858B811BE764BA004FC01E /* SensorProfile.swift */,
+			);
+			name = RealmObjects;
+			sourceTree = "<group>";
+		};
+		27858B8E1BE76577004FC01E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				27858B881BE7656F004FC01E /* JSONUtils.swift */,
+				27858B891BE7656F004FC01E /* KeychainWrapper.swift */,
+				27858B8A1BE7656F004FC01E /* ValueParser.swift */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		3E820D5F15D40AB50001A3EC = {
@@ -728,25 +750,19 @@
 		FAC4EC871BA086BC00B24CAA /* DSESwift */ = {
 			isa = PBXGroup;
 			children = (
+				27858B8E1BE76577004FC01E /* Utils */,
+				27858B871BE764E2004FC01E /* RealmObjects */,
 				FAC4EC881BA086BC00B24CAA /* DSESwift.h */,
 				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				276CBB821BB56E12001C287D /* DataStorageEngine.swift */,
 				27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */,
-				27431DD91BA2D38000729FB2 /* RLMDataPoint.swift */,
-				27431DF01BA3354300729FB2 /* RLMSensor.swift */,
-				275C80531BDFB38F00450AE4 /* SensorProfile.swift */,
-				A5702C891BCF9A66004FFFA1 /* DataDeletionRequest.swift */,
-				FAC4ECA71BA0873000B24CAA /* communication.swift */,
 				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
-				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
-				27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */,
-				27E4281B1BA960600067E149 /* DataPoint.swift */,
-				27F752701BB0212C000FC400 /* KeychainWrapper.swift */,
-				27F89E201BBAF07A0006C15A /* JSONUtils.swift */,
-				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
-				27A77CEC1BE3B66E004FAC3A /* ValueParser.swift */,
+				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
+				27E4281B1BA960600067E149 /* DataPoint.swift */,
+				27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */,
+				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -754,12 +770,12 @@
 		FAC4EC931BA086BC00B24CAA /* DSESwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */,
-				27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */,
-				27F89E1C1BB9966B0006C15A /* DataPointTests.swift */,
+				A5C1FE381BDA1F1200196C51 /* TestDataSyncer.swift */,
+				27DF117A1BD0027200C4E79F /* TestSensorDataProxy.swift */,
+				27F89E1C1BB9966B0006C15A /* TestDataPoint.swift */,
 				276CBB801BB52B9D001C287D /* testObject.swift */,
-				FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */,
-				27F752721BB02512000FC400 /* KeychainWrapperTests.swift */,
+				FAC4EC941BA086BC00B24CAA /* TestDatabaseHandler.swift */,
+				27F752721BB02512000FC400 /* TestKeychainWrapper.swift */,
 				FAC4EC961BA086BC00B24CAA /* Info.plist */,
 				278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */,
 			);
@@ -1177,21 +1193,21 @@
 			files = (
 				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
 				276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */,
-				FAC4ECA81BA0873000B24CAA /* communication.swift in Sources */,
-				27F752711BB0212C000FC400 /* KeychainWrapper.swift in Sources */,
+				27858B851BE764BA004FC01E /* RLMUser.swift in Sources */,
 				272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */,
 				A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */,
 				27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */,
+				27858B821BE764BA004FC01E /* DataDeletionRequest.swift in Sources */,
+				27858B8B1BE7656F004FC01E /* JSONUtils.swift in Sources */,
+				27858B861BE764BA004FC01E /* SensorProfile.swift in Sources */,
 				27DF11771BCFF10A00C4E79F /* SensorDataProxy.swift in Sources */,
 				27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */,
-				A5702C8A1BCF9A66004FFFA1 /* DataDeletionRequest.swift in Sources */,
 				27A77CEA1BE28027004FAC3A /* DataStorageEngineDelegate.swift in Sources */,
+				27858B8D1BE7656F004FC01E /* ValueParser.swift in Sources */,
+				27858B831BE764BA004FC01E /* RLMDataPoint.swift in Sources */,
+				27858B8C1BE7656F004FC01E /* KeychainWrapper.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* SensorConfig.swift in Sources */,
-				27A77CED1BE3B66E004FAC3A /* ValueParser.swift in Sources */,
-				27F89E211BBAF07A0006C15A /* JSONUtils.swift in Sources */,
-				27431DDE1BA2D38000729FB2 /* RLMDataPoint.swift in Sources */,
-				27431DF11BA3354300729FB2 /* RLMSensor.swift in Sources */,
-				275C80541BDFB38F00450AE4 /* SensorProfile.swift in Sources */,
+				27858B841BE764BA004FC01E /* RLMSensor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1199,12 +1215,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27DF117B1BD0027200C4E79F /* SensorDataProxyTests.swift in Sources */,
-				A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */,
-				27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */,
-				27F752731BB02512000FC400 /* KeychainWrapperTests.swift in Sources */,
+				27DF117B1BD0027200C4E79F /* TestSensorDataProxy.swift in Sources */,
+				A5C1FE391BDA1F1200196C51 /* TestDataSyncer.swift in Sources */,
+				27F752751BB02793000FC400 /* TestDatabaseHandler.swift in Sources */,
+				27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */,
 				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
-				27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */,
+				27F89E1D1BB9966B0006C15A /* TestDataPoint.swift in Sources */,
 				278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

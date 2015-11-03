@@ -41,8 +41,7 @@ public class CSAccountUtils{
         // evaluate the response
         if(!r.ok){
             didSucceed = false
-            NSLog("Couldn't register user.");
-            //NSLog("Responded: %s", JSON(r.json!).string!);
+            NSLog("Couldn't register the user.");
         }
         return didSucceed
     }
@@ -65,7 +64,7 @@ public class CSAccountUtils{
         // evaluate the response
         if(response.statusCode != 200){
             didSucceed = false
-            NSLog("Couldn't delete user.");
+            NSLog("Couldn't delete the user.");
             NSLog("Responded: %s", response.text!);
         }
         return didSucceed

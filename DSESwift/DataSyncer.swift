@@ -12,49 +12,69 @@ import PromiseKit
 import CoreLocation
 
 class DataSyncer: NSObject {
-    static let SOURCE: String = "aim-ios-sdk"
     
+    enum DataSyncerError: ErrorType{
+        case InvalidPersistentPeriod
+        case InvalidSyncRate
+    }
+    
+    
+    static let SOURCE: String = "aim-ios-sdk"
     let SENSOR_PROFILE_KEY_NAME = "sensor_name"
     let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
+
+    let DEFAULT_SYNC_RATE: Double = 30 * 60    // 30 mins in secs
+    let DEFAULT_PERSISTENT_PERIOD: Double = 30 * 24 * 60 * 60     // 30 days in secs
     
-    // 30 mins in secs
-    let DEFAULT_SYNC_RATE: Double = 30 * 60
-    // 30 days in secs
-    let DEFAULT_PERSISTENT_PERIOD: Double = 30 * 24 * 60 * 60
+    var syncRate: Double!
+    var persistentPeriod: Double!
     
     var proxy:SensorDataProxy
     var timer:NSTimer?
     var delegates = [DataStorageEngineDelegate]()
 
-    var syncRate: Double!
-    var persistentPeriod: Double!
-    var sensorConfigDict: Dictionary<String, SensorConfig>!
-
     // the key for the string should be <source>:<sensor>
-    init (proxy:SensorDataProxy, persistPeriod:Double?, syncRate: Double?) {
+    init (proxy:SensorDataProxy) {
         self.proxy = proxy
-        self.persistentPeriod = (persistPeriod != nil) ? persistPeriod! : DEFAULT_PERSISTENT_PERIOD
-        self.syncRate = (syncRate != nil) ? syncRate! : DEFAULT_SYNC_RATE
+        self.persistentPeriod = DEFAULT_PERSISTENT_PERIOD
+        self.syncRate = DEFAULT_SYNC_RATE
     }
     
-    func enablePeriodicSync() {
+    func initialize() throws{
+        dispatch_promise{
+            self.downloadSensorProfiles
+        }
+    }
+    
+    func setPersistentPeriod(persistentPeriod:Double?) throws {
+        if isValidPersistentPeriod(persistentPeriod){
+            self.persistentPeriod = persistentPeriod
+        } else {
+            throw DataSyncerError.InvalidPersistentPeriod
+        }
+    }
+    
+    func setSyncRate(syncRate:Double?) throws {
+        if isValidSyncRate(syncRate){
+            self.syncRate = syncRate
+        } else {
+            throw DataSyncerError.InvalidSyncRate
+        }
+    }
+    
+    func enablePeriodicSync(syncRate: Double?) {
         if timer == nil {
             timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: Selector("synchronize"), userInfo: nil, repeats: true);
         }
         timer!.fire()
     }
 
-    func disablePeriodicSync(){
+    func disablePeriodicSync(syncRate: Double?){
         timer!.invalidate()
     }
+
     
-    func initializeSensorProfile() throws{
-        dispatch_promise{
-            self.downloadSensorProfile
-        }
-    }
-    
-    func synchronize() throws {        
+    func doPeriodicSync() throws {
         dispatch_promise{
             return self.processDeletionRequests()
         }.then{ e in
@@ -62,13 +82,14 @@ class DataSyncer: NSObject {
         }.then{ e in
             return self.downloadSensorsDataFromRemote()
         }.then{ e in
-            return self.uploadDataToRemote
+            return self.uploadSensorDataToRemote
         }.then{ e in
             return self.cleanUpLocalStorage
         }
     }
 
-    func downloadSensorProfile() throws {
+    
+    internal func downloadSensorProfiles() throws {
         let sensorProfiles = try proxy.getSensorProfiles()
         for sensorProfile in sensorProfiles!{
             let profileDict = sensorProfile as! Dictionary<String, String>
@@ -77,11 +98,13 @@ class DataSyncer: NSObject {
         
         // invoke delegates
         for delegate in delegates{
-            delegate.onSensorProfilesDownloaded()
+            delegate.onDSEReady()
         }
+        
+        // TODO: Change the status of DSE
     }
     
-    func processDeletionRequests() -> ErrorType? {
+    internal func processDeletionRequests() -> ErrorType? {
         do{
             let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
             for request in dataDeletionRequests {
@@ -95,17 +118,22 @@ class DataSyncer: NSObject {
         }
     }
     
-    func downloadSensorsFromRemote() -> ErrorType?  {
+    internal func downloadSensorsFromRemote() -> ErrorType?  {
         do{
-            let downloadedSensors = try proxy.getSensors()
-            try handleDownloadedSensors(downloadedSensors)
+            let sensors = try getSensorsFromRemote()
+            
+            try insertSensorsIntoLocalDB(sensors)
+            // invoke delegates
+            for delegate in delegates{
+                delegate.onSensorsDownloaded(sensors)
+            }
             return nil
         }catch{
             return error
         }
     }
     
-    func downloadSensorsDataFromRemote() -> ErrorType?  {
+    internal func downloadSensorsDataFromRemote() -> ErrorType?  {
         do{
             let sensorsInLocal = getSensorsInLocal()
             for sensor in sensorsInLocal{
@@ -120,7 +148,7 @@ class DataSyncer: NSObject {
         }
     }
 
-    func uploadDataToRemote() -> ErrorType? {
+    internal func uploadSensorDataToRemote() -> ErrorType? {
         do {
             let sensorsInLocal = getSensorsInLocal()
             for sensor in sensorsInLocal {
@@ -136,7 +164,7 @@ class DataSyncer: NSObject {
         return nil
     }
     
-    func cleanUpLocalStorage() -> ErrorType? {
+    internal func cleanUpLocalStorage() -> ErrorType? {
         let sensorsInLocal = getSensorsInLocal()
         do{
             for sensor in sensorsInLocal {
@@ -159,7 +187,7 @@ class DataSyncer: NSObject {
             let sensorData = try proxy.getSensorData(sourceName: sensor.source, sensorName: sensor.name)
             try insertSensorDataIntoLocalDB(sensorData!, sensorId: sensor.id)
             isDataDownloadCompleted = (sensorData!.count != limit)
-        } while (isDataDownloadCompleted)
+        } while (!isDataDownloadCompleted)
     }
     
     private func updateDownloadStatusForSensor(sensor: Sensor) throws {
@@ -194,20 +222,6 @@ class DataSyncer: NSObject {
         return allSensorsInLocal
     }
     
-    
-    //TODO: why the sensors is optional
-    private func handleDownloadedSensors(sensors: Array<AnyObject>?) throws {
-        if sensors != nil {
-            let sensors = convertAnyObjArrayToSensorArray(sensors)
-            try insertSensorsIntoLocalDB(sensors)
-            
-            // invoke delegates
-            for delegate in delegates{
-                delegate.onSensorsDownloaded(sensors)
-            }
-        }
-    }
-    
     private func insertSensorsIntoLocalDB(sensors: Array<Sensor>) throws {
         for sensor in sensors {
             if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
@@ -216,6 +230,11 @@ class DataSyncer: NSObject {
                 try DatabaseHandler.updateSensor(sensor)
             }
         }
+    }
+    
+    private func getSensorsFromRemote() throws -> Array<Sensor>{
+        let downloadedArray = try proxy.getSensors()
+        return convertAnyObjArrayToSensorArray(downloadedArray)
     }
     
     private func convertAnyObjArrayToSensorArray(inputArray: Array<AnyObject>?) -> Array<Sensor>{
@@ -242,7 +261,7 @@ class DataSyncer: NSObject {
         for data in dataArray{
             // convert AnyObject to DataPoint
             let dataDict = data as! Dictionary<String, AnyObject>
-            let value = dataDict["value"] as! String
+            let value = JSONUtils.stringify(dataDict["value"])
             let time = NSDate(timeIntervalSince1970: dataDict["time"] as! Double / 1000)
             let dataPoint = DataPoint(sensorId: sensorId, value: value, time: time)
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
@@ -271,14 +290,22 @@ class DataSyncer: NSObject {
     }
     
     private func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> Array<AnyObject>{
-        let profile = try DatabaseHandler.getSensorProfile(sensorName)
-        let parser : BaseValueParser = try getParser(profile!["type"] as! String)
+        let profile = try DatabaseHandler.getSensorProfile(sensorName)!
+        let type = try getTypeFromDataStructure(profile.dataStructure)
+        let parser : BaseValueParser = try getParser(type)
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {
-            let dataDict:Dictionary<String, AnyObject> = ["time": dataPoint.time, "value": parser.getValueInOriginalFormat(dataPoint)]
+            let dataDict = ["time": dataPoint.time, "value": parser.getValueInOriginalFormat(dataPoint)]
             dataArray.append(dataDict)
         }
         return dataArray
+    }
+    
+    private func getTypeFromDataStructure(structure: String) throws -> String {
+        let data :NSData = structure.dataUsingEncoding(NSUTF8StringEncoding)!
+        let json :Dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as! [String:AnyObject]
+        
+        return json["type"] as! String
     }
     
     private func purgeDataForSensor(sensor:Sensor) throws {
@@ -310,6 +337,22 @@ class DataSyncer: NSObject {
                 return DictionaryValueParser()
             default:
                 throw DSEError.UnknownDataType
+        }
+    }
+    
+    private func isValidSyncRate(syncRate: Double?) -> Bool{
+        if (syncRate != nil) && (syncRate > 0){
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    private func isValidPersistentPeriod(peristentPeriod: Double?) -> Bool{
+        if (persistentPeriod != nil) && (persistentPeriod > 0){
+            return true
+        } else {
+            return false
         }
     }
     

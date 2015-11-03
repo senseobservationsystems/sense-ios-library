@@ -35,14 +35,14 @@ public class Sensor{
     var id = -1
     var name = ""
     var meta: Dictionary<String, AnyObject>?
-    var remoteUploadEnabled = false
-    var remoteDownloadEnabled = false
+    var remoteUploadEnabled = true
+    var remoteDownloadEnabled = true
     var persistLocally = true
     var userId = ""
     var source = ""
     var remoteDataPointsDownloaded = false
 
-    init(id:Int, name: String,   meta:Dictionary<String, AnyObject>?, remoteUploadEnabled: Bool? = false, remoteDownloadEnabled: Bool? = false,
+    init(id:Int, name: String,   meta:Dictionary<String, AnyObject>?, remoteUploadEnabled: Bool? = true, remoteDownloadEnabled: Bool? = true,
         persistLocally: Bool? = true, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
             
         self.id = id
@@ -58,7 +58,7 @@ public class Sensor{
     
     convenience init(name: String, source: String, sensorConfig: SensorConfig? = nil, userId: String, remoteDataPointsDownloaded: Bool) {
         self.init(
-            id: DatabaseHandler.getNextKeyForSensor(),
+            id: 0,
             name: name,
             meta: sensorConfig?.meta,
             remoteUploadEnabled: sensorConfig?.uploadEnabled,

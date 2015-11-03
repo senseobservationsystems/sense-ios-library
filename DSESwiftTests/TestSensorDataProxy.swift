@@ -9,7 +9,7 @@
 import XCTest
 @testable import DSESwift
 
-class SensorDataProxyTests: XCTestCase {
+class TestSensorDataProxy: XCTestCase {
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
     var accountUtils: CSAccountUtils?

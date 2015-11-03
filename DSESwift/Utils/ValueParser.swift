@@ -8,35 +8,35 @@
 
 import Foundation
 
-protocol BaseValueParser {
+internal protocol BaseValueParser {
     func getValueInOriginalFormat(dataPoint: DataPoint) -> AnyObject
 }
 
-class IntValueParser: BaseValueParser {
+internal class IntValueParser: BaseValueParser {
     func getValueInOriginalFormat(dataPoint: DataPoint) -> AnyObject {
         return dataPoint.getValueInInt()
     }
 }
 
-class DoubleValueParser: BaseValueParser {
+internal class DoubleValueParser: BaseValueParser {
     func getValueInOriginalFormat(dataPoint: DataPoint) -> AnyObject {
         return dataPoint.getValueInDouble()
     }
 }
 
-class BoolValueParser: BaseValueParser {
+internal class BoolValueParser: BaseValueParser {
     func getValueInOriginalFormat(dataPoint: DataPoint) -> AnyObject {
         return dataPoint.getValueInBool()
     }
 }
 
-class StringValueParser: BaseValueParser {
+internal class StringValueParser: BaseValueParser {
     func getValueInOriginalFormat(dataPoint: DataPoint) -> AnyObject {
         return dataPoint.getValueInString()
     }
 }
 
-class DictionaryValueParser: BaseValueParser {
+internal class DictionaryValueParser: BaseValueParser {
     func getValueInOriginalFormat(dataPoint: DataPoint) -> AnyObject {
         return dataPoint.getValueInDictionary()
     }

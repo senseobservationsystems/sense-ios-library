@@ -13,7 +13,7 @@ import RealmSwift
 @testable import DSESwift
 
 
-class DatabaseHandlerTests: XCTestCase {
+class TestDatabaseHandler: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -238,9 +238,9 @@ class DatabaseHandlerTests: XCTestCase {
         let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
         let endTime = NSDate()
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: startTime, endTime: endTime)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "sony", sensorName: "light",  startTime: startTime, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: endTime)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "gyroscope",  startTime: startTime, endTime: endTime)
             numberOfRequest++
             let realm = try! Realm()
             let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -256,11 +256,11 @@ class DatabaseHandlerTests: XCTestCase {
         let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
         let endTime = NSDate()
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: nil, endTime: endTime)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "sony",sensorName: "light", startTime: nil, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "gyroscope", startTime: startTime, endTime: nil)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: nil, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "gyroscope", startTime: nil, endTime: nil)
             numberOfRequest++
             let realm = try! Realm()
             let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -277,11 +277,11 @@ class DatabaseHandlerTests: XCTestCase {
         let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
         let endTime = NSDate()
         do{
-            try DatabaseHandler.createDataDeletionRequest("accelerometer", sourceName: "sony", startTime: nil, endTime: endTime)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "sony", sensorName: "accelerometer", startTime: nil, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("time_active", sourceName: "htc", startTime: startTime, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "time_active", startTime: startTime, endTime: nil)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("time_active", sourceName: "htc", startTime: nil, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "time_active", startTime: nil, endTime: nil)
             numberOfRequest++
             let results = DatabaseHandler.getDataDeletionRequest()
             XCTAssertEqual(numberOfRequest, results.count)
@@ -296,11 +296,11 @@ class DatabaseHandlerTests: XCTestCase {
         let startTime = NSDate().dateByAddingTimeInterval( -7 * 24 * 60 * 60 )
         let endTime = NSDate()
         do{
-            try DatabaseHandler.createDataDeletionRequest("light", sourceName: "sony", startTime: nil, endTime: endTime)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "sony", sensorName: "light", startTime: nil, endTime: endTime)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: startTime, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "gyroscope", startTime: startTime, endTime: nil)
             numberOfRequest++
-            try DatabaseHandler.createDataDeletionRequest("gyroscope", sourceName: "htc", startTime: nil, endTime: nil)
+            try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "gyroscope", startTime: nil, endTime: nil)
             numberOfRequest++
             let results = DatabaseHandler.getDataDeletionRequest()
             //XCTAssertEqual(numberOfRequest, results.count)

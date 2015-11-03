@@ -296,7 +296,7 @@ public class SensorDataProxy {
     }
     
     /**
-    * Returns NSData containing JSONArray. It perform JSONSerizlization on the give Array.
+    * Returns NSData containing JSONArray. It perform JSONSerizlization on the given Array.
     * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
     */
     private func serializeArrayToJSONArray(sensorsData: Array<AnyObject>) throws -> NSData?{

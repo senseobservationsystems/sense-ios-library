@@ -115,7 +115,7 @@ class DatabaseHandler: NSObject{
     * @param startTime the start Time to delete the data points
     * @param endTime the end Time to delete the data points
     */
-    class func createDataDeletionRequest(sensorName: String, sourceName: String, startTime: NSDate?, endTime: NSDate?) throws{
+    class func createDataDeletionRequest(sourceName sourceName: String, sensorName: String, startTime: NSDate?, endTime: NSDate?) throws{
         let realm = try! Realm()
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
@@ -191,7 +191,7 @@ class DatabaseHandler: NSObject{
         realm.beginWrite()
         rlmSensor.meta = JSONUtils.stringify(sensor.meta!)
         rlmSensor.remoteUploadEnabled = sensor.remoteUploadEnabled
-        rlmSensor.remoteDownloadEnabled = sensor.remoteUploadEnabled
+        rlmSensor.remoteDownloadEnabled = sensor.remoteDownloadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
         rlmSensor.remoteDataPointsDownloaded = sensor.remoteDataPointsDownloaded
         realm.add(rlmSensor, update: true)
@@ -216,11 +216,11 @@ class DatabaseHandler: NSObject{
         let realm = try! Realm()
         let rlmSensor = RLMSensor()
         realm.beginWrite()
-        rlmSensor.id = sensor.id
+        rlmSensor.id = getNextKeyForSensor()
         rlmSensor.name = sensor.name
         rlmSensor.meta =  JSONUtils.stringify(sensor.meta)
         rlmSensor.remoteUploadEnabled = sensor.remoteUploadEnabled
-        rlmSensor.remoteDownloadEnabled = sensor.remoteUploadEnabled
+        rlmSensor.remoteDownloadEnabled = sensor.remoteDownloadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
         rlmSensor.userId = sensor.userId
         rlmSensor.source = sensor.source
@@ -257,6 +257,17 @@ class DatabaseHandler: NSObject{
         //query
         let results = realm.objects(SensorProfile).filter(predicate)
         return results.first
+    }
+    
+    class func getSensorProfiles() throws -> [SensorProfile] {
+        var sensorProfiles = [SensorProfile]()
+        let realm = try! Realm()
+        //query
+        let results = realm.objects(SensorProfile)
+        for entry in results{
+            sensorProfiles.append(entry)
+        }
+        return sensorProfiles
     }
     
     /**
@@ -390,7 +401,7 @@ class DatabaseHandler: NSObject{
             predicates.append(NSPredicate(format: "time < %f" , queryOptions.endTime!.timeIntervalSince1970))
         }
         if(queryOptions.existsInRemote != nil){
-            predicates.append(NSPredicate(format: "time < %b" , queryOptions.existsInRemote!))
+            predicates.append(NSPredicate(format: "existsInRemote = %@" , queryOptions.existsInRemote!))
         }
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }

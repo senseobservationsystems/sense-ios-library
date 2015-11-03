@@ -59,16 +59,20 @@ public class JSONUtils{
     }
     
     class func getDictionaryValue(jsonString: String) -> [String: AnyObject]{
+        if (jsonString.isEmpty){
+            return [String: AnyObject]()
+        }
+        var result = [String: AnyObject]()
         if let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding){
             do{
                 if let dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [String: AnyObject]{
-                    return dictionary
+                    result = dictionary
                 }
             }catch {
                 print("Error while parsing string into dictionary")
             }
         }
-        return [String: AnyObject]()
+        return result
     }
     
     public class func validateValue(value: AnyObject, schema: String) -> Bool{
