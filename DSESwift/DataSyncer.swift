@@ -92,8 +92,8 @@ class DataSyncer: NSObject {
     internal func downloadSensorProfiles() throws {
         let sensorProfiles = try proxy.getSensorProfiles()
         for sensorProfile in sensorProfiles!{
-            let profileDict = sensorProfile as! Dictionary<String, String>
-            try DatabaseHandler.createOrUpdateSensorProfile(profileDict[SENSOR_PROFILE_KEY_NAME]!, dataStructure: profileDict[SENSOR_PROFILE_KEY_STRUCTURE]!)
+            let profileDict = sensorProfile as! Dictionary<String, AnyObject>
+            try DatabaseHandler.createOrUpdateSensorProfile(profileDict[SENSOR_PROFILE_KEY_NAME] as! String, dataStructure: JSONUtils.stringify(profileDict[SENSOR_PROFILE_KEY_STRUCTURE]!))
         }
         
         // invoke delegates
@@ -292,14 +292,22 @@ class DataSyncer: NSObject {
     private func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> Array<AnyObject>{
         let profile = try DatabaseHandler.getSensorProfile(sensorName)!
         let type = try getTypeFromDataStructure(profile.dataStructure)
-        let parser : BaseValueParser = try getParser(type)
-        var dataArray = Array<AnyObject>()
-        for dataPoint in dataPoints {
-            let dataDict = ["time": dataPoint.time, "value": parser.getValueInOriginalFormat(dataPoint)]
-            dataArray.append(dataDict)
+        switch (type){
+            case "integer":
+                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints)
+            case "number":
+                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithDoubleValue(dataPoints)
+            case "bool":
+                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithBoolValue(dataPoints)
+            case "string":
+                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithStringValue(dataPoints)
+            case "object":
+                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithDictionaryValue(dataPoints)
+            default:
+                throw DSEError.UnknownDataType
         }
-        return dataArray
     }
+    
     
     private func getTypeFromDataStructure(structure: String) throws -> String {
         let data :NSData = structure.dataUsingEncoding(NSUTF8StringEncoding)!

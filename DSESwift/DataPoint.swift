@@ -52,6 +52,10 @@ public class DataPoint{
         self.value = value
     }
     
+    func getTimeInMillis() -> Int {
+        return Int(self.time.timeIntervalSince1970 * 1000)
+    }
+    
     func getValueInInt() -> Int {
         return JSONUtils.getIntValue(self.value)
     }

@@ -28,6 +28,7 @@ class TestDataSyncer: XCTestCase{
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
+        KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
     }
     
     override func tearDown() {
@@ -218,40 +219,76 @@ class TestDataSyncer: XCTestCase{
             registerAndLogin()
             let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
             let dataSyncer = DataSyncer(proxy: proxy)
+            try dataSyncer.downloadSensorProfiles()
+            
+            // Sensors to be tested
             //1. sensor with uploadEnabled = true and persistLocally = true
             //2. sensor with uploadEnabled = true and persistLocally = false
             //3. sensor with uploadEnabled = false and persistLocally = true
             try createSensorsInLocalDataBase()
             
+            // ============
             //1. sensor with uploadEnabled = true and persistLocally = true
             //  a. data expired and existsInRemote -> removed
             //  b. data existsInRemote -> remain
             //  c. data expired -> remain
-            try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
+            try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-50*24*60*60))
             try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1)
             dataSyncer.uploadSensorDataToRemote()
             try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
             dataSyncer.cleanUpLocalStorage()
             //verify the result
+            var queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(0, sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             
+            queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(5, sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            
+            queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-35*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(5, sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            
+            // ============
             //2. sensor with uploadEnabled = true and persistLocally = false
             //  a. data expired and existsInRemote -> removed
             //  b. data existsInRemote -> removed
             //  c. data expired -> remain
-            try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
+            try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-50*24*60*60))
             try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2)
             dataSyncer.uploadSensorDataToRemote()
             try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
             dataSyncer.cleanUpLocalStorage()
             //verify the result
+            queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(0, sourceName: sourceName2, sensorName: sensorName2, queryOptions: queryOptions)
             
+            queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(0, sourceName: sourceName2, sensorName: sensorName2, queryOptions: queryOptions)
+            
+            queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-35*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(5, sourceName: sourceName2, sensorName: sensorName2, queryOptions: queryOptions)
+            
+            // ============
             //3. sensor with uploadEnabled = false and persistLocally = true
             //  a. data expired -> removed
             //  b. data not expired -> remain
-            try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
-            try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2)
+            try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3, startTime: NSDate().dateByAddingTimeInterval(-50*24*60*60))
+            try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3)
             dataSyncer.cleanUpLocalStorage()
             //verify the result
+            queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(0, sourceName: sourceName3, sensorName: sensorName3, queryOptions: queryOptions)
+            
+            queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            try checkNumberOfDataPointsForSensorInLocal(5, sourceName: sourceName3, sensorName: sensorName3, queryOptions: queryOptions)
+            
             
         } catch {
             print(error)
@@ -313,6 +350,13 @@ class TestDataSyncer: XCTestCase{
         }
     }
     
+    func checkNumberOfDataPointsForSensorInLocal(expectedNumber: Int, sourceName: String, sensorName: String, queryOptions:QueryOptions? = QueryOptions()) throws {
+        let sensor = try DatabaseHandler.getSensor(sourceName, sensorName)
+        let dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions!)
+        XCTAssertEqual(dataPoints.count, expectedNumber)
+    }
+    
+    
     func populateRemoteDatabase(proxy: SensorDataProxy, startTime: NSDate? = nil) throws {
 
         let data1 = getDummyAccelerometerData(time: startTime)
@@ -334,17 +378,17 @@ class TestDataSyncer: XCTestCase{
     
     func createSensorsInLocalDataBase() throws {
         var sensorConfig = SensorConfig()
-        var sensor1 = Sensor(name: sensorName1, source: sourceName1, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let sensor1 = Sensor(name: sensorName1, source: sourceName1, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor1)
         
         sensorConfig = SensorConfig()
         sensorConfig.persist = false
-        var sensor2 = Sensor(name: sensorName2, source: sourceName2, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let sensor2 = Sensor(name: sensorName2, source: sourceName2, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor2)
         
         sensorConfig = SensorConfig()
         sensorConfig.uploadEnabled = false
-        var sensor3 = Sensor(name: sensorName3, source: sourceName3, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let sensor3 = Sensor(name: sensorName3, source: sourceName3, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor3)
     }
     

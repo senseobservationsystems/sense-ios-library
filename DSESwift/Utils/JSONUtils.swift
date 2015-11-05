@@ -75,6 +75,51 @@ public class JSONUtils{
         return result
     }
     
+    public class func convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+        var dataArray = Array<AnyObject>()
+        for dataPoint in dataPoints {
+            let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInInt()]
+            dataArray.append(dataDict)
+        }
+        return dataArray
+    }
+    
+    public class func convertArrayOfDataPointIntoJSONArrayWithDoubleValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+        var dataArray = Array<AnyObject>()
+        for dataPoint in dataPoints {
+            let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInDouble()]
+            dataArray.append(dataDict)
+        }
+        return dataArray
+    }
+    
+    public class func convertArrayOfDataPointIntoJSONArrayWithBoolValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+        var dataArray = Array<AnyObject>()
+        for dataPoint in dataPoints {
+            let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInBool()]
+            dataArray.append(dataDict)
+        }
+        return dataArray
+    }
+    
+    public class func convertArrayOfDataPointIntoJSONArrayWithStringValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+        var dataArray = Array<AnyObject>()
+        for dataPoint in dataPoints {
+            let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInString()]
+            dataArray.append(dataDict)
+        }
+        return dataArray
+    }
+    
+    public class func convertArrayOfDataPointIntoJSONArrayWithDictionaryValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+        var dataArray = Array<AnyObject>()
+        for dataPoint in dataPoints {
+            let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInDictionary()]
+            dataArray.append(dataDict)
+        }
+        return dataArray
+    }
+    
     public class func validateValue(value: AnyObject, schema: String) -> Bool{
         do{
             let jsonSchamaValidator = try getJSONSchemaValidator(schema)
