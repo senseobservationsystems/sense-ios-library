@@ -13,3 +13,5 @@ github "mxcl/PromiseKit"
 # JSON Schema Validation 
 github "kanekin/JSONSchemaValidation"
 
+# JSON Parser
+github "SwiftyJSON/SwiftyJSON"

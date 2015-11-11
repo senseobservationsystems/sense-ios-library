@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import DSESwift
+import SwiftyJSON
 
 class TestSensorDataProxy: XCTestCase {
     
@@ -30,8 +31,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     
-    func testRegistrationAndDelete(){
-        accountUtils!.deleteUser()
+    func testRegistrationAndDelete() {
+        XCTAssertEqual(accountUtils!.deleteUser(), true)
     }
     
     
@@ -39,7 +40,7 @@ class TestSensorDataProxy: XCTestCase {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do {
             let json = try proxy.getSensorProfiles()
-            print(json)
+            print(json[0])
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -50,7 +51,7 @@ class TestSensorDataProxy: XCTestCase {
         let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 0)
+            XCTAssertEqual(resultArray.count, 0)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -76,7 +77,7 @@ class TestSensorDataProxy: XCTestCase {
             try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
             let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 3)
+            XCTAssertEqual(resultArray.count, 3)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -102,7 +103,7 @@ class TestSensorDataProxy: XCTestCase {
             try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
             let resultArray = try proxy.getSensors(sourceName1)
-            XCTAssertEqual(resultArray!.count, 2)
+            XCTAssertEqual(resultArray.count, 2)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -128,7 +129,7 @@ class TestSensorDataProxy: XCTestCase {
             try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
             let result = try proxy.getSensor(sourceName1, sensorName1)
-            XCTAssertEqual(result!["sensor_name"] as? String, sensorName1)
+            XCTAssertEqual(result["sensor_name"].stringValue, sensorName1)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -145,15 +146,14 @@ class TestSensorDataProxy: XCTestCase {
             
             // check the sensor is added.
             let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 1)
+            XCTAssertEqual(resultArray.count, 1)
             
             // update meta
             let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
             try proxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
             
             let result = try proxy.getSensor(sourceName1, sensorName1)
-            let retrievedMeta = result!["meta"] as? Dictionary<String, String>
-            XCTAssertEqual(retrievedMeta!["Doge"], "Wow, MUCH ACCELERATION! VERY HORSEPOWER!")
+            XCTAssertEqual(result["meta"]["Doge"].stringValue, "Wow, MUCH ACCELERATION! VERY HORSEPOWER!")
             
         }catch{
             print( error )
@@ -175,20 +175,19 @@ class TestSensorDataProxy: XCTestCase {
             try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             // check the sensor is added.
-            var resultArray : Array<AnyObject>?
-            resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 2)
+            var resultArray = try proxy.getSensors()
+            XCTAssertEqual(resultArray.count, 2)
             
             // delete a sensor
             try proxy.deleteSensor(sourceName1, sensorName1)
             resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 1)
+            XCTAssertEqual(resultArray.count, 1)
             
             // delete another sensor
             try proxy.deleteSensor(sourceName2, sensorName2)
             resultArray = try proxy.getSensors()
             // Puff... aand it's gone
-            XCTAssertEqual(resultArray!.count, 0)
+            XCTAssertEqual(resultArray.count, 0)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -207,7 +206,7 @@ class TestSensorDataProxy: XCTestCase {
             NSThread.sleepForTimeInterval(5)
             
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -229,12 +228,12 @@ class TestSensorDataProxy: XCTestCase {
             queryOptions.startTime = NSDate().dateByAddingTimeInterval(-4*24*60*60)
             
             var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
             
             result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
-            XCTAssertEqual(result!["data"]!.count, 0)
+            XCTAssertEqual(result["data"].count, 0)
             
         }catch{
             print( error )
@@ -257,12 +256,12 @@ class TestSensorDataProxy: XCTestCase {
             queryOptions.endTime = NSDate()
             
             var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             queryOptions.endTime = NSDate().dateByAddingTimeInterval(-2*24*60*60)
             
             result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
-            XCTAssertEqual(result!["data"]!.count, 0)
+            XCTAssertEqual(result["data"].count, 0)
             
         }catch{
             print( error )
@@ -282,13 +281,13 @@ class TestSensorDataProxy: XCTestCase {
             NSThread.sleepForTimeInterval(5)
             
             var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             var queryOptions = QueryOptions()
             queryOptions.limit = 3
             
             result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
-            XCTAssertEqual(result!["data"]!.count, 3)
+            XCTAssertEqual(result["data"].count, 3)
             
         }catch{
             print( error )
@@ -317,14 +316,13 @@ class TestSensorDataProxy: XCTestCase {
             NSThread.sleepForTimeInterval(5)
             
             let resultArray = try proxy.getSensors(sourceName1)
-            XCTAssertEqual(resultArray!.count, 2)
+            XCTAssertEqual(resultArray.count, 2)
             
-            var result : Dictionary<String, AnyObject>?
-            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            XCTAssertEqual(result["data"].count, 5)
             
             result = try proxy.getSensorData(sourceName: sourceName2, sensorName: sensorName2)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -351,29 +349,28 @@ class TestSensorDataProxy: XCTestCase {
             
             // == Check that the sensors are added properly
             // Sensors
-            var resultArray: Array<AnyObject>?
-            resultArray = try proxy.getSensors(sourceName)
-            XCTAssertEqual(resultArray!.count, 2)
+
+            var resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray.count, 2)
             // SensorData
-            var result : Dictionary<String, AnyObject>?
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            var result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
+            XCTAssertEqual(result["data"].count, 5)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             // delete a sensor
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName1, startTime: nil, endTime: nil)
             resultArray = try proxy.getSensors(sourceName)
-            XCTAssertEqual(resultArray!.count, 2)
+            XCTAssertEqual(resultArray.count, 2)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
-            XCTAssertEqual(result!["data"]!.count, 0)
+            XCTAssertEqual(result["data"].count, 0)
             
             // delete the other sensor
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName2, startTime: nil, endTime: nil)
             resultArray = try proxy.getSensors(sourceName)
-            XCTAssertEqual(resultArray!.count, 2)
+            XCTAssertEqual(resultArray.count, 2)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
-            XCTAssertEqual(result!["data"]!.count, 0)
+            XCTAssertEqual(result["data"].count, 0)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -396,25 +393,23 @@ class TestSensorDataProxy: XCTestCase {
             
             // == Check that the sensors are added properly
             // Sensors
-            var resultArray: Array<AnyObject>?
-            resultArray = try proxy.getSensors(sourceName)
-            XCTAssertEqual(resultArray!.count, 1)
+            var resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray.count, 1)
             // SensorData
-            var result : Dictionary<String, AnyObject>?
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            var result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result["data"].count, 5)
             
             // delete a sensor
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-1*24*60*60), endTime: nil)
             resultArray = try proxy.getSensors(sourceName)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             // delete the other sensor
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-3*24*60*60 - 60), endTime: nil)
             resultArray = try proxy.getSensors(sourceName)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
-            XCTAssertEqual(result!["data"]!.count, 0)
+            XCTAssertEqual(result["data"].count, 0)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -437,25 +432,23 @@ class TestSensorDataProxy: XCTestCase {
             
             // == Check that the sensors are added properly
             // Sensors
-            var resultArray: Array<AnyObject>?
-            resultArray = try proxy.getSensors(sourceName)
-            XCTAssertEqual(resultArray!.count, 1)
+            var resultArray = try proxy.getSensors(sourceName)
+            XCTAssertEqual(resultArray.count, 1)
             // SensorData
-            var result : Dictionary<String, AnyObject>?
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            var result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            XCTAssertEqual(result["data"].count, 5)
             
             // delete a sensor
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-3*24*60*60))
             resultArray = try proxy.getSensors(sourceName)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             // delete the other sensor
             try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-1*24*60*60))
             resultArray = try proxy.getSensors(sourceName)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
-            XCTAssertEqual(result!["data"]!.count, 0)
+            XCTAssertEqual(result["data"].count, 0)
         }catch{
             print( error )
             XCTFail("Exception was captured. Abort the test.")
@@ -840,7 +833,7 @@ class TestSensorDataProxy: XCTestCase {
             
             // check the sensor is added.
             let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 1)
+            XCTAssertEqual(resultArray.count, 1)
             
         }catch{
             print( error )
@@ -871,7 +864,7 @@ class TestSensorDataProxy: XCTestCase {
             
             // check the sensor is added.
             let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray!.count, 1)
+            XCTAssertEqual(resultArray.count, 1)
             
         }catch{
             print( error )
@@ -898,7 +891,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorName1 = "accelerometer"
             
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
-            XCTAssertEqual(result!["data"]!.count, 5)
+            XCTAssertEqual(result["data"].count, 5)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -983,4 +976,5 @@ class TestSensorDataProxy: XCTestCase {
         }
         return data
     }
+
 }

@@ -34,7 +34,7 @@ When you want to add a new library or modify the dependency, you can edit Cartfi
 
     carthage update --configuration Debug --platform iOS
 
-For more details about carthage, you can refer to the instruction at [Carthage repository](https://github.com/Carthage/Carthage).
+For more details about carthage, you can refer to the instruction at [Carthage repository](https://github.com/Carthage/Carthage#if-youre-building-for-ios).
 ###### Note: 
 At this moment, Cartage can not handle Realm. So Realm Framework has to be added manually when Realm releases a new version.
 

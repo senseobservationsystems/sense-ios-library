@@ -8,6 +8,7 @@
 
 import Foundation
 import Just
+import SwiftyJSON
 
 public class SensorDataProxy {
     
@@ -56,14 +57,14 @@ public class SensorDataProxy {
     * @return Returns an array with sensor profiles, structured like:
     *         [{sensor_name: string, data_type: JSON}, ...]
     */
-    func getSensorProfiles() throws -> Array<AnyObject>?{
+    func getSensorProfiles() throws -> JSON {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(self.baseUrl! + "/sensor_profiles", headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Array<AnyObject>
+        return JSON(result.json!)
     }
     
 
@@ -74,14 +75,14 @@ public class SensorDataProxy {
     * @param sourceName     The source name. When no sourceName parameter is given, it returns all the sensors of the currrent logged in user. for example "sense-ios", "sense-android", "fitbit", ...
     * @return Returns an array containing sensors
     */
-    func getSensors(sourceName: String? = nil) throws -> Array<AnyObject>?{
+    func getSensors(sourceName: String? = nil) throws -> JSON {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(getSensorUrl(sourceName), headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Array<AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -94,14 +95,14 @@ public class SensorDataProxy {
     * @param sensorName     The sensor name, for example "accelerometer"
     * @return Returns a Dictionary containing the sensor info
     */
-    func getSensor(sourceName: String, _ sensorName: String) throws -> Dictionary<String, AnyObject>?{
+    func getSensor(sourceName: String, _ sensorName: String) throws -> JSON {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let result = Just.get(getSensorUrl(sourceName, sensorName), headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Dictionary<String, AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -114,7 +115,7 @@ public class SensorDataProxy {
     * @param meta           JSON object with meta data
     * @return               Returns a Dictionary containing the sensor info
     */
-    func updateSensor(sourceName sourceName: String, sensorName: String, meta: Dictionary<String, AnyObject>) throws -> Dictionary<String, AnyObject>? {
+    func updateSensor(sourceName sourceName: String, sensorName: String, meta: Dictionary<String, AnyObject>) throws -> JSON {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         
         let body = ["meta": meta]
@@ -122,7 +123,7 @@ public class SensorDataProxy {
         if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
-        return result.json as? Dictionary<String, AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -155,7 +156,7 @@ public class SensorDataProxy {
     * @param queryOptions   Query options to set start and end time, and to sort and limit the data
     * @return Returns an Dictionary containing the sensor data, where the data is structured as `[{time: long, value: JSON}, ...]`
     */
-    func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> Dictionary<String, AnyObject>?{
+    func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> JSON {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
         if (!isValidQueryOptions(queryOptions)){ throw ProxyError.InvalidQuery }
         
@@ -166,7 +167,7 @@ public class SensorDataProxy {
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Dictionary<String, AnyObject>
+        return JSON(result.json!)
     }
     
     /**
