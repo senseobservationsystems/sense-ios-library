@@ -21,16 +21,24 @@ enum DatabaseError: ErrorType{
 
 /**
  * This class provides the main interface for creating sensors and sources and setting storage engine specific properties.
- 
+ *
  * All the Data Storage Engine updates are delivered to the associated delegate object, which is a custom object that you provide.
  * For information about the delegate methods you use to receive events, see DataStorageEngineDelegate protocol.
+ *
+ * this is a singleton class: read how it works here:
+ * http://krakendev.io/blog/the-right-way-to-write-a-singleton
 */
-public class DataStorageEngine{
-
-    //let dataSyncer: DataSyncer
+public class DataStorageEngine {
+    // this makes the DSE a singleton!! woohoo!
+    static let sharedInstance = DataStorageEngine()
     
-    init() {
-        //DataSyncer()
+    //This prevents others from using the default '()' initializer for this class.
+    private init() {
+        
+    }
+    
+    public static func getInstance() -> DataStorageEngine {
+        return sharedInstance
     }
     
     /**
@@ -74,5 +82,9 @@ public class DataStorageEngine{
     **/
     public func getSources() -> [String]{
         return DatabaseHandler.getSources()
+    }
+    
+    public func setCredentials(credentials: String) -> Void {
+        
     }
 }

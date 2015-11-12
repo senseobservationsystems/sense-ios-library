@@ -6,14 +6,19 @@
 //
 //
 
-import Foundation
-@testable import DSESwift
+import XCTest
 import RealmSwift
+@testable import DSESwift
+import SwiftyJSON
+import PromiseKit
 
-class DataStorageEngineTests: XCTestCase{
+class TestDataStorageEngine: XCTestCase{
     
     override func setUp() {
         super.setUp()
+        
+        // create DSE singleton here
+        
     }
     
     override func tearDown() {
@@ -22,6 +27,7 @@ class DataStorageEngineTests: XCTestCase{
     }
     
     func testSetup() {
-        
+        let dseRef = DataStorageEngine.sharedInstance // this will be lazy-loaded when first called
+
     }
 }
