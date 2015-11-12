@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DatabaseError: ErrorType{
+public enum DatabaseError: ErrorType{
     case ObjectNotFound
     case InsertFailed
     case UpdateFailed
@@ -17,6 +17,7 @@ enum DatabaseError: ErrorType{
     case UnauthenticatedAccess
     case UnknownError
 }
+
 
 
 /**
@@ -31,30 +32,41 @@ enum DatabaseError: ErrorType{
 public class DataStorageEngine {
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
+    private var config = DSEConfig()
+    
+    // reference to the datasyncer
+    let dataSyncer = DataSyncer()
     
     //This prevents others from using the default '()' initializer for this class.
     private init() {
-        
+        // set default config
+        self.setDefaultConfig();
+    }
+    
+    func setDefaultConfig() {
+        self.config.syncInterval           = 30 * 60
+        self.config.localPersistancePeriod = 30 * 24 * 60 * 60
+        self.config.enableEncryption       = true
+        self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
     }
     
     public static func getInstance() -> DataStorageEngine {
         return sharedInstance
     }
     
-    /**
-    * Create a new sensor in database and backend if it does not already exist. Throw exception if it already exists. If it has been created, return the object.
-    * an object.
-    * @param name The sensor name (e.g accelerometer)
-    * @param dataType The data type of the sensor
-    * @param options The sensor options
-    * @return sensor object
-    **/
-    public func createSensor(source: String, name: String, sensorConfig: SensorConfig) throws -> Sensor
-    {
-        let sensor = Sensor(name: name, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
-        try DatabaseHandler.insertSensor(sensor)
-
-        return sensor
+    public func setup(customConfig: DSEConfig) {
+        self.config.syncInterval           = customConfig.syncInterval           ?? self.config.syncInterval
+        self.config.localPersistancePeriod = customConfig.localPersistancePeriod ?? self.config.localPersistancePeriod
+        self.config.enableEncryption       = customConfig.enableEncryption       ?? self.config.enableEncryption
+        self.config.backendEnvironment     = customConfig.backendEnvironment     ?? self.config.backendEnvironment
+        self.config.appKey                 = customConfig.appKey!
+        self.config.sessionId              = customConfig.sessionId!
+        
+        self.dataSyncer.setConfig(self.config)
+    }
+    
+    public func start() {
+        
     }
 
     /**

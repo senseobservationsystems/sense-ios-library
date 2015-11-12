@@ -48,7 +48,7 @@
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; };
 		2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
-		27431DEF1BA32FEF00729FB2 /* SensorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */; };
+		27431DEF1BA32FEF00729FB2 /* DSEConfigurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; };
@@ -62,7 +62,6 @@
 		27858B8C1BE7656F004FC01E /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B891BE7656F004FC01E /* KeychainWrapper.swift */; };
 		27858B8D1BE7656F004FC01E /* ValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B8A1BE7656F004FC01E /* ValueParser.swift */; };
 		278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */; };
-		27A77CEA1BE28027004FAC3A /* DataStorageEngineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */; };
 		27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* QueryOptions.swift */; };
 		27CE749C1BDFC52D0095E735 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74981BDFC4F00095E735 /* Realm.framework */; };
 		27CE749D1BDFC52D0095E735 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74991BDFC4F00095E735 /* RealmSwift.framework */; };
@@ -239,7 +238,7 @@
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVJSONSchemaValidation.framework; path = Carthage/Build/iOS/VVJSONSchemaValidation.framework; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
-		27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorConfig.swift; sourceTree = "<group>"; };
+		27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEConfigurations.swift; sourceTree = "<group>"; };
 		276CBB801BB52B9D001C287D /* testObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testObject.swift; sourceTree = "<group>"; };
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
@@ -253,7 +252,6 @@
 		27858B891BE7656F004FC01E /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeychainWrapper.swift; path = Utils/KeychainWrapper.swift; sourceTree = "<group>"; };
 		27858B8A1BE7656F004FC01E /* ValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ValueParser.swift; path = Utils/ValueParser.swift; sourceTree = "<group>"; };
 		278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSAccountUtils.swift; sourceTree = "<group>"; };
-		27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngineDelegate.swift; sourceTree = "<group>"; };
 		27C2F3AB1BBD955000832A7F /* QueryOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryOptions.swift; sourceTree = "<group>"; };
 		27CE74981BDFC4F00095E735 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		27CE74991BDFC4F00095E735 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -732,13 +730,12 @@
 				FAC4EC881BA086BC00B24CAA /* DSESwift.h */,
 				FAC4EC8A1BA086BC00B24CAA /* Info.plist */,
 				276CBB821BB56E12001C287D /* DataStorageEngine.swift */,
-				27A77CE91BE28027004FAC3A /* DataStorageEngineDelegate.swift */,
 				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
 				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
-				27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */,
+				27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */,
 				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
 			);
 			path = DSESwift;
@@ -1146,11 +1143,10 @@
 				27858B861BE764BA004FC01E /* SensorProfile.swift in Sources */,
 				27DF11771BCFF10A00C4E79F /* SensorDataProxy.swift in Sources */,
 				27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */,
-				27A77CEA1BE28027004FAC3A /* DataStorageEngineDelegate.swift in Sources */,
 				27858B8D1BE7656F004FC01E /* ValueParser.swift in Sources */,
 				27858B831BE764BA004FC01E /* RLMDataPoint.swift in Sources */,
 				27858B8C1BE7656F004FC01E /* KeychainWrapper.swift in Sources */,
-				27431DEF1BA32FEF00729FB2 /* SensorConfig.swift in Sources */,
+				27431DEF1BA32FEF00729FB2 /* DSEConfigurations.swift in Sources */,
 				27858B841BE764BA004FC01E /* RLMSensor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

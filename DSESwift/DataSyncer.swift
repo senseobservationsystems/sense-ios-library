@@ -12,13 +12,12 @@ import PromiseKit
 import CoreLocation
 import SwiftyJSON
 
-class DataSyncer: NSObject {
+class DataSyncer {
     
     enum DataSyncerError: ErrorType{
         case InvalidPersistentPeriod
         case InvalidSyncRate
     }
-    
     
     static let SOURCE = "aim-ios-sdk"
     let SENSOR_PROFILE_KEY_NAME = "sensor_name"
@@ -29,14 +28,14 @@ class DataSyncer: NSObject {
     
     var syncRate: Double!
     var persistentPeriod: Double!
+    var config = DSEConfig()
     
     var proxy:SensorDataProxy
     var timer:NSTimer?
-    var delegates = [DataStorageEngineDelegate]()
 
     // the key for the string should be <source>:<sensor>
-    init (proxy:SensorDataProxy) {
-        self.proxy = proxy
+    init () {
+        self.proxy = SensorDataProxy()
         self.persistentPeriod = DEFAULT_PERSISTENT_PERIOD
         self.syncRate = DEFAULT_SYNC_RATE
     }
@@ -47,20 +46,11 @@ class DataSyncer: NSObject {
         }
     }
     
-    func setPersistentPeriod(persistentPeriod:Double?) throws {
-        if isValidPersistentPeriod(persistentPeriod){
-            self.persistentPeriod = persistentPeriod
-        } else {
-            throw DataSyncerError.InvalidPersistentPeriod
-        }
-    }
-    
-    func setSyncRate(syncRate:Double?) throws {
-        if isValidSyncRate(syncRate){
-            self.syncRate = syncRate
-        } else {
-            throw DataSyncerError.InvalidSyncRate
-        }
+    func setConfig(config: DSEConfig) {
+        self.config = config
+        self.syncRate = self.config.syncInterval!
+        self.persistentPeriod = self.config.localPersistancePeriod!
+        self.proxy.setConfig(self.config)
     }
     
     func enablePeriodicSync(syncRate: Double?) {
@@ -104,11 +94,6 @@ class DataSyncer: NSObject {
                 try DatabaseHandler.createOrUpdateSensorProfile(subJson[SENSOR_PROFILE_KEY_NAME].stringValue, dataStructure: subJson[SENSOR_PROFILE_KEY_STRUCTURE].stringValue)
             }
             
-            // invoke delegates
-            for delegate in delegates{
-                delegate.onDSEReady()
-            }
-            
             // TODO: Change the status of DSE
             fulfill()
         }
@@ -132,10 +117,6 @@ class DataSyncer: NSObject {
             let sensors = try getSensorsFromRemote()
             
             try insertSensorsIntoLocalDB(sensors)
-            // invoke delegates
-            for delegate in delegates{
-                delegate.onSensorsDownloaded(sensors)
-            }
             fulfill()
         }
     }
@@ -347,12 +328,5 @@ class DataSyncer: NSObject {
         }
     }
     
-    private func isValidSyncRate(syncRate: Double?) -> Bool{
-        return (syncRate != nil) && (syncRate > 0)
-    }
-    
-    private func isValidPersistentPeriod(peristentPeriod: Double?) -> Bool{
-        return (persistentPeriod != nil) && (persistentPeriod > 0)
-    }
     
 }

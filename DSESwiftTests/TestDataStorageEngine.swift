@@ -16,9 +16,6 @@ class TestDataStorageEngine: XCTestCase{
     
     override func setUp() {
         super.setUp()
-        
-        // create DSE singleton here
-        
     }
     
     override func tearDown() {
@@ -26,8 +23,18 @@ class TestDataStorageEngine: XCTestCase{
         super.tearDown()
     }
     
+    
+    
     func testSetup() {
-        let dseRef = DataStorageEngine.sharedInstance // this will be lazy-loaded when first called
-
+        // im logged in?
+        let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
+        
+        //var credentials = "Timmy"
+        var config = DSEConfig()
+        config.syncInterval = 10000
+        
+        
+        //dse.setup(config)
+        dse.start()
     }
 }

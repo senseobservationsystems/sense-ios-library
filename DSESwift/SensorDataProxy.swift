@@ -37,18 +37,23 @@ public class SensorDataProxy {
     
     /**
     * Create a sensor data proxy.
-    * @param server     Select whether to use the live or staging server.
-    * appKey     Application key, identifying the application in the REST API.
-    * @param sessionId  The session id of the current user.
     */
-    init (server: Server, appKey: String, sessionId: String) {
+    init (server: Server = Server.STAGING) {
         self.baseUrl = (server == Server.LIVE) ? BASE_URL_LIVE : BASE_URL_STAGING;
-        self.appKey = appKey;
-        self.sessionId = sessionId;
     }
     
-    func setSessionId(sessionId: String){
-        self.sessionId = sessionId
+    func setAppKey(key: String) {
+        self.appKey = key
+    }
+
+    func setSessionId(id: String) {
+        self.sessionId = id
+    }
+    
+    func setConfig(config: DSEConfig) {
+        self.baseUrl = (config.backendEnvironment == Server.LIVE) ? BASE_URL_LIVE : BASE_URL_STAGING;
+        self.appKey = config.appKey
+        self.sessionId = config.sessionId
     }
     
     /**

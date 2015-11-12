@@ -14,6 +14,8 @@ class TestSensorDataProxy: XCTestCase {
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
     var accountUtils: CSAccountUtils?
+    let proxy = SensorDataProxy()
+    var config = DSEConfig()
     
     override func setUp() {
         super.setUp()
@@ -23,6 +25,13 @@ class TestSensorDataProxy: XCTestCase {
         accountUtils!.registerUser(username, password: "Password")
         accountUtils!.loginUser(username, password: "Password")
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        // set the config with CORRECT default values
+        self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
+        self.config.appKey = APPKEY_STAGING
+        self.config.sessionId = (accountUtils?.sessionId)!
+        
+        self.proxy.setConfig(self.config)
     }
     
     override func tearDown() {
@@ -37,7 +46,6 @@ class TestSensorDataProxy: XCTestCase {
     
     
     func testGetSensorProfiles(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do {
             let json = try proxy.getSensorProfiles()
             print(json[0])
@@ -48,7 +56,6 @@ class TestSensorDataProxy: XCTestCase {
     }
 
     func testGetSensorsWithZeroSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let resultArray = try proxy.getSensors()
             XCTAssertEqual(resultArray.count, 0)
@@ -59,7 +66,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -85,7 +91,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorsWithSourceName() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -111,7 +116,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorsWithSourceNameAndSensorName() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -137,7 +141,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testUpdateSensor() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -162,7 +165,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensor() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -195,7 +197,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorData() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -214,7 +215,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorDataWithStartDate() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -242,7 +242,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorDataWithEndDate() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -270,7 +269,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorDataWithLimit() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -297,7 +295,6 @@ class TestSensorDataProxy: XCTestCase {
     
     
     func testPutSensorDataForMultipleSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -330,7 +327,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorData() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -378,7 +374,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorDataWithStartDate() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -417,7 +412,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorDataWithEndDate() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -460,7 +454,6 @@ class TestSensorDataProxy: XCTestCase {
     // MARK: Sensor does not exist yet
     
     func testGetSensorsWithNonExistingSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -478,7 +471,6 @@ class TestSensorDataProxy: XCTestCase {
     
     //TODO: revive when the backend can return an error when update is called on the sensor which does not exist yet
 //    func testUpdateSensorsWithNonExistingSensors() {
-//        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
 //        do{
 //            let sourceName = "aim-ios-sdk"
 //            let sensorName = "accelerometer"
@@ -493,7 +485,6 @@ class TestSensorDataProxy: XCTestCase {
 //    }
     
     func testDeleteSensorsWithNonExistingSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -509,7 +500,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorDataWithNonExistingSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -525,7 +515,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorDataWithNonExistingSensors() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -546,7 +535,6 @@ class TestSensorDataProxy: XCTestCase {
     
     // putSensorData
     func testPutSensorWithBadStructure() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
@@ -563,7 +551,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testPutSensorDataForMultipleSensorsWithBadStructure() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -590,7 +577,6 @@ class TestSensorDataProxy: XCTestCase {
     // ## invalidSensorName or source
     
     func testPutSensorWithInvalidSourceName() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "invalidSourceName"
             let sensorName = "accelerometer"
@@ -607,7 +593,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testPutSensorWithInvalidSensorName() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "invalidSensorName"
@@ -624,7 +609,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testPutSensorForMultipleSensorsWithInvalidSourceName() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "invalidSourceName"
             let sensorName1 = "accelerometer"
@@ -649,7 +633,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testPutSensorForMultipleSensorsWithInvalidSensorName() {
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "invalidSensorName"
@@ -676,7 +659,6 @@ class TestSensorDataProxy: XCTestCase {
     // ## invalid limit
     
     func testGetSensorDataWithInvalidLimit(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -700,7 +682,6 @@ class TestSensorDataProxy: XCTestCase {
     
     // ## invalid start and end time
     func testGetSensorDataWithInvalidStartEndTime(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -725,7 +706,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorDataWithInvalidStartEndTime(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -748,7 +728,8 @@ class TestSensorDataProxy: XCTestCase {
     // MARK: Invalid sessionId
     
     func testGetSensorProfilesWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let json = try proxy.getSensorProfiles()
             debugPrint(json)
@@ -760,7 +741,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testPutSensorsWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -777,7 +759,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorsWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let json = try proxy.getSensors()
             print(json)
@@ -792,7 +775,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -809,7 +793,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorsWithSourceNameWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let json = try proxy.getSensors()
             print(json)
@@ -824,7 +809,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testUpdateSensorsWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         let sourceName1 = "aim-ios-sdk"
         let sensorName1 = "accelerometer"
         let data1 = getDummyAccelerometerData()
@@ -839,11 +823,12 @@ class TestSensorDataProxy: XCTestCase {
             print( error )
             XCTFail("Exception was captured. Abort the test.")
         }
-        let invalidProxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             // update meta
             let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
-            try invalidProxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
+            try proxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -855,7 +840,6 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorsWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: (accountUtils?.sessionId)!)
         let sourceName1 = "aim-ios-sdk"
         let sensorName1 = "accelerometer"
         let data1 = getDummyAccelerometerData()
@@ -870,10 +854,12 @@ class TestSensorDataProxy: XCTestCase {
             print( error )
             XCTFail("Exception was captured. Abort the test.")
         }
-        let invalidProxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             // delete a sensor
-            try invalidProxy.deleteSensor(sourceName1, sensorName1)
+            try proxy.deleteSensor(sourceName1, sensorName1)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -885,7 +871,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testGetSensorDataWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
@@ -903,7 +890,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testDeleteSensorDataWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             try proxy.deleteSensorData(sourceName: "sourcename", sensorName: "sensorName", startTime: nil, endTime: nil)
             
@@ -917,7 +905,8 @@ class TestSensorDataProxy: XCTestCase {
     }
     
     func testPutSensorDataForMultipleSensorsWithInvalidSessionId(){
-        let proxy = SensorDataProxy(server: SensorDataProxy.Server.STAGING, appKey: APPKEY_STAGING, sessionId: "invalidSessionId")
+        // invalidate the proxy session ID
+        proxy.setSessionId("invalidSessionId")
         do {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"

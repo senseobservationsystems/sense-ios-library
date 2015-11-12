@@ -35,7 +35,7 @@ class DatabaseHandler: NSObject{
     *
     * @param dataPoint: dataPoint to be added
     */
-    class func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
+    static func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
         // Validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
             throw RLMError.ObjectNotFound
@@ -64,7 +64,7 @@ class DatabaseHandler: NSObject{
     * @param limit: The maximum number of data points. nil for no limit.
     * @return dataPoints: An array of NSDictionary represents data points.
     */
-    class func getDataPoints(sensorId: Int,_ queryOptions: QueryOptions) throws -> [DataPoint]{
+    static func getDataPoints(sensorId: Int,_ queryOptions: QueryOptions) throws -> [DataPoint]{
         if (queryOptions.limit != nil && queryOptions.limit <= 0){
             throw RLMError.InvalidLimit
         }
@@ -92,7 +92,7 @@ class DatabaseHandler: NSObject{
     * @param sensorId: String for sensorId
     * @param queryOptions: queryOptions for deleting criteria
     */
-    class func deleteDataPoints(sensorId: Int, _ queryOptions: QueryOptions) throws {
+    static func deleteDataPoints(sensorId: Int, _ queryOptions: QueryOptions) throws {
         if(isStartTimeLaterThanEndTime(queryOptions.startTime, queryOptions.endTime)){
             throw RLMError.StartTimeLaterThanEndTime
         }
@@ -115,7 +115,7 @@ class DatabaseHandler: NSObject{
     * @param startTime the start Time to delete the data points
     * @param endTime the end Time to delete the data points
     */
-    class func createDataDeletionRequest(sourceName sourceName: String, sensorName: String, startTime: NSDate?, endTime: NSDate?) throws{
+    static func createDataDeletionRequest(sourceName sourceName: String, sensorName: String, startTime: NSDate?, endTime: NSDate?) throws{
         let realm = try! Realm()
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
@@ -136,7 +136,7 @@ class DatabaseHandler: NSObject{
     * Get the list of data deletion requests from local storage
     * @return An array of NSDictionary represents data deletion requests
     */
-    class func getDataDeletionRequest() -> [DataDeletionRequest] {
+    static func getDataDeletionRequest() -> [DataDeletionRequest] {
         var dataDeletionRequest = [DataDeletionRequest]()
         let realm = try! Realm()
         let predicate = NSPredicate(format: "userId = %@", KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -151,7 +151,7 @@ class DatabaseHandler: NSObject{
     * Delete the DataDeletionRequest from local storage by querying uuid.
     * @param uuid
     */
-    class func deleteDataDeletionRequest(uuid: String) throws {
+    static func deleteDataDeletionRequest(uuid: String) throws {
         let realm = try! Realm()
         let predicate = NSPredicate(format: "uuid = %@ AND userId = %@", uuid, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(DataDeletionRequest).filter(predicate)
@@ -170,7 +170,7 @@ class DatabaseHandler: NSObject{
     *
     * @param sensor: Sensor object containing the updated info.
     */
-    class func updateSensor(sensor: Sensor) throws {
+    static func updateSensor(sensor: Sensor) throws {
         //validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw RLMError.ObjectNotFound
@@ -204,7 +204,7 @@ class DatabaseHandler: NSObject{
     *
     * @param sensor: Sensor object to be added
     */
-    class func insertSensor(sensor:Sensor) throws {
+    static func insertSensor(sensor:Sensor) throws {
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
             throw RLMError.UnauthenticatedAccess
         }
@@ -236,7 +236,7 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for the name of the sensor which the data structure belongs to.
     * @param dataStructure: String for the structure of the sensor.
     **/
-    class func createOrUpdateSensorProfile(sensorName: String, dataStructure: String) throws {
+    static func createOrUpdateSensorProfile(sensorName: String, dataStructure: String) throws {
         let realm = try! Realm()
         realm.beginWrite()
         let rlmSensorProfile = SensorProfile()
@@ -251,7 +251,7 @@ class DatabaseHandler: NSObject{
      * Returns the data structure of the requested sensor.
      * @param sensorName: String for the sensor name to specify data.
      **/
-    class func getSensorProfile(sensorName: String) throws -> SensorProfile? {
+    static func getSensorProfile(sensorName: String) throws -> SensorProfile? {
         let realm = try! Realm()
         let predicate = NSPredicate(format: "sensorName = %@", sensorName)
         //query
@@ -259,7 +259,7 @@ class DatabaseHandler: NSObject{
         return results.first
     }
     
-    class func getSensorProfiles() throws -> [SensorProfile] {
+    static func getSensorProfiles() throws -> [SensorProfile] {
         var sensorProfiles = [SensorProfile]()
         let realm = try! Realm()
         //query
@@ -275,7 +275,7 @@ class DatabaseHandler: NSObject{
     * @param sensorName: The name of sensor whose profile should be deleted.
     *
     **/
-    class func deleteSensorProfile(sensorName: String) throws {
+    static func deleteSensorProfile(sensorName: String) throws {
         let realm = try! Realm()
         let predicate = NSPredicate(format: "sensorName = %@", sensorName)
         let results = realm.objects(SensorProfile).filter(predicate)
@@ -293,7 +293,7 @@ class DatabaseHandler: NSObject{
     * @param sensorName	  The name of the sensor
     * @return boolean: true if the sensor exists in local storage, and vice versa.
     **/
-    class func hasSensor(source: String, sensorName: String) -> Bool {
+    static func hasSensor(source: String, sensorName: String) -> Bool {
         let realm = try! Realm()
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let results = realm.objects(RLMSensor).filter(predicates)
@@ -310,7 +310,7 @@ class DatabaseHandler: NSObject{
     * @param sensorName: String for sensor name.
     * @return A sensor with the given sensor name and source.
     */
-    class func getSensor(source: String, _ sensorName: String) throws -> Sensor {
+    static func getSensor(source: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
         
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
@@ -330,7 +330,7 @@ class DatabaseHandler: NSObject{
     * @param source: String for source.
     * @return An array of sensors that belongs to the given source.
     */
-    class func getSensors(source: String)->[Sensor]{
+    static func getSensors(source: String)->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
@@ -349,7 +349,7 @@ class DatabaseHandler: NSObject{
     *
     * @return An array of sources that belongs to the current user.
     */
-    class func getSources()->[String]{
+    static func getSources()->[String]{
         var sources = Set<String>()
         let realm = try! Realm()
         
@@ -367,7 +367,7 @@ class DatabaseHandler: NSObject{
     *
     * @return An available Id
     */
-    class func getNextKeyForSensor() -> Int{
+    static func getNextKeyForSensor() -> Int{
         let lockQueue = dispatch_queue_create("com.sense.lockQueue", nil)
         var newId = 0
         dispatch_sync(lockQueue) {
@@ -391,7 +391,7 @@ class DatabaseHandler: NSObject{
     * @param endTime: NSDate for endTime
     * @return A compound predicate for querying Sensors based on the arguments
     */
-    private class func getPredicateForDataPoint(sensorId: Int, _ queryOptions: QueryOptions)-> NSPredicate{
+    private static func getPredicateForDataPoint(sensorId: Int, _ queryOptions: QueryOptions)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "sensorId = %d", sensorId))
         if(queryOptions.startTime != nil){
@@ -413,7 +413,7 @@ class DatabaseHandler: NSObject{
     * @param remoteDataPointsDownloaded: Bool for whether a sensor has completed the initial download of data points
     * @return A compound predicate for querying Sensors based on the arguments
     */
-    private class func getPredicateForSensors(source: String)-> NSPredicate{
+    private static func getPredicateForSensors(source: String)-> NSPredicate{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "source = %@ AND userId = %@", source, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!))
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
@@ -422,7 +422,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns a sensor with the given id.
     */
-    private class func getSensor(id: Int) -> RLMSensor {
+    private static func getSensor(id: Int) -> RLMSensor {
         var sensor = RLMSensor()
         let predicates = NSPredicate(format: "id = %d AND userId = %@", id, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
@@ -435,7 +435,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if sensor with the given sensorId exists.
     */
-    private class func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
+    private static func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
         var exists = false
         let predicates = NSPredicate(format: "id = %d AND userId = %@", sensorId, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
@@ -448,7 +448,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if source with the combination of the given source and sensor exists.
     */
-    private class func isExistingCombinationOfSourceAndSensorName(source:String, _ sensorName: String) -> Bool {
+    private static func isExistingCombinationOfSourceAndSensorName(source:String, _ sensorName: String) -> Bool {
         var exists = false
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, KeychainWrapper.stringForKey(KEYCHAIN_USERID)!)
         let result = try! Realm().objects(RLMSensor).filter(predicates)
@@ -461,7 +461,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if either of sensor name or source is changed.(Compound primary key)
     */
-    private class func isPrimaryKeysChangedForSensor(new: Sensor, _ original:RLMSensor) -> Bool{
+    private static func isPrimaryKeysChangedForSensor(new: Sensor, _ original:RLMSensor) -> Bool{
         let isNameChanged = (new.name != original.name)
         let isSourceChanged = (new.source != original.source)
         let isUserIdChanged = (new.userId != original.userId)
@@ -471,7 +471,7 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if startTime is later or euqal to endTime.
     */
-    private class func isStartTimeLaterThanEndTime(startTime: NSDate?, _ endTime: NSDate?) -> Bool {
+    private static func isStartTimeLaterThanEndTime(startTime: NSDate?, _ endTime: NSDate?) -> Bool {
         return (startTime != nil) && (endTime != nil) && (startTime?.timeIntervalSince1970 >= endTime?.timeIntervalSince1970)
     }
 }
