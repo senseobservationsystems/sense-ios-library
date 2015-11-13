@@ -100,8 +100,10 @@ class DataSyncer: NSObject {
     func downloadSensorProfiles() throws -> Promise<Void> {
         return Promise{fulfill, reject in
             let sensorProfiles = try proxy.getSensorProfiles()
+            print (sensorProfiles)
             for ( _ ,subJson):(String, JSON) in sensorProfiles {
-                try DatabaseHandler.createOrUpdateSensorProfile(subJson[SENSOR_PROFILE_KEY_NAME].stringValue, dataStructure: subJson[SENSOR_PROFILE_KEY_STRUCTURE].stringValue)
+                let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
+                try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: structure)
             }
             
             // invoke delegates
@@ -113,6 +115,7 @@ class DataSyncer: NSObject {
             fulfill()
         }
     }
+
     
     func processDeletionRequests() throws -> Promise<Void> {
         return Promise{fulfill, reject in
@@ -180,15 +183,34 @@ class DataSyncer: NSObject {
     // MARK: Helper functions
     private func downloadAndStoreDataForSensor(sensor: Sensor) throws{
         let limit = 1000
-        var isDataDownloadCompleted = false
+        var isCompleted = false
+        let persistentBoundary = NSDate().dateByAddingTimeInterval (-1 * persistentPeriod)
+        var startBoundaryForNextQuery: NSDate?
+        
         // download and store data. Loop stops when the number of datapoints is not equal to the limit specified in the request.
         repeat{
             var queryOptions = QueryOptions()
             queryOptions.limit = limit
+            queryOptions.startTime = (startBoundaryForNextQuery == nil) ? persistentBoundary : startBoundaryForNextQuery
             let sensorData = try proxy.getSensorData(sourceName: sensor.source, sensorName: sensor.name)
             try insertSensorDataIntoLocalDB(sensorData, sensorId: sensor.id)
-            isDataDownloadCompleted = (sensorData.count != limit)
-        } while (!isDataDownloadCompleted)
+            
+            //check if download is completed, if not prepare for the next download
+            isCompleted = isDataDownloadCompleted(sensorData, limit: limit)
+            if (!isCompleted){
+                startBoundaryForNextQuery = getTimestampOfLastDataPoint(sensorData)
+            }
+        } while (!isCompleted)
+    }
+    
+    private func isDataDownloadCompleted(sensorData: JSON, limit: Int) -> Bool{
+        return (sensorData["data"].count != limit)
+    }
+    
+    private func getTimestampOfLastDataPoint(sensorData: JSON) -> NSDate?{
+        let data = sensorData["data"]
+        let lastDataPoint = data[data.count-1]
+        return NSDate(timeIntervalSince1970: lastDataPoint["time"].doubleValue)
     }
     
     private func updateDownloadStatusForSensor(sensor: Sensor) throws {
@@ -260,7 +282,7 @@ class DataSyncer: NSObject {
     func insertSensorDataIntoLocalDB(sensorData: JSON, sensorId: Int) throws {
         for (_ ,subJson):(String, JSON) in sensorData["data"] {
             //Do something you want
-            let value = subJson["value"].stringValue
+            let value = JSONUtils.stringify(subJson["value"])
             let time = NSDate(timeIntervalSince1970: subJson["time"].doubleValue / 1000.0)
             let dataPoint = DataPoint(sensorId: sensorId, value: value, time: time)
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
@@ -307,6 +329,12 @@ class DataSyncer: NSObject {
         }
     }
     
+    
+    func getSensorNameAndStructure(json: JSON) -> (String, String){
+        let sensorName = json[SENSOR_PROFILE_KEY_NAME].stringValue
+        let dataStructure = json[SENSOR_PROFILE_KEY_STRUCTURE].rawString(options: NSJSONWritingOptions(rawValue: 0))!
+        return (sensorName, dataStructure)
+    }
     
     private func getTypeFromDataStructure(structure: String) throws -> String {
         let data :NSData = structure.dataUsingEncoding(NSUTF8StringEncoding)!

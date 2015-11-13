@@ -8,6 +8,7 @@
 
 import Foundation
 import VVJSONSchemaValidation
+import SwiftyJSON
 
 
 let kCSDATA_TYPE_STRING = "string"

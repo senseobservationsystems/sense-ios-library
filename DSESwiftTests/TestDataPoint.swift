@@ -38,7 +38,7 @@ class TestDataPoint: XCTestCase {
         let dataPoint = DataPoint()
         let valueFloat = 2.01234
         dataPoint.setValue(JSONUtils.stringify(valueFloat))
-        XCTAssertEqual(dataPoint.value, "2.012340")
+        XCTAssertEqual(dataPoint.value, "2.01234")
         XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
     }
     
@@ -53,7 +53,7 @@ class TestDataPoint: XCTestCase {
         let dataPoint = DataPoint()
         let valueString = "valueString"
         dataPoint.setValue(JSONUtils.stringify(valueString))
-        XCTAssertEqual(dataPoint.value, "\"valueString\"")
+        XCTAssertEqual(dataPoint.value, "valueString")
         XCTAssertEqual(dataPoint.getValueInString(), valueString)
 
     }

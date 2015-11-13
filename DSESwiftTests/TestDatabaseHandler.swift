@@ -8,6 +8,7 @@
 
 import XCTest
 import RealmSwift
+import SwiftyJSON
 
 
 @testable import DSESwift

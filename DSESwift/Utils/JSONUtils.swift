@@ -8,38 +8,20 @@
 
 import Foundation
 import VVJSONSchemaValidation
+import SwiftyJSON
 
 public class JSONUtils{
 
     public class func stringify(value: AnyObject?)-> String {
-        
-        var stringifiedValue = ""
-        if value != nil {
-            switch value! {
-                case _ as Double:
-                    if isDouble(value as! Double){
-                        stringifiedValue = String(format:"%f", value!.doubleValue)
-                    } else {
-                        stringifiedValue = String(format:"%d", value!.intValue)
-                    }
-
-                case _ as Bool:
-                    stringifiedValue = String(format:"%b", value!.boolValue)
-                case _ as String:
-                    stringifiedValue = self.quote(value!.description)
-                case _ as Dictionary<String, AnyObject> :
-                    do{
-                        let jsonData = try NSJSONSerialization.dataWithJSONObject(value!, options: NSJSONWritingOptions.PrettyPrinted)
-                        let jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)! as String
-                        stringifiedValue = jsonString
-                    } catch {
-                        print("Error while parsing string into dictionary")
-                    }
-                default:
-                    stringifiedValue=""
-            }
+        if value == nil {
+            return ""
+        }else{
+            return self.stringify(JSON(value!))
         }
-        return stringifiedValue
+    }
+    
+    public class func stringify(json:JSON) -> String{
+        return json.rawString(options: NSJSONWritingOptions(rawValue: 0))!;
     }
     
     class func getIntValue(jsonString: String) -> Int {

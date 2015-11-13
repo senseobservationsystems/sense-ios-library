@@ -154,7 +154,13 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     * @param queryOptions   Query options to set start and end time, and to sort and limit the data
-    * @return Returns an Dictionary containing the sensor data, where the data is structured as `[{time: long, value: JSON}, ...]`
+    * @return Returns a dictionary structured as:
+    *  `{
+    *    "sensor_name": String,
+    *    "source_name": String,
+    *    "meta": JSON
+    *    "data":[{time: long, value: JSON}, ...]
+    *   }`
     */
     func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> JSON {
         if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
@@ -209,10 +215,10 @@ public class SensorDataProxy {
     *
     *                      [
     *                        {
-    *                          source_name: string,
-    *                          sensor_name, string,
-    *                          meta: JSON,   // optional
-    *                          data: [
+    *                          "source_name": string,
+    *                          "sensor_name", string,
+    *                          "meta": JSON,   // optional
+    *                          "data": [
     *                            {time: number, value: JSON},
     *                            // ...
     *                          ]
