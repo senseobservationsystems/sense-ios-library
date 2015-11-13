@@ -10,6 +10,7 @@ import XCTest
 @testable import DSESwift
 import RealmSwift
 import SwiftyJSON
+import PromiseKit
 
 class TestDataSyncer: XCTestCase{
     
@@ -155,6 +156,10 @@ class TestDataSyncer: XCTestCase{
                 XCTAssertEqual(dataPoints.count, 5)
             }
             
+            self.waitForExpectationsWithTimeout(20.0) { _ -> Void in
+                XCTFail("timeout");
+            }
+            
         } catch {
             XCTFail("Exception was captured. Abort the test.")
         }
@@ -163,13 +168,29 @@ class TestDataSyncer: XCTestCase{
     
     func testUploadSensorsDataToRemote() {
         do{
+            let response = self.expectationWithDescription("wait for promises")
             try self.dataSyncer.downloadSensorProfiles()
             
             try populateLocalDatabase()
             try assertDataPointsInLocal(5)
             
-            try dataSyncer.uploadSensorDataToRemote()
-            try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
+            firstly ({
+                return try dataSyncer.uploadSensorDataToRemote()
+
+            }).then ({
+                NSThread.sleepForTimeInterval(0.010)
+                print("## get request now!")
+                try self.assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
+                response.fulfill()
+            })
+            
+            self.waitForExpectationsWithTimeout(20.0) { _ -> Void in
+                print("timeout");
+            }
+            
+            //try dataSyncer.uploadSensorDataToRemote()
+            //NSThread.sleepForTimeInterval(10)
+            //try self.assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
             
         } catch {
             print(error)

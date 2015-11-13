@@ -90,7 +90,6 @@ class DataSyncer {
     func downloadSensorProfiles() throws -> Promise<Void> {
         return Promise{fulfill, reject in
             let sensorProfiles = try proxy.getSensorProfiles()
-            print (sensorProfiles)
             for ( _ ,subJson):(String, JSON) in sensorProfiles {
                 let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
                 try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: structure)
