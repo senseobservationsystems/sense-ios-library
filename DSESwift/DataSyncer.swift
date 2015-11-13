@@ -23,21 +23,18 @@ class DataSyncer {
     let SENSOR_PROFILE_KEY_NAME = "sensor_name"
     let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
 
-    let DEFAULT_SYNC_RATE: Double = 30 * 60    // 30 mins in secs
-    let DEFAULT_PERSISTENT_PERIOD: Double = 30 * 24 * 60 * 60     // 30 days in secs
-    
     var syncRate: Double!
     var persistentPeriod: Double!
-    var config = DSEConfig()
     
-    var proxy:SensorDataProxy
+    // only used for the default parameters
+    let config = DSEConfig()
+    
     var timer:NSTimer?
 
     // the key for the string should be <source>:<sensor>
     init () {
-        self.proxy = SensorDataProxy()
-        self.persistentPeriod = DEFAULT_PERSISTENT_PERIOD
-        self.syncRate = DEFAULT_SYNC_RATE
+        self.syncRate = self.config.syncInterval!
+        self.persistentPeriod = self.config.localPersistancePeriod!
     }
     
     func initialize() throws{
@@ -46,11 +43,25 @@ class DataSyncer {
         }
     }
     
-    func setConfig(config: DSEConfig) {
-        self.config = config
-        self.syncRate = self.config.syncInterval!
-        self.persistentPeriod = self.config.localPersistancePeriod!
-        self.proxy.setConfig(self.config)
+    /**
+     * this will error check it's own configuration
+     */
+    func setConfig(config: DSEConfig) throws -> (configChanged: Bool, syncInterval: Double, localPersistancePeriod: Double) {
+        var configChanged = false
+        if let syncInterval = config.syncInterval {
+            if (syncInterval < 0) {throw DataSyncerError.InvalidSyncRate}
+            configChanged = configChanged || self.syncRate != syncInterval
+            self.syncRate = syncInterval
+        }
+        
+        if let localPersistancePeriod = config.localPersistancePeriod {
+            if (localPersistancePeriod < 0) {throw DataSyncerError.InvalidPersistentPeriod}
+            configChanged = configChanged || self.persistentPeriod != localPersistancePeriod
+            self.persistentPeriod = localPersistancePeriod
+        }
+        
+        // return new values that will be used
+        return (configChanged, self.syncRate, self.persistentPeriod)
     }
     
     func enablePeriodicSync(syncRate: Double?) {
@@ -89,7 +100,7 @@ class DataSyncer {
     
     func downloadSensorProfiles() throws -> Promise<Void> {
         return Promise{fulfill, reject in
-            let sensorProfiles = try proxy.getSensorProfiles()
+            let sensorProfiles = try SensorDataProxy.getSensorProfiles()
             print (sensorProfiles)
             for ( _ ,subJson):(String, JSON) in sensorProfiles {
                 let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
@@ -106,7 +117,7 @@ class DataSyncer {
         return Promise{fulfill, reject in
             let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
             for request in dataDeletionRequests {
-                try proxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
+                try SensorDataProxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
                 // remove the deletion request which has been processed
                 try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
             }
@@ -173,7 +184,7 @@ class DataSyncer {
             var queryOptions = QueryOptions()
             queryOptions.limit = limit
             queryOptions.startTime = (startBoundaryForNextQuery == nil) ? persistentBoundary : startBoundaryForNextQuery
-            let sensorData = try proxy.getSensorData(sourceName: sensor.source, sensorName: sensor.name)
+            let sensorData = try SensorDataProxy.getSensorData(sourceName: sensor.source, sensorName: sensor.name)
             try insertSensorDataIntoLocalDB(sensorData, sensorId: sensor.id)
             
             //check if download is completed, if not prepare for the next download
@@ -207,7 +218,7 @@ class DataSyncer {
     
     private func uploadDataPointsForSensor(dataPoints: Array<DataPoint>, sensor: Sensor) throws {
         let dataArray = try getJSONArray(dataPoints, sensorName: sensor.name)
-        try proxy.putSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
+        try SensorDataProxy.putSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
     }
     
     private func updateUploadStatusForDataPoints(dataPoints: Array<DataPoint>) throws {
@@ -237,7 +248,7 @@ class DataSyncer {
     }
     
     private func getSensorsFromRemote() throws -> Array<Sensor>{
-        let downloadedArray = try proxy.getSensors()
+        let downloadedArray = try SensorDataProxy.getSensors()
         return convertAnyObjArrayToSensorArray(downloadedArray.arrayObject)
     }
     
