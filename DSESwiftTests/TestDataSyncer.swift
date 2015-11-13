@@ -32,6 +32,7 @@ class TestDataSyncer: XCTestCase{
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
+        registerAndLogin()
         KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
         
         // set the config with CORRECT default values
@@ -51,7 +52,7 @@ class TestDataSyncer: XCTestCase{
     }
     
     func testDefaultValuesForSyncRateAndPersistentPeriod() {
-        registerAndLogin()
+        
         let expectedSyncRate: Double = 30 * 60
         let expectedPersistentPeriod: Double = 30 * 24 * 60 * 60
         XCTAssertEqual(self.dataSyncer.syncRate, expectedSyncRate)
@@ -60,7 +61,6 @@ class TestDataSyncer: XCTestCase{
     
     func testInitialize() {
         do{
-            registerAndLogin()
             try self.dataSyncer.downloadSensorProfiles()
             let profiles = try DatabaseHandler.getSensorProfiles()
             XCTAssertEqual(profiles.count, 16)
@@ -71,8 +71,6 @@ class TestDataSyncer: XCTestCase{
     
     func testProcessDeletionRequest() {
         do{
-            registerAndLogin()
-            
             try populateRemoteDatabase(self.dataSyncer.proxy)
             try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
             
@@ -90,8 +88,6 @@ class TestDataSyncer: XCTestCase{
     
     func testProcessDeletionRequestWithStartTime() {
         do{
-            registerAndLogin()
-            
             try populateRemoteDatabase(self.dataSyncer.proxy, startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
             try populateRemoteDatabase(self.dataSyncer.proxy)
@@ -112,8 +108,6 @@ class TestDataSyncer: XCTestCase{
 
     func testProcessDeletionRequestWithEndTime() {
         do{
-            registerAndLogin()
-            
             try populateRemoteDatabase(self.dataSyncer.proxy, startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
             try populateRemoteDatabase(self.dataSyncer.proxy)
@@ -133,10 +127,6 @@ class TestDataSyncer: XCTestCase{
     
     func testDownloadSensorsFromRemote() {
         do {
-            registerAndLogin()
-            try populateRemoteDatabase(self.dataSyncer.proxy, startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
-            try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
-            
             try populateRemoteDatabase(self.dataSyncer.proxy, startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
             
@@ -150,8 +140,6 @@ class TestDataSyncer: XCTestCase{
 
     func testDownloadSensorsDataFromRemote() {
         do {
-            registerAndLogin()
-            
             try populateRemoteDatabase(self.dataSyncer.proxy, startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, proxy: self.dataSyncer.proxy)
             
@@ -175,7 +163,6 @@ class TestDataSyncer: XCTestCase{
     
     func testUploadSensorsDataToRemote() {
         do{
-            registerAndLogin()
             try self.dataSyncer.downloadSensorProfiles()
             
             try populateLocalDatabase()
@@ -192,8 +179,6 @@ class TestDataSyncer: XCTestCase{
 
     func testCleanUpLocalStorage() {
         do{
-            registerAndLogin()
-          
             try self.dataSyncer.downloadSensorProfiles()
             
             // Sensors to be tested
@@ -311,7 +296,7 @@ class TestDataSyncer: XCTestCase{
         let data2 = getDummyTimeActiveData(time: startTime)
         try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
         
-        NSThread.sleepForTimeInterval(6)
+        NSThread.sleepForTimeInterval(10)
     }
     
     func populateLocalDatabase(startTime: NSDate? = nil) throws {
