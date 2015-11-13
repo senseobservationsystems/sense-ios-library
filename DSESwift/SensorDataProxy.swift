@@ -206,6 +206,7 @@ public class SensorDataProxy {
         if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
+
         print("## put completed.", result.ok, result.statusCode!)
     }
     

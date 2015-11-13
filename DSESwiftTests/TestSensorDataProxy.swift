@@ -203,9 +203,6 @@ class TestSensorDataProxy: XCTestCase {
             let data1 = getDummyAccelerometerData()
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
-            
             let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 5)
         }catch{
@@ -218,11 +215,8 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            let data1 = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-3*24*60*60))
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             var queryOptions = QueryOptions()
             queryOptions.startTime = NSDate().dateByAddingTimeInterval(-4*24*60*60)
@@ -245,11 +239,8 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            let data1 = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-1*24*60*60))
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             var queryOptions = QueryOptions()
             queryOptions.endTime = NSDate()
@@ -272,11 +263,8 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            let data1 = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-1*24*60*60))
             try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 5)
@@ -298,19 +286,16 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
-            let data1 = getDummyAccelerometerData()
+            let data1 = self.getDummyAccelerometerData()
             let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
             
             let sourceName2 = "aim-ios-sdk"
             let sensorName2 = "time_active"
-            let data2 = getDummyTimeActiveData()
+            let data2 = self.getDummyTimeActiveData()
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
             try proxy.putSensorData(sensorsData)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             let resultArray = try proxy.getSensors(sourceName1)
             XCTAssertEqual(resultArray.count, 2)
@@ -339,9 +324,6 @@ class TestSensorDataProxy: XCTestCase {
             
             let sensorsData = [sensorData1, sensorData2]
             try proxy.putSensorData(sensorsData)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             // == Check that the sensors are added properly
             // Sensors
@@ -377,14 +359,11 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
-            let data = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            let data = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-3*24*60*60))
             let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
             
             let sensorsData = [sensorData]
             try proxy.putSensorData(sensorsData)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             // == Check that the sensors are added properly
             // Sensors
@@ -415,14 +394,11 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
-            let data = getDummyAccelerometerData(date: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            let data = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-1*24*60*60))
             let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
             
             let sensorsData = [sensorData]
             try proxy.putSensorData(sensorsData)
-            
-            //TODO: remove the when the issue that inserting datapoints takes long time on the backend is solved
-            NSThread.sleepForTimeInterval(5)
             
             // == Check that the sensors are added properly
             // Sensors
@@ -439,7 +415,7 @@ class TestSensorDataProxy: XCTestCase {
             XCTAssertEqual(result["data"].count, 5)
             
             // delete the other sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-1*24*60*60))
+            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-1*23*60*60))
             resultArray = try proxy.getSensors(sourceName)
             result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 0)
@@ -932,23 +908,32 @@ class TestSensorDataProxy: XCTestCase {
     
     
     // MARK: == helper functions
-    func getDummyAccelerometerData(date date: NSDate? = NSDate()) -> Array<AnyObject>{
+    // @param time: the datapoints will have time.timeIntervalSince1970 + index
+    func getDummyAccelerometerData(var time time: NSDate? = nil) -> Array<AnyObject>{
+        if time == nil {
+            time = NSDate().dateByAddingTimeInterval(-60)
+        }
         let value = ["x-axis": 4, "y-axis": 5, "z-axis": 6]
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(date!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            let dataPoint = ["time": (Int(time!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
             data.append(dataPoint)
         }
         return data
     }
     
-    func getDummyTimeActiveData(date date: NSDate? = NSDate()) -> Array<AnyObject>{
+    // @param time: the datapoints will have time.timeIntervalSince1970 + index
+    func getDummyTimeActiveData(var time time: NSDate? = nil) -> Array<AnyObject>{
+        if time == nil {
+            time = NSDate().dateByAddingTimeInterval(-60)
+        }
+        
         let value = 3
         var data = Array<AnyObject>()
         //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
         for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(date!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+            let dataPoint = ["time": (Int(time!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
             data.append(dataPoint)
         }
         return data
