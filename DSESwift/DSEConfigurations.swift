@@ -16,10 +16,11 @@ public struct SensorConfig{
 }
 
 public struct DSEConfig{
-    var syncInterval: Double? // amount of seconds between upload sessions (default: 30 minutes)
-    var localPersistancePeriod: Double?  // amount of seconds to persist history (default: 30 days)
-    var enableEncryption: Bool? // whether enable the encryption or not (default: true)
-    var backendEnvironment: SensorDataProxy.Server? // the backend environment to use  (LIVE / STAGING)
+    var syncInterval: Double? = 30 * 60// amount of seconds between upload sessions (default: 30 minutes)
+    var localPersistancePeriod: Double? = 30 * 24 * 60 * 60 // amount of seconds to persist history (default: 30 days)
+    var enableEncryption: Bool? = true // whether enable the encryption or not (default: true)
+    var backendEnvironment: SensorDataProxy.Server? = SensorDataProxy.Server.STAGING // the backend environment to use  (LIVE / STAGING)
     var appKey: String? // credentials: appKey
     var sessionId: String? // credentials: sessionId
+    var userId: String? // credentials: userId from CS
 }

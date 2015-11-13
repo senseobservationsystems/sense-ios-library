@@ -27,7 +27,9 @@
 
 import Foundation
 
-let KEYCHAIN_USERID = "userId"
+let KEYCHAIN_USERID    = "DSE_userId"
+let KEYCHAIN_SESSIONID = "DSE_sessionId"
+let KEYCHAIN_APPKEY    = "DSE_appKey"
 
 let SecMatchLimit: String! = kSecMatchLimit as String
 let SecReturnData: String! = kSecReturnData as String

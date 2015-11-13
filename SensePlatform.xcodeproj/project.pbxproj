@@ -87,6 +87,7 @@
 		FA4CDBA51BA70E8000DB44B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
 		FA4CDBA81BA7126400DB44B1 /* CSVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = FA4CDBA71BA7126400DB44B1 /* CSVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA51BAAC1BF5E81C00EB45DB /* TestUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */; };
 		FA5DF7A31BA716F700FF9544 /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */; };
 		FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */; };
 		FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */; };
@@ -283,6 +284,7 @@
 		FA38739E1BF378800078A85D /* TestDataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDataStorageEngine.swift; sourceTree = "<group>"; };
 		FA3877E21BF381020078A85D /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
+		FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtil.swift; sourceTree = "<group>"; };
 		FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
 		FA5DF79F1BA716F700FF9544 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
 		FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
@@ -754,6 +756,7 @@
 				278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */,
 				FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */,
 				FA38739E1BF378800078A85D /* TestDataStorageEngine.swift */,
+				FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */,
 			);
 			path = DSESwiftTests;
 			sourceTree = "<group>";
@@ -1158,6 +1161,7 @@
 				FA38739F1BF378800078A85D /* TestDataStorageEngine.swift in Sources */,
 				27DF117B1BD0027200C4E79F /* TestSensorDataProxy.swift in Sources */,
 				A5C1FE391BDA1F1200196C51 /* TestDataSyncer.swift in Sources */,
+				FA51BAAC1BF5E81C00EB45DB /* TestUtil.swift in Sources */,
 				27F752751BB02793000FC400 /* TestDatabaseHandler.swift in Sources */,
 				27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */,
 				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
