@@ -20,12 +20,6 @@ public class CSAccountUtils{
     var appKey: String?
     var sessionId: String?
     
-    /**
-    * Create a sensor data proxy.
-    * @param server     Select whether to use the live or staging server.
-    * appKey     Application key, identifying the application in the REST API.
-    * @param sessionId  The session id of the current user.
-    */
     init (appKey: String) {
         self.baseUrl = BASE_URL_CS_STAGING;
         self.appKey = appKey;

@@ -14,13 +14,15 @@ class TestSensorDataProxy: XCTestCase {
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
     var accountUtils: CSAccountUtils?
-    let proxy = SensorDataProxy()
     var config = DSEConfig()
+    
+    let userId = "testuser"
     
     override func setUp() {
         super.setUp()
         let username = String(format:"spam+%f@sense-os.nl", NSDate().timeIntervalSince1970)
         
+        let backendStringValue = "STAGING"
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
         accountUtils!.registerUser(username, password: "Password")
         accountUtils!.loginUser(username, password: "Password")
@@ -31,7 +33,14 @@ class TestSensorDataProxy: XCTestCase {
         self.config.appKey = APPKEY_STAGING
         self.config.sessionId = (accountUtils?.sessionId)!
         
-        self.proxy.setConfig(self.config)
+        // store the credentials in the keychain. All modules that need these will get them from the chain
+        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
+        KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
+        // store the other options in the standardUserDefaults
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(backendStringValue, forKey: BACKEND_ENVIRONMENT_KEY)
+
     }
     
     override func tearDown() {
@@ -47,7 +56,7 @@ class TestSensorDataProxy: XCTestCase {
     
     func testGetSensorProfiles(){
         do {
-            let json = try proxy.getSensorProfiles()
+            let json = try SensorDataProxy.getSensorProfiles()
             print(json[0])
         }catch{
             print( error )
@@ -57,7 +66,7 @@ class TestSensorDataProxy: XCTestCase {
 
     func testGetSensorsWithZeroSensors() {
         do{
-            let resultArray = try proxy.getSensors()
+            let resultArray = try SensorDataProxy.getSensors()
             XCTAssertEqual(resultArray.count, 0)
         }catch{
             print( error )
@@ -70,19 +79,19 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
             let sensorName2 = "time_active"
             let data2 = getDummyTimeActiveData()
-            try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
+            try SensorDataProxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             let sourceName3 = "fitbit"
             let sensorName3 = "accelerometer"
             let data3 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
+            try SensorDataProxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
-            let resultArray = try proxy.getSensors()
+            let resultArray = try SensorDataProxy.getSensors()
             XCTAssertEqual(resultArray.count, 3)
         }catch{
             print( error )
@@ -95,19 +104,19 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
             let sensorName2 = "time_active"
             let data2 = getDummyTimeActiveData()
-            try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
+            try SensorDataProxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             let sourceName3 = "fitbit"
             let sensorName3 = "accelerometer"
             let data3 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
+            try SensorDataProxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
-            let resultArray = try proxy.getSensors(sourceName1)
+            let resultArray = try SensorDataProxy.getSensors(sourceName1)
             XCTAssertEqual(resultArray.count, 2)
         }catch{
             print( error )
@@ -120,19 +129,19 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
             let sensorName2 = "time_active"
             let data2 = getDummyTimeActiveData()
-            try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
+            try SensorDataProxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             let sourceName3 = "fitbit"
             let sensorName3 = "accelerometer"
             let data3 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
+            try SensorDataProxy.putSensorData(sourceName: sourceName3, sensorName: sensorName3, data: data3)
             
-            let result = try proxy.getSensor(sourceName1, sensorName1)
+            let result = try SensorDataProxy.getSensor(sourceName1, sensorName1)
             XCTAssertEqual(result["sensor_name"].stringValue, sensorName1)
         }catch{
             print( error )
@@ -145,17 +154,17 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             // check the sensor is added.
-            let resultArray = try proxy.getSensors()
+            let resultArray = try SensorDataProxy.getSensors()
             XCTAssertEqual(resultArray.count, 1)
             
             // update meta
             let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
-            try proxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
+            try SensorDataProxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
             
-            let result = try proxy.getSensor(sourceName1, sensorName1)
+            let result = try SensorDataProxy.getSensor(sourceName1, sensorName1)
             XCTAssertEqual(result["meta"]["Doge"].stringValue, "Wow, MUCH ACCELERATION! VERY HORSEPOWER!")
             
         }catch{
@@ -169,25 +178,25 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             let sourceName2 = "aim-ios-sdk"
             let sensorName2 = "time_active"
             let data2 = getDummyTimeActiveData()
-            try proxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
+            try SensorDataProxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
             
             // check the sensor is added.
-            var resultArray = try proxy.getSensors()
+            var resultArray = try SensorDataProxy.getSensors()
             XCTAssertEqual(resultArray.count, 2)
             
             // delete a sensor
-            try proxy.deleteSensor(sourceName1, sensorName1)
-            resultArray = try proxy.getSensors()
+            try SensorDataProxy.deleteSensor(sourceName1, sensorName1)
+            resultArray = try SensorDataProxy.getSensors()
             XCTAssertEqual(resultArray.count, 1)
             
             // delete another sensor
-            try proxy.deleteSensor(sourceName2, sensorName2)
-            resultArray = try proxy.getSensors()
+            try SensorDataProxy.deleteSensor(sourceName2, sensorName2)
+            resultArray = try SensorDataProxy.getSensors()
             // Puff... aand it's gone
             XCTAssertEqual(resultArray.count, 0)
         }catch{
@@ -201,9 +210,9 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
-            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            let result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 5)
         }catch{
             print( error )
@@ -216,17 +225,17 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-3*24*60*60))
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             var queryOptions = QueryOptions()
             queryOptions.startTime = NSDate().dateByAddingTimeInterval(-4*24*60*60)
             
-            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             XCTAssertEqual(result["data"].count, 5)
             
             queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
             
-            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             XCTAssertEqual(result["data"].count, 0)
             
         }catch{
@@ -240,17 +249,17 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-1*24*60*60))
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             var queryOptions = QueryOptions()
             queryOptions.endTime = NSDate()
             
-            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             XCTAssertEqual(result["data"].count, 5)
             
             queryOptions.endTime = NSDate().dateByAddingTimeInterval(-2*24*60*60)
             
-            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             XCTAssertEqual(result["data"].count, 0)
             
         }catch{
@@ -264,15 +273,15 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData(time: NSDate().dateByAddingTimeInterval(-1*24*60*60))
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
-            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 5)
             
             var queryOptions = QueryOptions()
             queryOptions.limit = 3
             
-            result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             XCTAssertEqual(result["data"].count, 3)
             
         }catch{
@@ -295,15 +304,15 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
-            let resultArray = try proxy.getSensors(sourceName1)
+            let resultArray = try SensorDataProxy.getSensors(sourceName1)
             XCTAssertEqual(resultArray.count, 2)
             
-            var result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 5)
             
-            result = try proxy.getSensorData(sourceName: sourceName2, sensorName: sensorName2)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName2, sensorName: sensorName2)
             XCTAssertEqual(result["data"].count, 5)
         }catch{
             print( error )
@@ -323,31 +332,31 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
             // == Check that the sensors are added properly
             // Sensors
 
-            var resultArray = try proxy.getSensors(sourceName)
+            var resultArray = try SensorDataProxy.getSensors(sourceName)
             XCTAssertEqual(resultArray.count, 2)
             // SensorData
-            var result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 5)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
             XCTAssertEqual(result["data"].count, 5)
             
             // delete a sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName1, startTime: nil, endTime: nil)
-            resultArray = try proxy.getSensors(sourceName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName1, startTime: nil, endTime: nil)
+            resultArray = try SensorDataProxy.getSensors(sourceName)
             XCTAssertEqual(resultArray.count, 2)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName1)
             XCTAssertEqual(result["data"].count, 0)
             
             // delete the other sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName2, startTime: nil, endTime: nil)
-            resultArray = try proxy.getSensors(sourceName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName2, startTime: nil, endTime: nil)
+            resultArray = try SensorDataProxy.getSensors(sourceName)
             XCTAssertEqual(resultArray.count, 2)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName2)
             XCTAssertEqual(result["data"].count, 0)
         }catch{
             print( error )
@@ -363,26 +372,26 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
             
             let sensorsData = [sensorData]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
             // == Check that the sensors are added properly
             // Sensors
-            var resultArray = try proxy.getSensors(sourceName)
+            var resultArray = try SensorDataProxy.getSensors(sourceName)
             XCTAssertEqual(resultArray.count, 1)
             // SensorData
-            var result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 5)
             
             // delete a sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-1*24*60*60), endTime: nil)
-            resultArray = try proxy.getSensors(sourceName)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-1*24*60*60), endTime: nil)
+            resultArray = try SensorDataProxy.getSensors(sourceName)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 5)
             
             // delete the other sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-3*24*60*60 - 60), endTime: nil)
-            resultArray = try proxy.getSensors(sourceName)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, startTime: NSDate().dateByAddingTimeInterval(-3*24*60*60 - 60), endTime: nil)
+            resultArray = try SensorDataProxy.getSensors(sourceName)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 0)
         }catch{
             print( error )
@@ -398,26 +407,26 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
             
             let sensorsData = [sensorData]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
             // == Check that the sensors are added properly
             // Sensors
-            var resultArray = try proxy.getSensors(sourceName)
+            var resultArray = try SensorDataProxy.getSensors(sourceName)
             XCTAssertEqual(resultArray.count, 1)
             // SensorData
-            var result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            var result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 5)
             
             // delete a sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-3*24*60*60))
-            resultArray = try proxy.getSensors(sourceName)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-3*24*60*60))
+            resultArray = try SensorDataProxy.getSensors(sourceName)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 5)
             
             // delete the other sensor
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-1*23*60*60))
-            resultArray = try proxy.getSensors(sourceName)
-            result = try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName, endTime: NSDate().dateByAddingTimeInterval(-1*23*60*60))
+            resultArray = try SensorDataProxy.getSensors(sourceName)
+            result = try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             XCTAssertEqual(result["data"].count, 0)
         }catch{
             print( error )
@@ -433,7 +442,7 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
-            let resultArray = try proxy.getSensor(sourceName, sensorName)
+            let resultArray = try SensorDataProxy.getSensor(sourceName, sensorName)
             debugPrint(resultArray)
             
             XCTFail("An error should have thrown, but no error was thrown")
@@ -451,7 +460,7 @@ class TestSensorDataProxy: XCTestCase {
 //            let sourceName = "aim-ios-sdk"
 //            let sensorName = "accelerometer"
 //            let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
-//            let result = try proxy.updateSensor(sourceName: sourceName, sensorName: sensorName, meta: meta)
+//            let result = try SensorDataProxy.updateSensor(sourceName: sourceName, sensorName: sensorName, meta: meta)
 //            debugPrint(result)
 //        } catch let e as SensorDataProxy.ProxyError {
 //            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
@@ -464,7 +473,7 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
-            try proxy.deleteSensor(sourceName, sensorName)
+            try SensorDataProxy.deleteSensor(sourceName, sensorName)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -479,7 +488,7 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
-            try proxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
+            try SensorDataProxy.getSensorData(sourceName: sourceName, sensorName: sensorName)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -494,7 +503,7 @@ class TestSensorDataProxy: XCTestCase {
         do{
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
-            try proxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName, sensorName: sensorName)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -515,7 +524,7 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName = "aim-ios-sdk"
             let sensorName = "accelerometer"
             let data = getDummyDataWithBadStructure()
-            try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
+            try SensorDataProxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -539,7 +548,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -557,7 +566,7 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName = "invalidSourceName"
             let sensorName = "accelerometer"
             let data = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
+            try SensorDataProxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -573,7 +582,7 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName = "aim-ios-sdk"
             let sensorName = "invalidSensorName"
             let data = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
+            try SensorDataProxy.putSensorData(sourceName: sourceName, sensorName: sensorName, data: data)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -597,7 +606,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -621,7 +630,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try proxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(sensorsData)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -639,12 +648,12 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
             
             var queryOptions = QueryOptions()
             queryOptions.limit = 0
             
-            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            let result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             debugPrint(result)
             
             XCTFail("An error should have thrown, but no error was thrown")
@@ -662,14 +671,14 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
     
             var queryOptions = QueryOptions()
             let now = NSDate()
             queryOptions.startTime = now
             queryOptions.endTime = now
             
-            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
+            let result = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1, queryOptions: queryOptions)
             debugPrint(result)
             
             XCTFail("An error should have thrown, but no error was thrown")
@@ -686,10 +695,10 @@ class TestSensorDataProxy: XCTestCase {
             let sourceName1 = "aim-ios-sdk"
             let sensorName1 = "accelerometer"
             let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
+            try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
         
             let now = NSDate()
-            try proxy.deleteSensorData(sourceName: sourceName1, sensorName: sensorName1, startTime: now, endTime: now)
+            try SensorDataProxy.deleteSensorData(sourceName: sourceName1, sensorName: sensorName1, startTime: now, endTime: now)
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -700,212 +709,6 @@ class TestSensorDataProxy: XCTestCase {
         }
     }
 
-    
-    // MARK: Invalid sessionId
-    
-    func testGetSensorProfilesWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let json = try proxy.getSensorProfiles()
-            debugPrint(json)
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testPutSensorsWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let sourceName1 = "aim-ios-sdk"
-            let sensorName1 = "accelerometer"
-            let data1 = getDummyAccelerometerData()
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testGetSensorsWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let json = try proxy.getSensors()
-            print(json)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testGetSensorWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let sourceName1 = "aim-ios-sdk"
-            let sensorName1 = "accelerometer"
-            let json = try proxy.getSensor(sourceName1, sensorName1)
-            print(json)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testGetSensorsWithSourceNameWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let json = try proxy.getSensors()
-            print(json)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testUpdateSensorsWithInvalidSessionId(){
-        let sourceName1 = "aim-ios-sdk"
-        let sensorName1 = "accelerometer"
-        let data1 = getDummyAccelerometerData()
-        do{
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
-            
-            // check the sensor is added.
-            let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray.count, 1)
-            
-        }catch{
-            print( error )
-            XCTFail("Exception was captured. Abort the test.")
-        }
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            // update meta
-            let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
-            try proxy.updateSensor(sourceName: sourceName1, sensorName: sensorName1, meta: meta)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testDeleteSensorsWithInvalidSessionId(){
-        let sourceName1 = "aim-ios-sdk"
-        let sensorName1 = "accelerometer"
-        let data1 = getDummyAccelerometerData()
-        do{
-            try proxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
-            
-            // check the sensor is added.
-            let resultArray = try proxy.getSensors()
-            XCTAssertEqual(resultArray.count, 1)
-            
-        }catch{
-            print( error )
-            XCTFail("Exception was captured. Abort the test.")
-        }
-        
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            // delete a sensor
-            try proxy.deleteSensor(sourceName1, sensorName1)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testGetSensorDataWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let sourceName1 = "aim-ios-sdk"
-            let sensorName1 = "accelerometer"
-            
-            let result = try proxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
-            XCTAssertEqual(result["data"].count, 5)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testDeleteSensorDataWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            try proxy.deleteSensorData(sourceName: "sourcename", sensorName: "sensorName", startTime: nil, endTime: nil)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
-    func testPutSensorDataForMultipleSensorsWithInvalidSessionId(){
-        // invalidate the proxy session ID
-        proxy.setSessionId("invalidSessionId")
-        do {
-            let sourceName1 = "aim-ios-sdk"
-            let sensorName1 = "accelerometer"
-            let data1 = getDummyAccelerometerData()
-            let sensorData1 = SensorDataProxy.createSensorDataObject(sourceName: sourceName1, sensorName: sensorName1, data: data1);
-            
-            let sourceName2 = "aim-ios-sdk"
-            let sensorName2 = "time_active"
-            let data2 = getDummyTimeActiveData()
-            let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
-            
-            let sensorsData = [sensorData1, sensorData2]
-            try proxy.putSensorData(sensorsData)
-            
-            XCTFail("An error should have thrown, but no error was thrown")
-            
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSessionId )
-        } catch {
-            XCTFail("Wrong error")
-        }
-    }
-    
     
     // MARK: == helper functions
     // @param time: the datapoints will have time.timeIntervalSince1970 + index

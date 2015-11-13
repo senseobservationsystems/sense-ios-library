@@ -53,6 +53,7 @@
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; };
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; };
+		277E77471BF633CB00215338 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 277E77461BF633CB00215338 /* OHHTTPStubs.framework */; };
 		27858B821BE764BA004FC01E /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7D1BE764BA004FC01E /* DataDeletionRequest.swift */; };
 		27858B831BE764BA004FC01E /* RLMDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7E1BE764BA004FC01E /* RLMDataPoint.swift */; };
 		27858B841BE764BA004FC01E /* RLMSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7F1BE764BA004FC01E /* RLMSensor.swift */; };
@@ -244,6 +245,7 @@
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
 		276CBB851BB57838001C287D /* AccountUtilsForTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountUtilsForTest.m; path = "Sense Library Tests/AccountUtilsForTest.m"; sourceTree = SOURCE_ROOT; };
+		277E77461BF633CB00215338 /* OHHTTPStubs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OHHTTPStubs.framework; path = Carthage/Build/iOS/OHHTTPStubs.framework; sourceTree = "<group>"; };
 		27858B7D1BE764BA004FC01E /* DataDeletionRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataDeletionRequest.swift; path = RealmObjects/DataDeletionRequest.swift; sourceTree = "<group>"; };
 		27858B7E1BE764BA004FC01E /* RLMDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RLMDataPoint.swift; path = RealmObjects/RLMDataPoint.swift; sourceTree = "<group>"; };
 		27858B7F1BE764BA004FC01E /* RLMSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RLMSensor.swift; path = RealmObjects/RLMSensor.swift; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				277E77471BF633CB00215338 /* OHHTTPStubs.framework in Frameworks */,
 				FA3877E31BF381020078A85D /* SwiftyJSON.framework in Frameworks */,
 				27CE749C1BDFC52D0095E735 /* Realm.framework in Frameworks */,
 				27CE749D1BDFC52D0095E735 /* RealmSwift.framework in Frameworks */,
@@ -510,6 +513,7 @@
 		3E820D6C15D40AB50001A3EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				277E77461BF633CB00215338 /* OHHTTPStubs.framework */,
 				FA3877E21BF381020078A85D /* SwiftyJSON.framework */,
 				27CE74981BDFC4F00095E735 /* Realm.framework */,
 				27CE74991BDFC4F00095E735 /* RealmSwift.framework */,
@@ -1014,6 +1018,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/OHHTTPStubs.framework",
 			);
 			outputPaths = (
 			);
