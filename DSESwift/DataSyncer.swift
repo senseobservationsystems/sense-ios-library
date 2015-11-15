@@ -216,7 +216,7 @@ class DataSyncer {
     }
     
     private func uploadDataPointsForSensor(dataPoints: Array<DataPoint>, sensor: Sensor) throws {
-        let dataArray = try getJSONArray(dataPoints, sensorName: sensor.name)
+        let dataArray = try DataSyncer.getJSONArray(dataPoints, sensorName: sensor.name)
         try SensorDataProxy.putSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
     }
     
@@ -301,7 +301,7 @@ class DataSyncer {
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
     
-    private func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> JSON{
+    static func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> JSON{
         let profile = try DatabaseHandler.getSensorProfile(sensorName)!
         let type = try getTypeFromDataStructure(profile.dataStructure)
         switch (type){
@@ -327,7 +327,7 @@ class DataSyncer {
         return (sensorName, dataStructure)
     }
     
-    private func getTypeFromDataStructure(structure: String) throws -> String {
+    private static func getTypeFromDataStructure(structure: String) throws -> String {
         let data :NSData = structure.dataUsingEncoding(NSUTF8StringEncoding)!
         let json :Dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as! [String:AnyObject]
         

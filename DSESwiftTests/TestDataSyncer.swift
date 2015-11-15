@@ -95,8 +95,8 @@ class TestDataSyncer: XCTestCase{
         do{
             let response = self.expectationWithDescription("wait for promises")
             
-            try populateRemoteDatabase()
-            try assertDataPointsInRemote(5)
+            let data = try populateRemoteDatabase()
+            try assertDataPointsInRemote(5, data: data)
             
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: nil, endTime: nil)
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: nil, endTime: nil)
@@ -126,11 +126,11 @@ class TestDataSyncer: XCTestCase{
         do{
             let response = self.expectationWithDescription("wait for promises")
             
-            try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
-            try assertDataPointsInRemote(5)
-            try populateRemoteDatabase()
-            try assertDataPointsInRemote(10)
-
+            let data1 = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
+            try assertDataPointsInRemote(5, data: data1)
+            let data2 = try populateRemoteDatabase()
+            let concatData = concatenateDataArray(array1: data1, array2: data2)
+            try assertDataPointsInRemote(10, data: concatData)
             
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-24*60*60), endTime: nil)
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-24*60*60), endTime: nil)
@@ -138,7 +138,7 @@ class TestDataSyncer: XCTestCase{
             firstly({
                 return try self.dataSyncer.processDeletionRequests()
             }).then({
-                try self.assertDataPointsInRemote(5)
+                try self.assertDataPointsInRemote(5, data: data1)
                 self.accountUtils?.deleteUser()
                 response.fulfill()
             }).error({ error in
@@ -159,10 +159,11 @@ class TestDataSyncer: XCTestCase{
         do{
             let response = self.expectationWithDescription("wait for promises")
             
-            try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
-            try assertDataPointsInRemote(5)
-            try populateRemoteDatabase()
-            try assertDataPointsInRemote(10)
+            let data1 = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
+            try assertDataPointsInRemote(5, data: data1)
+            let data2 = try populateRemoteDatabase()
+            let concatData = concatenateDataArray(array1: data1, array2: data2)
+            try assertDataPointsInRemote(10, data: concatData)
             
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: nil, endTime: NSDate().dateByAddingTimeInterval(-24*60*60))
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: nil, endTime: NSDate().dateByAddingTimeInterval(-24*60*60))
@@ -170,7 +171,7 @@ class TestDataSyncer: XCTestCase{
             firstly({
                 return try self.dataSyncer.processDeletionRequests()
             }).then({
-                try self.assertDataPointsInRemote(5)
+                try self.assertDataPointsInRemote(5, data:data2)
                 self.accountUtils?.deleteUser()
                 response.fulfill()
             }).error({ error in
@@ -192,8 +193,8 @@ class TestDataSyncer: XCTestCase{
         do {
             let response = self.expectationWithDescription("wait for promises")
             
-            try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
-            try assertDataPointsInRemote(5)
+            let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
+            try assertDataPointsInRemote(5, data: data)
             
             firstly({
                 return try self.dataSyncer.downloadSensorsFromRemote()
@@ -221,27 +222,19 @@ class TestDataSyncer: XCTestCase{
         do {
             let response = self.expectationWithDescription("wait for promises")
             
-            try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
-            try assertDataPointsInRemote(5)
+            let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
+            try assertDataPointsInRemote(5, data: data)
             
-            firstly ({
-                return try dataSyncer.downloadSensorsFromRemote()
+            firstly({
+                return try self.dataSyncer.downloadSensorProfiles()
+            }).then({
+                return try self.dataSyncer.downloadSensorsFromRemote()
             }).then({
                 let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
                 XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            firstly ({
-                try dataSyncer.downloadSensorsDataFromRemote()
+                return try self.dataSyncer.downloadSensorsDataFromRemote()
             }).then({
-                let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
-                for sensor in sensorsInLocal{
-                    let queryOptions = QueryOptions()
-                    let dataPoints = try DatabaseHandler.getDataPoints(sensor.id , queryOptions)
-                    XCTAssertEqual(dataPoints.count, 5)
-                }
+                try self.assertDataPointsInLocal(5, data: data)
                 
                 print("Task completed")
                 response.fulfill()
@@ -268,13 +261,13 @@ class TestDataSyncer: XCTestCase{
             
             try self.dataSyncer.downloadSensorProfiles()
             
-            try populateLocalDatabase()
-            try assertDataPointsInLocal(5)
+            let data = try populateLocalDatabase()
+            try assertDataPointsInLocal(5, data: data)
             
             firstly ({
                 return try dataSyncer.uploadSensorDataToRemote()
             }).then ({
-                try self.assertDataPointsInRemote(5)
+                try self.assertDataPointsInRemote(5, data: data)
                 response.fulfill()
             }).error({ error in
                 XCTFail("Exception was captured. Abort the test.")
@@ -442,19 +435,31 @@ class TestDataSyncer: XCTestCase{
         accountUtils!.loginUser(username, password: "Password")
     }
     
-    func assertDataPointsInRemote(expectedNumber: Int) throws{
+    func assertDataPointsInRemote(expectedNumber: Int, data:[JSON]? = nil) throws{
         let dataPoints1 = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)
         let dataPoints2 = try SensorDataProxy.getSensorData(sourceName: sourceName2, sensorName: sensorName2)
         XCTAssertEqual(dataPoints1["data"].arrayObject!.count, expectedNumber)
         XCTAssertEqual(dataPoints2["data"].arrayObject!.count, expectedNumber)
+        //check the contents of the data
+        if data != nil {
+            XCTAssertEqual(dataPoints1["data"], data![0])
+            XCTAssertEqual(dataPoints2["data"], data![1])
+        }
     }
     
-    func assertDataPointsInLocal(expectedNumber: Int) throws {
+    func assertDataPointsInLocal(expectedNumber: Int, data: [JSON]? = nil) throws {
+        var index = 0
         let sensors = DatabaseHandler.getSensors(sourceName1)
         for sensor in sensors{
             let queryOptions = QueryOptions()
             let dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, expectedNumber)
+            
+            if data != nil {
+                let json = try DataSyncer.getJSONArray(dataPoints, sensorName: sensor.name)
+                XCTAssertEqual(json, data![index])
+            }
+            index++
         }
     }
     
@@ -465,21 +470,22 @@ class TestDataSyncer: XCTestCase{
     }
     
     
-    func populateRemoteDatabase(startTime startTime: NSDate? = nil) throws ->(JSON, JSON){
+    func populateRemoteDatabase(startTime startTime: NSDate? = nil) throws ->[JSON]{
         let data1 = getDummyAccelerometerData(time: startTime)
         try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
 
         let data2 = getDummyTimeActiveData(time: startTime)
         try SensorDataProxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
         
-        return (data1, data2)
+        return [data1, data2]
     }
     
-    func populateLocalDatabase(startTime startTime: NSDate? = nil) throws {
+    func populateLocalDatabase(startTime startTime: NSDate? = nil) throws -> [JSON]{
         try createSensorsInLocalDataBase()
-        try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: startTime)
-        try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: startTime)
-        try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3, startTime: startTime)
+        let data1 = try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: startTime)
+        let data2 = try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: startTime)
+        let data3 = try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3, startTime: startTime)
+        return [data1, data2, data3]
     }
     
     
@@ -499,7 +505,7 @@ class TestDataSyncer: XCTestCase{
         try DatabaseHandler.insertSensor(sensor3)
     }
     
-    func insertSensorDataIntoLocalStorage(sourceName: String, sensorName: String, startTime: NSDate? = nil) throws {
+    func insertSensorDataIntoLocalStorage(sourceName: String, sensorName: String, startTime: NSDate? = nil) throws -> JSON{
         let sensor = try DatabaseHandler.getSensor(sourceName, sensorName)
         var dataArray : JSON
         if sensor.name == sensorName1{
@@ -507,13 +513,18 @@ class TestDataSyncer: XCTestCase{
         } else {
             dataArray = getDummyTimeActiveData(time: startTime)
         }
-        for ( _, data):(String, JSON) in dataArray {
+        for (_, data):(String, JSON) in dataArray {
             let jsonData = data
             let value = JSONUtils.stringify(jsonData["value"])
             let time = NSDate.init(timeIntervalSince1970: (jsonData["time"].doubleValue / 1000) )
             let dataPoint = DataPoint(sensorId: sensor.id, value: value, time: time)
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
         }
+        return dataArray
+    }
+    
+    func concatenateDataArray(array1 array1:[JSON], array2:[JSON]) -> [JSON]{
+        return [JSON(array1[0].arrayObject! + array2[0].arrayObject!), JSON(array1[1].arrayObject! + array2[1].arrayObject!)]
     }
     
 //    // @param time: the datapoints will have time.timeIntervalSince1970 + index
