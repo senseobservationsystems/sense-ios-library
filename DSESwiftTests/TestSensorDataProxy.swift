@@ -306,7 +306,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             let resultArray = try SensorDataProxy.getSensors(sourceName1)
             XCTAssertEqual(resultArray.count, 2)
@@ -334,7 +334,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             // == Check that the sensors are added properly
             // Sensors
@@ -374,7 +374,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
             
             let sensorsData = [sensorData]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             // == Check that the sensors are added properly
             // Sensors
@@ -409,7 +409,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
             
             let sensorsData = [sensorData]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             // == Check that the sensors are added properly
             // Sensors
@@ -550,7 +550,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -608,7 +608,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             XCTFail("An error should have thrown, but no error was thrown")
             
@@ -632,7 +632,7 @@ class TestSensorDataProxy: XCTestCase {
             let sensorData2 = SensorDataProxy.createSensorDataObject(sourceName: sourceName2, sensorName: sensorName2, data: data2);
             
             let sensorsData = [sensorData1, sensorData2]
-            try SensorDataProxy.putSensorData(sensorsData)
+            try SensorDataProxy.putSensorData(JSON(sensorsData))
             
             XCTFail("An error should have thrown, but no error was thrown")
             

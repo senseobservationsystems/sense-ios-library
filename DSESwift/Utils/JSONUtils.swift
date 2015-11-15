@@ -24,6 +24,10 @@ public class JSONUtils{
         return json.rawString(options: NSJSONWritingOptions(rawValue: 0))!;
     }
     
+    public class func jsonToData(json:JSON) throws -> NSData{
+        return try json.rawData();
+    }
+    
     class func getIntValue(jsonString: String) -> Int {
         return NSString(string: jsonString).integerValue
     }
@@ -57,49 +61,49 @@ public class JSONUtils{
         return result
     }
     
-    public class func convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+    public class func convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints: Array<DataPoint>) -> JSON{
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {
             let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInInt()]
             dataArray.append(dataDict)
         }
-        return dataArray
+        return JSON(dataArray)
     }
     
-    public class func convertArrayOfDataPointIntoJSONArrayWithDoubleValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+    public class func convertArrayOfDataPointIntoJSONArrayWithDoubleValue(dataPoints: Array<DataPoint>) -> JSON{
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {
             let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInDouble()]
             dataArray.append(dataDict)
         }
-        return dataArray
+        return JSON(dataArray)
     }
     
-    public class func convertArrayOfDataPointIntoJSONArrayWithBoolValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+    public class func convertArrayOfDataPointIntoJSONArrayWithBoolValue(dataPoints: Array<DataPoint>) -> JSON{
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {
             let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInBool()]
             dataArray.append(dataDict)
         }
-        return dataArray
+        return JSON(dataArray)
     }
     
-    public class func convertArrayOfDataPointIntoJSONArrayWithStringValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+    public class func convertArrayOfDataPointIntoJSONArrayWithStringValue(dataPoints: Array<DataPoint>) -> JSON{
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {
             let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInString()]
             dataArray.append(dataDict)
         }
-        return dataArray
+        return JSON(dataArray)
     }
     
-    public class func convertArrayOfDataPointIntoJSONArrayWithDictionaryValue(dataPoints: Array<DataPoint>) -> Array<AnyObject>{
+    public class func convertArrayOfDataPointIntoJSONArrayWithDictionaryValue(dataPoints: Array<DataPoint>) -> JSON{
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {
             let dataDict = ["time": dataPoint.getTimeInMillis(), "value": dataPoint.getValueInDictionary()]
             dataArray.append(dataDict)
         }
-        return dataArray
+        return JSON(dataArray)
     }
     
     public class func validateValue(value: AnyObject, schema: String) -> Bool{

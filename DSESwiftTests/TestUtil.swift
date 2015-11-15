@@ -8,6 +8,7 @@
 
 import Foundation
 @testable import DSESwift
+import SwiftyJSON
 
 public func getAppKeyAndSessionId() {
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
@@ -19,7 +20,7 @@ public func getAppKeyAndSessionId() {
 
 // MARK: == helper functions
 // @param time: the datapoints will have time.timeIntervalSince1970 + index
-func getDummyAccelerometerData(var time time: NSDate? = nil) -> Array<AnyObject>{
+func getDummyAccelerometerData(var time time: NSDate? = nil) -> JSON{
     if time == nil {
         time = NSDate().dateByAddingTimeInterval(-60)
     }
@@ -30,11 +31,11 @@ func getDummyAccelerometerData(var time time: NSDate? = nil) -> Array<AnyObject>
         let dataPoint = ["time": (Int((time!.timeIntervalSince1970 + i) * 1000)), "value": value]
         data.append(dataPoint)
     }
-    return data
+    return JSON(data)
 }
 
 // @param time: the datapoints will have time.timeIntervalSince1970 + index
-func getDummyTimeActiveData(var time time: NSDate? = nil) -> Array<AnyObject>{
+func getDummyTimeActiveData(var time time: NSDate? = nil) -> JSON{
     if time == nil {
         time = NSDate().dateByAddingTimeInterval(-60)
     }
@@ -46,10 +47,10 @@ func getDummyTimeActiveData(var time time: NSDate? = nil) -> Array<AnyObject>{
         let dataPoint = ["time": Int((time!.timeIntervalSince1970 + i)  * 1000), "value": value]
         data.append(dataPoint)
     }
-    return data
+    return JSON(data)
 }
 
-func getDummyDataWithBadStructure() -> Array<AnyObject>{
+func getDummyDataWithBadStructure() -> JSON{
     let time = NSDate().dateByAddingTimeInterval(-60)
     let value = ["invalidx": 4, "invalidy": 5, "invalidz": 6]
     var data = Array<AnyObject>()
@@ -58,5 +59,5 @@ func getDummyDataWithBadStructure() -> Array<AnyObject>{
         let dataPoint = ["time": Double((time.timeIntervalSince1970 + i) * 1000.0), "value": value]
         data.append(dataPoint)
     }
-    return data
+    return JSON(data)
 }

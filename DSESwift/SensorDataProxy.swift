@@ -153,13 +153,13 @@ public class SensorDataProxy {
     * @param data           Array with data points, structured as `[{time: long, value: JSON}, ...]`
     * @param meta           Dictionary for optional field to store meta information. Can be left null
     */
-    static func putSensorData(sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) throws {
+    static func putSensorData(sourceName sourceName: String, sensorName: String, data: JSON, meta: Dictionary<String, AnyObject>? = nil) throws {
         // create one sensor data object and create an array
-        let sensorDataObject = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
+        let sensorDataObject = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data, meta: meta);
         let sensorDataArray = [sensorDataObject]
         
         // construct body in JSONArray format
-        let body = try serializeArrayToJSONArray(sensorDataArray)
+        let body = try JSONUtils.jsonToData(JSON(sensorDataArray))
         
         // send put request
         let result = Just.put(getSensorDataUrl(), headers: getHeadersWithContentType(), requestBody: body)
@@ -191,9 +191,9 @@ public class SensorDataProxy {
     *                        // ...
     *                      ]
     */
-    static func putSensorData(sensorDataArray: Array<AnyObject>) throws {
+    static func putSensorData(sensorDataArray: JSON) throws {
         // construct body in JSONArray format
-        let body = try serializeArrayToJSONArray(sensorDataArray)
+        let body = try JSONUtils.jsonToData(sensorDataArray)
         
         // send put request
         let result = Just.put(getSensorDataUrl(), headers: getHeadersWithContentType(), requestBody: body)
@@ -252,26 +252,28 @@ public class SensorDataProxy {
     * @param data           Array with data points, structured as `[{time: long, value: JSON}, ...]`
     * @param meta           Optional field to store meta information. Can be left null
     */
-    static func createSensorDataObject (sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) -> Dictionary<String, AnyObject> {
+    static func createSensorDataObject (sourceName sourceName: String, sensorName: String, data: JSON, meta: Dictionary<String, AnyObject>? = nil) -> JSON {
         var sensorData = Dictionary<String, AnyObject>()
         sensorData["source_name"] = sourceName;
         sensorData["sensor_name"] = sensorName;
         if (meta != nil) {
             sensorData["meta"] = meta!
         }
-        sensorData["data"] = data;
+        var json = JSON(sensorData)
+        json["data"] = data;
         
-        return sensorData;
+        return json;
     }
     
-    /**
-    * Returns NSData containing JSONArray. It perform JSONSerizlization on the given Array.
-    * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
-    */
-    private static func serializeArrayToJSONArray(sensorsData: Array<AnyObject>) throws -> NSData?{
-        let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
-        return body
-    }
+//    /**
+//    * Returns NSData containing JSONArray. It perform JSONSerizlization on the given Array.
+//    * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
+//    */
+//    private static func serializeArrayToJSONArray(sensorsData: JSON) throws -> NSData{
+//        //let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
+//        let body = try JSONUtils.jsonToData(sensorsData)
+//        return body
+//    }
     
     private static func getSensorUrl(sourceName: String? = nil, _ sensorName: String? = nil) -> String{
         let url = self.getUrl() + "/sensors"

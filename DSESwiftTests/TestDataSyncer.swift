@@ -465,7 +465,7 @@ class TestDataSyncer: XCTestCase{
     }
     
     
-    func populateRemoteDatabase(startTime startTime: NSDate? = nil) throws ->(Array<AnyObject>, Array<AnyObject>){
+    func populateRemoteDatabase(startTime startTime: NSDate? = nil) throws ->(JSON, JSON){
         let data1 = getDummyAccelerometerData(time: startTime)
         try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
 
@@ -501,14 +501,14 @@ class TestDataSyncer: XCTestCase{
     
     func insertSensorDataIntoLocalStorage(sourceName: String, sensorName: String, startTime: NSDate? = nil) throws {
         let sensor = try DatabaseHandler.getSensor(sourceName, sensorName)
-        var dataArray : Array<AnyObject>
+        var dataArray : JSON
         if sensor.name == sensorName1{
             dataArray = getDummyAccelerometerData(time: startTime)
         } else {
             dataArray = getDummyTimeActiveData(time: startTime)
         }
-        for data in dataArray {
-            let jsonData = JSON(data)
+        for ( _, data):(String, JSON) in dataArray {
+            let jsonData = data
             let value = JSONUtils.stringify(jsonData["value"])
             let time = NSDate.init(timeIntervalSince1970: (jsonData["time"].doubleValue / 1000) )
             let dataPoint = DataPoint(sensorId: sensor.id, value: value, time: time)

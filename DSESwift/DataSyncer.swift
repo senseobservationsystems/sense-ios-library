@@ -301,7 +301,7 @@ class DataSyncer {
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
     
-    private func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> Array<AnyObject>{
+    private func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> JSON{
         let profile = try DatabaseHandler.getSensorProfile(sensorName)!
         let type = try getTypeFromDataStructure(profile.dataStructure)
         switch (type){
