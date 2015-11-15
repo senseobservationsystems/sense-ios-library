@@ -85,11 +85,11 @@ class DataSyncer {
         dispatch_promise(on: queue, body: {
             return try self.processDeletionRequests()
         }).then (on: queue, {
+            return try self.uploadSensorDataToRemote()
+        }).then (on: queue, {
             return try self.downloadSensorsFromRemote()
         }).then (on: queue, {
             return try self.downloadSensorsDataFromRemote()
-        }).then (on: queue, {
-            return try self.uploadSensorDataToRemote()
         }).then (on: queue, {
             return try self.cleanUpLocalStorage()
         }).error({error in

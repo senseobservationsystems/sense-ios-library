@@ -11,6 +11,7 @@ import XCTest
 import RealmSwift
 import SwiftyJSON
 import PromiseKit
+//import OHHTTPStubs
 
 class TestDataSyncer: XCTestCase{
     
@@ -415,6 +416,23 @@ class TestDataSyncer: XCTestCase{
             XCTFail("Exception was captured. Abort the test.")
         }
     }
+    
+    
+    
+//    func testDoPeriodicSyncWithDownConnection() {
+//        // simulate down connection
+//        stub(isHost("sensor-api.staging.sense-os.nl")) { _ in
+//        let notConnectedError = NSError(domain:NSURLErrorDomain, code:Int(CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue), userInfo:nil)
+//        return OHHTTPStubsResponse(error:notConnectedError)
+//        }
+//        
+//        do{
+//            try self.dataSyncer.doPeriodicSync()
+//        } catch {
+//        print(error)
+//            XCTFail("Exception was captured. Abort the test.")
+//        }
+//    }
 
     // MARK: helper functions
     
@@ -447,12 +465,14 @@ class TestDataSyncer: XCTestCase{
     }
     
     
-    func populateRemoteDatabase(startTime startTime: NSDate? = nil) throws {
+    func populateRemoteDatabase(startTime startTime: NSDate? = nil) throws ->(Array<AnyObject>, Array<AnyObject>){
         let data1 = getDummyAccelerometerData(time: startTime)
         try SensorDataProxy.putSensorData(sourceName: sourceName1, sensorName: sensorName1, data: data1)
 
         let data2 = getDummyTimeActiveData(time: startTime)
         try SensorDataProxy.putSensorData(sourceName: sourceName2, sensorName: sensorName2, data: data2)
+        
+        return (data1, data2)
     }
     
     func populateLocalDatabase(startTime startTime: NSDate? = nil) throws {
@@ -496,36 +516,36 @@ class TestDataSyncer: XCTestCase{
         }
     }
     
-    // @param time: the datapoints will have time.timeIntervalSince1970 + index
-    func getDummyAccelerometerData(var time time: NSDate? = nil) -> Array<AnyObject>{
-        if time == nil {
-            time = NSDate().dateByAddingTimeInterval(-10)
-        }
-        let value = ["x-axis": 4, "y-axis": 5, "z-axis": 6]
-        var data = Array<AnyObject>()
-        //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
-        for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(time!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
-            data.append(dataPoint)
-        }
-        return data
-    }
-    
-    // @param time: the datapoints will have time.timeIntervalSince1970 + index
-    func getDummyTimeActiveData(var time time: NSDate? = nil) -> Array<AnyObject>{
-        if time == nil {
-            time = NSDate().dateByAddingTimeInterval(-10)
-        }
-        
-        let value = 3
-        var data = Array<AnyObject>()
-        //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
-        for (var i = 0 ; i < 5 ; i++) {
-            let dataPoint = ["time": (Int(time!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
-            data.append(dataPoint)
-        }
-        return data
-    }
+//    // @param time: the datapoints will have time.timeIntervalSince1970 + index
+//    func getDummyAccelerometerData(var time time: NSDate? = nil) -> Array<AnyObject>{
+//        if time == nil {
+//            time = NSDate().dateByAddingTimeInterval(-10)
+//        }
+//        let value = ["x-axis": 4, "y-axis": 5, "z-axis": 6]
+//        var data = Array<AnyObject>()
+//        //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
+//        for (var i = 0 ; i < 5 ; i++) {
+//            let dataPoint = ["time": (Int(time!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+//            data.append(dataPoint)
+//        }
+//        return data
+//    }
+//    
+//    // @param time: the datapoints will have time.timeIntervalSince1970 + index
+//    func getDummyTimeActiveData(var time time: NSDate? = nil) -> Array<AnyObject>{
+//        if time == nil {
+//            time = NSDate().dateByAddingTimeInterval(-10)
+//        }
+//        
+//        let value = 3
+//        var data = Array<AnyObject>()
+//        //TODO: increase the ceiling to 100 when the backend issue about slow insertion is resolved
+//        for (var i = 0 ; i < 5 ; i++) {
+//            let dataPoint = ["time": (Int(time!.timeIntervalSince1970 * 1000) + (i * 1000)), "value": value]
+//            data.append(dataPoint)
+//        }
+//        return data
+//    }
 
     
     

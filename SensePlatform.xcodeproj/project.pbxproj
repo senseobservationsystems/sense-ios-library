@@ -45,6 +45,7 @@
 /* Begin PBXBuildFile section */
 		2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
+		270E64E01BF63CA1004A23E1 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 277E77461BF633CB00215338 /* OHHTTPStubs.framework */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; };
 		2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
@@ -458,6 +459,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				270E64E01BF63CA1004A23E1 /* OHHTTPStubs.framework in Frameworks */,
 				2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

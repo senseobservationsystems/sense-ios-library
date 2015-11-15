@@ -48,6 +48,8 @@ public class SensorDataProxy {
     * Throws an exception when no sessionId is set or when the sessionId is not valid.
     * @param sourceName     The source name. When no sourceName parameter is given, it returns all the sensors of the currrent logged in user. for example "sense-ios", "sense-android", "fitbit", ...
     * @return Returns an array containing sensors
+    * 
+    *
     */
     static func getSensors(sourceName: String? = nil) throws -> JSON {
         let result = Just.get(getSensorUrl(sourceName), headers: getHeaders())
@@ -164,8 +166,6 @@ public class SensorDataProxy {
         if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
-
-        print("## put completed.", result.ok, result.statusCode!)
     }
     
     /**
