@@ -204,6 +204,173 @@ class PromiseTests: XCTestCase{
 
     }
     
+    func testPromisesForOrderingTasksWithSemaphore() {
+        let response = self.expectationWithDescription("wait for promises")
+        
+        // consecutive queue
+        let syncSemaphore = dispatch_semaphore_create(1)
+        let middlequeue = dispatch_queue_create("nl.sense.middlequeue", nil);
+        let queue = dispatch_queue_create("nl.sense.promisequeue", nil);
+        
+        dispatch_async(middlequeue, {
+            dispatch_semaphore_wait(syncSemaphore, DISPATCH_TIME_FOREVER)
+            dispatch_promise(on: queue, body: { _ -> Promise<Void> in
+                print ("The first tasks stream - 1")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The first tasks stream - 2")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The first tasks stream - 3")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void>in
+                print ("The first tasks stream - 4")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, {
+                print ("completed")
+            }).always({
+                dispatch_semaphore_signal(syncSemaphore);
+                print ("release semaphore")
+            }).error({ error in
+                print("error captured")
+            })
+        })
+        
+        dispatch_async(middlequeue, {
+            dispatch_semaphore_wait(syncSemaphore, DISPATCH_TIME_FOREVER)
+            dispatch_promise(on: queue, body: { _ -> Promise<Void> in
+                print ("The second tasks stream - 1")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The second tasks stream - 2")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The second tasks stream - 3")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The second tasks stream - 4")
+                return self.promiseSleep(0.5)
+            }).then({
+                response.fulfill()
+                dispatch_semaphore_signal(syncSemaphore);
+            })
+        })
+
+        
+        self.waitForExpectationsWithTimeout(20.0) { _ -> Void in
+            print("timeout");
+        }
+    }
+    
+    func testPromisesForOrderingTasksWithSemaphoreOnError() {
+        let response = self.expectationWithDescription("wait for promises")
+        
+        // consecutive queue
+        let syncSemaphore = dispatch_semaphore_create(1)
+        let middlequeue = dispatch_queue_create("nl.sense.middlequeue", nil);
+        let queue = dispatch_queue_create("nl.sense.promisequeue", nil);
+        
+        dispatch_async(middlequeue, {
+            dispatch_semaphore_wait(syncSemaphore, DISPATCH_TIME_FOREVER)
+            dispatch_promise(on: queue, body: { _ -> Promise<Void> in
+                print ("The first tasks stream - 1")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("Throw Error")
+                return try self.promiseNightmare(0.5, 1)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The first tasks stream - 3")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void>in
+                print ("The first tasks stream - 4")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, {
+                print ("completed")
+            }).always({
+                dispatch_semaphore_signal(syncSemaphore);
+                print ("release semaphore")
+            }).error({ error in
+                print("error captured")
+            })
+        })
+        
+        dispatch_async(middlequeue, {
+            dispatch_semaphore_wait(syncSemaphore, DISPATCH_TIME_FOREVER)
+            dispatch_promise(on: queue, body: { _ -> Promise<Void> in
+                print ("The second tasks stream - 1")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The second tasks stream - 2")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The second tasks stream - 3")
+                return self.promiseSleep(0.5)
+            }).then(on: queue, { _ -> Promise<Void> in
+                print ("The second tasks stream - 4")
+                return self.promiseSleep(0.5)
+            }).then({
+                response.fulfill()
+                dispatch_semaphore_signal(syncSemaphore);
+            })
+        })
+        
+        self.waitForExpectationsWithTimeout(20.0) { _ -> Void in
+            print("timeout");
+        }
+    }
+    
+//NOTE: This test is to show that this setup causes deadlock.
+//    func testPromisesForOrderingTasksWithSemaphoreDeadLock() {
+//        let response = self.expectationWithDescription("wait for promises")
+//        
+//        // consecutive queue
+//        let syncSemaphore = dispatch_semaphore_create(1)
+//        let queue = dispatch_queue_create("nl.sense.promisequeue", nil);
+//        
+//        dispatch_semaphore_wait(syncSemaphore, DISPATCH_TIME_FOREVER)
+//        dispatch_promise(on: queue, body: { _ -> Promise<Void> in
+//            print ("The first tasks stream - 1")
+//            return self.promiseSleep(0.5)
+//        }).then(on: queue, { _ -> Promise<Void> in
+//            print ("Throw Error. Expect deadlock here!!")
+//            return try self.promiseNightmare(0.5, 1)
+//        }).then(on: queue, { _ -> Promise<Void> in
+//            print ("The first tasks stream - 3")
+//            return self.promiseSleep(0.5)
+//        }).then(on: queue, { _ -> Promise<Void>in
+//            print ("The first tasks stream - 4")
+//            return self.promiseSleep(0.5)
+//        }).then(on: queue, {
+//            print ("completed")
+//        }).always({
+//            dispatch_semaphore_signal(syncSemaphore);
+//            print ("release semaphore")
+//        }).error({ error in
+//            print("error captured")
+//        })
+//    
+//        dispatch_semaphore_wait(syncSemaphore, DISPATCH_TIME_FOREVER)
+//        dispatch_promise(on: queue, body: { _ -> Promise<Void> in
+//            print ("The second tasks stream - 1")
+//            return self.promiseSleep(0.5)
+//        }).then(on: queue, { _ -> Promise<Void> in
+//            print ("The second tasks stream - 2")
+//            return self.promiseSleep(0.5)
+//        }).then(on: queue, { _ -> Promise<Void> in
+//            print ("The second tasks stream - 3")
+//            return self.promiseSleep(0.5)
+//        }).then(on: queue, { _ -> Promise<Void> in
+//            print ("The second tasks stream - 4")
+//            return self.promiseSleep(0.5)
+//        }).then({
+//            response.fulfill()
+//            dispatch_semaphore_signal(syncSemaphore);
+//        })
+//        
+//        self.waitForExpectationsWithTimeout(5.0) { _ -> Void in
+//            print("timeout");
+//        }
+//    }
     
     
     

@@ -30,28 +30,16 @@ class DataSyncer {
     let config = DSEConfig()
     
     var timer:NSTimer?
+    
+    // concurrency related variables
+    let sync_semaphore = dispatch_semaphore_create(1)
+    let sync_launch_queue = dispatch_queue_create("nl.sense.dse.sync_launch_queue", nil)
+    let sync_process_queue = dispatch_queue_create("nl.sense.dse.sync_process_queue", nil)
 
     // the key for the string should be <source>:<sensor>
     init () {
         self.syncRate = self.config.syncInterval!
         self.persistentPeriod = self.config.localPersistancePeriod!
-    }
-    
-    func initialize(useMainThread: Bool = false) throws{
-        var queue = dispatch_get_main_queue()
-        if (useMainThread == false) {
-            queue = dispatch_queue_create("DSEDataSyncerPeriodicSync", nil)
-        }
-        
-        dispatch_promise(on: queue, body:{
-            return try self.downloadSensorProfiles()
-        }).then({
-            //TODO: change the status of DSE
-            print("initialization of DSE completed")
-        }).error({ error in
-            //TODO: do something proper
-            print("An error was captured. Initialization failed.")
-        })
     }
     
     /**
@@ -85,26 +73,47 @@ class DataSyncer {
     func disablePeriodicSync(){
         timer!.invalidate()
     }
-
     
-    func doPeriodicSync(useMainThread: Bool = false) throws {
+    func initialize(useMainThread: Bool = false) throws{
         var queue = dispatch_get_main_queue()
         if (useMainThread == false) {
             queue = dispatch_queue_create("DSEDataSyncerPeriodicSync", nil)
         }
         
-        dispatch_promise(on: queue, body: {
-            return try self.processDeletionRequests()
-        }).then (on: queue, {
-            return try self.uploadSensorDataToRemote()
-        }).then (on: queue, {
-            return try self.downloadSensorsFromRemote()
-        }).then (on: queue, {
-            return try self.downloadSensorsDataFromRemote()
-        }).then (on: queue, {
-            return try self.cleanLocalStorage()
-        }).error({error in
-            print(error)
+        dispatch_promise(on: queue, body:{
+            return try self.downloadSensorProfiles()
+        }).then(on: queue, {
+            //TODO: change the status of DSE
+            print("initialization of DSE completed")
+        }).error({ error in
+            //TODO: do something proper
+            print("An error was captured. Initialization failed.")
+        })
+    }
+    
+    /**
+     * Synchronize data in local and remote storage.
+     * Is executed synchronously.
+     */
+    func doPeriodicSync() throws {
+
+        dispatch_async(sync_launch_queue, {
+            dispatch_semaphore_wait(self.sync_semaphore, DISPATCH_TIME_FOREVER)
+            dispatch_promise(on: self.sync_process_queue, body: {
+                return try self.processDeletionRequests()
+            }).then (on: self.sync_process_queue, {
+                return try self.uploadSensorDataToRemote()
+            }).then (on: self.sync_process_queue, {
+                return try self.downloadSensorsFromRemote()
+            }).then (on: self.sync_process_queue, {
+                return try self.downloadSensorsDataFromRemote()
+            }).then (on: self.sync_process_queue, {
+                return try self.cleanLocalStorage()
+            }).always({
+                dispatch_semaphore_signal(self.sync_semaphore);
+            }).error({error in
+                print(error)
+            })
         })
     }
 
