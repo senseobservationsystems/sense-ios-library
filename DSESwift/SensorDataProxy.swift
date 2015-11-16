@@ -41,8 +41,6 @@ public class SensorDataProxy {
         return JSON(result.json!)
     }
     
-
-    
     /**
     * Get all sensors of the current source of logged in user
     * Throws an exception when no sessionId is set or when the sessionId is not valid.

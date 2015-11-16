@@ -37,10 +37,21 @@ class DataSyncer {
         self.persistentPeriod = self.config.localPersistancePeriod!
     }
     
-    func initialize() throws{
-        dispatch_promise{
-            self.downloadSensorProfiles
+    func initialize(useMainThread: Bool = false) throws{
+        var queue = dispatch_get_main_queue()
+        if (useMainThread == false) {
+            queue = dispatch_queue_create("DSEDataSyncerPeriodicSync", nil)
         }
+        
+        dispatch_promise(on: queue, body:{
+            return try self.downloadSensorProfiles()
+        }).then({
+            //TODO: change the status of DSE
+            print("initialization of DSE completed")
+        }).error({ error in
+            //TODO: do something proper
+            print("An error was captured. Initialization failed.")
+        })
     }
     
     /**
@@ -91,7 +102,7 @@ class DataSyncer {
         }).then (on: queue, {
             return try self.downloadSensorsDataFromRemote()
         }).then (on: queue, {
-            return try self.cleanUpLocalStorage()
+            return try self.cleanLocalStorage()
         }).error({error in
             print(error)
         })
@@ -105,8 +116,6 @@ class DataSyncer {
                 let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
                 try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: structure)
             }
-            
-            // TODO: Change the status of DSE
             fulfill()
         }
     }
@@ -161,7 +170,7 @@ class DataSyncer {
         }
     }
     
-    func cleanUpLocalStorage() throws -> Promise<Void> {
+    func cleanLocalStorage() throws -> Promise<Void> {
         return Promise{fulfill, reject in
             let sensorsInLocal = getSensorsInLocal()
             for sensor in sensorsInLocal {
