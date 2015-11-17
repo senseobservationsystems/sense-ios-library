@@ -87,18 +87,19 @@ class DataSyncer {
         timer!.invalidate()
     }
     
-    func initialize(completionHandler: ()-> Void) throws{
-        
-        dispatch_promise(on: sync_process_queue, body:{
-            return try self.downloadSensorProfiles()
-        }).then(on: dispatch_get_main_queue(), {
-            
-            print("initialization of DSE completed")
-            completionHandler()
-        }).error({ error in
-            //TODO: do something proper
-            print("An error was captured. Initialization failed.")
-        })
+    func initialize() -> Promise<Void> {
+        return Promise<Void> { fulfill, reject in
+            dispatch_promise(on: sync_process_queue, body:{
+                return self.downloadSensorProfiles()
+            }).then(on: dispatch_get_main_queue(), {
+                print("initialization of DSE completed")
+                fulfill()
+            }).error({ error in
+                //TODO: do something proper
+                print("An error was captured. Initialization failed.")
+                reject(error)
+            })
+        }
     }
     
     /**
@@ -125,7 +126,7 @@ class DataSyncer {
     }
 
     
-    func downloadSensorProfiles() throws  -> Promise<Void> {
+    func downloadSensorProfiles() -> Promise<Void> {
         return Promise{fulfill, reject in
             let sensorProfiles = try SensorDataProxy.getSensorProfiles()
             for ( _ ,subJson):(String, JSON) in sensorProfiles {

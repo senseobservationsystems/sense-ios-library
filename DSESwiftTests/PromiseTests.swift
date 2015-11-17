@@ -41,7 +41,7 @@ class PromiseTests: XCTestCase{
         }
     }
     
-    func promiseNightmare(duration: Double, _ throwError: Int) throws -> Promise<Void> {
+    func promiseNightmare(duration: Double, _ throwError: Int) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
             self.sleep(duration);
             if (throwError == 1) {
@@ -73,7 +73,11 @@ class PromiseTests: XCTestCase{
         a.then{
             print("im after promise a")
         }
-    
+        
+        
+        self.promiseSleep(0.1)
+            .then({print("after the first promise")})
+        
         
         firstly ({
             return self.promiseSleep(0.1, "setting up promiseSleep with Firstly () ")
@@ -127,6 +131,11 @@ class PromiseTests: XCTestCase{
     func testPromisesWithErrorHandling() {
         let response = self.expectationWithDescription("wait for promises")
         
+        self.promiseNightmare(0.1,1)
+            .then({print("after the first promise")})
+            .error({error in print("I'm the error that has been fired")})
+        
+        
         firstly ({ _ -> Promise<Void> in
             print("1")
             return try self.promiseNightmare(0.1, 2)
@@ -163,6 +172,8 @@ class PromiseTests: XCTestCase{
             print("in the error handler: \(error)")
             response.fulfill()
         })
+        
+        
         
         print("end of test, waiting for async")
         //wait for asynchronous call to complete before running assertions

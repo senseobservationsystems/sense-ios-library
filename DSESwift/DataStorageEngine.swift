@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 public enum DatabaseError: ErrorType{
     case InvalidAppKey
@@ -102,16 +103,18 @@ public class DataStorageEngine {
     }
     
     public func start() {
-        // todo: check if we have credentials!
-        do{
-            try self.dataSyncer.initialize({
-                self.initialized = true
-                //TODO: callback success
-            })
-        }catch{
-            //TODO: callback fail
-            print(error)
+        if (self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
+            // callback fail?
+            print("NO CREDENTIALS")
         }
+        
+        self.dataSyncer.initialize().then({
+            //TODO: callback success?
+        }).error({error in
+            //TODO: callback fail?
+            print(error)
+
+        })
     }
     
     /**
