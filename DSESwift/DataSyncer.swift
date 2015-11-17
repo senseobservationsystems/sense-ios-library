@@ -103,32 +103,29 @@ class DataSyncer {
     
     /**
      * Synchronize data in local and remote storage.
-     * Is executed synchronously.
+     * Is executed asynchronously.
      */
     func sync() throws {
-
-        dispatch_async(sync_launch_queue, {
-            dispatch_semaphore_wait(self.sync_semaphore, DISPATCH_TIME_FOREVER)
-            dispatch_promise(on: self.sync_process_queue, body: {
-                return try self.processDeletionRequests()
-            }).then (on: self.sync_process_queue, {
-                return try self.uploadSensorDataToRemote()
-            }).then (on: self.sync_process_queue, {
-                return try self.downloadSensorsFromRemote()
-            }).then (on: self.sync_process_queue, {
-                return try self.downloadSensorsDataFromRemote()
-            }).then (on: self.sync_process_queue, {
-                return try self.cleanLocalStorage()
-            }).always({
-                dispatch_semaphore_signal(self.sync_semaphore);
-            }).error({error in
-                print(error)
-            })
+        dispatch_promise(on: sync_process_queue, body:{
+            return Promise<Void> { fulfill, reject in
+                try self.processDeletionRequests()
+                try self.uploadSensorDataToRemote()
+                try self.downloadSensorsFromRemote()
+                //notifiy?
+                
+                try self.downloadSensorsDataFromRemote()
+                //notifiy?
+                
+                try self.cleanLocalStorage()
+                fulfill()
+            }
+        }).then({
+            //Notify that sync is done?
         })
     }
 
     
-    func downloadSensorProfiles() throws -> Promise<Void> {
+    func downloadSensorProfiles() throws  -> Promise<Void> {
         return Promise{fulfill, reject in
             let sensorProfiles = try SensorDataProxy.getSensorProfiles()
             for ( _ ,subJson):(String, JSON) in sensorProfiles {
@@ -140,61 +137,46 @@ class DataSyncer {
     }
 
     
-    func processDeletionRequests() throws -> Promise<Void> {
-        return Promise{fulfill, reject in
-            let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
-            for request in dataDeletionRequests {
-                try SensorDataProxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
-                // remove the deletion request which has been processed
-                try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
-            }
-            fulfill()
+    func processDeletionRequests() throws {
+        let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
+        for request in dataDeletionRequests {
+            try SensorDataProxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
+            // remove the deletion request which has been processed
+            try DatabaseHandler.deleteDataDeletionRequest(request.uuid)
         }
     }
     
     
-    func downloadSensorsFromRemote() throws -> Promise<Void> {
-        return Promise{fulfill, reject in
-            let sensors = try getSensorsFromRemote()
-            try insertSensorsIntoLocal(sensors)
-            fulfill()
-        }
+    func downloadSensorsFromRemote() throws {
+        let sensors = try getSensorsFromRemote()
+        try insertSensorsIntoLocal(sensors)
     }
     
-    func downloadSensorsDataFromRemote() throws -> Promise<Void> {
-        return Promise{fulfill, reject in
-            let sensorsInLocal = getSensorsInLocal()
-            for sensor in sensorsInLocal{
-                if (sensor.remoteDownloadEnabled){
-                    try downloadAndStoreDataForSensor(sensor)
-                    try updateDownloadStatusForSensor(sensor)
-                }
+    func downloadSensorsDataFromRemote() throws {
+        let sensorsInLocal = getSensorsInLocal()
+        for sensor in sensorsInLocal{
+            if (sensor.remoteDownloadEnabled){
+                try downloadAndStoreDataForSensor(sensor)
+                try updateDownloadStatusForSensor(sensor)
             }
-            fulfill()
         }
     }
 
-    func uploadSensorDataToRemote() throws -> Promise<Void> {
-        return Promise{fulfill, reject in
-            let sensorsInLocal = getSensorsInLocal()
-            for sensor in sensorsInLocal {
-                if (sensor.remoteUploadEnabled){
-                    let unuploadedDataPoints = try getUnuploadedDataPoints(sensor)
-                    try uploadDataPointsForSensor(unuploadedDataPoints, sensor: sensor)
-                    try updateUploadStatusForDataPoints(unuploadedDataPoints)
-                }
+    func uploadSensorDataToRemote() throws {
+        let sensorsInLocal = getSensorsInLocal()
+        for sensor in sensorsInLocal {
+            if (sensor.remoteUploadEnabled){
+                let unuploadedDataPoints = try getUnuploadedDataPoints(sensor)
+                try uploadDataPointsForSensor(unuploadedDataPoints, sensor: sensor)
+                try updateUploadStatusForDataPoints(unuploadedDataPoints)
             }
-            fulfill()
         }
     }
     
-    func cleanLocalStorage() throws -> Promise<Void> {
-        return Promise{fulfill, reject in
-            let sensorsInLocal = getSensorsInLocal()
-            for sensor in sensorsInLocal {
-                try purgeDataForSensor(sensor)
-            }
-            fulfill()
+    func cleanLocalStorage() throws {
+        let sensorsInLocal = getSensorsInLocal()
+        for sensor in sensorsInLocal {
+            try purgeDataForSensor(sensor)
         }
     }
     

@@ -73,29 +73,27 @@ class TestDataSyncer: XCTestCase{
     }
     
     func testInitialize() {
-            let response = self.expectationWithDescription("wait for promises")
-            
-            firstly({
-                return try self.dataSyncer.downloadSensorProfiles()
-            }).then({
-                let profiles = try DatabaseHandler.getSensorProfiles()
-                XCTAssertEqual(profiles.count, 16)
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
+        let response = self.expectationWithDescription("wait for promises")
+        
+        firstly({
+            return try self.dataSyncer.downloadSensorProfiles()
+        }).then({
+            let profiles = try DatabaseHandler.getSensorProfiles()
+            XCTAssertEqual(profiles.count, 16)
+            response.fulfill()
+        }).error({ error in
+            XCTFail("Exception was captured. Abort the test.")
+        })
+        
+        self.waitForExpectationsWithTimeout(5.0) { error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
             }
+        }
     }
     
     func testProcessDeletionRequestWithStartTime() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
-            
             let data1 = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data1)
             let data2 = try populateRemoteDatabase()
@@ -105,21 +103,9 @@ class TestDataSyncer: XCTestCase{
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-24*60*60), endTime: nil)
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-24*60*60), endTime: nil)
             
-            firstly({
-                return try self.dataSyncer.processDeletionRequests()
-            }).then({
-                try self.assertDataPointsInRemote(5, data: data1)
-                self.accountUtils?.deleteUser()
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            try self.dataSyncer.processDeletionRequests()
+            try self.assertDataPointsInRemote(5, data: data1)
+            self.accountUtils?.deleteUser()
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
@@ -127,7 +113,6 @@ class TestDataSyncer: XCTestCase{
 
     func testProcessDeletionRequestWithEndTime() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
             
             let data1 = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data1)
@@ -138,21 +123,9 @@ class TestDataSyncer: XCTestCase{
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: nil, endTime: NSDate().dateByAddingTimeInterval(-24*60*60))
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: nil, endTime: NSDate().dateByAddingTimeInterval(-24*60*60))
             
-            firstly({
-                return try self.dataSyncer.processDeletionRequests()
-            }).then({
-                try self.assertDataPointsInRemote(5, data:data2)
-                self.accountUtils?.deleteUser()
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            try self.dataSyncer.processDeletionRequests()
+            try self.assertDataPointsInRemote(5, data:data2)
+            self.accountUtils?.deleteUser()
             
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -161,28 +134,13 @@ class TestDataSyncer: XCTestCase{
     
     func testDownloadSensorsFromRemote() {
         do {
-            let response = self.expectationWithDescription("wait for promises")
             
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             
-            firstly({
-                return try self.dataSyncer.downloadSensorsFromRemote()
-            }).then({
-                let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
-                XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
-                
-                print("Test completed.")
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            try self.dataSyncer.downloadSensorsFromRemote()
+            let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
+            XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
         } catch {
             XCTFail("Exception was captured. Abort the test.")
         }
@@ -190,34 +148,17 @@ class TestDataSyncer: XCTestCase{
 
     func testDownloadSensorsDataFromRemote() {
         do {
-            let response = self.expectationWithDescription("wait for promises")
             
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             
-            firstly({
-                return try self.dataSyncer.downloadSensorProfiles()
-            }).then({
-                return try self.dataSyncer.downloadSensorsFromRemote()
-            }).then({
-                let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
-                XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
-                return try self.dataSyncer.downloadSensorsDataFromRemote()
-            }).then({
-                try self.assertDataPointsInLocal(5, data: data)
-                
-                print("Task completed")
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            try self.dataSyncer.downloadSensorProfiles()
+            try self.dataSyncer.downloadSensorsFromRemote()
+            let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
+            XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
+            try self.dataSyncer.downloadSensorsDataFromRemote()
+            try self.assertDataPointsInLocal(5, data: data)
+
         } catch {
             XCTFail("Exception was captured. Abort the test.")
         }
@@ -225,27 +166,13 @@ class TestDataSyncer: XCTestCase{
     
     func testUploadSensorsDataToRemote() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
-            
             try self.dataSyncer.downloadSensorProfiles()
             
             let data = try populateLocalDatabase()
             try assertDataPointsInLocal(5, data: data)
             
-            firstly ({
-                return try dataSyncer.uploadSensorDataToRemote()
-            }).then ({
-                try self.assertDataPointsInRemote(5, data: data)
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            try dataSyncer.uploadSensorDataToRemote()
+            try self.assertDataPointsInRemote(5, data: data)
             
         } catch {
             print(error)
@@ -265,7 +192,6 @@ class TestDataSyncer: XCTestCase{
     //  c. data expired -> remain
     func testCleanLocalStorageForSensorsUploadedAndPersisted() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
             try self.dataSyncer.downloadSensorProfiles()
             try createSensorsInLocalDataBase()
             
@@ -274,31 +200,20 @@ class TestDataSyncer: XCTestCase{
             try self.dataSyncer.uploadSensorDataToRemote()
             try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
             
-            firstly({
-                try self.dataSyncer.cleanLocalStorage()
-            }).then({
-                //verify the result
-                var queryOptions = QueryOptions()
-                queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
-                try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
-                
-                queryOptions = QueryOptions()
-                queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
-                try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
-                
-                queryOptions = QueryOptions()
-                queryOptions.endTime = NSDate().dateByAddingTimeInterval(-35*24*60*60)
-                try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
+            try self.dataSyncer.cleanLocalStorage()
+            //verify the result
+            var queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
+            try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
             
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
+            
+            queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-35*24*60*60)
+            try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
+            
         } catch {
             print(error)
             XCTFail("Exception was captured. Abort the test.")
@@ -311,7 +226,6 @@ class TestDataSyncer: XCTestCase{
     //  c. data expired -> remain
     func testCleanUpLocalStorageForSensorsUploadedNotPersisted() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
             try self.dataSyncer.downloadSensorProfiles()
             try createSensorsInLocalDataBase()
             
@@ -321,31 +235,20 @@ class TestDataSyncer: XCTestCase{
             
             try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
             
-            firstly({
-                try self.dataSyncer.cleanLocalStorage()
-            }).then({
-                //verify the result
-                var queryOptions = QueryOptions()
-                queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
-                try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
-                
-                queryOptions = QueryOptions()
-                queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
-                try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
-                
-                queryOptions = QueryOptions()
-                queryOptions.endTime = NSDate().dateByAddingTimeInterval(-35*24*60*60)
-                try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
+            try self.dataSyncer.cleanLocalStorage()
+            //verify the result
+            var queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
+            try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
             
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
+            
+            queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-35*24*60*60)
+            try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
+            
         } catch {
             print(error)
             XCTFail("Exception was captured. Abort the test.")
@@ -357,34 +260,21 @@ class TestDataSyncer: XCTestCase{
     //  b. data not expired -> remain
     func testCleanUpLocalStorageForSensorsNotUploadedPersisted() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
             try self.dataSyncer.downloadSensorProfiles()
             try createSensorsInLocalDataBase()
             
             try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3, startTime: NSDate().dateByAddingTimeInterval(-50*24*60*60))
             try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3)
 
-            firstly({
-                try self.dataSyncer.cleanLocalStorage()
-            }).then({
-                //verify the result
-                var queryOptions = QueryOptions()
-                queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
-                try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName3, sensorName: self.sensorName3, queryOptions: queryOptions)
-                
-                queryOptions = QueryOptions()
-                queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
-                try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName3, sensorName: self.sensorName3, queryOptions: queryOptions)
-                response.fulfill()
-            }).error({ error in
-                XCTFail("Exception was captured. Abort the test.")
-            })
+            try self.dataSyncer.cleanLocalStorage()
+            //verify the result
+            var queryOptions = QueryOptions()
+            queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
+            try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName3, sensorName: self.sensorName3, queryOptions: queryOptions)
             
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            queryOptions = QueryOptions()
+            queryOptions.startTime = NSDate().dateByAddingTimeInterval(-1*24*60*60)
+            try self.assertDataPointsForSensorInLocal(5, sourceName: self.sourceName3, sensorName: self.sensorName3, queryOptions: queryOptions)
             
         } catch {
             print(error)
@@ -398,13 +288,13 @@ class TestDataSyncer: XCTestCase{
         let response = self.expectationWithDescription("wait for promises")
         
         firstly({
-            stubDownConnection()
             return try self.dataSyncer.downloadSensorProfiles()
         }).then({
-            XCTFail("Exception was not captured. Abort the test.")
-        }).error({ error in
-            error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError
+            let profiles = try DatabaseHandler.getSensorProfiles()
+            XCTAssertEqual(profiles.count, 16)
             response.fulfill()
+        }).error({ error in
+            XCTFail("Exception was captured. Abort the test.")
         })
         
         self.waitForExpectationsWithTimeout(5.0) { error in
@@ -416,122 +306,64 @@ class TestDataSyncer: XCTestCase{
     
     func testProcessDeletionRequestWithNoConnection() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
-            
             let data = try populateRemoteDatabase()
             try assertDataPointsInRemote(5, data: data)
             
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: nil, endTime: nil)
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: nil, endTime: nil)
             
-            firstly({
-                stubDownConnection()
-                return try self.dataSyncer.processDeletionRequests()
-            }).then({
-                XCTFail("Exception was not captured. Abort the test.")
-            }).error({ error in
-                error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError
-                response.fulfill()
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            stubDownConnection()
+            try self.dataSyncer.processDeletionRequests()
+
         }catch{
-            XCTFail("Exception was captured. Abort the test.")
+            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
         }
     }
     
     func testDownloadSensorsFromRemoteWithNoConnection() {
         do {
-            let response = self.expectationWithDescription("wait for promises")
-            
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             
-            firstly({
-                stubDownConnection()
-                return try self.dataSyncer.downloadSensorsFromRemote()
-            }).then({
-                XCTFail("Exception was not captured. Abort the test.")
-            }).error({ error in
-                error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError
-                response.fulfill()
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            stubDownConnection()
+            try self.dataSyncer.downloadSensorsFromRemote()
+
         } catch {
-            XCTFail("Exception was captured. Abort the test.")
+            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
         }
     }
     
     func testDownloadSensorsDataFromRemoteWithNoConnection() {
         do {
-            let response = self.expectationWithDescription("wait for promises")
             
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             
-            firstly({
-                return try self.dataSyncer.downloadSensorProfiles()
-            }).then({
-                return try self.dataSyncer.downloadSensorsFromRemote()
-            }).then({
-                self.stubDownConnection()
-                let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
-                XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
-                return try self.dataSyncer.downloadSensorsDataFromRemote()
-            }).then({
-                XCTFail("Exception was not captured. Abort the test.")
-            }).error({ error in
-                error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError
-                response.fulfill()
-            })
+            try self.dataSyncer.downloadSensorProfiles()
+            try self.dataSyncer.downloadSensorsFromRemote()
+            self.stubDownConnection()
+            let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
+            XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
+            try self.dataSyncer.downloadSensorsDataFromRemote()
             
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
         } catch {
-            XCTFail("Exception was captured. Abort the test.")
+            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
         }
     }
     
     func testUploadSensorsDataToRemoteWithNoConnction() {
         do{
-            let response = self.expectationWithDescription("wait for promises")
-            
             try self.dataSyncer.downloadSensorProfiles()
             
             let data = try populateLocalDatabase()
             try assertDataPointsInLocal(5, data: data)
             
-            firstly ({
-                self.stubDownConnection()
-                return try dataSyncer.uploadSensorDataToRemote()
-            }).then ({
-                XCTFail("Exception was not captured. Abort the test.")
-            }).error({ error in
-                error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError
-                response.fulfill()
-            })
-            
-            self.waitForExpectationsWithTimeout(5.0) { error in
-                if let error = error {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+            self.stubDownConnection()
+            try dataSyncer.uploadSensorDataToRemote()
             
         } catch {
             print(error)
-            XCTFail("Exception was captured. Abort the test.")
+            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
         }
     }
 
