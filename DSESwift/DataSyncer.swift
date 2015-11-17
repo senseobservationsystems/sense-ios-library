@@ -12,6 +12,14 @@ import PromiseKit
 import CoreLocation
 import SwiftyJSON
 
+
+
+/**
+ * DataSyncer handles the synchronization between the local storage and CommonSense.
+ * The syncing process is handled automatically and periodically, thus the external
+ * user does not need to be aware of the data syncing process at all.
+ *
+ */
 class DataSyncer {
     
     enum DataSyncerError: ErrorType{
@@ -35,6 +43,11 @@ class DataSyncer {
     let sync_semaphore = dispatch_semaphore_create(1)
     let sync_launch_queue = dispatch_queue_create("nl.sense.dse.sync_launch_queue", nil)
     let sync_process_queue = dispatch_queue_create("nl.sense.dse.sync_process_queue", nil)
+    
+    // callbacks
+    var readyCallbacks = [DSEAsyncCallback]()
+    var sensorDownloadedCallbacks = [DSEAsyncCallback]()
+    var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
 
     // the key for the string should be <source>:<sensor>
     init () {
@@ -74,17 +87,14 @@ class DataSyncer {
         timer!.invalidate()
     }
     
-    func initialize(useMainThread: Bool = false) throws{
-        var queue = dispatch_get_main_queue()
-        if (useMainThread == false) {
-            queue = dispatch_queue_create("DSEDataSyncerPeriodicSync", nil)
-        }
+    func initialize(completionHandler: ()-> Void) throws{
         
-        dispatch_promise(on: queue, body:{
+        dispatch_promise(on: sync_process_queue, body:{
             return try self.downloadSensorProfiles()
-        }).then(on: queue, {
-            //TODO: change the status of DSE
+        }).then(on: dispatch_get_main_queue(), {
+            
             print("initialization of DSE completed")
+            completionHandler()
         }).error({ error in
             //TODO: do something proper
             print("An error was captured. Initialization failed.")
@@ -95,7 +105,7 @@ class DataSyncer {
      * Synchronize data in local and remote storage.
      * Is executed synchronously.
      */
-    func doPeriodicSync() throws {
+    func sync() throws {
 
         dispatch_async(sync_launch_queue, {
             dispatch_semaphore_wait(self.sync_semaphore, DISPATCH_TIME_FOREVER)
@@ -146,8 +156,7 @@ class DataSyncer {
     func downloadSensorsFromRemote() throws -> Promise<Void> {
         return Promise{fulfill, reject in
             let sensors = try getSensorsFromRemote()
-            
-            try insertSensorsIntoLocalDB(sensors)
+            try insertSensorsIntoLocal(sensors)
             fulfill()
         }
     }
@@ -254,7 +263,7 @@ class DataSyncer {
         return allSensorsInLocal
     }
     
-    private func insertSensorsIntoLocalDB(sensors: Array<Sensor>) throws {
+    private func insertSensorsIntoLocal(sensors: Array<Sensor>) throws {
         for sensor in sensors {
             if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
                 try DatabaseHandler.insertSensor(sensor)

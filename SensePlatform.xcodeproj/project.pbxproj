@@ -46,6 +46,8 @@
 		2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		270E64E01BF63CA1004A23E1 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 277E77461BF633CB00215338 /* OHHTTPStubs.framework */; };
+		272540E21BFA3F0900EB0551 /* DSEAsyncCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272540E11BFA3F0900EB0551 /* DSEAsyncCallback.swift */; };
+		272540E41BFA44C400EB0551 /* testCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272540E31BFA44C400EB0551 /* testCallbacks.swift */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; };
 		2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
@@ -238,6 +240,8 @@
 
 /* Begin PBXFileReference section */
 		2709FF7D1BAF0E800051E8B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		272540E11BFA3F0900EB0551 /* DSEAsyncCallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEAsyncCallback.swift; sourceTree = "<group>"; };
+		272540E31BFA44C400EB0551 /* testCallbacks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testCallbacks.swift; sourceTree = "<group>"; };
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVJSONSchemaValidation.framework; path = Carthage/Build/iOS/VVJSONSchemaValidation.framework; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
@@ -745,6 +749,7 @@
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
 				27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */,
 				27C2F3AB1BBD955000832A7F /* QueryOptions.swift */,
+				272540E11BFA3F0900EB0551 /* DSEAsyncCallback.swift */,
 			);
 			path = DSESwift;
 			sourceTree = "<group>";
@@ -763,6 +768,7 @@
 				FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */,
 				FA38739E1BF378800078A85D /* TestDataStorageEngine.swift */,
 				FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */,
+				272540E31BFA44C400EB0551 /* testCallbacks.swift */,
 			);
 			path = DSESwiftTests;
 			sourceTree = "<group>";
@@ -1144,6 +1150,7 @@
 			files = (
 				27E4281C1BA960600067E149 /* DataPoint.swift in Sources */,
 				276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */,
+				272540E21BFA3F0900EB0551 /* DSEAsyncCallback.swift in Sources */,
 				27858B851BE764BA004FC01E /* RLMUser.swift in Sources */,
 				272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */,
 				A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */,
@@ -1172,6 +1179,7 @@
 				27F752751BB02793000FC400 /* TestDatabaseHandler.swift in Sources */,
 				27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */,
 				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
+				272540E41BFA44C400EB0551 /* testCallbacks.swift in Sources */,
 				27F89E1D1BB9966B0006C15A /* TestDataPoint.swift in Sources */,
 				278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */,
 				FA0DECBB1BF1F2A100DB4CB4 /* PromiseTests.swift in Sources */,

@@ -85,7 +85,13 @@ public class Sensor{
         )
     }
     
-    public func insertDataPoint(value: AnyObject, _ time: NSDate) throws {
+    /**
+     * Inserts or updates a single data point for a sensor.
+     * @param value: value of the dataPoint
+     * @param time: time of the dataPoint
+     * Throws an Exception if saving the value fails.
+     **/
+    public func insertOrUpdateDataPoint(value: AnyObject, _ time: NSDate) throws {
         let dataStructure = try DatabaseHandler.getSensorProfile(self.name)?.dataStructure
         if !JSONUtils.validateValue(value, schema: dataStructure!){
             throw DSEError.IncorrectDataStructure
@@ -101,7 +107,12 @@ public class Sensor{
     }
 
 
-    
+    /**
+     * Returns an array of datapoints
+     *@param queryOptions: options for the data points query.
+     *@return List<DataPoint> containing the queried data points.
+     * //TODO add a list of potential exceptions
+     **/
     public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
         return try DatabaseHandler.getDataPoints(self.id, queryOptions)
     }
@@ -111,13 +122,28 @@ public class Sensor{
     * fields in `options` which are `null` will be ignored.
     * @param options
     * @return Returns the applied options.
+    *  //TODO add a list of potential exceptions
     */
     public func setSensorConfig(sensorConfig: SensorConfig) throws {
-        do{
-            let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-            let updatedSensor = getSensorWithUpdatedConfig(sensor, sensorConfig)
-            try DatabaseHandler.updateSensor(updatedSensor)
-        }
+        let sensor = try DatabaseHandler.getSensor(self.source, self.name)
+        let updatedSensor = getSensorWithUpdatedConfig(sensor, sensorConfig)
+        try DatabaseHandler.updateSensor(updatedSensor)
+    }
+    
+    /**
+    * Delete data from the Local Storage and Common Sense for this sensor
+    * DataPoints will be immediately removed locally, and an event (class DataDeletionRequest)
+    * is scheduled for the next synchronization round to delete them from Common Sense.
+    * @param startTime The start time in epoch milliseconds. nil for not specified.
+    * @param endTime The end time in epoch milliseconds. nil for not specified.
+    * //TODO add a list of potential exceptions
+    **/
+    func deleteDataPoints(startTime : NSDate?, endTime: NSDate?) throws {
+        var queryOptions = QueryOptions()
+        queryOptions.startTime = startTime
+        queryOptions.endTime = endTime
+        try DatabaseHandler.deleteDataPoints(self.id, queryOptions)
+        try DatabaseHandler.createDataDeletionRequest(sourceName: self.source, sensorName: self.name, startTime: startTime, endTime: endTime)
     }
     
     

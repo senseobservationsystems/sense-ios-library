@@ -209,7 +209,7 @@ class DatabaseHandler: NSObject{
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
             throw RLMError.UnauthenticatedAccess
         }
-        //TODO: check if the same combination of the sensorname and SourceName exists
+        //check if the same combination of the sensorname and SourceName exists
         if (isExistingCombinationOfSourceAndSensorName(sensor.source,sensor.name)){
             throw RLMError.DuplicatedObjects
         }

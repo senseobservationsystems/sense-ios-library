@@ -9,13 +9,6 @@
 import Foundation
 
 public enum DatabaseError: ErrorType{
-    case ObjectNotFound
-    case InsertFailed
-    case UpdateFailed
-    case DuplicatedObjects
-    case InvalidLimit
-    case UnauthenticatedAccess
-    case UnknownError
     case InvalidAppKey
     case InvalidSessionId
     case InvalidUserId
@@ -40,11 +33,25 @@ public class DataStorageEngine {
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
     
+    /**
+     * The possible statuses of the DataStorageEngine
+     * AWAITING_CREDENTIALS = there are not credentials set, setCredentials needs to be called
+     * AWAITING_SENSOR_PROFILES = the credentials are set and the sensor profiles are being downloaded
+     * READY = the engine is ready for use
+     */
+    public enum DSEStatus{
+        case AWAITING_CREDENTIALS
+        case AWAITING_SENSOR_PROFILES
+        case READY
+    }
+    
     // get the config with default values
     private var config = DSEConfig()
     
     // reference to the datasyncer
     let dataSyncer = DataSyncer()
+    
+    private var initialized = false
     
     //This prevents others from using the default '()' initializer for this class.
     private init() {
@@ -57,7 +64,7 @@ public class DataStorageEngine {
     }
     
     public func setup(customConfig: DSEConfig) throws {
-        var (configChanged, syncInterval, localPersistancePeriod) = try self.dataSyncer.setConfig(self.config)
+        var (configChanged, syncInterval, localPersistancePeriod) = try self.dataSyncer.setConfig(customConfig)
         
         self.config.syncInterval           = syncInterval
         self.config.localPersistancePeriod = localPersistancePeriod
@@ -96,6 +103,29 @@ public class DataStorageEngine {
     
     public func start() {
         // todo: check if we have credentials!
+        do{
+            try self.dataSyncer.initialize({
+                self.initialized = true
+                //TODO: callback success
+            })
+        }catch{
+            //TODO: callback fail
+            print(error)
+        }
+    }
+    
+    /**
+    * Create a new sensor in database and backend if it does not already exist.
+    * @param source The source name (e.g accelerometer)
+    * @param name The sensor name (e.g accelerometer)
+    * @param options The sensor options
+    * @return The newly created sensor object
+    * //TODO: List possible exceptions
+    **/
+    func createSensor(source: String, name: String, options: SensorConfig) throws -> Sensor{
+        let sensor = Sensor(name: name, source: source, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
+        try DatabaseHandler.insertSensor(sensor)
+        return sensor
     }
 
     /**
@@ -104,9 +134,7 @@ public class DataStorageEngine {
     * @param sensorName The name of the sensor
     **/
     public func getSensor(source: String, sensorName : String) throws -> Sensor?{
-        var sensor : Sensor?
-        sensor = try DatabaseHandler.getSensor(source, sensorName)
-        return sensor
+        return try DatabaseHandler.getSensor(source, sensorName)
     }
     
     /**
@@ -125,7 +153,59 @@ public class DataStorageEngine {
         return DatabaseHandler.getSources()
     }
     
-    public func setCredentials(credentials: String) -> Void {
+    /**
+     * Returns enum DSEStatus indicating status of DSE.
+     * @return The DSEStatus, this could be either AWAITING_CREDENTIALS, AWAITING_SENSOR_PROFILES, READY.
+     **/
+    public func getStatus() -> DSEStatus{
+        if(self.config.sessionId == nil) {
+            return DSEStatus.AWAITING_CREDENTIALS;
+        } else if(self.initialized) {
+            return DSEStatus.READY;
+        } else {
+            return DSEStatus.AWAITING_SENSOR_PROFILES;
+        }
+    }
+
+    /**
+    * Synchronizes the local data with Common Sense asynchronously
+    * The results will be returned via AsyncCallback
+    **/
+    func syncData(completionHandler : DSEAsyncCallback){
         
     }
+    
+    /**
+    * Notifies when the sensors are downloaded asynchronously
+    * The sensors are automatically downloaded when the DataStorageEngine is ready
+    * @param callback The AsyncCallback method to call the success function on when the sensors are downloaded
+    **/
+    func onSensorsDownloaded(callback: DSEAsyncCallback){
+        //How do we check this????
+    }
+    
+    /**
+    * Notifies when the sensors are downloaded asynchronously
+    * The sensor data is automatically downloaded when the DataStorageEngine is ready
+    * @param callback The AsyncCallback method to call the success function on when the sensor data is downloaded
+    **/
+    func onSensorDataDownloaded(callback: DSEAsyncCallback){
+        //Check the download status of all the sensors
+    }
+    
+    /**
+    * Notifies when the initialization is done asynchronously
+    * The initialization is done when the credentials have been set and sensor profiles downloaded.
+    * @param callback The AsyncCallback method to call the success function on when ready
+    **/
+    func onReady(callback : DSEAsyncCallback){
+        if (getStatus() != DSEStatus.READY) {
+            // status not ready yet. keep the callback in the array in DataSyncer
+            // TODO: Should we store this in the DSE or DataSyncer?
+            self.dataSyncer.readyCallbacks.append(callback)
+        } else {
+            callback.onSuccess()
+        }
+    }
+    
 }

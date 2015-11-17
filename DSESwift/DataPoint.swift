@@ -40,39 +40,75 @@ public class DataPoint{
         self.init(sensorId: -1, value: "", time: now, existsInRemote: false)
     }
     
+    /**
+     * Return the id constructed by "<sensorId>-<timestamp>" in string.
+     **/
     func getId() -> String {
         return "\(self.sensorId)-\(String(self.time))"
     }
     
+    /**
+     * Set time of the data point.
+     * @param time: NSDate for the timestamp of the datapoint.
+     **/
     func setTime(time: NSDate){
         self.time = time
     }
     
+    /**
+     * Set value of the data point.
+     * @param value: value of the datapoint in String.
+     **/
     func setValue(value: String) {
         self.value = value
     }
     
+    /**
+     * Return the timestamp in Int with milliseconds accuracy
+     **/
     func getTimeInMillis() -> Int {
         return Int(self.time.timeIntervalSince1970 * 1000)
     }
     
+    /**
+     * Return the value in Int.
+     **/
     func getValueInInt() -> Int {
         return JSONUtils.getIntValue(self.value)
     }
-    
+    /**
+     * Return the value in Double.
+     **/
     func getValueInDouble() -> Double {
         return JSONUtils.getDoubleValue(self.value)
     }
     
+    /**
+     * Return the value in Bool.
+     **/
     func getValueInBool() -> Bool {
         return JSONUtils.getBoolValue(self.value)
     }
     
+    /**
+     * Return the value in String.
+     **/
     func getValueInString() -> String{
         return JSONUtils.getStringValue(self.value)
     }
     
+    /**
+     * Return the value in Dictionary.
+     **/
     func getValueInDictionary() -> [String: AnyObject]{
         return JSONUtils.getDictionaryValue(self.value)
+    }
+    
+    /**
+    * set the existsInRemote state.
+    * @param state: true if the datapoint exsists in Remote, or vice versa.
+    **/
+    func setExistsInRemote(state: Bool){
+        self.existsInRemote = state
     }
 }
