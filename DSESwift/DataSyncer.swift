@@ -20,7 +20,7 @@ import SwiftyJSON
  * user does not need to be aware of the data syncing process at all.
  *
  */
-class DataSyncer {
+public class DataSyncer : NSObject {
     
     enum DataSyncerError: ErrorType{
         case InvalidPersistentPeriod
@@ -30,27 +30,26 @@ class DataSyncer {
     static let SOURCE = "aim-ios-sdk"
     let SENSOR_PROFILE_KEY_NAME = "sensor_name"
     let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
-
-    var syncRate: Double!
-    var persistentPeriod: Double!
     
+    let MAX_INITIALIZATION_ATTEMPTS = 5
+    
+    var initializationAttemps = 0
+
     // only used for the default parameters
     let config = DSEConfig()
     
+    var syncRate: Double!
+    var persistentPeriod: Double!
+    
     var timer:NSTimer?
+    let data_syncer_process_queue = dispatch_queue_create("nl.sense.dse.sync_process_queue", nil)
     
-    // concurrency related variables
-    let sync_semaphore = dispatch_semaphore_create(1)
-    let sync_launch_queue = dispatch_queue_create("nl.sense.dse.sync_launch_queue", nil)
-    let sync_process_queue = dispatch_queue_create("nl.sense.dse.sync_process_queue", nil)
+    var delegate: DataSyncerDelegate?
     
-    // callbacks
-    var readyCallbacks = [DSEAsyncCallback]()
-    var sensorDownloadedCallbacks = [DSEAsyncCallback]()
-    var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
+    private(set) var initialized = false
 
     // the key for the string should be <source>:<sensor>
-    init () {
+    override init () {
         self.syncRate = self.config.syncInterval!
         self.persistentPeriod = self.config.localPersistancePeriod!
     }
@@ -76,29 +75,37 @@ class DataSyncer {
         return (configChanged, self.syncRate, self.persistentPeriod)
     }
     
-    func enablePeriodicSync(syncRate: Double?) {
-        if timer == nil {
-            timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: Selector("synchronize"), userInfo: nil, repeats: true);
-        }
-        timer!.fire()
+    func initialize()  {
+        dispatch_async(data_syncer_process_queue, {
+            do{
+                try self.downloadSensorProfiles()
+                print("DSE Initialization Completed")
+                self.initialized = true
+                self.delegate?.onInitializationCompleted()
+            }catch{
+                self.delegate?.onInitializationFailed(error)
+            }
+        })
+    }
+    
+    func enablePeriodicSync() {
+        dispatch_async(data_syncer_process_queue, {
+            if (self.initialized){
+                if self.timer == nil {
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "sync", userInfo: nil, repeats: true);
+                }
+                self.timer!.fire()
+            }else{
+                print("DSE is not initialized")
+            }
+        })
     }
 
     func disablePeriodicSync(){
-        timer!.invalidate()
-    }
-    
-    func initialize() -> Promise<Void> {
-        return Promise<Void> { fulfill, reject in
-            dispatch_promise(on: sync_process_queue, body:{
-                return self.downloadSensorProfiles()
-            }).then(on: dispatch_get_main_queue(), {
-                print("initialization of DSE completed")
-                fulfill()
-            }).error({ error in
-                //TODO: do something proper
-                print("An error was captured. Initialization failed.")
-                reject(error)
-            })
+        if self.timer == nil {
+            timer!.invalidate()
+        } else {
+            print("timer is nil")
         }
     }
     
@@ -106,34 +113,35 @@ class DataSyncer {
      * Synchronize data in local and remote storage.
      * Is executed asynchronously.
      */
-    func sync() throws {
-        dispatch_promise(on: sync_process_queue, body:{
+    public func sync() {
+        
+        dispatch_promise(on: data_syncer_process_queue, body:{
             return Promise<Void> { fulfill, reject in
+                // step 1
                 try self.processDeletionRequests()
+                // step 2
                 try self.uploadSensorDataToRemote()
+                // step 3
                 try self.downloadSensorsFromRemote()
-                //notifiy?
-                
+                // step 4
                 try self.downloadSensorsDataFromRemote()
-                //notifiy?
-                
+                // step 5
                 try self.cleanLocalStorage()
                 fulfill()
             }
         }).then({
-            //Notify that sync is done?
+            self.delegate?.onSyncCompleted()
+        }).error({ error in
+            print(error)
+            self.delegate?.onSyncFailed(error)
         })
     }
-
     
-    func downloadSensorProfiles() -> Promise<Void> {
-        return Promise{fulfill, reject in
-            let sensorProfiles = try SensorDataProxy.getSensorProfiles()
-            for ( _ ,subJson):(String, JSON) in sensorProfiles {
-                let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
-                try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: structure)
-            }
-            fulfill()
+    func downloadSensorProfiles() throws {
+        let sensorProfiles = try SensorDataProxy.getSensorProfiles()
+        for ( _ ,subJson):(String, JSON) in sensorProfiles {
+            let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
+            try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: structure)
         }
     }
 
@@ -149,17 +157,31 @@ class DataSyncer {
     
     
     func downloadSensorsFromRemote() throws {
-        let sensors = try getSensorsFromRemote()
-        try insertSensorsIntoLocal(sensors)
+        do{
+            let sensors = try getSensorsFromRemote()
+            try insertSensorsIntoLocal(sensors)
+            //notify
+            self.delegate?.onSensorsDownloadCompleted()
+        }catch {
+            self.delegate?.onSensorDataDownloadFailed(error)
+            throw error
+        }
+
     }
     
     func downloadSensorsDataFromRemote() throws {
-        let sensorsInLocal = getSensorsInLocal()
-        for sensor in sensorsInLocal{
-            if (sensor.remoteDownloadEnabled){
-                try downloadAndStoreDataForSensor(sensor)
-                try updateDownloadStatusForSensor(sensor)
+        do{
+            let sensorsInLocal = getSensorsInLocal()
+            for sensor in sensorsInLocal{
+                if (sensor.remoteDownloadEnabled){
+                    try downloadAndStoreDataForSensor(sensor)
+                    try updateDownloadStatusForSensor(sensor)
+                }
             }
+            self.delegate?.onSensorDataDownloadCompleted()
+        }catch{
+            self.delegate?.onSensorDataDownloadFailed(error)
+            throw error
         }
     }
 

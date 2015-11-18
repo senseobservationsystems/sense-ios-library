@@ -47,11 +47,14 @@
 		2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2709FF7D1BAF0E800051E8B2 /* Security.framework */; };
 		270E64E01BF63CA1004A23E1 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 277E77461BF633CB00215338 /* OHHTTPStubs.framework */; };
 		272540E21BFA3F0900EB0551 /* DSEAsyncCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272540E11BFA3F0900EB0551 /* DSEAsyncCallback.swift */; };
-		272540E41BFA44C400EB0551 /* testCallbacks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272540E31BFA44C400EB0551 /* testCallbacks.swift */; };
+		272540E61BFB414300EB0551 /* DataSyncerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272540E51BFB414300EB0551 /* DataSyncerDelegate.swift */; };
 		272F52421BAA190B001EE8A2 /* DatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */; };
 		2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
 		27431DEF1BA32FEF00729FB2 /* DSEConfigurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */; };
+		27457AAC1BFC8CAC0028CF58 /* SensorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27457AAB1BFC8CAC0028CF58 /* SensorTests.swift */; };
+		27457AAE1BFC8CAC0028CF58 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
+		27457AB51BFC8D510028CF58 /* SensorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27457AB41BFC8D510028CF58 /* SensorTests.swift */; };
 		2769CC641BA355E600A76ED8 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; };
@@ -71,16 +74,16 @@
 		27CE749D1BDFC52D0095E735 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74991BDFC4F00095E735 /* RealmSwift.framework */; };
 		27D441641BD128B400950ADC /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D441631BD128B400950ADC /* CryptoSwift.framework */; };
 		27DF11771BCFF10A00C4E79F /* SensorDataProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */; };
-		27DF117B1BD0027200C4E79F /* TestSensorDataProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF117A1BD0027200C4E79F /* TestSensorDataProxy.swift */; };
+		27DF117B1BD0027200C4E79F /* SensorDataProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; };
 		27F1D1AA1BD7A4A000ACE232 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */; };
 		27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* TestKeychainWrapper.swift */; };
-		27F752751BB02793000FC400 /* TestDatabaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* TestDatabaseHandler.swift */; };
-		27F89E1D1BB9966B0006C15A /* TestDataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* TestDataPoint.swift */; };
+		27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */; };
+		27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* DataPointTests.swift */; };
 		A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */; };
-		A5C1FE391BDA1F1200196C51 /* TestDataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1FE381BDA1F1200196C51 /* TestDataSyncer.swift */; };
+		A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */; };
 		FA0DECBB1BF1F2A100DB4CB4 /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */; };
-		FA38739F1BF378800078A85D /* TestDataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA38739E1BF378800078A85D /* TestDataStorageEngine.swift */; };
+		FA38739F1BF378800078A85D /* DataStorageEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA38739E1BF378800078A85D /* DataStorageEngineTests.swift */; };
 		FA3877E31BF381020078A85D /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3877E21BF381020078A85D /* SwiftyJSON.framework */; };
 		FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C158315D574E700F520D0 /* CoreLocation.framework */; };
 		FA4CDBA01BA70E1100DB44B1 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157D15D574D300F520D0 /* CoreAudio.framework */; };
@@ -91,7 +94,7 @@
 		FA4CDBA51BA70E8000DB44B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E820D6D15D40AB50001A3EC /* Foundation.framework */; };
 		FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9C157615D574B500F520D0 /* SystemConfiguration.framework */; };
 		FA4CDBA81BA7126400DB44B1 /* CSVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = FA4CDBA71BA7126400DB44B1 /* CSVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FA51BAAC1BF5E81C00EB45DB /* TestUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */; };
+		FA51BAAC1BF5E81C00EB45DB /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA51BAAB1BF5E81C00EB45DB /* TestUtils.swift */; };
 		FA5DF7A31BA716F700FF9544 /* CSSensePlatformTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */; };
 		FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */; };
 		FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */; };
@@ -210,6 +213,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		27457AAF1BFC8CAC0028CF58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
+			remoteInfo = DSESwift;
+		};
 		FA66C2A01BA86E1B00281B6F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
@@ -241,11 +251,15 @@
 /* Begin PBXFileReference section */
 		2709FF7D1BAF0E800051E8B2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		272540E11BFA3F0900EB0551 /* DSEAsyncCallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEAsyncCallback.swift; sourceTree = "<group>"; };
-		272540E31BFA44C400EB0551 /* testCallbacks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testCallbacks.swift; sourceTree = "<group>"; };
+		272540E51BFB414300EB0551 /* DataSyncerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncerDelegate.swift; sourceTree = "<group>"; };
 		272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseHandler.swift; path = DSESwift/DatabaseHandler.swift; sourceTree = SOURCE_ROOT; };
 		2735E7411BD7D633009A45BF /* VVJSONSchemaValidation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVJSONSchemaValidation.framework; path = Carthage/Build/iOS/VVJSONSchemaValidation.framework; sourceTree = "<group>"; };
 		27431DEA1BA32F3C00729FB2 /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSEConfigurations.swift; sourceTree = "<group>"; };
+		27457AA91BFC8CAC0028CF58 /* SensorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SensorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27457AAB1BFC8CAC0028CF58 /* SensorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTests.swift; sourceTree = "<group>"; };
+		27457AAD1BFC8CAC0028CF58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27457AB41BFC8D510028CF58 /* SensorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorTests.swift; sourceTree = "<group>"; };
 		276CBB801BB52B9D001C287D /* testObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testObject.swift; sourceTree = "<group>"; };
 		276CBB821BB56E12001C287D /* DataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngine.swift; sourceTree = "<group>"; };
 		276CBB841BB57838001C287D /* AccountUtilsForTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountUtilsForTest.h; path = "Sense Library Tests/AccountUtilsForTest.h"; sourceTree = SOURCE_ROOT; };
@@ -265,11 +279,11 @@
 		27CE74991BDFC4F00095E735 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		27D441631BD128B400950ADC /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
 		27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorDataProxy.swift; sourceTree = "<group>"; };
-		27DF117A1BD0027200C4E79F /* TestSensorDataProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSensorDataProxy.swift; sourceTree = "<group>"; };
+		27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorDataProxyTests.swift; sourceTree = "<group>"; };
 		27E4281B1BA960600067E149 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* TestKeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeychainWrapper.swift; sourceTree = "<group>"; };
-		27F89E1C1BB9966B0006C15A /* TestDataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDataPoint.swift; sourceTree = "<group>"; };
+		27F89E1C1BB9966B0006C15A /* DataPointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPointTests.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -285,13 +299,13 @@
 		3E9C158115D574E100F520D0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3E9C158315D574E700F520D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncer.swift; sourceTree = "<group>"; };
-		A5C1FE381BDA1F1200196C51 /* TestDataSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDataSyncer.swift; sourceTree = "<group>"; };
+		A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSyncerTests.swift; sourceTree = "<group>"; };
 		A99F99D71A5D8C1300D6CB76 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseTests.swift; sourceTree = "<group>"; };
-		FA38739E1BF378800078A85D /* TestDataStorageEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDataStorageEngine.swift; sourceTree = "<group>"; };
+		FA38739E1BF378800078A85D /* DataStorageEngineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStorageEngineTests.swift; sourceTree = "<group>"; };
 		FA3877E21BF381020078A85D /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		FA4CDBA71BA7126400DB44B1 /* CSVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVersion.h; sourceTree = "<group>"; };
-		FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtil.swift; sourceTree = "<group>"; };
+		FA51BAAB1BF5E81C00EB45DB /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
 		FA5DF79F1BA716F700FF9544 /* CSSpatialProviderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSpatialProviderTest.h; sourceTree = "<group>"; };
 		FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSpatialProviderTest.m; sourceTree = "<group>"; };
@@ -413,11 +427,19 @@
 		FAC4EC881BA086BC00B24CAA /* DSESwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSESwift.h; sourceTree = "<group>"; };
 		FAC4EC8A1BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAC4EC8F1BA086BC00B24CAA /* DSESwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DSESwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FAC4EC941BA086BC00B24CAA /* TestDatabaseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabaseHandler.swift; sourceTree = "<group>"; };
+		FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseHandlerTests.swift; sourceTree = "<group>"; };
 		FAC4EC961BA086BC00B24CAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		27457AA61BFC8CAC0028CF58 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27457AAE1BFC8CAC0028CF58 /* DSESwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FABCC0881BA7003500EE6DE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -471,6 +493,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27457AAA1BFC8CAC0028CF58 /* SensorTests */ = {
+			isa = PBXGroup;
+			children = (
+				27457AAB1BFC8CAC0028CF58 /* SensorTests.swift */,
+				27457AAD1BFC8CAC0028CF58 /* Info.plist */,
+			);
+			path = SensorTests;
+			sourceTree = "<group>";
+		};
 		27858B871BE764E2004FC01E /* RealmObjects */ = {
 			isa = PBXGroup;
 			children = (
@@ -500,6 +531,7 @@
 				FAC4EC931BA086BC00B24CAA /* DSESwiftTests */,
 				FABCC08D1BA7003500EE6DE0 /* SensePlatform */,
 				FABCC0991BA7003500EE6DE0 /* SensePlatformTests */,
+				27457AAA1BFC8CAC0028CF58 /* SensorTests */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
 				3E820D6B15D40AB50001A3EC /* Products */,
 			);
@@ -512,6 +544,7 @@
 				FAC4EC8F1BA086BC00B24CAA /* DSESwiftTests.xctest */,
 				FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */,
 				FABCC0951BA7003500EE6DE0 /* SensePlatformTests.xctest */,
+				27457AA91BFC8CAC0028CF58 /* SensorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -745,6 +778,7 @@
 				272F52411BAA190B001EE8A2 /* DatabaseHandler.swift */,
 				27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */,
 				A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */,
+				272540E51BFB414300EB0551 /* DataSyncerDelegate.swift */,
 				27431DEA1BA32F3C00729FB2 /* Sensor.swift */,
 				27E4281B1BA960600067E149 /* DataPoint.swift */,
 				27431DEE1BA32FEF00729FB2 /* DSEConfigurations.swift */,
@@ -757,18 +791,18 @@
 		FAC4EC931BA086BC00B24CAA /* DSESwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				A5C1FE381BDA1F1200196C51 /* TestDataSyncer.swift */,
-				27DF117A1BD0027200C4E79F /* TestSensorDataProxy.swift */,
-				27F89E1C1BB9966B0006C15A /* TestDataPoint.swift */,
+				27457AB41BFC8D510028CF58 /* SensorTests.swift */,
+				A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */,
+				27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */,
+				27F89E1C1BB9966B0006C15A /* DataPointTests.swift */,
 				276CBB801BB52B9D001C287D /* testObject.swift */,
-				FAC4EC941BA086BC00B24CAA /* TestDatabaseHandler.swift */,
+				FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */,
 				27F752721BB02512000FC400 /* TestKeychainWrapper.swift */,
 				FAC4EC961BA086BC00B24CAA /* Info.plist */,
 				278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */,
 				FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */,
-				FA38739E1BF378800078A85D /* TestDataStorageEngine.swift */,
-				FA51BAAB1BF5E81C00EB45DB /* TestUtil.swift */,
-				272540E31BFA44C400EB0551 /* testCallbacks.swift */,
+				FA38739E1BF378800078A85D /* DataStorageEngineTests.swift */,
+				FA51BAAB1BF5E81C00EB45DB /* TestUtils.swift */,
 			);
 			path = DSESwiftTests;
 			sourceTree = "<group>";
@@ -853,6 +887,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		27457AA81BFC8CAC0028CF58 /* SensorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27457AB31BFC8CAC0028CF58 /* Build configuration list for PBXNativeTarget "SensorTests" */;
+			buildPhases = (
+				27457AA51BFC8CAC0028CF58 /* Sources */,
+				27457AA61BFC8CAC0028CF58 /* Frameworks */,
+				27457AA71BFC8CAC0028CF58 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				27457AB01BFC8CAC0028CF58 /* PBXTargetDependency */,
+			);
+			name = SensorTests;
+			productName = SensorTests;
+			productReference = 27457AA91BFC8CAC0028CF58 /* SensorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FABCC08B1BA7003500EE6DE0 /* SensePlatform */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FABCC09D1BA7003500EE6DE0 /* Build configuration list for PBXNativeTarget "SensePlatform" */;
@@ -933,10 +985,13 @@
 		3E820D6115D40AB50001A3EC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0710;
 				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0700;
 				TargetAttributes = {
+					27457AA81BFC8CAC0028CF58 = {
+						CreatedOnToolsVersion = 7.1;
+					};
 					A9DCAB711B949E5A00318E69 = {
 						CreatedOnToolsVersion = 6.4;
 					};
@@ -977,11 +1032,19 @@
 				FAC4EC8E1BA086BC00B24CAA /* DSESwiftTests */,
 				FABCC08B1BA7003500EE6DE0 /* SensePlatform */,
 				FABCC0941BA7003500EE6DE0 /* SensePlatformTests */,
+				27457AA81BFC8CAC0028CF58 /* SensorTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		27457AA71BFC8CAC0028CF58 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FABCC08A1BA7003500EE6DE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1076,6 +1139,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		27457AA51BFC8CAC0028CF58 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27457AAC1BFC8CAC0028CF58 /* SensorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FABCC0871BA7003500EE6DE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1164,6 +1235,7 @@
 				27858B831BE764BA004FC01E /* RLMDataPoint.swift in Sources */,
 				27858B8C1BE7656F004FC01E /* KeychainWrapper.swift in Sources */,
 				27431DEF1BA32FEF00729FB2 /* DSEConfigurations.swift in Sources */,
+				272540E61BFB414300EB0551 /* DataSyncerDelegate.swift in Sources */,
 				27858B841BE764BA004FC01E /* RLMSensor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1172,15 +1244,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA38739F1BF378800078A85D /* TestDataStorageEngine.swift in Sources */,
-				27DF117B1BD0027200C4E79F /* TestSensorDataProxy.swift in Sources */,
-				A5C1FE391BDA1F1200196C51 /* TestDataSyncer.swift in Sources */,
-				FA51BAAC1BF5E81C00EB45DB /* TestUtil.swift in Sources */,
-				27F752751BB02793000FC400 /* TestDatabaseHandler.swift in Sources */,
+				FA38739F1BF378800078A85D /* DataStorageEngineTests.swift in Sources */,
+				27DF117B1BD0027200C4E79F /* SensorDataProxyTests.swift in Sources */,
+				A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */,
+				FA51BAAC1BF5E81C00EB45DB /* TestUtils.swift in Sources */,
+				27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */,
+				27457AB51BFC8D510028CF58 /* SensorTests.swift in Sources */,
 				27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */,
 				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
-				272540E41BFA44C400EB0551 /* testCallbacks.swift in Sources */,
-				27F89E1D1BB9966B0006C15A /* TestDataPoint.swift in Sources */,
+				27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */,
 				278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */,
 				FA0DECBB1BF1F2A100DB4CB4 /* PromiseTests.swift in Sources */,
 			);
@@ -1189,6 +1261,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		27457AB01BFC8CAC0028CF58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
+			targetProxy = 27457AAF1BFC8CAC0028CF58 /* PBXContainerItemProxy */;
+		};
 		FA66C2A11BA86E1B00281B6F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
@@ -1202,6 +1279,53 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		27457AB11BFC8CAC0028CF58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = SensorTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = tatsuya.SensorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		27457AB21BFC8CAC0028CF58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = SensorTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = tatsuya.SensorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		3E820D7515D40AB50001A3EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1605,6 +1729,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		27457AB31BFC8CAC0028CF58 /* Build configuration list for PBXNativeTarget "SensorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27457AB11BFC8CAC0028CF58 /* Debug */,
+				27457AB21BFC8CAC0028CF58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		3E820D6415D40AB50001A3EC /* Build configuration list for PBXProject "SensePlatform" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

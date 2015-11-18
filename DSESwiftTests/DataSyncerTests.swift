@@ -13,10 +13,10 @@ import SwiftyJSON
 import PromiseKit
 import OHHTTPStubs
 
-class TestDataSyncer: XCTestCase{
+class DataSyncerTests: XCTestCase{
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
-    var accountUtils: CSAccountUtils?
+    var accountUtils: CSAccountUtils
     
     let userId = "testuser"
     
@@ -36,7 +36,7 @@ class TestDataSyncer: XCTestCase{
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
-        registerAndLogin()
+        registerAndLogin(accountUtils)
         
         
         // set the config with CORRECT default values
@@ -45,7 +45,7 @@ class TestDataSyncer: XCTestCase{
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
         self.config.appKey = APPKEY_STAGING
-        self.config.sessionId = (accountUtils?.sessionId)!
+        self.config.sessionId = (accountUtils.sessionId)!
         
         do{
             try self.dataSyncer.setConfig(self.config)
@@ -73,39 +73,35 @@ class TestDataSyncer: XCTestCase{
     }
     
     func testInitialize() {
-        let response = self.expectationWithDescription("wait for promises")
-        
-        firstly({
-            return try self.dataSyncer.downloadSensorProfiles()
-        }).then({
+        do{
+            // Act:
+            try self.dataSyncer.downloadSensorProfiles()
+            
+            // Assert:
             let profiles = try DatabaseHandler.getSensorProfiles()
             XCTAssertEqual(profiles.count, 16)
-            response.fulfill()
-        }).error({ error in
+        }catch{
             XCTFail("Exception was captured. Abort the test.")
-        })
-        
-        self.waitForExpectationsWithTimeout(5.0) { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-            }
         }
     }
     
     func testProcessDeletionRequestWithStartTime() {
         do{
+            // Arrange:
             let data1 = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data1)
             let data2 = try populateRemoteDatabase()
             let concatData = concatenateDataArray(array1: data1, array2: data2)
             try assertDataPointsInRemote(10, data: concatData)
-            
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-24*60*60), endTime: nil)
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-24*60*60), endTime: nil)
             
+            // Act:
             try self.dataSyncer.processDeletionRequests()
+            
+            // Assert:
             try self.assertDataPointsInRemote(5, data: data1)
-            self.accountUtils?.deleteUser()
+            self.accountUtils.deleteUser()
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
@@ -113,19 +109,21 @@ class TestDataSyncer: XCTestCase{
 
     func testProcessDeletionRequestWithEndTime() {
         do{
-            
+            // Arrange:
             let data1 = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data1)
             let data2 = try populateRemoteDatabase()
             let concatData = concatenateDataArray(array1: data1, array2: data2)
             try assertDataPointsInRemote(10, data: concatData)
-            
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName1, sensorName: sensorName1, startTime: nil, endTime: NSDate().dateByAddingTimeInterval(-24*60*60))
             try DatabaseHandler.createDataDeletionRequest(sourceName: sourceName2, sensorName: sensorName2, startTime: nil, endTime: NSDate().dateByAddingTimeInterval(-24*60*60))
             
+            // Act:
             try self.dataSyncer.processDeletionRequests()
+            
+            // Assert:
             try self.assertDataPointsInRemote(5, data:data2)
-            self.accountUtils?.deleteUser()
+            self.accountUtils.deleteUser()
             
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -134,11 +132,14 @@ class TestDataSyncer: XCTestCase{
     
     func testDownloadSensorsFromRemote() {
         do {
-            
+            // Arrange:
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             
+            // Act:
             try self.dataSyncer.downloadSensorsFromRemote()
+            
+            // Assert:
             let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
         } catch {
@@ -148,15 +149,18 @@ class TestDataSyncer: XCTestCase{
 
     func testDownloadSensorsDataFromRemote() {
         do {
-            
+            // Arrange:
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
-            
             try self.dataSyncer.downloadSensorProfiles()
             try self.dataSyncer.downloadSensorsFromRemote()
             let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
+            
+            // Act:
             try self.dataSyncer.downloadSensorsDataFromRemote()
+            
+            // Assert:
             try self.assertDataPointsInLocal(5, data: data)
 
         } catch {
@@ -166,12 +170,15 @@ class TestDataSyncer: XCTestCase{
     
     func testUploadSensorsDataToRemote() {
         do{
+            // Arrange:
             try self.dataSyncer.downloadSensorProfiles()
-            
             let data = try populateLocalDatabase()
             try assertDataPointsInLocal(5, data: data)
             
+            // Act:
             try dataSyncer.uploadSensorDataToRemote()
+            
+            // Assert:
             try self.assertDataPointsInRemote(5, data: data)
             
         } catch {
@@ -192,16 +199,24 @@ class TestDataSyncer: XCTestCase{
     //  c. data expired -> remain
     func testCleanLocalStorageForSensorsUploadedAndPersisted() {
         do{
+            // Arrange: prepare the various datapoints
+            //  a. data expired and existsInRemote -> removed
+            //  b. data existsInRemote -> remain
+            //  c. data expired -> remain
             try self.dataSyncer.downloadSensorProfiles()
             try createSensorsInLocalDataBase()
-            
             try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-50*24*60*60))
             try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1)
             try self.dataSyncer.uploadSensorDataToRemote()
             try insertSensorDataIntoLocalStorage(sourceName1, sensorName: sensorName1, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
             
+            // Act: clean the local database
             try self.dataSyncer.cleanLocalStorage()
-            //verify the result
+            
+            // Assert: The number of datapoints per conditions.
+            //  a. data expired and existsInRemote -> removed
+            //  b. data existsInRemote -> remain
+            //  c. data expired -> remain
             var queryOptions = QueryOptions()
             queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
             try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName1, sensorName: self.sensorName1, queryOptions: queryOptions)
@@ -226,6 +241,7 @@ class TestDataSyncer: XCTestCase{
     //  c. data expired -> remain
     func testCleanUpLocalStorageForSensorsUploadedNotPersisted() {
         do{
+            // Arrange:
             try self.dataSyncer.downloadSensorProfiles()
             try createSensorsInLocalDataBase()
             
@@ -235,8 +251,10 @@ class TestDataSyncer: XCTestCase{
             
             try insertSensorDataIntoLocalStorage(sourceName2, sensorName: sensorName2, startTime: NSDate().dateByAddingTimeInterval(-40*24*60*60))
             
+            // Act:
             try self.dataSyncer.cleanLocalStorage()
-            //verify the result
+            
+            // Assert: verify the result
             var queryOptions = QueryOptions()
             queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
             try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName2, sensorName: self.sensorName2, queryOptions: queryOptions)
@@ -260,14 +278,17 @@ class TestDataSyncer: XCTestCase{
     //  b. data not expired -> remain
     func testCleanUpLocalStorageForSensorsNotUploadedPersisted() {
         do{
+            // Arrange:
             try self.dataSyncer.downloadSensorProfiles()
             try createSensorsInLocalDataBase()
             
             try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3, startTime: NSDate().dateByAddingTimeInterval(-50*24*60*60))
             try insertSensorDataIntoLocalStorage(sourceName3, sensorName: sensorName3)
 
+            // Act:
             try self.dataSyncer.cleanLocalStorage()
-            //verify the result
+            
+            // Assert: verify the result
             var queryOptions = QueryOptions()
             queryOptions.endTime = NSDate().dateByAddingTimeInterval(-45*24*60*60)
             try self.assertDataPointsForSensorInLocal(0, sourceName: self.sourceName3, sensorName: self.sensorName3, queryOptions: queryOptions)
@@ -285,22 +306,12 @@ class TestDataSyncer: XCTestCase{
     // MARK: Test for down connection
     
     func testInitializeWithNoConnection() {
-        let response = self.expectationWithDescription("wait for promises")
-        
-        firstly({
-            return try self.dataSyncer.downloadSensorProfiles()
-        }).then({
+        do{
+            try self.dataSyncer.downloadSensorProfiles()
             let profiles = try DatabaseHandler.getSensorProfiles()
             XCTAssertEqual(profiles.count, 16)
-            response.fulfill()
-        }).error({ error in
-            XCTFail("Exception was captured. Abort the test.")
-        })
-        
-        self.waitForExpectationsWithTimeout(5.0) { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-            }
+        }catch{
+            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
         }
     }
     
@@ -374,12 +385,6 @@ class TestDataSyncer: XCTestCase{
             let notConnectedError = NSError(domain:NSURLErrorDomain, code:Int(CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue), userInfo:nil)
             return OHHTTPStubsResponse(error:notConnectedError)
         }
-    }
-    
-    func registerAndLogin(){
-        let username = String(format:"spam+%f@sense-os.nl", NSDate().timeIntervalSince1970)
-        accountUtils!.registerUser(username, password: "Password")
-        accountUtils!.loginUser(username, password: "Password")
     }
     
     func assertDataPointsInRemote(expectedNumber: Int, data:[JSON]? = nil) throws{

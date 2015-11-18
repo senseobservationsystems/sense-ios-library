@@ -11,7 +11,7 @@ import XCTest
 import SwiftyJSON
 import OHHTTPStubs
 
-class TestSensorDataProxy: XCTestCase {
+class SensorDataProxyTests: XCTestCase {
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
     var accountUtils: CSAccountUtils?
@@ -46,6 +46,7 @@ class TestSensorDataProxy: XCTestCase {
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        OHHTTPStubs.removeAllStubs()
         super.tearDown()
     }
     

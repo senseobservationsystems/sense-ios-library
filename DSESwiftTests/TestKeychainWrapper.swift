@@ -40,7 +40,7 @@ let testServiceName = "myTestService"
 let defaultAccessGroup = KeychainWrapper.accessGroup
 let testAccessGroup = "myTestAccessGroup"
 
-class TestKeychainWrapper: XCTestCase {
+class KeychainWrapperTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

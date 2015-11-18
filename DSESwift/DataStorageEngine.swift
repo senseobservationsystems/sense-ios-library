@@ -13,6 +13,7 @@ public enum DatabaseError: ErrorType{
     case InvalidAppKey
     case InvalidSessionId
     case InvalidUserId
+    case EmptyCredentials
 }
 
 let SYNC_INTERVAL_KEY = "DSE_syncInterval"
@@ -30,7 +31,7 @@ let ENABLE_ENCRYPTION_KEY = "DSE_enableEncryption"
  * this is a singleton class: read how it works here:
  * http://krakendev.io/blog/the-right-way-to-write-a-singleton
 */
-public class DataStorageEngine {
+public class DataStorageEngine: DataSyncerDelegate{
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
     
@@ -46,13 +47,22 @@ public class DataStorageEngine {
         case READY
     }
     
+    // callbacks
+    var readyCallbacks = [DSEAsyncCallback]()
+    var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
+    var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
+    var syncCompleteHandlers = [DSEAsyncCallback]()
+    
+    private var isSensorDownloadCompleted = false
+    private var isSensorDataDownloadCompleted = false
+    
     // get the config with default values
     private var config = DSEConfig()
     
     // reference to the datasyncer
     let dataSyncer = DataSyncer()
     
-    private var initialized = false
+
     
     //This prevents others from using the default '()' initializer for this class.
     private init() {
@@ -65,6 +75,7 @@ public class DataStorageEngine {
     }
     
     public func setup(customConfig: DSEConfig) throws {
+        // set config for DataSyncer
         var (configChanged, syncInterval, localPersistancePeriod) = try self.dataSyncer.setConfig(customConfig)
         
         self.config.syncInterval           = syncInterval
@@ -80,10 +91,11 @@ public class DataStorageEngine {
         // todo: do something with the encryption
         self.config.enableEncryption       = customConfig.enableEncryption       ?? self.config.enableEncryption
         
+        
         // verify if we have indeed received valid credentials (not nil) and throw the appropriate error if something is wrong
-        if let appKey    = self.config.appKey {self.config.appKey = appKey}       else { throw DatabaseError.InvalidAppKey }
-        if let sessionId = self.config.appKey {self.config.sessionId = sessionId} else { throw DatabaseError.InvalidSessionId }
-        if let userId    = self.config.userId {self.config.userId = userId}       else { throw DatabaseError.InvalidUserId }
+        if let appKey    = customConfig.appKey {self.config.appKey = appKey}       else { throw DatabaseError.InvalidAppKey }
+        if let sessionId = customConfig.sessionId {self.config.sessionId = sessionId} else { throw DatabaseError.InvalidSessionId }
+        if let userId    = customConfig.userId {self.config.userId = userId}       else { throw DatabaseError.InvalidUserId }
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
         KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
@@ -99,22 +111,20 @@ public class DataStorageEngine {
         
         if (configChanged) {
             // do something? reinit the syncer?
+            // if the timer in data syncer is running, then we should re start the sync
+            // if the timer in data syncer is not running, then no need of change
         }
     }
     
-    public func start() {
+    public func start() throws {
         if (self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
             // callback fail?
-            print("NO CREDENTIALS")
+           throw DatabaseError.EmptyCredentials
         }
         
-        self.dataSyncer.initialize().then({
-            //TODO: callback success?
-        }).error({error in
-            //TODO: callback fail?
-            print(error)
-
-        })
+        self.dataSyncer.delegate = self
+        self.dataSyncer.initialize()
+        self.dataSyncer.enablePeriodicSync()
     }
     
     /**
@@ -163,7 +173,7 @@ public class DataStorageEngine {
     public func getStatus() -> DSEStatus{
         if(self.config.sessionId == nil) {
             return DSEStatus.AWAITING_CREDENTIALS;
-        } else if(self.initialized) {
+        } else if(self.dataSyncer.initialized) {
             return DSEStatus.READY;
         } else {
             return DSEStatus.AWAITING_SENSOR_PROFILES;
@@ -174,8 +184,9 @@ public class DataStorageEngine {
     * Synchronizes the local data with Common Sense asynchronously
     * The results will be returned via AsyncCallback
     **/
-    func syncData(completionHandler : DSEAsyncCallback){
-        
+    func syncData(completionHandler : DSEAsyncCallback) throws {
+        syncCompleteHandlers.append(completionHandler)
+        self.dataSyncer.sync()
     }
     
     /**
@@ -184,7 +195,11 @@ public class DataStorageEngine {
     * @param callback The AsyncCallback method to call the success function on when the sensors are downloaded
     **/
     func onSensorsDownloaded(callback: DSEAsyncCallback){
-        //How do we check this????
+        if self.isSensorDownloadCompleted{
+            callback.onSuccess()
+        } else {
+            self.sensorsDownloadedCallbacks.append(callback)
+        }
     }
     
     /**
@@ -193,7 +208,11 @@ public class DataStorageEngine {
     * @param callback The AsyncCallback method to call the success function on when the sensor data is downloaded
     **/
     func onSensorDataDownloaded(callback: DSEAsyncCallback){
-        //Check the download status of all the sensors
+        if self.isSensorDataDownloadCompleted{
+            callback.onSuccess()
+        } else {
+            self.sensorDataDownloadedCallbacks.append(callback)
+        }
     }
     
     /**
@@ -202,13 +221,63 @@ public class DataStorageEngine {
     * @param callback The AsyncCallback method to call the success function on when ready
     **/
     func onReady(callback : DSEAsyncCallback){
-        if (getStatus() != DSEStatus.READY) {
-            // status not ready yet. keep the callback in the array in DataSyncer
-            // TODO: Should we store this in the DSE or DataSyncer?
-            self.dataSyncer.readyCallbacks.append(callback)
-        } else {
+        if (getStatus() == DSEStatus.READY) {
             callback.onSuccess()
+        } else {
+            // status not ready yet. keep the callback in the array in DataSyncer
+            self.readyCallbacks.append(callback)
         }
     }
     
+    func onInitializationCompleted() {
+        for callback in readyCallbacks{
+            callback.onSuccess()
+            readyCallbacks.removeFirst()
+        }
+    }
+    
+    func onInitializationFailed(error:ErrorType) {
+        for callback in readyCallbacks{
+            callback.onFailure(error)
+        }
+    }
+    
+    func onSensorsDownloadCompleted() {
+        for callback in sensorsDownloadedCallbacks{
+            callback.onSuccess()
+            sensorsDownloadedCallbacks.removeFirst()
+        }
+    }
+    
+    func onSensorsDownloadFailed(error: ErrorType){
+        for callback in sensorDataDownloadedCallbacks{
+            callback.onFailure(error)
+        }
+    }
+    
+    func onSensorDataDownloadCompleted() {
+        for callback in sensorDataDownloadedCallbacks{
+            callback.onSuccess()
+            sensorDataDownloadedCallbacks.removeFirst()
+        }
+    }
+    
+    func onSensorDataDownloadFailed(error: ErrorType) {
+        for callback in sensorDataDownloadedCallbacks{
+            callback.onFailure(error)
+        }
+    }
+    
+    func onSyncCompleted() {
+        for callback in syncCompleteHandlers{
+            callback.onSuccess()
+            syncCompleteHandlers.removeFirst()
+        }
+    }
+    
+    func onSyncFailed(error: ErrorType) {
+        for callback in syncCompleteHandlers{
+            callback.onFailure(error)
+        }
+    }
 }

@@ -14,7 +14,7 @@ import SwiftyJSON
 @testable import DSESwift
 
 
-class TestDatabaseHandler: XCTestCase {
+class DatabaseHandlerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -224,7 +224,7 @@ class TestDatabaseHandler: XCTestCase {
             XCTAssertEqual(dataPoints[0].getValueInString(), "String value")
             
             dataPoint = dataPoints[0]
-            try dataPoint.setValue("String value updated")
+            dataPoint.setValue("String value updated")
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             let updatedDataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(updatedDataPoints.count, 1)

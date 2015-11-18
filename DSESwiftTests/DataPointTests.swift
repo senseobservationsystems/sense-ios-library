@@ -11,7 +11,7 @@ import RealmSwift
 
 @testable import DSESwift
 
-class TestDataPoint: XCTestCase {
+class DataPointTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

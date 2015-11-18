@@ -10,15 +10,20 @@ import Foundation
 @testable import DSESwift
 import SwiftyJSON
 
-public func getAppKeyAndSessionId() {
-    let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
-    let accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
+//public func getAppKeyAndSessionId() {
+//    let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
+//    let accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
+//    let username = String(format:"spam+%f@sense-os.nl", NSDate().timeIntervalSince1970)
+//    accountUtils.registerUser(username, password: "Password")
+//    accountUtils.loginUser(username, password: "Password")
+//}
+
+func registerAndLogin(accountUtils: CSAccountUtils){
     let username = String(format:"spam+%f@sense-os.nl", NSDate().timeIntervalSince1970)
     accountUtils.registerUser(username, password: "Password")
     accountUtils.loginUser(username, password: "Password")
 }
 
-// MARK: == helper functions
 // @param time: the datapoints will have time.timeIntervalSince1970 + index
 func getDummyAccelerometerData(var time time: NSDate? = nil) -> JSON{
     if time == nil {

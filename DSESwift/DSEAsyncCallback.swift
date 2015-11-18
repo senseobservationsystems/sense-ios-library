@@ -19,5 +19,5 @@ protocol DSEAsyncCallback{
      * Callback method called on failure
      * @param throwable If available a throwable is send with with failure response.
      **/
-    func onFailure() throws
+    func onFailure(error:ErrorType)
 }

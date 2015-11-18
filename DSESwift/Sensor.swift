@@ -138,7 +138,7 @@ public class Sensor{
     * @param endTime The end time in epoch milliseconds. nil for not specified.
     * //TODO add a list of potential exceptions
     **/
-    func deleteDataPoints(startTime : NSDate?, endTime: NSDate?) throws {
+    public func deleteDataPoints(startTime : NSDate?, endTime: NSDate?) throws {
         var queryOptions = QueryOptions()
         queryOptions.startTime = startTime
         queryOptions.endTime = endTime

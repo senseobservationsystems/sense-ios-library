@@ -138,14 +138,14 @@ class PromiseTests: XCTestCase{
         
         firstly ({ _ -> Promise<Void> in
             print("1")
-            return try self.promiseNightmare(0.1, 2)
+            return self.promiseNightmare(0.1, 2)
         })
         .then ({ _ -> Promise<Void> in
             print("2")
             return self.promiseSleep(0.1)
         }).then ({ _ -> Promise<Void> in
             print("3")
-            return try self.promiseNightmare(0.1, 1)
+            return self.promiseNightmare(0.1, 1)
         }).then({ _ in
             print("4")
         }).always({
@@ -156,7 +156,7 @@ class PromiseTests: XCTestCase{
         
         firstly ({ _ -> Promise<Void> in
             print("1")
-            return try self.promiseNightmare(0.1, 2)
+            return self.promiseNightmare(0.1, 2)
         }).recover({Error in
             print("error: \(Error)")
         })
@@ -165,7 +165,7 @@ class PromiseTests: XCTestCase{
             return self.promiseSleep(0.1)
         }).then ({ _ -> Promise<Void> in
             print("3")
-            return try self.promiseNightmare(0.1, 1)
+            return self.promiseNightmare(0.1, 1)
         }).then({ _ in
             print("4")
         }).error({(error: ErrorType) -> Void in
@@ -197,7 +197,7 @@ class PromiseTests: XCTestCase{
         }).then(on: queue, { _ in
             return self.promiseSleep(0.2)
         }).then(on: queue, { _ in
-            return try self.promiseNightmare(0.2,2)
+            return self.promiseNightmare(0.2,2)
         }).then(on: queue, { _ in
             return self.promiseSleep(0.2)
         })
@@ -288,7 +288,7 @@ class PromiseTests: XCTestCase{
                 return self.promiseSleep(0.5)
             }).then(on: queue, { _ -> Promise<Void> in
                 print ("Throw Error")
-                return try self.promiseNightmare(0.5, 1)
+                return self.promiseNightmare(0.5, 1)
             }).then(on: queue, { _ -> Promise<Void> in
                 print ("The first tasks stream - 3")
                 return self.promiseSleep(0.5)
