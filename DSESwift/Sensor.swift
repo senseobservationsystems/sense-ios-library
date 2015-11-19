@@ -35,7 +35,7 @@ public enum DSEError: ErrorType{
 public class Sensor{
     var id = -1
     var name = ""
-    var meta: Dictionary<String, AnyObject>?
+    var meta: Dictionary<String, AnyObject>
     var remoteUploadEnabled = true
     var remoteDownloadEnabled = true
     var persistLocally = true
@@ -43,28 +43,28 @@ public class Sensor{
     var source = ""
     var remoteDataPointsDownloaded = false
 
-    init(id:Int, name: String,   meta:Dictionary<String, AnyObject>?, remoteUploadEnabled: Bool? = true, remoteDownloadEnabled: Bool? = true,
-        persistLocally: Bool? = true, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
+    init(id:Int, name: String,   meta:Dictionary<String, AnyObject> = Dictionary<String, AnyObject>(), remoteUploadEnabled: Bool = false, remoteDownloadEnabled: Bool = false,
+        persistLocally: Bool = false, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
         self.meta = meta
-        self.remoteUploadEnabled = remoteUploadEnabled!
-        self.remoteDownloadEnabled = remoteDownloadEnabled!
-        self.persistLocally = persistLocally!
+        self.remoteUploadEnabled = remoteUploadEnabled
+        self.remoteDownloadEnabled = remoteDownloadEnabled
+        self.persistLocally = persistLocally
         self.userId = userId
         self.source = source
         self.remoteDataPointsDownloaded = remoteDataPointsDownloaded
     }
     
-    convenience init(name: String, source: String, sensorConfig: SensorConfig? = nil, userId: String, remoteDataPointsDownloaded: Bool) {
+    convenience init(name: String, source: String, sensorConfig: SensorConfig = SensorConfig(), userId: String, remoteDataPointsDownloaded: Bool) {
         self.init(
             id: 0,
             name: name,
-            meta: sensorConfig?.meta,
-            remoteUploadEnabled: sensorConfig?.uploadEnabled,
-            remoteDownloadEnabled: sensorConfig?.downloadEnabled,
-            persistLocally: sensorConfig?.persist,
+            meta: sensorConfig.meta,
+            remoteUploadEnabled: sensorConfig.uploadEnabled,
+            remoteDownloadEnabled: sensorConfig.downloadEnabled,
+            persistLocally: sensorConfig.persist,
             userId: userId,
             source: source,
             remoteDataPointsDownloaded: remoteDataPointsDownloaded
@@ -125,9 +125,8 @@ public class Sensor{
     *  //TODO add a list of potential exceptions
     */
     public func setSensorConfig(sensorConfig: SensorConfig) throws {
-        let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-        let updatedSensor = getSensorWithUpdatedConfig(sensor, sensorConfig)
-        try DatabaseHandler.updateSensor(updatedSensor)
+        applyNewConfig(sensorConfig)
+        try DatabaseHandler.updateSensor(self)
     }
     
     /**
@@ -138,7 +137,7 @@ public class Sensor{
     * @param endTime The end time in epoch milliseconds. nil for not specified.
     * //TODO add a list of potential exceptions
     **/
-    public func deleteDataPoints(startTime : NSDate?, endTime: NSDate?) throws {
+    public func deleteDataPoints(startTime startTime : NSDate? = nil, endTime: NSDate? = nil) throws {
         var queryOptions = QueryOptions()
         queryOptions.startTime = startTime
         queryOptions.endTime = endTime
@@ -149,19 +148,10 @@ public class Sensor{
     
     // MARK: helper functions
     
-    func getSensorWithUpdatedConfig(sensor: Sensor, _ sensorConfig: SensorConfig) -> Sensor{
-        if (sensorConfig.downloadEnabled != nil){
-            sensor.remoteDownloadEnabled = sensorConfig.downloadEnabled!
-        }
-        if (sensorConfig.uploadEnabled != nil){
-            sensor.remoteUploadEnabled = sensorConfig.uploadEnabled!
-        }
-        if (sensorConfig.meta != nil){
-            sensor.meta = sensorConfig.meta!
-        }
-        if (sensorConfig.persist != nil){
-            sensor.persistLocally = sensorConfig.persist!
-        }
-        return sensor
+    func applyNewConfig(sensorConfig: SensorConfig){
+        self.remoteDownloadEnabled = sensorConfig.downloadEnabled
+        self.remoteUploadEnabled = sensorConfig.uploadEnabled
+        self.meta = sensorConfig.meta
+        self.persistLocally = sensorConfig.persist
     }
 }

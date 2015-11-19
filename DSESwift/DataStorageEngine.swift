@@ -111,7 +111,7 @@ public class DataStorageEngine: DataSyncerDelegate{
         
         if (configChanged) {
             // do something? reinit the syncer?
-            // if the timer in data syncer is running, then we should re start the sync
+            // if the timer in data syncer is running, then we should re-start the sync
             // if the timer in data syncer is not running, then no need of change
         }
     }
@@ -131,12 +131,12 @@ public class DataStorageEngine: DataSyncerDelegate{
     * Create a new sensor in database and backend if it does not already exist.
     * @param source The source name (e.g accelerometer)
     * @param name The sensor name (e.g accelerometer)
-    * @param options The sensor options
+    * @param sensorConfig The sensor options
     * @return The newly created sensor object
     * //TODO: List possible exceptions
     **/
-    func createSensor(source: String, name: String, options: SensorConfig) throws -> Sensor{
-        let sensor = Sensor(name: name, source: source, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
+    func createSensor(source: String, name: String, sensorConfig: SensorConfig = SensorConfig()) throws -> Sensor{
+        let sensor = Sensor(name: name, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
         try DatabaseHandler.insertSensor(sensor)
         return sensor
     }
@@ -184,8 +184,10 @@ public class DataStorageEngine: DataSyncerDelegate{
     * Synchronizes the local data with Common Sense asynchronously
     * The results will be returned via AsyncCallback
     **/
-    func syncData(completionHandler : DSEAsyncCallback) throws {
-        syncCompleteHandlers.append(completionHandler)
+    func syncData(completionHandler : DSEAsyncCallback?) throws {
+        if (completionHandler != nil){
+            syncCompleteHandlers.append(completionHandler!)
+        }
         self.dataSyncer.sync()
     }
     

@@ -16,7 +16,7 @@ import OHHTTPStubs
 class DataSyncerTests: XCTestCase{
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
-    var accountUtils: CSAccountUtils
+    var accountUtils: CSAccountUtils?
     
     let userId = "testuser"
     
@@ -36,7 +36,7 @@ class DataSyncerTests: XCTestCase{
         super.setUp()
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
-        registerAndLogin(accountUtils)
+        registerAndLogin(accountUtils!)
         
         
         // set the config with CORRECT default values
@@ -45,7 +45,7 @@ class DataSyncerTests: XCTestCase{
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
         self.config.appKey = APPKEY_STAGING
-        self.config.sessionId = (accountUtils.sessionId)!
+        self.config.sessionId = (accountUtils!.sessionId)!
         
         do{
             try self.dataSyncer.setConfig(self.config)
@@ -101,7 +101,7 @@ class DataSyncerTests: XCTestCase{
             
             // Assert:
             try self.assertDataPointsInRemote(5, data: data1)
-            self.accountUtils.deleteUser()
+            self.accountUtils!.deleteUser()
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
@@ -123,7 +123,7 @@ class DataSyncerTests: XCTestCase{
             
             // Assert:
             try self.assertDataPointsInRemote(5, data:data2)
-            self.accountUtils.deleteUser()
+            self.accountUtils!.deleteUser()
             
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -133,6 +133,7 @@ class DataSyncerTests: XCTestCase{
     func testDownloadSensorsFromRemote() {
         do {
             // Arrange:
+            try self.dataSyncer.downloadSensorProfiles()
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             
@@ -143,6 +144,7 @@ class DataSyncerTests: XCTestCase{
             let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
         } catch {
+            print(error)
             XCTFail("Exception was captured. Abort the test.")
         }
     }
@@ -150,12 +152,17 @@ class DataSyncerTests: XCTestCase{
     func testDownloadSensorsDataFromRemote() {
         do {
             // Arrange:
+            try self.dataSyncer.downloadSensorProfiles()
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
-            try self.dataSyncer.downloadSensorProfiles()
             try self.dataSyncer.downloadSensorsFromRemote()
             let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
+            
+            let config = SensorConfig(meta: Dictionary<String, AnyObject>(), uploadEnabled: true, downloadEnabled: true, persist: true)
+            for sensor in sensorsInLocal{
+                try sensor.setSensorConfig(config)
+            }
             
             // Act:
             try self.dataSyncer.downloadSensorsDataFromRemote()
@@ -164,6 +171,7 @@ class DataSyncerTests: XCTestCase{
             try self.assertDataPointsInLocal(5, data: data)
 
         } catch {
+            print(error)
             XCTFail("Exception was captured. Abort the test.")
         }
     }
@@ -443,16 +451,24 @@ class DataSyncerTests: XCTestCase{
     
     func createSensorsInLocalDataBase() throws {
         var sensorConfig = SensorConfig()
+        sensorConfig.uploadEnabled = true
+        sensorConfig.downloadEnabled = true
+        sensorConfig.persist = true
+
         let sensor1 = Sensor(name: sensorName1, source: sourceName1, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor1)
         
         sensorConfig = SensorConfig()
+        sensorConfig.uploadEnabled = true
+        sensorConfig.downloadEnabled = true
         sensorConfig.persist = false
         let sensor2 = Sensor(name: sensorName2, source: sourceName2, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor2)
         
         sensorConfig = SensorConfig()
         sensorConfig.uploadEnabled = false
+        sensorConfig.downloadEnabled = true
+        sensorConfig.persist = true
         let sensor3 = Sensor(name: sensorName3, source: sourceName3, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor3)
     }

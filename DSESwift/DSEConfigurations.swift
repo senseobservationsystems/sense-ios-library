@@ -9,10 +9,10 @@
 import Foundation
 
 public struct SensorConfig{
-    var meta : Dictionary<String, AnyObject>? = nil  // null by default, if not null, change from default
-    var uploadEnabled: Bool? = true// null by default, if not null, change from default
-    var downloadEnabled: Bool? = true// null by default, if not null, change from default
-    var persist: Bool? = true// null by default, if not null, change from default
+    var meta: Dictionary<String, AnyObject> = Dictionary<String, AnyObject>()  // null by default, if not null, change from default
+    var uploadEnabled: Bool = false// null by default, if not null, change from default
+    var downloadEnabled: Bool = false// null by default, if not null, change from default
+    var persist: Bool = false// null by default, if not null, change from default
 }
 
 public struct DSEConfig{

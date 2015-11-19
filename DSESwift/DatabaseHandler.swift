@@ -19,6 +19,7 @@ public enum RLMError: ErrorType{
     case StartTimeLaterThanEndTime
     case UnauthenticatedAccess
     case CanNotChangePrimaryKey
+    case InvalidSensorName
     case InsertFailed
     case UpdateFailed
     case DeleteFailed
@@ -137,7 +138,7 @@ class DatabaseHandler: NSObject{
     * Get the list of data deletion requests from local storage
     * @return An array of NSDictionary represents data deletion requests
     */
-    static func getDataDeletionRequest() -> [DataDeletionRequest] {
+    static func getDataDeletionRequests() -> [DataDeletionRequest] {
         var dataDeletionRequest = [DataDeletionRequest]()
         let realm = try! Realm()
         let predicate = NSPredicate(format: "userId = %@", self.getUserId())
@@ -190,7 +191,7 @@ class DatabaseHandler: NSObject{
         // Changes to dataType, userId, sensorName, source will be ignored.
         let realm = try! Realm()
         realm.beginWrite()
-        rlmSensor.meta = JSONUtils.stringify(sensor.meta!)
+        rlmSensor.meta = JSONUtils.stringify(sensor.meta)
         rlmSensor.remoteUploadEnabled = sensor.remoteUploadEnabled
         rlmSensor.remoteDownloadEnabled = sensor.remoteDownloadEnabled
         rlmSensor.persistLocally = sensor.persistLocally
@@ -209,8 +210,11 @@ class DatabaseHandler: NSObject{
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
             throw RLMError.UnauthenticatedAccess
         }
+        if (try DatabaseHandler.getSensorProfile(sensor.name) == nil){
+            throw RLMError.InvalidSensorName
+        }
         //check if the same combination of the sensorname and SourceName exists
-        if (isExistingCombinationOfSourceAndSensorName(sensor.source,sensor.name)){
+        if (isExistingCombinationOfSourceAndSensorName(sensor.source, sensor.name)){
             throw RLMError.DuplicatedObjects
         }
         
@@ -369,7 +373,7 @@ class DatabaseHandler: NSObject{
     * @return An available Id
     */
     static func getNextKeyForSensor() -> Int{
-        let lockQueue = dispatch_queue_create("com.sense.lockQueue", nil)
+        let lockQueue = dispatch_queue_create("com.sense.key_generation_queue", nil)
         var newId = 0
         dispatch_sync(lockQueue) {
             let realm = try! Realm()

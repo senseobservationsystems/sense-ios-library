@@ -16,6 +16,8 @@ import SwiftyJSON
 
 class DatabaseHandlerTests: XCTestCase {
     
+    let sensorConfig = SensorConfig(meta: Dictionary<String, AnyObject>(), uploadEnabled: true, downloadEnabled: true, persist: true)
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -29,7 +31,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testInsertDataPoint() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -57,7 +58,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointWithValidLimit() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -86,7 +86,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointWithEmptyStartAndEnd() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName,  sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,remoteDataPointsDownloaded: false)
@@ -118,7 +117,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testDeleteDataPointWithEmptyStartAndEnd() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -157,7 +155,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testDeleteDataPointWithEnd() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
@@ -201,7 +198,6 @@ class DatabaseHandlerTests: XCTestCase {
     
 
     func testUpdateValueOfDataPoint() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
@@ -284,7 +280,7 @@ class DatabaseHandlerTests: XCTestCase {
             numberOfRequest++
             try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "time_active", startTime: nil, endTime: nil)
             numberOfRequest++
-            let results = DatabaseHandler.getDataDeletionRequest()
+            let results = DatabaseHandler.getDataDeletionRequests()
             XCTAssertEqual(numberOfRequest, results.count)
         }catch{
             XCTFail("Exception was captured. Abort the test.")
@@ -303,13 +299,13 @@ class DatabaseHandlerTests: XCTestCase {
             numberOfRequest++
             try DatabaseHandler.createDataDeletionRequest(sourceName: "htc", sensorName: "gyroscope", startTime: nil, endTime: nil)
             numberOfRequest++
-            let results = DatabaseHandler.getDataDeletionRequest()
+            let results = DatabaseHandler.getDataDeletionRequests()
             //XCTAssertEqual(numberOfRequest, results.count)
         
             for result in results {
                 try DatabaseHandler.deleteDataDeletionRequest(result.uuid)
                 numberOfRequest--
-                let newResult = DatabaseHandler.getDataDeletionRequest()
+                let newResult = DatabaseHandler.getDataDeletionRequests()
                 XCTAssertEqual(numberOfRequest, newResult.count)
             }
         }catch{
@@ -318,7 +314,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testUpdateSyncedStatusOfDataPoint() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
@@ -353,7 +348,6 @@ class DatabaseHandlerTests: XCTestCase {
 
 
     func testInsertSensorWithValidSetup() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
@@ -376,25 +370,23 @@ class DatabaseHandlerTests: XCTestCase {
 
     
     func testUpdateSensor() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
             
-            let newSensorMeta: Dictionary<String, AnyObject>? = ["sensor":"meta data updated"]
+            let newSensorMeta: Dictionary<String, AnyObject> = ["sensor":"meta data updated"]
             sensor.meta = newSensorMeta
             try DatabaseHandler.updateSensor(sensor)
             
             let retrievedSensor = try! DatabaseHandler.getSensor(sourceName, sensor.name)
-            XCTAssertEqual(JSONUtils.stringify(retrievedSensor.meta!), JSONUtils.stringify(newSensorMeta!))
+            XCTAssertEqual(JSONUtils.stringify(retrievedSensor.meta), JSONUtils.stringify(newSensorMeta))
         }catch{
             XCTFail("Exception was captured. Abort the test.")
         }
     }
     
     func testGetSensors() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
@@ -411,7 +403,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSources() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             //add 2 sensors with source 1 and add 1 sensor with source 2
             var sensor = Sensor(name: "sensor1", source: "testSource1", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
@@ -436,7 +427,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorWithSourceNameAndSensorName() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -497,7 +487,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointsWithInvalidLimit() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -526,7 +515,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetDataPointsWithStartTimeLaterThanEndTime() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -571,7 +559,7 @@ class DatabaseHandlerTests: XCTestCase {
     
     
     func testInsertSameSensorTwice() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
+
         do{
             let sourceName = "testSource"
             let sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -585,7 +573,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testInsertSensorWithInvalidUserId() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sensor = Sensor(name: "sensor1", source: "testSource", sensorConfig: sensorConfig, userId: "anotheruser", remoteDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
@@ -595,7 +582,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testUpdateInvalidUpdateOfSensorName() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sensor = Sensor(name: "sensor1", source: "testSource", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
@@ -610,7 +596,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testUpdateSensorWithInvalidUsername() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sensor = Sensor(name: "sensor1", source: "testSource", sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
             try DatabaseHandler.insertSensor(sensor)
@@ -625,7 +610,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorWithNonExistingSource() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -645,7 +629,6 @@ class DatabaseHandlerTests: XCTestCase {
     }
     
     func testGetSensorWithNonExistingSensorName() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!,  remoteDataPointsDownloaded: false)
@@ -666,7 +649,6 @@ class DatabaseHandlerTests: XCTestCase {
 
     
     func testGetSensorsWithInvalidSorceName() {
-        let sensorConfig = SensorConfig(meta: nil, uploadEnabled: true, downloadEnabled: true, persist: true)
         do{
             let sourceName = "testSource"
             var sensor = Sensor(name: "sensor1", source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)

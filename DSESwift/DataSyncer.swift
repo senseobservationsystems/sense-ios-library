@@ -147,7 +147,7 @@ public class DataSyncer : NSObject {
 
     
     func processDeletionRequests() throws {
-        let dataDeletionRequests = DatabaseHandler.getDataDeletionRequest()
+        let dataDeletionRequests = DatabaseHandler.getDataDeletionRequests()
         for request in dataDeletionRequests {
             try SensorDataProxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
             // remove the deletion request which has been processed
@@ -188,8 +188,11 @@ public class DataSyncer : NSObject {
     func uploadSensorDataToRemote() throws {
         let sensorsInLocal = getSensorsInLocal()
         for sensor in sensorsInLocal {
+            print("###", sensor.name)
+            print("###", sensor.remoteUploadEnabled)
             if (sensor.remoteUploadEnabled){
                 let unuploadedDataPoints = try getUnuploadedDataPoints(sensor)
+                print("### datapoints", unuploadedDataPoints)
                 try uploadDataPointsForSensor(unuploadedDataPoints, sensor: sensor)
                 try updateUploadStatusForDataPoints(unuploadedDataPoints)
             }
