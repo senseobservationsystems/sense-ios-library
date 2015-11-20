@@ -127,6 +127,10 @@ public class DataStorageEngine: DataSyncerDelegate{
         self.dataSyncer.enablePeriodicSync()
     }
     
+    public func stopPeriodicSync(){
+        self.dataSyncer.disablePeriodicSync()
+    }
+    
     /**
     * Create a new sensor in database and backend if it does not already exist.
     * @param source The source name (e.g accelerometer)
@@ -184,19 +188,15 @@ public class DataStorageEngine: DataSyncerDelegate{
     * Synchronizes the local data with Common Sense asynchronously
     * The results will be returned via AsyncCallback
     **/
-    func syncData(completionHandler : DSEAsyncCallback?) throws {
-        if (completionHandler != nil){
-            syncCompleteHandlers.append(completionHandler!)
-        }
+    func syncData() throws {
         self.dataSyncer.sync()
     }
     
     /**
     * Notifies when the sensors are downloaded asynchronously
-    * The sensors are automatically downloaded when the DataStorageEngine is ready
     * @param callback The AsyncCallback method to call the success function on when the sensors are downloaded
     **/
-    func onSensorsDownloaded(callback: DSEAsyncCallback){
+    func setSensorsDownloadedCallback(callback: DSEAsyncCallback){
         if self.isSensorDownloadCompleted{
             callback.onSuccess()
         } else {
@@ -205,11 +205,10 @@ public class DataStorageEngine: DataSyncerDelegate{
     }
     
     /**
-    * Notifies when the sensors are downloaded asynchronously
-    * The sensor data is automatically downloaded when the DataStorageEngine is ready
+    * Notifies when the sensor data are downloaded asynchronously
     * @param callback The AsyncCallback method to call the success function on when the sensor data is downloaded
     **/
-    func onSensorDataDownloaded(callback: DSEAsyncCallback){
+    func setSensorDataDownloadedCallback(callback: DSEAsyncCallback){
         if self.isSensorDataDownloadCompleted{
             callback.onSuccess()
         } else {
@@ -219,16 +218,24 @@ public class DataStorageEngine: DataSyncerDelegate{
     
     /**
     * Notifies when the initialization is done asynchronously
-    * The initialization is done when the credentials have been set and sensor profiles downloaded.
     * @param callback The AsyncCallback method to call the success function on when ready
     **/
-    func onReady(callback : DSEAsyncCallback){
+    func setReadyCallback(callback : DSEAsyncCallback){
         if (getStatus() == DSEStatus.READY) {
             callback.onSuccess()
         } else {
             // status not ready yet. keep the callback in the array in DataSyncer
             self.readyCallbacks.append(callback)
         }
+    }
+    
+    /**
+     * Notifies on completion of the first sync since you set the callback.
+     * @param callback The AsyncCallback method to call the success function on when ready
+     **/
+    func setSyncCompletedCallback(callback : DSEAsyncCallback){
+        // status not ready yet. keep the callback in the array in DataSyncer
+        self.syncCompleteHandlers.append(callback)
     }
     
     func onInitializationCompleted() {
@@ -280,6 +287,7 @@ public class DataStorageEngine: DataSyncerDelegate{
     func onSyncFailed(error: ErrorType) {
         for callback in syncCompleteHandlers{
             callback.onFailure(error)
+            syncCompleteHandlers.removeFirst()
         }
     }
 }

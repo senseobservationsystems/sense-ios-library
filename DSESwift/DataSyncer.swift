@@ -27,7 +27,6 @@ public class DataSyncer : NSObject {
         case InvalidSyncRate
     }
     
-    static let SOURCE = "aim-ios-sdk"
     let SENSOR_PROFILE_KEY_NAME = "sensor_name"
     let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
     
@@ -102,8 +101,9 @@ public class DataSyncer : NSObject {
     }
 
     func disablePeriodicSync(){
-        if self.timer == nil {
-            timer!.invalidate()
+        if self.timer != nil {
+            self.timer!.invalidate()
+            self.timer = nil
         } else {
             print("timer is nil")
         }
@@ -114,9 +114,9 @@ public class DataSyncer : NSObject {
      * Is executed asynchronously.
      */
     public func sync() {
-        
-        dispatch_promise(on: data_syncer_process_queue, body:{
+        dispatch_promise(on: data_syncer_process_queue, body:{ _ -> Promise<Void> in
             return Promise<Void> { fulfill, reject in
+                print("")
                 // step 1
                 try self.processDeletionRequests()
                 // step 2
@@ -129,7 +129,7 @@ public class DataSyncer : NSObject {
                 try self.cleanLocalStorage()
                 fulfill()
             }
-        }).then({
+        }).then({ _ in
             self.delegate?.onSyncCompleted()
         }).error({ error in
             print(error)
@@ -187,14 +187,12 @@ public class DataSyncer : NSObject {
 
     func uploadSensorDataToRemote() throws {
         let sensorsInLocal = getSensorsInLocal()
+        
         for sensor in sensorsInLocal {
-            print("###", sensor.name)
-            print("###", sensor.remoteUploadEnabled)
             if (sensor.remoteUploadEnabled){
-                let unuploadedDataPoints = try getUnuploadedDataPoints(sensor)
-                print("### datapoints", unuploadedDataPoints)
-                try uploadDataPointsForSensor(unuploadedDataPoints, sensor: sensor)
-                try updateUploadStatusForDataPoints(unuploadedDataPoints)
+                let dataPointsToUpload = try getDataPointsToUpload(sensor)
+                try uploadDataPointsForSensor(dataPointsToUpload, sensor: sensor)
+                try updateUploadStatusForDataPoints(dataPointsToUpload)
             }
         }
     }
@@ -244,7 +242,7 @@ public class DataSyncer : NSObject {
         try DatabaseHandler.updateSensor(sensor)
     }
     
-    private func getUnuploadedDataPoints(sensor: Sensor) throws -> Array<DataPoint> {
+    private func getDataPointsToUpload(sensor: Sensor) throws -> Array<DataPoint> {
         var queryOptions = QueryOptions()
         queryOptions.existsInRemote = false
         return try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
@@ -252,7 +250,7 @@ public class DataSyncer : NSObject {
     
     private func uploadDataPointsForSensor(dataPoints: Array<DataPoint>, sensor: Sensor) throws {
         let dataArray = try DataSyncer.getJSONArray(dataPoints, sensorName: sensor.name)
-        try SensorDataProxy.putSensorData(sourceName: DataSyncer.SOURCE, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
+        try SensorDataProxy.putSensorData(sourceName: sensor.source, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
     }
     
     private func updateUploadStatusForDataPoints(dataPoints: Array<DataPoint>) throws {

@@ -234,6 +234,9 @@ class DatabaseHandler: NSObject{
         realm.add(rlmSensor)
         
         try realm.commitWrite()
+        
+        //update the id of sensor object
+        sensor.id = rlmSensor.id
     }
     
     /**
@@ -259,7 +262,6 @@ class DatabaseHandler: NSObject{
     static func getSensorProfile(sensorName: String) throws -> SensorProfile? {
         let realm = try! Realm()
         let predicate = NSPredicate(format: "sensorName = %@", sensorName)
-        //query
         let results = realm.objects(SensorProfile).filter(predicate)
         return results.first
     }
@@ -267,7 +269,6 @@ class DatabaseHandler: NSObject{
     static func getSensorProfiles() throws -> [SensorProfile] {
         var sensorProfiles = [SensorProfile]()
         let realm = try! Realm()
-        //query
         let results = realm.objects(SensorProfile)
         for entry in results{
             sensorProfiles.append(entry)
@@ -357,7 +358,6 @@ class DatabaseHandler: NSObject{
     static func getSources()->[String]{
         var sources = Set<String>()
         let realm = try! Realm()
-        
         let predicates = NSPredicate(format: "userId = %@", self.getUserId())
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {

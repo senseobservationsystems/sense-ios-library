@@ -49,8 +49,8 @@ class DataStorageEngineTests: XCTestCase{
     }
     
     override func tearDown() {
+        print("-------teardown ")
         OHHTTPStubs.removeAllStubs()
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
@@ -72,9 +72,9 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
             
-            dse.onReady(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: false))
-            dse.onSensorsDownloaded(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: false))
-            dse.onSensorDataDownloaded(OnSensorDataDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: false))
+            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: false))
+            dse.setSensorDataDownloadedCallback(OnSensorDataDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
             
             // Act:
             try dse.start()
@@ -103,7 +103,7 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
             
-            dse.onReady(OnReadyCallback(expectation, expectSuccess: false, isLastCallback: true))
+            dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: false, isLastCallback: true))
             
             // Act:
             try dse.start()
@@ -126,7 +126,7 @@ class DataStorageEngineTests: XCTestCase{
         do{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.onSensorsDownloaded(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
             try dse.start()
             
             waitForExpectationsWithTimeout(5) { error in
@@ -155,7 +155,7 @@ class DataStorageEngineTests: XCTestCase{
         do{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.onSensorsDownloaded(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
             try dse.start()
             
             waitForExpectationsWithTimeout(5) { error in
@@ -200,7 +200,7 @@ class DataStorageEngineTests: XCTestCase{
         do{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.onSensorsDownloaded(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
             try dse.start()
             
             waitForExpectationsWithTimeout(5) { error in
@@ -248,7 +248,7 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             XCTAssertEqual(dse.getStatus(), DataStorageEngine.DSEStatus.AWAITING_CREDENTIALS)
             try dse.setup(self.config)
-            dse.onReady(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: true, completionHandler:{
+            dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: true, completionHandler:{
                 XCTAssertEqual(dse.getStatus(), DataStorageEngine.DSEStatus.READY)
             }))
             
@@ -265,65 +265,90 @@ class DataStorageEngineTests: XCTestCase{
         }
     }
     
-    func testSyncData_whenDSEReady_remoteHasSensors(){
+  func testSyncData_whenDSEReady_remoteHasSensors(){
         // Arrange:
         do{
+            print("test")
             let expectation = expectationWithDescription("expect callback")
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.onSensorsDownloaded(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+
+            let syncSuccuessHandler = {
+                print("-----SyncCompleted!!!")
+                expectation.fulfill()
+            }
+            let syncFailureHandler = {(print("SyncFailed"))}
+            let syncCompletionCallback = SyncCompletionCallback(successHandler: syncSuccuessHandler, failureHandler: syncFailureHandler)
+            dse.setSyncCompletedCallback(syncCompletionCallback)
             try dse.start()
+            print("------", try DatabaseHandler.getSensorProfile(sensorName1))
             
+
             waitForExpectationsWithTimeout(5) { error in
+                print(error)
                 print("time out or expectation is fulfilled")
             }
-            let valueAccelerometer = ["x-axis": 1, "y-axis": 2, "z-axis": 3]
+
+            let valueAccelerometer = ["x-axis": 4, "y-axis": 5, "z-axis": 6]
             let valueTimeActive = 2
+
             let sensor1 = try dse.createSensor(sourceName1, name: sensorName1, sensorConfig: sensorConfig)
             try sensor1.insertOrUpdateDataPoint(valueAccelerometer, NSDate())
             
             let sensor2 = try dse.createSensor(sourceName1, name: sensorName2, sensorConfig: sensorConfig)
             try sensor2.insertOrUpdateDataPoint(valueTimeActive, NSDate())
-            
+            print(try sensor2.getDataPoints(QueryOptions()).count)
+
             let sensor3 = try dse.createSensor(sourceName2, name: sensorName1, sensorConfig: sensorConfig)
             try sensor3.insertOrUpdateDataPoint(valueAccelerometer, NSDate())
             
             let sensor4 = try dse.createSensor(sourceName2, name: sensorName2, sensorConfig: sensorConfig)
             try sensor4.insertOrUpdateDataPoint(valueTimeActive, NSDate())
             
-            let expectation2 = expectationWithDescription("expect sync completion callback")
+            let expectation2 = expectationWithDescription("expect callback")
             
-            // Act:
-            try dse.syncData(OnSyncCompletion(expectation2, expectSuccess: true, completionHandler: {
+            let syncSuccuessHandler2 = {
                 do{
                     let retrievedSensors = try SensorDataProxy.getSensors()
                     XCTAssertEqual(retrievedSensors.count, 4)
                     
-                    XCTAssertEqual(sensor1.name, retrievedSensors[0]["name"].stringValue)
-                    XCTAssertEqual(sensor1.source, retrievedSensors[0]["source"].stringValue)
+                    for sensor in retrievedSensors{
+                        print(sensor)
+                    }
+                    
+                    XCTAssertEqual(sensor1.name, retrievedSensors[0]["sensor_name"].stringValue)
+                    XCTAssertEqual(sensor1.source, retrievedSensors[0]["source_name"].stringValue)
                     XCTAssertEqual(JSON(sensor1.meta), retrievedSensors[0]["meta"])
                     
-                    XCTAssertEqual(sensor2.name, retrievedSensors[1]["name"].stringValue)
-                    XCTAssertEqual(sensor2.source, retrievedSensors[1]["source"].stringValue)
-                    XCTAssertEqual(JSON(sensor2.meta), retrievedSensors[1]["meta"])
+                    XCTAssertEqual(sensor2.name, retrievedSensors[2]["sensor_name"].stringValue)
+                    XCTAssertEqual(sensor2.source, retrievedSensors[2]["source_name"].stringValue)
+                    XCTAssertEqual(JSON(sensor2.meta), retrievedSensors[2]["meta"])
                     
-                    XCTAssertEqual(sensor3.name, retrievedSensors[2]["name"].stringValue)
-                    XCTAssertEqual(sensor3.source, retrievedSensors[2]["source"].stringValue)
-                    XCTAssertEqual(JSON(sensor3.meta), retrievedSensors[2]["meta"])
+                    XCTAssertEqual(sensor3.name, retrievedSensors[1]["sensor_name"].stringValue)
+                    XCTAssertEqual(sensor3.source, retrievedSensors[1]["source_name"].stringValue)
+                    XCTAssertEqual(JSON(sensor3.meta), retrievedSensors[1]["meta"])
                     
-                    XCTAssertEqual(sensor4.name, retrievedSensors[3]["name"].stringValue)
-                    XCTAssertEqual(sensor4.source, retrievedSensors[3]["source"].stringValue)
+                    XCTAssertEqual(sensor4.name, retrievedSensors[3]["sensor_name"].stringValue)
+                    XCTAssertEqual(sensor4.source, retrievedSensors[3]["source_name"].stringValue)
                     XCTAssertEqual(JSON(sensor4.meta), retrievedSensors[3]["meta"])
+                    print("fulfilling here!")
+                    expectation2.fulfill()
                 }catch{
                     print(error)
                     XCTFail("An exception was captured. Abort the test.")
                 }
-            }))
+            }
+            let syncCompletionCallback2 = SyncCompletionCallback(successHandler: syncSuccuessHandler2, failureHandler: syncFailureHandler)
+            
+            dse.setSyncCompletedCallback(syncCompletionCallback2)
+            
+            // Act:
+            try dse.syncData()
             
             // Assert: Assert is held in the callback
-
+            
             waitForExpectationsWithTimeout(5) { error in
-                print("time out or expectation is fulfilled")
+                print("expectation 2 is fulfilled")
             }
             
         }catch{
@@ -339,30 +364,23 @@ class DataStorageEngineTests: XCTestCase{
 // MARK: Callbacks
 
 
-class OnSyncCompletion: DSEAsyncCallback{
-    // all the parameters are only for testing
-    let expectation: XCTestExpectation
-    let expectSuccess: Bool
-    let completionHandler:()->Void
+class SyncCompletionCallback: DSEAsyncCallback{
     
-    init(_ expectation: XCTestExpectation, expectSuccess: Bool, completionHandler:()->Void = {}){
-        self.expectation = expectation
-        self.expectSuccess = expectSuccess
-        self.completionHandler = completionHandler
+    let successHandler: () -> Void
+    let failureHandler: () -> Void
+    
+    init(successHandler: () -> Void, failureHandler: () -> Void){
+        print("hello1")
+        self.successHandler = successHandler
+        self.failureHandler = failureHandler
     }
     
     func onSuccess() {
-        print("on Success in onSyncCompletion")
-        XCTAssert(expectSuccess)
-        completionHandler()
-        self.expectation.fulfill()
+        self.successHandler()
     }
     
-    func onFailure(error:ErrorType)  {
-        print("on Failure in onSyncCompletion")
-        XCTAssert(!expectSuccess)
-        print(error)
-        self.expectation.fulfill()
+    func onFailure(error: ErrorType)  {
+        self.failureHandler()
     }
 }
 
@@ -383,10 +401,10 @@ class OnReadyCallback: DSEAsyncCallback{
     func onSuccess() {
         print("on Success in onReadyCallback")
         XCTAssert(expectSuccess)
-                completionHandler()
         if self.isLastCallback {
             self.expectation.fulfill()
         }
+        completionHandler()
     }
     
     func onFailure(error:ErrorType)  {
