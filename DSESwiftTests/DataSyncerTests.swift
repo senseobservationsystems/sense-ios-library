@@ -416,7 +416,7 @@ class DataSyncerTests: XCTestCase{
             XCTAssertEqual(dataPoints.count, expectedNumber)
             
             if data != nil {
-                let json = try DataSyncer.getJSONArray(dataPoints, sensorName: sensor.name)
+                let json = try JSONUtils.getJSONArray(dataPoints, sensorName: sensor.name)
                 XCTAssertEqual(json, data![index])
             }
             index++

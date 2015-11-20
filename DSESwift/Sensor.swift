@@ -100,8 +100,8 @@ public class Sensor{
 
     /**
      * Returns an array of datapoints
-     *@param queryOptions: options for the data points query.
-     *@return List<DataPoint> containing the queried data points.
+     * @param queryOptions: options for the data points query.
+     * @return List<DataPoint> containing the queried data points.
      * //TODO add a list of potential exceptions
      **/
     public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
@@ -139,7 +139,7 @@ public class Sensor{
     
     // MARK: helper functions
     
-    func applyNewConfig(sensorConfig: SensorConfig){
+    private func applyNewConfig(sensorConfig: SensorConfig){
         self.remoteDownloadEnabled = sensorConfig.downloadEnabled
         self.remoteUploadEnabled = sensorConfig.uploadEnabled
         self.meta = sensorConfig.meta

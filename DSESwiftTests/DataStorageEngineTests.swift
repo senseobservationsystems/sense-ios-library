@@ -78,7 +78,7 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
             
-            dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: false))
+            dse.setInitializationCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: false))
             dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: false))
             dse.setSensorDataDownloadedCallback(OnSensorDataDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
             
@@ -109,7 +109,7 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
             
-            dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: false, isLastCallback: true))
+            dse.setInitializationCallback(OnReadyCallback(expectation, expectSuccess: false, isLastCallback: true))
             
             // Act:
             try dse.start()
@@ -247,15 +247,15 @@ class DataStorageEngineTests: XCTestCase{
         }
     }
     
-    func testGetStatus_beforeAndAfterSetup_ready(){
+    func testGetStatus_beforeAndAfterSetup_initialized(){
         do{
-            // Arrange: prepare dse and set callback on ready
+            // Arrange: prepare dse and set callback on initialization complete
             let expectation = expectationWithDescription("expect callback")
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             XCTAssertEqual(dse.getStatus(), DSEStatus.AWAITING_CREDENTIALS)
             try dse.setup(self.config)
-            dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: true, completionHandler:{
-                XCTAssertEqual(dse.getStatus(), DSEStatus.READY)
+            dse.setInitializationCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: true, completionHandler:{
+                XCTAssertEqual(dse.getStatus(), DSEStatus.INITIALIZED)
             }))
             
             // Act: start dse
@@ -271,7 +271,7 @@ class DataStorageEngineTests: XCTestCase{
         }
     }
     
-  func testSyncData_whenDSEReady_remoteHasSensors(){
+  func testSyncData_whenDSEInitialized_remoteHasSensors(){
         // Arrange:
         do{
             let expectation = expectationWithDescription("expect callback")

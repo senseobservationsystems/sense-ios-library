@@ -61,6 +61,32 @@ public class JSONUtils{
         return result
     }
     
+    public static func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> JSON{
+        let profile = try DatabaseHandler.getSensorProfile(sensorName)!
+        let type = try getTypeFromDataStructure(profile.dataStructure)
+        switch (type){
+        case "integer":
+            return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints)
+        case "number":
+            return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithDoubleValue(dataPoints)
+        case "bool":
+            return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithBoolValue(dataPoints)
+        case "string":
+            return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithStringValue(dataPoints)
+        case "object":
+            return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithDictionaryValue(dataPoints)
+        default:
+            throw DSEError.UnknownDataType
+        }
+    }
+    
+    private static func getTypeFromDataStructure(structure: String) throws -> String {
+        let data :NSData = structure.dataUsingEncoding(NSUTF8StringEncoding)!
+        let json :Dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as! [String:AnyObject]
+        
+        return json["type"] as! String
+    }
+    
     public class func convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints: Array<DataPoint>) -> JSON{
         var dataArray = Array<AnyObject>()
         for dataPoint in dataPoints {

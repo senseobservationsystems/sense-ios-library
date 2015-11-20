@@ -41,7 +41,7 @@ public class DataStorageEngine: DataSyncerDelegate{
     
     //This prevents others from using the default '()' initializer for this class.
     private init() {
-        // todo: get config from keychain and user defaults?
+        self.dataSyncer.delegate = self
     }
     
     public static func getInstance() -> DataStorageEngine {
@@ -98,7 +98,6 @@ public class DataStorageEngine: DataSyncerDelegate{
            throw DSEError.EmptyCredentials
         }
         
-        self.dataSyncer.delegate = self
         self.dataSyncer.initialize()
         self.dataSyncer.startPeriodicSync()
     }
@@ -110,6 +109,7 @@ public class DataStorageEngine: DataSyncerDelegate{
     func reset(){
         self.config = DSEConfig()
         self.dataSyncer = DataSyncer()
+        self.dataSyncer.delegate = self
     }
     
     /**
@@ -156,10 +156,10 @@ public class DataStorageEngine: DataSyncerDelegate{
      * @return The DSEStatus, this could be either AWAITING_CREDENTIALS, AWAITING_SENSOR_PROFILES, READY.
      **/
     public func getStatus() -> DSEStatus{
-        if(self.config.sessionId == nil) {
+        if(self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
             return DSEStatus.AWAITING_CREDENTIALS;
         } else if(self.dataSyncer.initialized) {
-            return DSEStatus.READY;
+            return DSEStatus.INITIALIZED;
         } else {
             return DSEStatus.AWAITING_SENSOR_PROFILES;
         }
@@ -201,8 +201,8 @@ public class DataStorageEngine: DataSyncerDelegate{
     * Notifies when the initialization is done asynchronously
     * @param callback The AsyncCallback method to call the success function on when ready
     **/
-    func setReadyCallback(callback : DSEAsyncCallback){
-        if (getStatus() == DSEStatus.READY) {
+    func setInitializationCallback(callback : DSEAsyncCallback){
+        if (getStatus() == DSEStatus.INITIALIZED) {
             callback.onSuccess()
         } else {
             // status not ready yet. keep the callback in the array in DataSyncer

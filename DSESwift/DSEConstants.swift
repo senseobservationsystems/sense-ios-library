@@ -20,9 +20,15 @@ public struct DSEConstants{
     static let DATA_TYPE_INTEGER = "integer"
     static let DATA_TYPE_FLOAT = "float"
     static let DATA_TYPE_BOOL = "bool"
+    
+    // for syncing
+    // 1000 datapoints is a safe amount for a respond not to exceed the maximum data size of respond in CommonSense
+    static let DEFAULT_REMOTE_QUERY_LIMIT = 1000
+    
     // for sensor profile
     static let SENSOR_PROFILE_KEY_NAME = "sensor_name"
     static let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
+    
     // for queues
     static let DATASYNCER_PROCESS_QUEUE_ID = "nl.sense.dse.sync_process_queue"
 }
@@ -64,7 +70,7 @@ public enum DSEError: ErrorType{
 public enum DSEStatus{
     case AWAITING_CREDENTIALS
     case AWAITING_SENSOR_PROFILES
-    case READY
+    case INITIALIZED
 }
 
 public enum DSEServer {

@@ -18,7 +18,7 @@ import SwiftyJSON
  * user does not need to be aware of the data syncing process at all.
  *
  */
-public class DataSyncer : NSObject {
+class DataSyncer : NSObject {
 
     // only used for the default parameters
     let config = DSEConfig()
@@ -128,7 +128,7 @@ public class DataSyncer : NSObject {
         }).then({ _ in
             self.delegate?.onSyncCompleted()
         }).error({ error in
-            print(error)
+            print("ERROR: DataSyncer - There has been an error during syncing:", error)
             self.delegate?.onSyncFailed(error)
         })
     }
@@ -136,8 +136,9 @@ public class DataSyncer : NSObject {
     func downloadSensorProfiles() throws {
         let sensorProfiles = try SensorDataProxy.getSensorProfiles()
         for ( _ ,subJson):(String, JSON) in sensorProfiles {
-            let (sensorName, structure) = self.getSensorNameAndStructure(subJson)
-            try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: structure)
+            let sensorName = subJson[DSEConstants.SENSOR_PROFILE_KEY_NAME].stringValue
+            let dataStructure = JSONUtils.stringify(subJson[DSEConstants.SENSOR_PROFILE_KEY_STRUCTURE])
+            try DatabaseHandler.createOrUpdateSensorProfile(sensorName, dataStructure: dataStructure)
         }
     }
 
@@ -155,8 +156,14 @@ public class DataSyncer : NSObject {
     func downloadSensorsFromRemote() throws {
         do{
             let sensors = try getSensorsFromRemote()
-            try insertSensorsIntoLocal(sensors)
-            //notify
+            for sensor in sensors {
+                if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
+                    try DatabaseHandler.insertSensor(sensor)
+                } else {
+                    try DatabaseHandler.updateSensor(sensor)
+                }
+            }
+            
             self.delegate?.onSensorsDownloadCompleted()
         }catch {
             self.delegate?.onSensorDataDownloadFailed(error)
@@ -171,7 +178,9 @@ public class DataSyncer : NSObject {
             for sensor in sensorsInLocal{
                 if (sensor.remoteDownloadEnabled){
                     try downloadAndStoreDataForSensor(sensor)
-                    try updateDownloadStatusForSensor(sensor)
+                    //update download status of the sensor
+                    sensor.remoteDataPointsDownloaded = true
+                    try DatabaseHandler.updateSensor(sensor)
                 }
             }
             self.delegate?.onSensorDataDownloadCompleted()
@@ -183,12 +192,17 @@ public class DataSyncer : NSObject {
 
     func uploadSensorDataToRemote() throws {
         let sensorsInLocal = getSensorsInLocal()
-        
         for sensor in sensorsInLocal {
             if (sensor.remoteUploadEnabled){
+                // upload datapoints that are not yet uploaded to remote
                 let dataPointsToUpload = try getDataPointsToUpload(sensor)
-                try uploadDataPointsForSensor(dataPointsToUpload, sensor: sensor)
-                try updateUploadStatusForDataPoints(dataPointsToUpload)
+                let dataArray = try JSONUtils.getJSONArray(dataPointsToUpload, sensorName: sensor.name)
+                try SensorDataProxy.putSensorData(sourceName: sensor.source, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
+                // Update the existsInRemote status of datapoints to true
+                for datapoint in dataPointsToUpload {
+                    datapoint.existsInRemote = true
+                    try DatabaseHandler.insertOrUpdateDataPoint(datapoint)
+                }
             }
         }
     }
@@ -202,7 +216,7 @@ public class DataSyncer : NSObject {
     
     // MARK: Helper functions
     private func downloadAndStoreDataForSensor(sensor: Sensor) throws{
-        let limit = 1000
+        let limit = DSEConstants.DEFAULT_REMOTE_QUERY_LIMIT
         var isCompleted = false
         let persistentBoundary = NSDate().dateByAddingTimeInterval (-1 * persistentPeriod)
         var startBoundaryForNextQuery: NSDate?
@@ -216,16 +230,13 @@ public class DataSyncer : NSObject {
             try insertSensorDataIntoLocalDB(sensorData, sensorId: sensor.id)
             
             //check if download is completed, if not prepare for the next download
-            isCompleted = isDataDownloadCompleted(sensorData, limit: limit)
+            isCompleted = (sensorData["data"].count != limit)
             if (!isCompleted){
                 startBoundaryForNextQuery = getTimestampOfLastDataPoint(sensorData)
             }
         } while (!isCompleted)
     }
     
-    private func isDataDownloadCompleted(sensorData: JSON, limit: Int) -> Bool{
-        return (sensorData["data"].count != limit)
-    }
     
     private func getTimestampOfLastDataPoint(sensorData: JSON) -> NSDate?{
         let data = sensorData["data"]
@@ -233,27 +244,10 @@ public class DataSyncer : NSObject {
         return NSDate(timeIntervalSince1970: lastDataPoint["time"].doubleValue)
     }
     
-    private func updateDownloadStatusForSensor(sensor: Sensor) throws {
-        sensor.remoteDataPointsDownloaded = true
-        try DatabaseHandler.updateSensor(sensor)
-    }
-    
     private func getDataPointsToUpload(sensor: Sensor) throws -> Array<DataPoint> {
         var queryOptions = QueryOptions()
         queryOptions.existsInRemote = false
         return try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
-    }
-    
-    private func uploadDataPointsForSensor(dataPoints: Array<DataPoint>, sensor: Sensor) throws {
-        let dataArray = try DataSyncer.getJSONArray(dataPoints, sensorName: sensor.name)
-        try SensorDataProxy.putSensorData(sourceName: sensor.source, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
-    }
-    
-    private func updateUploadStatusForDataPoints(dataPoints: Array<DataPoint>) throws {
-        for datapoint in dataPoints {
-            datapoint.existsInRemote = true
-            try DatabaseHandler.insertOrUpdateDataPoint(datapoint)
-        }
     }
     
     private func getSensorsInLocal() -> Array<Sensor>{
@@ -265,24 +259,10 @@ public class DataSyncer : NSObject {
         return allSensorsInLocal
     }
     
-    private func insertSensorsIntoLocal(sensors: Array<Sensor>) throws {
-        for sensor in sensors {
-            if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
-                try DatabaseHandler.insertSensor(sensor)
-            } else {
-                try DatabaseHandler.updateSensor(sensor)
-            }
-        }
-    }
-    
     private func getSensorsFromRemote() throws -> Array<Sensor>{
         let downloadedArray = try SensorDataProxy.getSensors()
-        return convertAnyObjArrayToSensorArray(downloadedArray.arrayObject)
-    }
-    
-    private func convertAnyObjArrayToSensorArray(inputArray: Array<AnyObject>?) -> Array<Sensor>{
         var sensors = Array<Sensor>()
-        for anyObj in inputArray! {
+        for anyObj in downloadedArray.arrayObject! {
             sensors.append(convertAnyObjectToSensor(anyObj))
         }
         return sensors
@@ -299,7 +279,7 @@ public class DataSyncer : NSObject {
         return Sensor(name: sensorName, source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
     }
     
-    func insertSensorDataIntoLocalDB(sensorData: JSON, sensorId: Int) throws {
+    private func insertSensorDataIntoLocalDB(sensorData: JSON, sensorId: Int) throws {
         for (_ ,subJson):(String, JSON) in sensorData["data"] {
             //Do something you want
             let value = JSONUtils.stringify(subJson["value"])
@@ -326,7 +306,7 @@ public class DataSyncer : NSObject {
         }
     }
     
-    func deleteDataIfExistsInRemoteAndExpired(id:Int) throws {
+    private func deleteDataIfExistsInRemoteAndExpired(id:Int) throws {
         let persistentBoundary = NSDate().dateByAddingTimeInterval (-1 * persistentPeriod)
         var queryOptions = QueryOptions()
         queryOptions.endTime = persistentBoundary
@@ -334,75 +314,22 @@ public class DataSyncer : NSObject {
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
     
-    func deleteDataIfExistsInRemote(id:Int) throws {
+    private func deleteDataIfExistsInRemote(id:Int) throws {
         var queryOptions = QueryOptions()
         queryOptions.existsInRemote = true
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
     
-    func deleteDataIfExpired(id:Int) throws {
+    private func deleteDataIfExpired(id:Int) throws {
         let persistentBoundary = NSDate().dateByAddingTimeInterval (-1 * persistentPeriod)
         var queryOptions = QueryOptions()
         queryOptions.endTime = persistentBoundary
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
     
-    func deleteDataForSensor(id:Int) throws {
+    private func deleteDataForSensor(id:Int) throws {
         let queryOptions = QueryOptions()
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
-    
-    static func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> JSON{
-        let profile = try DatabaseHandler.getSensorProfile(sensorName)!
-        let type = try getTypeFromDataStructure(profile.dataStructure)
-        switch (type){
-            case "integer":
-                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithIntValue(dataPoints)
-            case "number":
-                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithDoubleValue(dataPoints)
-            case "bool":
-                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithBoolValue(dataPoints)
-            case "string":
-                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithStringValue(dataPoints)
-            case "object":
-                return JSONUtils.convertArrayOfDataPointIntoJSONArrayWithDictionaryValue(dataPoints)
-            default:
-                throw DSEError.UnknownDataType
-        }
-    }
-    
-    
-    func getSensorNameAndStructure(json: JSON) -> (String, String){
-        let sensorName = json[DSEConstants.SENSOR_PROFILE_KEY_NAME].stringValue
-        let dataStructure = json[DSEConstants.SENSOR_PROFILE_KEY_STRUCTURE].rawString(options: NSJSONWritingOptions(rawValue: 0))!
-        return (sensorName, dataStructure)
-    }
-    
-    private static func getTypeFromDataStructure(structure: String) throws -> String {
-        let data :NSData = structure.dataUsingEncoding(NSUTF8StringEncoding)!
-        let json :Dictionary = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as! [String:AnyObject]
-        
-        return json["type"] as! String
-    }
-    
-
-    
-    private func getParser(datatype: String) throws -> BaseValueParser{
-        switch (datatype){
-            case "integer":
-                return IntValueParser()
-            case "number":
-                return DoubleValueParser()
-            case "bool":
-                return BoolValueParser()
-            case "string":
-                return StringValueParser()
-            case "object":
-                return DictionaryValueParser()
-            default:
-                throw DSEError.UnknownDataType
-        }
-    }
-    
     
 }
