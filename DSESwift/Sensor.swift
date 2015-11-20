@@ -11,20 +11,11 @@ import VVJSONSchemaValidation
 import SwiftyJSON
 
 
-let kCSDATA_TYPE_STRING = "string"
-let kCSDATA_TYPE_JSON = "json"
-let kCSDATA_TYPE_INTEGER = "integer"
-let kCSDATA_TYPE_FLOAT = "float"
-let kCSDATA_TYPE_BOOL = "bool"
+
 
 public enum SortOrder{
     case Asc
     case Desc
-}
-
-public enum DSEError: ErrorType{
-    case IncorrectDataStructure
-    case UnknownDataType
 }
 
 

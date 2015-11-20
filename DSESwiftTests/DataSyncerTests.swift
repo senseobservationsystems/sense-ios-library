@@ -43,7 +43,7 @@ class DataSyncerTests: XCTestCase{
         self.config.syncInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
         self.config.enableEncryption       = true
-        self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
+        self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
         self.config.sessionId = (accountUtils!.sessionId)!
         
@@ -319,7 +319,7 @@ class DataSyncerTests: XCTestCase{
             let profiles = try DatabaseHandler.getSensorProfiles()
             XCTAssertEqual(profiles.count, 16)
         }catch{
-            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
+            XCTAssert(error as! DSEError == DSEError.UnknownError)
         }
     }
     
@@ -335,7 +335,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.processDeletionRequests()
 
         }catch{
-            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
+            XCTAssert(error as! DSEError == DSEError.UnknownError)
         }
     }
     
@@ -348,7 +348,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.downloadSensorsFromRemote()
 
         } catch {
-            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
+            XCTAssert(error as! DSEError == DSEError.UnknownError)
         }
     }
     
@@ -366,7 +366,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.downloadSensorsDataFromRemote()
             
         } catch {
-            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
+            XCTAssert(error as! DSEError == DSEError.UnknownError)
         }
     }
     
@@ -382,7 +382,7 @@ class DataSyncerTests: XCTestCase{
             
         } catch {
             print(error)
-            XCTAssert(error as! SensorDataProxy.ProxyError == SensorDataProxy.ProxyError.UnknownError)
+            XCTAssert(error as! DSEError == DSEError.UnknownError)
         }
     }
 

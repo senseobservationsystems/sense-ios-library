@@ -26,7 +26,7 @@ class DataStorageEngineTests: XCTestCase{
     
     override func setUp() {
         super.setUp()
-        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
+        //Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
         let username = String(format:"spam+%f@sense-os.nl", NSDate().timeIntervalSince1970)
         
         let backendStringValue = "STAGING"
@@ -35,14 +35,14 @@ class DataStorageEngineTests: XCTestCase{
         accountUtils!.loginUser(username, password: "Password")
         
         // set the config with CORRECT default values
-        self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
+        self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
         self.config.sessionId = (accountUtils?.sessionId)!
         self.config.userId = "testuser"
         
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(backendStringValue, forKey: BACKEND_ENVIRONMENT_KEY)
+        defaults.setObject(backendStringValue, forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
         
         sensorConfig.uploadEnabled = true
         sensorConfig.persist = true
@@ -50,7 +50,13 @@ class DataStorageEngineTests: XCTestCase{
     
     override func tearDown() {
         print("-------teardown ")
+        DataStorageEngine.getInstance().reset()
         OHHTTPStubs.removeAllStubs()
+        let realm = try! Realm()
+        realm.beginWrite()
+        realm.deleteAll()
+        try! realm.commitWrite()
+
         super.tearDown()
     }
     
@@ -229,13 +235,13 @@ class DataStorageEngineTests: XCTestCase{
         do{
             // Arrange:
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
-            XCTAssertEqual(dse.getStatus(), DataStorageEngine.DSEStatus.AWAITING_CREDENTIALS)
+            XCTAssertEqual(dse.getStatus(), DSEStatus.AWAITING_CREDENTIALS)
             
             // Act
             try dse.setup(self.config)
             
             // Assert
-            XCTAssertEqual(dse.getStatus(), DataStorageEngine.DSEStatus.AWAITING_SENSOR_PROFILES)
+            XCTAssertEqual(dse.getStatus(), DSEStatus.AWAITING_SENSOR_PROFILES)
         }catch{
             XCTFail("An exception was captured. Abort the test.")
         }
@@ -246,10 +252,10 @@ class DataStorageEngineTests: XCTestCase{
             // Arrange: prepare dse and set callback on ready
             let expectation = expectationWithDescription("expect callback")
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
-            XCTAssertEqual(dse.getStatus(), DataStorageEngine.DSEStatus.AWAITING_CREDENTIALS)
+            XCTAssertEqual(dse.getStatus(), DSEStatus.AWAITING_CREDENTIALS)
             try dse.setup(self.config)
             dse.setReadyCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: true, completionHandler:{
-                XCTAssertEqual(dse.getStatus(), DataStorageEngine.DSEStatus.READY)
+                XCTAssertEqual(dse.getStatus(), DSEStatus.READY)
             }))
             
             // Act: start dse
@@ -268,7 +274,6 @@ class DataStorageEngineTests: XCTestCase{
   func testSyncData_whenDSEReady_remoteHasSensors(){
         // Arrange:
         do{
-            print("test")
             let expectation = expectationWithDescription("expect callback")
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
@@ -281,7 +286,7 @@ class DataStorageEngineTests: XCTestCase{
             let syncCompletionCallback = SyncCompletionCallback(successHandler: syncSuccuessHandler, failureHandler: syncFailureHandler)
             dse.setSyncCompletedCallback(syncCompletionCallback)
             try dse.start()
-            print("------", try DatabaseHandler.getSensorProfile(sensorName1))
+            //print("------", try DatabaseHandler.getSensorProfile(sensorName1))
             
 
             waitForExpectationsWithTimeout(5) { error in
@@ -370,7 +375,6 @@ class SyncCompletionCallback: DSEAsyncCallback{
     let failureHandler: () -> Void
     
     init(successHandler: () -> Void, failureHandler: () -> Void){
-        print("hello1")
         self.successHandler = successHandler
         self.failureHandler = failureHandler
     }

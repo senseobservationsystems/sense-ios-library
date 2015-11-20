@@ -9,19 +9,6 @@
 import Foundation
 import PromiseKit
 
-public enum DatabaseError: ErrorType{
-    case InvalidAppKey
-    case InvalidSessionId
-    case InvalidUserId
-    case EmptyCredentials
-}
-
-let SYNC_INTERVAL_KEY = "DSE_syncInterval"
-let LOCAL_PERSISTANCE_PERIOD_KEY = "DSE_localPersistancePeriod"
-let BACKEND_ENVIRONMENT_KEY = "DSE_backendEnvironment"
-let ENABLE_ENCRYPTION_KEY = "DSE_enableEncryption"
-
-
 /**
  * This class provides the main interface for creating sensors and sources and setting storage engine specific properties.
  *
@@ -34,18 +21,6 @@ let ENABLE_ENCRYPTION_KEY = "DSE_enableEncryption"
 public class DataStorageEngine: DataSyncerDelegate{
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
-    
-    /**
-     * The possible statuses of the DataStorageEngine
-     * AWAITING_CREDENTIALS = there are not credentials set, setCredentials needs to be called
-     * AWAITING_SENSOR_PROFILES = the credentials are set and the sensor profiles are being downloaded
-     * READY = the engine is ready for use
-     */
-    public enum DSEStatus{
-        case AWAITING_CREDENTIALS
-        case AWAITING_SENSOR_PROFILES
-        case READY
-    }
     
     // callbacks
     var readyCallbacks = [DSEAsyncCallback]()
@@ -60,7 +35,7 @@ public class DataStorageEngine: DataSyncerDelegate{
     private var config = DSEConfig()
     
     // reference to the datasyncer
-    let dataSyncer = DataSyncer()
+    var dataSyncer = DataSyncer()
     
 
     
@@ -68,7 +43,6 @@ public class DataStorageEngine: DataSyncerDelegate{
     private init() {
         // todo: get config from keychain and user defaults?
     }
-
     
     public static func getInstance() -> DataStorageEngine {
         return sharedInstance
@@ -76,26 +50,27 @@ public class DataStorageEngine: DataSyncerDelegate{
     
     public func setup(customConfig: DSEConfig) throws {
         // set config for DataSyncer
-        var (configChanged, syncInterval, localPersistancePeriod) = try self.dataSyncer.setConfig(customConfig)
+        var (configChanged, syncInterval, localPersistancePeriod, enablePeriodicSync) = try self.dataSyncer.setConfig(customConfig)
         
         self.config.syncInterval           = syncInterval
         self.config.localPersistancePeriod = localPersistancePeriod
+        self.config.enablePeriodicSync = enablePeriodicSync
         
         // check for changed in the backend environment
         if let backendEnvironment = customConfig.backendEnvironment {
             configChanged = configChanged || self.config.backendEnvironment != customConfig.backendEnvironment
             self.config.backendEnvironment = backendEnvironment
         }
-        let backendStringValue = self.config.backendEnvironment! == SensorDataProxy.Server.LIVE ? "LIVE" : "STAGING"
+        let backendStringValue = self.config.backendEnvironment! == DSEServer.LIVE ? "LIVE" : "STAGING"
         
         // todo: do something with the encryption
         self.config.enableEncryption       = customConfig.enableEncryption       ?? self.config.enableEncryption
         
         
         // verify if we have indeed received valid credentials (not nil) and throw the appropriate error if something is wrong
-        if let appKey    = customConfig.appKey {self.config.appKey = appKey}       else { throw DatabaseError.InvalidAppKey }
-        if let sessionId = customConfig.sessionId {self.config.sessionId = sessionId} else { throw DatabaseError.InvalidSessionId }
-        if let userId    = customConfig.userId {self.config.userId = userId}       else { throw DatabaseError.InvalidUserId }
+        if let appKey    = customConfig.appKey {self.config.appKey = appKey}       else { throw DSEError.InvalidAppKey }
+        if let sessionId = customConfig.sessionId {self.config.sessionId = sessionId} else { throw DSEError.InvalidSessionId }
+        if let userId    = customConfig.userId {self.config.userId = userId}       else { throw DSEError.InvalidUserId }
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
         KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
@@ -104,31 +79,37 @@ public class DataStorageEngine: DataSyncerDelegate{
         
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setDouble(self.config.syncInterval!,           forKey: SYNC_INTERVAL_KEY)
-        defaults.setDouble(self.config.localPersistancePeriod!, forKey: LOCAL_PERSISTANCE_PERIOD_KEY)
-        defaults.setObject(backendStringValue,                  forKey: BACKEND_ENVIRONMENT_KEY)
-        defaults.setBool(self.config.enableEncryption!,         forKey: ENABLE_ENCRYPTION_KEY)
+        defaults.setDouble(self.config.syncInterval!,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
+        defaults.setDouble(self.config.localPersistancePeriod!, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
+        defaults.setObject(backendStringValue,                  forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
+        defaults.setBool(self.config.enableEncryption!,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
         
         if (configChanged) {
             // do something? reinit the syncer?
-            // if the timer in data syncer is running, then we should re-start the sync
+            // if the timer in data syncer is running, then we should re-start the syncer
             // if the timer in data syncer is not running, then no need of change
         }
     }
     
+    
     public func start() throws {
         if (self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
             // callback fail?
-           throw DatabaseError.EmptyCredentials
+           throw DSEError.EmptyCredentials
         }
         
         self.dataSyncer.delegate = self
         self.dataSyncer.initialize()
-        self.dataSyncer.enablePeriodicSync()
+        self.dataSyncer.startPeriodicSync()
     }
     
     public func stopPeriodicSync(){
-        self.dataSyncer.disablePeriodicSync()
+        self.dataSyncer.stopPeriodicSync()
+    }
+    
+    func reset(){
+        self.config = DSEConfig()
+        self.dataSyncer = DataSyncer()
     }
     
     /**

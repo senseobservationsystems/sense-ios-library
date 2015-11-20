@@ -12,8 +12,6 @@ import PromiseKit
 import CoreLocation
 import SwiftyJSON
 
-
-
 /**
  * DataSyncer handles the synchronization between the local storage and CommonSense.
  * The syncing process is handled automatically and periodically, thus the external
@@ -21,27 +19,16 @@ import SwiftyJSON
  *
  */
 public class DataSyncer : NSObject {
-    
-    enum DataSyncerError: ErrorType{
-        case InvalidPersistentPeriod
-        case InvalidSyncRate
-    }
-    
-    let SENSOR_PROFILE_KEY_NAME = "sensor_name"
-    let SENSOR_PROFILE_KEY_STRUCTURE = "data_structure"
-    
-    let MAX_INITIALIZATION_ATTEMPTS = 5
-    
-    var initializationAttemps = 0
 
     // only used for the default parameters
     let config = DSEConfig()
     
-    var syncRate: Double!
-    var persistentPeriod: Double!
+    var syncRate: Double
+    var persistentPeriod: Double
+    var enablePeriodicSync: Bool
     
     var timer:NSTimer?
-    let data_syncer_process_queue = dispatch_queue_create("nl.sense.dse.sync_process_queue", nil)
+    let data_syncer_process_queue = dispatch_queue_create(DSEConstants.DATASYNCER_PROCESS_QUEUE_ID, nil)
     
     var delegate: DataSyncerDelegate?
     
@@ -51,33 +38,40 @@ public class DataSyncer : NSObject {
     override init () {
         self.syncRate = self.config.syncInterval!
         self.persistentPeriod = self.config.localPersistancePeriod!
+        self.enablePeriodicSync = self.config.enablePeriodicSync!
     }
     
     /**
      * this will error check it's own configuration
      */
-    func setConfig(config: DSEConfig) throws -> (configChanged: Bool, syncInterval: Double, localPersistancePeriod: Double) {
+    func setConfig(config: DSEConfig) throws -> (configChanged: Bool, syncInterval: Double, localPersistancePeriod: Double, enablePeridicSync: Bool) {
         var configChanged = false
         if let syncInterval = config.syncInterval {
-            if (syncInterval < 0) {throw DataSyncerError.InvalidSyncRate}
+            if (syncInterval < 0) {throw DSEError.InvalidSyncRate}
             configChanged = configChanged || self.syncRate != syncInterval
             self.syncRate = syncInterval
         }
         
         if let localPersistancePeriod = config.localPersistancePeriod {
-            if (localPersistancePeriod < 0) {throw DataSyncerError.InvalidPersistentPeriod}
+            if (localPersistancePeriod < 0) {throw DSEError.InvalidPersistentPeriod}
             configChanged = configChanged || self.persistentPeriod != localPersistancePeriod
             self.persistentPeriod = localPersistancePeriod
         }
         
+        if let enablePeriodicSync = config.enablePeriodicSync {
+            configChanged = configChanged || self.enablePeriodicSync != enablePeriodicSync
+            self.enablePeriodicSync = enablePeriodicSync
+        }
+        
         // return new values that will be used
-        return (configChanged, self.syncRate, self.persistentPeriod)
+        return (configChanged, self.syncRate, self.persistentPeriod, self.enablePeriodicSync)
     }
     
     func initialize()  {
         dispatch_async(data_syncer_process_queue, {
             do{
                 try self.downloadSensorProfiles()
+                try self.downloadSensorsFromRemote()
                 print("DSE Initialization Completed")
                 self.initialized = true
                 self.delegate?.onInitializationCompleted()
@@ -87,25 +81,27 @@ public class DataSyncer : NSObject {
         })
     }
     
-    func enablePeriodicSync() {
+    func startPeriodicSync() {
         dispatch_async(data_syncer_process_queue, {
             if (self.initialized){
-                if self.timer == nil {
+                if (self.enablePeriodicSync){
                     self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "sync", userInfo: nil, repeats: true);
+                    self.timer!.fire()
+                }else{
+                    print("Periodic Sync is disabled.")
                 }
-                self.timer!.fire()
             }else{
                 print("DSE is not initialized")
             }
         })
     }
 
-    func disablePeriodicSync(){
+    func stopPeriodicSync(){
         if self.timer != nil {
             self.timer!.invalidate()
             self.timer = nil
         } else {
-            print("timer is nil")
+            print("timer is already nil")
         }
     }
     
@@ -313,6 +309,23 @@ public class DataSyncer : NSObject {
         }
     }
     
+    private func purgeDataForSensor(sensor:Sensor) throws {
+        // delete Data if matches the criteria
+        if sensor.remoteUploadEnabled {
+            if sensor.persistLocally {
+                try deleteDataIfExistsInRemoteAndExpired(sensor.id)
+            }else{
+                try deleteDataIfExistsInRemote(sensor.id)
+            }
+        } else {
+            if sensor.persistLocally {
+                try deleteDataIfExpired(sensor.id)
+            }else{
+                try deleteDataForSensor(sensor.id)
+            }
+        }
+    }
+    
     func deleteDataIfExistsInRemoteAndExpired(id:Int) throws {
         let persistentBoundary = NSDate().dateByAddingTimeInterval (-1 * persistentPeriod)
         var queryOptions = QueryOptions()
@@ -331,6 +344,11 @@ public class DataSyncer : NSObject {
         let persistentBoundary = NSDate().dateByAddingTimeInterval (-1 * persistentPeriod)
         var queryOptions = QueryOptions()
         queryOptions.endTime = persistentBoundary
+        try DatabaseHandler.deleteDataPoints(id, queryOptions)
+    }
+    
+    func deleteDataForSensor(id:Int) throws {
+        let queryOptions = QueryOptions()
         try DatabaseHandler.deleteDataPoints(id, queryOptions)
     }
     
@@ -355,8 +373,8 @@ public class DataSyncer : NSObject {
     
     
     func getSensorNameAndStructure(json: JSON) -> (String, String){
-        let sensorName = json[SENSOR_PROFILE_KEY_NAME].stringValue
-        let dataStructure = json[SENSOR_PROFILE_KEY_STRUCTURE].rawString(options: NSJSONWritingOptions(rawValue: 0))!
+        let sensorName = json[DSEConstants.SENSOR_PROFILE_KEY_NAME].stringValue
+        let dataStructure = json[DSEConstants.SENSOR_PROFILE_KEY_STRUCTURE].rawString(options: NSJSONWritingOptions(rawValue: 0))!
         return (sensorName, dataStructure)
     }
     
@@ -367,20 +385,7 @@ public class DataSyncer : NSObject {
         return json["type"] as! String
     }
     
-    private func purgeDataForSensor(sensor:Sensor) throws {
-        // delete Data if matches the criteria
-        if sensor.remoteUploadEnabled {
-            if sensor.persistLocally {
-                try deleteDataIfExistsInRemoteAndExpired(sensor.id)
-            }else{
-                try deleteDataIfExistsInRemote(sensor.id)
-            }
-        } else {
-            if sensor.persistLocally {
-                try deleteDataIfExpired(sensor.id)
-            }
-        }
-    }
+
     
     private func getParser(datatype: String) throws -> BaseValueParser{
         switch (datatype){

@@ -30,7 +30,7 @@ class SensorDataProxyTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         // set the config with CORRECT default values
-        self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
+        self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
         self.config.sessionId = (accountUtils?.sessionId)!
         
@@ -40,7 +40,7 @@ class SensorDataProxyTests: XCTestCase {
         KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(backendStringValue, forKey: BACKEND_ENVIRONMENT_KEY)
+        defaults.setObject(backendStringValue, forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
 
     }
     
@@ -450,8 +450,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist)
+        } catch let e as DSEError {
+            assert( e == DSEError.SensorDoesNotExist)
         } catch {
             XCTFail("Wrong error")
         }
@@ -465,8 +465,8 @@ class SensorDataProxyTests: XCTestCase {
 //            let meta = ["Doge": "Wow, MUCH ACCELERATION! VERY HORSEPOWER!"]
 //            let result = try SensorDataProxy.updateSensor(sourceName: sourceName, sensorName: sensorName, meta: meta)
 //            debugPrint(result)
-//        } catch let e as SensorDataProxy.ProxyError {
-//            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExistOrBadStructure )
+//        } catch let e as DSEError {
+//            assert( e == DSEError.SensorDoesNotExistOrBadStructure )
 //        } catch {
 //            XCTFail("Wrong error")
 //        }
@@ -480,8 +480,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist )
+        } catch let e as DSEError {
+            assert( e == DSEError.SensorDoesNotExist )
         } catch {
             XCTFail("Wrong error")
         }
@@ -495,8 +495,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist )
+        } catch let e as DSEError {
+            assert( e == DSEError.SensorDoesNotExist )
         } catch {
             XCTFail("Wrong error")
         }
@@ -510,8 +510,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.SensorDoesNotExist )
+        } catch let e as DSEError {
+            assert( e == DSEError.SensorDoesNotExist )
         } catch {
             XCTFail("Wrong error")
         }
@@ -531,8 +531,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure)
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidSensorOrSourceOrBadStructure)
         } catch {
             XCTFail("Wrong error")
         }
@@ -555,8 +555,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure)
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidSensorOrSourceOrBadStructure)
         } catch {
             XCTFail("Wrong error")
         }
@@ -573,8 +573,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -589,8 +589,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -613,8 +613,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -637,8 +637,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidSensorOrSourceOrBadStructure )
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidSensorOrSourceOrBadStructure )
         } catch {
             XCTFail("Wrong error")
         }
@@ -661,8 +661,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidQuery )
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidQuery )
         } catch {
             XCTFail("Wrong error")
         }
@@ -686,8 +686,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidQuery )
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidQuery )
         } catch {
             XCTFail("Wrong error")
         }
@@ -705,8 +705,8 @@ class SensorDataProxyTests: XCTestCase {
             
             XCTFail("An error should have thrown, but no error was thrown")
             
-        } catch let e as SensorDataProxy.ProxyError {
-            assert( e == SensorDataProxy.ProxyError.InvalidQuery)
+        } catch let e as DSEError {
+            assert( e == DSEError.InvalidQuery)
         } catch {
             XCTFail("Wrong error")
         }

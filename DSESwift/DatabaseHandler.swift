@@ -10,21 +10,6 @@ import Foundation
 import RealmSwift
 import SwiftyJSON
 
-
-
-public enum RLMError: ErrorType{
-    case ObjectNotFound
-    case DuplicatedObjects
-    case InvalidLimit
-    case StartTimeLaterThanEndTime
-    case UnauthenticatedAccess
-    case CanNotChangePrimaryKey
-    case InvalidSensorName
-    case InsertFailed
-    case UpdateFailed
-    case DeleteFailed
-}
-
 /**
 
 DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, Sensor, Source.
@@ -40,7 +25,7 @@ class DatabaseHandler: NSObject{
     static func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
         // Validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
-            throw RLMError.ObjectNotFound
+            throw DSEError.ObjectNotFound
         }
         
         // Create data point
@@ -68,10 +53,10 @@ class DatabaseHandler: NSObject{
     */
     static func getDataPoints(sensorId: Int,_ queryOptions: QueryOptions) throws -> [DataPoint]{
         if (queryOptions.limit != nil && queryOptions.limit <= 0){
-            throw RLMError.InvalidLimit
+            throw DSEError.InvalidLimit
         }
         if(isStartTimeLaterThanEndTime(queryOptions.startTime, queryOptions.endTime)){
-            throw RLMError.StartTimeLaterThanEndTime
+            throw DSEError.StartTimeLaterThanEndTime
         }
         
         var dataPoints = [DataPoint]()
@@ -96,7 +81,7 @@ class DatabaseHandler: NSObject{
     */
     static func deleteDataPoints(sensorId: Int, _ queryOptions: QueryOptions) throws {
         if(isStartTimeLaterThanEndTime(queryOptions.startTime, queryOptions.endTime)){
-            throw RLMError.StartTimeLaterThanEndTime
+            throw DSEError.StartTimeLaterThanEndTime
         }
         
         let realm = try! Realm()
@@ -175,17 +160,17 @@ class DatabaseHandler: NSObject{
     static func updateSensor(sensor: Sensor) throws {
         //validate the sensorId
         if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
-            throw RLMError.ObjectNotFound
+            throw DSEError.ObjectNotFound
         }
         
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
-            throw RLMError.UnauthenticatedAccess
+            throw DSEError.UnauthenticatedAccess
         }
         
         let rlmSensor = getSensor(sensor.id)
         //check if the sensorName and source is not changed
         if (self.isPrimaryKeysChangedForSensor(sensor, rlmSensor)){
-            throw RLMError.CanNotChangePrimaryKey
+            throw DSEError.CanNotChangePrimaryKey
         }
         
         // Changes to dataType, userId, sensorName, source will be ignored.
@@ -208,14 +193,14 @@ class DatabaseHandler: NSObject{
     */
     static func insertSensor(sensor:Sensor) throws {
         if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
-            throw RLMError.UnauthenticatedAccess
+            throw DSEError.UnauthenticatedAccess
         }
         if (try DatabaseHandler.getSensorProfile(sensor.name) == nil){
-            throw RLMError.InvalidSensorName
+            throw DSEError.InvalidSensorName
         }
         //check if the same combination of the sensorname and SourceName exists
         if (isExistingCombinationOfSourceAndSensorName(sensor.source, sensor.name)){
-            throw RLMError.DuplicatedObjects
+            throw DSEError.DuplicatedObjects
         }
         
         let realm = try! Realm()
@@ -322,9 +307,9 @@ class DatabaseHandler: NSObject{
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, self.getUserId())
         let results = realm.objects(RLMSensor).filter(predicates)
         if (results.count < 1){
-            throw RLMError.ObjectNotFound
+            throw DSEError.ObjectNotFound
         } else if(results.count > 1){
-            throw RLMError.DuplicatedObjects
+            throw DSEError.DuplicatedObjects
         }
         
         return Sensor(results.first!)

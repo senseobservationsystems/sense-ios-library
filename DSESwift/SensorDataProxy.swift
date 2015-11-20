@@ -12,21 +12,6 @@ import SwiftyJSON
 
 public class SensorDataProxy {
     
-    public enum Server {
-        case LIVE
-        case STAGING
-    }
-    
-    public enum ProxyError: ErrorType, Equatable{
-        case SessionIdNotSet
-        case InvalidSessionId
-        case InvalidSensorOrSourceOrBadStructure //thrown when invalid sensorName/sourceName/structure is given
-        case InvalidDataFormat
-        case InvalidQuery
-        case SensorDoesNotExist
-        case UnknownError
-    }
-    
     /**
     * Get all sensor profiles
     * Throws an exception when no sessionId is set or when the sessionId is not valid.
@@ -129,7 +114,7 @@ public class SensorDataProxy {
     *   }`
     */
     static func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> JSON {
-        if (!isValidQueryOptions(queryOptions)){ throw ProxyError.InvalidQuery }
+        if (!isValidQueryOptions(queryOptions)){ throw DSEError.InvalidQuery }
         
         if (queryOptions == nil) {
             queryOptions = QueryOptions()
@@ -217,7 +202,7 @@ public class SensorDataProxy {
     *                       When both startTime and endTime are null, all data will be removed.
     */
     static func deleteSensorData(sourceName sourceName: String, sensorName: String, startTime: NSDate? = nil, endTime: NSDate? = nil) throws {
-        if (!isStartTimeEarlierThanEndTime(startTime, endTime)){ throw ProxyError.InvalidQuery }
+        if (!isStartTimeEarlierThanEndTime(startTime, endTime)){ throw DSEError.InvalidQuery }
         
         var params = Dictionary<String, AnyObject>()
         if startTime != nil { params["start_time"] = Int(startTime!.timeIntervalSince1970*1000)}
@@ -324,15 +309,15 @@ public class SensorDataProxy {
         }
     }
     
-    private static func checkStatusCode(statusCode: Int?, successfulCode: Int) -> ProxyError?{
+    private static func checkStatusCode(statusCode: Int?, successfulCode: Int) -> DSEError?{
         if (statusCode == 401){
-            return ProxyError.InvalidSessionId
+            return DSEError.InvalidSessionId
         } else if (statusCode == 400){
-            return ProxyError.InvalidSensorOrSourceOrBadStructure //Bad structure too
+            return DSEError.InvalidSensorOrSourceOrBadStructure //Bad structure too
         } else if (statusCode == 404){
-            return ProxyError.SensorDoesNotExist
+            return DSEError.SensorDoesNotExist
         } else if (statusCode != successfulCode) || (statusCode == nil){
-            return ProxyError.UnknownError
+            return DSEError.UnknownError
         }
         return nil
     }
@@ -342,7 +327,7 @@ public class SensorDataProxy {
         let BASE_URL_STAGING = "http://sensor-api.staging.sense-os.nl";
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        let serverString = defaults.stringForKey(BACKEND_ENVIRONMENT_KEY);
+        let serverString = defaults.stringForKey(DSEConstants.BACKEND_ENVIRONMENT_KEY);
         return (serverString == "LIVE") ? BASE_URL_LIVE : BASE_URL_STAGING;
     }
     

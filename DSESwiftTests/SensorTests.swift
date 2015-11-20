@@ -29,7 +29,7 @@ class SensorTests: XCTestCase {
         self.config.syncInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
         self.config.enableEncryption       = true
-        self.config.backendEnvironment     = SensorDataProxy.Server.STAGING
+        self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
         self.config.sessionId = (accountUtils!.sessionId)!
         
@@ -109,7 +109,7 @@ class SensorTests: XCTestCase {
         }catch{
             // Assert:
             print(error)
-            XCTAssert(error as! RLMError == RLMError.InvalidSensorName)
+            XCTAssert(error as! DSEError == DSEError.InvalidSensorName)
         }
     }
     
