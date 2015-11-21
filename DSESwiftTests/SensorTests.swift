@@ -20,7 +20,7 @@ class SensorTests: XCTestCase {
     let dataSyncer = DataSyncer()
     
     override func setUp() {
-        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
+        Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test2"
         KeychainWrapper.setString(userId, forKey: KEYCHAIN_USERID)
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
         registerAndLogin(accountUtils!)
@@ -150,7 +150,7 @@ class SensorTests: XCTestCase {
             try sensor.insertOrUpdateDataPoint(value, time)
             
             // Act: call delete
-            try sensor.deleteDataPoints(endTime:time)
+            try sensor.deleteDataPoints(endTime:time.dateByAddingTimeInterval(0.1))
             
             // Assert: check if the datapoints are removed from local and deletion request is created for the datapoints
             let queryOptions = QueryOptions()

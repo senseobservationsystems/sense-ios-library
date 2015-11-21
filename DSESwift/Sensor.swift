@@ -89,7 +89,6 @@ public class Sensor{
         }
         
         let dataPoint = DataPoint(sensorId: self.id)
-        
         let stringifiedValue = JSONUtils.stringify(value)
         dataPoint.setValue(stringifiedValue)
         dataPoint.setTime(time)

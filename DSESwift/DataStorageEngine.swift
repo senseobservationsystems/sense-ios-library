@@ -23,7 +23,7 @@ public class DataStorageEngine: DataSyncerDelegate{
     static let sharedInstance = DataStorageEngine()
     
     // callbacks
-    var readyCallbacks = [DSEAsyncCallback]()
+    var initializationCallbacks = [DSEAsyncCallback]()
     var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
     var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
     var syncCompleteHandlers = [DSEAsyncCallback]()
@@ -36,7 +36,6 @@ public class DataStorageEngine: DataSyncerDelegate{
     
     // reference to the datasyncer
     var dataSyncer = DataSyncer()
-    
 
     
     //This prevents others from using the default '()' initializer for this class.
@@ -110,6 +109,10 @@ public class DataStorageEngine: DataSyncerDelegate{
         self.config = DSEConfig()
         self.dataSyncer = DataSyncer()
         self.dataSyncer.delegate = self
+        initializationCallbacks = [DSEAsyncCallback]()
+        sensorsDownloadedCallbacks = [DSEAsyncCallback]()
+        sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
+        syncCompleteHandlers = [DSEAsyncCallback]()
     }
     
     /**
@@ -206,7 +209,7 @@ public class DataStorageEngine: DataSyncerDelegate{
             callback.onSuccess()
         } else {
             // status not ready yet. keep the callback in the array in DataSyncer
-            self.readyCallbacks.append(callback)
+            self.initializationCallbacks.append(callback)
         }
     }
     
@@ -220,14 +223,14 @@ public class DataStorageEngine: DataSyncerDelegate{
     }
     
     func onInitializationCompleted() {
-        for callback in readyCallbacks{
+        for callback in initializationCallbacks{
             callback.onSuccess()
-            readyCallbacks.removeFirst()
+            initializationCallbacks.removeFirst()
         }
     }
     
     func onInitializationFailed(error:ErrorType) {
-        for callback in readyCallbacks{
+        for callback in initializationCallbacks{
             callback.onFailure(error)
         }
     }

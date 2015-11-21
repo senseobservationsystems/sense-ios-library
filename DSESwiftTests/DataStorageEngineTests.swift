@@ -78,9 +78,16 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
             
-            dse.setInitializationCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: false))
-            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: false))
-            dse.setSensorDataDownloadedCallback(OnSensorDataDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            let successHandler = {
+                expectation.fulfill()
+            }
+            let failureHandler = {
+                XCTFail("The failure handler is triggered. Abort the test.")
+            }
+            
+            dse.setInitializationCallback(TestCallback(failureHandler: failureHandler))
+            dse.setSensorsDownloadedCallback(TestCallback(failureHandler: failureHandler))
+            dse.setSensorDataDownloadedCallback(TestCallback(successHandler: successHandler, failureHandler: failureHandler))
             
             // Act:
             try dse.start()
@@ -109,7 +116,13 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
             
-            dse.setInitializationCallback(OnReadyCallback(expectation, expectSuccess: false, isLastCallback: true))
+            let successHandler = {
+                XCTFail("The success handler is triggered. Abort the test.")
+            }
+            let failureHandler = {
+                expectation.fulfill()
+            }
+            dse.setInitializationCallback(TestCallback(successHandler: successHandler, failureHandler: failureHandler))
             
             // Act:
             try dse.start()
@@ -132,7 +145,14 @@ class DataStorageEngineTests: XCTestCase{
         do{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            
+            let successHandler = {
+                expectation.fulfill()
+            }
+            let failureHandler = {
+                XCTFail("The failure handler is triggered. Abort the test.")
+            }
+            dse.setSensorsDownloadedCallback(TestCallback(successHandler: successHandler, failureHandler: failureHandler))
             try dse.start()
             
             waitForExpectationsWithTimeout(5) { error in
@@ -161,7 +181,14 @@ class DataStorageEngineTests: XCTestCase{
         do{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            
+            let successHandler = {
+                expectation.fulfill()
+            }
+            let failureHandler = {
+                XCTFail("The failure handler is triggered. Abort the test.")
+            }
+            dse.setSensorsDownloadedCallback(TestCallback(successHandler: successHandler, failureHandler: failureHandler))
             try dse.start()
             
             waitForExpectationsWithTimeout(5) { error in
@@ -206,7 +233,14 @@ class DataStorageEngineTests: XCTestCase{
         do{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
-            dse.setSensorsDownloadedCallback(OnSensorsDownloadedCallback(expectation, expectSuccess: true, isLastCallback: true))
+            // Prepare callbacks
+            let successHandler = {
+                expectation.fulfill()
+            }
+            let failureHandler = {
+                XCTFail("The failure handler is triggered. Abort the test.")
+            }
+            dse.setSensorsDownloadedCallback(TestCallback(successHandler: successHandler, failureHandler: failureHandler))
             try dse.start()
             
             waitForExpectationsWithTimeout(5) { error in
@@ -254,9 +288,14 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             XCTAssertEqual(dse.getStatus(), DSEStatus.AWAITING_CREDENTIALS)
             try dse.setup(self.config)
-            dse.setInitializationCallback(OnReadyCallback(expectation, expectSuccess: true, isLastCallback: true, completionHandler:{
+            let successHandler = {
+                expectation.fulfill()
                 XCTAssertEqual(dse.getStatus(), DSEStatus.INITIALIZED)
-            }))
+            }
+            let failureHandler = {
+                XCTFail("The failure handler is triggered. Abort the test.")
+            }
+            dse.setInitializationCallback(TestCallback(successHandler: successHandler, failureHandler: failureHandler))
             
             // Act: start dse
             try dse.start()
@@ -278,15 +317,12 @@ class DataStorageEngineTests: XCTestCase{
             let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
             try dse.setup(self.config)
 
-            let syncSuccuessHandler = {
-                print("-----SyncCompleted!!!")
+            let succuessHandler = {
                 expectation.fulfill()
             }
-            let syncFailureHandler = {(print("SyncFailed"))}
-            let syncCompletionCallback = SyncCompletionCallback(successHandler: syncSuccuessHandler, failureHandler: syncFailureHandler)
-            dse.setSyncCompletedCallback(syncCompletionCallback)
+            let failureHandler = {(print("SyncFailed"))}
+            dse.setSyncCompletedCallback(TestCallback(successHandler: succuessHandler, failureHandler: failureHandler))
             try dse.start()
-            //print("------", try DatabaseHandler.getSensorProfile(sensorName1))
             
 
             waitForExpectationsWithTimeout(5) { error in
@@ -312,14 +348,10 @@ class DataStorageEngineTests: XCTestCase{
             
             let expectation2 = expectationWithDescription("expect callback")
             
-            let syncSuccuessHandler2 = {
+            let succuessHandler2 = {
                 do{
                     let retrievedSensors = try SensorDataProxy.getSensors()
                     XCTAssertEqual(retrievedSensors.count, 4)
-                    
-                    for sensor in retrievedSensors{
-                        print(sensor)
-                    }
                     
                     XCTAssertEqual(sensor1.name, retrievedSensors[0]["sensor_name"].stringValue)
                     XCTAssertEqual(sensor1.source, retrievedSensors[0]["source_name"].stringValue)
@@ -336,16 +368,14 @@ class DataStorageEngineTests: XCTestCase{
                     XCTAssertEqual(sensor4.name, retrievedSensors[3]["sensor_name"].stringValue)
                     XCTAssertEqual(sensor4.source, retrievedSensors[3]["source_name"].stringValue)
                     XCTAssertEqual(JSON(sensor4.meta), retrievedSensors[3]["meta"])
-                    print("fulfilling here!")
                     expectation2.fulfill()
                 }catch{
                     print(error)
                     XCTFail("An exception was captured. Abort the test.")
                 }
             }
-            let syncCompletionCallback2 = SyncCompletionCallback(successHandler: syncSuccuessHandler2, failureHandler: syncFailureHandler)
             
-            dse.setSyncCompletedCallback(syncCompletionCallback2)
+            dse.setSyncCompletedCallback(TestCallback(successHandler: succuessHandler2, failureHandler: failureHandler))
             
             // Act:
             try dse.syncData()
@@ -369,12 +399,12 @@ class DataStorageEngineTests: XCTestCase{
 // MARK: Callbacks
 
 
-class SyncCompletionCallback: DSEAsyncCallback{
+class TestCallback: DSEAsyncCallback{
     
     let successHandler: () -> Void
     let failureHandler: () -> Void
     
-    init(successHandler: () -> Void, failureHandler: () -> Void){
+    init(successHandler: () -> Void = {}, failureHandler: () -> Void = {}){
         self.successHandler = successHandler
         self.failureHandler = failureHandler
     }
@@ -385,105 +415,5 @@ class SyncCompletionCallback: DSEAsyncCallback{
     
     func onFailure(error: ErrorType)  {
         self.failureHandler()
-    }
-}
-
-class OnReadyCallback: DSEAsyncCallback{
-    // all the parameters are only for testing
-    let expectation: XCTestExpectation
-    let expectSuccess: Bool
-    let isLastCallback: Bool
-    let completionHandler:()->Void
-    
-    init(_ expectation: XCTestExpectation, expectSuccess: Bool, isLastCallback: Bool, completionHandler:()->Void = {}){
-        self.expectation = expectation
-        self.expectSuccess = expectSuccess
-        self.isLastCallback = isLastCallback
-        self.completionHandler = completionHandler
-    }
-    
-    func onSuccess() {
-        print("on Success in onReadyCallback")
-        XCTAssert(expectSuccess)
-        if self.isLastCallback {
-            self.expectation.fulfill()
-        }
-        completionHandler()
-    }
-    
-    func onFailure(error:ErrorType)  {
-        print("on Failure in onReadyCallback")
-        XCTAssert(!expectSuccess)
-        print(error)
-        if self.isLastCallback {
-            self.expectation.fulfill()
-        }
-    }
-}
-
-class OnSensorsDownloadedCallback: DSEAsyncCallback{
-    // all the parameters are only for testing
-    let expectation: XCTestExpectation
-    let expectSuccess: Bool
-    let isLastCallback: Bool
-    let completionHandler:()->Void
-    
-    init(_ expectation: XCTestExpectation, expectSuccess: Bool, isLastCallback: Bool, completionHandler:()->Void = {}){
-        self.expectation = expectation
-        self.expectSuccess = expectSuccess
-        self.isLastCallback = isLastCallback
-        self.completionHandler = completionHandler
-    }
-    
-    func onSuccess() {
-        print("on Success in onSensorsDownloadCallback")
-        XCTAssert(expectSuccess)
-                self.completionHandler()
-        if self.isLastCallback {
-            self.expectation.fulfill()
-        }
-    }
-    
-    func onFailure(error:ErrorType)  {
-        print("on Failure in onSensorsDownloadCallback")
-        XCTAssert(!expectSuccess)
-        print(error)
-        if self.isLastCallback {
-            self.expectation.fulfill()
-        }
-    }
-}
-
-class OnSensorDataDownloadedCallback: DSEAsyncCallback{
-    
-    // all the parameters are only for testing
-    let expectation: XCTestExpectation
-    let expectSuccess: Bool
-    let isLastCallback: Bool
-    let completionHandler:()->Void
-    
-    init(_ expectation: XCTestExpectation, expectSuccess: Bool, isLastCallback: Bool, completionHandler:()->Void = {}){
-        self.expectation = expectation
-        self.expectSuccess = expectSuccess
-        self.isLastCallback = isLastCallback
-        self.completionHandler = completionHandler
-    }
-    
-    func onSuccess() {
-        print("on Success in onSensorDataDownloadCallback")
-        XCTAssert(expectSuccess)
-        completionHandler()
-        if self.isLastCallback {
-            self.expectation.fulfill()
-        }
-    }
-    
-    func onFailure(error:ErrorType)  {
-        print("on Failure in onSensorDataDownloadCallback")
-        XCTAssert(!expectSuccess)
-        print(error)
-        if self.isLastCallback {
-            self.expectation.fulfill()
-        }
     }
 }
