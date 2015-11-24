@@ -8,6 +8,10 @@
 
 import Foundation
 
+/**
+ * The DataPoint class can hold a single data point of for a sensor.
+ *
+ */
 public class DataPoint{
     private(set) var sensorId = -1
     private(set) var value = ""

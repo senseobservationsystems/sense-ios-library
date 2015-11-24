@@ -321,7 +321,7 @@ class DataStorageEngineTests: XCTestCase{
                 expectation.fulfill()
             }
             let failureHandler = {(print("SyncFailed"))}
-            dse.setSyncCompletedCallback(TestCallback(successHandler: succuessHandler, failureHandler: failureHandler))
+            dse.setSensorDataDownloadedCallback(TestCallback(successHandler: succuessHandler, failureHandler: failureHandler))
             try dse.start()
             
 
@@ -375,10 +375,8 @@ class DataStorageEngineTests: XCTestCase{
                 }
             }
             
-            dse.setSyncCompletedCallback(TestCallback(successHandler: succuessHandler2, failureHandler: failureHandler))
-            
             // Act:
-            try dse.syncData()
+            dse.syncData(TestCallback(successHandler: succuessHandler2, failureHandler: failureHandler))
             
             // Assert: Assert is held in the callback
             
@@ -392,11 +390,67 @@ class DataStorageEngineTests: XCTestCase{
         }
     }
     
-
+    func testSyncData_whenDSEisNotInitialized_triggerExceptionHandler(){
+        // Arrange: initialize dse and stub the connection to simulate a down connection
+        do{
+            let expectation = expectationWithDescription("expect callback")
+            let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
+            try dse.setup(self.config)
+            let succuessHandler = {
+                expectation.fulfill()
+            }
+            let failureHandler = {(print("SyncFailed"))}
+            dse.setSensorDataDownloadedCallback(TestCallback(successHandler: succuessHandler, failureHandler: failureHandler))
+            try dse.start()
+            
+            waitForExpectationsWithTimeout(5) { error in
+                print(error)
+                print("time out or expectation is fulfilled")
+            }
+            let expectation2 = expectationWithDescription("expect callback")
+            stubDownConnection()
+            
+            // Act: set sync exception and trigger sync to cause the exception handler to be triggered
+            dse.setSyncExceptionHandler({error in
+                XCTAssert(error as! DSEError == DSEError.UnknownError)
+                expectation2.fulfill()
+            })
+            let succuessHandler2 = {
+                XCTFail("SuccessHandler is called where it should not be. Abort the test.")
+            }
+            let failureHandler2 = {
+                print("error")
+            }
+            dse.syncData(TestCallback(successHandler: succuessHandler2, failureHandler: failureHandler2))
+            
+            waitForExpectationsWithTimeout(5) { error in
+                print("expectation 2 is fulfilled")
+            }
+        }catch{
+            print(error)
+            XCTFail("An exception was captured. Abort the test.")
+        }
+    }
+    
+    func testSetAndRemoveSyncExceptionHandler(){
+        // Arrange: initialize dse and stub the connection to simulate a down connection
+        let dse = DataStorageEngine.getInstance() // this will be lazy-loaded when first called
+        let uuid = dse.setSyncExceptionHandler({error in
+            XCTAssert(error as! DSEError == DSEError.UnknownError)
+        })
+        
+        // Act: remove a handler
+        let result1 = dse.removeSyncExceptionHandler(uuid)
+        let result2 = dse.removeSyncExceptionHandler(uuid)
+        
+        // Assert: assert the return value when the handler exists and when it does not.
+        XCTAssertTrue(result1, "Returned false. Failed to remove the handler.")
+        XCTAssertFalse(result2, "Returned true where it should be false")
+    }
 }
 
 
-// MARK: Callbacks
+// MARK: Callbacks for Tests
 
 
 class TestCallback: DSEAsyncCallback{

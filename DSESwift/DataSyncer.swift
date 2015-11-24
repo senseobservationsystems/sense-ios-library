@@ -67,6 +67,9 @@ class DataSyncer : NSObject {
         return (configChanged, self.syncRate, self.persistentPeriod, self.enablePeriodicSync)
     }
     
+    /**
+     * Initialize DataSyncer by downloading sensor profile and sensors from remote.
+     **/
     func initialize()  {
         dispatch_async(data_syncer_process_queue, {
             do{
@@ -81,11 +84,14 @@ class DataSyncer : NSObject {
         })
     }
     
+    /**
+     * start the timer for the periodic syncing.
+     **/
     func startPeriodicSync() {
         dispatch_async(data_syncer_process_queue, {
             if (self.initialized){
                 if (self.enablePeriodicSync){
-                    self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "sync", userInfo: nil, repeats: true);
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
                     self.timer!.fire()
                 }else{
                     print("Periodic Sync is disabled.")
@@ -96,6 +102,9 @@ class DataSyncer : NSObject {
         })
     }
 
+    /**
+    * stop the timer for the periodic syncing.
+    **/
     func stopPeriodicSync(){
         if self.timer != nil {
             self.timer!.invalidate()
@@ -105,14 +114,19 @@ class DataSyncer : NSObject {
         }
     }
     
+    // called only by the timer
+    func periodicSync() {
+        sync()
+    }
+
+    
     /**
      * Synchronize data in local and remote storage.
      * Is executed asynchronously.
      */
-    public func sync() {
-        dispatch_promise(on: data_syncer_process_queue, body:{ _ -> Promise<Void> in
-            return Promise<Void> { fulfill, reject in
-                print("")
+    func sync(callback: DSEAsyncCallback? = nil) {
+        dispatch_async(data_syncer_process_queue, {
+            do{
                 // step 1
                 try self.processDeletionRequests()
                 // step 2
@@ -123,13 +137,16 @@ class DataSyncer : NSObject {
                 try self.downloadSensorsDataFromRemote()
                 // step 5
                 try self.cleanLocalStorage()
-                fulfill()
+                if(callback != nil){
+                    callback!.onSuccess()
+                }
+            }catch{
+                print("ERROR: DataSyncer - There has been an error during syncing:", error)
+                if(callback != nil){
+                    callback!.onFailure(error)
+                }
+                self.delegate?.onException(error)
             }
-        }).then({ _ in
-            self.delegate?.onSyncCompleted()
-        }).error({ error in
-            print("ERROR: DataSyncer - There has been an error during syncing:", error)
-            self.delegate?.onSyncFailed(error)
         })
     }
     
@@ -160,7 +177,8 @@ class DataSyncer : NSObject {
                 if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
                     try DatabaseHandler.insertSensor(sensor)
                 } else {
-                    try DatabaseHandler.updateSensor(sensor)
+                    let sensorInLocal = try DatabaseHandler.getSensor(sensor.source, sensor.name)
+                    try DatabaseHandler.updateSensor(sensorInLocal)
                 }
             }
             

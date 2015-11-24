@@ -9,6 +9,8 @@
 import Foundation
 @testable import DSESwift
 import SwiftyJSON
+import OHHTTPStubs
+
 
 //public func getAppKeyAndSessionId() {
 //    let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
@@ -65,4 +67,11 @@ func getDummyDataWithBadStructure() -> JSON{
         data.append(dataPoint)
     }
     return JSON(data)
+}
+
+func stubDownConnection(){
+    stub(isHost("sensor-api.staging.sense-os.nl")) { _ in
+        let notConnectedError = NSError(domain:NSURLErrorDomain, code:Int(CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue), userInfo:nil)
+        return OHHTTPStubsResponse(error:notConnectedError)
+    }
 }

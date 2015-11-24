@@ -19,6 +19,5 @@ protocol DataSyncerDelegate{
     func onSensorDataDownloadCompleted()
     func onSensorDataDownloadFailed(error: ErrorType)
     
-    func onSyncCompleted()
-    func onSyncFailed(error: ErrorType)
+    func onException(error:ErrorType)
 }

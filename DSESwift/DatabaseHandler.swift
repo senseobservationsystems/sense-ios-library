@@ -12,7 +12,7 @@ import SwiftyJSON
 
 /**
 
-DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, Sensor, Source.
+DatabaseHandler is a class to wrap around Realm database operation and provide methods that actual public interfaces can use, such as DataStorageEngine, Sensor.
 */
 class DatabaseHandler: NSObject{
     

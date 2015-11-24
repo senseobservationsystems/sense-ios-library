@@ -18,15 +18,9 @@ import PromiseKit
  * this is a singleton class: read how it works here:
  * http://krakendev.io/blog/the-right-way-to-write-a-singleton
 */
-public class DataStorageEngine: DataSyncerDelegate{
+public class DataStorageEngine{
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
-    
-    // callbacks
-    var initializationCallbacks = [DSEAsyncCallback]()
-    var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
-    var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
-    var syncCompleteHandlers = [DSEAsyncCallback]()
     
     private var isSensorDownloadCompleted = false
     private var isSensorDataDownloadCompleted = false
@@ -36,17 +30,27 @@ public class DataStorageEngine: DataSyncerDelegate{
     
     // reference to the datasyncer
     var dataSyncer = DataSyncer()
+    
+    private var dataSyncerProgressHandler = DataSyncerProgressHandler()
 
     
     //This prevents others from using the default '()' initializer for this class.
     private init() {
-        self.dataSyncer.delegate = self
+        self.dataSyncer.delegate = dataSyncerProgressHandler
     }
     
+    /**
+     * Return the singleton DSE object.
+     * @return sharedInstance: the singleton DSE object.
+     **/
     public static func getInstance() -> DataStorageEngine {
         return sharedInstance
     }
     
+    /**
+     * Set up the configration for DSE.
+     * @param customConfig: DSEConfig holding the configuration to be applied.
+     **/
     public func setup(customConfig: DSEConfig) throws {
         // set config for DataSyncer
         var (configChanged, syncInterval, localPersistancePeriod, enablePeriodicSync) = try self.dataSyncer.setConfig(customConfig)
@@ -90,7 +94,9 @@ public class DataStorageEngine: DataSyncerDelegate{
         }
     }
     
-    
+    /**
+    * Initialize DSE and start the timer for periodic syncing.
+    **/
     public func start() throws {
         if (self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
             // callback fail?
@@ -101,18 +107,21 @@ public class DataStorageEngine: DataSyncerDelegate{
         self.dataSyncer.startPeriodicSync()
     }
     
+    /**
+     * Stop the timer for periodic syncing.
+     **/
     public func stopPeriodicSync(){
         self.dataSyncer.stopPeriodicSync()
     }
     
+    /**
+     * Reset DataStorage Engine. The configuration, callbacks, the timer for the syncing will be reset.
+     **/
     func reset(){
         self.config = DSEConfig()
         self.dataSyncer = DataSyncer()
-        self.dataSyncer.delegate = self
-        initializationCallbacks = [DSEAsyncCallback]()
-        sensorsDownloadedCallbacks = [DSEAsyncCallback]()
-        sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
-        syncCompleteHandlers = [DSEAsyncCallback]()
+        self.dataSyncerProgressHandler = DataSyncerProgressHandler()
+        self.dataSyncer.delegate = self.dataSyncerProgressHandler
     }
     
     /**
@@ -172,8 +181,8 @@ public class DataStorageEngine: DataSyncerDelegate{
     * Synchronizes the local data with Common Sense asynchronously
     * The results will be returned via AsyncCallback
     **/
-    func syncData() throws {
-        self.dataSyncer.sync()
+    func syncData(callback: DSEAsyncCallback){
+        self.dataSyncer.sync(callback)
     }
     
     /**
@@ -184,7 +193,7 @@ public class DataStorageEngine: DataSyncerDelegate{
         if self.isSensorDownloadCompleted{
             callback.onSuccess()
         } else {
-            self.sensorsDownloadedCallbacks.append(callback)
+            dataSyncerProgressHandler.sensorsDownloadedCallbacks.append(callback)
         }
     }
     
@@ -196,82 +205,99 @@ public class DataStorageEngine: DataSyncerDelegate{
         if self.isSensorDataDownloadCompleted{
             callback.onSuccess()
         } else {
-            self.sensorDataDownloadedCallbacks.append(callback)
+            dataSyncerProgressHandler.sensorDataDownloadedCallbacks.append(callback)
         }
     }
     
     /**
     * Notifies when the initialization is done asynchronously
-    * @param callback The AsyncCallback method to call the success function on when ready
+    * @param callback The AsyncCallback method to call the success function on when dse initialized
     **/
     func setInitializationCallback(callback : DSEAsyncCallback){
         if (getStatus() == DSEStatus.INITIALIZED) {
             callback.onSuccess()
         } else {
             // status not ready yet. keep the callback in the array in DataSyncer
-            self.initializationCallbacks.append(callback)
+            dataSyncerProgressHandler.initializationCallbacks.append(callback)
         }
     }
     
     /**
-     * Notifies on completion of the first sync since you set the callback.
-     * @param callback The AsyncCallback method to call the success function on when ready
+     * Add an exception handler for sync process to the dictionary of sync exception handlers.
+     * The callback will not be removed until removeSyncExceptionHandler is called.
+     * @param callback A closure to handle the exception
+     * @return returns String for uuid to identify the closure.
      **/
-    func setSyncCompletedCallback(callback : DSEAsyncCallback){
-        // status not ready yet. keep the callback in the array in DataSyncer
-        self.syncCompleteHandlers.append(callback)
+    func setSyncExceptionHandler(exceptionHandler : (error: ErrorType)->Void) -> String{
+        let uuid = NSUUID().UUIDString
+        dataSyncerProgressHandler.exceptionHandlers[uuid] = exceptionHandler
+        return uuid
     }
     
-    func onInitializationCompleted() {
-        for callback in initializationCallbacks{
-            callback.onSuccess()
-            initializationCallbacks.removeFirst()
+    /**
+     * Remove the closure with the given uuid.
+     * @param uuid String for uuid of the closure to be removed.
+     * @return true if the handler is removed. false if the handler is not in the dictionary.
+     **/
+    func removeSyncExceptionHandler(uuid: String) -> Bool {
+        if (dataSyncerProgressHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
+            return true
+        }else{
+            return false
         }
     }
     
-    func onInitializationFailed(error:ErrorType) {
-        for callback in initializationCallbacks{
-            callback.onFailure(error)
-        }
-    }
+    private class DataSyncerProgressHandler: DataSyncerDelegate{
+        
+        // callbacks
+        var initializationCallbacks = [DSEAsyncCallback]()
+        var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
+        var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
+        var exceptionHandlers = Dictionary<String ,(error:ErrorType) -> Void>()
     
-    func onSensorsDownloadCompleted() {
-        for callback in sensorsDownloadedCallbacks{
-            callback.onSuccess()
-            sensorsDownloadedCallbacks.removeFirst()
+        func onInitializationCompleted() {
+            for callback in initializationCallbacks{
+                callback.onSuccess()
+                initializationCallbacks.removeFirst()
+            }
         }
-    }
-    
-    func onSensorsDownloadFailed(error: ErrorType){
-        for callback in sensorDataDownloadedCallbacks{
-            callback.onFailure(error)
+        
+        func onInitializationFailed(error:ErrorType) {
+            for callback in initializationCallbacks{
+                callback.onFailure(error)
+            }
         }
-    }
-    
-    func onSensorDataDownloadCompleted() {
-        for callback in sensorDataDownloadedCallbacks{
-            callback.onSuccess()
-            sensorDataDownloadedCallbacks.removeFirst()
+        
+        func onSensorsDownloadCompleted() {
+            for callback in sensorsDownloadedCallbacks{
+                callback.onSuccess()
+                sensorsDownloadedCallbacks.removeFirst()
+            }
         }
-    }
-    
-    func onSensorDataDownloadFailed(error: ErrorType) {
-        for callback in sensorDataDownloadedCallbacks{
-            callback.onFailure(error)
+        
+        func onSensorsDownloadFailed(error: ErrorType){
+            for callback in sensorDataDownloadedCallbacks{
+                callback.onFailure(error)
+            }
         }
-    }
-    
-    func onSyncCompleted() {
-        for callback in syncCompleteHandlers{
-            callback.onSuccess()
-            syncCompleteHandlers.removeFirst()
+        
+        func onSensorDataDownloadCompleted() {
+            for callback in sensorDataDownloadedCallbacks{
+                callback.onSuccess()
+                sensorDataDownloadedCallbacks.removeFirst()
+            }
         }
-    }
-    
-    func onSyncFailed(error: ErrorType) {
-        for callback in syncCompleteHandlers{
-            callback.onFailure(error)
-            syncCompleteHandlers.removeFirst()
+        
+        func onSensorDataDownloadFailed(error: ErrorType) {
+            for callback in sensorDataDownloadedCallbacks{
+                callback.onFailure(error)
+            }
+        }
+        
+        func onException(error:ErrorType){
+            for (_, handler) in exceptionHandlers{
+                handler(error: error)
+            }
         }
     }
 }

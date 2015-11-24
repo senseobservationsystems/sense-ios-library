@@ -360,7 +360,7 @@ class DataSyncerTests: XCTestCase{
             
             try self.dataSyncer.downloadSensorProfiles()
             try self.dataSyncer.downloadSensorsFromRemote()
-            self.stubDownConnection()
+            stubDownConnection()
             let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
             try self.dataSyncer.downloadSensorsDataFromRemote()
@@ -377,7 +377,7 @@ class DataSyncerTests: XCTestCase{
             let data = try populateLocalDatabase()
             try assertDataPointsInLocal(5, data: data)
             
-            self.stubDownConnection()
+            stubDownConnection()
             try dataSyncer.uploadSensorDataToRemote()
             
         } catch {
@@ -387,13 +387,7 @@ class DataSyncerTests: XCTestCase{
     }
 
     // MARK: helper functions
-    
-    func stubDownConnection(){
-        stub(isHost("sensor-api.staging.sense-os.nl")) { _ in
-            let notConnectedError = NSError(domain:NSURLErrorDomain, code:Int(CFNetworkErrors.CFURLErrorNotConnectedToInternet.rawValue), userInfo:nil)
-            return OHHTTPStubsResponse(error:notConnectedError)
-        }
-    }
+
     
     func assertDataPointsInRemote(expectedNumber: Int, data:[JSON]? = nil) throws{
         let dataPoints1 = try SensorDataProxy.getSensorData(sourceName: sourceName1, sensorName: sensorName1)

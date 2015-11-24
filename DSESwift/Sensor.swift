@@ -20,7 +20,7 @@ public enum SortOrder{
 
 
 /**
-* //TODO: Add documentation
+* The Sensor class to represent a sensor in DSE and groups the database operations related to the sensor.
 *
 */
 public class Sensor{
