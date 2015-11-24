@@ -88,9 +88,11 @@ public class DataStorageEngine{
         defaults.setBool(self.config.enableEncryption!,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
         
         if (configChanged) {
-            // do something? reinit the syncer?
-            // if the timer in data syncer is running, then we should re-start the syncer
-            // if the timer in data syncer is not running, then no need of change
+            if (self.dataSyncer.timer != nil){
+                // Restart the timer in syncer to apply the new configurations.
+                self.dataSyncer.stopPeriodicSync()
+                self.dataSyncer.startPeriodicSync()
+            }
         }
     }
     
