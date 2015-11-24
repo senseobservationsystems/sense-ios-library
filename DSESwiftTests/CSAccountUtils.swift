@@ -20,12 +20,6 @@ public class CSAccountUtils{
     var appKey: String?
     var sessionId: String?
     
-    /**
-    * Create a sensor data proxy.
-    * @param server     Select whether to use the live or staging server.
-    * appKey     Application key, identifying the application in the REST API.
-    * @param sessionId  The session id of the current user.
-    */
     init (appKey: String) {
         self.baseUrl = BASE_URL_CS_STAGING;
         self.appKey = appKey;
@@ -41,8 +35,7 @@ public class CSAccountUtils{
         // evaluate the response
         if(!r.ok){
             didSucceed = false
-            NSLog("Couldn't register user.");
-            //NSLog("Responded: %s", JSON(r.json!).string!);
+            NSLog("Couldn't register the user.");
         }
         return didSucceed
     }
@@ -65,7 +58,7 @@ public class CSAccountUtils{
         // evaluate the response
         if(response.statusCode != 200){
             didSucceed = false
-            NSLog("Couldn't delete user.");
+            NSLog("Couldn't delete the user.");
             NSLog("Responded: %s", response.text!);
         }
         return didSucceed

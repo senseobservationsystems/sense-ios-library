@@ -14,9 +14,10 @@ The rest of this documentation is organized as follows. First we explain the goa
 
 ## Getting started
 ##### 1.Install Carthage
-Sense iOS Library makes use of third party libraries and the libraries are managed using [Carthage](https://github.com/Carthage/Carthage). `carthage` is a simple dependency manager for iOS and OSX development enviroment. You can install `carthage` by running:
-	
-	brew install carthage
+Sense iOS Library makes use of third party libraries and the libraries are managed using [Carthage](https://github.com/Carthage/Carthage). `carthage` is a simple dependency manager for iOS and OSX development enviroment. You can install `carthage` from their [release page](https://github.com/Carthage/Carthage/releases).
+
+....Why not via homebrew? Well, because we need to install Realm with carthage and it is possible only with carthage v9.2 or higher, which is not yet indexed on homebrew.... too bad indeed. - 27th October 2015
+
 	
 ##### 2.Install libraries into your enviroment
 	
@@ -27,6 +28,15 @@ To install the libraries that you need in your enviroment, you can simply do:
 
 Done!
 
+## Adding new libraries
+
+When you want to add a new library or modify the dependency, you can edit Cartfile. When you updated Cartfile then you can run the following command in your project directory.
+
+    carthage update --configuration Debug --platform iOS
+
+For more details about carthage, you can refer to the instruction at [Carthage repository](https://github.com/Carthage/Carthage#if-youre-building-for-ios).
+###### Note: 
+At this moment, Cartage can not handle Realm. So Realm Framework has to be added manually when Realm releases a new version.
 
 ## Test code coverage  
 
@@ -39,10 +49,3 @@ Before running the test code coverage target you have to run the tests themselve
 
     build/reports/coverage/index.html
 
-## I found a nice library! Let me add it!
-
-When you want to add/modify a new library in the dependency, you can edit Cartfile. For details, you can refer to the instruction at [Carthage](https://github.com/Carthage/Carthage).
-
-[Note] At this moment, Cartage can not handle Realm and PromiseKit. So those libraries have to be installed manually. It should be fixed as soon as the issue is resolved.
-
- 

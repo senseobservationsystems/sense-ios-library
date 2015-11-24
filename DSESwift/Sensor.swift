@@ -7,12 +7,11 @@
 //
 
 import Foundation
+import VVJSONSchemaValidation
+import SwiftyJSON
 
-let kCSDATA_TYPE_STRING = "string"
-let kCSDATA_TYPE_JSON = "json"
-let kCSDATA_TYPE_INTEGER = "integer"
-let kCSDATA_TYPE_FLOAT = "float"
-let kCSDATA_TYPE_BOOL = "bool"
+
+
 
 public enum SortOrder{
     case Asc
@@ -21,50 +20,45 @@ public enum SortOrder{
 
 
 /**
-* //TODO: Add documentation
+* The Sensor class to represent a sensor in DSE and groups the database operations related to the sensor.
 *
 */
 public class Sensor{
     var id = -1
     var name = ""
-    var meta = ""
-    var csUploadEnabled = true
-    var csDownloadEnabled = true
+    var meta: Dictionary<String, AnyObject>
+    var remoteUploadEnabled = true
+    var remoteDownloadEnabled = true
     var persistLocally = true
     var userId = ""
     var source = ""
-    var dataType = ""
-    var csDataPointsDownloaded = false
+    var remoteDataPointsDownloaded = false
 
-    init(id:Int,              name: String,   meta:String,      csUploadEnabled: Bool, csDownloadEnabled: Bool,
-        persistLocally: Bool, userId: String, source: String,   dataType: String,  
-        csDataPointsDownloaded: Bool) {
+    init(id:Int, name: String,   meta:Dictionary<String, AnyObject> = Dictionary<String, AnyObject>(), remoteUploadEnabled: Bool = false, remoteDownloadEnabled: Bool = false,
+        persistLocally: Bool = false, userId: String, source: String, remoteDataPointsDownloaded: Bool) {
             
         self.id = id
         self.name = name
         self.meta = meta
-        self.csUploadEnabled = csUploadEnabled
-        self.csDownloadEnabled = csDownloadEnabled
+        self.remoteUploadEnabled = remoteUploadEnabled
+        self.remoteDownloadEnabled = remoteDownloadEnabled
         self.persistLocally = persistLocally
         self.userId = userId
         self.source = source
-        self.dataType = dataType
-        self.csDataPointsDownloaded = csDataPointsDownloaded
+        self.remoteDataPointsDownloaded = remoteDataPointsDownloaded
     }
     
-    public convenience init(name: String,   sensorOptions: SensorOptions,   userId: String,
-                            source: String, dataType: String, csDataPointsDownloaded: Bool) {
+    convenience init(name: String, source: String, sensorConfig: SensorConfig = SensorConfig(), userId: String, remoteDataPointsDownloaded: Bool) {
         self.init(
-            id: DatabaseHandler.getNextKeyForSensor(),
+            id: 0,
             name: name,
-            meta: sensorOptions.meta!,
-            csUploadEnabled: sensorOptions.uploadEnabled!,
-            csDownloadEnabled: sensorOptions.downloadEnabled!,
-            persistLocally: sensorOptions.persist!,
+            meta: sensorConfig.meta,
+            remoteUploadEnabled: sensorConfig.uploadEnabled,
+            remoteDownloadEnabled: sensorConfig.downloadEnabled,
+            persistLocally: sensorConfig.persist,
             userId: userId,
             source: source,
-            dataType: dataType,
-            csDataPointsDownloaded: csDataPointsDownloaded
+            remoteDataPointsDownloaded: remoteDataPointsDownloaded
         )
     }
     
@@ -72,64 +66,82 @@ public class Sensor{
         self.init(
             id: sensor.id,
             name: sensor.name,
-            meta: sensor.meta,
-            csUploadEnabled: sensor.csUploadEnabled,
-            csDownloadEnabled: sensor.csDownloadEnabled,
+            meta: JSONUtils.getDictionaryValue(sensor.meta),
+            remoteUploadEnabled: sensor.remoteUploadEnabled,
+            remoteDownloadEnabled: sensor.remoteDownloadEnabled,
             persistLocally: sensor.persistLocally,
             userId: sensor.userId,
             source: sensor.source,
-            dataType: sensor.dataType,
-            csDataPointsDownloaded: sensor.csDataPointsDownloaded
+            remoteDataPointsDownloaded: sensor.remoteDataPointsDownloaded
         )
     }
     
-    public func insertDataPoint(value: AnyObject, _ date: NSDate) -> Bool {
-        let dataPoint = DataPoint(sensorId: DatabaseHandler.getNextKeyForSensor(), value: JSONUtils.stringify(value), date: date)
-        do{
-            try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
-            return true
-        } catch {
-            NSLog("Failed to insert DataPoint")
-            return false
+    /**
+     * Inserts or updates a single data point for a sensor.
+     * @param value: value of the dataPoint
+     * @param time: time of the dataPoint
+     * Throws an Exception if saving the value fails.
+     **/
+    public func insertOrUpdateDataPoint(value: AnyObject, _ time: NSDate) throws {
+        let dataStructure = try DatabaseHandler.getSensorProfile(self.name)?.dataStructure
+        if !JSONUtils.validateValue(value, schema: dataStructure!){
+            throw DSEError.IncorrectDataStructure
         }
+        
+        let dataPoint = DataPoint(sensorId: self.id)
+        let stringifiedValue = JSONUtils.stringify(value)
+        dataPoint.setValue(stringifiedValue)
+        dataPoint.setTime(time)
+        
+        try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
     }
 
-    
-    public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
-        var dataPoints = [DataPoint]()
-        
-        dataPoints = try DatabaseHandler.getDataPoints(self.id, queryOptions)
 
-        return dataPoints
+    /**
+     * Returns an array of datapoints
+     * @param queryOptions: options for the data points query.
+     * @return List<DataPoint> containing the queried data points.
+     * //TODO add a list of potential exceptions
+     **/
+    public func getDataPoints(queryOptions: QueryOptions) throws -> [DataPoint]{
+        return try DatabaseHandler.getDataPoints(self.id, queryOptions)
     }
     
     /**
-    * Apply options for the sensor.
+    * Apply configs for the sensor.
     * fields in `options` which are `null` will be ignored.
     * @param options
     * @return Returns the applied options.
+    *  //TODO add a list of potential exceptions
     */
-    public func setSensorOptions(sensorOptions: SensorOptions) throws {
-        let sensor = try DatabaseHandler.getSensor(self.source, self.name)
-        let updatedSensor = getSensorWithUpdatedOptions(sensor, sensorOptions)
-        try DatabaseHandler.update(updatedSensor)
+    public func setSensorConfig(sensorConfig: SensorConfig) throws {
+        applyNewConfig(sensorConfig)
+        try DatabaseHandler.updateSensor(self)
     }
     
-    private func getSensorWithUpdatedOptions(sensor: Sensor, _ sensorOptions: SensorOptions) -> Sensor{
-        if (sensorOptions.downloadEnabled != nil){
-            sensor.csDownloadEnabled = sensorOptions.downloadEnabled!
-        }
-        if (sensorOptions.uploadEnabled != nil){
-            sensor.csUploadEnabled = sensorOptions.uploadEnabled!
-        }
-        if (sensorOptions.meta != nil){
-            sensor.meta = sensorOptions.meta!
-        }
-        if (sensorOptions.persist != nil){
-            sensor.persistLocally = sensorOptions.persist!
-        }
-        return sensor
+    /**
+    * Delete data from the Local Storage and Common Sense for this sensor
+    * DataPoints will be immediately removed locally, and an event (class DataDeletionRequest)
+    * is scheduled for the next synchronization round to delete them from Common Sense.
+    * @param startTime The start time in epoch milliseconds. nil for not specified.
+    * @param endTime The end time in epoch milliseconds. nil for not specified.
+    * //TODO add a list of potential exceptions
+    **/
+    public func deleteDataPoints(startTime startTime : NSDate? = nil, endTime: NSDate? = nil) throws {
+        var queryOptions = QueryOptions()
+        queryOptions.startTime = startTime
+        queryOptions.endTime = endTime
+        try DatabaseHandler.deleteDataPoints(self.id, queryOptions)
+        try DatabaseHandler.createDataDeletionRequest(sourceName: self.source, sensorName: self.name, startTime: startTime, endTime: endTime)
     }
     
     
+    // MARK: helper functions
+    
+    private func applyNewConfig(sensorConfig: SensorConfig){
+        self.remoteDownloadEnabled = sensorConfig.downloadEnabled
+        self.remoteUploadEnabled = sensorConfig.uploadEnabled
+        self.meta = sensorConfig.meta
+        self.persistLocally = sensorConfig.persist
+    }
 }

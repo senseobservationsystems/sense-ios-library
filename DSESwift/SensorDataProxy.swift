@@ -8,47 +8,9 @@
 
 import Foundation
 import Just
+import SwiftyJSON
 
 public class SensorDataProxy {
-    
-    public enum Server {
-        case LIVE
-        case STAGING
-    }
-    
-    public enum ProxyError: ErrorType, Equatable{
-        case SessionIdNotSet
-        case InvalidSessionId
-        case InvalidSensorOrSourceOrBadStructure //thrown when invalid sensorName/sourceName/structure is given
-        case InvalidDataFormat
-        case InvalidQuery
-        case SensorDoesNotExist
-        case UnknownError
-    }
-    
-    let BASE_URL_LIVE = "https://sensor-api.sense-os.nl";
-    let BASE_URL_STAGING = "http://sensor-api.staging.sense-os.nl";
-    
-    var baseUrl: String?
-    var appKey: String?
-    var sessionId: String?
-    
-    
-    /**
-    * Create a sensor data proxy.
-    * @param server     Select whether to use the live or staging server.
-    * appKey     Application key, identifying the application in the REST API.
-    * @param sessionId  The session id of the current user.
-    */
-    init (server: Server, appKey: String, sessionId: String) {
-        self.baseUrl = (server == Server.LIVE) ? BASE_URL_LIVE : BASE_URL_STAGING;
-        self.appKey = appKey;
-        self.sessionId = sessionId;
-    }
-    
-    func setSessionId(sessionId: String){
-        self.sessionId = sessionId
-    }
     
     /**
     * Get all sensor profiles
@@ -56,32 +18,28 @@ public class SensorDataProxy {
     * @return Returns an array with sensor profiles, structured like:
     *         [{sensor_name: string, data_type: JSON}, ...]
     */
-    func getSensorProfiles() throws -> Array<AnyObject>?{
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
-        let result = Just.get(self.baseUrl! + "/sensor_profiles", headers: getHeaders())
+    static func getSensorProfiles() throws -> JSON {
+        let result = Just.get(self.getUrl() + "/sensor_profiles", headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Array<AnyObject>
+        return JSON(result.json!)
     }
-    
-
     
     /**
     * Get all sensors of the current source of logged in user
     * Throws an exception when no sessionId is set or when the sessionId is not valid.
     * @param sourceName     The source name. When no sourceName parameter is given, it returns all the sensors of the currrent logged in user. for example "sense-ios", "sense-android", "fitbit", ...
-    * @return Returns a json containing sensors
+    * @return Returns an array containing sensors
+    * 
+    *
     */
-    func getSensors(sourceName: String? = nil) throws -> Array<AnyObject>?{
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
+    static func getSensors(sourceName: String? = nil) throws -> JSON {
         let result = Just.get(getSensorUrl(sourceName), headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Array<AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -94,14 +52,12 @@ public class SensorDataProxy {
     * @param sensorName     The sensor name, for example "accelerometer"
     * @return Returns a Dictionary containing the sensor info
     */
-    func getSensor(sourceName: String, _ sensorName: String) throws -> Dictionary<String, AnyObject>?{
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
+    static func getSensor(sourceName: String, _ sensorName: String) throws -> JSON {
         let result = Just.get(getSensorUrl(sourceName, sensorName), headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Dictionary<String, AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -114,15 +70,13 @@ public class SensorDataProxy {
     * @param meta           JSON object with meta data
     * @return               Returns a Dictionary containing the sensor info
     */
-    func updateSensor(sourceName sourceName: String, sensorName: String, meta: Dictionary<String, AnyObject>) throws -> Dictionary<String, AnyObject>? {
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
+    static func updateSensor(sourceName sourceName: String, sensorName: String, meta: Dictionary<String, AnyObject>) throws -> JSON {
         let body = ["meta": meta]
         let result = Just.put(getSensorUrl(sourceName, sensorName), headers: getHeaders(), json: body);
         if let error = checkStatusCode(result.statusCode, successfulCode: 201){
             throw error
         }
-        return result.json as? Dictionary<String, AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -136,9 +90,7 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     */
-    func deleteSensor(sourceName: String, _ sensorName: String) throws {
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
+    static func deleteSensor(sourceName: String, _ sensorName: String) throws {
         let result = Just.delete(getSensorUrl(sourceName, sensorName), headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 204){
             throw error
@@ -153,11 +105,16 @@ public class SensorDataProxy {
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
     * @param queryOptions   Query options to set start and end time, and to sort and limit the data
-    * @return Returns an Dictionary containing the sensor data, where the data is structured as `[{date: long, value: JSON}, ...]`
+    * @return Returns a dictionary structured as:
+    *  `{
+    *    "sensor_name": String,
+    *    "source_name": String,
+    *    "meta": JSON
+    *    "data":[{time: long, value: JSON}, ...]
+    *   }`
     */
-    func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> Dictionary<String, AnyObject>?{
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        if (!isValidQueryOptions(queryOptions)){ throw ProxyError.InvalidQuery }
+    static func getSensorData(sourceName sourceName: String, sensorName: String, var queryOptions: QueryOptions? = nil) throws -> JSON {
+        if (!isValidQueryOptions(queryOptions)){ throw DSEError.InvalidQuery }
         
         if (queryOptions == nil) {
             queryOptions = QueryOptions()
@@ -166,7 +123,7 @@ public class SensorDataProxy {
         if let error = checkStatusCode(result.statusCode, successfulCode: 200){
             throw error
         }
-        return result.json as? Dictionary<String, AnyObject>
+        return JSON(result.json!)
     }
     
     /**
@@ -176,18 +133,16 @@ public class SensorDataProxy {
     * @param sourceName     The source name, for example "sense-ios",
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
-    * @param data           Array with data points, structured as `[{date: long, value: JSON}, ...]`
+    * @param data           Array with data points, structured as `[{time: long, value: JSON}, ...]`
     * @param meta           Dictionary for optional field to store meta information. Can be left null
     */
-    func putSensorData(sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) throws {
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
+    static func putSensorData(sourceName sourceName: String, sensorName: String, data: JSON, meta: Dictionary<String, AnyObject>? = nil) throws {
         // create one sensor data object and create an array
-        let sensorDataObject = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data);
+        let sensorDataObject = SensorDataProxy.createSensorDataObject(sourceName: sourceName, sensorName: sensorName, data: data, meta: meta);
         let sensorDataArray = [sensorDataObject]
         
         // construct body in JSONArray format
-        let body = try serializeArrayToJSONArray(sensorDataArray)
+        let body = try JSONUtils.jsonToData(JSON(sensorDataArray))
         
         // send put request
         let result = Just.put(getSensorDataUrl(), headers: getHeadersWithContentType(), requestBody: body)
@@ -208,22 +163,20 @@ public class SensorDataProxy {
     *
     *                      [
     *                        {
-    *                          source_name: string,
-    *                          sensor_name, string,
-    *                          meta: JSON,   // optional
-    *                          data: [
-    *                            {date: number, value: JSON},
+    *                          "source_name": string,
+    *                          "sensor_name", string,
+    *                          "meta": JSON,   // optional
+    *                          "data": [
+    *                            {time: number, value: JSON},
     *                            // ...
     *                          ]
     *                        },
     *                        // ...
     *                      ]
     */
-    func putSensorData(sensorDataArray: Array<AnyObject>) throws {
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        
+    static func putSensorData(sensorDataArray: JSON) throws {
         // construct body in JSONArray format
-        let body = try serializeArrayToJSONArray(sensorDataArray)
+        let body = try JSONUtils.jsonToData(sensorDataArray)
         
         // send put request
         let result = Just.put(getSensorDataUrl(), headers: getHeadersWithContentType(), requestBody: body)
@@ -248,13 +201,12 @@ public class SensorDataProxy {
     *                       When endTime is null, all data from startTime till now will be removed.
     *                       When both startTime and endTime are null, all data will be removed.
     */
-    func deleteSensorData(sourceName sourceName: String, sensorName: String, startDate: NSDate? = nil, endDate: NSDate? = nil) throws {
-        if (!isSessionIdSet()){ throw ProxyError.SessionIdNotSet }
-        if (!isStartDateEarlierThanEndDate(startDate, endDate)){ throw ProxyError.InvalidQuery }
+    static func deleteSensorData(sourceName sourceName: String, sensorName: String, startTime: NSDate? = nil, endTime: NSDate? = nil) throws {
+        if (!isStartTimeEarlierThanEndTime(startTime, endTime)){ throw DSEError.InvalidQuery }
         
         var params = Dictionary<String, AnyObject>()
-        if startDate != nil { params["start_time"] = Int(startDate!.timeIntervalSince1970*1000)}
-        if endDate != nil { params["end_time"] = Int(endDate!.timeIntervalSince1970)*1000}
+        if startTime != nil { params["start_time"] = Int(startTime!.timeIntervalSince1970*1000)}
+        if endTime != nil { params["end_time"] = Int(endTime!.timeIntervalSince1970)*1000}
         let result = Just.delete(getSensorDataUrl(sourceName, sensorName), params: params, headers: getHeaders())
         if let error = checkStatusCode(result.statusCode, successfulCode: 204){
             throw error
@@ -271,7 +223,7 @@ public class SensorDataProxy {
     *       source_name: string,
     *       sensor_name, string,
     *       data: [
-    *         {date: number, value: JSON},
+    *         {time: number, value: JSON},
     *         ...
     *       ]
     *     }
@@ -280,97 +232,111 @@ public class SensorDataProxy {
     * @param sourceName     The source name, for example "sense-ios",
     *                       "sense-android", "fitbit", ...
     * @param sensorName     The sensor name, for example "accelerometer"
-    * @param data           Array with data points, structured as `[{date: long, value: JSON}, ...]`
+    * @param data           Array with data points, structured as `[{time: long, value: JSON}, ...]`
     * @param meta           Optional field to store meta information. Can be left null
     */
-    static func createSensorDataObject (sourceName sourceName: String, sensorName: String, data: Array<AnyObject>, meta: Dictionary<String, AnyObject>? = nil) -> Dictionary<String, AnyObject> {
+    static func createSensorDataObject (sourceName sourceName: String, sensorName: String, data: JSON, meta: Dictionary<String, AnyObject>? = nil) -> JSON {
         var sensorData = Dictionary<String, AnyObject>()
         sensorData["source_name"] = sourceName;
         sensorData["sensor_name"] = sensorName;
         if (meta != nil) {
             sensorData["meta"] = meta!
         }
-        sensorData["data"] = data;
+        var json = JSON(sensorData)
+        json["data"] = data;
         
-        return sensorData;
+        return json;
     }
     
-    /**
-    * Returns NSData containing JSONArray. It perform JSONSerizlization on the give Array.
-    * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
-    */
-    private func serializeArrayToJSONArray(sensorsData: Array<AnyObject>) throws -> NSData?{
-        let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
-        return body
-    }
+//    /**
+//    * Returns NSData containing JSONArray. It perform JSONSerizlization on the given Array.
+//    * Don't forget to validate the Array by calling NSJSONSerialization.isValidJSONObject before using this method.
+//    */
+//    private static func serializeArrayToJSONArray(sensorsData: JSON) throws -> NSData{
+//        //let body = try NSJSONSerialization.dataWithJSONObject(sensorsData, options: NSJSONWritingOptions(rawValue: 0))
+//        let body = try JSONUtils.jsonToData(sensorsData)
+//        return body
+//    }
     
-    private func getSensorUrl(sourceName: String? = nil, _ sensorName: String? = nil) -> String{
-        let url = self.baseUrl! + "/sensors"
+    private static func getSensorUrl(sourceName: String? = nil, _ sensorName: String? = nil) -> String{
+        let url = self.getUrl() + "/sensors"
         return addAppendixToURL(url, sourceName: sourceName, sensorName: sensorName)
     }
     
-    private func getSensorDataUrl(sourceName: String? = nil, _ sensorName: String? = nil) -> String{
-        let url = self.baseUrl! + "/sensor_data"
+    private static func getSensorDataUrl(sourceName: String? = nil, _ sensorName: String? = nil) -> String{
+        let url = self.getUrl() + "/sensor_data"
         return addAppendixToURL(url, sourceName: sourceName, sensorName: sensorName)
     }
     
-    private func addAppendixToURL(var url: String, sourceName: String?, sensorName: String?) -> String{
+    private static func addAppendixToURL(var url: String, sourceName: String?, sensorName: String?) -> String{
         if(sourceName != nil){ url = url + "/" + sourceName!}
         if(sensorName != nil){ url = url + "/" + sensorName!}
         return url
     }
     
-    private func getHeadersWithContentType() -> [String: String]{
-        var headers = getHeaders()
+    private static func getHeadersWithContentType() -> [String: String]{
+        var headers = self.getHeaders()
         headers["CONTENT-TYPE"] = "application/json"
         return headers
     }
     
-    private func getHeaders() -> [String: String]{
-        let headers = ["APPLICATION-KEY": self.appKey!,
-            "SESSION-ID": self.sessionId!]
+    private static func getHeaders() -> [String: String]{
+        let headers = ["APPLICATION-KEY": self.getAppKey(), "SESSION-ID": self.getSessionId()]
         return headers
     }
     
-    private func isSessionIdSet() -> Bool{
-        return (self.sessionId != nil)
-    }
-    
-    private func isValidQueryOptions(queryOptions: QueryOptions?) -> Bool{
+    private static func isValidQueryOptions(queryOptions: QueryOptions?) -> Bool{
         if (queryOptions == nil){
             return true
         }
         
-        let isValidStartEndDates = isStartDateEarlierThanEndDate(queryOptions!.startDate, queryOptions!.endDate)
+        let isValidStartEndTimes = isStartTimeEarlierThanEndTime(queryOptions!.startTime, queryOptions!.endTime)
         let isValidLimit = (queryOptions!.limit != nil) ? queryOptions!.limit > 0 : true
         
-        return isValidStartEndDates && isValidLimit
+        return isValidStartEndTimes && isValidLimit
     }
     
-    private func isStartDateEarlierThanEndDate(startDate: NSDate?, _ endDate: NSDate?) -> Bool{
+    private static func isStartTimeEarlierThanEndTime(startTime: NSDate?, _ endTime: NSDate?) -> Bool{
         // check if both of start and end is pupulated
-        if startDate == nil || endDate == nil {
+        if startTime == nil || endTime == nil {
             return true
         }
         // is startDate ealier
-        if startDate!.timeIntervalSinceReferenceDate < endDate!.timeIntervalSinceReferenceDate {
+        if startTime!.timeIntervalSinceReferenceDate < endTime!.timeIntervalSinceReferenceDate {
             return true
         } else {
             return false
         }
     }
     
-    private func checkStatusCode(statusCode: Int?, successfulCode: Int) -> ProxyError?{
+    private static func checkStatusCode(statusCode: Int?, successfulCode: Int) -> DSEError?{
         if (statusCode == 401){
-            return ProxyError.InvalidSessionId
+            return DSEError.InvalidSessionId
         } else if (statusCode == 400){
-            return ProxyError.InvalidSensorOrSourceOrBadStructure //Bad structure too
+            return DSEError.InvalidSensorOrSourceOrBadStructure //Bad structure too
         } else if (statusCode == 404){
-            return ProxyError.SensorDoesNotExist
+            return DSEError.SensorDoesNotExist
         } else if (statusCode != successfulCode) || (statusCode == nil){
-            return ProxyError.UnknownError
+            return DSEError.UnknownError
         }
         return nil
+    }
+    
+    private static func getUrl() -> String {
+        let BASE_URL_LIVE = "https://sensor-api.sense-os.nl";
+        let BASE_URL_STAGING = "http://sensor-api.staging.sense-os.nl";
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let serverString = defaults.stringForKey(DSEConstants.BACKEND_ENVIRONMENT_KEY);
+        return (serverString == "LIVE") ? BASE_URL_LIVE : BASE_URL_STAGING;
+    }
+    
+    private static func getAppKey() -> String {
+        return KeychainWrapper.stringForKey(KEYCHAIN_APPKEY)!
+    }
+    
+    private static func getSessionId() -> String {
+        return KeychainWrapper.stringForKey(KEYCHAIN_SESSIONID)!
     }
     
 }

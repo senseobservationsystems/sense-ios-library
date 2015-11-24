@@ -1,8 +1,21 @@
-#Swift HTTP for Humans
+# A mobile database.
+github "realm/realm-cocoa"
+
+# Swift HTTP for Humans
 github "JustHTTP/Just" 
 
-#Crypto related functions and helpers for Swift
+# Crypto related functions and helpers for Swift
 github "krzyzanowskim/CryptoSwift"
 
 # We code in Asynchronous world. We promise. [http://promisekit.org/]
 github "mxcl/PromiseKit"
+
+# JSON Schema Validation 
+github "kanekin/JSONSchemaValidation"
+
+# JSON Parser
+github "SwiftyJSON/SwiftyJSON"
+
+# Stub your network request easily
+github "AliSoftware/OHHTTPStubs"
+
