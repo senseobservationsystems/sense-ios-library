@@ -385,10 +385,10 @@ class DatabaseHandler: NSObject{
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "sensorId = %d", sensorId))
         if(queryOptions.startTime != nil){
-            predicates.append(NSPredicate(format: "time >= %f", queryOptions.startTime!.timeIntervalSince1970))
+            predicates.append(NSPredicate(format: "time >= %lf", queryOptions.startTime!.timeIntervalSince1970))
         }
         if(queryOptions.endTime != nil){
-            predicates.append(NSPredicate(format: "time < %f" , queryOptions.endTime!.timeIntervalSince1970))
+            predicates.append(NSPredicate(format: "time < %lf" , queryOptions.endTime!.timeIntervalSince1970))
         }
         if(queryOptions.existsInRemote != nil){
             predicates.append(NSPredicate(format: "existsInRemote = %@" , queryOptions.existsInRemote!))
