@@ -504,7 +504,7 @@
 				3E9C154315D564E100F520D0 /* include */,
 				3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */,
 				3E59ACB915F4DB1B00C07D59 /* Utils */,
-				3E820DBF15D40B180001A3EC /* sensePlatform */,
+				3E820DBF15D40B180001A3EC /* sense platform */,
 				3E820DBB15D40B100001A3EC /* resources */,
 				3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */,
 				A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */,
@@ -544,7 +544,7 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
-		3E820DBF15D40B180001A3EC /* sensePlatform */ = {
+		3E820DBF15D40B180001A3EC /* sense platform */ = {
 			isa = PBXGroup;
 			children = (
 				3E820DC115D40B180001A3EC /* communication */,
@@ -565,7 +565,6 @@
 				DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */,
 				3E820DD015D40B180001A3EC /* sensors */,
 			);
-			name = sensePlatform;
 			path = "sense platform";
 			sourceTree = "<group>";
 		};
