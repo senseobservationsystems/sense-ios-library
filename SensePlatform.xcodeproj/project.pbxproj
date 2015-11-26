@@ -250,10 +250,10 @@
 		3E820DC615D40B180001A3EC /* CSSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSender.h; sourceTree = "<group>"; };
 		3E820DC715D40B180001A3EC /* CSSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSender.m; sourceTree = "<group>"; };
 		3E820DC815D40B180001A3EC /* CSDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataStore.h; sourceTree = "<group>"; };
-		3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+MainThread.h"; path = "sense platform/misc/NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
-		3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+MainThread.m"; path = "sense platform/misc/NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
-		3E820DCC15D40B180001A3EC /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSReachability.h; path = "sense platform/misc/CSReachability.h"; sourceTree = "<group>"; };
-		3E820DCD15D40B180001A3EC /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSReachability.m; path = "sense platform/misc/CSReachability.m"; sourceTree = "<group>"; };
+		3E820DCA15D40B180001A3EC /* NSNotificationCenter+MainThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+MainThread.h"; path = "sensePlatform/misc/NSNotificationCenter+MainThread.h"; sourceTree = "<group>"; };
+		3E820DCB15D40B180001A3EC /* NSNotificationCenter+MainThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+MainThread.m"; path = "sensePlatform/misc/NSNotificationCenter+MainThread.m"; sourceTree = "<group>"; };
+		3E820DCC15D40B180001A3EC /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSReachability.h; path = sensePlatform/misc/CSReachability.h; sourceTree = "<group>"; };
+		3E820DCD15D40B180001A3EC /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSReachability.m; path = sensePlatform/misc/CSReachability.m; sourceTree = "<group>"; };
 		3E820DCE15D40B180001A3EC /* CSSensePlatform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatform.m; sourceTree = "<group>"; };
 		3E820DCF15D40B180001A3EC /* CSSensorIds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensorIds.m; sourceTree = "<group>"; };
 		3E820DD315D40B180001A3EC /* CSAccelerationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAccelerationSensor.h; sourceTree = "<group>"; };
@@ -324,7 +324,7 @@
 		3EF47FB819093D3E00104D69 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
 		3EF47FB919093D3E00104D69 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
 		955999E91B18A0480060B20A /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
-		A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sense Library Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A96D6ECA1A5C49FF00554BBC /* SenseLibraryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SenseLibraryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96D6ECD1A5C49FF00554BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A97744681B468FE20092D5FC /* CSSensePlatformTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSensePlatformTest.m; sourceTree = "<group>"; };
 		A9902AB21A9F591A00FCB951 /* CSLocationSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationSensor.h; sourceTree = "<group>"; };
@@ -504,10 +504,10 @@
 				3E9C154315D564E100F520D0 /* include */,
 				3E820F8215D41C970001A3EC /* SensePlatform-Prefix.pch */,
 				3E59ACB915F4DB1B00C07D59 /* Utils */,
-				3E820DBF15D40B180001A3EC /* sense platform */,
+				3E820DBF15D40B180001A3EC /* sensePlatform */,
 				3E820DBB15D40B100001A3EC /* resources */,
 				3E148BAE160A12010010A0D1 /* SensePlatformTestAppTests */,
-				A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */,
+				A96D6ECB1A5C49FF00554BBC /* SenseLibraryTests */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
 				3E820D6B15D40AB50001A3EC /* Products */,
 			);
@@ -519,7 +519,7 @@
 				3E820D6A15D40AB50001A3EC /* libSensePlatform.a */,
 				3E148B91160A12000010A0D1 /* SensePlatformTestApp.app */,
 				3E148BA8160A12010010A0D1 /* .octest */,
-				A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */,
+				A96D6ECA1A5C49FF00554BBC /* SenseLibraryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -544,7 +544,7 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
-		3E820DBF15D40B180001A3EC /* sense platform */ = {
+		3E820DBF15D40B180001A3EC /* sensePlatform */ = {
 			isa = PBXGroup;
 			children = (
 				3E820DC115D40B180001A3EC /* communication */,
@@ -565,7 +565,7 @@
 				DC1AF4AA1AFCFDB400E58835 /* CSErrorDomain.h */,
 				3E820DD015D40B180001A3EC /* sensors */,
 			);
-			path = "sense platform";
+			path = sensePlatform;
 			sourceTree = "<group>";
 		};
 		3E820DC115D40B180001A3EC /* communication */ = {
@@ -681,10 +681,10 @@
 			children = (
 			);
 			name = plugins;
-			path = "sense platform/plugins";
+			path = sensePlatform/plugins;
 			sourceTree = "<group>";
 		};
-		A96D6ECB1A5C49FF00554BBC /* Sense Library Tests */ = {
+		A96D6ECB1A5C49FF00554BBC /* SenseLibraryTests */ = {
 			isa = PBXGroup;
 			children = (
 				A97744681B468FE20092D5FC /* CSSensePlatformTest.m */,
@@ -693,7 +693,8 @@
 				A9FA46311A893EBB00D3D0E4 /* CSSpatialProviderTest.m */,
 				A96D6ECC1A5C49FF00554BBC /* Supporting Files */,
 			);
-			path = "Sense Library Tests";
+			name = SenseLibraryTests;
+			path = senseLibraryTests;
 			sourceTree = "<group>";
 		};
 		A96D6ECC1A5C49FF00554BBC /* Supporting Files */ = {
@@ -763,9 +764,9 @@
 			productReference = 3E820D6A15D40AB50001A3EC /* libSensePlatform.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		A96D6EC91A5C49FF00554BBC /* Sense Library Tests */ = {
+		A96D6EC91A5C49FF00554BBC /* SenseLibraryTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "Sense Library Tests" */;
+			buildConfigurationList = A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "SenseLibraryTests" */;
 			buildPhases = (
 				A96D6EC61A5C49FF00554BBC /* Sources */,
 				A96D6EC71A5C49FF00554BBC /* Frameworks */,
@@ -776,9 +777,9 @@
 			dependencies = (
 				A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */,
 			);
-			name = "Sense Library Tests";
-			productName = "Sense Library Tests";
-			productReference = A96D6ECA1A5C49FF00554BBC /* Sense Library Tests.xctest */;
+			name = SenseLibraryTests;
+			productName = "SenseLibraryTests";
+			productReference = A96D6ECA1A5C49FF00554BBC /* SenseLibraryTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -815,7 +816,7 @@
 				3E148BA7160A12010010A0D1 /* SensePlatformTestAppTests */,
 				3EBEAF4D1887FADE009F81C1 /* GenVersion */,
 				DC097FA61ABAD37600BDDD09 /* GenDocumentation */,
-				A96D6EC91A5C49FF00554BBC /* Sense Library Tests */,
+				A96D6EC91A5C49FF00554BBC /* SenseLibraryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -889,7 +890,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}\" \\\n--project-company \"SenseLabs\" \\\n--company-id \"nl.sense-os\" \\\n--output \"${PROJECT_DIR}/documentation/output\" \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--merge-categories \\\n--exit-threshold 2 \\\n--docset-platform-family iphoneos \\\n--ignore \"*.m\" \\\n--include \"${PROJECT_DIR}/documentation/source\" \\\n--ignore \"LoadableCategory.h\" \\\n--index-desc \"${PROJECT_DIR}/README.md\" \\\n\"${PROJECT_DIR}/sense platform\" \"${PROJECT_DIR}/include\"";
+			shellScript = "/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}\" \\\n--project-company \"SenseLabs\" \\\n--company-id \"nl.sense-os\" \\\n--output \"${PROJECT_DIR}/documentation/output\" \\\n--logformat xcode \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--merge-categories \\\n--exit-threshold 2 \\\n--docset-platform-family iphoneos \\\n--ignore \"*.m\" \\\n--include \"${PROJECT_DIR}/documentation/source\" \\\n--ignore \"LoadableCategory.h\" \\\n--index-desc \"${PROJECT_DIR}/README.md\" \\\n\"${PROJECT_DIR}/sensePlatform\" \"${PROJECT_DIR}/include\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1269,7 +1270,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
+				INFOPLIST_FILE = "SenseLibraryTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_bundle;
@@ -1303,7 +1304,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Sense Library Tests/Info.plist";
+				INFOPLIST_FILE = "SenseLibraryTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_bundle;
@@ -1379,7 +1380,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "Sense Library Tests" */ = {
+		A96D6ED31A5C49FF00554BBC /* Build configuration list for PBXNativeTarget "SenseLibraryTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A96D6ED41A5C49FF00554BBC /* Debug */,
