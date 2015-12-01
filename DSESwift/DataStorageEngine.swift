@@ -125,27 +125,26 @@ import PromiseKit
         self.dataSyncer.delegate = self.dataSyncerProgressHandler
     }
     
-    /**
-    * Create a new sensor in database and backend if it does not already exist.
-    * @param source The source name (e.g accelerometer)
-    * @param name The sensor name (e.g accelerometer)
-    * @param sensorConfig The sensor options
-    * @return The newly created sensor object
-    * //TODO: List possible exceptions
-    **/
-    func createSensor(source: String, name: String, sensorConfig: SensorConfig = SensorConfig()) throws -> Sensor{
-        let sensor = Sensor(name: name, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
-        try DatabaseHandler.insertSensor(sensor)
-        return sensor
-    }
+
+
 
     /**
-    * Returns a specific sensor by name and the source it belongs to
+    * Returns a specific sensor by name and the source. It creates sensor if the sensor does not exist in the local storage.
     * @param source The name of the source
     * @param sensorName The name of the sensor
     **/
     public func getSensor(source: String, sensorName : String) throws -> Sensor?{
-        return try DatabaseHandler.getSensor(source, sensorName)
+        do{
+            return try DatabaseHandler.getSensor(source, sensorName)
+        }catch DSEError.ObjectNotFound {
+            // sensor does not exist in local storage, create the sensor
+            let sensorConfig = SensorConfig()
+            let sensor = Sensor(name: sensorName, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
+            try DatabaseHandler.insertSensor(sensor)
+            return sensor
+        }catch{
+            throw error
+        }
     }
     
     /**

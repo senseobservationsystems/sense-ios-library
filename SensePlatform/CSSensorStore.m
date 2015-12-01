@@ -162,17 +162,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         //sampleStrategy = [[SampleStrategy alloc] init];
 
         
-		//set settings and initialise sensors
-        if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
-            [self instantiateSensors];
-        } else {
-            dispatch_sync(dispatch_get_main_queue(), ^() {
-                [self instantiateSensors];
-            });
-        }
-            
-		[self applyGeneralSettings];
-        
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginChanged) name:CSsettingLoginChangedNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(generalSettingChanged:) name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeGeneral] object:nil];
@@ -191,21 +180,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 			if ([aClass isAvailable]) {
 				CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
 				[sensors addObject:newSensor];
-				//save sensor description in storage
-				if (newSensor.sensorDescription != nil) {
-					NSString* type = [newSensor.device valueForKey:@"type"];
-					NSString* uuid = [newSensor.device valueForKey:@"uuid"];
-					NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
-					NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-					[self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
-				}
 			}
 		}
 		
-		//set self as data store
-		for (CSSensor* sensor in sensors) {
-			sensor.dataStore = self;
-		}
 		
 		//initialise spatial provider
 		CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
@@ -248,12 +225,26 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
     
     //TODO: put proper callbacks
-    void (^successHandler)() = ^(){NSLog(@"successcallback");};
-    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){NSLog(@"Error:%ld", (long)error);};
+    void (^successHandler)() = ^(){NSLog(@"successcallback");
+    
+        //set settings and initialise sensors
+        if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
+            [self instantiateSensors];
+        } else {
+            dispatch_sync(dispatch_get_main_queue(), ^() {
+                [self instantiateSensors];
+            });
+        }
+        [self applyGeneralSettings];
+    };
+    
+    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
+        NSLog(@"Error:%ld", (long)error);
+    };
     
     DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
                                                       andFailureHandler: failureHandler];
-    [dse setSensorsDownloadedCallback:callback];
+    [dse setInitializationCallback:callback];
     
     error = nil;
     [dse startAndReturnError:&error];
