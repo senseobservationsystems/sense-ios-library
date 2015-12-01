@@ -18,7 +18,7 @@ import PromiseKit
  * this is a singleton class: read how it works here:
  * http://krakendev.io/blog/the-right-way-to-write-a-singleton
 */
-public class DataStorageEngine{
+@objc public class DataStorageEngine: NSObject{
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
     
@@ -35,7 +35,7 @@ public class DataStorageEngine{
 
     
     //This prevents others from using the default '()' initializer for this class.
-    private init() {
+    override private init() {
         self.dataSyncer.delegate = dataSyncerProgressHandler
     }
     
