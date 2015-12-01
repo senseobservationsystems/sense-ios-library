@@ -178,6 +178,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return succeeded;
 }
 
+- (NSString*) getUserId{
+    return [[[self doJsonRequestTo:[self makeUrlFor:@"devices"] withMethod:@"GET" withInput:nil] valueForKey:@"user"] valueForKey:@"id"];
+}
+
 - (BOOL) logout
 {
 	if (sessionCookie == nil)

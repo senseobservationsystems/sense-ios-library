@@ -35,7 +35,7 @@ import PromiseKit
 
     
     //This prevents others from using the default '()' initializer for this class.
-    override private init() {
+    private override init() {
         self.dataSyncer.delegate = dataSyncerProgressHandler
     }
     
@@ -60,32 +60,31 @@ import PromiseKit
         self.config.enablePeriodicSync = enablePeriodicSync
         
         // check for changed in the backend environment
-        if let backendEnvironment = customConfig.backendEnvironment {
-            configChanged = configChanged || self.config.backendEnvironment != customConfig.backendEnvironment
-            self.config.backendEnvironment = backendEnvironment
-        }
-        let backendStringValue = self.config.backendEnvironment! == DSEServer.LIVE ? "LIVE" : "STAGING"
+        let backendEnvironment = customConfig.backendEnvironment
+        configChanged = configChanged || self.config.backendEnvironment != customConfig.backendEnvironment
+        self.config.backendEnvironment = backendEnvironment
+        let backendStringValue = self.config.backendEnvironment == DSEServer.LIVE ? "LIVE" : "STAGING"
         
         // todo: do something with the encryption
         self.config.enableEncryption       = customConfig.enableEncryption       ?? self.config.enableEncryption
         
         
         // verify if we have indeed received valid credentials (not nil) and throw the appropriate error if something is wrong
-        if let appKey    = customConfig.appKey {self.config.appKey = appKey}       else { throw DSEError.InvalidAppKey }
-        if let sessionId = customConfig.sessionId {self.config.sessionId = sessionId} else { throw DSEError.InvalidSessionId }
-        if let userId    = customConfig.userId {self.config.userId = userId}       else { throw DSEError.InvalidUserId }
+        if (customConfig.appKey != "") {self.config.appKey = customConfig.appKey}       else { throw DSEError.InvalidAppKey }
+        if (customConfig.sessionId != ""){self.config.sessionId = customConfig.sessionId} else { throw DSEError.InvalidSessionId }
+        if (customConfig.userId != "") {self.config.userId = customConfig.userId}       else { throw DSEError.InvalidUserId }
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
-        KeychainWrapper.setString(self.config.userId!,    forKey: KEYCHAIN_USERID)
+        KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
+        KeychainWrapper.setString(self.config.userId,    forKey: KEYCHAIN_USERID)
         
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setDouble(self.config.syncInterval!,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
-        defaults.setDouble(self.config.localPersistancePeriod!, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
+        defaults.setDouble(self.config.syncInterval,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
+        defaults.setDouble(self.config.localPersistancePeriod, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
         defaults.setObject(backendStringValue,                  forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
-        defaults.setBool(self.config.enableEncryption!,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
+        defaults.setBool(self.config.enableEncryption,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
         
         if (configChanged) {
             if (self.dataSyncer.timer != nil){
@@ -100,7 +99,7 @@ import PromiseKit
     * Initialize DSE and start the timer for periodic syncing.
     **/
     public func start() throws {
-        if (self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
+        if (self.config.sessionId == "" || self.config.appKey == "" || self.config.userId == "") {
             // callback fail?
            throw DSEError.EmptyCredentials
         }
@@ -170,7 +169,7 @@ import PromiseKit
      * @return The DSEStatus, this could be either AWAITING_CREDENTIALS, AWAITING_SENSOR_PROFILES, READY.
      **/
     public func getStatus() -> DSEStatus{
-        if(self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
+        if(self.config.sessionId == "" || self.config.appKey == "" || self.config.userId == "") {
             return DSEStatus.AWAITING_CREDENTIALS;
         } else if(self.dataSyncer.initialized) {
             return DSEStatus.INITIALIZED;
@@ -183,7 +182,7 @@ import PromiseKit
     * Synchronizes the local data with Common Sense asynchronously
     * The results will be returned via AsyncCallback
     **/
-    func syncData(callback: DSEAsyncCallback){
+    public func syncData(callback: DSEAsyncCallback){
         self.dataSyncer.sync(callback)
     }
     
@@ -191,7 +190,7 @@ import PromiseKit
     * Notifies when the sensors are downloaded asynchronously
     * @param callback The AsyncCallback method to call the success function on when the sensors are downloaded
     **/
-    func setSensorsDownloadedCallback(callback: DSEAsyncCallback){
+    public func setSensorsDownloadedCallback(callback: DSEAsyncCallback){
         if self.isSensorDownloadCompleted{
             callback.onSuccess()
         } else {
@@ -203,7 +202,7 @@ import PromiseKit
     * Notifies when the sensor data are downloaded asynchronously
     * @param callback The AsyncCallback method to call the success function on when the sensor data is downloaded
     **/
-    func setSensorDataDownloadedCallback(callback: DSEAsyncCallback){
+    public func setSensorDataDownloadedCallback(callback: DSEAsyncCallback){
         if self.isSensorDataDownloadCompleted{
             callback.onSuccess()
         } else {
@@ -215,7 +214,7 @@ import PromiseKit
     * Notifies when the initialization is done asynchronously
     * @param callback The AsyncCallback method to call the success function on when dse initialized
     **/
-    func setInitializationCallback(callback : DSEAsyncCallback){
+    public func setInitializationCallback(callback : DSEAsyncCallback){
         if (getStatus() == DSEStatus.INITIALIZED) {
             callback.onSuccess()
         } else {
@@ -230,7 +229,7 @@ import PromiseKit
      * @param callback A closure to handle the exception
      * @return returns String for uuid to identify the closure.
      **/
-    func setSyncExceptionHandler(exceptionHandler : (error: ErrorType)->Void) -> String{
+    public func setSyncExceptionHandler(exceptionHandler : (error: ErrorType)->Void) -> String{
         let uuid = NSUUID().UUIDString
         dataSyncerProgressHandler.exceptionHandlers[uuid] = exceptionHandler
         return uuid
@@ -241,7 +240,7 @@ import PromiseKit
      * @param uuid String for uuid of the closure to be removed.
      * @return true if the handler is removed. false if the handler is not in the dictionary.
      **/
-    func removeSyncExceptionHandler(uuid: String) -> Bool {
+    public func removeSyncExceptionHandler(uuid: String) -> Bool {
         if (dataSyncerProgressHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
             return true
         }else{
@@ -255,7 +254,7 @@ import PromiseKit
         var initializationCallbacks = [DSEAsyncCallback]()
         var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
         var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
-        var exceptionHandlers = Dictionary<String ,(error:ErrorType) -> Void>()
+        var exceptionHandlers = Dictionary<String ,(error:DSEError) -> Void>()
     
         func onInitializationCompleted() {
             for callback in initializationCallbacks{
@@ -264,7 +263,7 @@ import PromiseKit
             }
         }
         
-        func onInitializationFailed(error:ErrorType) {
+        func onInitializationFailed(error:DSEError) {
             for callback in initializationCallbacks{
                 callback.onFailure(error)
             }
@@ -277,7 +276,7 @@ import PromiseKit
             }
         }
         
-        func onSensorsDownloadFailed(error: ErrorType){
+        func onSensorsDownloadFailed(error: DSEError){
             for callback in sensorDataDownloadedCallbacks{
                 callback.onFailure(error)
             }
@@ -290,13 +289,13 @@ import PromiseKit
             }
         }
         
-        func onSensorDataDownloadFailed(error: ErrorType) {
+        func onSensorDataDownloadFailed(error: DSEError) {
             for callback in sensorDataDownloadedCallbacks{
                 callback.onFailure(error)
             }
         }
         
-        func onException(error:ErrorType){
+        func onException(error:DSEError){
             for (_, handler) in exceptionHandlers{
                 handler(error: error)
             }

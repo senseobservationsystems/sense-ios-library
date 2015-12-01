@@ -44,6 +44,10 @@
 #import "CSSpatialProvider.h"
 #import "CSLocationProvider.h"
 
+#import "DSECallback.h"
+
+@import DSESwift;
+
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
 #define MAX_UPLOAD_INTERVAL 3600
@@ -228,6 +232,36 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
 		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
     }
+}
+
+- (void) initializeDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey{
+    NSError* error = nil;
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    DSEConfig* dseConfig = [[DSEConfig alloc] init];
+    dseConfig.sessionId = sessionId;
+    dseConfig.userId = userId;
+    dseConfig.appKey = appKey;
+    [dse setup:dseConfig error:&error];
+    if (error){
+        NSLog(@"Error: %@",error);
+        return;
+    }
+    
+    //TODO: put proper callbacks
+    void (^successHandler)() = ^(){NSLog(@"successcallback");};
+    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){NSLog(@"Error:%ld", (long)error);};
+    
+    DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
+                                                      andFailureHandler: failureHandler];
+    [dse setSensorsDownloadedCallback:callback];
+    
+    error = nil;
+    [dse startAndReturnError:&error];
+    if (error){
+        NSLog(@"Error: %@",error);
+        return;
+    }
+    
 }
 
 - (void) addSensor:(CSSensor*) sensor {
@@ -665,6 +699,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (CLAuthorizationStatus) locationPermissionState {
     return [locationProvider permissionState];
 }
+
+
 
 
 @end

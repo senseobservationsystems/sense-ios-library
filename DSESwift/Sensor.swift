@@ -10,9 +10,6 @@ import Foundation
 import VVJSONSchemaValidation
 import SwiftyJSON
 
-
-
-
 public enum SortOrder{
     case Asc
     case Desc
@@ -23,7 +20,7 @@ public enum SortOrder{
 * The Sensor class to represent a sensor in DSE and groups the database operations related to the sensor.
 *
 */
-public class Sensor{
+@objc public class Sensor: NSObject{
     var id = -1
     var name = ""
     var meta: Dictionary<String, AnyObject>
@@ -90,8 +87,8 @@ public class Sensor{
         
         let dataPoint = DataPoint(sensorId: self.id)
         let stringifiedValue = JSONUtils.stringify(value)
-        dataPoint.setValue(stringifiedValue)
-        dataPoint.setTime(time)
+        dataPoint.setValueWithString(stringifiedValue)
+        dataPoint.setTimeWithNSDate(time)
         
         try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
     }

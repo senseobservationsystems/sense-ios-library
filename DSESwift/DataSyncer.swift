@@ -36,9 +36,9 @@ class DataSyncer : NSObject {
 
     // the key for the string should be <source>:<sensor>
     override init () {
-        self.syncRate = self.config.syncInterval!
-        self.persistentPeriod = self.config.localPersistancePeriod!
-        self.enablePeriodicSync = self.config.enablePeriodicSync!
+        self.syncRate = self.config.syncInterval
+        self.persistentPeriod = self.config.localPersistancePeriod
+        self.enablePeriodicSync = self.config.enablePeriodicSync
     }
     
     /**
@@ -46,22 +46,20 @@ class DataSyncer : NSObject {
      */
     func setConfig(config: DSEConfig) throws -> (configChanged: Bool, syncInterval: Double, localPersistancePeriod: Double, enablePeridicSync: Bool) {
         var configChanged = false
-        if let syncInterval = config.syncInterval {
-            if (syncInterval < 0) {throw DSEError.InvalidSyncRate}
-            configChanged = configChanged || self.syncRate != syncInterval
-            self.syncRate = syncInterval
-        }
         
-        if let localPersistancePeriod = config.localPersistancePeriod {
-            if (localPersistancePeriod < 0) {throw DSEError.InvalidPersistentPeriod}
-            configChanged = configChanged || self.persistentPeriod != localPersistancePeriod
-            self.persistentPeriod = localPersistancePeriod
-        }
+        let syncInterval = config.syncInterval
+        if (syncInterval < 0) {throw DSEError.InvalidSyncRate}
+        configChanged = configChanged || self.syncRate != syncInterval
+        self.syncRate = syncInterval
         
-        if let enablePeriodicSync = config.enablePeriodicSync {
-            configChanged = configChanged || self.enablePeriodicSync != enablePeriodicSync
-            self.enablePeriodicSync = enablePeriodicSync
-        }
+        let localPersistancePeriod = config.localPersistancePeriod
+        if (localPersistancePeriod < 0) {throw DSEError.InvalidPersistentPeriod}
+        configChanged = configChanged || self.persistentPeriod != localPersistancePeriod
+        self.persistentPeriod = localPersistancePeriod
+        
+        let enablePeriodicSync = config.enablePeriodicSync
+        configChanged = configChanged || self.enablePeriodicSync != enablePeriodicSync
+        self.enablePeriodicSync = enablePeriodicSync
         
         // return new values that will be used
         return (configChanged, self.syncRate, self.persistentPeriod, self.enablePeriodicSync)
@@ -78,8 +76,8 @@ class DataSyncer : NSObject {
                 print("DSE Initialization Completed")
                 self.initialized = true
                 self.delegate?.onInitializationCompleted()
-            }catch{
-                self.delegate?.onInitializationFailed(error)
+            }catch{ let e = error as! DSEError
+                self.delegate?.onInitializationFailed(e)
             }
         })
     }
@@ -140,12 +138,12 @@ class DataSyncer : NSObject {
                 if(callback != nil){
                     callback!.onSuccess()
                 }
-            }catch{
+            }catch{ let e = error as! DSEError
                 print("ERROR: DataSyncer - There has been an error during syncing:", error)
                 if(callback != nil){
-                    callback!.onFailure(error)
+                    callback!.onFailure(e)
                 }
-                self.delegate?.onException(error)
+                self.delegate?.onException(e)
             }
         })
     }
@@ -183,8 +181,8 @@ class DataSyncer : NSObject {
             }
             
             self.delegate?.onSensorsDownloadCompleted()
-        }catch {
-            self.delegate?.onSensorDataDownloadFailed(error)
+        }catch { let e = error as! DSEError
+            self.delegate?.onSensorDataDownloadFailed(e)
             throw error
         }
 
@@ -202,8 +200,8 @@ class DataSyncer : NSObject {
                 }
             }
             self.delegate?.onSensorDataDownloadCompleted()
-        }catch{
-            self.delegate?.onSensorDataDownloadFailed(error)
+        }catch{ let e = error as! DSEError
+            self.delegate?.onSensorDataDownloadFailed(e)
             throw error
         }
     }

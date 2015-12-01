@@ -42,6 +42,7 @@
 + (NSDictionary*) device;
 
 - (id)init;
+- (void) initializeDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey;
 - (void) loginChanged;
 - (void) setEnabled:(BOOL) enable;
 - (void) enabledChanged:(id) notification;

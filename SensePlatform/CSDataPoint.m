@@ -7,7 +7,6 @@
 //
 
 #import "CSDataPoint.h"
-@import DSESwift;
 
 @implementation CSDataPoint
 - (NSDictionary*) device {

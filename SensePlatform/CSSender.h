@@ -48,6 +48,7 @@
  *  @return wheter the login is successful or not
  */
 - (BOOL) loginWithError:(NSError **) error;
+- (NSString*) getUserId;
 - (BOOL) logout;
 - (NSArray*) listSensors;
 - (NSArray*) listSensorsForDevice:(NSDictionary*)device;

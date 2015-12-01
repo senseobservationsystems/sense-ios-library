@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol DSEAsyncCallback{
+@objc public protocol DSEAsyncCallback{
 
     /**
      * Callback method called on success
@@ -19,5 +19,5 @@ protocol DSEAsyncCallback{
      * Callback method called on failure
      * @param throwable If available a throwable is send with with failure response.
      **/
-    func onFailure(error:ErrorType)
+    func onFailure(error:DSEError)
 }

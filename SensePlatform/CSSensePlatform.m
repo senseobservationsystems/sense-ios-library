@@ -122,6 +122,10 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     
     BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
     if (succeed) {
+        NSString* sessionId = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+        NSString* userId = [[CSSensorStore sharedSensorStore].sender getUserId];
+        NSString* appKey = [CSSensorStore sharedSensorStore].sender.applicationKey;
+        [[CSSensorStore sharedSensorStore] initializeDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey];
         [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
     }
     return succeed;

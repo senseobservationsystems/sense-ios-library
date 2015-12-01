@@ -12,7 +12,7 @@ import Foundation
  * The DataPoint class can hold a single data point of for a sensor.
  *
  */
-public class DataPoint{
+@objc public class DataPoint: NSObject{
     private(set) var sensorId = -1
     private(set) var value = ""
     private(set) var time = NSDate()
@@ -39,7 +39,7 @@ public class DataPoint{
         self.init(sensorId: sensorId, value: "", time: now, existsInRemote: false)
     }
 
-    required convenience public init() {
+    required convenience public override init() {
         let now = NSDate()
         self.init(sensorId: -1, value: "", time: now, existsInRemote: false)
     }
@@ -47,7 +47,7 @@ public class DataPoint{
     /**
      * Return the id constructed by "<sensorId>-<timestamp>" in string.
      **/
-    func getId() -> String {
+    public func getId() -> String {
         return "\(self.sensorId)-\(String(self.time))"
     }
     
@@ -55,7 +55,7 @@ public class DataPoint{
      * Set time of the data point.
      * @param time: NSDate for the timestamp of the datapoint.
      **/
-    func setTime(time: NSDate){
+    public func setTimeWithNSDate(time: NSDate){
         self.time = time
     }
     
@@ -63,48 +63,48 @@ public class DataPoint{
      * Set value of the data point.
      * @param value: value of the datapoint in String.
      **/
-    func setValue(value: String) {
+    public func setValueWithString(value: String) {
         self.value = value
     }
     
     /**
      * Return the timestamp in Int with milliseconds accuracy
      **/
-    func getTimeInMillis() -> Int {
+    public func getTimeInMillis() -> Int {
         return Int(self.time.timeIntervalSince1970 * 1000)
     }
     
     /**
      * Return the value in Int.
      **/
-    func getValueInInt() -> Int {
+    public func getValueInInt() -> Int {
         return JSONUtils.getIntValue(self.value)
     }
     /**
      * Return the value in Double.
      **/
-    func getValueInDouble() -> Double {
+    public func getValueInDouble() -> Double {
         return JSONUtils.getDoubleValue(self.value)
     }
     
     /**
      * Return the value in Bool.
      **/
-    func getValueInBool() -> Bool {
+    public func getValueInBool() -> Bool {
         return JSONUtils.getBoolValue(self.value)
     }
     
     /**
      * Return the value in String.
      **/
-    func getValueInString() -> String{
+    public func getValueInString() -> String{
         return JSONUtils.getStringValue(self.value)
     }
     
     /**
      * Return the value in Dictionary.
      **/
-    func getValueInDictionary() -> [String: AnyObject]{
+    public func getValueInDictionary() -> [String: AnyObject]{
         return JSONUtils.getDictionaryValue(self.value)
     }
     
@@ -112,7 +112,7 @@ public class DataPoint{
     * set the existsInRemote state.
     * @param state: true if the datapoint exsists in Remote, or vice versa.
     **/
-    func setExistsInRemote(state: Bool){
+    func setExistsInRemoteWithBool(state: Bool){
         self.existsInRemote = state
     }
 }

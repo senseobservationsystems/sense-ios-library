@@ -33,7 +33,7 @@ public struct DSEConstants{
     static let DATASYNCER_PROCESS_QUEUE_ID = "nl.sense.dse.sync_process_queue"
 }
 
-public enum DSEError: ErrorType{
+@objc public enum DSEError: Int, ErrorType{
     // Database Handler
     case ObjectNotFound
     case DuplicatedObjects
@@ -67,13 +67,13 @@ public enum DSEError: ErrorType{
  * AWAITING_SENSOR_PROFILES = the credentials are set and the sensor profiles are being downloaded
  * READY = the engine is ready for use
  */
-public enum DSEStatus{
+@objc public enum DSEStatus: Int{
     case AWAITING_CREDENTIALS
     case AWAITING_SENSOR_PROFILES
     case INITIALIZED
 }
 
-public enum DSEServer {
-    case LIVE
+@objc public enum DSEServer: Int{
+    case LIVE = 0
     case STAGING
 }

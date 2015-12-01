@@ -11,13 +11,13 @@ import Foundation
 protocol DataSyncerDelegate{
 
     func onInitializationCompleted()
-    func onInitializationFailed(error: ErrorType)
+    func onInitializationFailed(error: DSEError)
     
     func onSensorsDownloadCompleted()
-    func onSensorsDownloadFailed(error: ErrorType)
+    func onSensorsDownloadFailed(error: DSEError)
     
     func onSensorDataDownloadCompleted()
-    func onSensorDataDownloadFailed(error: ErrorType)
+    func onSensorDataDownloadFailed(error: DSEError)
     
-    func onException(error:ErrorType)
+    func onException(error:DSEError)
 }
