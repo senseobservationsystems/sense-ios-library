@@ -751,7 +751,6 @@
 			buildPhases = (
 				3E820D6615D40AB50001A3EC /* Sources */,
 				3E820D6715D40AB50001A3EC /* Frameworks */,
-				3EBEAF441887ED21009F81C1 /* ShellScript */,
 				3E4F273817033C7A0045588C /* CopyFiles */,
 			);
 			buildRules = (
@@ -853,19 +852,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		3EBEAF441887ED21009F81C1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "git=/usr/local/git/bin/git\nversion=`git describe --tags --dirty`\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" > CSVersion.h\ncp CSVersion.h include/SensePlatform/CSVersion.h";
-		};
 		3EBEAF511887FAE9009F81C1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -877,7 +863,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\n\ncat $VERSIONFILE | grep $version\n\nif [ $? -ne 0 ]; then\n    PRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\n    POST=\"#endif\"\n    echo -e ${PRE} > ${VERSIONFILE}\n    echo \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\n    echo ${POST} >> ${VERSIONFILE}\nfi";
+			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\n\nif [ $? -ne 0 ]; then\n    PRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\n    POST=\"#endif\"\n    echo -e ${PRE} > ${VERSIONFILE}\n    echo \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\n    echo ${POST} >> ${VERSIONFILE}\nfi\n\ncat $VERSIONFILE | grep $version";
 		};
 		DC097FAA1ABAD3C100BDDD09 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
