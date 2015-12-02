@@ -864,7 +864,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "git=/usr/local/git/bin/git\nversion=`git describe --tags --dirty`\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" > CSVersion.h";
+			shellScript = "git=/usr/local/git/bin/git\nversion=`git describe --tags --dirty`\necho \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" > CSVersion.h\ncp CSVersion.h include/CSVersion.h";
 		};
 		3EBEAF511887FAE9009F81C1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
