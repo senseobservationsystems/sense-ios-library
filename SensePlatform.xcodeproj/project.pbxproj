@@ -751,8 +751,8 @@
 			buildPhases = (
 				3E820D6615D40AB50001A3EC /* Sources */,
 				3E820D6715D40AB50001A3EC /* Frameworks */,
-				3E4F273817033C7A0045588C /* CopyFiles */,
 				3EBEAF441887ED21009F81C1 /* ShellScript */,
+				3E4F273817033C7A0045588C /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -778,7 +778,7 @@
 				A96D6ED21A5C49FF00554BBC /* PBXTargetDependency */,
 			);
 			name = SenseLibraryTests;
-			productName = "SenseLibraryTests";
+			productName = SenseLibraryTests;
 			productReference = A96D6ECA1A5C49FF00554BBC /* SenseLibraryTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -1270,7 +1270,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "SenseLibraryTests/Info.plist";
+				INFOPLIST_FILE = SenseLibraryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_bundle;
@@ -1304,7 +1304,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "SenseLibraryTests/Info.plist";
+				INFOPLIST_FILE = SenseLibraryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_bundle;
