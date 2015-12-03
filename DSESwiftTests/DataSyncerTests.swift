@@ -53,8 +53,8 @@ class DataSyncerTests: XCTestCase{
             XCTFail("Fail in setup")
         }
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
+        KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
         KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
     }
     
@@ -159,7 +159,11 @@ class DataSyncerTests: XCTestCase{
             let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
             
-            let config = SensorConfig(meta: Dictionary<String, AnyObject>(), uploadEnabled: true, downloadEnabled: true, persist: true)
+            let config = SensorConfig()
+            config.meta = Dictionary<String, AnyObject>()
+            config.uploadEnabled = true
+            config.downloadEnabled = true
+            config.persist = true
             for sensor in sensorsInLocal{
                 try sensor.setSensorConfig(config)
             }

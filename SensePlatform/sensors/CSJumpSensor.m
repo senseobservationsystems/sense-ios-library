@@ -179,14 +179,16 @@ static NSString* const jumpLandingHeadingKey = @"landing heading";
 									[NSString stringWithFormat:@"%.0f", takeOffDegrees], jumpTakeOffHeadingKey,
 									[NSString stringWithFormat:@"%.0f", landingDegrees], jumpLandingHeadingKey,
 									nil];
+    NSDate* date = [NSDate date];
 
-	double timestamp = [[NSDate date] timeIntervalSince1970];
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										newItem, @"value",
-										[NSString stringWithFormat:@"%.3f",timestamp],@"date",
-										nil];
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+//	double timestamp = [[NSDate date] timeIntervalSince1970];
+//	
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										newItem, @"value",
+//										[NSString stringWithFormat:@"%.3f",timestamp],@"date",
+//										nil];
+//	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+    [self insertOrUpdateDataPointWithValue:newItem time:date];
 }
 
 - (double) normDegrees:(double) degreesIn toRange:(double)range {

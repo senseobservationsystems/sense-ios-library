@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PromiseKit
 
 /**
  * This class provides the main interface for creating sensors and sources and setting storage engine specific properties.
@@ -52,6 +51,7 @@ import PromiseKit
      * @param customConfig: DSEConfig holding the configuration to be applied.
      **/
     public func setup(customConfig: DSEConfig) throws {
+        NSLog("-------- dse setup is called")
         // set config for DataSyncer
         var (configChanged, syncInterval, localPersistancePeriod, enablePeriodicSync) = try self.dataSyncer.setConfig(customConfig)
         
@@ -70,11 +70,12 @@ import PromiseKit
         
         
         // verify if we have indeed received valid credentials (not nil) and throw the appropriate error if something is wrong
-        if (customConfig.appKey != "") {self.config.appKey = customConfig.appKey}       else { throw DSEError.InvalidAppKey }
-        if (customConfig.sessionId != ""){self.config.sessionId = customConfig.sessionId} else { throw DSEError.InvalidSessionId }
-        if (customConfig.userId != "") {self.config.userId = customConfig.userId}       else { throw DSEError.InvalidUserId }
+        if (customConfig.appKey != "") {self.config.appKey = customConfig.appKey}
+        if (customConfig.sessionId != ""){self.config.sessionId = customConfig.sessionId}
+        if (customConfig.userId != "") {self.config.userId = customConfig.userId}
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
+        NSLog("--------new sessionId %@", self.config.sessionId);
         KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
         KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
         KeychainWrapper.setString(self.config.userId,    forKey: KEYCHAIN_USERID)
@@ -133,16 +134,19 @@ import PromiseKit
     * @param source The name of the source
     * @param sensorName The name of the sensor
     **/
-    public func getSensor(source: String, sensorName : String) throws -> Sensor?{
+    public func getSensor(source: String, sensorName: String) throws -> Sensor{
         do{
             return try DatabaseHandler.getSensor(source, sensorName)
         }catch DSEError.ObjectNotFound {
             // sensor does not exist in local storage, create the sensor
             let sensorConfig = SensorConfig()
             let sensor = Sensor(name: sensorName, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
+            print("---creating sensor", sensor.name)
             try DatabaseHandler.insertSensor(sensor)
+            print("---created sensor", sensor.name)
             return sensor
         }catch{
+            print(error)
             throw error
         }
     }

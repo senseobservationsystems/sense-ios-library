@@ -79,19 +79,20 @@ static const NSString* speedKey = @"speed";
     WFFootpodConnection* fpConnection = (WFFootpodConnection*) connection;
     float cadence = fpConnection.getFootpodData.cadence;
     float speed = fpConnection.getFootpodData.instantaneousSpeed;
-    double timestamp = [[NSDate date] timeIntervalSince1970];
+//    double timestamp = [[NSDate date] timeIntervalSince1970];
     
     NSDictionary* newItem = [NSDictionary dictionaryWithObjectsAndKeys:
 									[NSString stringWithFormat:@"%.1f", cadence], cadenceKey,
 									[NSString stringWithFormat:@"%.2f", speed], speedKey,
 									nil];
   	
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										[newItem JSONRepresentation], @"value",
-										[NSString stringWithFormat:@"%.3f", timestamp], @"date",
-										nil];
-    [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+//	
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										[newItem JSONRepresentation], @"value",
+//										[NSString stringWithFormat:@"%.3f", timestamp], @"date",
+//										nil];
+//    [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    [self insertOrUpdateDataPointWithValue:newItem time:[NSDate date]];
 }
 
 

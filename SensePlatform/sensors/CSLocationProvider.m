@@ -20,6 +20,7 @@
 #import "math.h"
 #import "CSDataStore.h"
 #import "CSSensorStore.h"
+#import "CSSensorConstants.h"
 
 @implementation CSLocationProvider {
     CLLocationManager* locationManager;
@@ -186,7 +187,7 @@
             break;
     }
     // remove unnecessary NSLog statement.
-    // NSLog(@"New location authorization: %@", statusString);
+     NSLog(@"New location authorization: %@", statusString);
 }
 
 

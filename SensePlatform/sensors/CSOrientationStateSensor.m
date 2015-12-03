@@ -74,15 +74,18 @@
 			orientationString = @"unknown";
 			break;
 	}
+    
+    NSDate* time = [NSDate date];
 	
-	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
+//	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
+//	
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										orientationString, @"value",
+//										timestamp,@"date",
+//										nil];
 	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										orientationString, @"value",
-										timestamp,@"date",
-										nil];
-	
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    [self insertOrUpdateDataPointWithValue:orientationString time:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

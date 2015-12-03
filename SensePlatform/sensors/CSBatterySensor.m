@@ -18,7 +18,9 @@
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
 #import "Formatting.h"
+#import "CSSensorConstants.h"
 
+@import DSESwift;
 
 @implementation CSBatterySensor
 //constants
@@ -65,39 +67,49 @@ static NSString* levelKey = @"level";
 
 - (void) commitBatteryState:(NSNotification*) notification {
     if (isEnabled) {
-	//get battery infomation
-	UIDevice* currentDevice = [UIDevice currentDevice];
-	NSString* batteryState = @"unknown";
-	//convert state to string:
-	switch ([currentDevice batteryState]) {
-		case UIDeviceBatteryStateUnknown:
-			batteryState = @"unknown";
-			break;
-		case UIDeviceBatteryStateUnplugged:
-			batteryState = @"discharging";
-			break;
-		case UIDeviceBatteryStateCharging:
-			batteryState = @"charging";
-			break;
-		case UIDeviceBatteryStateFull:
-			batteryState = @"full";
-			break;
-	}
-	//battery level as percentage
-	NSNumber* batteryLevel = [NSNumber numberWithFloat:[currentDevice batteryLevel] * 100];
-	
-	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									batteryLevel, levelKey,
-									batteryState, stateKey,
-									nil];
-	
-	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										newItem, @"value",
-										timestamp,@"date",
-										nil];
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+        //get battery infomation
+        UIDevice* currentDevice = [UIDevice currentDevice];
+        NSString* batteryState = @"unknown";
+        //convert state to string:
+        switch ([currentDevice batteryState]) {
+            case UIDeviceBatteryStateUnknown:
+                batteryState = @"unknown";
+                break;
+            case UIDeviceBatteryStateUnplugged:
+                batteryState = @"discharging";
+                break;
+            case UIDeviceBatteryStateCharging:
+                batteryState = @"charging";
+                break;
+            case UIDeviceBatteryStateFull:
+                batteryState = @"full";
+                break;
+        }
+        //battery level as percentage
+        NSNumber* batteryLevel = [NSNumber numberWithFloat:[currentDevice batteryLevel] * 100];
+        
+        NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        batteryLevel, levelKey,
+                                        batteryState, stateKey,
+                                        nil];
+        
+        //NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
+        
+        NSError* error = nil;
+        DataStorageEngine* dse = [DataStorageEngine getInstance];
+        Sensor* sensor = [dse getSensor:self.name sensorName:CSSorceName_iOS error:&error];
+        
+        error = nil;
+        [sensor insertOrUpdateDataPointWithValue:newItem time:[NSDate date] error:&error];
+        
+    
+    
+        
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										newItem, @"value",
+//										timestamp,@"date",
+//										nil];
+//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     }
 }
 

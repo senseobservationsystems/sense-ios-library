@@ -17,6 +17,9 @@
 #import "CSSensor.h"
 #import "CSSettings.h"
 #import "CSSensorStore.h"
+#import "CSSensorConstants.h"
+
+@import DSESwift;
 
 
 @implementation CSSensor
@@ -71,6 +74,17 @@
 
 - (NSString*) sensorId {
     return [CSSensor sensorIdFromName:self.name andDeviceType:self.deviceType andDevice:self.device];
+}
+
+- (void) insertOrUpdateDataPointWithValue:(id)value time: (NSDate*) time{
+    NSError* error = nil;
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:self.name error:&error];
+    
+    error = nil;
+    NSLog(@"Sensor:%@, value: %@, time: %@, error:%@", sensor, value, time, error);
+    
+    [sensor insertOrUpdateDataPointWithValue:value time:time error:&error];
 }
 
 + (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)description andDevice:(NSDictionary *)device {

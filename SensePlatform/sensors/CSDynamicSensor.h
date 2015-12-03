@@ -49,6 +49,6 @@
  @param value The value to be stored, will be stored as a JSON string object. Can be anything.
  @param timestamp Seconds since 1970 timestamp that describes time the value was collected.
  */
-- (void) commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp;
+- (void) commitValue:(id)value withTimestamp:(NSDate*)time;
 @end
 

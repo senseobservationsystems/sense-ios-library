@@ -24,6 +24,9 @@
 #import <pthread.h>
 #import "Formatting.h"
 #import "CSSensePlatform.h"
+#import "CSSensorConstants.h"
+
+@import DSESwift;
 
 static const double G = 9.81;
 static const double radianInDegrees = 180.0 / M_PI;
@@ -324,6 +327,7 @@ void someScheduleFunction(void* context) {
     }
 
     NSTimeInterval timestamp = ((CMDeviceMotion*)[deviceMotionArray objectAtIndex:0]).timestamp + timestampOffset;
+    NSDate* time = [[NSDate alloc] initWithTimeIntervalSince1970:timestamp];
     
     //either send all samples, or just the first
     BOOL rawSamples = NO, stats = YES;
@@ -337,7 +341,7 @@ void someScheduleFunction(void* context) {
     }
 
     if (stats) {
-        [self commitMotionFeaturesForSamples:deviceMotionArray withTimestamp:timestamp];
+        [self commitMotionFeaturesForSamples:deviceMotionArray withTime:time];
     }
 
     if (burst) {
@@ -345,7 +349,7 @@ void someScheduleFunction(void* context) {
     }
 }
 
-- (void) commitMotionFeaturesForSamples:(NSArray*)deviceMotionArray withTimestamp:(NSTimeInterval) timestamp {
+- (void) commitMotionFeaturesForSamples:(NSArray*)deviceMotionArray withTime:(NSDate*) time {
     //commit average, stddev and kurtosis
     double magnitudeSum=0, magnitudeSqSum=0;
     double totalRotSum=0, totalRotSqSum=0;
@@ -372,16 +376,17 @@ void someScheduleFunction(void* context) {
     double totalRotMeanSquares = totalRotSqSum / [deviceMotionArray count];
     double totalRotStddev = totalRotMeanSquares - totalRotAvg*totalRotAvg;
 
-    //commit values
-    [[CSSensorStore sharedSensorStore] addSensor:motionEnergySensor];
-    [[CSSensorStore sharedSensorStore] addSensor:motionFeaturesSensor];
-    
-    //commit motion energy
-    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        CSroundedNumber(magnitudeAvg, 3), @"value",
-                                        CSroundedNumber(timestamp, 3),@"date",
-                                        nil];
-    [motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
+//    //commit values
+//    [[CSSensorStore sharedSensorStore] addSensor:motionEnergySensor];
+//    [[CSSensorStore sharedSensorStore] addSensor:motionFeaturesSensor];
+//    
+//    //commit motion energy
+//    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                        CSroundedNumber(magnitudeAvg, 3), @"value",
+//                                        CSroundedNumber(timestamp, 3),@"date",
+//                                        nil];
+    //[motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
+    [motionEnergySensor insertOrUpdateDataPointWithValue:CSroundedNumber(magnitudeAvg, 3) time:time];
     
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
 							CSroundedNumber(magnitudeAvg, 3), accelerationAvg,
@@ -392,11 +397,12 @@ void someScheduleFunction(void* context) {
 							//@"", rotationKurtosis,
 							nil];
     
-    valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        value, @"value",
-                                        CSroundedNumber(timestamp, 3),@"date",
-                                        nil];
-    [motionFeaturesSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionFeaturesSensor.sensorId];
+//    valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                        value, @"value",
+//                                        CSroundedNumber(timestamp, 3),@"date",
+//                                        nil];
+    //[motionFeaturesSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionFeaturesSensor.sensorId];
+    [motionFeaturesSensor insertOrUpdateDataPointWithValue:value time:time];
 }
 
 - (void) commitBurst:(NSArray*)deviceMotionArray {
@@ -514,6 +520,7 @@ void someScheduleFunction(void* context) {
     BOOL hasRotation = rotationSensor != nil && rotationSensor.isEnabled;
     
     NSTimeInterval timestamp = motion.timestamp + timestampOffset;
+    NSDate* time = [[NSDate alloc] initWithTimeIntervalSince1970:timestamp];
     
     
     //Commit samples for the sensors
@@ -529,11 +536,12 @@ void someScheduleFunction(void* context) {
                                         CSroundedNumber(yaw, 3), attitudeYawKey,
                                         nil];
         
-        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            newItem, @"value",
-                                            CSroundedNumber(timestamp, 3), @"date",
-                                            nil];
-        [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
+//        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                            newItem, @"value",
+//                                            CSroundedNumber(timestamp, 3), @"date",
+//                                            nil];
+//        [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
+        [orientationSensor insertOrUpdateDataPointWithValue:newItem time:time];
         
     }
     
@@ -549,12 +557,13 @@ void someScheduleFunction(void* context) {
                                         CSroundedNumber(z * G, 3), CSaccelerationZKey,
                                         nil];
         
-        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            newItem, @"value",
-                                            CSroundedNumber(timestamp, 3),@"date",
-                                            nil];
-        
-        [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
+//        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                            newItem, @"value",
+//                                            CSroundedNumber(timestamp, 3),@"date",
+//                                            nil];
+//        
+//        [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
+        [accelerometerSensor insertOrUpdateDataPointWithValue:newItem time:time];
         
     }
     
@@ -569,11 +578,12 @@ void someScheduleFunction(void* context) {
                                         CSroundedNumber(z, 3), CSaccelerationZKey,
                                         nil];
         
-        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            newItem, @"value",
-                                            CSroundedNumber(timestamp, 3),@"date",
-                                            nil];
-        [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
+//        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                            newItem, @"value",
+//                                            CSroundedNumber(timestamp, 3),@"date",
+//                                            nil];
+//        [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
+        [accelerometerSensor insertOrUpdateDataPointWithValue:newItem time:time];
     }
     
     if (hasRotation) {
@@ -586,11 +596,12 @@ void someScheduleFunction(void* context) {
                                         CSroundedNumber(yaw, 3), attitudeYawKey,
                                         nil];
         
-        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            newItem, @"value",
-                                            CSroundedNumber(timestamp, 3),@"date",
-                                            nil];
-        [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];
+//        NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                            newItem, @"value",
+//                                            CSroundedNumber(timestamp, 3),@"date",
+//                                            nil];
+//        [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];
+        [accelerometerSensor insertOrUpdateDataPointWithValue:newItem time:time];
     }
 }
 

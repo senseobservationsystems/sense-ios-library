@@ -88,14 +88,15 @@ static NSString* eventKey = @"event";
 									CSroundedNumber(accuracy, 8), accuracyKey,
 									nil];
 	
-	double timestamp = [eventDate timeIntervalSince1970];
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										newItem, @"value",
-										CSroundedNumber(timestamp, 3), @"date",
-										nil];
-	
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+//	double timestamp = [eventDate timeIntervalSince1970];
+//	
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										newItem, @"value",
+//										CSroundedNumber(timestamp, 3), @"date",
+//										nil];
+//	
+//	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+    [self insertOrUpdateDataPointWithValue:newItem time:eventDate];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

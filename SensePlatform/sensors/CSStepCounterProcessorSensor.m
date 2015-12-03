@@ -28,6 +28,7 @@ static NSString* stepsKey = @"total";
 - (NSString*) deviceType {return @"apple_motion_processor";}
 + (BOOL) isAvailable {return [CMStepCounter isStepCountingAvailable];}
 
+
 - (NSDictionary*) sensorDescription {
 	//create description for data format. programmer: make SURE it matches the format used to send data
 	NSDictionary* format = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -104,13 +105,14 @@ static NSString* stepsKey = @"total";
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
                            [NSNumber numberWithLongLong:steps], stepsKey,
                            nil];
-    NSTimeInterval timestamp = [date timeIntervalSince1970];
-    
-    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        value, @"value",
-                                        CSroundedNumber(timestamp, 3),@"date",
-                                        nil];
-    [self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+//    NSTimeInterval timestamp = [date timeIntervalSince1970];
+//    
+//    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                        value, @"value",
+//                                        CSroundedNumber(timestamp, 3),@"date",
+//                                        nil];
+//    [self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+    [self insertOrUpdateDataPointWithValue:value time:date];
     
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
     [prefs setInteger:(int)steps forKey:CSCMLastStepCount];

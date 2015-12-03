@@ -154,16 +154,16 @@ CLLocation* previousLocation;
 		[newItem setObject:CSroundedNumber(altitude, 0) forKey:altitudeKey];
 		[newItem setObject:CSroundedNumber(verticalAccuracy, 0) forKey:verticalAccuracyKey];
 	}
+    
+    [self insertOrUpdateDataPointWithValue:newItem time:location.timestamp];
 	
-	double timestamp = [location.timestamp timeIntervalSince1970];
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										newItem, @"value",
-									 	CSroundedNumber(timestamp, 3), @"date",
-										nil];
-	
-	
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+//	double timestamp = [location.timestamp timeIntervalSince1970];
+//	
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										newItem, @"value",
+//									 	CSroundedNumber(timestamp, 3), @"date",
+//										nil];
+//	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
 	
 	return true;
 }

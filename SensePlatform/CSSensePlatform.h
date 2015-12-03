@@ -103,7 +103,7 @@ Note that if registration fails, there is no way for the developer or end-user t
  *
  *  @return whether the login succeeded
  */
-+ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error;
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler andError:(NSError **) error;
 
 /**
  *  Set the credentials to log in on Common Sense

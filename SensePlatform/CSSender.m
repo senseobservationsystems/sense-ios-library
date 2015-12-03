@@ -19,6 +19,9 @@
 #import "NSData+GZIP.h"
 #import "CSErrorDomain.h"
 #import "CSSettings.h"
+#import "CSSensorConstants.h"
+
+@import DSESwift;
 
 static NSString* kUrlBaseURL = @"https://api.sense-os.nl";
 static NSString* kUrlBaseURLLive = @"https://api.sense-os.nl";
@@ -173,13 +176,23 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
         
 		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
+        
+        NSLog(@"### sender: %@", self);
+        NSLog(@"###Login successful: %@", self.sessionCookie);
+        
+        DataStorageEngine* dse = [DataStorageEngine getInstance];
+        DSEConfig* config = [[DSEConfig alloc] init];
+        config.sessionId = [jsonResponse valueForKey:@"session_id"];
+        NSError* error = nil;
+        NSLog(@"### settting the new session ID: %@", config.sessionId);
+        [dse setup:config error:&error];
 	}
     
 	return succeeded;
 }
 
 - (NSString*) getUserId{
-    return [[[self doJsonRequestTo:[self makeUrlFor:@"devices"] withMethod:@"GET" withInput:nil] valueForKey:@"user"] valueForKey:@"id"];
+    return [[[self doJsonRequestTo:[self makeUrlFor:@"users/current"] withMethod:@"GET" withInput:nil] valueForKey:@"user"] valueForKey:@"id"];
 }
 
 - (BOOL) logout
@@ -299,87 +312,87 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	return YES;
 }
 
-- (BOOL) uploadData:(NSArray*) data forSensorId:(NSString*)sensorId {	
-	NSDictionary* sensorData = [NSDictionary dictionaryWithObjectsAndKeys:
-							  data, @"data", nil];
-    //make session
-	if (sessionCookie == nil) {
-		if (NO == [self login])
-			return NO;
-        
-	}
-	NSString* method = @"POST";
-    NSURL* url = [self makeUrlForSensor:sensorId];
-	NSData* contents;
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
-	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
-	
-	//handle unauthorized error
-	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
-		//relogin (session might've expired)
-		if ([self login]) {
-            //redo request
-            response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
-        }
-	}
-    
-	//check response code
-	if ([response statusCode] > 200 && [response statusCode] < 300)
-	{
-        return YES;
-	} else {
-        //Ai, some error that couldn't be resolved. Log and return error
-		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
-		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
-		NSLog(@"Responded: %@", responded);
-		return NO;
-    }
-}
-
-- (BOOL) uploadDataForMultipleSensors:(NSArray*) data {
-	NSDictionary* sensorData = [NSDictionary dictionaryWithObjectsAndKeys:
-                                data, @"sensors", nil];
-    //make session
-	if (sessionCookie == nil) {
-		if (NO == [self login])
-			return NO;
-        
-	}
-	NSString* method = @"POST";
-    NSURL* url = [self makeUrlFor:kUrlUploadMultipleSensors];
-	NSData* contents;
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
-    if (error) {
-        NSLog(@"Error serializing data to json.");
-        return NO;
-    }
-	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
-	
-	//handle unauthorized error
-	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
-		//relogin (session might've expired)
-		if ([self login]) {
-            //redo request
-            response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
-        }
-	}
-    
-	//check response code
-	if ([response statusCode] > 200 && [response statusCode] < 300)
-	{
-        return YES;
-	} else {
-        //Ai, some error that couldn't be resolved. Log and return error
-		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
-		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
-		NSLog(@"Responded: %@", responded);
-		return NO;
-    }
-}
+//- (BOOL) uploadData:(NSArray*) data forSensorId:(NSString*)sensorId {	
+//	NSDictionary* sensorData = [NSDictionary dictionaryWithObjectsAndKeys:
+//							  data, @"data", nil];
+//    //make session
+//	if (sessionCookie == nil) {
+//		if (NO == [self login])
+//			return NO;
+//        
+//	}
+//	NSString* method = @"POST";
+//    NSURL* url = [self makeUrlForSensor:sensorId];
+//	NSData* contents;
+//    NSError *error = nil;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
+//	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
+//	
+//	//handle unauthorized error
+//	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
+//		//relogin (session might've expired)
+//		if ([self login]) {
+//            //redo request
+//            response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
+//        }
+//	}
+//    
+//	//check response code
+//	if ([response statusCode] > 200 && [response statusCode] < 300)
+//	{
+//        return YES;
+//	} else {
+//        //Ai, some error that couldn't be resolved. Log and return error
+//		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
+//		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+//		NSLog(@"Responded: %@", responded);
+//		return NO;
+//    }
+//}
+//
+//- (BOOL) uploadDataForMultipleSensors:(NSArray*) data {
+//	NSDictionary* sensorData = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                data, @"sensors", nil];
+//    //make session
+//	if (sessionCookie == nil) {
+//		if (NO == [self login])
+//			return NO;
+//        
+//	}
+//	NSString* method = @"POST";
+//    NSURL* url = [self makeUrlFor:kUrlUploadMultipleSensors];
+//	NSData* contents;
+//    NSError *error = nil;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sensorData options:0 error:&error];
+//    if (error) {
+//        NSLog(@"Error serializing data to json.");
+//        return NO;
+//    }
+//	NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
+//	
+//	//handle unauthorized error
+//	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
+//		//relogin (session might've expired)
+//		if ([self login]) {
+//            //redo request
+//            response = [self doRequestTo:url method:method input:json output:&contents cookie:sessionCookie];
+//        }
+//	}
+//    
+//	//check response code
+//	if ([response statusCode] > 200 && [response statusCode] < 300)
+//	{
+//        return YES;
+//	} else {
+//        //Ai, some error that couldn't be resolved. Log and return error
+//		NSLog(@"%@ \"%@\" failed with status code %ld", method, url, (long)[response statusCode]);
+//		NSString* responded = [[NSString alloc] initWithData:contents encoding:NSUTF8StringEncoding];
+//		NSLog(@"Responded: %@", responded);
+//		return NO;
+//    }
+//}
 
 - (NSArray*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints {
 	return [[self doJsonRequestTo:[self makeUrlForGettingSensorData:sensorId nrPoints:nrPoints order:@"DESC"] withMethod:@"GET" withInput:nil] valueForKey:@"data"];

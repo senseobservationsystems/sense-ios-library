@@ -82,12 +82,13 @@
 }
 
 
-- (void) commitValue:(id)value withTimestamp:(NSTimeInterval)timestamp {
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										value, @"value",
-										CSroundedNumber(timestamp, 3),@"date",
-										nil];
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+- (void) commitValue:(id)value withTimestamp:(NSDate*) time {
+//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//										value, @"value",
+//										CSroundedNumber(timestamp, 3),@"date",
+//										nil];
+//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    [self insertOrUpdateDataPointWithValue:value time:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

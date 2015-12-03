@@ -88,14 +88,18 @@ static NSString* disconnected = @"idle";
 			NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 											callState, stateKey,
 											nil];
+            
+            NSDate* time = [NSDate date];
 			
-			NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-			
-			NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-												newItem, @"value",
-												timestamp,@"date",
-												nil];
-			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];
+//			NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
+//			
+//			NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//												newItem, @"value",
+//												timestamp,@"date",
+//												nil];
+//			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];
+            
+            [selfRef insertOrUpdateDataPointWithValue:newItem time:time];
 			
 		};
 	} else {

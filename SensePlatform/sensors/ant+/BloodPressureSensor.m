@@ -239,17 +239,18 @@ static const NSTimeInterval SCAN_INTERVAL = 60;
     USHORT heartRate = record.heartRate;
     USHORT diastollicPressure = record.diastolicPressure;
     USHORT systollicPressure = record.systolicPressure;
-    NSTimeInterval timestamp = [record.timestamp timeIntervalSince1970];
-    
+    //NSTimeInterval timestamp = [record.timestamp timeIntervalSince1970];
+    NSDate time = record.timestamp;
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
                            [NSString stringWithFormat:@"%i", (int) heartRate], heartRateKey,
                            [NSString stringWithFormat:@"%i", (int) systollicPressure], systollicPressureKey,
                            [NSString stringWithFormat:@"%i", (int) diastollicPressure], diastollicPressureKey,
                            nil];
-    NSDictionary* timeValuePair = [NSDictionary dictionaryWithObjectsAndKeys:[value JSONRepresentation], @"value",
-                                   [NSString stringWithFormat:@"%.3f", timestamp], @"date",
-                                   nil];
-    [dataStore commitFormattedData:timeValuePair forSensorId:self.sensorId];
+//    NSDictionary* timeValuePair = [NSDictionary dictionaryWithObjectsAndKeys:[value JSONRepresentation], @"value",
+//                                   [NSString stringWithFormat:@"%.3f", timestamp], @"date",
+//                                   nil];
+
+    [self insertOrUpdateDataPointWithValue:value time:record.timestamp]
 }
 
 

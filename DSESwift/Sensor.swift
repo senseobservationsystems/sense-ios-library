@@ -79,7 +79,7 @@ public enum SortOrder{
      * @param time: time of the dataPoint
      * Throws an Exception if saving the value fails.
      **/
-    public func insertOrUpdateDataPoint(value: AnyObject, _ time: NSDate) throws {
+    public func insertOrUpdateDataPoint(value value: AnyObject, time: NSDate) throws {
         let dataStructure = try DatabaseHandler.getSensorProfile(self.name)?.dataStructure
         if !JSONUtils.validateValue(value, schema: dataStructure!){
             throw DSEError.IncorrectDataStructure
@@ -112,7 +112,10 @@ public enum SortOrder{
     *  //TODO add a list of potential exceptions
     */
     public func setSensorConfig(sensorConfig: SensorConfig) throws {
-        applyNewConfig(sensorConfig)
+        self.remoteDownloadEnabled = sensorConfig.downloadEnabled
+        self.remoteUploadEnabled = sensorConfig.uploadEnabled
+        self.meta = sensorConfig.meta
+        self.persistLocally = sensorConfig.persist
         try DatabaseHandler.updateSensor(self)
     }
     
@@ -133,12 +136,4 @@ public enum SortOrder{
     }
     
     
-    // MARK: helper functions
-    
-    private func applyNewConfig(sensorConfig: SensorConfig){
-        self.remoteDownloadEnabled = sensorConfig.downloadEnabled
-        self.remoteUploadEnabled = sensorConfig.uploadEnabled
-        self.meta = sensorConfig.meta
-        self.persistLocally = sensorConfig.persist
-    }
 }

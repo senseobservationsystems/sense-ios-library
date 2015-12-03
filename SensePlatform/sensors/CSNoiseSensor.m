@@ -28,6 +28,7 @@
 #import "Formatting.h"
 #import "CSSensePlatform.h"
 #import "CSScreenSensor.h"
+#import "CSSensorConstants.h"
 
 static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 
@@ -295,16 +296,18 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     volumeOfAudioSignal = 10 * (log10(avgOfRawSampleData));
     
     //take timestamp
-    double timestamp = [[NSDate date] timeIntervalSince1970];
+//    double timestamp = [[NSDate date] timeIntervalSince1970];
+    NSDate* time = [NSDate date];
     
     double level = volumeOfAudioSignal;
 	
-    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        CSroundedNumber(level, 1), @"value",
-                                        CSroundedNumber(timestamp, 3), @"date",
-                                        nil];
+//    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                                        CSroundedNumber(level, 1), @"value",
+//                                        CSroundedNumber(timestamp, 3), @"date",
+//                                        nil];
 	if (numberOfPackets > 0) {
-        [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+        //[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+        [self insertOrUpdateDataPointWithValue:[[NSNumber alloc] initWithDouble:level] time:time];
     }
     
     // Total duration of recording

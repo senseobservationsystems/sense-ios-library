@@ -17,7 +17,7 @@ import SwiftyJSON
 class DatabaseHandlerTests: XCTestCase {
     
     let APPKEY_STAGING = "o4cbgFZjPPDA6GO32WipJBLnyazu8w4o"
-    let sensorConfig = SensorConfig(meta: Dictionary<String, AnyObject>(), uploadEnabled: true, downloadEnabled: true, persist: true)
+    let sensorConfig = SensorConfig()
     var accountUtils: CSAccountUtils?
     let dataSyncer = DataSyncer()
     var config = DSEConfig()
@@ -38,6 +38,11 @@ class DatabaseHandlerTests: XCTestCase {
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
         registerAndLogin(accountUtils!)
         
+        sensorConfig.meta = Dictionary<String, AnyObject>()
+        sensorConfig.uploadEnabled = true
+        sensorConfig.downloadEnabled = true
+        sensorConfig.persist = true
+        
         // set the config with CORRECT default values
         self.config.syncInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
@@ -52,8 +57,8 @@ class DatabaseHandlerTests: XCTestCase {
             XCTFail("Fail in setup")
         }
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
+        KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
         KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
         
         do{
@@ -253,7 +258,7 @@ class DatabaseHandlerTests: XCTestCase {
             XCTAssertEqual(dataPoints[0].getValueInString(), "String value")
             
             dataPoint = dataPoints[0]
-            dataPoint.setValue("String value updated")
+            dataPoint.setValueWithString("String value updated")
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
             let updatedDataPoints = try! DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(updatedDataPoints.count, 1)

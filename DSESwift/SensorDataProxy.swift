@@ -282,6 +282,8 @@ public class SensorDataProxy {
     
     private static func getHeaders() -> [String: String]{
         let headers = ["APPLICATION-KEY": self.getAppKey(), "SESSION-ID": self.getSessionId()]
+        print("--- appkey: ", getAppKey())
+        print("--- sessionId: ", getSessionId())
         return headers
     }
     

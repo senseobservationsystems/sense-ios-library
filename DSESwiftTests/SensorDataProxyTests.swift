@@ -35,8 +35,8 @@ class SensorDataProxyTests: XCTestCase {
         self.config.sessionId = (accountUtils?.sessionId)!
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
+        KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
         KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()

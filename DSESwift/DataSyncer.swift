@@ -8,7 +8,6 @@
 
 import Foundation
 import RealmSwift
-import PromiseKit
 import CoreLocation
 import SwiftyJSON
 
@@ -126,20 +125,25 @@ class DataSyncer : NSObject {
         dispatch_async(data_syncer_process_queue, {
             do{
                 // step 1
+                print("step1")
                 try self.processDeletionRequests()
                 // step 2
+                print("step2")
                 try self.uploadSensorDataToRemote()
                 // step 3
+                print("step3")
                 try self.downloadSensorsFromRemote()
                 // step 4
+                print("step4")
                 try self.downloadSensorsDataFromRemote()
                 // step 5
+                print("step5")
                 try self.cleanLocalStorage()
                 if(callback != nil){
                     callback!.onSuccess()
                 }
             }catch{ let e = error as! DSEError
-                print("ERROR: DataSyncer - There has been an error during syncing:", error)
+                NSLog("ERROR: DataSyncer - There has been an error during syncing:%d", e.rawValue)
                 if(callback != nil){
                     callback!.onFailure(e)
                 }
