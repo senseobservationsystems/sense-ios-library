@@ -57,6 +57,7 @@
 		273CEC7A1C11A99C009D9556 /* EventBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273CEC5B1C11A8CD009D9556 /* EventBus.swift */; };
 		273CEC7C1C11A9B4009D9556 /* EventBusConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273CEC7B1C11A9B4009D9556 /* EventBusConstants.swift */; };
 		273CEC7D1C11CA8C009D9556 /* EventBusConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273CEC7B1C11A9B4009D9556 /* EventBusConstants.swift */; };
+		273CEC8A1C11D917009D9556 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3877E21BF381020078A85D /* SwiftyJSON.framework */; };
 		27431DEB1BA32F3C00729FB2 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEA1BA32F3C00729FB2 /* Sensor.swift */; };
 		27431DEF1BA32FEF00729FB2 /* SensorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27431DEE1BA32FEF00729FB2 /* SensorConfig.swift */; };
 		27457AAC1BFC8CAC0028CF58 /* SensorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27457AAB1BFC8CAC0028CF58 /* SensorTests.swift */; };
@@ -470,6 +471,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				273CEC8A1C11D917009D9556 /* SwiftyJSON.framework in Frameworks */,
 				273CEC6D1C11A988009D9556 /* EventBus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1518,12 +1520,16 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = EventBusTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = tatsuya.EventBusTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1543,11 +1549,15 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = EventBusTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = tatsuya.EventBusTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -10,5 +10,5 @@ import Foundation
 
 @objc public class EventBusConstants: NSObject{
     
-    static let ACCELEROMETER_NEW_DATA = "eventbus_accelerometer_new_data"
+    static let ACCELEROMETER_NEW_DATA = "eventbus.accelerometer.new_data"
 }
