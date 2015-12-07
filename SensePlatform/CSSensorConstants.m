@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CSSensorConstants.h"
 
-NSString* const CSSorceName_iOS = @"aim-ios-sdk";
+NSString* const CSSorceName_iOS = @"sense-library";
 //notifications
 NSString* const CSsettingLoginChangedNotification = @"CSsettingLoginChangedNotification";
 NSString* const CSanySettingChangedNotification = @"CSanySettingChangedNotification";

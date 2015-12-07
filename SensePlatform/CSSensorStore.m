@@ -234,6 +234,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
         NSLog(@"Error:%ld", (long)error);
         failure();
+        //TODO logout??
     };
     
     DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
@@ -258,7 +259,20 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         });
     }
     [self applyGeneralSettings];
+    [self configureSensors];
     completeHandler();
+}
+
+-(void) configureSensors{
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    NSArray* sensors = [dse getSensors:CSSorceName_iOS];
+    for(Sensor* sensor in sensors){
+        NSLog(@"----setting sensors to upload:%@", sensor);
+        NSError* error = nil;
+        SensorConfig* config = [[SensorConfig alloc] init];
+        config.uploadEnabled = true;
+        [sensor setSensorConfig:config error:&error];
+    }
 }
 
 //- (void) addSensor:(CSSensor*) sensor {
