@@ -876,7 +876,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\n\ncat $VERSIONFILE | grep $version\n\nif [ $? -ne 0 ]; then\n    PRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\n    POST=\"#endif\"\n    echo -e ${PRE} > ${VERSIONFILE}\n    echo \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\n    echo ${POST} >> ${VERSIONFILE}\nfi";
+			shellScript = "VERSIONFILE=\"${PROJECT_DIR}/include/SensePlatform/CSVersion.h\"\nversion=`git describe --tags --dirty`\n\ntouch $VERSIONFILE\ncat $VERSIONFILE | grep $version\n\nif [ $? -ne 0 ]; then\n    PRE=\"#ifndef CSVERSION_H\\n#define CSVERSION_H\\n\"\n    POST=\"#endif\"\n    echo -e ${PRE} > ${VERSIONFILE}\n    echo \"#define SENSE_PLATFORM_VERSION \\\"$version\\\"\" >> ${VERSIONFILE}\n    echo ${POST} >> ${VERSIONFILE}\nfi";
 		};
 		DC097FAA1ABAD3C100BDDD09 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
