@@ -97,7 +97,7 @@ static NSString* levelKey = @"level";
         
         NSError* error = nil;
         DataStorageEngine* dse = [DataStorageEngine getInstance];
-        Sensor* sensor = [dse getSensor:self.name sensorName:CSSorceName_iOS error:&error];
+        Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:self.name error:&error];
         
         error = nil;
         [sensor insertOrUpdateDataPointWithValue:newItem time:[NSDate date] error:&error];

@@ -70,8 +70,8 @@ import Foundation
     /**
      * Return the timestamp in Int with milliseconds accuracy
      **/
-    public func getTimeInMillis() -> Int {
-        return Int(self.time.timeIntervalSince1970 * 1000)
+    public func getTimeInMillis() -> Double {
+        return round(self.time.timeIntervalSince1970 * 1000)
     }
     
     /**

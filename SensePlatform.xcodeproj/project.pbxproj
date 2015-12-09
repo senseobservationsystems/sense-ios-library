@@ -59,6 +59,7 @@
 		276CBB811BB52B9D001C287D /* testObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB801BB52B9D001C287D /* testObject.swift */; };
 		276CBB831BB56E12001C287D /* DataStorageEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB821BB56E12001C287D /* DataStorageEngine.swift */; };
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; };
+		276D07C61C16492700DDFF08 /* DSESwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2779AF9D1C1061B600855421 /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC0C51BA7009200EE6DE0 /* libsqlcipher */; };
 		277E77471BF633CB00215338 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 277E77461BF633CB00215338 /* OHHTTPStubs.framework */; };
 		278292511BFF5DA9007027A0 /* DSEConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278292501BFF5DA9007027A0 /* DSEConstants.swift */; };
@@ -105,7 +106,6 @@
 		FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */; };
 		FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */; };
 		FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */; };
-		FA66C29F1BA86E1500281B6F /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		FA66C2A21BA86E9E00281B6F /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; };
 		FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */; };
@@ -238,6 +238,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		276D07C51C1648F600DDFF08 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				276D07C61C16492700DDFF08 /* DSESwift.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FAA6145E1BA81D6900B05FCD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -452,7 +462,6 @@
 			files = (
 				2779AF9D1C1061B600855421 /* libsqlcipher in Frameworks */,
 				2709FF801BAF0FDA0051E8B2 /* Security.framework in Frameworks */,
-				FA66C29F1BA86E1500281B6F /* DSESwift.framework in Frameworks */,
 				FA4CDBA61BA70E8B00DB44B1 /* SystemConfiguration.framework in Frameworks */,
 				FA4CDB9F1BA70DE900DB44B1 /* CoreLocation.framework in Frameworks */,
 				FA4CDBA11BA70E1100DB44B1 /* CoreMotion.framework in Frameworks */,
@@ -924,6 +933,7 @@
 				FABCC0881BA7003500EE6DE0 /* Frameworks */,
 				FABCC0891BA7003500EE6DE0 /* Headers */,
 				FABCC08A1BA7003500EE6DE0 /* Resources */,
+				276D07C51C1648F600DDFF08 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1509,10 +1519,12 @@
 					"$(PROJECT_DIR)/SensePlatform/libraries/sqlcipher",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1551,10 +1563,12 @@
 					"$(PROJECT_DIR)/SensePlatform/libraries/sqlcipher",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1639,12 +1653,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1681,11 +1697,13 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sense.DSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
