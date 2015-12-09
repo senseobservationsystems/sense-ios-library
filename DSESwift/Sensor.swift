@@ -22,11 +22,11 @@ public enum SortOrder{
 */
 @objc public class Sensor: NSObject{
     var id = -1
-    var name = ""
+    public var name = ""
     var meta: Dictionary<String, AnyObject>
-    var remoteUploadEnabled = true
-    var remoteDownloadEnabled = true
-    var persistLocally = true
+    public private(set) var remoteUploadEnabled = true
+    public private(set) var remoteDownloadEnabled = true
+    public private(set) var persistLocally = true
     var userId = ""
     var source = ""
     var remoteDataPointsDownloaded = false

@@ -388,9 +388,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     // TODO: refactor so we don't need all this indirection
     return [sensorStore locationPermissionState];
 }
-//
-//+ (void) removeLocalData {
-//    [[CSSensorStore sharedSensorStore] removeLocalData];
-//}
+
+
 
 @end

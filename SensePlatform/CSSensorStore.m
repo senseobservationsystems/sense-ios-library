@@ -249,7 +249,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
--(void) onDSEInitializationSuccessWithHandler: (void (^)())completeHandler {
+-(void) onDSEInitializationSuccessWithHandler: (void (^)())success {
     //set settings and initialise sensors
     if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
         [self instantiateSensors];
@@ -260,19 +260,41 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
     [self applyGeneralSettings];
     [self configureSensors];
-    completeHandler();
+    success();
 }
 
 -(void) configureSensors{
     DataStorageEngine* dse = [DataStorageEngine getInstance];
-    NSArray* sensors = [dse getSensors:CSSorceName_iOS];
-    for(Sensor* sensor in sensors){
-        NSLog(@"----setting sensors to upload:%@", sensor);
-        NSError* error = nil;
-        SensorConfig* config = [[SensorConfig alloc] init];
-        config.uploadEnabled = true;
-        [sensor setSensorConfig:config error:&error];
+    NSArray* localSensors = [dse getSensors:CSSorceName_iOS];
+    for(Sensor* sensor in localSensors){
+        NSLog(@"----Setting SensorOptions for: %@", sensor.name);
+        NSDictionary* sensorOptions = [self getDefaultSensorOptionForSensor:sensor.name];
+        if (sensorOptions != nil){
+            NSLog(@"----setting sensor: %@ config:%@", sensor.name, sensorOptions);
+            NSError* error = nil;
+            SensorConfig* config = [[SensorConfig alloc] init];
+            config.uploadEnabled = [sensorOptions[@"upload_enabled"] boolValue];
+            config.downloadEnabled = [sensorOptions[@"download_enabled"] boolValue];
+            config.persist = [sensorOptions[@"persist_locally"] boolValue];
+            [sensor setSensorConfig:config error:&error];
+        }
     }
+}
+
+- (NSDictionary*) getDefaultSensorOptionForSensor:(NSString*) sensorName{
+    // get default sensor options from json file
+    NSError* error = nil;
+    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"default_sensor_options" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    NSArray* arrayOfSensorOptions = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    // find the corresponding one
+    for(NSDictionary* sensorOptions in arrayOfSensorOptions){
+        NSLog(@"----Searching through sensorOptions for : %@ sensor: %@ match?:%d", sensorName, sensorOptions[@"sensor_name"], [sensorOptions[@"sensor_name"] isEqualToString: sensorName]);
+        if([sensorOptions[@"sensor_name"] isEqualToString: sensorName]){
+            return sensorOptions;
+        }
+    }
+    return nil;
 }
 
 //- (void) addSensor:(CSSensor*) sensor {

@@ -82,7 +82,7 @@
     Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:self.name error:&error];
     
     error = nil;
-    NSLog(@"Sensor:%@, value: %@, time: %@, error:%@", sensor, value, time, error);
+    NSLog(@"Sensor:%@, value: %@, time: %@, error:%@", sensor.name, value, time, error);
     
     [sensor insertOrUpdateDataPointWithValue:value time:time error:&error];
 }

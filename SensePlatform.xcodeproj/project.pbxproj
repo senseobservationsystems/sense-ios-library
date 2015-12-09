@@ -61,6 +61,7 @@
 		276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 276CBB851BB57838001C287D /* AccountUtilsForTest.m */; };
 		276D07C61C16492700DDFF08 /* DSESwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2779AF9D1C1061B600855421 /* libsqlcipher in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC0C51BA7009200EE6DE0 /* libsqlcipher */; };
+		277B16F91C1861D60001B7FC /* default_sensor_options.json in Resources */ = {isa = PBXBuildFile; fileRef = 279A5F8A1C18291B003389B4 /* default_sensor_options.json */; };
 		277E77471BF633CB00215338 /* OHHTTPStubs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 277E77461BF633CB00215338 /* OHHTTPStubs.framework */; };
 		278292511BFF5DA9007027A0 /* DSEConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278292501BFF5DA9007027A0 /* DSEConstants.swift */; };
 		27858B821BE764BA004FC01E /* DataDeletionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B7D1BE764BA004FC01E /* DataDeletionRequest.swift */; };
@@ -71,6 +72,7 @@
 		27858B8B1BE7656F004FC01E /* JSONUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B881BE7656F004FC01E /* JSONUtils.swift */; };
 		27858B8C1BE7656F004FC01E /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27858B891BE7656F004FC01E /* KeychainWrapper.swift */; };
 		278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */; };
+		279A5F8F1C185268003389B4 /* SensePlatformTestss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A5F8E1C185268003389B4 /* SensePlatformTestss.swift */; };
 		27A1189F1C0DE0570095A34B /* DSECallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A1189E1C0DE0570095A34B /* DSECallback.m */; };
 		27A118A41C0DFD9C0095A34B /* CSSensorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A118A31C0DFD9C0095A34B /* CSSensorConstants.m */; };
 		27A118A51C0EF64E0095A34B /* CSSensorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A118A21C0DFBEC0095A34B /* CSSensorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,7 +110,6 @@
 		FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */; };
 		FA66C2A21BA86E9E00281B6F /* SensePlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABCC08C1BA7003500EE6DE0 /* SensePlatform.framework */; };
 		FABCC08F1BA7003500EE6DE0 /* SensePlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */; };
 		FABCC1191BA7009200EE6DE0 /* CSApplicationStateChange.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A31BA7009200EE6DE0 /* CSApplicationStateChange.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC11A1BA7009200EE6DE0 /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */; };
 		FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -221,6 +222,13 @@
 			remoteGlobalIDString = FAC4EC851BA086BC00B24CAA;
 			remoteInfo = DSESwift;
 		};
+		277B16F71C18615A0001B7FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FABCC08B1BA7003500EE6DE0;
+			remoteInfo = SensePlatform;
+		};
 		FA66C2A01BA86E1B00281B6F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E820D6115D40AB50001A3EC /* Project object */;
@@ -285,6 +293,9 @@
 		27858B881BE7656F004FC01E /* JSONUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONUtils.swift; path = Utils/JSONUtils.swift; sourceTree = "<group>"; };
 		27858B891BE7656F004FC01E /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeychainWrapper.swift; path = Utils/KeychainWrapper.swift; sourceTree = "<group>"; };
 		278CCD071BD0F30300BC7B9C /* CSAccountUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSAccountUtils.swift; sourceTree = "<group>"; };
+		279A5F8A1C18291B003389B4 /* default_sensor_options.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = default_sensor_options.json; path = SensePlatform/Resources/default_sensor_options.json; sourceTree = "<group>"; };
+		279A5F8D1C185267003389B4 /* SensePlatformTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SensePlatformTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		279A5F8E1C185268003389B4 /* SensePlatformTestss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensePlatformTestss.swift; sourceTree = "<group>"; };
 		27A1189D1C0DD9710095A34B /* DSECallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSECallback.h; sourceTree = "<group>"; };
 		27A1189E1C0DE0570095A34B /* DSECallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSECallback.m; sourceTree = "<group>"; };
 		27A118A21C0DFBEC0095A34B /* CSSensorConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSSensorConstants.h; sourceTree = "<group>"; };
@@ -331,7 +342,6 @@
 		FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensePlatform.h; sourceTree = "<group>"; };
 		FABCC0901BA7003500EE6DE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FABCC0951BA7003500EE6DE0 /* SensePlatformTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SensePlatformTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SensePlatformTests.m; sourceTree = "<group>"; };
 		FABCC09C1BA7003500EE6DE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FABCC0A31BA7009200EE6DE0 /* CSApplicationStateChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSApplicationStateChange.h; sourceTree = "<group>"; };
 		FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
@@ -538,6 +548,14 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		279A5F891C18284B003389B4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				279A5F8A1C18291B003389B4 /* default_sensor_options.json */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		3E820D5F15D40AB50001A3EC = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +566,7 @@
 				27457AAA1BFC8CAC0028CF58 /* SensorTests */,
 				3E820D6C15D40AB50001A3EC /* Frameworks */,
 				3E820D6B15D40AB50001A3EC /* Products */,
+				279A5F891C18284B003389B4 /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -637,6 +656,7 @@
 		FABCC0991BA7003500EE6DE0 /* SensePlatformTests */ = {
 			isa = PBXGroup;
 			children = (
+				279A5F8E1C185268003389B4 /* SensePlatformTestss.swift */,
 				276CBB841BB57838001C287D /* AccountUtilsForTest.h */,
 				276CBB851BB57838001C287D /* AccountUtilsForTest.m */,
 				FA5DF79E1BA716F700FF9544 /* CSSensePlatformTest.m */,
@@ -644,8 +664,8 @@
 				FA5DF7A01BA716F700FF9544 /* CSSpatialProviderTest.m */,
 				FA5DF7A11BA716F700FF9544 /* CSStorageTest.m */,
 				FA5DF7A21BA716F700FF9544 /* DSECommonSenseProxyTest.m */,
-				FABCC09A1BA7003500EE6DE0 /* SensePlatformTests.m */,
 				FABCC09C1BA7003500EE6DE0 /* Info.plist */,
+				279A5F8D1C185267003389B4 /* SensePlatformTests-Bridging-Header.h */,
 			);
 			path = SensePlatformTests;
 			sourceTree = "<group>";
@@ -844,8 +864,8 @@
 				FABCC1531BA7009300EE6DE0 /* CSDynamicSensor.h in Headers */,
 				FABCC1241BA7009200EE6DE0 /* CSSensorIds.h in Headers */,
 				FA4CDBA81BA7126400DB44B1 /* CSVersion.h in Headers */,
-				FABCC1281BA7009200EE6DE0 /* CSSensorStore.h in Headers */,
 				27A118A61C0EF6770095A34B /* DSECallback.h in Headers */,
+				FABCC1281BA7009200EE6DE0 /* CSSensorStore.h in Headers */,
 				FABCC1711BA7009300EE6DE0 /* CSSpatialProvider.h in Headers */,
 				FABCC1611BA7009300EE6DE0 /* CSNoiseSensor.h in Headers */,
 				FABCC1471BA7009200EE6DE0 /* CSAccelerometerSensor.h in Headers */,
@@ -956,6 +976,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				277B16F81C18615A0001B7FC /* PBXTargetDependency */,
 			);
 			name = SensePlatformTests;
 			productName = SensePlatformTests;
@@ -1070,6 +1091,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				277B16F91C1861D60001B7FC /* default_sensor_options.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1228,9 +1250,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA5DF7A41BA716F700FF9544 /* CSSpatialProviderTest.m in Sources */,
+				279A5F8F1C185268003389B4 /* SensePlatformTestss.swift in Sources */,
 				276CBB861BB57838001C287D /* AccountUtilsForTest.m in Sources */,
 				FA5DF7A51BA716F700FF9544 /* CSStorageTest.m in Sources */,
-				FABCC09B1BA7003500EE6DE0 /* SensePlatformTests.m in Sources */,
 				FA5DF7A61BA716F700FF9544 /* DSECommonSenseProxyTest.m in Sources */,
 				FA5DF7A31BA716F700FF9544 /* CSSensePlatformTest.m in Sources */,
 			);
@@ -1287,6 +1309,11 @@
 			isa = PBXTargetDependency;
 			target = FAC4EC851BA086BC00B24CAA /* DSESwift */;
 			targetProxy = 27457AAF1BFC8CAC0028CF58 /* PBXContainerItemProxy */;
+		};
+		277B16F81C18615A0001B7FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FABCC08B1BA7003500EE6DE0 /* SensePlatform */;
+			targetProxy = 277B16F71C18615A0001B7FC /* PBXContainerItemProxy */;
 		};
 		FA66C2A11BA86E1B00281B6F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1595,6 +1622,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatformTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SensePlatformTests/SensePlatformTests-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -1619,6 +1647,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatformTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SensePlatformTests/SensePlatformTests-Bridging-Header.h";
 			};
 			name = Release;
 		};

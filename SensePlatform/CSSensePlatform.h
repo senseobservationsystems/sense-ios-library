@@ -18,12 +18,12 @@
 #import <CoreLocation/CoreLocation.h>
 
 //Include all header files
-#include "CSVersion.h"
-#include "CSSensor.h"
-#include "CSSensorIds.h"
-#include "CSSensorRequirements.h"
-#include "CSSettings.h"
-#include "CSLocationPermissionProtocol.h"
+#import "CSVersion.h"
+#import "CSSensor.h"
+#import "CSSensorIds.h"
+#import "CSSensorRequirements.h"
+#import "CSSettings.h"
+#import "CSLocationPermissionProtocol.h"
 
 extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;
@@ -356,6 +356,4 @@ These limitations are treated in a first in first out way. Hence, older data is 
 @deprecated This function will be removed in future version
  */
 + (void) applyIVitalitySettings;
-
-
 @end
