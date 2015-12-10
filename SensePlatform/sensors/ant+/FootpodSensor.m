@@ -91,7 +91,7 @@ static const NSString* speedKey = @"speed";
 //										[newItem JSONRepresentation], @"value",
 //										[NSString stringWithFormat:@"%.3f", timestamp], @"date",
 //										nil];
-//    [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+//  [dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     [self insertOrUpdateDataPointWithValue:newItem time:[NSDate date]];
 }
 

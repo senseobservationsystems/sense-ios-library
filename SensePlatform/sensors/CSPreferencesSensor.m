@@ -80,7 +80,7 @@ static NSString* valueKey = @"value";
 //										timestamp,@"date",
 //										nil];
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    [self insertOrUpdateDataPointWithValue:newItem time:time];
+    [self commitDataPointWithValue:newItem andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

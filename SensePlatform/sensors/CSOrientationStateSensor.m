@@ -85,7 +85,7 @@
 //										nil];
 	
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    [self insertOrUpdateDataPointWithValue:orientationString time:time];
+    [self commitDataPointWithValue:orientationString andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

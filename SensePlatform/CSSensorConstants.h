@@ -13,6 +13,8 @@ extern NSString* const CSSorceName_iOS;
 /** @name Settings */
 
 //notifications
+extern NSString* const kCSNewSensorDataNotification;
+extern NSString* const kCSNewMotionDataNotification;
 extern NSString* const CSsettingLoginChangedNotification;
 extern NSString* const settingSynchronisationChangedNotification;
 extern NSString* const CSanySettingChangedNotification;

@@ -78,7 +78,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 //	
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     
-    [self insertOrUpdateDataPointWithValue:newItem time:time];
+    [self commitDataPointWithValue:newItem andTime:time];
 
 }
 

@@ -386,7 +386,7 @@ void someScheduleFunction(void* context) {
 //                                        CSroundedNumber(timestamp, 3),@"date",
 //                                        nil];
     //[motionEnergySensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionEnergySensor.sensorId];
-    [motionEnergySensor insertOrUpdateDataPointWithValue:CSroundedNumber(magnitudeAvg, 3) time:time];
+    [motionEnergySensor commitDataPointWithValue:CSroundedNumber(magnitudeAvg, 3) andTime:time];
     
     NSDictionary* value = [NSDictionary dictionaryWithObjectsAndKeys:
 							CSroundedNumber(magnitudeAvg, 3), accelerationAvg,
@@ -402,7 +402,7 @@ void someScheduleFunction(void* context) {
 //                                        CSroundedNumber(timestamp, 3),@"date",
 //                                        nil];
     //[motionFeaturesSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:motionFeaturesSensor.sensorId];
-    [motionFeaturesSensor insertOrUpdateDataPointWithValue:value time:time];
+    [motionFeaturesSensor commitDataPointWithValue:value andTime:time];
 }
 
 - (void) commitBurst:(NSArray*)deviceMotionArray {
@@ -541,7 +541,7 @@ void someScheduleFunction(void* context) {
 //                                            CSroundedNumber(timestamp, 3), @"date",
 //                                            nil];
 //        [orientationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:orientationSensor.sensorId];
-        [orientationSensor insertOrUpdateDataPointWithValue:newItem time:time];
+        [orientationSensor commitDataPointWithValue:newItem andTime:time];
         
     }
     
@@ -563,7 +563,7 @@ void someScheduleFunction(void* context) {
 //                                            nil];
 //        
 //        [accelerometerSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerometerSensor.sensorId];
-        [accelerometerSensor insertOrUpdateDataPointWithValue:newItem time:time];
+        [accelerometerSensor commitDataPointWithValue:newItem andTime:time];
         
     }
     
@@ -583,7 +583,7 @@ void someScheduleFunction(void* context) {
 //                                            CSroundedNumber(timestamp, 3),@"date",
 //                                            nil];
 //        [accelerationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:accelerationSensor.sensorId];
-        [accelerometerSensor insertOrUpdateDataPointWithValue:newItem time:time];
+        [accelerometerSensor commitDataPointWithValue:newItem andTime:time];
     }
     
     if (hasRotation) {
@@ -601,7 +601,7 @@ void someScheduleFunction(void* context) {
 //                                            CSroundedNumber(timestamp, 3),@"date",
 //                                            nil];
 //        [rotationSensor.dataStore commitFormattedData:valueTimestampPair forSensorId:rotationSensor.sensorId];
-        [accelerometerSensor insertOrUpdateDataPointWithValue:newItem time:time];
+        [accelerometerSensor commitDataPointWithValue:newItem andTime:time];
     }
 }
 

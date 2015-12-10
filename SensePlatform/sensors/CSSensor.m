@@ -18,6 +18,7 @@
 #import "CSSettings.h"
 #import "CSSensorStore.h"
 #import "CSSensorConstants.h"
+#import "Formatting.h"
 
 @import DSESwift;
 
@@ -76,11 +77,21 @@
     return [CSSensor sensorIdFromName:self.name andDeviceType:self.deviceType andDevice:self.device];
 }
 
-- (void) insertOrUpdateDataPointWithValue:(id)value time: (NSDate*) time{
+- (void) commitDataPointWithValue:(id)value andTime: (NSDate*) time{
+    
+    // Broad cast the data
+    NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                value, @"value",
+                                                CSroundedNumber([time timeIntervalSince1970], 3),@"date",
+                                                nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:self.name userInfo:data];
+    
+    //Insert data to dse
     NSError* error = nil;
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:self.name error:&error];
     
+    //TODO: remove this
     error = nil;
     NSLog(@"Sensor:%@, value: %@, time: %@, error:%@", sensor.name, value, time, error);
     

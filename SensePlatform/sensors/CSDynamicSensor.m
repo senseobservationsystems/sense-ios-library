@@ -88,7 +88,7 @@
 //										CSroundedNumber(timestamp, 3),@"date",
 //										nil];
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    [self insertOrUpdateDataPointWithValue:value time:time];
+    [self commitDataPointWithValue:value andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

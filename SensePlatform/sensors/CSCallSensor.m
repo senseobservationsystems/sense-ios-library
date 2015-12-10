@@ -99,7 +99,7 @@ static NSString* disconnected = @"idle";
 //												nil];
 //			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];
             
-            [selfRef insertOrUpdateDataPointWithValue:newItem time:time];
+            [selfRef commitDataPointWithValue:newItem andTime:time];
 			
 		};
 	} else {

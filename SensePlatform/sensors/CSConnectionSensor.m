@@ -77,7 +77,7 @@
 //										timestamp,@"date",
 //										nil];
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    [self insertOrUpdateDataPointWithValue:statusString time:time];
+    [self commitDataPointWithValue:statusString andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

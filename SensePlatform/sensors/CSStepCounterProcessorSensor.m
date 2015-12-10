@@ -112,7 +112,7 @@ static NSString* stepsKey = @"total";
 //                                        CSroundedNumber(timestamp, 3),@"date",
 //                                        nil];
 //    [self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
-    [self insertOrUpdateDataPointWithValue:value time:date];
+    [self commitDataPointWithValue:value andTime:date];
     
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];
     [prefs setInteger:(int)steps forKey:CSCMLastStepCount];

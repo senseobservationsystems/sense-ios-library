@@ -307,7 +307,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 //                                        nil];
 	if (numberOfPackets > 0) {
         //[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-        [self insertOrUpdateDataPointWithValue:[[NSNumber alloc] initWithDouble:level] time:time];
+        [self commitDataPointWithValue:[[NSNumber alloc] initWithDouble:level] andTime:time];
     }
     
     // Total duration of recording

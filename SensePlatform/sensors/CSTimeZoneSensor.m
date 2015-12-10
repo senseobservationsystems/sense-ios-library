@@ -76,7 +76,7 @@ static NSString* idKey = @"id";
 
     NSLog(@"Timezone changed to %@ with offset %li", timeZoneString, (long)secondsFromGmt);
 
-    [self insertOrUpdateDataPointWithValue:value time:[NSDate date]];
+    [self commitDataPointWithValue:value andTime:[NSDate date]];
     
 //    [dataStore commitFormattedData:@{@"value":@{offsetKey:@(secondsFromGmt), idKey:timeZoneString}, @"date":timestamp} forSensorId:[self sensorId]];
 }

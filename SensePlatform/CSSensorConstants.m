@@ -11,6 +11,8 @@
 
 NSString* const CSSorceName_iOS = @"sense-library";
 //notifications
+NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
+NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 NSString* const CSsettingLoginChangedNotification = @"CSsettingLoginChangedNotification";
 NSString* const CSanySettingChangedNotification = @"CSanySettingChangedNotification";
 

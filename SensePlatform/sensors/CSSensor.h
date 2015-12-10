@@ -56,7 +56,7 @@
 ///Returns the sensor id of the sensor, a unique name that is used by the library to uniquely identify the sensor. This is NOT the id of the sensor in Common Sense
 - (NSString*) sensorId;
 
-- (void) insertOrUpdateDataPointWithValue:(id)value time: (NSDate*) time;
+- (void) commitDataPointWithValue:(id)value andTime: (NSDate*) time;
 
 ///Create sensor id
 + (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)deviceType andDevice:(NSDictionary*)device;

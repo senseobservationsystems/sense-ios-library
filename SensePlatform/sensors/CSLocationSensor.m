@@ -155,7 +155,7 @@ CLLocation* previousLocation;
 		[newItem setObject:CSroundedNumber(verticalAccuracy, 0) forKey:verticalAccuracyKey];
 	}
     
-    [self insertOrUpdateDataPointWithValue:newItem time:location.timestamp];
+    [self commitDataPointWithValue:newItem andTime:location.timestamp];
 	
 //	double timestamp = [location.timestamp timeIntervalSince1970];
 //	

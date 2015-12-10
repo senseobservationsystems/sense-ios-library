@@ -31,9 +31,6 @@ extern NSString * const kCSDATA_TYPE_FLOAT;
 extern NSString * const kCSDATA_TYPE_STRING;
 extern NSString * const kCSDATA_TYPE_BOOL;
 
-extern NSString* const kCSNewSensorDataNotification;
-extern NSString* const kCSNewMotionDataNotification;
-
 typedef enum {BPM_SUCCES=0, BPM_CONNECTOR_NOT_PRESENT, BPM_NOT_FOUND, BPM_UNAUTHORIZED, BPM_OTHER_ERROR} BpmResult;
 typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInteger newFailedMeasurements, NSDate* latestMeasurement);
 
@@ -246,7 +243,7 @@ These limitations are treated in a first in first out way. Hence, older data is 
 @param endDate The date and time at which to stop looking for datapoints
 @return an array of values, each value is a dictonary that descirbes the data point
 */
-+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
+//+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
 
 /** Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.
  
@@ -267,14 +264,14 @@ These limitations are treated in a first in first out way. Hence, older data is 
  @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
  @return an array of values, each value is a dictonary that descirbes the data point
  */
-+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
+//+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
 
 /**
  Remove all sensor data that are stored locally
 
  @warning This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/logout occurs). In that case, the data from previous user will be shown to the next user. 
  */
-+ (void) removeLocalData;
+//+ (void) removeLocalData;
 
 /** Retrieve all the sensor data stored locally between a certain time interval.
  * @param name The name of the sensor to get the data from
@@ -283,7 +280,7 @@ These limitations are treated in a first in first out way. Hence, older data is 
  * @param endDate The date and time at which to stop looking for datapoints
  * @return an arrat of values, each value is a dictonary that descirbes the data point
  */
-+ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
+//+ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
 
 
 /** @name Permissions */
@@ -344,7 +341,7 @@ These limitations are treated in a first in first out way. Hence, older data is 
 /// Flush data to Common Sense
 + (void) flushData;
 /// Flush data to Common Sense, return after the flush is completed
-+ (void) flushDataAndBlock;
+//+ (void) flushDataAndBlock;
 
 /** This function isn't operational.
 @deprecated This function is not operational anymore. If it is working for you that is dumb luck; don't count on it.

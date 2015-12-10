@@ -96,7 +96,7 @@ static NSString* eventKey = @"event";
 //										nil];
 //	
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
-    [self insertOrUpdateDataPointWithValue:newItem time:eventDate];
+    [self commitDataPointWithValue:newItem andTime:eventDate];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

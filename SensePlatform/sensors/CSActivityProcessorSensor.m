@@ -132,7 +132,7 @@ static const NSString* activityKey = @"activity";
 //                          CSroundedNumber(timestamp, 3),@"date",
 //                          nil];
 //    //[self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
-    [self insertOrUpdateDataPointWithValue:value time:activity.startDate];
+    [self commitDataPointWithValue:value andTime:activity.startDate];
     
     //store the date of the activity
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];

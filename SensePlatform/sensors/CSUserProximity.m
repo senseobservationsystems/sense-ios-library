@@ -59,7 +59,7 @@
 //										nil];
 //	
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    [self insertOrUpdateDataPointWithValue:proximityState time:[NSDate date]];
+    [self commitDataPointWithValue:proximityState andTime:[NSDate date]];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

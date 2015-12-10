@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <SensePlatform/CSSensePlatform.h>
+#import <SensePlatform/SensePlatform.h>
 
 @interface CSSensePlatformTest : XCTestCase
 

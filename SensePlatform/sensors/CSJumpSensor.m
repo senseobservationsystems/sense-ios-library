@@ -188,7 +188,7 @@ static NSString* const jumpLandingHeadingKey = @"landing heading";
 //										[NSString stringWithFormat:@"%.3f",timestamp],@"date",
 //										nil];
 //	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
-    [self insertOrUpdateDataPointWithValue:newItem time:date];
+    [self commitDataPointWithValue:newItem andTime:date];
 }
 
 - (double) normDegrees:(double) degreesIn toRange:(double)range {
