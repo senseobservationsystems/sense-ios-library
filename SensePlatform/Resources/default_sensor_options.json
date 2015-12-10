@@ -76,5 +76,11 @@
         "persist_locally": false,
         "upload_enabled": true,
         "download_enabled": false
+    },
+    {
+        "sensor_name": "time_active",
+        "persist_locally": false,
+        "upload_enabled": true,
+        "download_enabled": false
     }
 ]

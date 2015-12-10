@@ -114,7 +114,6 @@
 		FABCC11A1BA7009200EE6DE0 /* CSApplicationStateChange.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */; };
 		FABCC11B1BA7009200EE6DE0 /* CSDataPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC11C1BA7009200EE6DE0 /* CSDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */; };
-		FABCC11D1BA7009200EE6DE0 /* CSDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC11E1BA7009200EE6DE0 /* CSErrorDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FABCC11F1BA7009200EE6DE0 /* CSLocationPermissionProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FABCC1201BA7009200EE6DE0 /* CSSender.h in Headers */ = {isa = PBXBuildFile; fileRef = FABCC0AA1BA7009200EE6DE0 /* CSSender.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -347,7 +346,6 @@
 		FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSApplicationStateChange.m; sourceTree = "<group>"; };
 		FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataPoint.h; sourceTree = "<group>"; };
 		FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSDataPoint.m; sourceTree = "<group>"; };
-		FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDataStore.h; sourceTree = "<group>"; };
 		FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSErrorDomain.h; sourceTree = "<group>"; };
 		FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLocationPermissionProtocol.h; sourceTree = "<group>"; };
 		FABCC0AA1BA7009200EE6DE0 /* CSSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSender.h; sourceTree = "<group>"; };
@@ -364,8 +362,6 @@
 		FABCC0B51BA7009200EE6DE0 /* CSSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSettings.m; sourceTree = "<group>"; };
 		FABCC0B61BA7009200EE6DE0 /* CSStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSStorage.h; sourceTree = "<group>"; };
 		FABCC0B71BA7009200EE6DE0 /* CSStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSStorage.m; sourceTree = "<group>"; };
-		FABCC0B81BA7009200EE6DE0 /* CSUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSUploader.h; sourceTree = "<group>"; };
-		FABCC0B91BA7009200EE6DE0 /* CSUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSUploader.m; sourceTree = "<group>"; };
 		FABCC0BF1BA7009200EE6DE0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		FABCC0C01BA7009200EE6DE0 /* keywordhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keywordhash.h; sourceTree = "<group>"; };
 		FABCC0C11BA7009200EE6DE0 /* opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opcodes.h; sourceTree = "<group>"; };
@@ -623,7 +619,6 @@
 				FABCC0A41BA7009200EE6DE0 /* CSApplicationStateChange.m */,
 				FABCC0A51BA7009200EE6DE0 /* CSDataPoint.h */,
 				FABCC0A61BA7009200EE6DE0 /* CSDataPoint.m */,
-				FABCC0A71BA7009200EE6DE0 /* CSDataStore.h */,
 				FABCC0A81BA7009200EE6DE0 /* CSErrorDomain.h */,
 				FABCC0A91BA7009200EE6DE0 /* CSLocationPermissionProtocol.h */,
 				FABCC0AA1BA7009200EE6DE0 /* CSSender.h */,
@@ -642,8 +637,6 @@
 				FABCC0B51BA7009200EE6DE0 /* CSSettings.m */,
 				FABCC0B61BA7009200EE6DE0 /* CSStorage.h */,
 				FABCC0B71BA7009200EE6DE0 /* CSStorage.m */,
-				FABCC0B81BA7009200EE6DE0 /* CSUploader.h */,
-				FABCC0B91BA7009200EE6DE0 /* CSUploader.m */,
 				FABCC08E1BA7003500EE6DE0 /* SensePlatform.h */,
 				FA4CDBA71BA7126400DB44B1 /* CSVersion.h */,
 				FABCC0901BA7003500EE6DE0 /* Info.plist */,
@@ -881,7 +874,6 @@
 				FABCC1371BA7009200EE6DE0 /* sqlite3ext.h in Headers */,
 				FABCC1491BA7009300EE6DE0 /* CSActivityProcessorSensor.h in Headers */,
 				FABCC15F1BA7009300EE6DE0 /* CSMovingSensor.h in Headers */,
-				FABCC11D1BA7009200EE6DE0 /* CSDataStore.h in Headers */,
 				FABCC1361BA7009200EE6DE0 /* sqlite3.h in Headers */,
 				FABCC17B1BA7009400EE6DE0 /* Formatting.h in Headers */,
 				FABCC1631BA7009300EE6DE0 /* CSOrientationSensor.h in Headers */,

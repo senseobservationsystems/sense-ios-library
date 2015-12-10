@@ -50,13 +50,11 @@
 - (BOOL) loginWithError:(NSError **) error;
 - (NSString*) getUserId;
 - (BOOL) logout;
-- (NSArray*) listSensors;
-- (NSArray*) listSensorsForDevice:(NSDictionary*)device;
-- (NSDictionary*) createSensorWithDescription:(NSDictionary*) description;
-- (BOOL) connectSensor:(NSString*)sensorId ToDevice:(NSDictionary*) device;
-- (BOOL) uploadData:(NSArray*) data forSensorId:(NSString*)sensorId;
-- (BOOL) uploadDataForMultipleSensors:(NSArray*) data;
-- (BOOL) shareSensor: (NSString*)sensorId WithUser:(NSString*)user;
-- (NSArray*) getDataFromSensor: (NSString*)sensorId nrPoints:(NSInteger) nrPoints;
-- (BOOL) giveFeedbackToStateSensor:(NSString*)sensorId from:(NSDate*) from to:(NSDate*)to label:(NSString*) label;
+//- (NSArray*) listSensors;
+//- (NSArray*) listSensorsForDevice:(NSDictionary*)device;
+//- (NSDictionary*) createSensorWithDescription:(NSDictionary*) description;
+//- (BOOL) connectSensor:(NSString*)sensorId ToDevice:(NSDictionary*) device;
+//
+//- (BOOL) shareSensor: (NSString*)sensorId WithUser:(NSString*)user;
+//- (BOOL) giveFeedbackToStateSensor:(NSString*)sensorId from:(NSDate*) from to:(NSDate*)to label:(NSString*) label;
 @end

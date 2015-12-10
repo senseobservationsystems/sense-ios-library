@@ -30,12 +30,12 @@ import Foundation
     // reference to the datasyncer
     var dataSyncer = DataSyncer()
     
-    private var dataSyncerProgressHandler = DataSyncerProgressHandler()
+    private var dataSyncerCallbackHandler = DataSyncerCallbackHandler()
 
     
     //This prevents others from using the default '()' initializer for this class.
     private override init() {
-        self.dataSyncer.delegate = dataSyncerProgressHandler
+        self.dataSyncer.delegate = dataSyncerCallbackHandler
     }
     
     /**
@@ -122,8 +122,8 @@ import Foundation
     func reset(){
         self.config = DSEConfig()
         self.dataSyncer = DataSyncer()
-        self.dataSyncerProgressHandler = DataSyncerProgressHandler()
-        self.dataSyncer.delegate = self.dataSyncerProgressHandler
+        self.dataSyncerCallbackHandler = DataSyncerCallbackHandler()
+        self.dataSyncer.delegate = self.dataSyncerCallbackHandler
     }
     
 
@@ -144,6 +144,7 @@ import Foundation
             print("---creating sensor", sensor.name)
             try DatabaseHandler.insertSensor(sensor)
             print("---created sensor", sensor.name)
+            dataSyncerCallbackHandler.onSensorCreated(sensor.name)
             return sensor
         }catch{
             print(error)
@@ -197,7 +198,7 @@ import Foundation
         if self.isSensorDownloadCompleted{
             callback.onSuccess()
         } else {
-            dataSyncerProgressHandler.sensorsDownloadedCallbacks.append(callback)
+            dataSyncerCallbackHandler.sensorsDownloadedCallbacks.append(callback)
         }
     }
     
@@ -209,7 +210,7 @@ import Foundation
         if self.isSensorDataDownloadCompleted{
             callback.onSuccess()
         } else {
-            dataSyncerProgressHandler.sensorDataDownloadedCallbacks.append(callback)
+            dataSyncerCallbackHandler.sensorDataDownloadedCallbacks.append(callback)
         }
     }
     
@@ -222,7 +223,33 @@ import Foundation
             callback.onSuccess()
         } else {
             // status not ready yet. keep the callback in the array in DataSyncer
-            dataSyncerProgressHandler.initializationCallbacks.append(callback)
+            dataSyncerCallbackHandler.initializationCallbacks.append(callback)
+        }
+    }
+    
+    /**
+     * Add a handler for sensor creation. The callback will be triggered whenever a sensor is created in local storage,
+     * such as on download of sensor from remote or on getSensor() call but sensor does not exists.
+     * The callback will not be removed until removeSensorCreationHandler is called.
+     * @param callback A closure to handle the exception
+     * @return returns String for uuid to identify the closure.
+     **/
+    public func setSensorCreationHandler(sensorCreationHandler :(sensorName: String)->Void) -> String{
+        let uuid = NSUUID().UUIDString
+        dataSyncerCallbackHandler.sensorCreationHandlers[uuid] = sensorCreationHandler
+        return uuid
+    }
+    
+    /**
+     * Remove the closure with the given uuid.
+     * @param uuid String for uuid of the closure to be removed.
+     * @return true if the handler is removed. false if the handler is not in the dictionary.
+     **/
+    public func removeSensorCreationHandler(uuid: String) -> Bool{
+        if (dataSyncerCallbackHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
+            return true
+        }else{
+            return false
         }
     }
     
@@ -234,7 +261,7 @@ import Foundation
      **/
     public func setSyncExceptionHandler(exceptionHandler : (error: ErrorType)->Void) -> String{
         let uuid = NSUUID().UUIDString
-        dataSyncerProgressHandler.exceptionHandlers[uuid] = exceptionHandler
+        dataSyncerCallbackHandler.exceptionHandlers[uuid] = exceptionHandler
         return uuid
     }
     
@@ -244,19 +271,20 @@ import Foundation
      * @return true if the handler is removed. false if the handler is not in the dictionary.
      **/
     public func removeSyncExceptionHandler(uuid: String) -> Bool {
-        if (dataSyncerProgressHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
+        if (dataSyncerCallbackHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
             return true
         }else{
             return false
         }
     }
     
-    private class DataSyncerProgressHandler: DataSyncerDelegate{
+    private class DataSyncerCallbackHandler: DataSyncerDelegate{
         
         // callbacks
         var initializationCallbacks = [DSEAsyncCallback]()
         var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
         var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
+        var sensorCreationHandlers = Dictionary<String ,(sensorName: String) -> Void>()
         var exceptionHandlers = Dictionary<String ,(error:DSEError) -> Void>()
     
         func onInitializationCompleted() {
@@ -298,9 +326,15 @@ import Foundation
             }
         }
         
+        func onSensorCreated(sensorName: String) {
+            for (_, sensorCreationhandler) in sensorCreationHandlers{
+                sensorCreationhandler(sensorName: sensorName)
+            }
+        }
+        
         func onException(error:DSEError){
-            for (_, handler) in exceptionHandlers{
-                handler(error: error)
+            for (_, exceptionHandler) in exceptionHandlers{
+                exceptionHandler(error: error)
             }
         }
     }
