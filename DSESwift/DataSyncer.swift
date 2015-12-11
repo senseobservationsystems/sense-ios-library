@@ -68,7 +68,7 @@ class DataSyncer : NSObject {
      * Initialize DataSyncer by downloading sensor profile and sensors from remote.
      **/
     func initialize()  {
-        dispatch_async(data_syncer_process_queue, {
+        dispatch_async(dispatch_get_main_queue(), {
             do{
                 try self.downloadSensorProfiles()
                 try self.downloadSensorsFromRemote()
@@ -85,9 +85,10 @@ class DataSyncer : NSObject {
      * start the timer for the periodic syncing.
      **/
     func startPeriodicSync() {
-        dispatch_async(data_syncer_process_queue, {
+        dispatch_async(dispatch_get_main_queue(), {
             if (self.initialized){
                 if (self.enablePeriodicSync){
+                    print("Start timer go!")
                     self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
                     self.timer!.fire()
                 }else{
@@ -96,6 +97,7 @@ class DataSyncer : NSObject {
             }else{
                 print("DSE is not initialized")
             }
+            print("is timer valid?", self.timer?.valid)
         })
     }
 
