@@ -48,6 +48,8 @@ static CSSettings* sharedSettingsInstance = nil;
 
 
 - (id) init {
+    //TODO:Remove this
+    NSLog(@"---Initialize settings:/n %@", [NSThread callStackSymbols]);
 	self = [super init];
 	if (self) {
 		//initialise settings from plist
@@ -174,6 +176,8 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setLogin:(NSString*)user withPasswordHash:(NSString*) passwordHash {
+    NSLog(@"---setLogin.  StackTrace: %@", [NSThread callStackSymbols]);
+    
     NSLog(@"Settings setLogin:%@", user);
     [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername value:user];
     [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword value:passwordHash ];

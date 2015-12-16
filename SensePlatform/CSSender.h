@@ -49,6 +49,7 @@
  */
 - (BOOL) loginWithError:(NSError **) error;
 - (NSString*) getUserId;
+- (NSString*) getSessionId;
 - (BOOL) logout;
 //- (NSArray*) listSensors;
 //- (NSArray*) listSensorsForDevice:(NSDictionary*)device;

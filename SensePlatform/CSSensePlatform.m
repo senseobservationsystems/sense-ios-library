@@ -42,6 +42,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     [CSSensorStore sharedSensorStore].sender.applicationKey = applicationKey;
     
     [self initialize];
+    [[CSSensorStore sharedSensorStore] start];
 }
 
 + (void) initialize {
@@ -115,22 +116,14 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
-    NSError* error;
-    return [[self class] loginWithUser:user andPassword:password completeHandler:^{} failureHandler:^{}andError:&error];
+    
+    NSError* error = nil;
+    return [[CSSensorStore sharedSensorStore] loginWithUser:user andPassword:password completeHandler:^{} failureHandler:^{}andError:&error];
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
-    [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    
-    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
-    if (succeed) {
-        NSString* sessionId = [[CSSensorStore sharedSensorStore].sender.sessionCookie componentsSeparatedByString:@"="][1];
-        NSString* userId = [[CSSensorStore sharedSensorStore].sender getUserId];
-        NSString* appKey = [CSSensorStore sharedSensorStore].sender.applicationKey;
-        [[CSSensorStore sharedSensorStore] initializeDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey completeHandler:successHandler failureHandler:failureHandler];
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
-    }
-    return succeed;
+
+    return [[CSSensorStore sharedSensorStore] loginWithUser:user andPassword:password completeHandler:successHandler failureHandler:failureHandler andError:error];
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
@@ -140,13 +133,8 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
-    
-    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
-    if (succeed) {
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
-    }
-    
-    return succeed;
+
+    return [[CSSensorStore sharedSensorStore] loginWithUser:user andPassword:passwordHash completeHandler:^{} failureHandler:^{} andError:error];
 }
 
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password  withEmail:(NSString*) email {
@@ -169,6 +157,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 + (NSString*) getSessionCookie {
     NSString* cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+    NSLog(@"----getSessionCookie:%@ adderessOfSender:%p", cookie, [CSSensorStore sharedSensorStore].sender);
     
     if (cookie == nil) {
         NSString* user = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];

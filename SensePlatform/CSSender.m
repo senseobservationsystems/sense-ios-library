@@ -52,8 +52,10 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     if (self)
 	{
         if([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging] isEqualToString:kCSSettingYES]) {
+            NSLog(@"--- setup for staging");
             [self setupForStaging];
         } else {
+            NSLog(@"--- setup for live");
             [self setupForLive];
         };
         
@@ -71,8 +73,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash {
-	if (sessionCookie != nil)
+    if (! [self isLoggedIn]){
 		[self logout];
+    }
 	username = user;
 	passwordHash = hash;
 }
@@ -176,16 +179,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
         
 		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
-        
-        NSLog(@"### sender: %@", self);
-        NSLog(@"###Login successful: %@", self.sessionCookie);
-        
-        DataStorageEngine* dse = [DataStorageEngine getInstance];
-        DSEConfig* config = [[DSEConfig alloc] init];
-        config.sessionId = [jsonResponse valueForKey:@"session_id"];
-        NSError* error = nil;
-        NSLog(@"### settting the new session ID: %@", config.sessionId);
-        [dse setup:config error:&error];
+        NSLog(@"----setSessionCookie:%@ adderessOfSender:%p", self.sessionCookie, self);
 	}
     
 	return succeeded;
@@ -193,6 +187,15 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
 - (NSString*) getUserId{
     return [[[self doJsonRequestTo:[self makeUrlFor:@"users/current"] withMethod:@"GET" withInput:nil] valueForKey:@"user"] valueForKey:@"id"];
+}
+
+- (NSString*) getSessionId{
+    if (sessionCookie!=nil){
+        NSArray* sessionCookieArray = [self.sessionCookie componentsSeparatedByString: @"="];
+        return [sessionCookieArray objectAtIndex: 1];
+    }else{
+        return nil;
+    }
 }
 
 - (BOOL) logout

@@ -42,7 +42,9 @@
 + (NSDictionary*) device;
 
 - (id)init;
-- (void) initializeDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler;
+- (void)start;
+- (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error;
+- (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler;
 - (void) loginChanged;
 - (void) setEnabled:(BOOL) enable;
 - (void) enabledChanged:(id) notification;

@@ -129,28 +129,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         sensorIdMapLock = [[NSObject alloc] init];
 		
 		//all sensor classes
-		allSensorClasses = [NSArray arrayWithObjects:
-							[CSLocationSensor class],
-							[CSVisitsSensor class],
-							[CSBatterySensor class],
-							[CSCallSensor class],
- 							[CSConnectionSensor class],
-   							[CSNoiseSensor class],
-							[CSOrientationSensor class],
-							//[CSCompassSensor class],
-							//[UserProximity class],
-							//[OrientationStateSensor class],
- 							[CSAccelerometerSensor class],
-							[CSAccelerationSensor class],
-							[CSRotationSensor class],
-                            [CSScreenSensor class],
-                            //[CSJumpSensor class],
-							//[PreferencesSensor class],
-							//[BloodPressureSensor class],
-							//[CSActivityProcessorSensor class],
-                            [CSTimeZoneSensor class],
-                            //[CSStepCounterProcessorSensor class],
-							nil];
+        allSensorClasses = [self getAllSensorClassesArray];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];
 		allAvailableSensorClasses = [allSensorClasses filteredArrayUsingPredicate:availablePredicate];
@@ -158,7 +137,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         
         //instantiate sample strategy
         //sampleStrategy = [[SampleStrategy alloc] init];
-
         
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginChanged) name:CSsettingLoginChangedNotification object:nil];
@@ -167,49 +145,72 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 }
 
-- (void) instantiateSensors {
-    @synchronized(sensors) {
-		//release current sensors
-		spatialProvider=nil;
-		[sensors removeAllObjects];
-		
-		//instantiate sensors
-		for (Class aClass in allAvailableSensorClasses) {
-			if ([aClass isAvailable]) {
-				CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
-				[sensors addObject:newSensor];
-			}
-		}
-		
-		
-		//initialise spatial provider
-		CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
-		CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
-		for (CSSensor* sensor in sensors) {
-			if ([sensor isKindOfClass:[CSCompassSensor class]])
-				compass = (CSCompassSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSOrientationSensor class]])
-				orientation = (CSOrientationSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
-				accelerometer = (CSAccelerometerSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
-				acceleration = (CSAccelerationSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSRotationSensor class]])
-				rotation = (CSRotationSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSJumpSensor class]])
-				jumpSensor = (CSJumpSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSLocationSensor class]])
-				location = (CSLocationSensor*) sensor;
-			else if ([sensor isKindOfClass:[CSVisitsSensor class]])
-				visits = (CSVisitsSensor*) sensor;
-		}
-		
-		spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
-		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
+-(void) start{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userLoggedIn"] == YES) {
+        // User is already loggedin, renew session-ID and reinitialize DSE
+        NSLog(@"---SensorStore initialization. Already logged in.");
+        [self loadCreadentialsFromSettingsIntoSender];
+        NSError* error = nil;
+        [self loginWithCompleteHandler: ^{} failureHandler:^{[CSSensePlatform logout];} andError: &error];
+        
+    }else{
+        NSLog(@"---SensorStore initialization. Not logged in yet");
+        //TODO: Do something?
     }
 }
 
-- (void) initializeDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler: (void (^)()) success failureHandler: (void (^)()) failure{
+- (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
+    [[CSSettings sharedSettings] setLogin:user withPassword:password];
+    
+    return [self loginWithCompleteHandler:successHandler failureHandler:failureHandler andError:error];
+}
+
+
+
+- (BOOL) loginWithCompleteHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error{
+    BOOL succeed = [self.sender loginWithError:error];
+    if (*error) {
+        NSLog(@"Error during login: %@", *error);
+    }
+    if (succeed) {
+        NSString* sessionId = [self.sender getSessionId];
+        NSString* userId = [self.sender getUserId];
+        NSString* appKey = self.sender.applicationKey;
+        [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey completeHandler:successHandler failureHandler:failureHandler];
+        
+        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
+    }
+    return succeed;
+}
+
+- (NSArray*) getAllSensorClassesArray{
+    return [NSArray arrayWithObjects:
+            [CSLocationSensor class],
+            [CSVisitsSensor class],
+            [CSBatterySensor class],
+            [CSCallSensor class],
+            [CSConnectionSensor class],
+            [CSNoiseSensor class],
+            [CSOrientationSensor class],
+            //[CSCompassSensor class],
+            //[UserProximity class],
+            //[OrientationStateSensor class],
+            [CSAccelerometerSensor class],
+            [CSAccelerationSensor class],
+            [CSRotationSensor class],
+            [CSScreenSensor class],
+            //[CSJumpSensor class],
+            //[PreferencesSensor class],
+            //[BloodPressureSensor class],
+            //[CSActivityProcessorSensor class],
+            [CSTimeZoneSensor class],
+            //[CSStepCounterProcessorSensor class],
+            nil];
+}
+
+
+
+- (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler: (void (^)()) success failureHandler: (void (^)()) failure{
     NSError* error = nil;
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     DSEConfig* dseConfig = [[DSEConfig alloc] init];
@@ -222,7 +223,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         return;
     }
     
-    //TODO: put proper callbacks
+    if ([dse getStatus] != DSEStatusINITIALIZED) {
+        [self initializeDSEWithSuccessHandler:success failureHandler: failure];
+    }
+}
+
+- (void) initializeDSEWithSuccessHandler:(void (^)()) success failureHandler: (void (^)()) failure{
+    // Set up callbacks
     void (^successHandler)() = ^(){NSLog(@"successcallback");
         [self onDSEInitializationSuccessWithHandler:success];
     };
@@ -230,18 +237,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
         NSLog(@"Error:%ld", (long)error);
         failure();
-        //TODO logout??
     };
     
     DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
                                                       andFailureHandler: failureHandler];
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
     [dse setInitializationCallback:callback];
     [dse setSensorCreationHandler: ^(NSString* sensorName){
         NSLog(@"---- sensor creation Handler is triggered.");
         [self configureSensor: sensorName];
     }];
     
-    error = nil;
+    // DSE go!
+    NSError* error = nil;
     [dse startAndReturnError:&error];
     if (error){
         NSLog(@"Error: %@",error);
@@ -260,6 +268,48 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
     [self applyGeneralSettings];
     success();
+}
+
+- (void) instantiateSensors {
+    @synchronized(sensors) {
+        //release current sensors
+        spatialProvider=nil;
+        [sensors removeAllObjects];
+        
+        //instantiate sensors
+        for (Class aClass in allAvailableSensorClasses) {
+            if ([aClass isAvailable]) {
+                CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
+                [sensors addObject:newSensor];
+            }
+        }
+        
+        
+        //initialise spatial provider
+        CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
+        CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
+        for (CSSensor* sensor in sensors) {
+            if ([sensor isKindOfClass:[CSCompassSensor class]])
+                compass = (CSCompassSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSOrientationSensor class]])
+                orientation = (CSOrientationSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
+                accelerometer = (CSAccelerometerSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
+                acceleration = (CSAccelerationSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSRotationSensor class]])
+                rotation = (CSRotationSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSJumpSensor class]])
+                jumpSensor = (CSJumpSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSLocationSensor class]])
+                location = (CSLocationSensor*) sensor;
+            else if ([sensor isKindOfClass:[CSVisitsSensor class]])
+                visits = (CSVisitsSensor*) sensor;
+        }
+        
+        spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
+        locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
+    }
 }
 
 -(void) configureSensor: (NSString*) sensorName{
@@ -355,12 +405,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) applyGeneralSettings {
 	@try {
-		//get new settings
-        NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
-        NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
-        
-		//apply properties one by one
-		[sender setUser:username andPasswordHash:passwordHash];
+        [self loadCreadentialsFromSettingsIntoSender];
+
         //TODO:FIX
 		NSString* setting = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval];
 
@@ -387,6 +433,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		NSLog(@"SenseStore: Exception thrown while updating general settings: %@", e);
 	}	
 }
+
+- (void)loadCreadentialsFromSettingsIntoSender{
+    //get settings
+    NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
+    NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+    //apply properties one by one
+    [sender setUser:username andPasswordHash:passwordHash];
+}
+
+
 
 - (void) forceDataFlushWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback {
     //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
