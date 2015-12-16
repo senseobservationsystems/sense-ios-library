@@ -198,8 +198,8 @@ class DataStorageEngineTests: XCTestCase{
             let sensor4 = try dse.getSensor(sourceName2, sensorName: sensorName2)
             
             // Act: get sensors
-            let retrievedSensorsFromSource1 = dse.getSensors(sourceName1)
-            let retrievedSensorsFromSource2 = dse.getSensors(sourceName2)
+            let retrievedSensorsFromSource1 = try dse.getSensors(sourceName1)
+            let retrievedSensorsFromSource2 = try dse.getSensors(sourceName2)
             
             // Assert: check if each parameter of retrieved sensors is the same individuallys
             XCTAssertEqual(sensor1.name, retrievedSensorsFromSource1[0].name)
@@ -250,7 +250,7 @@ class DataStorageEngineTests: XCTestCase{
             try dse.getSensor(sourceName2, sensorName: sensorName2)
             
             // Act:
-            let retrievedSources = dse.getSources()
+            let retrievedSources = try dse.getSources()
             
             // Assert:
             XCTAssertEqual(retrievedSources.count, 2)

@@ -282,8 +282,6 @@ public class SensorDataProxy {
     
     private static func getHeaders() -> [String: String]{
         let headers = ["APPLICATION-KEY": self.getAppKey(), "SESSION-ID": self.getSessionId()]
-        print("--- appkey: ", getAppKey())
-        print("--- sessionId: ", getSessionId())
         return headers
     }
     
@@ -334,11 +332,12 @@ public class SensorDataProxy {
     }
     
     private static func getAppKey() -> String {
-        return KeychainWrapper.stringForKey(KEYCHAIN_APPKEY)!
+        let defaults = NSUserDefaults.standardUserDefaults()
+        return defaults.stringForKey(DSEConstants.APPKEY_KEY)!
     }
     
     private static func getSessionId() -> String {
-        return KeychainWrapper.stringForKey(KEYCHAIN_SESSIONID)!
+        return KeychainWrapper.stringForKey(DSEConstants.KEYCHAIN_SESSIONID)!
     }
     
 }

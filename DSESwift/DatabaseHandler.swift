@@ -24,7 +24,7 @@ class DatabaseHandler: NSObject{
     */
     static func insertOrUpdateDataPoint(dataPoint:DataPoint) throws {
         // Validate the sensorId
-        if (!self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
+        if (try !self.isExistingPrimaryKeyForSensor(dataPoint.sensorId)){
             throw DSEError.ObjectNotFound
         }
         
@@ -107,7 +107,7 @@ class DatabaseHandler: NSObject{
         // Create data deletionrequest
         let rlmDataDeletionRequest = DataDeletionRequest()
         rlmDataDeletionRequest.uuid = NSUUID().UUIDString
-        rlmDataDeletionRequest.userId = self.getUserId()
+        rlmDataDeletionRequest.userId = try self.getUserId()
         rlmDataDeletionRequest.sensorName = sensorName
         rlmDataDeletionRequest.sourceName = sourceName
         rlmDataDeletionRequest.startTime = startTime
@@ -123,10 +123,10 @@ class DatabaseHandler: NSObject{
     * Get the list of data deletion requests from local storage
     * @return An array of NSDictionary represents data deletion requests
     */
-    static func getDataDeletionRequests() -> [DataDeletionRequest] {
+    static func getDataDeletionRequests() throws -> [DataDeletionRequest] {
         var dataDeletionRequest = [DataDeletionRequest]()
         let realm = try! Realm()
-        let predicate = NSPredicate(format: "userId = %@", self.getUserId())
+        let predicate = NSPredicate(format: "userId = %@", try self.getUserId())
         let results = realm.objects(DataDeletionRequest).filter(predicate)
         for request in results {
             dataDeletionRequest.append(request)
@@ -140,7 +140,7 @@ class DatabaseHandler: NSObject{
     */
     static func deleteDataDeletionRequest(uuid: String) throws {
         let realm = try! Realm()
-        let predicate = NSPredicate(format: "uuid = %@ AND userId = %@", uuid, self.getUserId())
+        let predicate = NSPredicate(format: "uuid = %@ AND userId = %@", uuid, try self.getUserId())
         let results = realm.objects(DataDeletionRequest).filter(predicate)
         realm.beginWrite()
         realm.delete(results)
@@ -159,15 +159,16 @@ class DatabaseHandler: NSObject{
     */
     static func updateSensor(sensor: Sensor) throws {
         //validate the sensorId
-        if (!self.isExistingPrimaryKeyForSensor(sensor.id)){
+        if (try !self.isExistingPrimaryKeyForSensor(sensor.id)){
             throw DSEError.ObjectNotFound
         }
         
-        if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if (sensor.userId != defaults.stringForKey(DSEConstants.USERID_KEY)){
             throw DSEError.UnauthenticatedAccess
         }
         
-        let rlmSensor = getSensor(sensor.id)
+        let rlmSensor = try getSensor(sensor.id)
         //check if the sensorName and source is not changed
         if (self.isPrimaryKeysChangedForSensor(sensor, rlmSensor)){
             throw DSEError.CanNotChangePrimaryKey
@@ -192,14 +193,15 @@ class DatabaseHandler: NSObject{
     * @param sensor: Sensor object to be added
     */
     static func insertSensor(sensor:Sensor) throws {
-        if (sensor.userId != KeychainWrapper.stringForKey(KEYCHAIN_USERID)){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if (sensor.userId != defaults.stringForKey(DSEConstants.USERID_KEY)){
             throw DSEError.UnauthenticatedAccess
         }
         if (try DatabaseHandler.getSensorProfile(sensor.name) == nil){
             throw DSEError.InvalidSensorName
         }
         //check if the same combination of the sensorname and SourceName exists
-        if (isExistingCombinationOfSourceAndSensorName(sensor.source, sensor.name)){
+        if (try isExistingCombinationOfSourceAndSensorName(sensor.source, sensor.name)){
             throw DSEError.DuplicatedObjects
         }
         
@@ -284,9 +286,9 @@ class DatabaseHandler: NSObject{
     * @param sensorName	  The name of the sensor
     * @return boolean: true if the sensor exists in local storage, and vice versa.
     **/
-    static func hasSensor(source: String, sensorName: String) -> Bool {
+    static func hasSensor(source: String, sensorName: String) throws -> Bool {
         let realm = try! Realm()
-        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, self.getUserId())
+        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, try self.getUserId())
         let results = realm.objects(RLMSensor).filter(predicates)
         if !results.isEmpty {
             return true
@@ -303,8 +305,8 @@ class DatabaseHandler: NSObject{
     */
     static func getSensor(source: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
-        
-        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, self.getUserId())
+        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, try self.getUserId())
+        NSLog("predicates:%@", predicates);
         let results = realm.objects(RLMSensor).filter(predicates)
         if (results.count < 1){
             throw DSEError.ObjectNotFound
@@ -321,11 +323,11 @@ class DatabaseHandler: NSObject{
     * @param source: String for source.
     * @return An array of sensors that belongs to the given source.
     */
-    static func getSensors(source: String)->[Sensor]{
+    static func getSensors(source: String) throws ->[Sensor]{
         var sensors = [Sensor]()
         let realm = try! Realm()
         
-        let predicates = self.getPredicateForSensors(source)
+        let predicates = try self.getPredicateForSensors(source)
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             let sensor = Sensor(rlmSensor)
@@ -340,10 +342,10 @@ class DatabaseHandler: NSObject{
     *
     * @return An array of sources that belongs to the current user.
     */
-    static func getSources()->[String]{
+    static func getSources() throws -> [String]{
         var sources = Set<String>()
         let realm = try! Realm()
-        let predicates = NSPredicate(format: "userId = %@", self.getUserId())
+        let predicates = NSPredicate(format: "userId = %@", try self.getUserId())
         let retrievedSensors = realm.objects(RLMSensor).filter(predicates)
         for rlmSensor in retrievedSensors {
             sources.insert(rlmSensor.source)
@@ -403,18 +405,18 @@ class DatabaseHandler: NSObject{
     * @param remoteDataPointsDownloaded: Bool for whether a sensor has completed the initial download of data points
     * @return A compound predicate for querying Sensors based on the arguments
     */
-    private static func getPredicateForSensors(source: String)-> NSPredicate{
+    private static func getPredicateForSensors(source: String) throws -> NSPredicate{
         var predicates = [NSPredicate]()
-        predicates.append(NSPredicate(format: "source = %@ AND userId = %@", source, self.getUserId()))
+        predicates.append(NSPredicate(format: "source = %@ AND userId = %@", source, try self.getUserId()))
         return NSCompoundPredicate.init(andPredicateWithSubpredicates: predicates)
     }
 
     /**
     * Returns a sensor with the given id.
     */
-    private static func getSensor(id: Int) -> RLMSensor {
+    private static func getSensor(id: Int) throws -> RLMSensor {
         var sensor = RLMSensor()
-        let predicates = NSPredicate(format: "id = %d AND userId = %@", id, self.getUserId())
+        let predicates = NSPredicate(format: "id = %d AND userId = %@", id, try self.getUserId())
         let result = try! Realm().objects(RLMSensor).filter(predicates)
         if(result.count == 1){
             sensor = result.first!
@@ -425,9 +427,9 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if sensor with the given sensorId exists.
     */
-    private static func isExistingPrimaryKeyForSensor(sensorId: Int) -> Bool {
+    private static func isExistingPrimaryKeyForSensor(sensorId: Int) throws -> Bool {
         var exists = false
-        let predicates = NSPredicate(format: "id = %d AND userId = %@", sensorId, self.getUserId())
+        let predicates = NSPredicate(format: "id = %d AND userId = %@", sensorId, try self.getUserId())
         let result = try! Realm().objects(RLMSensor).filter(predicates)
         if(result.count == 1){
             exists = true
@@ -438,9 +440,9 @@ class DatabaseHandler: NSObject{
     /**
     * Returns true if source with the combination of the given source and sensor exists.
     */
-    private static func isExistingCombinationOfSourceAndSensorName(source:String, _ sensorName: String) -> Bool {
+    private static func isExistingCombinationOfSourceAndSensorName(source:String, _ sensorName: String) throws -> Bool {
         var exists = false
-        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, self.getUserId())
+        let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, try self.getUserId())
         let result = try! Realm().objects(RLMSensor).filter(predicates)
         if(result.count > 0){
             exists = true
@@ -465,8 +467,15 @@ class DatabaseHandler: NSObject{
         return (startTime != nil) && (endTime != nil) && (startTime?.timeIntervalSince1970 >= endTime?.timeIntervalSince1970)
     }
     
-    private static func getUserId() -> String {
-        return KeychainWrapper.stringForKey(KEYCHAIN_USERID)!
+    private static func getUserId() throws -> String {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let userId = defaults.stringForKey(DSEConstants.USERID_KEY){
+            return userId
+        } else {
+            // KeyChain occationaly returns nil even though the data is persisted in KeyChain.
+            print("Error:userId is nil for some reasons!!!")
+            throw DSEError.EmptyUserId
+        }
     }
 }
 

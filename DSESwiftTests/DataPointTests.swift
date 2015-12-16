@@ -17,7 +17,7 @@ class DataPointTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
-        KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
+        NSUserDefaults.standardUserDefaults().stringForKey(DSEConstants.USERID_KEY)!
     }
     
     override func tearDown() {

@@ -88,16 +88,12 @@ class DataSyncer : NSObject {
         dispatch_async(dispatch_get_main_queue(), {
             if (self.initialized){
                 if (self.enablePeriodicSync){
-                    print("Start timer go!")
                     self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
                     self.timer!.fire()
-                }else{
-                    print("Periodic Sync is disabled.")
                 }
             }else{
                 print("DSE is not initialized")
             }
-            print("is timer valid?", self.timer?.valid)
         })
     }
 
@@ -127,19 +123,19 @@ class DataSyncer : NSObject {
         dispatch_async(data_syncer_process_queue, {
             do{
                 // step 1
-                print("step1")
+                print("---sync-step1")
                 try self.processDeletionRequests()
                 // step 2
-                print("step2")
+                print("---sync-step2")
                 try self.uploadSensorDataToRemote()
                 // step 3
-                print("step3")
+                print("---sync-step3")
                 try self.downloadSensorsFromRemote()
                 // step 4
-                print("step4")
+                print("---sync-step4")
                 try self.downloadSensorsDataFromRemote()
                 // step 5
-                print("step5")
+                print("---sync-step5")
                 try self.cleanLocalStorage()
                 if(callback != nil){
                     callback!.onSuccess()
@@ -165,7 +161,7 @@ class DataSyncer : NSObject {
 
     
     func processDeletionRequests() throws {
-        let dataDeletionRequests = DatabaseHandler.getDataDeletionRequests()
+        let dataDeletionRequests = try DatabaseHandler.getDataDeletionRequests()
         for request in dataDeletionRequests {
             try SensorDataProxy.deleteSensorData(sourceName: request.sourceName, sensorName: request.sensorName, startTime: request.startTime, endTime: request.endTime)
             // remove the deletion request which has been processed
@@ -178,7 +174,7 @@ class DataSyncer : NSObject {
         do{
             let sensors = try getSensorsFromRemote()
             for sensor in sensors {
-                if !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
+                if try !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
                     try DatabaseHandler.insertSensor(sensor)
                     self.delegate?.onSensorCreated(sensor.name)
                 } else {
@@ -197,7 +193,7 @@ class DataSyncer : NSObject {
     
     func downloadSensorsDataFromRemote() throws {
         do{
-            let sensorsInLocal = getSensorsInLocal()
+            let sensorsInLocal = try getSensorsInLocal()
             for sensor in sensorsInLocal{
                 if (sensor.remoteDownloadEnabled){
                     try downloadAndStoreDataForSensor(sensor)
@@ -214,14 +210,14 @@ class DataSyncer : NSObject {
     }
 
     func uploadSensorDataToRemote() throws {
-        let sensorsInLocal = getSensorsInLocal()
+        let sensorsInLocal = try getSensorsInLocal()
         print("---- local sensors:", sensorsInLocal.count)
         for sensor in sensorsInLocal {
             print("--- Sensor to be uploaded:", sensor.name, sensor.remoteUploadEnabled)
             if (sensor.remoteUploadEnabled){
                 // upload datapoints that are not yet uploaded to remote
                 let dataPointsToUpload = try getDataPointsToUpload(sensor)
-                print("--- DataPoints be uploaded:", dataPointsToUpload)
+                print("--- DataPoints be uploaded:", dataPointsToUpload.count)
                 let dataArray = try JSONUtils.getJSONArray(dataPointsToUpload, sensorName: sensor.name)
                 try SensorDataProxy.putSensorData(sourceName: sensor.source, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
                 // Update the existsInRemote status of datapoints to true
@@ -234,7 +230,7 @@ class DataSyncer : NSObject {
     }
     
     func cleanLocalStorage() throws {
-        let sensorsInLocal = getSensorsInLocal()
+        let sensorsInLocal = try getSensorsInLocal()
         for sensor in sensorsInLocal {
             try purgeDataForSensor(sensor)
         }
@@ -253,7 +249,7 @@ class DataSyncer : NSObject {
             queryOptions.limit = limit
             queryOptions.startTime = (startBoundaryForNextQuery == nil) ? persistentBoundary : startBoundaryForNextQuery
             let sensorData = try SensorDataProxy.getSensorData(sourceName: sensor.source, sensorName: sensor.name)
-            try insertSensorDataIntoLocalDB(sensorData, sensorId: sensor.id)
+            try insertRemoteSensorDataIntoLocalDB(sensorData, sensorId: sensor.id)
             
             //check if download is completed, if not prepare for the next download
             isCompleted = (sensorData["data"].count != limit)
@@ -276,11 +272,11 @@ class DataSyncer : NSObject {
         return try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
     }
     
-    private func getSensorsInLocal() -> Array<Sensor>{
+    private func getSensorsInLocal() throws -> Array<Sensor>{
         var allSensorsInLocal = Array<Sensor>()
-        let sources = DatabaseHandler.getSources()
+        let sources = try DatabaseHandler.getSources()
         for source in sources{
-            allSensorsInLocal.appendContentsOf(DatabaseHandler.getSensors(source))
+            allSensorsInLocal.appendContentsOf(try DatabaseHandler.getSensors(source))
         }
         return allSensorsInLocal
     }
@@ -302,15 +298,16 @@ class DataSyncer : NSObject {
         var sensorConfig = SensorConfig()
         sensorConfig.meta = metaDict
         
-        return Sensor(name: sensorName, source: sourceName, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        return Sensor(name: sensorName, source: sourceName, sensorConfig: sensorConfig, userId: defaults.stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: false)
     }
     
-    private func insertSensorDataIntoLocalDB(sensorData: JSON, sensorId: Int) throws {
+    private func insertRemoteSensorDataIntoLocalDB(sensorData: JSON, sensorId: Int) throws {
         for (_ ,subJson):(String, JSON) in sensorData["data"] {
             //Do something you want
             let value = JSONUtils.stringify(subJson["value"])
             let time = NSDate(timeIntervalSince1970: subJson["time"].doubleValue / 1000.0)
-            let dataPoint = DataPoint(sensorId: sensorId, value: value, time: time)
+            let dataPoint = DataPoint(sensorId: sensorId, value: value, time: time, existsInRemote: true)
             try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
         }
     }

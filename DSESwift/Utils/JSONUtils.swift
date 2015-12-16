@@ -62,7 +62,6 @@ public class JSONUtils{
     }
     
     public static func getJSONArray(dataPoints: Array<DataPoint>, sensorName: String) throws -> JSON{
-        print("---- getJSONArray for: ", sensorName)
         let profile = try DatabaseHandler.getSensorProfile(sensorName)!
         let type = try getTypeFromDataStructure(profile.dataStructure)
         switch (type){

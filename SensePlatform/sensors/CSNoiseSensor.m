@@ -30,7 +30,7 @@
 #import "CSScreenSensor.h"
 #import "CSSensorConstants.h"
 
-static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
+static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
 
 //Declare private methods using empty category
 @interface CSNoiseSensor()
@@ -86,7 +86,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 													 name:[CSSettings settingChangedNotificationNameForType:kCSSettingTypeAmbience] object:nil];
 		
         sampleInterval				= [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeAmbience setting:kCSAmbienceSettingInterval] doubleValue];
-        sampleDuration				= 3; // seconds
+        sampleDuration				= 3.0; // seconds
         recordQueue					= dispatch_queue_create("com.sense.platform.noiseRecord", NULL);
         numberOfPackets				= 0;
         screenstateBlocksRecording	= YES;
@@ -120,6 +120,9 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 	if (![session setActive:YES error:&activationError]) {
 		NSLog(@"Audio session can't be activated. Error: %@", activationError);
 	}
+    
+    NSLog(@"----NoiseSensor: Set Audio Session Category: %@", session.category);
+    NSLog(@"----NoiseSensor: Set Audio Session Active: %d", session.inputAvailable);
 }
 
 /** Initalize and configure the audio recorder
@@ -145,6 +148,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
         NSLog(@"Recorder could not be initialised. Error: %@", error);
     }
     else {
+        NSLog(@"---NoiseSensor: setDelegate. AudioRecorder address:%p", audioRecorder);
         audioRecorder.delegate = self;
         [audioRecorder prepareToRecord];
     }
@@ -152,6 +156,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 }
 
 - (void) scheduleRecording {
+    NSLog(@"---NoiseSensor: schedule recording");
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
         @autoreleasepool {
@@ -162,7 +167,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 
 - (void) startRecording {
     
-    BOOL started = NO;
+    __block BOOL started = NO;
 	
 	//Skip this recording if it was canceled
 	if (nextRecordingCancelled) {
@@ -174,10 +179,18 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 	@synchronized(self) {
 		// sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
 		if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
-			started = [audioRecorder recordForDuration:sampleDuration];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                NSLog(@"---NoiseSensor: StartRecoding with AudioRecorder address:%p", audioRecorder);
+                NSLog(@"---NoiseSensor: Recording starts. Duration:%f:", sampleDuration);
+                NSLog(@"----NoiseSensor: Audio Session Category: %@", [AVAudioSession sharedInstance].category);
+                NSLog(@"----NoiseSensor: Audio Session Active: %d", [AVAudioSession sharedInstance].inputAvailable);
+                NSLog(@"---NoiseSensor: MainThread?:%d:", [NSThread isMainThread]);
+                started = [audioRecorder recordForDuration:sampleDuration];
+            });
 		}
 	}
 	
+    NSLog(@"---NoiseSensor: Started?:%d:", started);
 	//Schedule a new recording if this one was not started
 	if (started == NO || audioRecorder.isRecording == NO) {
 		[self scheduleRecording];
@@ -196,8 +209,10 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 	NSLog(@"%@ noise sensor (id=%@)", enable ? @"Enabling" : @"Disabling", self.sensorId);
 	isEnabled = enable;
 	if (enable) {
-        if (sampleOnlyWhenScreenLocked)
+        NSLog(@"---enable noise sensor. enable = true");
+        if (sampleOnlyWhenScreenLocked){
             [[CSSensorRequirements sharedRequirements] setRequirements:self->requirements byConsumer:CONSUMER_NAME];
+        }
 
 		if (NO==audioRecorder.recording) {
             // configure the audio session
@@ -212,6 +227,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
         NSLog(@"[Noise Sensor] Sending notification to Location Provider!");
         [[NSNotificationCenter defaultCenter] postNotificationName: kCSEnableLocationProvider object:nil];
 	} else {
+        NSLog(@"---enable noise sensor. enable = false");
 		[audioRecorder stop];
 		audioRecorder.delegate = nil;
         NSError* error;
@@ -222,9 +238,11 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
+    NSLog(@"----audioRecorderDidFinishRecording");
     if (didSucceed ==TRUE) {
         // calculate the audio recording volume in dBs
         [self computeAudioVolume];
+        NSLog(@"Audio recording finished succesfully");
     }
     else {
         NSLog(@"Audio recording finished unsuccesfully");
@@ -233,6 +251,10 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 	if (isEnabled) {
 		[self scheduleRecording];
 	}
+}
+
+- (void)audioRecorderEncodeErrorDidOccur:(AVAudioRecorder *)recorder error:(NSError *)error{
+    NSLog(@"[NoiseSensor] Error during recording: %@", error);
 }
 
 /** Stores in an array the values of the samples of the audio signal
@@ -257,6 +279,8 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     UInt32 propertySize = 0;
     UInt64 packetsCount = 0;
     
+    NSLog(@"---NoiseSensor: Computing Audio Volume");
+    
     // open recording file
     result = AudioFileOpenURL(CFBridgingRetain(recording), kAudioFileReadPermission, 0, &recordingFile);
     if (result != 0) {
@@ -278,6 +302,8 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     //}
     numberOfPackets = (int) packetsCount;
     
+    NSLog(@"---NoiseSensor: PacketCounts:%d", numberOfPackets);
+    
     rawSampleData = (short int*) malloc(numberOfPackets * sizeof(short int));
 
     for (int i=0; i<(numberOfPackets); i++) {
@@ -295,11 +321,12 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     rootAvgOfRawSampleData = sqrt(avgOfRawSampleData);
     volumeOfAudioSignal = 10 * (log10(avgOfRawSampleData));
     
-    //take timestamp
-//    double timestamp = [[NSDate date] timeIntervalSince1970];
+    NSLog(@"---NoiseSensor: Prepare level");
+
     NSDate* time = [NSDate date];
-    
     double level = volumeOfAudioSignal;
+    
+    NSLog(@"---NoiseSensor: level = %f", level);
 	
 //    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
 //                                        CSroundedNumber(level, 1), @"value",
@@ -307,7 +334,8 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 //                                        nil];
 	if (numberOfPackets > 0) {
         //[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-        [self commitDataPointWithValue:[[NSNumber alloc] initWithDouble:level] andTime:time];
+        NSLog(@"---NoiseSensor: store data");
+        [self commitDataPointWithValue:CSroundedNumber(level, 1) andTime:time];
     }
     
     // Total duration of recording
@@ -379,7 +407,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
  */
 - (void) onNewData:(NSNotification*)notification {
     if ([notification.object isEqualToString:kCSSENSOR_SCREEN_STATE]) {
-		NSString *screenState = [[notification.userInfo valueForKey:@"value"] valueForKey:@"screen"];
+		NSString *screenState = [notification.userInfo valueForKey:@"value"];
 
 		@synchronized(self) {
 			if ([screenState isEqualToString:kVALUE_IDENTIFIER_SCREEN_LOCKED]) {

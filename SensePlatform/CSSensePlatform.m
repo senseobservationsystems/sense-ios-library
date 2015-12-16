@@ -208,6 +208,10 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp {
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value options:0 error:&error];
+    //TODO: remove log
+    if (error) {
+        NSLog(@"----Error while serializing jsonValue to NSData. Error:%@", error);
+    }
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
     [CSSensePlatform addDataPointForSensor:sensorName displayName:displayName description:description device:[CSSensorStore device] dataType:dataType stringValue:jsonString timestamp:timestamp];

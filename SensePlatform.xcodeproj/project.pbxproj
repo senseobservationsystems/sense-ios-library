@@ -85,7 +85,6 @@
 		27DF11771BCFF10A00C4E79F /* SensorDataProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF11761BCFF10A00C4E79F /* SensorDataProxy.swift */; };
 		27DF117B1BD0027200C4E79F /* SensorDataProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF117A1BD0027200C4E79F /* SensorDataProxyTests.swift */; };
 		27E4281C1BA960600067E149 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E4281B1BA960600067E149 /* DataPoint.swift */; };
-		27F1D1AA1BD7A4A000ACE232 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */; };
 		27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* TestKeychainWrapper.swift */; };
 		27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */; };
 		27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* DataPointTests.swift */; };
@@ -496,7 +495,6 @@
 				27CE749C1BDFC52D0095E735 /* Realm.framework in Frameworks */,
 				27CE749D1BDFC52D0095E735 /* RealmSwift.framework in Frameworks */,
 				2735E7421BD7D633009A45BF /* VVJSONSchemaValidation.framework in Frameworks */,
-				27F1D1AA1BD7A4A000ACE232 /* PromiseKit.framework in Frameworks */,
 				27D441641BD128B400950ADC /* CryptoSwift.framework in Frameworks */,
 				2709FF7E1BAF0E800051E8B2 /* Security.framework in Frameworks */,
 			);
@@ -1119,7 +1117,6 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Just.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/CryptoSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/VVJSONSchemaValidation.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",

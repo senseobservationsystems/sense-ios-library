@@ -21,7 +21,6 @@ class SensorTests: XCTestCase {
     
     override func setUp() {
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test2"
-        KeychainWrapper.setString(userId, forKey: KEYCHAIN_USERID)
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
         registerAndLogin(accountUtils!)
         
@@ -31,6 +30,7 @@ class SensorTests: XCTestCase {
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
+        self.config.userId = userId
         self.config.sessionId = (accountUtils!.sessionId)!
         
         do{
@@ -39,9 +39,7 @@ class SensorTests: XCTestCase {
             XCTFail("Failed in setup")
         }
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
-        KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
+        KeychainWrapper.setString(self.config.sessionId, forKey: DSEConstants.KEYCHAIN_SESSIONID)
         
         do{
             try dataSyncer.downloadSensorProfiles()
@@ -156,7 +154,7 @@ class SensorTests: XCTestCase {
             let queryOptions = QueryOptions()
             let retrievedDataPoints = try sensor.getDataPoints(queryOptions)
             XCTAssertEqual(retrievedDataPoints.count, 0)
-            let deletionRequests = DatabaseHandler.getDataDeletionRequests()
+            let deletionRequests = try DatabaseHandler.getDataDeletionRequests()
             XCTAssertEqual(deletionRequests.count, 1)
             XCTAssertEqualWithAccuracy(time.timeIntervalSince1970, (deletionRequests[0].endTime?.timeIntervalSince1970)!, accuracy:1.0)
             

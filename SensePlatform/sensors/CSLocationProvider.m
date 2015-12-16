@@ -251,7 +251,7 @@
             [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
         }
     }
-    // for iOS versions where LocationManagre has the property allowsBackgroundLocationUpdates(iOS9 or higher)
+    // for iOS versions where LocationManager has the property allowsBackgroundLocationUpdates(iOS9 or higher)
     NSArray* backgroundModes  = [[NSBundle mainBundle].infoDictionary objectForKey:@"UIBackgroundModes"];
     
     if(backgroundModes && [backgroundModes containsObject:@"location"]) {

@@ -66,6 +66,7 @@
 }
 
 - (void) enabledChanged: (id) notification {
+    NSLog(@"--enableChanged:%@", self.class);
 	self.isEnabled = [[notification object] boolValue];
 }
 
@@ -78,7 +79,7 @@
 }
 
 - (void) commitDataPointWithValue:(id)value andTime: (NSDate*) time{
-    
+    NSLog(@"----Sensor:%@, value: %@, time: %@", self.name, value, time);
     // Broad cast the data
     NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
                                                 value, @"value",
@@ -90,12 +91,14 @@
     NSError* error = nil;
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:self.name error:&error];
-    
-    //TODO: remove this
+    if(error){
+        NSLog(@"error while calling getSensor. Error:%@:", error);
+    }
     error = nil;
-    NSLog(@"Sensor:%@, value: %@, time: %@, error:%@", sensor.name, value, time, error);
-    
     [sensor insertOrUpdateDataPointWithValue:value time:time error:&error];
+    if(error){
+        NSLog(@"error while calling insertOrUpdate. Error:%@:", error);
+    }
 }
 
 + (NSString*) sensorIdFromName:(NSString*)name andDeviceType:(NSString*)description andDevice:(NSDictionary *)device {

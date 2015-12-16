@@ -143,8 +143,8 @@ static CSSettings* sharedSettingsInstance = nil;
 	NSString* key = [NSString stringWithFormat:@"%@", sensor];
 	id object = [sensorEnables objectForKey:key];
 	BOOL enabled = object == nil? NO : [object boolValue];
+    NSLog(@"---sendingNotification for sensor: %@, enable:%d",sensor, enabled);
 	NSNumber* enableObject = [NSNumber numberWithBool:enabled];
-	
 	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:[[self class] enabledChangedNotificationNameForSensor:sensor] object:enableObject]];
 }
 

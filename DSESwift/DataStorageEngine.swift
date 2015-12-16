@@ -51,7 +51,6 @@ import Foundation
      * @param customConfig: DSEConfig holding the configuration to be applied.
      **/
     public func setup(customConfig: DSEConfig) throws {
-        NSLog("-------- dse setup is called")
         // set config for DataSyncer
         var (configChanged, syncInterval, localPersistancePeriod, enablePeriodicSync) = try self.dataSyncer.setConfig(customConfig)
         
@@ -70,22 +69,23 @@ import Foundation
         
         
         // verify if we have indeed received valid credentials (not nil) and throw the appropriate error if something is wrong
-        if (customConfig.appKey != "") {self.config.appKey = customConfig.appKey}
         if (customConfig.sessionId != ""){self.config.sessionId = customConfig.sessionId}
-        if (customConfig.userId != "") {self.config.userId = customConfig.userId}
+        if (customConfig.userId != ""){self.config.userId = customConfig.userId}
+        if (customConfig.appKey != ""){self.config.appKey = customConfig.appKey}
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
         NSLog("--------new sessionId %@", self.config.sessionId);
-        KeychainWrapper.setString(self.config.sessionId, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey,    forKey: KEYCHAIN_APPKEY)
-        KeychainWrapper.setString(self.config.userId,    forKey: KEYCHAIN_USERID)
+        KeychainWrapper.removeObjectForKey(DSEConstants.KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.sessionId, forKey: DSEConstants.KEYCHAIN_SESSIONID)
         
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setDouble(self.config.syncInterval,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
         defaults.setDouble(self.config.localPersistancePeriod, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
-        defaults.setObject(backendStringValue,                  forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
+        defaults.setObject(backendStringValue,                 forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
         defaults.setBool(self.config.enableEncryption,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
+        defaults.setObject(self.config.userId,                 forKey: DSEConstants.USERID_KEY)
+        defaults.setObject(self.config.appKey,                 forKey: DSEConstants.APPKEY_KEY)
         
         if (configChanged) {
             if (self.dataSyncer.timer != nil){
@@ -141,8 +141,8 @@ import Foundation
         }catch DSEError.ObjectNotFound {
             // sensor does not exist in local storage, create the sensor
             let sensorConfig = SensorConfig()
-            let sensor = Sensor(name: sensorName, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
-            print("---creating sensor", sensor.name)
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let sensor = Sensor(name: sensorName, source: source, sensorConfig: sensorConfig, userId: defaults.stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: true)
             try DatabaseHandler.insertSensor(sensor)
             print("---created sensor", sensor.name)
             dataSyncerCallbackHandler.onSensorCreated(sensor.name)
@@ -157,16 +157,16 @@ import Foundation
     * Returns all the sensors connected to the given source
     * @return [Sensor] The sensors connected to the given source
     **/
-    public func getSensors(source: String) -> [Sensor]{
-        return DatabaseHandler.getSensors(source)
+    public func getSensors(source: String) throws -> [Sensor]{
+        return try DatabaseHandler.getSensors(source)
     }
     
     /**
     * Returns all the sources attached to the current user
     * @return [String] The sources attached to the current user
     **/
-    public func getSources() -> [String]{
-        return DatabaseHandler.getSources()
+    public func getSources() throws -> [String]{
+        return try DatabaseHandler.getSources()
     }
     
     /**

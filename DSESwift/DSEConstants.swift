@@ -13,6 +13,8 @@ public struct DSEConstants{
     static let LOCAL_PERSISTANCE_PERIOD_KEY = "DSE_localPersistancePeriod"
     static let BACKEND_ENVIRONMENT_KEY = "DSE_backendEnvironment"
     static let ENABLE_ENCRYPTION_KEY = "DSE_enableEncryption"
+    static let USERID_KEY    = "DSE_userId"
+    static let APPKEY_KEY    = "DSE_appKey"
     
     // for data types
     static let DATA_TYPE_STRING = "string"
@@ -31,6 +33,9 @@ public struct DSEConstants{
     
     // for queues
     static let DATASYNCER_PROCESS_QUEUE_ID = "nl.sense.dse.sync_process_queue"
+    
+    // for key chaines
+    static let KEYCHAIN_SESSIONID = "DSE_sessionId"
 }
 
 @objc public enum DSEError: Int, ErrorType{
@@ -42,6 +47,7 @@ public struct DSEConstants{
     case UnauthenticatedAccess
     case CanNotChangePrimaryKey
     case InvalidSensorName
+    case EmptyUserId
     // DSE
     case InvalidAppKey
     case InvalidSessionId
