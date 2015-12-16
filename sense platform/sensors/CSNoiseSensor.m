@@ -159,28 +159,36 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
     });
 }
 
+/**
+ Starts an audio recording. 
+ 
+ It will check for permission and if permissions are undetermined it will ask for permission. It will schedule a new recording if the recording fails or does not execute for some reason. It will not record if the nextRecordingCancelled parameter was set to True (it will set it to False instead and schedule a new recording).
+ */
 - (void) startRecording {
-    
-    BOOL started = NO;
 	
-	//Skip this recording if it was canceled
-	if (nextRecordingCancelled) {
-		nextRecordingCancelled = NO;
-		[self scheduleRecording];
-		return;
-	}
-	
-	@synchronized(self) {
-		// sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
-		if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
-			started = [audioRecorder recordForDuration:sampleDuration];
-		}
-	}
-	
-	//Schedule a new recording if this one was not started
-	if (started == NO || audioRecorder.isRecording == NO) {
-		[self scheduleRecording];
-		return;
+	@synchronized (self) {
+		[[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+
+			//Skip this recording if it was canceled
+			if ((! granted) || (nextRecordingCancelled)) {
+				nextRecordingCancelled = NO;
+				[self scheduleRecording];
+				return;
+			}
+			
+			BOOL started = NO;
+			
+			// sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
+			if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
+				started = [audioRecorder recordForDuration:sampleDuration];
+			}
+
+			//Schedule a new recording if this one was not started
+			if (started == NO || audioRecorder.isRecording == NO) {
+				[self scheduleRecording];
+				return;
+			}
+		}];
 	}
 }
 
@@ -398,5 +406,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise_sensor";
 		}
     }
 }
+
 
 @end
