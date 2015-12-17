@@ -157,7 +157,6 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 + (NSString*) getSessionCookie {
     NSString* cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
-    NSLog(@"----getSessionCookie:%@ adderessOfSender:%p", cookie, [CSSensorStore sharedSensorStore].sender);
     
     if (cookie == nil) {
         NSString* user = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
@@ -197,9 +196,8 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp {
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value options:0 error:&error];
-    //TODO: remove log
     if (error) {
-        NSLog(@"----Error while serializing jsonValue to NSData. Error:%@", error);
+        NSLog(@"Error while serializing jsonValue to NSData. Error:%@", error);
     }
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     

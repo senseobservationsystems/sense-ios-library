@@ -63,8 +63,6 @@ NSString* CSaccelerationZKey = @"z-axis";
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
-    //TODO:Remove this
-    NSLog(@"---Accelerometer enabling stack trace:/n %@", [NSThread callStackSymbols]);
     
 	NSLog(@"%@ %@ sensor (id=%@).", enable ? @"Enabling":@"Disabling", [self class], self.sensorId);
 	isEnabled = enable;

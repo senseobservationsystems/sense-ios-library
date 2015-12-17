@@ -122,21 +122,18 @@ class DataSyncer : NSObject {
     func sync(callback: DSEAsyncCallback? = nil) {
         dispatch_async(data_syncer_process_queue, {
             do{
+                NSLog("[DataSyncer] sync started")
                 // step 1
-                print("---sync-step1")
                 try self.processDeletionRequests()
                 // step 2
-                print("---sync-step2")
                 try self.uploadSensorDataToRemote()
                 // step 3
-                print("---sync-step3")
                 try self.downloadSensorsFromRemote()
                 // step 4
-                print("---sync-step4")
                 try self.downloadSensorsDataFromRemote()
                 // step 5
-                print("---sync-step5")
                 try self.cleanLocalStorage()
+                NSLog("[DataSyncer] sync completed")
                 if(callback != nil){
                     callback!.onSuccess()
                 }

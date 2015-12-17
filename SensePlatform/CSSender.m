@@ -52,10 +52,8 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     if (self)
 	{
         if([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging] isEqualToString:kCSSettingYES]) {
-            NSLog(@"--- setup for staging");
             [self setupForStaging];
         } else {
-            NSLog(@"--- setup for live");
             [self setupForLive];
         };
         
@@ -179,7 +177,6 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
         
 		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
-        NSLog(@"----setSessionCookie:%@ adderessOfSender:%p", self.sessionCookie, self);
 	}
     
 	return succeeded;

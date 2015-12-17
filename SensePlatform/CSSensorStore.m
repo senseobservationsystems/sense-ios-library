@@ -316,10 +316,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     NSError* error = nil;
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:sensorName error:&error];
-    NSLog(@"----Setting SensorOptions for: %@", sensor.name);
     NSDictionary* sensorOptions = [self getDefaultSensorOptionForSensor:sensor.name];
     if (sensorOptions != nil){
-        NSLog(@"----setting sensor: %@ config:%@", sensor.name, sensorOptions);
         NSError* error = nil;
         SensorConfig* config = [[SensorConfig alloc] init];
         config.uploadEnabled = [sensorOptions[@"upload_enabled"] boolValue];
@@ -337,7 +335,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     NSArray* arrayOfSensorOptions = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     // find the corresponding one
     for(NSDictionary* sensorOptions in arrayOfSensorOptions){
-        NSLog(@"----Searching through sensorOptions for : %@ sensor: %@ match?:%d", sensorName, sensorOptions[@"sensor_name"], [sensorOptions[@"sensor_name"] isEqualToString: sensorName]);
         if([sensorOptions[@"sensor_name"] isEqualToString: sensorName]){
             return sensorOptions;
         }

@@ -48,8 +48,6 @@ static CSSettings* sharedSettingsInstance = nil;
 
 
 - (id) init {
-    //TODO:Remove this
-    NSLog(@"---Initialize settings:/n %@", [NSThread callStackSymbols]);
 	self = [super init];
 	if (self) {
 		//initialise settings from plist
@@ -145,7 +143,6 @@ static CSSettings* sharedSettingsInstance = nil;
 	NSString* key = [NSString stringWithFormat:@"%@", sensor];
 	id object = [sensorEnables objectForKey:key];
 	BOOL enabled = object == nil? NO : [object boolValue];
-    NSLog(@"---sendingNotification for sensor: %@, enable:%d",sensor, enabled);
 	NSNumber* enableObject = [NSNumber numberWithBool:enabled];
 	[[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:[[self class] enabledChangedNotificationNameForSensor:sensor] object:enableObject]];
 }
@@ -176,9 +173,6 @@ static CSSettings* sharedSettingsInstance = nil;
 }
 
 - (BOOL) setLogin:(NSString*)user withPasswordHash:(NSString*) passwordHash {
-    NSLog(@"---setLogin.  StackTrace: %@", [NSThread callStackSymbols]);
-    
-    NSLog(@"Settings setLogin:%@", user);
     [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername value:user];
     [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword value:passwordHash ];
     //notify registered subscribers

@@ -74,7 +74,6 @@ import Foundation
         if (customConfig.appKey != ""){self.config.appKey = customConfig.appKey}
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        NSLog("--------new sessionId %@", self.config.sessionId);
         KeychainWrapper.removeObjectForKey(DSEConstants.KEYCHAIN_SESSIONID)
         KeychainWrapper.setString(self.config.sessionId, forKey: DSEConstants.KEYCHAIN_SESSIONID)
         
@@ -144,7 +143,6 @@ import Foundation
             let defaults = NSUserDefaults.standardUserDefaults()
             let sensor = Sensor(name: sensorName, source: source, sensorConfig: sensorConfig, userId: defaults.stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: true)
             try DatabaseHandler.insertSensor(sensor)
-            print("---created sensor", sensor.name)
             dataSyncerCallbackHandler.onSensorCreated(sensor.name)
             return sensor
         }catch{
