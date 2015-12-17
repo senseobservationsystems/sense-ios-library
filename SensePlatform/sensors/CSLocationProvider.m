@@ -239,7 +239,7 @@
 		//[locationManager stopUpdatingLocation];
 		//as this needs to be enabled to run in the background, rather switch to the lowest accuracy
 		//locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-	}
+    }
 }
 
 - (void) requestPermission {

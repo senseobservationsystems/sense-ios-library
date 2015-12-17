@@ -220,8 +220,6 @@ static CSSensorRequirements* sharedRequirementsInstance = nil;
 
 - (void) updateSettingFromRequirement:(NSDictionary*) from to:(NSDictionary*) to {
     NSString* sensor = [to valueForKey:kCSREQUIREMENT_FIELD_SENSOR_NAME];
-    NSLog(@"---updateSettingFromRequirement: Sensor:%@", sensor);
-    NSLog(@"---updateSettingFromRequirement: requirementDict:%@", to);
     
     if ([to isEqualToDictionary:from]) {
         return;

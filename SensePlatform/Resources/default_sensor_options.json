@@ -1,49 +1,43 @@
 [
     {
         "sensor_name": "position",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },
     {
         "sensor_name": "time_zone",
-        "persist_locally": true,
+        "persist_locally": false,
         "download_enabled": true,
         "upload_enabled": true
     },
     {
         "sensor_name": "accelerometer",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },
     {
         "sensor_name": "battery",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },
     {
         "sensor_name": "call",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },
     {
         "sensor_name": "light",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },
     {
         "sensor_name": "noise",
-        "persist_locally": false,
-        "upload_enabled": true,
-        "download_enabled": false
-    },
-    {
-        "sensor_name": "position",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },
@@ -55,7 +49,7 @@
     },
     {
         "sensor_name": "screen",
-        "persist_locally": false,
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     },

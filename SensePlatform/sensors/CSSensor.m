@@ -79,8 +79,7 @@
 }
 
 - (void) commitDataPointWithValue:(id)value andTime: (NSDate*) time{
-    NSLog(@"----Sensor:%@, value: %@, time: %@", self.name, value, time);
-    // Broad cast the data
+    // Broadcast the data
     NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
                                                 value, @"value",
                                                 CSroundedNumber([time timeIntervalSince1970], 3),@"date",

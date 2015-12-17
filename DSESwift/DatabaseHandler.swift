@@ -306,7 +306,6 @@ class DatabaseHandler: NSObject{
     static func getSensor(source: String, _ sensorName: String) throws -> Sensor {
         let realm = try! Realm()
         let predicates = NSPredicate(format: "source = %@ AND name = %@ AND userId = %@", source, sensorName, try self.getUserId())
-        NSLog("predicates:%@", predicates);
         let results = realm.objects(RLMSensor).filter(predicates)
         if (results.count < 1){
             throw DSEError.ObjectNotFound
