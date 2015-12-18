@@ -63,7 +63,6 @@ NSString* CSaccelerationZKey = @"z-axis";
 - (BOOL) isEnabled {return isEnabled;}
 
 - (void) setIsEnabled:(BOOL) enable {
-    
 	NSLog(@"%@ %@ sensor (id=%@).", enable ? @"Enabling":@"Disabling", [self class], self.sensorId);
 	isEnabled = enable;
 }

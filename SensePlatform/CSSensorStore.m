@@ -36,8 +36,6 @@
 #import "BloodPressureSensor.h"
 #import "CSScreenSensor.h"
 #import "CSSender.h"
-#import "CSStorage.h"
-#import "CSUploader.h"
 #import "CSStepCounterProcessorSensor.h"
 #import "CSTimeZoneSensor.h"
 
@@ -68,8 +66,6 @@
 
 @implementation CSSensorStore {
     CSSender* sender;
-//    CSStorage* storage;
-//    CSUploader* uploader;
 	
 	NSMutableDictionary* sensorData;
 	BOOL serviceEnabled;
