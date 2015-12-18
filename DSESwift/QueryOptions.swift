@@ -27,7 +27,6 @@ public struct QueryOptions{
         }
     }
 
-
     var startTime : NSDate? = nil // null by default, if not null, change from default
     var endTime: NSDate? = nil// null by default, if not null, change from default
     var existsInRemote: Bool? = nil // null by default, if not null, change from default

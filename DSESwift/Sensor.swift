@@ -81,6 +81,10 @@ public enum SortOrder{
      **/
     public func insertOrUpdateDataPoint(value value: AnyObject, time: NSDate) throws {
         let dataStructure = try DatabaseHandler.getSensorProfile(self.name)?.dataStructure
+        NSLog("inserting value for sensor:%@ schema:%@", self.name, dataStructure!)
+        print("value:", value)
+        print("valuetype:", value.dynamicType)
+        //NSLog("stacktrace:%@", NSThread.callStackSymbols())
         if !JSONUtils.validateValue(value, schema: dataStructure!){
             throw DSEError.IncorrectDataStructure
         }

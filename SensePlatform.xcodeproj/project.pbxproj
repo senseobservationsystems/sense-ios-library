@@ -76,6 +76,7 @@
 		27A118A41C0DFD9C0095A34B /* CSSensorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A118A31C0DFD9C0095A34B /* CSSensorConstants.m */; };
 		27A118A51C0EF64E0095A34B /* CSSensorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A118A21C0DFBEC0095A34B /* CSSensorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27A118A61C0EF6770095A34B /* DSECallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A1189D1C0DD9710095A34B /* DSECallback.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		27A5CAD51C24598600529F28 /* DSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC4EC861BA086BC00B24CAA /* DSESwift.framework */; };
 		27C2F3AC1BBD955000832A7F /* QueryOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C2F3AB1BBD955000832A7F /* QueryOptions.swift */; };
 		27C797EB1C0DB91D0009EBC1 /* DSEConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C797EA1C0DB91D0009EBC1 /* DSEConfig.swift */; };
 		27CE749C1BDFC52D0095E735 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CE74981BDFC4F00095E735 /* Realm.framework */; };
@@ -87,6 +88,7 @@
 		27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F752721BB02512000FC400 /* TestKeychainWrapper.swift */; };
 		27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC4EC941BA086BC00B24CAA /* DatabaseHandlerTests.swift */; };
 		27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F89E1C1BB9966B0006C15A /* DataPointTests.swift */; };
+		27FDC31F1C240D3900136959 /* VVJSONSchemaValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FDC31E1C240D3900136959 /* VVJSONSchemaValidationTests.swift */; };
 		A5702C861BCF8E2B004FFFA1 /* DataSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5702C851BCF8E2B004FFFA1 /* DataSyncer.swift */; };
 		A5C1FE391BDA1F1200196C51 /* DataSyncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C1FE381BDA1F1200196C51 /* DataSyncerTests.swift */; };
 		FA0DECBB1BF1F2A100DB4CB4 /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */; };
@@ -303,6 +305,7 @@
 		27F1D1A91BD7A4A000ACE232 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		27F752721BB02512000FC400 /* TestKeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestKeychainWrapper.swift; sourceTree = "<group>"; };
 		27F89E1C1BB9966B0006C15A /* DataPointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPointTests.swift; sourceTree = "<group>"; };
+		27FDC31E1C240D3900136959 /* VVJSONSchemaValidationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VVJSONSchemaValidationTests.swift; sourceTree = "<group>"; };
 		3E148B7C160A11280010A0D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		3E148B95160A12010010A0D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3E148BC7160A17F50010A0D1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -471,6 +474,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27A5CAD51C24598600529F28 /* DSESwift.framework in Frameworks */,
 				FA66C2A21BA86E9E00281B6F /* SensePlatform.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -816,6 +820,7 @@
 				FA0DECBA1BF1F2A100DB4CB4 /* PromiseTests.swift */,
 				FA38739E1BF378800078A85D /* DataStorageEngineTests.swift */,
 				FA51BAAB1BF5E81C00EB45DB /* TestUtils.swift */,
+				27FDC31E1C240D3900136959 /* VVJSONSchemaValidationTests.swift */,
 			);
 			path = DSESwiftTests;
 			sourceTree = "<group>";
@@ -1262,6 +1267,7 @@
 				27F752751BB02793000FC400 /* DatabaseHandlerTests.swift in Sources */,
 				27457AB51BFC8D510028CF58 /* SensorTests.swift in Sources */,
 				27F752731BB02512000FC400 /* TestKeychainWrapper.swift in Sources */,
+				27FDC31F1C240D3900136959 /* VVJSONSchemaValidationTests.swift in Sources */,
 				276CBB811BB52B9D001C287D /* testObject.swift in Sources */,
 				27F89E1D1BB9966B0006C15A /* DataPointTests.swift in Sources */,
 				278CCD081BD0F30300BC7B9C /* CSAccountUtils.swift in Sources */,
@@ -1581,11 +1587,15 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(inherited)",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SensePlatformTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatformTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1606,11 +1616,15 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(inherited)",
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = SensePlatformTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.almende.SensePlatformTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

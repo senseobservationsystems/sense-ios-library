@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import DSESwift
 
 class SensePlatformTests: XCTestCase {
     
@@ -33,10 +34,31 @@ class SensePlatformTests: XCTestCase {
             try CSSensePlatform.loginWithUser("Username", andPassword: "Password", completeHandler: completeHandler, failureHandler: {})
         }catch{
             print(error)
+            XCTFail()
         }
         
         waitForExpectationsWithTimeout(30, handler: nil)
     }
-
+    
+    func testAddDataPoint(){
+        testInitialization()
+        
+        CSSensePlatform.addDataPointForSensor("time_active", displayName: "", description: "", dataType: kCSDATA_TYPE_FLOAT, stringValue: "0.00000000000000", timestamp: NSDate())
+        
+        do{
+            let sensor = try DataStorageEngine.getInstance().getSensor("sense-library", sensorName: "time_active")
+            let queryOptions = QueryOptions()
+            let dataPoints = try sensor.getDataPoints(queryOptions)
+            XCTAssertEqual(dataPoints.count, 1)
+            print(dataPoints[0].value)
+        }catch{
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func test(){
+        print(NSNumberFormatter().numberFromString("0.0000000000"));
+    }
     
 }

@@ -241,28 +241,29 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     
     NSMutableDictionary* fields;
 
-    if ([dataType isEqualToString:kCSDATA_TYPE_JSON]) {
-        fields = [[NSMutableDictionary alloc] init];
-        //extract data structure from value
-        @try {
-            NSError* error = nil;
-            NSData* jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary* values = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-            if (error)
-                @throw [NSException exceptionWithName:@"Invalid JSON" reason:@"Value is not JSON" userInfo:nil];
-            
-            for (NSString* key in values) {
-                NSString* type = [CSSensePlatform dataTypeOf:[values objectForKey:key]];
-                if (type == nil)
-                    type = @"";
-                [fields setObject:type forKey:key];
-            }
-            
-        }
-        @catch (NSException *exception) {
-            NSLog(@"SensePlatform addDataPointForSensor %@: error extracting datatype from sensor value (%@)", sensorName, value);
-        }
-    }
+    // TODO: remove this whole thing if fields is not used
+//    if ([dataType isEqualToString:kCSDATA_TYPE_JSON]) {
+//        fields = [[NSMutableDictionary alloc] init];
+//        //extract data structure from value
+//        @try {
+//            NSError* error = nil;
+//            NSData* jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
+//            NSDictionary* values = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+//            if (error)
+//                @throw [NSException exceptionWithName:@"Invalid JSON" reason:@"Value is not JSON" userInfo:nil];
+//            
+//            for (NSString* key in values) {
+//                NSString* type = [CSSensePlatform dataTypeOf:[values objectForKey:key]];
+//                if (type == nil)
+//                    type = @"";
+//                [fields setObject:type forKey:key];
+//            }
+//            
+//        }
+//        @catch (NSException *exception) {
+//            NSLog(@"SensePlatform addDataPointForSensor %@: error extracting datatype from sensor value (%@)", sensorName, value);
+//        }
+//    }
     if (displayName == nil)
         displayName = sensorName;
     if (description == nil)
@@ -274,12 +275,33 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     //add sensor to the sensor store
     //[[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
-    NSError* error;
+    NSLog(@"---addDataPoints with value: %@", value);
     id jsonValue = value;
-    if (value != nil && [value isKindOfClass:[NSString class]])
-        jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
-    if (error != nil)
-        jsonValue = value;
+    if (value != nil && [value isKindOfClass:[NSString class]]){
+        NSString* stringValue = (NSString*) value;
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        formatter.decimalSeparator = @".";
+        NSLog(@"---addDataPoints with stringValue: %@", stringValue);
+        if(dataType == kCSDATA_TYPE_FLOAT){
+            jsonValue = [formatter numberFromString:stringValue];
+            NSLog(@"---float: %@", jsonValue);
+        }else if (dataType == kCSDATA_TYPE_INTEGER){
+            jsonValue = [formatter numberFromString:stringValue];
+            NSLog(@"---int: %@", jsonValue);
+        }else if (dataType == kCSDATA_TYPE_STRING){
+            jsonValue = stringValue;
+            NSLog(@"---string: %@", jsonValue);
+        }
+//        }else if (dataType == kCSDATA_TYPE_JSON){
+//            NSError *error = nil;
+//            jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+//            if (error) {
+//                NSLog(@"Error while serializing jsonValue to NSData. Error:%@", error);
+//            }
+//        }
+    }
+//    if (error != nil)
+//        jsonValue = value;
     [sensor commitValue:jsonValue withTimestamp:timestamp];
 }
 

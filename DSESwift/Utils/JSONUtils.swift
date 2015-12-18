@@ -145,7 +145,7 @@ public class JSONUtils{
     
     private class func getJSONSchemaValidator(schema: String) throws -> VVJSONSchema{
         let schemaInDict = try getSchemaInDictionary(schema)
-        //VVJSONSchemaValication library is written in Objective-C and not completely upto date with Framework. In the original Objective-C it allows us to pass nil for baseURI and reference Storage, but not in swift. It seems like automatic generation of framework is doing something wrong. Thus, we need to pass meaning less empty stuff here.
+        //VVJSONSchemaValication library is written in Objective-C and not completely upto date with Framework. In the original Objective-C it allows us to pass nil for baseURI and reference Storage, but not in swift. It seems like automatic generation of framework is doing something wrong. Thus, we need to pass meaningless empty arguments here.
         let schemaStorage = VVJSONSchemaStorage.init()
         let baseUri = NSURL.init(fileURLWithPath: "")
         return try VVJSONSchema.init(dictionary: schemaInDict, baseURI: baseUri, referenceStorage: schemaStorage)

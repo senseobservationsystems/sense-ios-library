@@ -171,13 +171,7 @@ class DataSyncer : NSObject {
         do{
             let sensors = try getSensorsFromRemote()
             for sensor in sensors {
-                if try !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
-                    try DatabaseHandler.insertSensor(sensor)
-                    self.delegate?.onSensorCreated(sensor.name)
-                } else {
-                    let sensorInLocal = try DatabaseHandler.getSensor(sensor.source, sensor.name)
-                    try DatabaseHandler.updateSensor(sensorInLocal)
-                }
+                try self.insertOrUpdateSensorIntoLocal(sensor)
             }
             
             self.delegate?.onSensorsDownloadCompleted()
@@ -256,6 +250,19 @@ class DataSyncer : NSObject {
         } while (!isCompleted)
     }
     
+    private func insertOrUpdateSensorIntoLocal(sensor: Sensor) throws{
+        if try !DatabaseHandler.hasSensor(sensor.source, sensorName: sensor.name) {
+            do{
+                try DatabaseHandler.insertSensor(sensor)
+                self.delegate?.onSensorCreated(sensor.name)
+            }catch DSEError.InvalidSensorName {
+                print("Invalid SensorName: ", sensor.name)
+            }
+        } else {
+            let sensorInLocal = try DatabaseHandler.getSensor(sensor.source, sensor.name)
+            try DatabaseHandler.updateSensor(sensorInLocal)
+        }
+    }
     
     private func getTimestampOfLastDataPoint(sensorData: JSON) -> NSDate?{
         let data = sensorData["data"]
