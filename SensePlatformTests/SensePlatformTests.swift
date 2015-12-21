@@ -13,29 +13,30 @@ class SensePlatformTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        CSSettings.sharedSettings().setSettingType(kCSSettingTypeGeneral, setting:
+        
+        CSSensePlatform.initializeWithApplicationKey("o4cbgFZjPPDA6GO32WipJBLnyazu8w4o")
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        
         super.tearDown()
     }
     
     func testInitialization() {
+        // Arange: set expectation and callback
         let expectation = expectationWithDescription("wait for success callback")
         let completeHandler = {expectation.fulfill()}
-        
-        CSSettings.sharedSettings().setSettingType(kCSSettingTypeGeneral, setting: kCSGeneralSettingUseStaging, value: kCSSettingYES, persistent: true)
-        //setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUseStaging value:(enabled ? kCSSettingYES : kCSSettingNO) persistent:NO]
-        
-        CSSensePlatform.initializeWithApplicationKey("o4cbgFZjPPDA6GO32WipJBLnyazu8w4o")
-        
+
+        // Act: Login
         do{
             try CSSensePlatform.loginWithUser("Username", andPassword: "Password", completeHandler: completeHandler, failureHandler: {})
         }catch{
             print(error)
             XCTFail()
         }
+        
+        // Assert: State of DSE
         
         waitForExpectationsWithTimeout(30, handler: nil)
     }

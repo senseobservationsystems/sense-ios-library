@@ -142,6 +142,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 -(void) start{
+    // TODO: change the condition here. Check sessionId and userId instead of checking boolean for isLoggedin.
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userLoggedIn"] == YES) {
         // User is already loggedin, renew session-ID and reinitialize DSE
         NSLog(@"---SensorStore initialization. Already logged in.");
@@ -169,6 +170,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         NSLog(@"Error during login: %@", *error);
     }
     if (succeed) {
+        // TODO: persist the login info? Or we can rely on persisted credentials in DSE?
         NSString* sessionId = [self.sender getSessionId];
         NSString* userId = [self.sender getUserId];
         NSString* appKey = self.sender.applicationKey;
@@ -207,8 +209,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 
 - (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler: (void (^)()) success failureHandler: (void (^)()) failure{
-    NSError* error = nil;
+    // Update credentials
     DataStorageEngine* dse = [DataStorageEngine getInstance];
+    NSError* error = nil;
     DSEConfig* dseConfig = [[DSEConfig alloc] init];
     dseConfig.sessionId = sessionId;
     dseConfig.userId = userId;
@@ -218,8 +221,11 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         NSLog(@"Error: %@",error);
         return;
     }
-    
+    //TODO: replace this condition with a check for sessionId and AppKey.
+    //TODO: probably we do not have to pass credentials as parameters.
     if ([dse getStatus] != DSEStatusINITIALIZED) {
+
+        
         [self initializeDSEWithSuccessHandler:success failureHandler: failure];
     }
 }
