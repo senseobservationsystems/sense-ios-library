@@ -156,15 +156,6 @@ CLLocation* previousLocation;
 	}
     
     [self commitDataPointWithValue:newItem andTime:location.timestamp];
-	
-//	double timestamp = [location.timestamp timeIntervalSince1970];
-//	
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										newItem, @"value",
-//									 	CSroundedNumber(timestamp, 3), @"date",
-//										nil];
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
-	
 	return true;
 }
 

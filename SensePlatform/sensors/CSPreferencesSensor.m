@@ -62,24 +62,10 @@ static NSString* valueKey = @"value";
 
 - (void) commitPreference:(NSNotification*) notification {
 	CSSetting* setting = notification.object;
-	
-    /*
-	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									setting.name, variableKey,
-									setting.value, valueKey,
-									nil];
-     */
     NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 									setting.value, setting.name,
 									nil];
     NSDate* time = [NSDate date];
-//	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-	
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										newItem, @"value",
-//										timestamp,@"date",
-//										nil];
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     [self commitDataPointWithValue:newItem andTime:time];
 }
 

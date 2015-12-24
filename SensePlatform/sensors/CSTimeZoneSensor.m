@@ -69,16 +69,10 @@ static NSString* idKey = @"id";
     NSTimeZone* localTimeZone = [NSTimeZone systemTimeZone];
     NSInteger secondsFromGmt = [localTimeZone secondsFromGMT];
     NSString* timeZoneString = localTimeZone.name;
-    
     NSDictionary* value = @{offsetKey:@(secondsFromGmt), idKey:timeZoneString};
-    
-//	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-
     NSLog(@"Timezone changed to %@ with offset %li", timeZoneString, (long)secondsFromGmt);
 
     [self commitDataPointWithValue:value andTime:[NSDate date]];
-    
-//    [dataStore commitFormattedData:@{@"value":@{offsetKey:@(secondsFromGmt), idKey:timeZoneString}, @"date":timestamp} forSensorId:[self sensorId]];
 }
 
 @end

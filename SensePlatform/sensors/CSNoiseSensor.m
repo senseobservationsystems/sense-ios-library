@@ -279,8 +279,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
     UInt32 propertySize = 0;
     UInt64 packetsCount = 0;
     
-    NSLog(@"---NoiseSensor: Computing Audio Volume");
-    
     // open recording file
     result = AudioFileOpenURL(CFBridgingRetain(recording), kAudioFileReadPermission, 0, &recordingFile);
     if (result != 0) {
@@ -297,12 +295,7 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
     if (result != noErr) {
         NSLog(@"Error: Getting property %d\n", (int)result);
     }
-    //else {
-    //    NSLog(@"Number of pakcets: %llu\n", packetsCount);
-    //}
     numberOfPackets = (int) packetsCount;
-    
-    NSLog(@"---NoiseSensor: PacketCounts:%d", numberOfPackets);
     
     rawSampleData = (short int*) malloc(numberOfPackets * sizeof(short int));
 
@@ -320,21 +313,11 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
     avgOfRawSampleData = sumOfRawSampleData / numberOfPackets;
     rootAvgOfRawSampleData = sqrt(avgOfRawSampleData);
     volumeOfAudioSignal = 10 * (log10(avgOfRawSampleData));
-    
-    NSLog(@"---NoiseSensor: Prepare level");
 
     NSDate* time = [NSDate date];
     double level = volumeOfAudioSignal;
     
-    NSLog(@"---NoiseSensor: level = %f", level);
-	
-//    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                        CSroundedNumber(level, 1), @"value",
-//                                        CSroundedNumber(timestamp, 3), @"date",
-//                                        nil];
 	if (numberOfPackets > 0) {
-        //[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-        NSLog(@"---NoiseSensor: store data");
         [self commitDataPointWithValue:CSroundedNumber(level, 1) andTime:time];
     }
     

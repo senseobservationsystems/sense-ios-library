@@ -65,21 +65,8 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 }
 
 - (void) commitDisplayState:(const NSString *) state {
-//	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
     NSDate* time = [NSDate date];
-//	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-//									state, screenKey,
-//									nil];
-	
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										newItem, @"value",
-//										timestamp,@"date",
-//										nil];
-//	
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-    
     [self commitDataPointWithValue:state andTime:time];
-
 }
 
 - (BOOL) isEnabled {return isEnabled;}

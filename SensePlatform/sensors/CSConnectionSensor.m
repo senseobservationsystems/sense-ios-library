@@ -69,14 +69,6 @@
 		}
     }
     NSDate* time = [NSDate date];
-	
-//	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-//	
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										statusString, @"value",
-//										timestamp,@"date",
-//										nil];
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     [self commitDataPointWithValue:statusString andTime:time];
 }
 

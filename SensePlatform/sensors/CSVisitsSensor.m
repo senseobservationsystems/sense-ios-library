@@ -87,15 +87,6 @@ static NSString* eventKey = @"event";
 									CSroundedNumber(latitude, 8), latitudeKey,
 									CSroundedNumber(accuracy, 8), accuracyKey,
 									nil];
-	
-//	double timestamp = [eventDate timeIntervalSince1970];
-//	
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										newItem, @"value",
-//										CSroundedNumber(timestamp, 3), @"date",
-//										nil];
-//	
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
     [self commitDataPointWithValue:newItem andTime:eventDate];
 }
 

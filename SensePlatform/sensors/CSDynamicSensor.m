@@ -83,11 +83,6 @@
 
 
 - (void) commitValue:(id)value withTimestamp:(NSDate*) time {
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										value, @"value",
-//										CSroundedNumber(timestamp, 3),@"date",
-//										nil];
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     [self commitDataPointWithValue:value andTime:time];
 }
 

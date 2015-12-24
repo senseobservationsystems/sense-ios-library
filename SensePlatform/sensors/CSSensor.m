@@ -66,7 +66,6 @@
 }
 
 - (void) enabledChanged: (id) notification {
-    NSLog(@"--enableChanged:%@", self.class);
 	self.isEnabled = [[notification object] boolValue];
 }
 

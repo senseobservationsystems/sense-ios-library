@@ -104,11 +104,11 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 }
 
 + (void) willTerminate {
-    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:^{} failureCallback:^(NSError* error){}];
+    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:nil failureCallback:^(NSError* error){NSLog(@"flush data failed");}];
 }
 
 + (void) flushData {
-    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:^{} failureCallback:^(NSError* error){}];
+    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:nil failureCallback:^(NSError* error){NSLog(@"flush data failed");}];
 }
 
 + (void) flushDataWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback {

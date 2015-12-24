@@ -93,23 +93,12 @@ static NSString* levelKey = @"level";
                                         batteryState, stateKey,
                                         nil];
         
-        //NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-        
         NSError* error = nil;
         DataStorageEngine* dse = [DataStorageEngine getInstance];
         Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:self.name error:&error];
         
         error = nil;
         [sensor insertOrUpdateDataPointWithValue:newItem time:[NSDate date] error:&error];
-        
-    
-    
-        
-//	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//										newItem, @"value",
-//										timestamp,@"date",
-//										nil];
-//	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
     }
 }
 

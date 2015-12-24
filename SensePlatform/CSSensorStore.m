@@ -375,7 +375,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		}
 
 		//flush data
-        [self forceDataFlushWithSuccessCallback:^{} failureCallback:^(NSError* error){}];
+        [self forceDataFlushWithSuccessCallback:nil failureCallback:nil];
         
         //set timer
         //[self stopUploading];
@@ -394,7 +394,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (void) loginChanged {
 	//flush current data before making any changes
-	//[self forceDataFlush];
+    [self forceDataFlushWithSuccessCallback:nil failureCallback:nil];
 	
 	//get new settings
     NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
@@ -456,12 +456,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) forceDataFlushWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback {
     //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
     void (^successHandler)() = ^(){
-        successCallback();
+        if (successCallback) {
+            successCallback();
+        }
         NSLog(@"Flush completed");
     };
     
     void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
-        failureCallback(nil);
+        if (failureHandler) {
+            failureCallback(nil);
+        }
         NSLog(@"Error:%ld", (long)error);
     };
     
