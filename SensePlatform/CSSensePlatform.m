@@ -248,24 +248,18 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:description dataType:dataType fields:nil device:device];
 
     //commit value
-    NSLog(@"---addDataPoints with value: %@", value);
     id jsonValue = value;
     if (value != nil && [value isKindOfClass:[NSString class]]){
         NSString* stringValue = (NSString*) value;
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         formatter.decimalSeparator = @".";
-        NSLog(@"---addDataPoints with stringValue: %@", stringValue);
         if(dataType == kCSDATA_TYPE_FLOAT){
             jsonValue = [formatter numberFromString:stringValue];
-            NSLog(@"---float: %@", jsonValue);
         }else if (dataType == kCSDATA_TYPE_INTEGER){
             jsonValue = [formatter numberFromString:stringValue];
-            NSLog(@"---int: %@", jsonValue);
         }else if (dataType == kCSDATA_TYPE_STRING){
             jsonValue = stringValue;
-            NSLog(@"---string: %@", jsonValue);
         }else if (dataType == kCSDATA_TYPE_JSON){
-            NSLog(@"---json: %@", jsonValue);
             NSError *error = nil;
             jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
             if (error) {
@@ -275,7 +269,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     }
 
     if (jsonValue == nil) {
-        NSLog(@"Error during adding DataPoint. Invalid value.");
+        NSLog(@"Error during adding DataPoint. Invalid value type.");
     }
     
     [sensor commitValue:jsonValue withTimestamp:timestamp];

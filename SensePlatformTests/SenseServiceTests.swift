@@ -37,7 +37,7 @@ class SenseServiceTests: XCTestCase {
         let dse = DataStorageEngine.getInstance()
         XCTAssertEqual(dse.getStatus(), DSEStatus.INITIALIZED)
         
-        waitForExpectationsWithTimeout(30, handler: nil)
+        waitForExpectationsWithTimeout(5, handler: nil)
     }
     
     func testRespawn() {
@@ -54,7 +54,7 @@ class SenseServiceTests: XCTestCase {
         // Assert: State of DSE should be initialized, because credentails and db contents should be persisted and global.
         let dse = DataStorageEngine.getInstance()
         XCTAssertEqual(dse.getStatus(), DSEStatus.INITIALIZED)
-        waitForExpectationsWithTimeout(30, handler: nil)
+        waitForExpectationsWithTimeout(5, handler: nil)
     }
     
     func testCreateUniqueSensorStore(){

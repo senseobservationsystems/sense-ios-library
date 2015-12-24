@@ -78,7 +78,6 @@
 }
 
 - (void) commitDataPointWithValue:(id)value andTime: (NSDate*) time{
-    NSLog(@"----Sensor:%@, value: %@, time: %@", self.name, value, time);
     // Broadcast the data
     NSDictionary* data = [NSDictionary dictionaryWithObjectsAndKeys:
                                                 value, @"value",

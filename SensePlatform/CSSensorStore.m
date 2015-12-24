@@ -170,7 +170,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 
 - (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    //[self.sender setUser:user andPasswordHash:password];
     
     return [self loginWithCompleteHandler:successHandler failureHandler:failureHandler andError:error];
 }
@@ -210,14 +209,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         
         DataStorageEngine* dse = [DataStorageEngine getInstance];
         if ([dse getStatus] != DSEStatusINITIALIZED) {
-            [self initializeDSEWithSuccessHandler:successHandler failureHandler: failureHandler];
+            [self initializeDSEWithCompleteHandler:successHandler failureHandler: failureHandler];
         } else {
             [self initializeSensorsWithCompleteHandler:successHandler];
         }
         
     }else{
         NSLog(@"---SensorStore initialization. Not logged in yet");
-        failureHandler();
+        if (failureHandler){
+            failureHandler();
+        }
     }
 }
 
@@ -237,16 +238,18 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
-- (void) initializeDSEWithSuccessHandler:(void (^)()) success failureHandler: (void (^)()) failure{
+- (void) initializeDSEWithCompleteHandler:(void (^)()) completeHandler failureHandler: (void (^)()) fHandler{
     // Set up callbacks
     void (^successHandler)() = ^(){
         NSLog(@"successcallback");
-        [self initializeSensorsWithCompleteHandler:success];
+        [self initializeSensorsWithCompleteHandler:completeHandler];
     };
     
     void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
         NSLog(@"Error:%ld", (long)error);
-        failure();
+        if (fHandler){
+            fHandler();
+        }
     };
     
     DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
@@ -282,7 +285,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
--(void) initializeSensorsWithCompleteHandler: (void (^)())success {
+-(void) initializeSensorsWithCompleteHandler: (void (^)())completeHandler {
     //set settings and initialise sensors
     if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
         [self instantiateSensors];
@@ -292,7 +295,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         });
     }
     [self applyGeneralSettings];
-    success();
+    if (completeHandler) {
+        completeHandler();
+    }
 }
 
 - (void) instantiateSensors {

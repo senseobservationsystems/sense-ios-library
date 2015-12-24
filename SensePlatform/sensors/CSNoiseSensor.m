@@ -120,9 +120,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
 	if (![session setActive:YES error:&activationError]) {
 		NSLog(@"Audio session can't be activated. Error: %@", activationError);
 	}
-    
-    NSLog(@"----NoiseSensor: Set Audio Session Category: %@", session.category);
-    NSLog(@"----NoiseSensor: Set Audio Session Active: %d", session.inputAvailable);
 }
 
 /** Initalize and configure the audio recorder
@@ -148,7 +145,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
         NSLog(@"Recorder could not be initialised. Error: %@", error);
     }
     else {
-        NSLog(@"---NoiseSensor: setDelegate. AudioRecorder address:%p", audioRecorder);
         audioRecorder.delegate = self;
         [audioRecorder prepareToRecord];
     }
@@ -156,7 +152,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
 }
 
 - (void) scheduleRecording {
-    NSLog(@"---NoiseSensor: schedule recording");
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, sampleInterval * NSEC_PER_SEC);
     dispatch_after(popTime, recordQueue, ^(void){
         @autoreleasepool {
@@ -180,17 +175,11 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
 		// sample when screen does not block recording (because it is unlocked) or when we don't care about screen lock
 		if((sampleOnlyWhenScreenLocked == NO) || (screenstateBlocksRecording == NO)){
             dispatch_sync(dispatch_get_main_queue(), ^{
-                NSLog(@"---NoiseSensor: StartRecoding with AudioRecorder address:%p", audioRecorder);
-                NSLog(@"---NoiseSensor: Recording starts. Duration:%f:", sampleDuration);
-                NSLog(@"----NoiseSensor: Audio Session Category: %@", [AVAudioSession sharedInstance].category);
-                NSLog(@"----NoiseSensor: Audio Session Active: %d", [AVAudioSession sharedInstance].inputAvailable);
-                NSLog(@"---NoiseSensor: MainThread?:%d:", [NSThread isMainThread]);
                 started = [audioRecorder recordForDuration:sampleDuration];
             });
 		}
 	}
-	
-    NSLog(@"---NoiseSensor: Started?:%d:", started);
+
 	//Schedule a new recording if this one was not started
 	if (started == NO || audioRecorder.isRecording == NO) {
 		[self scheduleRecording];
@@ -209,7 +198,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
 	NSLog(@"%@ noise sensor (id=%@)", enable ? @"Enabling" : @"Disabling", self.sensorId);
 	isEnabled = enable;
 	if (enable) {
-        NSLog(@"---enable noise sensor. enable = true");
         if (sampleOnlyWhenScreenLocked){
             [[CSSensorRequirements sharedRequirements] setRequirements:self->requirements byConsumer:CONSUMER_NAME];
         }
@@ -227,7 +215,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
         NSLog(@"[Noise Sensor] Sending notification to Location Provider!");
         [[NSNotificationCenter defaultCenter] postNotificationName: kCSEnableLocationProvider object:nil];
 	} else {
-        NSLog(@"---enable noise sensor. enable = false");
 		[audioRecorder stop];
 		audioRecorder.delegate = nil;
         NSError* error;
@@ -238,7 +225,6 @@ static NSString* CONSUMER_NAME = @"nl.sense.sensors.noise";
 }
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)didSucceed {
-    NSLog(@"----audioRecorderDidFinishRecording");
     if (didSucceed ==TRUE) {
         // calculate the audio recording volume in dBs
         [self computeAudioVolume];

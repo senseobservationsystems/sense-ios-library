@@ -112,7 +112,6 @@ import Foundation
      * Stop the timer for periodic syncing.
      **/
     public func stopPeriodicSync(){
-        print("---stopPeriodicSync")
         self.dataSyncer.stopPeriodicSync()
     }
     

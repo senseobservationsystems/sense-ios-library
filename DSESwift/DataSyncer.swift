@@ -199,13 +199,10 @@ class DataSyncer : NSObject {
 
     func uploadSensorDataToRemote() throws {
         let sensorsInLocal = try getSensorsInLocal()
-        print("---- local sensors:", sensorsInLocal.count)
         for sensor in sensorsInLocal {
-            print("--- Sensor to be uploaded:", sensor.name, sensor.remoteUploadEnabled)
             if (sensor.remoteUploadEnabled){
                 // upload datapoints that are not yet uploaded to remote
                 let dataPointsToUpload = try getDataPointsToUpload(sensor)
-                print("--- DataPoints be uploaded:", dataPointsToUpload.count)
                 let dataArray = try JSONUtils.getJSONArray(dataPointsToUpload, sensorName: sensor.name)
                 try SensorDataProxy.putSensorData(sourceName: sensor.source, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
                 // Update the existsInRemote status of datapoints to true
