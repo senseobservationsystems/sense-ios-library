@@ -19,6 +19,11 @@
 #import "CSSettings.h"
 #import "CSApplicationStateChange.h"
 
+
+
+#import "UIDevice+IdentifierAddition.h"
+#import "UIDevice+Hardware.h"
+
 #import "CSLocationSensor.h"
 #import "CSVisitsSensor.h"
 #import "CSBatterySensor.h"
@@ -98,11 +103,7 @@
 static CSSensorStore* sharedSensorStoreInstance = nil;
 
 + (CSSensorStore*) sharedSensorStore {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-		sharedSensorStoreInstance = [[[super class] alloc] init];
-    });
-	return sharedSensorStoreInstance;	
+	return [self sharedInstance];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -141,46 +142,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 }
 
--(void) start{
-    // TODO: change the condition here. Check sessionId and userId instead of checking boolean for isLoggedin.
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userLoggedIn"] == YES) {
-        // User is already loggedin, renew session-ID and reinitialize DSE
-        NSLog(@"---SensorStore initialization. Already logged in.");
-        [self loadCreadentialsFromSettingsIntoSender];
-        NSError* error = nil;
-        [self loginWithCompleteHandler: ^{} failureHandler:^{[CSSensePlatform logout];} andError: &error];
-        
-    }else{
-        NSLog(@"---SensorStore initialization. Not logged in yet");
-        //TODO: Do something?
-    }
-}
-
-- (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
-    [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    
-    return [self loginWithCompleteHandler:successHandler failureHandler:failureHandler andError:error];
-}
-
-
-
-- (BOOL) loginWithCompleteHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error{
-    BOOL succeed = [self.sender loginWithError:error];
-    if (*error) {
-        NSLog(@"Error during login: %@", *error);
-    }
-    if (succeed) {
-        // TODO: persist the login info? Or we can rely on persisted credentials in DSE?
-        NSString* sessionId = [self.sender getSessionId];
-        NSString* userId = [self.sender getUserId];
-        NSString* appKey = self.sender.applicationKey;
-        [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey completeHandler:successHandler failureHandler:failureHandler];
-        
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
-    }
-    return succeed;
-}
-
 - (NSArray*) getAllSensorClassesArray{
     return [NSArray arrayWithObjects:
             [CSLocationSensor class],
@@ -207,9 +168,62 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 
+- (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
+    [[CSSettings sharedSettings] setLogin:user withPassword:password];
+    //[self.sender setUser:user andPasswordHash:password];
+    
+    return [self loginWithCompleteHandler:successHandler failureHandler:failureHandler andError:error];
+}
 
-- (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler: (void (^)()) success failureHandler: (void (^)()) failure{
-    // Update credentials
+- (BOOL) loginWithCompleteHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error{
+    BOOL succeed = [self.sender loginWithError:error];
+    if (*error) {
+        NSLog(@"Error during login: %@", *error);
+    }
+    if (succeed) {
+        NSString* sessionId = [self.sender getSessionId];
+        NSString* userId = [self.sender getUserId];
+        NSString* appKey = [self.sender applicationKey];
+        
+        //Persist
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:sessionId forKey:kCSCredentialsSessionId];
+        [defaults setObject:userId forKey:kCSCredentialsUserId];
+        [defaults setObject:appKey forKey:kCSCredentialsAppKey];
+        
+        [self startWithSuccessHandler:successHandler failureHandler:failureHandler];
+    }
+    return succeed;
+}
+
+-(void) start{
+    [self startWithSuccessHandler:^{} failureHandler:^{}];
+}
+
+-(void) startWithSuccessHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* sessionId = [defaults stringForKey:kCSCredentialsSessionId];
+    NSString* userId = [defaults stringForKey:kCSCredentialsUserId];
+    NSString* appKey = [defaults stringForKey:kCSCredentialsAppKey];
+    if (sessionId != nil && userId != nil && appKey != nil) {
+        [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey];
+        
+        DataStorageEngine* dse = [DataStorageEngine getInstance];
+        if ([dse getStatus] != DSEStatusINITIALIZED) {
+            [self initializeDSEWithSuccessHandler:successHandler failureHandler: failureHandler];
+        } else {
+            [self initializeSensorsWithCompleteHandler:successHandler];
+        }
+        
+    }else{
+        NSLog(@"---SensorStore initialization. Not logged in yet");
+        failureHandler();
+    }
+}
+
+- (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey{
+
+    // Load credentials to DSE
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     NSError* error = nil;
     DSEConfig* dseConfig = [[DSEConfig alloc] init];
@@ -221,19 +235,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         NSLog(@"Error: %@",error);
         return;
     }
-    //TODO: replace this condition with a check for sessionId and AppKey.
-    //TODO: probably we do not have to pass credentials as parameters.
-    if ([dse getStatus] != DSEStatusINITIALIZED) {
-
-        
-        [self initializeDSEWithSuccessHandler:success failureHandler: failure];
-    }
 }
 
 - (void) initializeDSEWithSuccessHandler:(void (^)()) success failureHandler: (void (^)()) failure{
     // Set up callbacks
-    void (^successHandler)() = ^(){NSLog(@"successcallback");
-        [self onDSEInitializationSuccessWithHandler:success];
+    void (^successHandler)() = ^(){
+        NSLog(@"successcallback");
+        [self initializeSensorsWithCompleteHandler:success];
     };
     
     void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
@@ -259,7 +267,22 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
--(void) onDSEInitializationSuccessWithHandler: (void (^)())success {
+-(void) configureSensor: (NSString*) sensorName{
+    NSError* error = nil;
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:sensorName error:&error];
+    NSDictionary* sensorOptions = [self getDefaultSensorOptionForSensor:sensor.name];
+    if (sensorOptions != nil){
+        NSError* error = nil;
+        SensorConfig* config = [[SensorConfig alloc] init];
+        config.uploadEnabled = [sensorOptions[@"upload_enabled"] boolValue];
+        config.downloadEnabled = [sensorOptions[@"download_enabled"] boolValue];
+        config.persist = [sensorOptions[@"persist_locally"] boolValue];
+        [sensor setSensorConfig:config error:&error];
+    }
+}
+
+-(void) initializeSensorsWithCompleteHandler: (void (^)())success {
     //set settings and initialise sensors
     if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
         [self instantiateSensors];
@@ -314,20 +337,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
--(void) configureSensor: (NSString*) sensorName{
-    NSError* error = nil;
-    DataStorageEngine* dse = [DataStorageEngine getInstance];
-    Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:sensorName error:&error];
-    NSDictionary* sensorOptions = [self getDefaultSensorOptionForSensor:sensor.name];
-    if (sensorOptions != nil){
-        NSError* error = nil;
-        SensorConfig* config = [[SensorConfig alloc] init];
-        config.uploadEnabled = [sensorOptions[@"upload_enabled"] boolValue];
-        config.downloadEnabled = [sensorOptions[@"download_enabled"] boolValue];
-        config.persist = [sensorOptions[@"persist_locally"] boolValue];
-        [sensor setSensorConfig:config error:&error];
-    }
-}
+
 
 - (NSDictionary*) getDefaultSensorOptionForSensor:(NSString*) sensorName{
     // get default sensor options from json file

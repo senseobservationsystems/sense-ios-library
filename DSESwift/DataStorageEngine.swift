@@ -172,9 +172,9 @@ import Foundation
      * @return The DSEStatus, this could be either AWAITING_CREDENTIALS, AWAITING_SENSOR_PROFILES, READY.
      **/
     public func getStatus() -> DSEStatus{
-        if(self.config.sessionId == "" || self.config.appKey == "" || self.config.userId == "") {
+        if(!self.areCredentialsPopulated()) {
             return DSEStatus.AWAITING_CREDENTIALS;
-        } else if(self.dataSyncer.initialized) {
+        } else if(self.isInitialized()) {
             return DSEStatus.INITIALIZED;
         } else {
             return DSEStatus.AWAITING_SENSOR_PROFILES;
@@ -276,6 +276,24 @@ import Foundation
             return false
         }
     }
+    
+    private func isInitialized() -> Bool {
+        if (self.areCredentialsPopulated() && dataSyncer.areSensorAndSensorProfilesPopulated()){
+            return true
+        }else{
+            return false
+        }
+    }
+    
+    private func areCredentialsPopulated() -> Bool {
+        if (self.config.sessionId != "" && self.config.appKey != "" && self.config.userId != ""){
+            return true
+        }else{
+            return false
+        }
+    }
+    
+
     
     private class DataSyncerCallbackHandler: DataSyncerDelegate{
         

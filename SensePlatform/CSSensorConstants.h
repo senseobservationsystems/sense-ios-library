@@ -19,6 +19,11 @@ extern NSString* const CSsettingLoginChangedNotification;
 extern NSString* const settingSynchronisationChangedNotification;
 extern NSString* const CSanySettingChangedNotification;
 
+//credentials
+extern NSString* const kCSCredentialsUserId;
+extern NSString* const kCSCredentialsAppKey;
+extern NSString* const kCSCredentialsSessionId;
+
 //setting types
 extern NSString* const kCSSettingTypeGeneral;
 extern NSString* const kCSSettingTypeBiometric;

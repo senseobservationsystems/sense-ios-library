@@ -20,17 +20,17 @@
 #import "CSDataStore.h"
 #import "CSSender.h"
 #import "CSSensor.h"
+#import "SingletonByChoice.h"
 
 #import <UIKit/UIKit.h>
-#import "UIDevice+IdentifierAddition.h"
-#import "UIDevice+Hardware.h"
+
 
 /**
  Handles sensor data storing and uploading. Start all sensors and data providers.
  
  Data is stored locally for 30 days. After a succesfull upload, older data is removed.
  */
-@interface CSSensorStore : NSObject <CSDataStore> {
+@interface CSSensorStore : SingletonByChoice <CSDataStore> {
 }
 
 @property (readonly) NSArray* allAvailableSensorClasses;
@@ -41,7 +41,6 @@
 + (CSSensorStore*) sharedSensorStore;
 + (NSDictionary*) device;
 
-- (id)init;
 - (void)start;
 - (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error;
 - (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler;

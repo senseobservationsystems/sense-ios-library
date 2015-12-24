@@ -239,41 +239,14 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString *)description device:(NSDictionary*)device dataType:(NSString*)dataType stringValue:(id)value timestamp:(NSDate*)timestamp {
     
-    NSMutableDictionary* fields;
-
-    // TODO: remove this whole thing if fields is not used
-//    if ([dataType isEqualToString:kCSDATA_TYPE_JSON]) {
-//        fields = [[NSMutableDictionary alloc] init];
-//        //extract data structure from value
-//        @try {
-//            NSError* error = nil;
-//            NSData* jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
-//            NSDictionary* values = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-//            if (error)
-//                @throw [NSException exceptionWithName:@"Invalid JSON" reason:@"Value is not JSON" userInfo:nil];
-//            
-//            for (NSString* key in values) {
-//                NSString* type = [CSSensePlatform dataTypeOf:[values objectForKey:key]];
-//                if (type == nil)
-//                    type = @"";
-//                [fields setObject:type forKey:key];
-//            }
-//            
-//        }
-//        @catch (NSException *exception) {
-//            NSLog(@"SensePlatform addDataPointForSensor %@: error extracting datatype from sensor value (%@)", sensorName, value);
-//        }
-//    }
     if (displayName == nil)
         displayName = sensorName;
     if (description == nil)
         description = sensorName;
     
     //create sensor
-    CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:description dataType:dataType fields:fields device:device];
+    CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:description dataType:dataType fields:nil device:device];
 
-    //add sensor to the sensor store
-    //[[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
     NSLog(@"---addDataPoints with value: %@", value);
     id jsonValue = value;
@@ -291,17 +264,20 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
         }else if (dataType == kCSDATA_TYPE_STRING){
             jsonValue = stringValue;
             NSLog(@"---string: %@", jsonValue);
+        }else if (dataType == kCSDATA_TYPE_JSON){
+            NSLog(@"---json: %@", jsonValue);
+            NSError *error = nil;
+            jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+            if (error) {
+                NSLog(@"Error while serializing jsonValue to NSData. Error:%@", error);
+            }
         }
-//        }else if (dataType == kCSDATA_TYPE_JSON){
-//            NSError *error = nil;
-//            jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
-//            if (error) {
-//                NSLog(@"Error while serializing jsonValue to NSData. Error:%@", error);
-//            }
-//        }
     }
-//    if (error != nil)
-//        jsonValue = value;
+
+    if (jsonValue == nil) {
+        NSLog(@"Error during adding DataPoint. Invalid value.");
+    }
+    
     [sensor commitValue:jsonValue withTimestamp:timestamp];
 }
 

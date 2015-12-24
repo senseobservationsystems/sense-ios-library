@@ -73,7 +73,19 @@
     },
     {
         "sensor_name": "time_active",
-        "persist_locally": false,
+        "persist_locally": true,
+        "upload_enabled": true,
+        "download_enabled": false
+    },
+    {
+        "sensor_name": "sleep",
+        "persist_locally": true,
+        "upload_enabled": true,
+        "download_enabled": false
+    },
+    {
+        "sensor_name": "sleep_estimate",
+        "persist_locally": true,
         "upload_enabled": true,
         "download_enabled": false
     }

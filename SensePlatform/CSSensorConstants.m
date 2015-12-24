@@ -16,6 +16,11 @@ NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
 NSString* const CSsettingLoginChangedNotification = @"CSsettingLoginChangedNotification";
 NSString* const CSanySettingChangedNotification = @"CSanySettingChangedNotification";
 
+//credentials
+NSString* const kCSCredentialsUserId = @"CSCredentialsUserId";
+NSString* const kCSCredentialsAppKey = @"CSCredentialsAppKey";
+NSString* const kCSCredentialsSessionId = @"CSCredentialsSessionId";
+
 //setting types
 NSString* const kCSSettingTypeGeneral = @"general";
 NSString* const kCSSettingTypeBiometric = @"biometric";

@@ -20,10 +20,10 @@ class DataSyncerTests: XCTestCase{
     
     let userId = "testuser"
     
-    let sourceName1 = "aim-ios-sdk"
+    let sourceName1 = "sense-library"
     let sensorName1 = "accelerometer"
     
-    let sourceName2 = "aim-ios-sdk"
+    let sourceName2 = "sense-library"
     let sensorName2 = "time_active"
     
     let sourceName3 = "fitbit"

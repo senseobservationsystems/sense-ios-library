@@ -30,8 +30,6 @@ class DataSyncer : NSObject {
     let data_syncer_process_queue = dispatch_queue_create(DSEConstants.DATASYNCER_PROCESS_QUEUE_ID, nil)
     
     var delegate: DataSyncerDelegate?
-    
-    private(set) var initialized = false
 
     // the key for the string should be <source>:<sensor>
     override init () {
@@ -73,7 +71,6 @@ class DataSyncer : NSObject {
                 try self.downloadSensorProfiles()
                 try self.downloadSensorsFromRemote()
                 print("DSE Initialization Completed")
-                self.initialized = true
                 self.delegate?.onInitializationCompleted()
             }catch{ let e = error as! DSEError
                 self.delegate?.onInitializationFailed(e)
@@ -86,7 +83,7 @@ class DataSyncer : NSObject {
      **/
     func startPeriodicSync() {
         dispatch_async(dispatch_get_main_queue(), {
-            if (self.initialized){
+            if (self.areSensorAndSensorProfilesPopulated()){
                 if (self.enablePeriodicSync){
                     self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
                     self.timer!.fire()
@@ -224,6 +221,20 @@ class DataSyncer : NSObject {
         let sensorsInLocal = try getSensorsInLocal()
         for sensor in sensorsInLocal {
             try purgeDataForSensor(sensor)
+        }
+    }
+    
+    func areSensorAndSensorProfilesPopulated() -> Bool {
+        do{
+            let areSensorsDownloaded = (try DatabaseHandler.getSources().count > 0)
+            let areSensorProfilesDownloaded = (try DatabaseHandler.getSensorProfiles().count > 0)
+            if (areSensorsDownloaded && areSensorProfilesDownloaded){
+                return true
+            }else{
+                return false
+            }
+        }catch{
+            return false
         }
     }
     
