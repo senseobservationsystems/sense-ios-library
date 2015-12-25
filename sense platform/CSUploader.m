@@ -11,7 +11,7 @@
 #import "CSSensorStore.h"
 #import "CSSensorIdKey.h"
 
-static const size_t ROW_LIMIT = 500;
+static const size_t ROW_LIMIT = 1000;
 static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
 
 @implementation CSUploader {
@@ -43,13 +43,31 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
     return self->lastUploadedRowId;
 }
 
+/**
+ Upload all data that has not been uploaded yet to CommonSense server
+ 
+ @return Whether or not the upload was successful
+ */
+
 - (BOOL) upload {
     long long lastDataPointId = [self->storage getLastDataPointId];
     BOOL goOn = YES;
     BOOL succeed;
+	
+	//get all sensors in the data that will be uploaded
+	NSArray* data = [storage getSensorDataPointsFromId:lastUploadedRowId+1 limit:INT_MAX];
+	if (data.count == 0) { return YES; }
+	NSSet* sensors = getSensorSet(data);
+	
+	//resolve sensorids
+	NSDictionary* remoteSensorIDs = [self resolveSensorIds:[sensors allObjects]];
+	if (remoteSensorIDs == nil) {
+		NSLog(@"Error: couldn't resolve sensorIds");
+		return NO;
+	}
+	
     while (goOn) {
-        succeed = [self singleUpload];
-        //TODO: depending on error do action
+        succeed = [self singleUploadWithRemoteSensorIDs:remoteSensorIDs];
         if (!succeed) {
             //Error occured, clear the cache as it might be invalid
             self->sensorIdCache = nil;
@@ -62,34 +80,73 @@ static NSString* lastUploadedRowIdKey = @"CSUploader_lastUploadedRowId";
     return succeed;
 }
 
+/** Upload data batch to remote. The number of datapoints per batch is limited to ROW_LIMIT (specified at the beginning of this file).
+ 
+ @param remoteSensorIDs Dictionary containing a recent set of sensor IDs currently available on the server. Function will try to match these sensor IDs to the local sensors. If a match cannot be made it will create a new sensor. 
+ 
+ @return whether the upload was successfull or not
+ */
+- (BOOL) singleUploadWithRemoteSensorIDs: (NSDictionary *) remoteSensorIDs {
+	//get enough data from storage for a single upload
+	//TODO: check size?
+	NSArray* data = [storage getSensorDataPointsFromId:lastUploadedRowId+1 limit:ROW_LIMIT];
+	if (data.count == 0)
+		return YES;
+	//extract sensors
+	NSSet* sensors = getSensorSet(data);
+	
+	if (remoteSensorIDs == nil || remoteSensorIDs.count < sensors.count) {
+		return [self singleUpload];
+	}
+	
+	//Upload data to remote sensor IDs
+	return [self singleUploadHelperWithData:data andRemoteSensorIDs:remoteSensorIDs];
+}
+
+
+/** Upload data batch to remote. The number of datapoints per batch is limited to ROW_LIMIT (specified at the beginning of this file). This will first try to get the remote sensor IDs with a GET call and is therefore slower than 
+ 
+		- (BOOL) singleUploadWithRemoteSensorIDs: (NSDictionary *) remoteSensorIDs;
+ 
+ @return whether the upload was successfull or not
+ */
+
 - (BOOL) singleUpload {
     //get enough data from storage for a single upload
-    //TODO: check size?
     NSArray* data = [storage getSensorDataPointsFromId:lastUploadedRowId+1 limit:ROW_LIMIT];
-    if (data.count == 0)
-        return YES;
-    //extract sensors
+	if (data.count == 0) { return YES; }
+	
+	//extract sensors
     NSSet* sensors = getSensorSet(data);
-    //resolve sensorids
-    NSDictionary* sensorRemoteIds = [self resolveSensorIds:[sensors allObjects]];
-    if (sensorRemoteIds == nil || sensorRemoteIds.count != sensors.count) {
+	
+	//resolve sensorids
+    NSDictionary* remoteSensorIDs = [self resolveSensorIds:[sensors allObjects]];
+    if (remoteSensorIDs == nil || remoteSensorIDs.count != sensors.count) {
         //TODO: handle error
         NSLog(@"Error couldn't resolve all sensorIds");
         return NO;
     }
-    
-    //create datastructure with data per sensorid
-    NSArray* perSensorData = formattedData(data, sensorRemoteIds);
-    
-    //upload data
-    BOOL succeed = [sender uploadDataForMultipleSensors:perSensorData];
-    if (succeed) {
-        CSDataPoint* last = [data lastObject];
-        [self setLastUploadedRowId:last.dataPointID];
-        return YES;
-    }
-    return NO;
+	
+	//Upload data to remote sensor IDs
+	return [self singleUploadHelperWithData:data andRemoteSensorIDs:remoteSensorIDs];
 }
+
+
+//Helper function to prevent code duplication
+- (BOOL) singleUploadHelperWithData: (NSArray *) data andRemoteSensorIDs: (NSDictionary *) remoteSensorIDs{
+	//create datastructure with data per sensorid
+	NSArray* perSensorData = formattedData(data, remoteSensorIDs);
+	
+	//upload data
+	BOOL succeed = [sender uploadDataForMultipleSensors:perSensorData];
+	if (succeed) {
+		CSDataPoint* last = [data lastObject];
+		[self setLastUploadedRowId:last.dataPointID];
+		return YES;
+	}
+	return NO;
+}
+
 
 #pragma mark - Sensors
 
