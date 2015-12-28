@@ -93,11 +93,11 @@ class DataSyncer : NSObject {
                 return
             }
             if (self.isPeriodicSyncTimerStarted()){
-                NSLog("[DataSyncer] Start periodic syncing. Scheduling sync at: %@", self.timer!.fireDate)
                 return
             }
             self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
             self.timer!.fire()
+            NSLog("[DataSyncer] Start periodic syncing. Scheduling sync at: %@", self.timer!.fireDate)
         })
     }
 

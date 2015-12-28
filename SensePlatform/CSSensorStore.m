@@ -186,7 +186,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) logout{
-    [self.sender logout];
+    [self forceDataFlushWithSuccessCallback:^{
+                                [self.sender logout];
+                            }
+                            failureCallback:^(NSError* error){
+                                [self.sender logout];
+                                NSLog(@"Flush data failed");
+                            }];
 }
 
 -(void) start{

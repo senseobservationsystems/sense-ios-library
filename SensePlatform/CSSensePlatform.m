@@ -147,9 +147,9 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 }
 
 + (void) logout {
+    [[CSSensorStore sharedSensorStore] logout];
     [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
-    [[CSSensorStore sharedSensorStore] logout];
 }
 
 + (BOOL) isLoggedIn {
