@@ -174,7 +174,7 @@ static CSSettings* sharedSettingsInstance = nil;
 
 - (BOOL) setLogin:(NSString*)user withPasswordHash:(NSString*) passwordHash {
     [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername value:user];
-    [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword value:passwordHash ];
+    [self setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword value:passwordHash];
     //notify registered subscribers
     [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSsettingLoginChangedNotification object:nil]];
     return YES;

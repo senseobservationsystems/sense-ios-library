@@ -390,9 +390,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) loginChanged {
-	//flush current data before making any changes
-    [self forceDataFlushWithSuccessCallback:nil failureCallback:nil];
-	
+    //INTEGRATION-TODO: Reconsider this. Do we want to store username/password?
 	//get new settings
     NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
   	NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
