@@ -104,7 +104,9 @@ import Foundation
            throw DSEError.EmptyCredentials
         }
         
-        self.dataSyncer.initialize()
+        if(!self.isInitialized()){
+            self.dataSyncer.initialize()
+        }
         self.dataSyncer.startPeriodicSync()
     }
     

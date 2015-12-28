@@ -83,14 +83,20 @@ class DataSyncer : NSObject {
      **/
     func startPeriodicSync() {
         dispatch_async(dispatch_get_main_queue(), {
-            if (self.areSensorAndSensorProfilesPopulated()){
-                if (self.enablePeriodicSync){
-                    self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
-                    self.timer!.fire()
-                }
-            }else{
-                print("DSE is not initialized")
+            if (!self.areSensorAndSensorProfilesPopulated()){
+                NSLog("[DataSyncer] Sensors and SensorProfiles are not initialized")
+                return
             }
+            if (!self.enablePeriodicSync){
+                NSLog("[DataSyncer] Periodic sync is not enabled")
+                return
+            }
+            if (self.isPeriodicSyncTimerStarted()){
+                NSLog("[DataSyncer] Start periodic syncing. Scheduling sync at: %@", self.timer!.fireDate)
+                return
+            }
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
+            self.timer!.fire()
         })
     }
 
@@ -103,6 +109,15 @@ class DataSyncer : NSObject {
             self.timer = nil
         } else {
             print("timer is already nil")
+        }
+    }
+    
+    func isPeriodicSyncTimerStarted()-> Bool{
+        if(timer != nil){
+            NSLog("[DataSyncer] Sync is scheduled at: %@", self.timer!.fireDate)
+            return self.timer!.valid
+        }else{
+            return false
         }
     }
     

@@ -208,11 +208,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey];
         
         DataStorageEngine* dse = [DataStorageEngine getInstance];
-        if ([dse getStatus] != DSEStatusINITIALIZED) {
-            [self initializeDSEWithCompleteHandler:successHandler failureHandler: failureHandler];
-        } else {
-            [self initializeSensorsWithCompleteHandler:successHandler];
-        }
+        [self startDSEWithCompleteHandler:successHandler failureHandler: failureHandler];
         
     }else{
         NSLog(@"---SensorStore initialization. Not logged in yet");
@@ -238,22 +234,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     }
 }
 
-- (void) initializeDSEWithCompleteHandler:(void (^)()) completeHandler failureHandler: (void (^)()) fHandler{
-    // Set up callbacks
-    void (^successHandler)() = ^(){
-        NSLog(@"successcallback");
-        [self initializeSensorsWithCompleteHandler:completeHandler];
-    };
+- (void) startDSEWithCompleteHandler:(void (^)()) completeHandler failureHandler: (void (^)()) fHandler{
     
-    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
-        NSLog(@"Error:%ld", (long)error);
-        if (fHandler){
-            fHandler();
-        }
-    };
-    
-    DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
-                                                      andFailureHandler: failureHandler];
+    DSECallback *callback = [self getDSEInitializationCallback:completeHandler failureHandler:fHandler];
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     [dse setInitializationCallback:callback];
     [dse setSensorCreationHandler: ^(NSString* sensorName){
@@ -268,6 +251,24 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         NSLog(@"Error: %@",error);
         return;
     }
+}
+
+-(DSECallback*) getDSEInitializationCallback:(void (^)()) completeHandler failureHandler: (void (^)()) fHandler{
+    // Set up callbacks
+    void (^successHandler)() = ^(){
+        NSLog(@"successcallback");
+        [self initializeSensorsWithCompleteHandler:completeHandler];
+    };
+    
+    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
+        NSLog(@"Error:%ld", (long)error);
+        if (fHandler){
+            fHandler();
+        }
+    };
+    
+    return [[DSECallback alloc] initWithSuccessHandler: successHandler
+                                     andFailureHandler: failureHandler];
 }
 
 -(void) configureSensor: (NSString*) sensorName{
