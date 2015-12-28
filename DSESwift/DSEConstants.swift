@@ -26,6 +26,7 @@ public struct DSEConstants{
     // for syncing
     // 1000 datapoints is a safe amount for a respond not to exceed the maximum data size of respond in CommonSense
     static let DEFAULT_REMOTE_QUERY_LIMIT = 1000
+    static let DEFAULT_REMOTE_POST_LIMIT = 1000
     
     // for sensor profile
     static let SENSOR_PROFILE_KEY_NAME = "sensor_name"

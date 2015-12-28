@@ -104,9 +104,12 @@ import Foundation
            throw DSEError.EmptyCredentials
         }
         
+        NSLog("--- Starting DSE")
         if(!self.isInitialized()){
+            NSLog("--- Not yet initialized")
             self.dataSyncer.initialize()
         }
+        NSLog("--- Start timer")
         self.dataSyncer.startPeriodicSync()
     }
     
@@ -279,7 +282,7 @@ import Foundation
     }
     
     private func isInitialized() -> Bool {
-        if (self.areCredentialsPopulated() && dataSyncer.areSensorAndSensorProfilesPopulated()){
+        if (self.areCredentialsPopulated() && dataSyncer.areSensorProfilesPopulated()){
             return true
         }else{
             return false

@@ -30,13 +30,33 @@ class SenseServiceTests: XCTestCase {
         let completeHandler = {expectation.fulfill()}
 
         // Act: Login
-        let sensorStore = self.createUniqueSensorStore()
+        let sensorStore = self.getSharedSensorStore()
         self.loginSenseService(sensorStore, completeHandler: completeHandler)
+        waitForExpectationsWithTimeout(5, handler: nil)
         
         // Assert: State of DSE
         let dse = DataStorageEngine.getInstance()
         XCTAssertEqual(dse.getStatus(), DSEStatus.INITIALIZED)
+    }
+    
+    
+    func testInitialization_timerIsSet() {
+        // Arange: set expectation and callback
+        let expectation = expectationWithDescription("wait for timer")
         
+        // Act: Login
+        let sensorStore = self.getSharedSensorStore()
+        self.loginSenseService(sensorStore, completeHandler: {})
+
+        
+        // Assert: check timer
+        let dse = DataStorageEngine.getInstance()
+        dispatch_async(dispatch_queue_create("test", nil), {
+            while(!dse.dataSyncer.isPeriodicSyncTimerStarted()){
+                print("waiting for the timer to be set")
+            }
+            expectation.fulfill()
+        })
         waitForExpectationsWithTimeout(5, handler: nil)
     }
     

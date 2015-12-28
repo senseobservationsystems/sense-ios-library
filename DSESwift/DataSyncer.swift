@@ -83,7 +83,8 @@ class DataSyncer : NSObject {
      **/
     func startPeriodicSync() {
         dispatch_async(dispatch_get_main_queue(), {
-            if (!self.areSensorAndSensorProfilesPopulated()){
+            NSLog("--- Start PeriodicSync")
+            if (!self.areSensorProfilesPopulated()){
                 NSLog("[DataSyncer] Sensors and SensorProfiles are not initialized")
                 return
             }
@@ -117,6 +118,7 @@ class DataSyncer : NSObject {
             NSLog("[DataSyncer] Sync is scheduled at: %@", self.timer!.fireDate)
             return self.timer!.valid
         }else{
+            NSLog("[DataSyncer] Timer is nil")
             return false
         }
     }
@@ -150,7 +152,8 @@ class DataSyncer : NSObject {
                     callback!.onSuccess()
                 }
             }catch{ let e = error as! DSEError
-                NSLog("ERROR: DataSyncer - There has been an error during syncing:%d", e.rawValue)
+                NSLog("--StackTrace: %@", NSThread.callStackSymbols())
+                NSLog("ERROR: DataSyncer - An error occurred during syncing:%d", e.rawValue)
                 if(callback != nil){
                     callback!.onFailure(e)
                 }
@@ -215,13 +218,19 @@ class DataSyncer : NSObject {
     func uploadSensorDataToRemote() throws {
         let sensorsInLocal = try getSensorsInLocal()
         for sensor in sensorsInLocal {
-            if (sensor.remoteUploadEnabled){
-                // upload datapoints that are not yet uploaded to remote
-                let dataPointsToUpload = try getDataPointsToUpload(sensor)
-                let dataArray = try JSONUtils.getJSONArray(dataPointsToUpload, sensorName: sensor.name)
+            if (!sensor.remoteUploadEnabled){
+                break
+            }
+            // upload datapoints that are not yet uploaded to remote
+            let dataPointsToUpload = try getDataPointsToUpload(sensor)
+            // send 1000 datapoints per request
+            let numOfLoops = (dataPointsToUpload.count / DSEConstants.DEFAULT_REMOTE_POST_LIMIT) + 1
+            for(var startIndex = 0 ; startIndex < numOfLoops; startIndex++) {
+                let slicedArray = self.getSlicedArray(dataPointsToUpload, startIndex: startIndex)
+                let dataArray = try JSONUtils.getJSONArray(slicedArray, sensorName: sensor.name)
                 try SensorDataProxy.putSensorData(sourceName: sensor.source, sensorName: sensor.name, data: dataArray, meta: sensor.meta)
                 // Update the existsInRemote status of datapoints to true
-                for datapoint in dataPointsToUpload {
+                for datapoint in slicedArray {
                     datapoint.existsInRemote = true
                     try DatabaseHandler.insertOrUpdateDataPoint(datapoint)
                 }
@@ -236,15 +245,9 @@ class DataSyncer : NSObject {
         }
     }
     
-    func areSensorAndSensorProfilesPopulated() -> Bool {
+    func areSensorProfilesPopulated() -> Bool {
         do{
-            let areSensorsDownloaded = (try DatabaseHandler.getSources().count > 0)
-            let areSensorProfilesDownloaded = (try DatabaseHandler.getSensorProfiles().count > 0)
-            if (areSensorsDownloaded && areSensorProfilesDownloaded){
-                return true
-            }else{
-                return false
-            }
+            return (try DatabaseHandler.getSensorProfiles().count > 0)
         }catch{
             return false
         }
@@ -271,6 +274,12 @@ class DataSyncer : NSObject {
                 startBoundaryForNextQuery = getTimestampOfLastDataPoint(sensorData)
             }
         } while (!isCompleted)
+    }
+    
+    private func getSlicedArray(array: Array<DataPoint>,startIndex: Int) -> Array<DataPoint>{
+        // endIndex: remaining length from startIndex or next startIndex
+        let endIndex = min(array.count - startIndex, (startIndex + 1) * DSEConstants.DEFAULT_REMOTE_POST_LIMIT)
+        return Array(array[startIndex ..< endIndex])
     }
     
     private func insertOrUpdateSensorIntoLocal(sensor: Sensor) throws{

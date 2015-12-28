@@ -206,8 +206,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     NSString* appKey = [defaults stringForKey:kCSCredentialsAppKey];
     if (sessionId != nil && userId != nil && appKey != nil) {
         [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey];
-        
-        DataStorageEngine* dse = [DataStorageEngine getInstance];
         [self startDSEWithCompleteHandler:successHandler failureHandler: failureHandler];
         
     }else{
