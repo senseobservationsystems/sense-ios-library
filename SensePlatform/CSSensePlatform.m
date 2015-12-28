@@ -149,24 +149,25 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 + (void) logout {
     [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
+    [[CSSensorStore sharedSensorStore] logout];
 }
 
 + (BOOL) isLoggedIn {
     return [[CSSensorStore sharedSensorStore].sender isLoggedIn];
 }
 
-+ (NSString*) getSessionCookie {
-    NSString* cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
++ (NSString*) getSessionId {
+    NSString* sessionId = [[CSSensorStore sharedSensorStore].sender getSessionId];
     
-    if (cookie == nil) {
+    if (sessionId == nil) {
         NSString* user = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
         NSString* hash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
         if (user != nil && hash != nil) {
             [CSSensePlatform loginWithUser:user andPasswordHash:hash];
-            cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+            sessionId = [[CSSensorStore sharedSensorStore].sender getSessionId];
         }
     }
-    return cookie;
+    return sessionId;
 }
 
 + (void) applyIVitalitySettings {

@@ -41,8 +41,9 @@
 + (CSSensorStore*) sharedSensorStore;
 + (NSDictionary*) device;
 
-- (void)start;
+- (void) start;
 - (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error;
+- (void) logout;
 - (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler;
 - (void) loginChanged;
 - (void) setEnabled:(BOOL) enable;

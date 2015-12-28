@@ -17,14 +17,14 @@
 #import <Foundation/Foundation.h>
 
 @interface CSSender : NSObject {
-	NSString* sessionCookie;
+	//NSString* sessionCookie;
   	@private
 	NSString* username;
 	NSString* passwordHash;
 }
 
 @property NSDictionary* urls;
-@property NSString* sessionCookie;
+//@property NSString* sessionCookie;
 @property NSString* applicationKey;
 
 - (id) init;

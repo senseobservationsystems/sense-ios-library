@@ -147,11 +147,11 @@ This removes credentials from the settings and stops the uploading to CommonSens
 
 /** Get the session cookie for Common Sense
 
-Whenever a user is logged in, it uses a session id from CommonSense to be able to interact with the cloud. To be able to manually call the CommonSense API one would need to obtain that Session ID. This is returned by the getSessionCookie function. Note that the format is "session_id=<session_id>".
+Whenever a user is logged in, it uses a session id from CommonSense to be able to interact with the cloud. To be able to manually call the CommonSense API one would need to obtain that Session ID. 
 
-@returns The session id to communicate with CommonSense, nil if there is no session cookie.
+@returns The session id to communicate with CommonSense, nil if there is no session Id.
  */
-+ (NSString*) getSessionCookie;
++ (NSString*) getSessionId;
 
 
 /** @name Sensordata storage and access */

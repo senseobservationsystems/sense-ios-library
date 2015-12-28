@@ -180,19 +180,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         NSLog(@"Error during login: %@", *error);
     }
     if (succeed) {
-        NSString* sessionId = [self.sender getSessionId];
-        NSString* userId = [self.sender getUserId];
-        NSString* appKey = [self.sender applicationKey];
-        
-        //Persist
-        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:sessionId forKey:kCSCredentialsSessionId];
-        [defaults setObject:userId forKey:kCSCredentialsUserId];
-        [defaults setObject:appKey forKey:kCSCredentialsAppKey];
-        
         [self startWithSuccessHandler:successHandler failureHandler:failureHandler];
     }
     return succeed;
+}
+
+- (void) logout{
+    [self.sender logout];
 }
 
 -(void) start{
@@ -200,14 +194,13 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 -(void) startWithSuccessHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* sessionId = [defaults stringForKey:kCSCredentialsSessionId];
-    NSString* userId = [defaults stringForKey:kCSCredentialsUserId];
-    NSString* appKey = [defaults stringForKey:kCSCredentialsAppKey];
-    if (sessionId != nil && userId != nil && appKey != nil) {
+    if ([sender isLoggedIn]) {
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* sessionId = [defaults stringForKey:kCSCredentialsSessionId];
+        NSString* userId = [defaults stringForKey:kCSCredentialsUserId];
+        NSString* appKey = [defaults stringForKey:kCSCredentialsAppKey];
         [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey];
         [self startDSEWithCompleteHandler:successHandler failureHandler: failureHandler];
-        
     }else{
         NSLog(@"---SensorStore initialization. Not logged in yet");
         if (failureHandler){

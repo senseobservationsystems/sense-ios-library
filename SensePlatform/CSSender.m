@@ -41,7 +41,6 @@ static NSString* kUrlUploadMultipleSensors = @"sensors/data";
 
 
 @implementation CSSender
-@synthesize sessionCookie;
 
 static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 
@@ -67,7 +66,11 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 #pragma mark Public methods
 
 - (BOOL) isLoggedIn {
-	return sessionCookie != nil;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* sessionId = [defaults stringForKey:kCSCredentialsSessionId];
+    NSString* userId = [defaults stringForKey:kCSCredentialsUserId];
+    NSString* appKey = [defaults stringForKey:kCSCredentialsAppKey];
+	return sessionId != nil && userId != nil && appKey != nil;
 }
 
 - (void) setUser:(NSString*)user andPasswordHash:(NSString*) hash {
@@ -100,7 +103,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	
 	NSURL* url = [self makeUrlFor:@"users"];
 	NSData* contents;
-	NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil];
+    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents sessionId: [self getSessionId]];
 	BOOL didSucceed = YES;
 	//check response code
 	if ([response statusCode] != 201)
@@ -123,9 +126,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (BOOL) loginWithError:(NSError **) error
-{
+{    
 	//invalidate current session
-	if (sessionCookie != nil)
+	if ([self getSessionId] != nil)
 		[self logout];
 
 	//prepare post
@@ -142,7 +145,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	NSData* contents;
 
     NSError *httpError; // handle network related error
-    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents cookie:nil error:&httpError];
+    NSHTTPURLResponse* response = [self doRequestTo:url method:@"POST" input:json output:&contents sessionId:[self getSessionId] error:&httpError];
 
 	BOOL succeeded = YES;
 	//check response code
@@ -176,7 +179,16 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 		//interpret JSON
 		NSDictionary* jsonResponse = [NSJSONSerialization JSONObjectWithData:contents options:0 error:&jsonError];
         
-		self.sessionCookie = [NSString stringWithFormat:@"session_id=%@",[jsonResponse valueForKey:@"session_id"]];
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* sessionId = [jsonResponse valueForKey:@"session_id"];
+        NSString* appKey = self.applicationKey;
+        [defaults setObject:sessionId forKey:kCSCredentialsSessionId];
+        [defaults setObject:appKey forKey:kCSCredentialsAppKey];
+        
+        // get userId using the persisted sessionId
+        NSString* userId = [self getUserId];
+        [defaults setObject:userId forKey:kCSCredentialsUserId];
+
 	}
     
 	return succeeded;
@@ -187,25 +199,23 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 }
 
 - (NSString*) getSessionId{
-    if (sessionCookie!=nil){
-        NSArray* sessionCookieArray = [self.sessionCookie componentsSeparatedByString: @"="];
-        return [sessionCookieArray objectAtIndex: 1];
-    }else{
-        return nil;
-    }
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults stringForKey:kCSCredentialsSessionId];
 }
 
 - (BOOL) logout
 {
-	if (sessionCookie == nil)
+	if ([self getSessionId] == nil)
 		return FALSE;
 	
 	//perform request
 	NSURL* url = [self makeUrlFor:@"logout"];
-	NSHTTPURLResponse* response = [self doRequestTo:url method:@"GET" input:nil output:nil cookie:self.sessionCookie];
+	NSHTTPURLResponse* response = [self doRequestTo:url method:@"GET" input:nil output:nil sessionId:[self getSessionId]];
 
-	//invalidate session id
-	self.sessionCookie = nil;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:kCSCredentialsSessionId];
+    [defaults removeObjectForKey:kCSCredentialsUserId];
+    [defaults removeObjectForKey:kCSCredentialsAppKey];
 	//return whether the logout was acknowledged
 	return [response statusCode] == 200;
 }
@@ -218,7 +228,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 - (NSDictionary*) doJsonRequestTo:(NSURL*) url withMethod:(NSString*)method withInput:(NSDictionary*) input
 {
 	//make session
-	if (sessionCookie == nil) {
+	if ([self getSessionId] == nil) {
 		if (![self login])
 			return nil;
 	}
@@ -230,14 +240,14 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:input options:0 error:&error];
         jsonInput = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents sessionId:[self getSessionId]];
 	
 	//handle unauthorized error
 	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
 		//relogin (session might've expired)
 		[self login];
 		//redo request
-		response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
+		response = [self doRequestTo:url method:method input:jsonInput output:&contents sessionId:[self getSessionId]];
 	}
 
 	//check response code
@@ -267,7 +277,7 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 - (NSHTTPURLResponse*) doJsonRequestTo:(NSURL*) url withMethod:(NSString*)method withInput:(NSDictionary*) input output:(NSData*)contents
 {
 	//make session
-	if (sessionCookie == nil) {
+	if ([self getSessionId] == nil) {
 		if (![self login])
 			return nil;
 	}
@@ -276,14 +286,14 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:input options:0 error:&error];
 	NSString *jsonInput = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 
-	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
+	NSHTTPURLResponse* response = [self doRequestTo:url method:method input:jsonInput output:&contents sessionId: [self getSessionId]];
 	
 	//handle unauthorized error
 	if ([response statusCode] == STATUSCODE_UNAUTHORIZED) {
 		//relogin (session might've expired)
 		[self login];
 		//redo request
-		response = [self doRequestTo:url method:method input:jsonInput output:&contents cookie:sessionCookie];
+		response = [self doRequestTo:url method:method input:jsonInput output:&contents sessionId:[self getSessionId]];
 	}
     
 	//check response code
@@ -300,12 +310,12 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
     return response;
 }
 
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie {
+- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output sessionId:(NSString*) sessionId{
     NSError* error;
-    return [self doRequestTo:url method:method input:input output:output cookie:cookie error:&error];
+    return [self doRequestTo:url method:method input:input output:output sessionId:sessionId error:&error];
 }
 
-- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output cookie:(NSString*) cookie error:(NSError **) error
+- (NSHTTPURLResponse*) doRequestTo:(NSURL *)url method:(NSString*)method input:(NSString*)input output:(NSData**)output sessionId:(NSString*) sessionId error:(NSError **) error
 {
 	NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url
 															  cachePolicy:NSURLRequestReloadIgnoringCacheData
@@ -313,9 +323,9 @@ static const NSInteger STATUSCODE_UNAUTHORIZED = 403;
 	//set method method
 	[urlRequest setHTTPMethod:method];
 	
-	//Cookie
-	if (cookie != nil)
-		[urlRequest setValue:cookie forHTTPHeaderField:@"cookie"];
+	// SessionId
+	if ([self getSessionId] != nil)
+		[urlRequest setValue:sessionId forHTTPHeaderField:@"SESSION-ID"];
     if (self.applicationKey != nil)
         [urlRequest setValue:self.applicationKey forHTTPHeaderField:@"APPLICATION-KEY"];
     //Accept compressed response
