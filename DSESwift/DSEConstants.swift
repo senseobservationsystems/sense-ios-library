@@ -81,6 +81,6 @@ public struct DSEConstants{
 }
 
 @objc public enum DSEServer: Int{
-    case LIVE = 0
+    case LIVE 
     case STAGING
 }

@@ -54,14 +54,13 @@ import Foundation
         // set config for DataSyncer
         var (configChanged, syncInterval, localPersistancePeriod, enablePeriodicSync) = try self.dataSyncer.setConfig(customConfig)
         
-        self.config.syncInterval           = syncInterval
+        self.config.uploadInterval           = syncInterval
         self.config.localPersistancePeriod = localPersistancePeriod
-        self.config.enablePeriodicSync = enablePeriodicSync
+        self.config.enableSync = enablePeriodicSync
         
         // check for changed in the backend environment
-        let backendEnvironment = customConfig.backendEnvironment
-        configChanged = configChanged || self.config.backendEnvironment != customConfig.backendEnvironment
-        self.config.backendEnvironment = backendEnvironment
+        configChanged = (configChanged || (self.config.backendEnvironment != customConfig.backendEnvironment))
+        self.config.backendEnvironment = customConfig.backendEnvironment
         let backendStringValue = self.config.backendEnvironment == DSEServer.LIVE ? "LIVE" : "STAGING"
         
         // todo: do something with the encryption
@@ -79,7 +78,7 @@ import Foundation
         
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setDouble(self.config.syncInterval,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
+        defaults.setDouble(self.config.uploadInterval,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
         defaults.setDouble(self.config.localPersistancePeriod, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
         defaults.setObject(backendStringValue,                 forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
         defaults.setBool(self.config.enableEncryption,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)

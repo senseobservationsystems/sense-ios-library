@@ -22,9 +22,9 @@ class DataSyncer : NSObject {
     // only used for the default parameters
     let config = DSEConfig()
     
-    var syncRate: Double
+    var uploadInterval: Double
     var persistentPeriod: Double
-    var enablePeriodicSync: Bool
+    var enableSync: Bool
     
     var timer:NSTimer?
     let data_syncer_process_queue = dispatch_queue_create(DSEConstants.DATASYNCER_PROCESS_QUEUE_ID, nil)
@@ -33,9 +33,9 @@ class DataSyncer : NSObject {
 
     // the key for the string should be <source>:<sensor>
     override init () {
-        self.syncRate = self.config.syncInterval
+        self.uploadInterval = self.config.uploadInterval
         self.persistentPeriod = self.config.localPersistancePeriod
-        self.enablePeriodicSync = self.config.enablePeriodicSync
+        self.enableSync = self.config.enableSync
     }
     
     /**
@@ -44,22 +44,22 @@ class DataSyncer : NSObject {
     func setConfig(config: DSEConfig) throws -> (configChanged: Bool, syncInterval: Double, localPersistancePeriod: Double, enablePeridicSync: Bool) {
         var configChanged = false
         
-        let syncInterval = config.syncInterval
-        if (syncInterval < 0) {throw DSEError.InvalidSyncRate}
-        configChanged = configChanged || self.syncRate != syncInterval
-        self.syncRate = syncInterval
+        let uploadInterval = config.uploadInterval
+        if (uploadInterval < 0) {throw DSEError.InvalidSyncRate}
+        configChanged = configChanged || self.uploadInterval != uploadInterval
+        self.uploadInterval = uploadInterval
         
         let localPersistancePeriod = config.localPersistancePeriod
         if (localPersistancePeriod < 0) {throw DSEError.InvalidPersistentPeriod}
         configChanged = configChanged || self.persistentPeriod != localPersistancePeriod
         self.persistentPeriod = localPersistancePeriod
         
-        let enablePeriodicSync = config.enablePeriodicSync
-        configChanged = configChanged || self.enablePeriodicSync != enablePeriodicSync
-        self.enablePeriodicSync = enablePeriodicSync
+        let enableSync = config.enableSync
+        configChanged = configChanged || self.enableSync != enableSync
+        self.enableSync = enableSync
         
         // return new values that will be used
-        return (configChanged, self.syncRate, self.persistentPeriod, self.enablePeriodicSync)
+        return (configChanged, self.uploadInterval, self.persistentPeriod, self.enableSync)
     }
     
     /**
@@ -88,14 +88,14 @@ class DataSyncer : NSObject {
                 NSLog("[DataSyncer] Sensors and SensorProfiles are not initialized")
                 return
             }
-            if (!self.enablePeriodicSync){
+            if (!self.enableSync){
                 NSLog("[DataSyncer] Periodic sync is not enabled")
                 return
             }
             if (self.isPeriodicSyncTimerStarted()){
                 return
             }
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.syncRate, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(self.uploadInterval, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
             self.timer!.fire()
             NSLog("[DataSyncer] Start periodic syncing. Scheduling sync at: %@", self.timer!.fireDate)
         })

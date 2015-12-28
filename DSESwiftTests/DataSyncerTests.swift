@@ -40,7 +40,7 @@ class DataSyncerTests: XCTestCase{
         
         
         // set the config with CORRECT default values
-        self.config.syncInterval           = 30 * 60
+        self.config.uploadInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = DSEServer.STAGING
@@ -67,7 +67,7 @@ class DataSyncerTests: XCTestCase{
         
         let expectedSyncRate: Double = 30 * 60
         let expectedPersistentPeriod: Double = 30 * 24 * 60 * 60
-        XCTAssertEqual(self.dataSyncer.syncRate, expectedSyncRate)
+        XCTAssertEqual(self.dataSyncer.uploadInterval, expectedSyncRate)
         XCTAssertEqual(self.dataSyncer.persistentPeriod, expectedPersistentPeriod)
     }
     

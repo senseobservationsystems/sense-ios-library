@@ -504,7 +504,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (void) setSyncInterval:(int) interval{
     DataStorageEngine* dse = [DataStorageEngine getInstance];
     DSEConfig* config = [[DSEConfig alloc] init];
-    config.syncInterval = interval;
+    config.uploadInterval = interval;
     NSError* error = nil;
     [dse setup:config error:&error];
 }

@@ -47,7 +47,7 @@ import Foundation
     /**
      * Return the id constructed by "<sensorId>-<timestamp>" in string.
      **/
-    public func getId() -> String {
+    func getId() -> String {
         return "\(self.sensorId)-\(String(self.time))"
     }
     

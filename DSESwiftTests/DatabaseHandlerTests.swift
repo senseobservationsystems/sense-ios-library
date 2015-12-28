@@ -44,7 +44,7 @@ class DatabaseHandlerTests: XCTestCase {
         sensorConfig.persist = true
         
         // set the config with CORRECT default values
-        self.config.syncInterval           = 30 * 60
+        self.config.uploadInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = DSEServer.STAGING
