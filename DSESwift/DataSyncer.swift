@@ -109,7 +109,7 @@ class DataSyncer : NSObject {
             self.timer!.invalidate()
             self.timer = nil
         } else {
-            print("timer is already nil")
+            print("[DataSyncer]timer is already nil")
         }
     }
     
@@ -152,7 +152,6 @@ class DataSyncer : NSObject {
                     callback!.onSuccess()
                 }
             }catch{ let e = error as! DSEError
-                NSLog("--StackTrace: %@", NSThread.callStackSymbols())
                 NSLog("ERROR: DataSyncer - An error occurred during syncing:%d", e.rawValue)
                 if(callback != nil){
                     callback!.onFailure(e)

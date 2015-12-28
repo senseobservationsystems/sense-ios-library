@@ -104,12 +104,9 @@ import Foundation
            throw DSEError.EmptyCredentials
         }
         
-        NSLog("--- Starting DSE")
         if(!self.isInitialized()){
-            NSLog("--- Not yet initialized")
             self.dataSyncer.initialize()
         }
-        NSLog("--- Start timer")
         self.dataSyncer.startPeriodicSync()
     }
     
