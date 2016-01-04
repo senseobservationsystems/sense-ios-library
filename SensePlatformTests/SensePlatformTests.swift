@@ -67,6 +67,27 @@ class SensePlatformTests: XCTestCase {
         }
     }
     
+    func testAddDataPoint_Call(){
+        let sensorName = "call"
+        //TODO: it would be nice if we can use the data from the actual module.
+        let stringValue = "{\"state\" : \"idle\"}"
+        // Act: Add a datapoint for time active
+        CSSensePlatform.addDataPointForSensor(sensorName, displayName: "", description: "", dataType: kCSDATA_TYPE_JSON, stringValue: stringValue, timestamp: NSDate())
+        
+        // Assert: if DSE has the datapoint
+        do{
+            let sensor = try DataStorageEngine.getInstance().getSensor(sourceName, sensorName: sensorName)
+            let queryOptions = QueryOptions()
+            let dataPoints = try sensor.getDataPoints(queryOptions)
+            XCTAssertEqual(dataPoints.count, 1)
+            print(dataPoints[0].value)
+            self.clearDataPoints(sensor)
+        }catch{
+            print(error)
+            XCTFail()
+        }
+    }
+    
     // MARK: helper class
     func clearDataPoints(sensor: Sensor){
         do{

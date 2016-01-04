@@ -337,7 +337,11 @@ public class SensorDataProxy {
     }
     
     private static func getSessionId() -> String {
-        return KeychainWrapper.stringForKey(DSEConstants.KEYCHAIN_SESSIONID)!
+        if let sessionId = KeychainWrapper.stringForKey(DSEConstants.KEYCHAIN_SESSIONID){
+            return sessionId
+        }else{
+            return ""
+        }
     }
     
 }

@@ -93,6 +93,7 @@ class DataSyncer : NSObject {
                 return
             }
             if (self.isPeriodicSyncTimerStarted()){
+                NSLog("[DataSyncer] Sync is scheduled at: %@", self.timer!.fireDate)
                 return
             }
             self.timer = NSTimer.scheduledTimerWithTimeInterval(self.uploadInterval, target: self, selector: "periodicSync", userInfo: nil, repeats: true);
@@ -115,10 +116,8 @@ class DataSyncer : NSObject {
     
     func isPeriodicSyncTimerStarted()-> Bool{
         if(timer != nil){
-            NSLog("[DataSyncer] Sync is scheduled at: %@", self.timer!.fireDate)
             return self.timer!.valid
         }else{
-            NSLog("[DataSyncer] Timer is nil")
             return false
         }
     }

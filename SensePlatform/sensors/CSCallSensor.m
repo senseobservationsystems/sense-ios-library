@@ -90,15 +90,6 @@ static NSString* disconnected = @"idle";
 											nil];
             
             NSDate* time = [NSDate date];
-			
-//			NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-//			
-//			NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-//												newItem, @"value",
-//												timestamp,@"date",
-//												nil];
-//			[selfRef.dataStore commitFormattedData:valueTimestampPair forSensorId:selfRef.sensorId];
-            
             [selfRef commitDataPointWithValue:newItem andTime:time];
 			
 		};

@@ -98,7 +98,7 @@ import Foundation
     * Initialize DSE and start the timer for periodic syncing.
     **/
     public func start() throws {
-        if (self.config.sessionId == "" || self.config.appKey == "" || self.config.userId == "") {
+        if (!self.areCredentialsPopulated()) {
             // callback fail?
            throw DSEError.EmptyCredentials
         }
@@ -286,7 +286,7 @@ import Foundation
     }
     
     private func areCredentialsPopulated() -> Bool {
-        if (self.config.sessionId != "" && self.config.appKey != "" && self.config.userId != ""){
+        if (!self.config.sessionId.isEmpty && !self.config.appKey.isEmpty && !self.config.userId.isEmpty){
             return true
         }else{
             return false
