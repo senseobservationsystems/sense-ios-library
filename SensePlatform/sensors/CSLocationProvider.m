@@ -20,6 +20,7 @@
 #import "math.h"
 #import "CSDataStore.h"
 #import "CSSensorStore.h"
+#import "CSSensorConstants.h"
 
 @implementation CSLocationProvider {
     CLLocationManager* locationManager;
@@ -186,7 +187,7 @@
             break;
     }
     // remove unnecessary NSLog statement.
-    // NSLog(@"New location authorization: %@", statusString);
+     NSLog(@"New location authorization: %@", statusString);
 }
 
 
@@ -238,16 +239,24 @@
 		//[locationManager stopUpdatingLocation];
 		//as this needs to be enabled to run in the background, rather switch to the lowest accuracy
 		//locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-	}
+    }
 }
 
 - (void) requestPermission {
-    // check to make sure we dont do this on iOS < 8
+    // for iOS versions where LocationManagre has requestAlwaysAuthorization(iOS8 or higher)
     if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         // check if we haven't already asked permissions
         if (!([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
             // request the permissions
             [locationManager performSelectorOnMainThread:@selector(requestAlwaysAuthorization) withObject:nil waitUntilDone:YES];
+        }
+    }
+    // for iOS versions where LocationManager has the property allowsBackgroundLocationUpdates(iOS9 or higher)
+    NSArray* backgroundModes  = [[NSBundle mainBundle].infoDictionary objectForKey:@"UIBackgroundModes"];
+    
+    if(backgroundModes && [backgroundModes containsObject:@"location"]) {
+        if ([locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]){
+            [locationManager setAllowsBackgroundLocationUpdates:YES];
         }
     }
 }

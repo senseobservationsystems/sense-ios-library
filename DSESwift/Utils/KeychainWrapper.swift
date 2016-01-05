@@ -27,10 +27,6 @@
 
 import Foundation
 
-let KEYCHAIN_USERID    = "DSE_userId"
-let KEYCHAIN_SESSIONID = "DSE_sessionId"
-let KEYCHAIN_APPKEY    = "DSE_appKey"
-
 let SecMatchLimit: String! = kSecMatchLimit as String
 let SecReturnData: String! = kSecReturnData as String
 let SecValueData: String! = kSecValueData as String
@@ -183,8 +179,7 @@ public class KeychainWrapper {
         
         keychainQueryDictionary[SecValueData] = value
         
-        // Protect the keychain entry so it's only valid when the device is unlocked
-        keychainQueryDictionary[SecAttrAccessible] = kSecAttrAccessibleWhenUnlocked
+        keychainQueryDictionary[SecAttrAccessible] = kSecAttrAccessibleAfterFirstUnlock
         
         let status: OSStatus = SecItemAdd(keychainQueryDictionary, nil)
         

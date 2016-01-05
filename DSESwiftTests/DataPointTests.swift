@@ -17,19 +17,17 @@ class DataPointTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test"
-        KeychainWrapper.setString("user1", forKey: KEYCHAIN_USERID)
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
     
     func testSetIntValue() {
         let dataPoint = DataPoint()
         let valueInt = 1
-        dataPoint.setValue(JSONUtils.stringify(valueInt))
+        dataPoint.value = JSONUtils.stringify(valueInt)
         XCTAssertEqual(dataPoint.value, "1")
         XCTAssertEqual(dataPoint.getValueInInt(), valueInt)
     }
@@ -37,7 +35,7 @@ class DataPointTests: XCTestCase {
     func testSetDouble() {
         let dataPoint = DataPoint()
         let valueFloat = 2.01234
-        dataPoint.setValue(JSONUtils.stringify(valueFloat))
+        dataPoint.value = JSONUtils.stringify(valueFloat)
         XCTAssertEqual(dataPoint.value, "2.01234")
         XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
     }
@@ -45,14 +43,14 @@ class DataPointTests: XCTestCase {
     func testSetDoubleWithoutPrecision() {
         let dataPoint = DataPoint()
         let valueFloat = 2.0
-        dataPoint.setValue(JSONUtils.stringify(valueFloat))
+        dataPoint.value = JSONUtils.stringify(valueFloat)
         XCTAssertEqual(dataPoint.getValueInDouble(), valueFloat)
     }
     
     func testSetStringValue() {
         let dataPoint = DataPoint()
         let valueString = "valueString"
-        dataPoint.setValue(JSONUtils.stringify(valueString))
+        dataPoint.value = JSONUtils.stringify(valueString)
         XCTAssertEqual(dataPoint.value, "valueString")
         XCTAssertEqual(dataPoint.getValueInString(), valueString)
 
@@ -69,7 +67,7 @@ class DataPointTests: XCTestCase {
         valueDictionary["string"] = "\""+valueString+"\""
         valueDictionary["dict"] = ["subdictkey1": "subvalue1", "subdictkey2": "subvalue2"]
         
-        dataPoint.setValue(JSONUtils.stringify(valueDictionary))
+        dataPoint.value = JSONUtils.stringify(valueDictionary)
         let retrievedDictionary = dataPoint.getValueInDictionary()
         XCTAssertEqual(valueDictionary["float"]?.floatValue, retrievedDictionary["float"]?.floatValue)
         XCTAssertEqual(valueDictionary["bool"]?.boolValue, retrievedDictionary["bool"]?.boolValue)

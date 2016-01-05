@@ -160,13 +160,11 @@ class DataStorageEngineTests: XCTestCase{
             }
             
             // Act:
-            let sensor = try dse.createSensor(sourceName1, name: sensorName1)
             let retrievedSensor = try dse.getSensor(sourceName1, sensorName: sensorName1)
             
             // Assert:
-            XCTAssertEqual(sensor.name, retrievedSensor!.name)
-            XCTAssertEqual(sensor.source, retrievedSensor!.source)
-            XCTAssertEqual(JSON(sensor.meta), JSON(retrievedSensor!.meta))
+            XCTAssertEqual(sensorName1, retrievedSensor.name)
+            XCTAssertEqual(sourceName1, retrievedSensor.source)
             
         }catch{
             print(error)
@@ -194,14 +192,14 @@ class DataStorageEngineTests: XCTestCase{
             waitForExpectationsWithTimeout(5) { error in
                 print("time out or expectation is fulfilled")
             }
-            let sensor1 = try dse.createSensor(sourceName1, name: sensorName1)
-            let sensor2 = try dse.createSensor(sourceName1, name: sensorName2)
-            let sensor3 = try dse.createSensor(sourceName2, name: sensorName1)
-            let sensor4 = try dse.createSensor(sourceName2, name: sensorName2)
+            let sensor1 = try dse.getSensor(sourceName1, sensorName: sensorName1)
+            let sensor2 = try dse.getSensor(sourceName1, sensorName: sensorName2)
+            let sensor3 = try dse.getSensor(sourceName2, sensorName: sensorName1)
+            let sensor4 = try dse.getSensor(sourceName2, sensorName: sensorName2)
             
             // Act: get sensors
-            let retrievedSensorsFromSource1 = dse.getSensors(sourceName1)
-            let retrievedSensorsFromSource2 = dse.getSensors(sourceName2)
+            let retrievedSensorsFromSource1 = try dse.getSensors(sourceName1)
+            let retrievedSensorsFromSource2 = try dse.getSensors(sourceName2)
             
             // Assert: check if each parameter of retrieved sensors is the same individuallys
             XCTAssertEqual(sensor1.name, retrievedSensorsFromSource1[0].name)
@@ -246,13 +244,13 @@ class DataStorageEngineTests: XCTestCase{
             waitForExpectationsWithTimeout(5) { error in
                 print("time out or expectation is fulfilled")
             }
-            try dse.createSensor(sourceName1, name: sensorName1)
-            try dse.createSensor(sourceName1, name: sensorName2)
-            try dse.createSensor(sourceName2, name: sensorName1)
-            try dse.createSensor(sourceName2, name: sensorName2)
+            try dse.getSensor(sourceName1, sensorName: sensorName1)
+            try dse.getSensor(sourceName1, sensorName: sensorName2)
+            try dse.getSensor(sourceName2, sensorName: sensorName1)
+            try dse.getSensor(sourceName2, sensorName: sensorName2)
             
             // Act:
-            let retrievedSources = dse.getSources()
+            let retrievedSources = try dse.getSources()
             
             // Assert:
             XCTAssertEqual(retrievedSources.count, 2)
@@ -333,18 +331,22 @@ class DataStorageEngineTests: XCTestCase{
             let valueAccelerometer = ["x-axis": 4, "y-axis": 5, "z-axis": 6]
             let valueTimeActive = 2
 
-            let sensor1 = try dse.createSensor(sourceName1, name: sensorName1, sensorConfig: sensorConfig)
-            try sensor1.insertOrUpdateDataPoint(valueAccelerometer, NSDate())
+            let sensor1 = try dse.getSensor(sourceName1, sensorName: sensorName1)
+            try sensor1.setSensorConfig(sensorConfig)
+            try sensor1.insertOrUpdateDataPoint(value: valueAccelerometer, time: NSDate())
             
-            let sensor2 = try dse.createSensor(sourceName1, name: sensorName2, sensorConfig: sensorConfig)
-            try sensor2.insertOrUpdateDataPoint(valueTimeActive, NSDate())
+            let sensor2 = try dse.getSensor(sourceName1, sensorName: sensorName2)
+            try sensor2.setSensorConfig(sensorConfig)
+            try sensor2.insertOrUpdateDataPoint(value: valueTimeActive, time: NSDate())
             print(try sensor2.getDataPoints(QueryOptions()).count)
 
-            let sensor3 = try dse.createSensor(sourceName2, name: sensorName1, sensorConfig: sensorConfig)
-            try sensor3.insertOrUpdateDataPoint(valueAccelerometer, NSDate())
+            let sensor3 = try dse.getSensor(sourceName2, sensorName: sensorName1)
+            try sensor3.setSensorConfig(sensorConfig)
+            try sensor3.insertOrUpdateDataPoint(value: valueAccelerometer, time: NSDate())
             
-            let sensor4 = try dse.createSensor(sourceName2, name: sensorName2, sensorConfig: sensorConfig)
-            try sensor4.insertOrUpdateDataPoint(valueTimeActive, NSDate())
+            let sensor4 = try dse.getSensor(sourceName2, sensorName: sensorName2)
+            try sensor4.setSensorConfig(sensorConfig)
+            try sensor4.insertOrUpdateDataPoint(value: valueTimeActive, time: NSDate())
             
             let expectation2 = expectationWithDescription("expect callback")
             
@@ -452,8 +454,7 @@ class DataStorageEngineTests: XCTestCase{
 
 // MARK: Callbacks for Tests
 
-
-class TestCallback: DSEAsyncCallback{
+class TestCallback: NSObject, DSEAsyncCallback{
     
     let successHandler: () -> Void
     let failureHandler: () -> Void
@@ -467,7 +468,7 @@ class TestCallback: DSEAsyncCallback{
         self.successHandler()
     }
     
-    func onFailure(error: ErrorType)  {
+    func onFailure(error: DSEError)  {
         self.failureHandler()
     }
 }

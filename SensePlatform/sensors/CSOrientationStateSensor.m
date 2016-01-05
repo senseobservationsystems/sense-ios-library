@@ -74,15 +74,9 @@
 			orientationString = @"unknown";
 			break;
 	}
-	
-	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										orientationString, @"value",
-										timestamp,@"date",
-										nil];
-	
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    
+    NSDate* time = [NSDate date];
+    [self commitDataPointWithValue:orientationString andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

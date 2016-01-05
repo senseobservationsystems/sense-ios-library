@@ -19,8 +19,11 @@ FOUNDATION_EXPORT const unsigned char SensePlatformVersionString[];
 #import <SensePlatform/CSSensorRequirements.h>
 #import <SensePlatform/CSSensePlatform.h>
 #import <SensePlatform/CSSettings.h>
+#import <SensePlatform/CSSensorConstants.h>
 #import <SensePlatform/CSLocationPermissionProtocol.h>
 #import <SensePlatform/CSApplicationStateChange.h>
 #import <SensePlatform/CSDynamicSensor.h>
 #import <SensePlatform/CSSensorIds.h>
 #import <SensePlatform/CSVersion.h>
+#import <SensePlatform/SingletonByChoice.h>
+#import <SensePlatform/CSSensorStore.h>

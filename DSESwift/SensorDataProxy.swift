@@ -332,11 +332,16 @@ public class SensorDataProxy {
     }
     
     private static func getAppKey() -> String {
-        return KeychainWrapper.stringForKey(KEYCHAIN_APPKEY)!
+        let defaults = NSUserDefaults.standardUserDefaults()
+        return defaults.stringForKey(DSEConstants.APPKEY_KEY)!
     }
     
     private static func getSessionId() -> String {
-        return KeychainWrapper.stringForKey(KEYCHAIN_SESSIONID)!
+        if let sessionId = KeychainWrapper.stringForKey(DSEConstants.KEYCHAIN_SESSIONID){
+            return sessionId
+        }else{
+            return ""
+        }
     }
     
 }

@@ -24,8 +24,8 @@ double timeLockCompleteEvent;
 // Timer to wait for a lockcomplete event
 NSTimer *waitForLockCompleteEvent;
 
-NSString* const kVALUE_IDENTIFIER_SCREEN_LOCKED = @"locked";
-NSString* const kVALUE_IDENTIFIER_SCREEN_UNLOCKED = @"unlocked";
+NSString* const kVALUE_IDENTIFIER_SCREEN_LOCKED = @"off";
+NSString* const kVALUE_IDENTIFIER_SCREEN_UNLOCKED = @"on";
 NSString* const kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH = @"screenOnOffSwitch";
 
 @implementation CSScreenSensor {
@@ -65,19 +65,8 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 }
 
 - (void) commitDisplayState:(const NSString *) state {
-	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-	
-	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									state, screenKey,
-									nil];
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										newItem, @"value",
-										timestamp,@"date",
-										nil];
-	
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
-
+    NSDate* time = [NSDate date];
+    [self commitDataPointWithValue:state andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}
@@ -163,6 +152,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 			waitForLockCompleteEvent = [NSTimer scheduledTimerWithTimeInterval:0.300 target:refToSelf selector:@selector(lockcompleteNotReceived) userInfo:nil repeats:NO];
 		}
 	} else if ([eventIdentifier isEqualToString:@"com.apple.springboard.hasBlankedScreen"]) {
-		[refToSelf commitDisplayState:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH];
+		//TODO: what is this state? Should I remove this?
+        //[refToSelf commitDisplayState:kVALUE_IDENTIFIER_SCREEN_ONOFF_SWITCH];
 	}
 }

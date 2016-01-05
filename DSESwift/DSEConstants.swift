@@ -13,6 +13,8 @@ public struct DSEConstants{
     static let LOCAL_PERSISTANCE_PERIOD_KEY = "DSE_localPersistancePeriod"
     static let BACKEND_ENVIRONMENT_KEY = "DSE_backendEnvironment"
     static let ENABLE_ENCRYPTION_KEY = "DSE_enableEncryption"
+    static let USERID_KEY    = "DSE_userId"
+    static let APPKEY_KEY    = "DSE_appKey"
     
     // for data types
     static let DATA_TYPE_STRING = "string"
@@ -24,6 +26,7 @@ public struct DSEConstants{
     // for syncing
     // 1000 datapoints is a safe amount for a respond not to exceed the maximum data size of respond in CommonSense
     static let DEFAULT_REMOTE_QUERY_LIMIT = 1000
+    static let DEFAULT_REMOTE_POST_LIMIT = 1000
     
     // for sensor profile
     static let SENSOR_PROFILE_KEY_NAME = "sensor_name"
@@ -31,9 +34,12 @@ public struct DSEConstants{
     
     // for queues
     static let DATASYNCER_PROCESS_QUEUE_ID = "nl.sense.dse.sync_process_queue"
+    
+    // for key chaines
+    static let KEYCHAIN_SESSIONID = "DSE_sessionId"
 }
 
-public enum DSEError: ErrorType{
+@objc public enum DSEError: Int, ErrorType{
     // Database Handler
     case ObjectNotFound
     case DuplicatedObjects
@@ -42,6 +48,7 @@ public enum DSEError: ErrorType{
     case UnauthenticatedAccess
     case CanNotChangePrimaryKey
     case InvalidSensorName
+    case EmptyUserId
     // DSE
     case InvalidAppKey
     case InvalidSessionId
@@ -67,13 +74,13 @@ public enum DSEError: ErrorType{
  * AWAITING_SENSOR_PROFILES = the credentials are set and the sensor profiles are being downloaded
  * READY = the engine is ready for use
  */
-public enum DSEStatus{
+@objc public enum DSEStatus: Int{
     case AWAITING_CREDENTIALS
     case AWAITING_SENSOR_PROFILES
     case INITIALIZED
 }
 
-public enum DSEServer {
-    case LIVE
+@objc public enum DSEServer: Int{
+    case LIVE 
     case STAGING
 }

@@ -19,15 +19,17 @@
 #import "CSSettings.h"
 #import "CSDynamicSensor.h"
 #import "CSVersion.h"
+#import "CSSensorConstants.h"
 //#import "BloodPressureSensor.h"
+
+@import DSESwift;
 
 NSString * const kCSDATA_TYPE_JSON = @"json";
 NSString * const kCSDATA_TYPE_INTEGER = @"integer";
 NSString * const kCSDATA_TYPE_FLOAT = @"float";
 NSString * const kCSDATA_TYPE_STRING = @"string";
 NSString * const kCSDATA_TYPE_BOOL = @"bool";
-NSString* const kCSNewSensorDataNotification = @"CSNewSensorDataNotification";
-NSString* const kCSNewMotionDataNotification = @"CSNewMotionDataNotification";
+
 
 static CSSensorStore* sensorStore;
 __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
@@ -40,6 +42,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     [CSSensorStore sharedSensorStore].sender.applicationKey = applicationKey;
     
     [self initialize];
+    [[CSSensorStore sharedSensorStore] start];
 }
 
 + (void) initialize {
@@ -76,7 +79,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
                           nil];
     
     //add data point for app version
-    [CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
+    //[CSSensePlatform addDataPointForSensor:@"app_info" displayName:@"Application Information" description:appIdentifier dataType:kCSDATA_TYPE_JSON jsonValue:data timestamp:[NSDate date]];
     
     // listen for notifications from the location provider indicating it has obtained permissions from the user
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationPermissionGranted:) name:[CSSettings permissionGrantedForProvider:kCSLOCATION_PROVIDER] object:nil];
@@ -101,30 +104,26 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 }
 
 + (void) willTerminate {
-    [[CSSensorStore sharedSensorStore] forceDataFlush];
+    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:nil failureCallback:^(NSError* error){NSLog(@"flush data failed");}];
 }
 
 + (void) flushData {
-    [[CSSensorStore sharedSensorStore] forceDataFlush];
+    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:nil failureCallback:^(NSError* error){NSLog(@"flush data failed");}];
 }
 
-+ (void) flushDataAndBlock {
-    [[CSSensorStore sharedSensorStore] forceDataFlushAndBlock];
++ (void) flushDataWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback {
+    [[CSSensorStore sharedSensorStore] forceDataFlushWithSuccessCallback:successCallback failureCallback:failureCallback];
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password {
-    NSError* error;
-    return [[self class] loginWithUser:user andPassword:password andError:&error];
+    
+    NSError* error = nil;
+    return [[CSSensorStore sharedSensorStore] loginWithUser:user andPassword:password completeHandler:^{} failureHandler:^{}andError:&error];
 }
 
-+ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error {
-    [[CSSettings sharedSettings] setLogin:user withPassword:password];
-    
-    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
-    if (succeed) {
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
-    }
-    return succeed;
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
+
+    return [[CSSensorStore sharedSensorStore] loginWithUser:user andPassword:password completeHandler:successHandler failureHandler:failureHandler andError:error];
 }
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash {
@@ -134,13 +133,8 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 + (BOOL) loginWithUser:(NSString*) user andPasswordHash:(NSString*) passwordHash andError:(NSError **) error {
     [[CSSettings sharedSettings] setLogin:user withPasswordHash:passwordHash];
-    
-    BOOL succeed = [[CSSensorStore sharedSensorStore].sender loginWithError:error];
-    if (succeed) {
-        [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingYES];
-    }
-    
-    return succeed;
+
+    return [[CSSensorStore sharedSensorStore] loginWithUser:user andPassword:passwordHash completeHandler:^{} failureHandler:^{} andError:error];
 }
 
 + (BOOL) registerUser:(NSString*) user withPassword:(NSString*) password  withEmail:(NSString*) email {
@@ -153,6 +147,7 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 }
 
 + (void) logout {
+    [[CSSensorStore sharedSensorStore] logout];
     [[CSSettings sharedSettings] setLogin:@"" withPassword:@""];
     [[CSSettings sharedSettings] setSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense value:kCSSettingNO];
 }
@@ -161,39 +156,18 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     return [[CSSensorStore sharedSensorStore].sender isLoggedIn];
 }
 
-+ (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate {
-	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate andOrder: @"DESC" withLimit: 1000];
-}
-
-
-+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
-	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name from: startDate to: endDate andOrder:order withLimit: nrOfPoints];
-}
-
-+ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate {
-	return [[CSSensorStore sharedSensorStore] getLocalDataForSensor: name andDeviceType: deviceType from: startDate to: endDate];
-}
-
-
-+ (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
-    return [[CSSensorStore sharedSensorStore] getDataForSensor:name onlyFromDevice:onlyFromDevice nrLastPoints:nrLastPoints];
-}
-
-+ (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
-    [[CSSensorStore sharedSensorStore] giveFeedbackOnState:state from:from to:to label:label];
-}
-
-+ (NSString*) getSessionCookie {
-    NSString* cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
-    if (cookie == nil) {
++ (NSString*) getSessionId {
+    NSString* sessionId = [[CSSensorStore sharedSensorStore].sender getSessionId];
+    
+    if (sessionId == nil) {
         NSString* user = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
         NSString* hash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
         if (user != nil && hash != nil) {
             [CSSensePlatform loginWithUser:user andPasswordHash:hash];
-            cookie = [CSSensorStore sharedSensorStore].sender.sessionCookie;
+            sessionId = [[CSSensorStore sharedSensorStore].sender getSessionId];
         }
     }
-    return cookie;
+    return sessionId;
 }
 
 + (void) applyIVitalitySettings {
@@ -223,6 +197,9 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString*)description dataType:(NSString*)dataType jsonValue:(id)value timestamp:(NSDate*)timestamp {
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value options:0 error:&error];
+    if (error) {
+        NSLog(@"Error while serializing jsonValue to NSData. Error:%@", error);
+    }
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
     [CSSensePlatform addDataPointForSensor:sensorName displayName:displayName description:description device:[CSSensorStore device] dataType:dataType stringValue:jsonString timestamp:timestamp];
@@ -263,48 +240,40 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
 
 + (void) addDataPointForSensor:(NSString*) sensorName displayName:(NSString*)displayName description:(NSString *)description device:(NSDictionary*)device dataType:(NSString*)dataType stringValue:(id)value timestamp:(NSDate*)timestamp {
     
-    NSMutableDictionary* fields;
-
-    if ([dataType isEqualToString:kCSDATA_TYPE_JSON]) {
-        fields = [[NSMutableDictionary alloc] init];
-        //extract data structure from value
-        @try {
-            NSError* error = nil;
-            NSData* jsonData = [value dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary* values = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-            if (error)
-                @throw [NSException exceptionWithName:@"Invalid JSON" reason:@"Value is not JSON" userInfo:nil];
-            
-            for (NSString* key in values) {
-                NSString* type = [CSSensePlatform dataTypeOf:[values objectForKey:key]];
-                if (type == nil)
-                    type = @"";
-                [fields setObject:type forKey:key];
-            }
-            
-        }
-        @catch (NSException *exception) {
-            NSLog(@"SensePlatform addDataPointForSensor %@: error extracting datatype from sensor value (%@)", sensorName, value);
-        }
-    }
     if (displayName == nil)
         displayName = sensorName;
     if (description == nil)
         description = sensorName;
     
     //create sensor
-    CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:description dataType:dataType fields:fields device:device];
+    CSDynamicSensor* sensor = [[CSDynamicSensor alloc] initWithName:sensorName displayName:displayName deviceType:description dataType:dataType fields:nil device:device];
 
-    //add sensor to the sensor store
-    [[CSSensorStore sharedSensorStore] addSensor:sensor];
     //commit value
-    NSError* error;
     id jsonValue = value;
-    if (value != nil && [value isKindOfClass:[NSString class]])
-        jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
-    if (error != nil)
-        jsonValue = value;
-    [sensor commitValue:jsonValue withTimestamp:[timestamp timeIntervalSince1970]];
+    if (value != nil && [value isKindOfClass:[NSString class]]){
+        NSString* stringValue = (NSString*) value;
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        formatter.decimalSeparator = @".";
+        if(dataType == kCSDATA_TYPE_FLOAT){
+            jsonValue = [formatter numberFromString:stringValue];
+        }else if (dataType == kCSDATA_TYPE_INTEGER){
+            jsonValue = [formatter numberFromString:stringValue];
+        }else if (dataType == kCSDATA_TYPE_STRING){
+            jsonValue = stringValue;
+        }else if (dataType == kCSDATA_TYPE_JSON){
+            NSError *error = nil;
+            jsonValue = [NSJSONSerialization JSONObjectWithData:[value dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+            if (error) {
+                NSLog(@"Error while serializing jsonValue to NSData. Error:%@", error);
+            }
+        }
+    }
+
+    if (jsonValue == nil) {
+        NSLog(@"Error during adding DataPoint. Invalid value type.");
+    }
+    
+    [sensor commitValue:jsonValue withTimestamp:timestamp];
 }
 
 + (void) synchronizeWithBloodPressureMonitor:(bpmCallBack) callback {
@@ -378,8 +347,6 @@ __weak id <CSLocationPermissionProtocol> locationPermissionDelegate;
     return [sensorStore locationPermissionState];
 }
 
-+ (void) removeLocalData {
-    [[CSSensorStore sharedSensorStore] removeLocalData];
-}
+
 
 @end

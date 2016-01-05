@@ -20,17 +20,17 @@
 #import "CSDataStore.h"
 #import "CSSender.h"
 #import "CSSensor.h"
+#import "SingletonByChoice.h"
 
 #import <UIKit/UIKit.h>
-#import "UIDevice+IdentifierAddition.h"
-#import "UIDevice+Hardware.h"
+
 
 /**
  Handles sensor data storing and uploading. Start all sensors and data providers.
  
  Data is stored locally for 30 days. After a succesfull upload, older data is removed.
  */
-@interface CSSensorStore : NSObject <CSDataStore> {
+@interface CSSensorStore : SingletonByChoice <CSDataStore> {
 }
 
 @property (readonly) NSArray* allAvailableSensorClasses;
@@ -41,52 +41,21 @@
 + (CSSensorStore*) sharedSensorStore;
 + (NSDictionary*) device;
 
-- (id)init;
+- (void) start;
+- (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error;
+- (void) logout;
+- (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler;
 - (void) loginChanged;
 - (void) setEnabled:(BOOL) enable;
 - (void) enabledChanged:(id) notification;
-- (void) setSyncRate: (int) newRate;
-- (void) addSensor:(CSSensor*) sensor;
-
-- (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
-
-/** 
- * Retrieve data from a sensor that is stored locally between a certain time interval
- * @param name The name of the sensor as an NSString
- * @param startDate The date and time of the first datapoint to look for (inclusive)
- * @param endDate The data and time of the last datapoint to look for (exclusive)
- * @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
- * @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
- * @result An array with dictionaries of time-value pairs
- */
-- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
-
-
-// remove all sensor data that are stored locally
-- (void) removeLocalData;
-
-/**
- * Retrieve data from a sensor and device type combination that is stored locally between a certain time interval
- * @param sensorName The name of the sensor as an NSString
- * @param deviceType The name of the device type as an NSString
- * @param startDate The date and time of the first datapoint to look for (inclusive)
- * @param endDate The data and time of the last datapoint to look for (exclusive)
- * @result An array with dictionaries of time-value pairs
- */
-- (NSArray*) getLocalDataForSensor:(NSString *)sensorName andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
-
-
-
-- (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label;
 
 /* Ensure all sensor data is flushed, used to reduce memory usage.
  * Flushing in this order, on failure continue with the next:
  * - flush to server
  * - flush to disk 
- * - delete
  */
-- (void) forceDataFlush;
-- (void) forceDataFlushAndBlock;
+- (void) forceDataFlushWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback;
+
 - (void) generalSettingChanged: (NSNotification*) notification;
 
 // passes on the requestLocationPermission function call to the locationProvider

@@ -10,9 +10,6 @@ import Foundation
 import VVJSONSchemaValidation
 import SwiftyJSON
 
-
-
-
 public enum SortOrder{
     case Asc
     case Desc
@@ -23,13 +20,13 @@ public enum SortOrder{
 * The Sensor class to represent a sensor in DSE and groups the database operations related to the sensor.
 *
 */
-public class Sensor{
+@objc public class Sensor: NSObject{
     var id = -1
-    var name = ""
+    public var name = ""
     var meta: Dictionary<String, AnyObject>
-    var remoteUploadEnabled = true
-    var remoteDownloadEnabled = true
-    var persistLocally = true
+    public private(set) var remoteUploadEnabled = true
+    public private(set) var remoteDownloadEnabled = true
+    public private(set) var persistLocally = true
     var userId = ""
     var source = ""
     var remoteDataPointsDownloaded = false
@@ -82,16 +79,13 @@ public class Sensor{
      * @param time: time of the dataPoint
      * Throws an Exception if saving the value fails.
      **/
-    public func insertOrUpdateDataPoint(value: AnyObject, _ time: NSDate) throws {
+    public func insertOrUpdateDataPoint(value value: AnyObject, time: NSDate) throws {
         let dataStructure = try DatabaseHandler.getSensorProfile(self.name)?.dataStructure
         if !JSONUtils.validateValue(value, schema: dataStructure!){
             throw DSEError.IncorrectDataStructure
         }
-        
-        let dataPoint = DataPoint(sensorId: self.id)
         let stringifiedValue = JSONUtils.stringify(value)
-        dataPoint.setValue(stringifiedValue)
-        dataPoint.setTime(time)
+        let dataPoint = DataPoint(sensorId: self.id, value: stringifiedValue, time: time)
         
         try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
     }
@@ -115,7 +109,10 @@ public class Sensor{
     *  //TODO add a list of potential exceptions
     */
     public func setSensorConfig(sensorConfig: SensorConfig) throws {
-        applyNewConfig(sensorConfig)
+        self.remoteDownloadEnabled = sensorConfig.downloadEnabled
+        self.remoteUploadEnabled = sensorConfig.uploadEnabled
+        self.meta = sensorConfig.meta
+        self.persistLocally = sensorConfig.persist
         try DatabaseHandler.updateSensor(self)
     }
     
@@ -136,12 +133,4 @@ public class Sensor{
     }
     
     
-    // MARK: helper functions
-    
-    private func applyNewConfig(sensorConfig: SensorConfig){
-        self.remoteDownloadEnabled = sensorConfig.downloadEnabled
-        self.remoteUploadEnabled = sensorConfig.uploadEnabled
-        self.meta = sensorConfig.meta
-        self.persistLocally = sensorConfig.persist
-    }
 }

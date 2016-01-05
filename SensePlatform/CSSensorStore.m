@@ -19,6 +19,11 @@
 #import "CSSettings.h"
 #import "CSApplicationStateChange.h"
 
+
+
+#import "UIDevice+IdentifierAddition.h"
+#import "UIDevice+Hardware.h"
+
 #import "CSLocationSensor.h"
 #import "CSVisitsSensor.h"
 #import "CSBatterySensor.h"
@@ -36,13 +41,18 @@
 #import "BloodPressureSensor.h"
 #import "CSScreenSensor.h"
 #import "CSSender.h"
-#import "CSStorage.h"
-#import "CSUploader.h"
 #import "CSStepCounterProcessorSensor.h"
 #import "CSTimeZoneSensor.h"
 
 #import "CSSpatialProvider.h"
 #import "CSLocationProvider.h"
+
+#import "DSECallback.h"
+#import "CSSensorConstants.h"
+
+@import DSESwift;
+
+
 
 //actual limit is 1mb, make it a little smaller to compensate for overhead and to be sure
 #define MAX_BYTES_TO_UPLOAD_AT_ONCE (800*1024)
@@ -61,8 +71,6 @@
 
 @implementation CSSensorStore {
     CSSender* sender;
-    CSStorage* storage;
-    CSUploader* uploader;
 	
 	NSMutableDictionary* sensorData;
 	BOOL serviceEnabled;
@@ -95,11 +103,7 @@
 static CSSensorStore* sharedSensorStoreInstance = nil;
 
 + (CSSensorStore*) sharedSensorStore {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-		sharedSensorStoreInstance = [[[super class] alloc] init];
-    });
-	return sharedSensorStoreInstance;	
+	return [self sharedInstance];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -120,35 +124,9 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		lastPoll = [NSDate date];
         lastDeletionDate = [NSDate date];
         sensorIdMapLock = [[NSObject alloc] init];
-        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-																  NSUserDomainMask, YES) objectAtIndex:0];
-        NSString* dbPath =[rootPath stringByAppendingPathComponent:@"data.db"];
-        storage = [[CSStorage alloc] initWithPath:dbPath];
-        uploader = [[CSUploader alloc] initWithStorage:storage andSender:sender];
 		
 		//all sensor classes
-		allSensorClasses = [NSArray arrayWithObjects:
-							[CSLocationSensor class],
-							[CSVisitsSensor class],
-							[CSBatterySensor class],
-							[CSCallSensor class],
- 							[CSConnectionSensor class],
-   							[CSNoiseSensor class],
-							[CSOrientationSensor class],
-							//[CSCompassSensor class],
-							//[UserProximity class],
-							//[OrientationStateSensor class],
- 							[CSAccelerometerSensor class],
-							[CSAccelerationSensor class],
-							[CSRotationSensor class],
-                            [CSScreenSensor class],
-                            //[CSJumpSensor class],
-							//[PreferencesSensor class],
-							//[BloodPressureSensor class],
-							//[CSActivityProcessorSensor class],
-                            [CSTimeZoneSensor class],
-                            //[CSStepCounterProcessorSensor class],
-							nil];
+        allSensorClasses = [self getAllSensorClassesArray];
 		
 		NSPredicate* availablePredicate = [NSPredicate predicateWithFormat:@"isAvailable == YES"];
 		allAvailableSensorClasses = [allSensorClasses filteredArrayUsingPredicate:availablePredicate];
@@ -156,18 +134,6 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
         
         //instantiate sample strategy
         //sampleStrategy = [[SampleStrategy alloc] init];
-
-        
-		//set settings and initialise sensors
-        if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
-            [self instantiateSensors];
-        } else {
-            dispatch_sync(dispatch_get_main_queue(), ^() {
-                [self instantiateSensors];
-            });
-        }
-            
-		[self applyGeneralSettings];
         
 		//register for change in settings
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginChanged) name:CSsettingLoginChangedNotification object:nil];
@@ -176,112 +142,221 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	return self;
 }
 
-- (void) instantiateSensors {
-    @synchronized(sensors) {
-		//release current sensors
-		spatialProvider=nil;
-		[sensors removeAllObjects];
-		
-		//instantiate sensors
-		for (Class aClass in allAvailableSensorClasses) {
-			if ([aClass isAvailable]) {
-				CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
-				[sensors addObject:newSensor];
-				//save sensor description in storage
-				if (newSensor.sensorDescription != nil) {
-					NSString* type = [newSensor.device valueForKey:@"type"];
-					NSString* uuid = [newSensor.device valueForKey:@"uuid"];
-					NSData* jsonData = [NSJSONSerialization dataWithJSONObject:newSensor.sensorDescription options:0 error:nil];
-					NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-					[self->storage storeSensorDescription:json forSensor:newSensor.name description:newSensor.deviceType deviceType:type device:uuid];
-				}
-			}
-		}
-		
-		//set self as data store
-		for (CSSensor* sensor in sensors) {
-			sensor.dataStore = self;
-		}
-		
-		//initialise spatial provider
-		CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
-		CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
-		for (CSSensor* sensor in sensors) {
-			if ([sensor isKindOfClass:[CSCompassSensor class]])
-				compass = (CSCompassSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSOrientationSensor class]])
-				orientation = (CSOrientationSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
-				accelerometer = (CSAccelerometerSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
-				acceleration = (CSAccelerationSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSRotationSensor class]])
-				rotation = (CSRotationSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSJumpSensor class]])
-				jumpSensor = (CSJumpSensor*)sensor;
-			else if ([sensor isKindOfClass:[CSLocationSensor class]])
-				location = (CSLocationSensor*) sensor;
-			else if ([sensor isKindOfClass:[CSVisitsSensor class]])
-				visits = (CSVisitsSensor*) sensor;
-		}
-		
-		spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
-		locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
+- (NSArray*) getAllSensorClassesArray{
+    return [NSArray arrayWithObjects:
+            [CSLocationSensor class],
+            [CSVisitsSensor class],
+            [CSBatterySensor class],
+            [CSCallSensor class],
+            [CSConnectionSensor class],
+            [CSNoiseSensor class],
+            [CSOrientationSensor class],
+            //[CSCompassSensor class],
+            //[UserProximity class],
+            //[OrientationStateSensor class],
+            [CSAccelerometerSensor class],
+            [CSAccelerationSensor class],
+            [CSRotationSensor class],
+            [CSScreenSensor class],
+            //[CSJumpSensor class],
+            //[PreferencesSensor class],
+            //[BloodPressureSensor class],
+            //[CSActivityProcessorSensor class],
+            [CSTimeZoneSensor class],
+            //[CSStepCounterProcessorSensor class],
+            nil];
+}
+
+
+- (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error {
+    [[CSSettings sharedSettings] setLogin:user withPassword:password];
+    
+    return [self loginWithCompleteHandler:successHandler failureHandler:failureHandler andError:error];
+}
+
+- (BOOL) loginWithCompleteHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler andError:(NSError **) error{
+    BOOL succeed = [self.sender loginWithError:error];
+    if (*error) {
+        NSLog(@"Error during login: %@", *error);
+    }
+    if (succeed) {
+        [self startWithSuccessHandler:successHandler failureHandler:failureHandler];
+    }
+    return succeed;
+}
+
+- (void) logout{
+    [self forceDataFlushWithSuccessCallback:^{
+                                [self.sender logout];
+                            }
+                            failureCallback:^(NSError* error){
+                                [self.sender logout];
+                                NSLog(@"Flush data failed");
+                            }];
+}
+
+-(void) start{
+    [self startWithSuccessHandler:^{} failureHandler:^{}];
+}
+
+-(void) startWithSuccessHandler:(void (^)()) successHandler failureHandler:(void (^)()) failureHandler{
+    if ([sender isLoggedIn]) {
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* sessionId = [defaults stringForKey:kCSCredentialsSessionId];
+        NSString* userId = [defaults stringForKey:kCSCredentialsUserId];
+        NSString* appKey = [defaults stringForKey:kCSCredentialsAppKey];
+        [self updateDSEWithSessionId:sessionId andUserId:userId andAppKey:appKey];
+        [self startDSEWithCompleteHandler:successHandler failureHandler: failureHandler];
+    }else{
+        NSLog(@"---SensorStore initialization. Not logged in yet");
+        if (failureHandler){
+            failureHandler();
+        }
     }
 }
 
-- (void) addSensor:(CSSensor*) sensor {
+- (void) updateDSEWithSessionId: (NSString*) sessionId andUserId:(NSString*) userId andAppKey:(NSString*) appKey{
+
+    // Load credentials to DSE
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    NSError* error = nil;
+    DSEConfig* dseConfig = [[DSEConfig alloc] init];
+    dseConfig.sessionId = sessionId;
+    dseConfig.userId = userId;
+    dseConfig.appKey = appKey;
+    [dse setup:dseConfig error:&error];
+    if (error){
+        NSLog(@"Error: %@",error);
+        return;
+    }
+}
+
+- (void) startDSEWithCompleteHandler:(void (^)()) completeHandler failureHandler: (void (^)()) fHandler{
+    
+    DSECallback *callback = [self getDSEInitializationCallback:completeHandler failureHandler:fHandler];
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    [dse setInitializationCallback:callback];
+    [dse setSensorCreationHandler: ^(NSString* sensorName){
+        NSLog(@"---- sensor creation Handler is triggered.");
+        [self configureSensor: sensorName];
+    }];
+    
+    // DSE go!
+    NSError* error = nil;
+    [dse startAndReturnError:&error];
+    if (error){
+        NSLog(@"Error: %@",error);
+        return;
+    }
+}
+
+-(DSECallback*) getDSEInitializationCallback:(void (^)()) completeHandler failureHandler: (void (^)()) fHandler{
+    // Set up callbacks
+    void (^successHandler)() = ^(){
+        NSLog(@"successcallback");
+        [self initializeSensorsWithCompleteHandler:completeHandler];
+    };
+    
+    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
+        NSLog(@"Error:%ld", (long)error);
+        if (fHandler){
+            fHandler();
+        }
+    };
+    
+    return [[DSECallback alloc] initWithSuccessHandler: successHandler
+                                     andFailureHandler: failureHandler];
+}
+
+-(void) configureSensor: (NSString*) sensorName{
+    NSError* error = nil;
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    Sensor* sensor = [dse getSensor:CSSorceName_iOS sensorName:sensorName error:&error];
+    NSDictionary* sensorOptions = [self getDefaultSensorOptionForSensor:sensor.name];
+    if (sensorOptions != nil){
+        NSError* error = nil;
+        SensorConfig* config = [[SensorConfig alloc] init];
+        config.uploadEnabled = [sensorOptions[@"upload_enabled"] boolValue];
+        config.downloadEnabled = [sensorOptions[@"download_enabled"] boolValue];
+        config.persist = [sensorOptions[@"persist_locally"] boolValue];
+        [sensor setSensorConfig:config error:&error];
+    }
+}
+
+-(void) initializeSensorsWithCompleteHandler: (void (^)())completeHandler {
+    //set settings and initialise sensors
+    if (dispatch_get_current_queue() == dispatch_get_main_queue()) {
+        [self instantiateSensors];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^() {
+            [self instantiateSensors];
+        });
+    }
+    [self applyGeneralSettings];
+    if (completeHandler) {
+        completeHandler();
+    }
+}
+
+- (void) instantiateSensors {
     @synchronized(sensors) {
-        sensor.dataStore = self;
-        for(CSSensor* s in sensors) {
-            if ([s.sensorId isEqualToString:sensor.sensorId]) {
-                //list already contains sensor, don't add
-                return;
+        //release current sensors
+        spatialProvider=nil;
+        [sensors removeAllObjects];
+        
+        //instantiate sensors
+        for (Class aClass in allAvailableSensorClasses) {
+            if ([aClass isAvailable]) {
+                CSSensor* newSensor = (CSSensor*)[[aClass alloc] init];
+                [sensors addObject:newSensor];
             }
         }
         
-        [sensors addObject:sensor];
-        if (sensor.sensorDescription != nil) {
-            NSString* type = [sensor.device valueForKey:@"type"];
-            NSString* uuid = [sensor.device valueForKey:@"uuid"];
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:sensor.sensorDescription options:0 error:nil];
-            NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-            [self->storage storeSensorDescription:json forSensor:sensor.name description:sensor.deviceType deviceType:type device:uuid];
+        
+        //initialise spatial provider
+        CSCompassSensor* compass=nil; CSOrientationSensor* orientation=nil; CSAccelerometerSensor* accelerometer=nil; CSAccelerationSensor* acceleration = nil; CSRotationSensor* rotation = nil; CSJumpSensor* jumpSensor = nil;
+        CSLocationSensor* location = nil; CSVisitsSensor* visits = nil;
+        for (CSSensor* sensor in sensors) {
+            if ([sensor isKindOfClass:[CSCompassSensor class]])
+                compass = (CSCompassSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSOrientationSensor class]])
+                orientation = (CSOrientationSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSAccelerometerSensor class]])
+                accelerometer = (CSAccelerometerSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSAccelerationSensor class]])
+                acceleration = (CSAccelerationSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSRotationSensor class]])
+                rotation = (CSRotationSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSJumpSensor class]])
+                jumpSensor = (CSJumpSensor*)sensor;
+            else if ([sensor isKindOfClass:[CSLocationSensor class]])
+                location = (CSLocationSensor*) sensor;
+            else if ([sensor isKindOfClass:[CSVisitsSensor class]])
+                visits = (CSVisitsSensor*) sensor;
+        }
+        
+        spatialProvider = [[CSSpatialProvider alloc] initWithCompass:compass orientation:orientation accelerometer:accelerometer acceleration:acceleration rotation:rotation jumpSensor:jumpSensor];
+        locationProvider = [[CSLocationProvider alloc] initWithLocationSensor:location andVisitsSensor:visits];
+    }
+}
+
+
+
+- (NSDictionary*) getDefaultSensorOptionForSensor:(NSString*) sensorName{
+    // get default sensor options from json file
+    NSError* error = nil;
+    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"default_sensor_options" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    NSArray* arrayOfSensorOptions = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    // find the corresponding one
+    for(NSDictionary* sensorOptions in arrayOfSensorOptions){
+        if([sensorOptions[@"sensor_name"] isEqualToString: sensorName]){
+            return sensorOptions;
         }
     }
+    return nil;
 }
 
-- (void) addDataForSensorId:(NSString*) sensorId dateValue:(NSDictionary*) dateValue {
-    NSData* valueData;
-    @try {
-        valueData  =  [NSJSONSerialization dataWithJSONObject:dateValue options:0 error:NULL];
-    }
-    @catch (NSException *exception) {
-        return;
-    }
-
-    NSString* value = [[NSString alloc] initWithData:valueData encoding:NSUTF8StringEncoding];
-    double timestamp = [[dateValue objectForKey:@"date"] doubleValue];
-    NSString* name = [CSSensor sensorNameFromSensorId:sensorId];
-    NSString* description = [CSSensor sensorDescriptionFromSensorId:sensorId];
-    //TODO: these values are not being used
-    NSString* deviceType = [CSSensor sensorDeviceTypeFromSensorId:sensorId];
-    NSString* deviceUUID = [CSSensor sensorDeviceUUIDFromSensorId:sensorId];
-    NSString* dataType = @""; //Not being used
-
-   [storage storeSensor:name description:description deviceType:deviceType device:deviceUUID dataType:dataType value:value timestamp:timestamp];
-}
-- (void) commitFormattedData:(NSDictionary*) data forSensorId:(NSString *)sensorId {
-    NSString* sensorName = [[[sensorId stringByReplacingOccurrencesOfString:@"//" withString:@"/"] componentsSeparatedByString:@"/"] objectAtIndex:0];
-	//post notification for the data
-    [[NSNotificationCenter defaultCenter] postNotificationName:kCSNewSensorDataNotification object:sensorName userInfo:data];
-
-    if ([[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadToCommonSense] isEqualToString:kCSSettingNO]) return;
-    BOOL dontUploadBursts = [[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingDontUploadBursts] isEqualToString:kCSSettingYES];
-    if (dontUploadBursts && [sensorId rangeOfString:@"burst-mode"].location != NSNotFound) return;
-
-    [self addDataForSensorId:sensorId dateValue:data];
-}
 
 - (void) enabledChanged:(id) notification {
     BOOL enable = [[notification object] boolValue];
@@ -303,17 +378,17 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		}
 
 		//flush data
-		[self forceDataFlush];
+        [self forceDataFlushWithSuccessCallback:nil failureCallback:nil];
         
         //set timer
-        [self stopUploading];
+        //[self stopUploading];
 	} else {
         //send notifications to notify sensors whether they should activate themselves
         for (CSSensor* sensor in sensors) {
 			[[CSSettings sharedSettings] sendNotificationForSensor:sensor.name];
         }
         //enable uploading
-        [self setSyncRate:syncRate];
+        //[self setSyncRate:syncRate];
 	}
         
     waitTime = 0;
@@ -321,9 +396,7 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 }
 
 - (void) loginChanged {
-	//flush current data before making any changes
-	[self forceDataFlush];
-	
+    //INTEGRATION-TODO: Reconsider this. Do we want to store username/password?
 	//get new settings
     NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
   	NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
@@ -337,149 +410,31 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
     waitTime = 0;
 }
 
-- (void) uploadAndClearData {
-    dispatch_sync(uploadQueueGCD, ^{
-        @autoreleasepool {
-            @try {
-               	[self uploadData];
-            }
-            @catch (NSException *exception) {
-                [self uploadData];
-            }
-        }
-    });
 
-	@synchronized(self){
-		[sensorData removeAllObjects];
-	}
-}
-
-- (void) scheduleUploadIn:(NSTimeInterval) interval {
-    /* Use a timer instead of dispatch_after so we can add some leeway and allow the scheduler to optimise. */
-    @synchronized(uploadTimerLock) {
-        if (uploadTimerGCD) {
-            dispatch_source_cancel(uploadTimerGCD);
-        }
-        uint64_t leeway = MAX(interval * 0.1, 1ull) * NSEC_PER_SEC;
-        uploadTimerGCD = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, uploadTimerQueueGCD);
-        dispatch_source_set_event_handler(uploadTimerGCD, ^{
-            dispatch_async(uploadQueueGCD, ^{
-                @autoreleasepool {
-                [self uploadOperation];
-                }
-            });
-        });
-        dispatch_source_set_timer(uploadTimerGCD, dispatch_walltime(NULL, interval * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, leeway);
-        dispatch_resume(uploadTimerGCD);
-    }
-}
-
-- (void) stopUploading {
-    @synchronized(uploadTimerLock) {
-        if (uploadTimerGCD) {
-            dispatch_source_cancel(uploadTimerGCD);
-            uploadTimerGCD = NULL;
-        }
-    }
-}
-
-- (void) uploadOperation {
-    BOOL allSucceed = NO;
-    @try {
-        allSucceed = [self uploadData];
-    } @catch (NSException* exception) {
-        NSLog(@"Exception during upload: %@", exception);
-    }
-    
-    //exponentially back off at failures to avoid spamming the server
-    if (allSucceed)
-        waitTime = 0; //no need to back off
-    else {
-        //back off with a factor 2, max to one hour or upload interval
-        waitTime = MIN(MAX(MAX_UPLOAD_INTERVAL, syncRate), MAX(2 * syncRate, 2 * waitTime));
-    }
-    
-    if (serviceEnabled == YES) {
-        NSTimeInterval interval = MAX(waitTime, syncRate);
-        [self scheduleUploadIn:interval];
-        NSLog(@"Uploading again in %f seconds.", interval);
-        
-        //send notification about upload
-        CSApplicationStateChangeMsg* msg = [[CSApplicationStateChangeMsg alloc] init];
-        msg.applicationStateChange = allSucceed ? kCSUPLOAD_OK :kCSUPLOAD_FAILED;
-        [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:CSapplicationStateChangeNotification object:msg]];
-    }
-}
-
-- (BOOL) uploadData {
-    BOOL succeed =  [uploader upload];
-    if (succeed) {
-        if([lastDeletionDate timeIntervalSinceNow] > TIME_INTERVAL_TO_CHECK_DATA_REMOVAL) { // if last deletion was more than limit ago remove old data again
-            
-            //Clean up storage by removing data that is older than LOCAL_STORAGE_TIME
-            NSDate *cutOffTime = [NSDate dateWithTimeIntervalSince1970: ([[NSDate date] timeIntervalSince1970] - LOCAL_STORAGE_TIME)];
-            
-            NSLog(@"Deleting all data before %@", [NSDateFormatter localizedStringFromDate:cutOffTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]);
-            
-            [self->storage removeDataBeforeTime: cutOffTime];
-            lastDeletionDate = [NSDate date]; // reset to now
-        }
-    }
-    return succeed;
-}
-
-- (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints {
-    @try {
-        NSString* sensorId = [self resolveSensorIdForSensorName:name onlyThisDevice:onlyFromDevice];
-        
-        if (sensorId) {
-            return [sender getDataFromSensor:sensorId nrPoints:nrLastPoints];
-        } else
-            return nil;
-    }
-    @catch (NSException *exception) {
-        return NULL;
-    }
-}
-- (NSArray*) getLocalDataForSensor:(NSString *)name from:(NSDate *)startDate to:(NSDate *)endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints {
-    return [self->storage getDataFromSensor:name from:startDate to:endDate andOrder:order withLimit: nrOfPoints];
-}
-
-- (NSArray*) getLocalDataForSensor:(NSString *)sensorName andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate {
-	return [self->storage getDataFromSensor:sensorName andDeviceType:deviceType from:startDate to:endDate];
-}
-
-- (void) giveFeedbackOnState:(NSString*) state from:(NSDate*)from to:(NSDate*) to label:(NSString*)label {
-    NSString* sensorId = [self resolveSensorIdForSensorName:state onlyThisDevice:NO];
-
-    if (sensorId) {
-        //make sure data is flushed
-        [self forceDataFlushAndBlock];
-        [sender giveFeedbackToStateSensor:sensorId from:from to:to label:label];
-    }
-}
 
 
 - (void) applyGeneralSettings {
 	@try {
-		//get new settings
-        NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
-        NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
-        
-		//apply properties one by one
-		[sender setUser:username andPasswordHash:passwordHash];
+        [self loadCreadentialsFromSettingsIntoSender];
+
         //TODO:FIX
 		NSString* setting = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUploadInterval];
-        if ([setting isEqualToString:kCSGeneralSettingUploadIntervalAdaptive])
-            [self setSyncRate:10];
-        else if ([setting isEqualToString:kCSGeneralSettingUploadIntervalNightly])
-            [self setSyncRate:3600];
-        else if ([setting isEqualToString:kCSGeneralSettingUploadIntervalWifi])
-            [self setSyncRate:3600];
-        else if ([setting doubleValue]) {   
-            [self setSyncRate:MAX(1,[setting doubleValue])];
+
+        if ([setting isEqualToString:kCSGeneralSettingUploadIntervalAdaptive]){
+            [self setSyncInterval:10];
+//            [self setSyncRate:10];
+        } else if ([setting isEqualToString:kCSGeneralSettingUploadIntervalNightly]){
+            [self setSyncInterval:3600];
+//            [self setSyncRate:3600];
+        } else if ([setting isEqualToString:kCSGeneralSettingUploadIntervalWifi]){
+            [self setSyncInterval:3600];
+//            [self setSyncRate:3600];
+        }else if ([setting doubleValue]) {
+            [self setSyncInterval:MAX(1,[setting doubleValue])];
+//            [self setSyncRate:MAX(1,[setting doubleValue])];
         } else {
-            [self setSyncRate:1800]; //Hmm, unknown, let's choose some value
+            [self setSyncInterval:1800];
+//            [self setSyncRate:1800]; //Hmm, unknown, let's choose some value
         }
         
 		[self setEnabled:[[[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingSenseEnabled] boolValue]];
@@ -489,43 +444,37 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	}	
 }
 
-
-- (void) forceDataFlushAndBlock {
-    dispatch_sync(uploadQueueGCD, ^{
-        @autoreleasepool {
-            @try {
-                //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
-                [storage flush];
-                [self uploadData];
-                [self->storage flush];
-            }
-            @catch (NSException *exception) {
-                NSLog(@"Exception during forced data flush and block: %@", exception);
-            }
-
-        }
-    });
+- (void)loadCreadentialsFromSettingsIntoSender{
+    //get settings
+    NSString* username = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingUsername];
+    NSString* passwordHash = [[CSSettings sharedSettings] getSettingType:kCSSettingTypeGeneral setting:kCSGeneralSettingPassword];
+    //apply properties one by one
+    [sender setUser:username andPasswordHash:passwordHash];
 }
 
-- (void) forceDataFlush {
+
+
+- (void) forceDataFlushWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback {
     //flush to disk before uploading. In case of a flush we want to make sure the data is saved, even if the app cannot upload.
-    [storage flush];
-    //schedule an upload
-    dispatch_async(uploadQueueGCD, ^{
-        @autoreleasepool {
-            @try {
-                [self uploadData];
-                [self->storage flush];
-            }
-            @catch (NSException *exception) {
-                 NSLog(@"Exception during forced data flush and block: %@", exception);
-            }
+    void (^successHandler)() = ^(){
+        if (successCallback) {
+            successCallback();
         }
-    });
-}
-
-- (void) removeLocalData {
-    [storage removeDataBeforeTime:[NSDate date]];
+        NSLog(@"Flush completed");
+    };
+    
+    void (^failureHandler)(enum DSEError) = ^(enum DSEError error){
+        if (failureHandler) {
+            failureCallback(nil);
+        }
+        NSLog(@"Error:%ld", (long)error);
+    };
+    
+    DSECallback *callback = [[DSECallback alloc] initWithSuccessHandler: successHandler
+                                                      andFailureHandler: failureHandler];
+    
+    
+    [[DataStorageEngine getInstance] syncData:callback];
 }
 
 - (void) generalSettingChanged: (NSNotification*) notification {
@@ -533,16 +482,16 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 		CSSetting* setting = notification.object;
 		if ([setting.name isEqualToString:kCSGeneralSettingUploadInterval]) {
             
-            if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalAdaptive])
-                [self setSyncRate:10];
-            else if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalNightly])
-                [self setSyncRate:3600];
-            else if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalWifi])
-                [self setSyncRate:3600];
-            else if ([setting.value doubleValue]) {   
-                    [self setSyncRate:MAX(1,[setting.value doubleValue])];
+            if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalAdaptive]){
+                [self setSyncInterval:10];
+            } else if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalNightly]){
+                [self setSyncInterval:3600];
+            }else if ([setting.value isEqualToString:kCSGeneralSettingUploadIntervalWifi]){
+                [self setSyncInterval:3600];
+            }else if ([setting.value doubleValue]) {
+                [self setSyncInterval:MAX(1,[setting.value doubleValue])];
             } else {
-                    [self setSyncRate:1800]; //Hmm, unknown, let's choose some value
+                [self setSyncInterval:1800];
             }
 		} else if ([setting.name isEqualToString:kCSGeneralSettingSenseEnabled]) {
 			[self setEnabled:[setting.value boolValue]];
@@ -552,99 +501,19 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 	}
 }
 
+- (void) setSyncInterval:(int) interval{
+    DataStorageEngine* dse = [DataStorageEngine getInstance];
+    DSEConfig* config = [[DSEConfig alloc] init];
+    config.uploadInterval = interval;
+    NSError* error = nil;
+    [dse setup:config error:&error];
+}
+
+
 - (void) setBackgroundHackEnabled:(BOOL) enable {
 	//when only enabling the locationProvider and not the locationSensor the location updates are used for background monitoring but are not stored
 	locationProvider.isEnabled = YES;
 }
-
-- (void) setSyncRate: (int) newRate {
-	syncRate = newRate;
-    if (serviceEnabled) {
-        [self scheduleUploadIn:syncRate];
-    }
-    NSLog(@"set upload interval: %d", newRate);
-}
-
-- (NSUInteger) nrPointsToSend:(NSArray*) data {
-    //Heuristic to estimate the nr of points to send.
-    NSUInteger points=0;
-    int size = 0;
-    NSError* error = nil;
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
-	NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-    size_t sizeOfNextPoint = [json length];
-    do {
-        points++;
-        size += sizeOfNextPoint;
-        if (points >= data.count)
-            break; //there is no next point...
-        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[data objectAtIndex:points] options:0 error:&error];
-        NSString* json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
-        sizeOfNextPoint = [json length];
-
-        //add some bytes for overhead
-        sizeOfNextPoint += 10;
-    } while (size + sizeOfNextPoint < MAX_BYTES_TO_UPLOAD_AT_ONCE);
-    return points;
-}
-
-- (NSString*) resolveSensorIdForSensorName:(NSString*) sensorName onlyThisDevice:(BOOL)onlyThisDevice {
-    /* TODO: remove this. There is some code in uploader that could be used */
-    //try to resolve the id from the local mapping
-    NSString* sensorId;
-    for (NSString* extendedID in sensorIdMap) {
-        //extract sensor name
-        NSString* name = [CSSensor sensorNameFromSensorId:extendedID];
-        if ([name isEqualToString:sensorName]) {
-            //found sensor name
-            sensorId = [sensorIdMap valueForKey:extendedID];
-            break;
-        }
-    }
-    
-    //in case it isn't in the local mapping, resolve the sensor id remotely
-    if (sensorId == nil) {
-        //get list of sensors from the server
-        NSArray* remoteSensors;
-        @try {
-            if (onlyThisDevice)
-                remoteSensors = [sender listSensorsForDevice:[CSSensorStore device]];
-            else 
-                remoteSensors = [sender listSensors];
-        } @catch (NSException* e) {
-            //for some reason the request failed, so stop. Trying to create the sensors might result in duplicate sensors.
-            NSLog(@"Couldn't get a list of sensors for the device: %@ ", e.description);
-            return nil;
-        }
-        
-        if (remoteSensors == nil)
-            return nil;
-        
-        //match against all remote sensors
-        for (id remoteSensor in remoteSensors) {
-            //determine whether the sensor matches
-            if ([remoteSensor isKindOfClass:[NSDictionary class]]) {
-                NSString* dName = [remoteSensor valueForKey:@"name"];
-                NSString* deviceType = [remoteSensor valueForKey:@"device_type"];
-                NSDictionary* device = [remoteSensor valueForKey:@"device"];
-                if (dName == nil || ([sensorName caseInsensitiveCompare:dName] != NSOrderedSame))
-                    continue;
-                
-                sensorId = [remoteSensor valueForKey:@"id"];
-                //update sensor id map
-                @synchronized(sensorIdMapLock) {
-                    [sensorIdMap setValue:sensorId forKey:[CSSensor sensorIdFromName:sensorName andDeviceType:deviceType andDevice:device]];
-                }
-                break;
-            }
-        }
-    }
-
-    return sensorId;
-}
-
 
 + (NSDictionary*) device {
     NSString* type = [[UIDevice currentDevice] platformString];
@@ -665,6 +534,8 @@ static CSSensorStore* sharedSensorStoreInstance = nil;
 - (CLAuthorizationStatus) locationPermissionState {
     return [locationProvider permissionState];
 }
+
+
 
 
 @end

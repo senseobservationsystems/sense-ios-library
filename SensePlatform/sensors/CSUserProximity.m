@@ -50,15 +50,7 @@
 - (void) commitUserProximity:(NSNotification*) notification {
 	//get proximity infomation
 	NSString* proximityState = [[UIDevice currentDevice] proximityState] ? @"true": @"false";
-	
-	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										proximityState, @"value",
-										timestamp,@"date",
-										nil];
-	
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    [self commitDataPointWithValue:proximityState andTime:[NSDate date]];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

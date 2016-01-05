@@ -9,6 +9,7 @@
 #import "CSSensorRequirements.h"
 #import "CSSettings.h"
 #import "CSSensePlatform.h"
+#import "CSSensorConstants.h"
 
 NSString* const kCSREQUIREMENT_FIELD_OPTIONAL = @"optional";
 NSString* const kCSREQUIREMENT_FIELD_SENSOR_NAME = @"sensor_name";

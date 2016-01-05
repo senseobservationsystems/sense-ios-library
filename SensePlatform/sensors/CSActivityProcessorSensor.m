@@ -11,6 +11,9 @@
 #import "CSDataStore.h"
 #import "Formatting.h"
 #import "CSSensePlatform.h"
+#import "CSSensorConstants.h"
+
+@import DSESwift;
 
 static NSString* CSCMMotionActivityLastDate = @"CSCMMotionActivityLastDate";
 
@@ -123,12 +126,13 @@ static const NSString* activityKey = @"activity";
                            confidence, confidenceKey,
                            nil];
     NSTimeInterval timestamp = [activity.startDate timeIntervalSince1970];
-    
-    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-                          value, @"value",
-                          CSroundedNumber(timestamp, 3),@"date",
-                          nil];
-    [self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+//    
+//    NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
+//                          value, @"value",
+//                          CSroundedNumber(timestamp, 3),@"date",
+//                          nil];
+//    //[self.dataStore commitFormattedData:valueTimestampPair forSensorId:self.sensorId];
+    [self commitDataPointWithValue:value andTime:activity.startDate];
     
     //store the date of the activity
     NSUserDefaults* prefs = [NSUserDefaults standardUserDefaults];

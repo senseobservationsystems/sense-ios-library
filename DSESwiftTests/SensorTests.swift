@@ -21,16 +21,16 @@ class SensorTests: XCTestCase {
     
     override func setUp() {
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = "test2"
-        KeychainWrapper.setString(userId, forKey: KEYCHAIN_USERID)
         accountUtils = CSAccountUtils(appKey: APPKEY_STAGING)
         registerAndLogin(accountUtils!)
         
         // set the config with CORRECT default values
-        self.config.syncInterval           = 30 * 60
+        self.config.uploadInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
+        self.config.userId = userId
         self.config.sessionId = (accountUtils!.sessionId)!
         
         do{
@@ -39,9 +39,7 @@ class SensorTests: XCTestCase {
             XCTFail("Failed in setup")
         }
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
-        KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
+        KeychainWrapper.setString(self.config.sessionId, forKey: DSEConstants.KEYCHAIN_SESSIONID)
         
         do{
             try dataSyncer.downloadSensorProfiles()
@@ -64,7 +62,7 @@ class SensorTests: XCTestCase {
             let value = ["x-axis": 3, "y-axis": 4, "z-axis": 5]
             
             // Act: insert the datapiont
-            try sensor.insertOrUpdateDataPoint(value, NSDate())
+            try sensor.insertOrUpdateDataPoint(value: value, time: NSDate())
         
             // Assert: check if the value of the retrieved datapoint is the same as the original value
             let queryOptions = QueryOptions()
@@ -85,7 +83,7 @@ class SensorTests: XCTestCase {
             let value = ["wrong-x-axis": 3, "wrong-y-axis": 4, "wrong-z-axis": 5]
             
             // Act: insert the datapiont
-            try sensor.insertOrUpdateDataPoint(value, NSDate())
+            try sensor.insertOrUpdateDataPoint(value: value, time: NSDate())
             
         }catch{
             // Assert: Check if correct exception is thrown
@@ -103,7 +101,7 @@ class SensorTests: XCTestCase {
             let value = ["x-axis": 3, "y-axis": 4, "z-axis": 5]
             
             // Act: insert the datapiont
-            try sensor.insertOrUpdateDataPoint(value, NSDate())
+            try sensor.insertOrUpdateDataPoint(value: value, time: NSDate())
             
             
         }catch{
@@ -147,7 +145,7 @@ class SensorTests: XCTestCase {
             try DatabaseHandler.insertSensor(sensor)
             let value = ["x-axis": 3, "y-axis": 4, "z-axis": 5]
             let time = NSDate()
-            try sensor.insertOrUpdateDataPoint(value, time)
+            try sensor.insertOrUpdateDataPoint(value: value,time: time)
             
             // Act: call delete
             try sensor.deleteDataPoints(endTime:time.dateByAddingTimeInterval(0.1))
@@ -156,7 +154,7 @@ class SensorTests: XCTestCase {
             let queryOptions = QueryOptions()
             let retrievedDataPoints = try sensor.getDataPoints(queryOptions)
             XCTAssertEqual(retrievedDataPoints.count, 0)
-            let deletionRequests = DatabaseHandler.getDataDeletionRequests()
+            let deletionRequests = try DatabaseHandler.getDataDeletionRequests()
             XCTAssertEqual(deletionRequests.count, 1)
             XCTAssertEqualWithAccuracy(time.timeIntervalSince1970, (deletionRequests[0].endTime?.timeIntervalSince1970)!, accuracy:1.0)
             

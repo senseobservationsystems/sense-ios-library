@@ -20,10 +20,10 @@ class DataSyncerTests: XCTestCase{
     
     let userId = "testuser"
     
-    let sourceName1 = "aim-ios-sdk"
+    let sourceName1 = "sense-library"
     let sensorName1 = "accelerometer"
     
-    let sourceName2 = "aim-ios-sdk"
+    let sourceName2 = "sense-library"
     let sensorName2 = "time_active"
     
     let sourceName3 = "fitbit"
@@ -40,11 +40,12 @@ class DataSyncerTests: XCTestCase{
         
         
         // set the config with CORRECT default values
-        self.config.syncInterval           = 30 * 60
+        self.config.uploadInterval           = 30 * 60
         self.config.localPersistancePeriod = 30 * 24 * 60 * 60
         self.config.enableEncryption       = true
         self.config.backendEnvironment     = DSEServer.STAGING
         self.config.appKey = APPKEY_STAGING
+        self.config.userId = userId
         self.config.sessionId = (accountUtils!.sessionId)!
         
         do{
@@ -53,9 +54,7 @@ class DataSyncerTests: XCTestCase{
             XCTFail("Fail in setup")
         }
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
-        KeychainWrapper.setString(self.userId, forKey: KEYCHAIN_USERID)
+        KeychainWrapper.setString(self.config.sessionId, forKey: DSEConstants.KEYCHAIN_SESSIONID)
     }
     
     override func tearDown() {
@@ -68,7 +67,7 @@ class DataSyncerTests: XCTestCase{
         
         let expectedSyncRate: Double = 30 * 60
         let expectedPersistentPeriod: Double = 30 * 24 * 60 * 60
-        XCTAssertEqual(self.dataSyncer.syncRate, expectedSyncRate)
+        XCTAssertEqual(self.dataSyncer.uploadInterval, expectedSyncRate)
         XCTAssertEqual(self.dataSyncer.persistentPeriod, expectedPersistentPeriod)
     }
     
@@ -141,7 +140,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.downloadSensorsFromRemote()
             
             // Assert:
-            let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
+            let sensorsInLocal = try DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
         } catch {
             print(error)
@@ -156,10 +155,14 @@ class DataSyncerTests: XCTestCase{
             let data = try populateRemoteDatabase(startTime: NSDate().dateByAddingTimeInterval(-365*24*60*60))
             try assertDataPointsInRemote(5, data: data)
             try self.dataSyncer.downloadSensorsFromRemote()
-            let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
+            let sensorsInLocal = try DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
             
-            let config = SensorConfig(meta: Dictionary<String, AnyObject>(), uploadEnabled: true, downloadEnabled: true, persist: true)
+            let config = SensorConfig()
+            config.meta = Dictionary<String, AnyObject>()
+            config.uploadEnabled = true
+            config.downloadEnabled = true
+            config.persist = true
             for sensor in sensorsInLocal{
                 try sensor.setSensorConfig(config)
             }
@@ -168,7 +171,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.downloadSensorsDataFromRemote()
             
             // Assert:
-            try self.assertDataPointsInLocal(5, data: data)
+            try self.assertDataPointsInLocal(5, expectedUploadStatus:true, data: data)
 
         } catch {
             print(error)
@@ -181,12 +184,13 @@ class DataSyncerTests: XCTestCase{
             // Arrange:
             try self.dataSyncer.downloadSensorProfiles()
             let data = try populateLocalDatabase()
-            try assertDataPointsInLocal(5, data: data)
+            try assertDataPointsInLocal(5, expectedUploadStatus:false, data: data)
             
             // Act:
             try dataSyncer.uploadSensorDataToRemote()
             
             // Assert:
+            try assertDataPointsInLocal(5, expectedUploadStatus:true, data: data)
             try self.assertDataPointsInRemote(5, data: data)
             
         } catch {
@@ -361,7 +365,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.downloadSensorProfiles()
             try self.dataSyncer.downloadSensorsFromRemote()
             stubDownConnection()
-            let sensorsInLocal = DatabaseHandler.getSensors(self.sourceName1)
+            let sensorsInLocal = try DatabaseHandler.getSensors(self.sourceName1)
             XCTAssertEqual(sensorsInLocal.count, 2) //accelerometer and time_active
             try self.dataSyncer.downloadSensorsDataFromRemote()
             
@@ -375,7 +379,7 @@ class DataSyncerTests: XCTestCase{
             try self.dataSyncer.downloadSensorProfiles()
             
             let data = try populateLocalDatabase()
-            try assertDataPointsInLocal(5, data: data)
+            try assertDataPointsInLocal(5, expectedUploadStatus: false, data: data)
             
             stubDownConnection()
             try dataSyncer.uploadSensorDataToRemote()
@@ -401,13 +405,17 @@ class DataSyncerTests: XCTestCase{
         }
     }
     
-    func assertDataPointsInLocal(expectedNumber: Int, data: [JSON]? = nil) throws {
+    func assertDataPointsInLocal(expectedNumber: Int, expectedUploadStatus: Bool,data: [JSON]? = nil) throws {
         var index = 0
-        let sensors = DatabaseHandler.getSensors(sourceName1)
+        let sensors = try DatabaseHandler.getSensors(sourceName1)
         for sensor in sensors{
             let queryOptions = QueryOptions()
             let dataPoints = try DatabaseHandler.getDataPoints(sensor.id, queryOptions)
             XCTAssertEqual(dataPoints.count, expectedNumber)
+            
+            for dataPoint in dataPoints {
+                XCTAssertEqual(dataPoint.existsInRemote, expectedUploadStatus)
+            }
             
             if data != nil {
                 let json = try JSONUtils.getJSONArray(dataPoints, sensorName: sensor.name)
@@ -449,21 +457,21 @@ class DataSyncerTests: XCTestCase{
         sensorConfig.downloadEnabled = true
         sensorConfig.persist = true
 
-        let sensor1 = Sensor(name: sensorName1, source: sourceName1, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let sensor1 = Sensor(name: sensorName1, source: sourceName1, sensorConfig: sensorConfig, userId: NSUserDefaults.standardUserDefaults().stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor1)
         
         sensorConfig = SensorConfig()
         sensorConfig.uploadEnabled = true
         sensorConfig.downloadEnabled = true
         sensorConfig.persist = false
-        let sensor2 = Sensor(name: sensorName2, source: sourceName2, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let sensor2 = Sensor(name: sensorName2, source: sourceName2, sensorConfig: sensorConfig, userId: NSUserDefaults.standardUserDefaults().stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor2)
         
         sensorConfig = SensorConfig()
         sensorConfig.uploadEnabled = false
         sensorConfig.downloadEnabled = true
         sensorConfig.persist = true
-        let sensor3 = Sensor(name: sensorName3, source: sourceName3, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: false)
+        let sensor3 = Sensor(name: sensorName3, source: sourceName3, sensorConfig: sensorConfig, userId: NSUserDefaults.standardUserDefaults().stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: false)
         try DatabaseHandler.insertSensor(sensor3)
     }
     

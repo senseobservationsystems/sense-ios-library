@@ -19,6 +19,7 @@
 #import <UIKit/UIKit.h>
 #import "CSDataStore.h"
 #import "Formatting.h"
+#import "CSSensorConstants.h"
 
 @implementation CSPreferencesSensor
 //constants
@@ -61,24 +62,11 @@ static NSString* valueKey = @"value";
 
 - (void) commitPreference:(NSNotification*) notification {
 	CSSetting* setting = notification.object;
-	
-    /*
-	NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-									setting.name, variableKey,
-									setting.value, valueKey,
-									nil];
-     */
     NSMutableDictionary* newItem = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 									setting.value, setting.name,
 									nil];
-	
-	NSNumber* timestamp = CSroundedNumber([[NSDate date] timeIntervalSince1970], 3);
-	
-	NSDictionary* valueTimestampPair = [NSDictionary dictionaryWithObjectsAndKeys:
-										newItem, @"value",
-										timestamp,@"date",
-										nil];
-	[dataStore commitFormattedData:valueTimestampPair forSensorId:[self sensorId]];
+    NSDate* time = [NSDate date];
+    [self commitDataPointWithValue:newItem andTime:time];
 }
 
 - (BOOL) isEnabled {return isEnabled;}

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PromiseKit
 
 /**
  * This class provides the main interface for creating sensors and sources and setting storage engine specific properties.
@@ -18,7 +17,7 @@ import PromiseKit
  * this is a singleton class: read how it works here:
  * http://krakendev.io/blog/the-right-way-to-write-a-singleton
 */
-public class DataStorageEngine{
+@objc public class DataStorageEngine: NSObject{
     // this makes the DSE a singleton!! woohoo!
     static let sharedInstance = DataStorageEngine()
     
@@ -31,12 +30,12 @@ public class DataStorageEngine{
     // reference to the datasyncer
     var dataSyncer = DataSyncer()
     
-    private var dataSyncerProgressHandler = DataSyncerProgressHandler()
+    private var dataSyncerCallbackHandler = DataSyncerCallbackHandler()
 
     
     //This prevents others from using the default '()' initializer for this class.
-    private init() {
-        self.dataSyncer.delegate = dataSyncerProgressHandler
+    private override init() {
+        self.dataSyncer.delegate = dataSyncerCallbackHandler
     }
     
     /**
@@ -55,37 +54,36 @@ public class DataStorageEngine{
         // set config for DataSyncer
         var (configChanged, syncInterval, localPersistancePeriod, enablePeriodicSync) = try self.dataSyncer.setConfig(customConfig)
         
-        self.config.syncInterval           = syncInterval
+        self.config.uploadInterval           = syncInterval
         self.config.localPersistancePeriod = localPersistancePeriod
-        self.config.enablePeriodicSync = enablePeriodicSync
+        self.config.enableSync = enablePeriodicSync
         
         // check for changed in the backend environment
-        if let backendEnvironment = customConfig.backendEnvironment {
-            configChanged = configChanged || self.config.backendEnvironment != customConfig.backendEnvironment
-            self.config.backendEnvironment = backendEnvironment
-        }
-        let backendStringValue = self.config.backendEnvironment! == DSEServer.LIVE ? "LIVE" : "STAGING"
+        configChanged = (configChanged || (self.config.backendEnvironment != customConfig.backendEnvironment))
+        self.config.backendEnvironment = customConfig.backendEnvironment
+        let backendStringValue = self.config.backendEnvironment == DSEServer.LIVE ? "LIVE" : "STAGING"
         
         // todo: do something with the encryption
         self.config.enableEncryption       = customConfig.enableEncryption       ?? self.config.enableEncryption
         
         
         // verify if we have indeed received valid credentials (not nil) and throw the appropriate error if something is wrong
-        if let appKey    = customConfig.appKey {self.config.appKey = appKey}       else { throw DSEError.InvalidAppKey }
-        if let sessionId = customConfig.sessionId {self.config.sessionId = sessionId} else { throw DSEError.InvalidSessionId }
-        if let userId    = customConfig.userId {self.config.userId = userId}       else { throw DSEError.InvalidUserId }
+        if (customConfig.sessionId != ""){self.config.sessionId = customConfig.sessionId}
+        if (customConfig.userId != ""){self.config.userId = customConfig.userId}
+        if (customConfig.appKey != ""){self.config.appKey = customConfig.appKey}
         
         // store the credentials in the keychain. All modules that need these will get them from the chain
-        KeychainWrapper.setString(self.config.sessionId!, forKey: KEYCHAIN_SESSIONID)
-        KeychainWrapper.setString(self.config.appKey!,    forKey: KEYCHAIN_APPKEY)
-        KeychainWrapper.setString(self.config.userId!,    forKey: KEYCHAIN_USERID)
+        KeychainWrapper.removeObjectForKey(DSEConstants.KEYCHAIN_SESSIONID)
+        KeychainWrapper.setString(self.config.sessionId, forKey: DSEConstants.KEYCHAIN_SESSIONID)
         
         // store the other options in the standardUserDefaults
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setDouble(self.config.syncInterval!,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
-        defaults.setDouble(self.config.localPersistancePeriod!, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
-        defaults.setObject(backendStringValue,                  forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
-        defaults.setBool(self.config.enableEncryption!,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
+        defaults.setDouble(self.config.uploadInterval,           forKey: DSEConstants.SYNC_INTERVAL_KEY)
+        defaults.setDouble(self.config.localPersistancePeriod, forKey: DSEConstants.LOCAL_PERSISTANCE_PERIOD_KEY)
+        defaults.setObject(backendStringValue,                 forKey: DSEConstants.BACKEND_ENVIRONMENT_KEY)
+        defaults.setBool(self.config.enableEncryption,         forKey: DSEConstants.ENABLE_ENCRYPTION_KEY)
+        defaults.setObject(self.config.userId,                 forKey: DSEConstants.USERID_KEY)
+        defaults.setObject(self.config.appKey,                 forKey: DSEConstants.APPKEY_KEY)
         
         if (configChanged) {
             if (self.dataSyncer.timer != nil){
@@ -100,12 +98,14 @@ public class DataStorageEngine{
     * Initialize DSE and start the timer for periodic syncing.
     **/
     public func start() throws {
-        if (self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
+        if (!self.areCredentialsPopulated()) {
             // callback fail?
            throw DSEError.EmptyCredentials
         }
         
-        self.dataSyncer.initialize()
+        if(!self.isInitialized()){
+            self.dataSyncer.initialize()
+        }
         self.dataSyncer.startPeriodicSync()
     }
     
@@ -122,47 +122,49 @@ public class DataStorageEngine{
     func reset(){
         self.config = DSEConfig()
         self.dataSyncer = DataSyncer()
-        self.dataSyncerProgressHandler = DataSyncerProgressHandler()
-        self.dataSyncer.delegate = self.dataSyncerProgressHandler
+        self.dataSyncerCallbackHandler = DataSyncerCallbackHandler()
+        self.dataSyncer.delegate = self.dataSyncerCallbackHandler
     }
     
-    /**
-    * Create a new sensor in database and backend if it does not already exist.
-    * @param source The source name (e.g accelerometer)
-    * @param name The sensor name (e.g accelerometer)
-    * @param sensorConfig The sensor options
-    * @return The newly created sensor object
-    * //TODO: List possible exceptions
-    **/
-    func createSensor(source: String, name: String, sensorConfig: SensorConfig = SensorConfig()) throws -> Sensor{
-        let sensor = Sensor(name: name, source: source, sensorConfig: sensorConfig, userId: KeychainWrapper.stringForKey(KEYCHAIN_USERID)!, remoteDataPointsDownloaded: true)
-        try DatabaseHandler.insertSensor(sensor)
-        return sensor
-    }
+
+
 
     /**
-    * Returns a specific sensor by name and the source it belongs to
+    * Returns a specific sensor by name and the source. It creates sensor if the sensor does not exist in the local storage.
     * @param source The name of the source
     * @param sensorName The name of the sensor
     **/
-    public func getSensor(source: String, sensorName : String) throws -> Sensor?{
-        return try DatabaseHandler.getSensor(source, sensorName)
+    public func getSensor(source: String, sensorName: String) throws -> Sensor{
+        do{
+            return try DatabaseHandler.getSensor(source, sensorName)
+        }catch DSEError.ObjectNotFound {
+            // sensor does not exist in local storage, create the sensor
+            let sensorConfig = SensorConfig()
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let sensor = Sensor(name: sensorName, source: source, sensorConfig: sensorConfig, userId: defaults.stringForKey(DSEConstants.USERID_KEY)!, remoteDataPointsDownloaded: true)
+            try DatabaseHandler.insertSensor(sensor)
+            dataSyncerCallbackHandler.onSensorCreated(sensor.name)
+            return sensor
+        }catch{
+            print(error)
+            throw error
+        }
     }
     
     /**
     * Returns all the sensors connected to the given source
     * @return [Sensor] The sensors connected to the given source
     **/
-    public func getSensors(source: String) -> [Sensor]{
-        return DatabaseHandler.getSensors(source)
+    public func getSensors(source: String) throws -> [Sensor]{
+        return try DatabaseHandler.getSensors(source)
     }
     
     /**
     * Returns all the sources attached to the current user
     * @return [String] The sources attached to the current user
     **/
-    public func getSources() -> [String]{
-        return DatabaseHandler.getSources()
+    public func getSources() throws -> [String]{
+        return try DatabaseHandler.getSources()
     }
     
     /**
@@ -170,9 +172,9 @@ public class DataStorageEngine{
      * @return The DSEStatus, this could be either AWAITING_CREDENTIALS, AWAITING_SENSOR_PROFILES, READY.
      **/
     public func getStatus() -> DSEStatus{
-        if(self.config.sessionId == nil || self.config.appKey == nil || self.config.userId == nil) {
+        if(!self.areCredentialsPopulated()) {
             return DSEStatus.AWAITING_CREDENTIALS;
-        } else if(self.dataSyncer.initialized) {
+        } else if(self.isInitialized()) {
             return DSEStatus.INITIALIZED;
         } else {
             return DSEStatus.AWAITING_SENSOR_PROFILES;
@@ -183,7 +185,7 @@ public class DataStorageEngine{
     * Synchronizes the local data with Common Sense asynchronously
     * The results will be returned via AsyncCallback
     **/
-    func syncData(callback: DSEAsyncCallback){
+    public func syncData(callback: DSEAsyncCallback){
         self.dataSyncer.sync(callback)
     }
     
@@ -191,11 +193,11 @@ public class DataStorageEngine{
     * Notifies when the sensors are downloaded asynchronously
     * @param callback The AsyncCallback method to call the success function on when the sensors are downloaded
     **/
-    func setSensorsDownloadedCallback(callback: DSEAsyncCallback){
+    public func setSensorsDownloadedCallback(callback: DSEAsyncCallback){
         if self.isSensorDownloadCompleted{
             callback.onSuccess()
         } else {
-            dataSyncerProgressHandler.sensorsDownloadedCallbacks.append(callback)
+            dataSyncerCallbackHandler.sensorsDownloadedCallbacks.append(callback)
         }
     }
     
@@ -203,11 +205,11 @@ public class DataStorageEngine{
     * Notifies when the sensor data are downloaded asynchronously
     * @param callback The AsyncCallback method to call the success function on when the sensor data is downloaded
     **/
-    func setSensorDataDownloadedCallback(callback: DSEAsyncCallback){
+    public func setSensorDataDownloadedCallback(callback: DSEAsyncCallback){
         if self.isSensorDataDownloadCompleted{
             callback.onSuccess()
         } else {
-            dataSyncerProgressHandler.sensorDataDownloadedCallbacks.append(callback)
+            dataSyncerCallbackHandler.sensorDataDownloadedCallbacks.append(callback)
         }
     }
     
@@ -215,12 +217,38 @@ public class DataStorageEngine{
     * Notifies when the initialization is done asynchronously
     * @param callback The AsyncCallback method to call the success function on when dse initialized
     **/
-    func setInitializationCallback(callback : DSEAsyncCallback){
+    public func setInitializationCallback(callback : DSEAsyncCallback){
         if (getStatus() == DSEStatus.INITIALIZED) {
             callback.onSuccess()
         } else {
             // status not ready yet. keep the callback in the array in DataSyncer
-            dataSyncerProgressHandler.initializationCallbacks.append(callback)
+            dataSyncerCallbackHandler.initializationCallbacks.append(callback)
+        }
+    }
+    
+    /**
+     * Add a handler for sensor creation. The callback will be triggered whenever a sensor is created in local storage,
+     * such as on download of sensor from remote or on getSensor() call but sensor does not exists.
+     * The callback will not be removed until removeSensorCreationHandler is called.
+     * @param callback A closure to handle the exception
+     * @return returns String for uuid to identify the closure.
+     **/
+    public func setSensorCreationHandler(sensorCreationHandler :(sensorName: String)->Void) -> String{
+        let uuid = NSUUID().UUIDString
+        dataSyncerCallbackHandler.sensorCreationHandlers[uuid] = sensorCreationHandler
+        return uuid
+    }
+    
+    /**
+     * Remove the closure with the given uuid.
+     * @param uuid String for uuid of the closure to be removed.
+     * @return true if the handler is removed. false if the handler is not in the dictionary.
+     **/
+    public func removeSensorCreationHandler(uuid: String) -> Bool{
+        if (dataSyncerCallbackHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
+            return true
+        }else{
+            return false
         }
     }
     
@@ -230,9 +258,9 @@ public class DataStorageEngine{
      * @param callback A closure to handle the exception
      * @return returns String for uuid to identify the closure.
      **/
-    func setSyncExceptionHandler(exceptionHandler : (error: ErrorType)->Void) -> String{
+    public func setSyncExceptionHandler(exceptionHandler : (error: ErrorType)->Void) -> String{
         let uuid = NSUUID().UUIDString
-        dataSyncerProgressHandler.exceptionHandlers[uuid] = exceptionHandler
+        dataSyncerCallbackHandler.exceptionHandlers[uuid] = exceptionHandler
         return uuid
     }
     
@@ -241,21 +269,40 @@ public class DataStorageEngine{
      * @param uuid String for uuid of the closure to be removed.
      * @return true if the handler is removed. false if the handler is not in the dictionary.
      **/
-    func removeSyncExceptionHandler(uuid: String) -> Bool {
-        if (dataSyncerProgressHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
+    public func removeSyncExceptionHandler(uuid: String) -> Bool {
+        if (dataSyncerCallbackHandler.exceptionHandlers.removeValueForKey(uuid) != nil){
             return true
         }else{
             return false
         }
     }
     
-    private class DataSyncerProgressHandler: DataSyncerDelegate{
+    private func isInitialized() -> Bool {
+        if (self.areCredentialsPopulated() && dataSyncer.areSensorProfilesPopulated()){
+            return true
+        }else{
+            return false
+        }
+    }
+    
+    private func areCredentialsPopulated() -> Bool {
+        if (!self.config.sessionId.isEmpty && !self.config.appKey.isEmpty && !self.config.userId.isEmpty){
+            return true
+        }else{
+            return false
+        }
+    }
+    
+
+    
+    private class DataSyncerCallbackHandler: DataSyncerDelegate{
         
         // callbacks
         var initializationCallbacks = [DSEAsyncCallback]()
         var sensorsDownloadedCallbacks = [DSEAsyncCallback]()
         var sensorDataDownloadedCallbacks = [DSEAsyncCallback]()
-        var exceptionHandlers = Dictionary<String ,(error:ErrorType) -> Void>()
+        var sensorCreationHandlers = Dictionary<String ,(sensorName: String) -> Void>()
+        var exceptionHandlers = Dictionary<String ,(error:DSEError) -> Void>()
     
         func onInitializationCompleted() {
             for callback in initializationCallbacks{
@@ -264,7 +311,7 @@ public class DataStorageEngine{
             }
         }
         
-        func onInitializationFailed(error:ErrorType) {
+        func onInitializationFailed(error:DSEError) {
             for callback in initializationCallbacks{
                 callback.onFailure(error)
             }
@@ -277,7 +324,7 @@ public class DataStorageEngine{
             }
         }
         
-        func onSensorsDownloadFailed(error: ErrorType){
+        func onSensorsDownloadFailed(error: DSEError){
             for callback in sensorDataDownloadedCallbacks{
                 callback.onFailure(error)
             }
@@ -290,15 +337,21 @@ public class DataStorageEngine{
             }
         }
         
-        func onSensorDataDownloadFailed(error: ErrorType) {
+        func onSensorDataDownloadFailed(error: DSEError) {
             for callback in sensorDataDownloadedCallbacks{
                 callback.onFailure(error)
             }
         }
         
-        func onException(error:ErrorType){
-            for (_, handler) in exceptionHandlers{
-                handler(error: error)
+        func onSensorCreated(sensorName: String) {
+            for (_, sensorCreationhandler) in sensorCreationHandlers{
+                sensorCreationhandler(sensorName: sensorName)
+            }
+        }
+        
+        func onException(error:DSEError){
+            for (_, exceptionHandler) in exceptionHandlers{
+                exceptionHandler(error: error)
             }
         }
     }

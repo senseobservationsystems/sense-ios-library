@@ -18,21 +18,18 @@
 #import <CoreLocation/CoreLocation.h>
 
 //Include all header files
-#include "CSVersion.h"
-#include "CSSensor.h"
-#include "CSSensorIds.h"
-#include "CSSensorRequirements.h"
-#include "CSSettings.h"
-#include "CSLocationPermissionProtocol.h"
+#import "CSVersion.h"
+#import "CSSensor.h"
+#import "CSSensorIds.h"
+#import "CSSensorRequirements.h"
+#import "CSSettings.h"
+#import "CSLocationPermissionProtocol.h"
 
 extern NSString * const kCSDATA_TYPE_JSON;
 extern NSString * const kCSDATA_TYPE_INTEGER;
 extern NSString * const kCSDATA_TYPE_FLOAT;
 extern NSString * const kCSDATA_TYPE_STRING;
 extern NSString * const kCSDATA_TYPE_BOOL;
-
-extern NSString* const kCSNewSensorDataNotification;
-extern NSString* const kCSNewMotionDataNotification;
 
 typedef enum {BPM_SUCCES=0, BPM_CONNECTOR_NOT_PRESENT, BPM_NOT_FOUND, BPM_UNAUTHORIZED, BPM_OTHER_ERROR} BpmResult;
 typedef void(^bpmCallBack)(BpmResult result, NSInteger newOkMeasurements, NSInteger newFailedMeasurements, NSDate* latestMeasurement);
@@ -103,7 +100,7 @@ Note that if registration fails, there is no way for the developer or end-user t
  *
  *  @return whether the login succeeded
  */
-+ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password andError:(NSError **) error;
++ (BOOL) loginWithUser:(NSString*) user andPassword:(NSString*) password completeHandler:(void (^)()) completeHandler failureHandler: (void (^)()) failureHandler andError:(NSError **) error;
 
 /**
  *  Set the credentials to log in on Common Sense
@@ -150,11 +147,11 @@ This removes credentials from the settings and stops the uploading to CommonSens
 
 /** Get the session cookie for Common Sense
 
-Whenever a user is logged in, it uses a session id from CommonSense to be able to interact with the cloud. To be able to manually call the CommonSense API one would need to obtain that Session ID. This is returned by the getSessionCookie function. Note that the format is "session_id=<session_id>".
+Whenever a user is logged in, it uses a session id from CommonSense to be able to interact with the cloud. To be able to manually call the CommonSense API one would need to obtain that Session ID. 
 
-@returns The session id to communicate with CommonSense, nil if there is no session cookie.
+@returns The session id to communicate with CommonSense, nil if there is no session Id.
  */
-+ (NSString*) getSessionCookie;
++ (NSString*) getSessionId;
 
 
 /** @name Sensordata storage and access */
@@ -229,61 +226,6 @@ This only looks at remote data, not at locally stored data. You can be sure that
 + (NSArray*) getDataForSensor:(NSString*) name onlyFromDevice:(bool) onlyFromDevice nrLastPoints:(NSInteger) nrLastPoints;
 
 
-/** Retrieve all the sensor data stored locally between a certain time interval.
- 
-Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
- 
-- It is kept for 30 days. Data older than 30 days is removed.
-- A maximum of 100 mb is kept. Users are likely to remove the app if there would be more storage space used. This should normally be ample for 30 days of data.
-- The total amount of storage is limited if the disk space of the device is smaller than what is needed by the.
-
-These limitations are treated in a first in first out way. Hence, older data is removed first.
-
-@warning Sensordata is not stored in a user specific format. Hence, when the user logs out or the app starts to being used by a different user on the same device, the old settings and data remains accessible to the new user.
- 
-@param name The name of the sensor to get the data from
-@param startDate The date and time at which to start looking for datapoints
-@param endDate The date and time at which to stop looking for datapoints
-@return an array of values, each value is a dictonary that descirbes the data point
-*/
-+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate;
-
-/** Retrieve all the sensor data stored locally between a certain time interval with a limit on the number of points that get returned.
- 
- Sensor data is stored in an SQLite table and can be retrieved by sensor and date. There are a few limitations on the storage:
- 
- - It is kept for 30 days. Data older than 30 days is removed.
- - A maximum of 100 mb is kept. Users are likely to remove the app if there would be more storage space used. This should normally be ample for 30 days of data.
- - The total amount of storage is limited if the disk space of the device is smaller than what is needed by the.
- 
- These limitations are treated in a first in first out way. Hence, older data is removed first.
- 
- @warning Sensordata is not stored in a user specific format. Hence, when the user logs out or the app starts to being used by a different user on the same device, the old settings and data remains accessible to the new user.
- 
- @param name The name of the sensor to get the data from
- @param startDate The date and time at which to start looking for datapoints
- @param endDate The date and time at which to stop looking for datapoints
- @param order Whether the returning datapoints are ordered in an ascending or descending way. Valid values are 'ASC' and 'DESC'
- @param nrOfPoints Limit to the nr of points that will be returned. This will take into account the ordering to select only the latest (descending) or first (ascending)
- @return an array of values, each value is a dictonary that descirbes the data point
- */
-+ (NSArray*) getLocalDataForSensor:(NSString*) name from:(NSDate*) startDate to: (NSDate*) endDate andOrder:(NSString *) order withLimit: (int) nrOfPoints;
-
-/**
- Remove all sensor data that are stored locally
-
- @warning This can be used to solve the issue that sensor data is not stored in a user specific format. Hence, applications that only stores the data locally could have issues when the user is changed (when login/logout occurs). In that case, the data from previous user will be shown to the next user. 
- */
-+ (void) removeLocalData;
-
-/** Retrieve all the sensor data stored locally between a certain time interval.
- * @param name The name of the sensor to get the data from
- * @param deviceType The name of the device type to get the sensors and data from
- * @param startDate The date and time at which to start looking for datapoints
- * @param endDate The date and time at which to stop looking for datapoints
- * @return an arrat of values, each value is a dictonary that descirbes the data point
- */
-+ (NSArray*) getLocalDataForSensor:(NSString *)name andDeviceType:(NSString *) deviceType from:(NSDate *)startDate to:(NSDate *)endDate;
 
 
 /** @name Permissions */
@@ -343,8 +285,8 @@ These limitations are treated in a first in first out way. Hence, older data is 
 + (void) willTerminate;
 /// Flush data to Common Sense
 + (void) flushData;
-/// Flush data to Common Sense, return after the flush is completed
-+ (void) flushDataAndBlock;
+/// Flush data to Common Sense with callbacks
++ (void) flushDataWithSuccessCallback: (void(^)()) successCallback failureCallback:(void(^)(NSError*)) failureCallback;
 
 /** This function isn't operational.
 @deprecated This function is not operational anymore. If it is working for you that is dumb luck; don't count on it.
@@ -356,6 +298,4 @@ These limitations are treated in a first in first out way. Hence, older data is 
 @deprecated This function will be removed in future version
  */
 + (void) applyIVitalitySettings;
-
-
 @end
