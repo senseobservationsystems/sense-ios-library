@@ -84,11 +84,8 @@ public enum SortOrder{
         if !JSONUtils.validateValue(value, schema: dataStructure!){
             throw DSEError.IncorrectDataStructure
         }
-        
-        let dataPoint = DataPoint(sensorId: self.id)
         let stringifiedValue = JSONUtils.stringify(value)
-        dataPoint.setValueWithString(stringifiedValue)
-        dataPoint.setTimeWithNSDate(time)
+        let dataPoint = DataPoint(sensorId: self.id, value: stringifiedValue, time: time)
         
         try DatabaseHandler.insertOrUpdateDataPoint(dataPoint)
     }

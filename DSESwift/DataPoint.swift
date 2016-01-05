@@ -14,7 +14,7 @@ import Foundation
  */
 @objc public class DataPoint: NSObject{
     private(set) var sensorId = -1
-    private(set) var value = ""
+    var value = ""
     private(set) var time = NSDate()
     var existsInRemote = false
 
@@ -49,22 +49,6 @@ import Foundation
      **/
     func getId() -> String {
         return "\(self.sensorId)-\(String(self.time))"
-    }
-    
-    /**
-     * Set time of the data point.
-     * @param time: NSDate for the timestamp of the datapoint.
-     **/
-    public func setTimeWithNSDate(time: NSDate){
-        self.time = time
-    }
-    
-    /**
-     * Set value of the data point.
-     * @param value: value of the datapoint in String.
-     **/
-    public func setValueWithString(value: String) {
-        self.value = value
     }
     
     /**
